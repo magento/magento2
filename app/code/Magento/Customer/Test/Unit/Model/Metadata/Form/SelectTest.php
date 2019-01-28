@@ -39,7 +39,7 @@ class SelectTest extends AbstractFormTestCase
     {
         $select = $this->getClass($value);
         $actual = $select->validateValue($value);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -71,7 +71,7 @@ class SelectTest extends AbstractFormTestCase
         $actual = $select->validateValue($value);
 
         if (is_bool($actual)) {
-            $this->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         } else {
             $this->assertContains($expected, $actual);
         }
@@ -148,7 +148,7 @@ class SelectTest extends AbstractFormTestCase
         );
         $select = $this->getClass($value);
         $actual = $select->outputValue();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

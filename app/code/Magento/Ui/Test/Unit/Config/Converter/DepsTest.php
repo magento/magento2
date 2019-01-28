@@ -43,6 +43,6 @@ class DepsTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
         $domXpath = new \DOMXPath($dom);
         $deps = $domXpath->query('//listing/settings/deps')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($deps));
+        $this->assertSame($expectedResult, $this->converter->convert($deps));
     }
 }

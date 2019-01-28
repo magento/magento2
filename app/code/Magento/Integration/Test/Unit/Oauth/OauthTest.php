@@ -503,7 +503,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             self::REQUEST_URL
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['oauth_token' => $this->_oauthToken, 'oauth_token_secret' => $this->_oauthSecret],
             $requestToken
         );
@@ -639,7 +639,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_setupToken(true, \Magento\Integration\Model\Oauth\Token::TYPE_REQUEST);
 
         $token = $this->_oauth->getAccessToken($this->_getAccessTokenRequiredParams(), self::REQUEST_URL);
-        $this->assertEquals(
+        $this->assertSame(
             ['oauth_token' => $this->_oauthToken, 'oauth_token_secret' => $this->_oauthSecret],
             $token
         );
@@ -699,7 +699,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_setupNonce();
         $this->_setupToken(true, \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS);
         $requiredParams = $this->_getAccessTokenRequiredParams();
-        $this->assertEquals(
+        $this->assertSame(
             1,
             $this->_oauth->validateAccessTokenRequest($requiredParams, self::REQUEST_URL),
             "Consumer ID is invalid."
@@ -756,7 +756,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_setupConsumer();
         $this->_setupToken(true, \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS);
 
-        $this->assertEquals(1, $this->_oauth->validateAccessToken($this->_oauthToken), "Consumer ID is invalid.");
+        $this->assertSame(1, $this->_oauth->validateAccessToken($this->_oauthToken), "Consumer ID is invalid.");
     }
 
     public function testBuildAuthorizationHeader()
@@ -793,7 +793,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             'oauth_token_secret="a6agsfrsfgsrjjjjyy487939244ssggg",' .
             'oauth_signature="valid_signature"';
 
-        $this->assertEquals($expectedHeader, $oauthHeader, 'Generated Oauth header is incorrect');
+        $this->assertSame($expectedHeader, $oauthHeader, 'Generated Oauth header is incorrect');
     }
 
     /**

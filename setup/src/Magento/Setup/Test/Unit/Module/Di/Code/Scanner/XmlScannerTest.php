@@ -68,6 +68,6 @@ class XmlScannerTest extends \PHPUnit\Framework\TestCase
         );
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = [];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

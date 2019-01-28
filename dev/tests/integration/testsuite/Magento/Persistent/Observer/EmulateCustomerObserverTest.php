@@ -69,7 +69,7 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
         $this->_customerSession->loginById(1);
         $this->_customerSession->logout();
         $this->assertNull($this->_customerSession->getCustomerId());
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             $this->_customerSession->getCustomerGroupId()
         );
@@ -78,11 +78,11 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
         $customer = $this->customerRepository->getById(
             $this->_persistentSessionHelper->getSession()->getCustomerId()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $customer->getId(),
             $this->_customerSession->getCustomerId()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $customer->getGroupId(),
             $this->_customerSession->getCustomerGroupId()
         );

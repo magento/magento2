@@ -60,7 +60,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValue($inlineTranslate));
 
-        $this->assertEquals($result, $this->renderer->render([$text], []));
+        $this->assertSame($result, $this->renderer->render([$text], []));
     }
 
     public function testRenderIfInlineTranslationIsNotAllowed()
@@ -76,7 +76,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValue($inlineTranslate));
 
-        $this->assertEquals($text, $this->renderer->render([$text], []));
+        $this->assertSame($text, $this->renderer->render([$text], []));
     }
 
     public function testRenderException()

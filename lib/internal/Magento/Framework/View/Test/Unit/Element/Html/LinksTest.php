@@ -41,7 +41,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->with($name)
             ->willReturn($blocks);
         $this->block->setNameInLayout($name);
-        $this->assertEquals($blocks, $this->block->getLinks());
+        $this->assertSame($blocks, $this->block->getLinks());
     }
 
     public function testSetActive()
@@ -87,6 +87,6 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('getNameInLayout')
             ->willReturn($name);
 
-        $this->assertEquals($blockHtml, $this->block->renderLink($link));
+        $this->assertSame($blockHtml, $this->block->renderLink($link));
     }
 }

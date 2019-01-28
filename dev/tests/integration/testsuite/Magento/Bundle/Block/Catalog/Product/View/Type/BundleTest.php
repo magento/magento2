@@ -69,9 +69,9 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $config = json_decode($this->block->getJsonConfig(), true);
         $options = current($config['options']);
         $selection = current($options['selections']);
-        $this->assertEquals(10, $selection['prices']['oldPrice']['amount']);
-        $this->assertEquals(5, $selection['prices']['basePrice']['amount']);
-        $this->assertEquals(5, $selection['prices']['finalPrice']['amount']);
+        $this->assertSame(10, $selection['prices']['oldPrice']['amount']);
+        $this->assertSame(5, $selection['prices']['basePrice']['amount']);
+        $this->assertSame(5, $selection['prices']['finalPrice']['amount']);
     }
 
     /**

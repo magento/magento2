@@ -52,7 +52,7 @@ class OrderCommandTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertOrderStateAndStatus($this->getOrder(), $expectedState, $expectedStatus);
-        self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
+        self::assertSame(__($expectedMessage, $this->amount), $actualReturn);
     }
 
     /**

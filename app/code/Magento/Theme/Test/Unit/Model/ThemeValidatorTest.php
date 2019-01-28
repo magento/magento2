@@ -70,7 +70,7 @@ class ThemeValidatorTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $result = $this->themeValidator->validateIsThemeInUse(['frontend/Magento/a']);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 '<error>frontend/Magento/a is in use in default config</error>',
                 '<error>frontend/Magento/a is in use in website websiteA</error>',

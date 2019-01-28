@@ -36,7 +36,7 @@ class ListTest extends \PHPUnit\Framework\TestCase
             $this->_layout->addBlock($child[1], $child[0], $this->_block->getNameInLayout())->setText($child[2]);
         }
         $html = $this->_block->toHtml();
-        $this->assertEquals('text1text2text3', $html);
+        $this->assertSame('text1text2text3', $html);
     }
 
     public function testToHtmlWithContainer()
@@ -50,6 +50,6 @@ class ListTest extends \PHPUnit\Framework\TestCase
         $block2->setText('text2');
         $block3->setText('text3');
         $html = $this->_block->toHtml();
-        $this->assertEquals('text1text2text3', $html);
+        $this->assertSame('text1text2text3', $html);
     }
 }

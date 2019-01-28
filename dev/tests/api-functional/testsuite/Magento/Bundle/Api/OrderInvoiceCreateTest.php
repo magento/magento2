@@ -84,7 +84,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
                 $this->fail('Failed asserting that Invoice was created');
             }
         }
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingOrder->getGrandTotal(),
             $grantTotal,
             'Failed asserting that invoice is correct.'
@@ -134,7 +134,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotEmpty($result);
         $invoice = $this->invoiceRepository->get($result);
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingOrder->getGrandTotal(),
             $invoice->getGrandTotal(),
             'Failed asserting that invoice is correct.'

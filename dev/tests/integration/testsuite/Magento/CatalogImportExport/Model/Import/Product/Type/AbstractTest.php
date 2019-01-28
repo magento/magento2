@@ -61,7 +61,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $actualAttributes = $this->_model->prepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue);
         foreach ($expectedAttributes as $key => $value) {
             $this->assertArrayHasKey($key, $actualAttributes);
-            $this->assertEquals($value, $actualAttributes[$key]);
+            $this->assertSame($value, $actualAttributes[$key]);
         }
     }
 
@@ -203,7 +203,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $actualAttributes = $this->_model->clearEmptyData($rowData);
         foreach ($expectedAttributes as $key => $value) {
             $this->assertArrayHasKey($key, $actualAttributes);
-            $this->assertEquals($value, $actualAttributes[$key]);
+            $this->assertSame($value, $actualAttributes[$key]);
         }
     }
 

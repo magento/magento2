@@ -88,7 +88,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         $actualResult = ob_get_contents();
         ob_end_clean();
         $expectedResult = '{"messages":{"error":[{"code":500,"message":"Message"}]}}';
-        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in JSON.');
+        $this->assertSame($expectedResult, $actualResult, 'Invalid rendering in JSON.');
     }
 
     /**
@@ -126,7 +126,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         $actualResult = ob_get_contents();
         ob_end_clean();
         $expectedResult = '{"messages":{"error":[{"code":401,"message":"Message","trace":"Message trace."}]}}';
-        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in JSON.');
+        $this->assertSame($expectedResult, $actualResult, 'Invalid rendering in JSON.');
     }
 
     /**
@@ -144,7 +144,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         ob_end_clean();
         $expectedResult = '<?xml version="1.0"?><error><messages><error><data_item><code>500</code>' .
             '<message><![CDATA[Message]]></message></data_item></error></messages></error>';
-        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in XML.');
+        $this->assertSame($expectedResult, $actualResult, 'Invalid rendering in XML.');
     }
 
     /**
@@ -165,7 +165,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         $expectedResult = '<?xml version="1.0"?><error><messages><error><data_item><code>401</code><message>' .
             '<![CDATA[Message]]></message><trace><![CDATA[Trace message.]]></trace></data_item></error>' .
             '</messages></error>';
-        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in XML with turned on developer mode.');
+        $this->assertSame($expectedResult, $actualResult, 'Invalid rendering in XML with turned on developer mode.');
     }
 
     /**
@@ -195,7 +195,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         /** Assert that Logic exception is converted to WebapiException without message obfuscation. */
         $maskedException = $this->_errorProcessor->maskException($logicalException);
         $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $maskedException);
-        $this->assertEquals(
+        $this->assertSame(
             $errorMessage,
             $maskedException->getMessage(),
             'Exception was masked incorrectly in developer mode.'
@@ -322,7 +322,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
             ) . "'."
         );
         /** @var $maskedException WebapiException */
-        $this->assertEquals(
+        $this->assertSame(
             $expectedHttpCode,
             $maskedException->getHttpCode(),
             "Masked exception HTTP code is invalid: expected '{$expectedHttpCode}', " .
@@ -334,6 +334,6 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
             "Masked exception message is invalid: expected '{$expectedMessage}', " .
             "given '{$maskedException->getMessage()}'."
         );
-        $this->assertEquals($expectedDetails, $maskedException->getDetails(), "Masked exception details are invalid.");
+        $this->assertSame($expectedDetails, $maskedException->getDetails(), "Masked exception details are invalid.");
     }
 }

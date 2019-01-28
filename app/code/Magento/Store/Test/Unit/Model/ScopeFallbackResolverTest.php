@@ -66,7 +66,7 @@ class ScopeFallbackResolverTest extends \PHPUnit\Framework\TestCase
             ->with($scopeId)
             ->willReturn($storeMock);
 
-        $this->assertEquals($result, $this->model->getFallbackScope($scope, $scopeId, $forConfig));
+        $this->assertSame($result, $this->model->getFallbackScope($scope, $scopeId, $forConfig));
     }
 
     /**

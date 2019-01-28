@@ -185,7 +185,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->builder->build($this->request, $this->table, $documents);
 
-        $this->assertEquals($fetchResult, $result);
+        $this->assertSame($fetchResult, $result);
     }
 
     public function testBuildWithoutPassedDocuments()

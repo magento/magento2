@@ -116,6 +116,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->with($this->attribute, $store, false)
             ->will($this->returnValue($select));
 
-        $this->assertEquals($select, $this->model->getFlatUpdateSelect($store));
+        $this->assertSame($select, $this->model->getFlatUpdateSelect($store));
     }
 }

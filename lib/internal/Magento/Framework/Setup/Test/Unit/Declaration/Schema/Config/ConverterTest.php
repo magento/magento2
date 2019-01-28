@@ -53,7 +53,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             </schema>'
         );
         $result = $this->converter->convert($dom);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'table' => [
                     'test_table' => [

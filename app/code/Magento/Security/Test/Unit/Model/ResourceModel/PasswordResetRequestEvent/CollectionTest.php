@@ -106,7 +106,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->with('account_reference', $reference)
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterByAccountReference($reference)
         );
@@ -124,7 +124,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->with('ip', $ip)
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterByIp($ip)
         );
@@ -142,7 +142,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->with('request_type', $requestType)
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterByRequestType($requestType)
         );
@@ -168,7 +168,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterByLifetime($lifetime)
         );
@@ -188,7 +188,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('limit')
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterLastItem()
         );
@@ -213,7 +213,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterByIpOrAccountReference($ip, $accountReference)
         );
@@ -231,6 +231,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->with($timestamp);
 
         $result = $this->collectionMock->deleteRecordsOlderThen($timestamp);
-        $this->assertEquals($this->collectionMock, $result);
+        $this->assertSame($this->collectionMock, $result);
     }
 }

@@ -195,6 +195,6 @@ class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $connectionMock->expects($this->once())->method('query')->with($selectMock)->willReturn($statementMock);
 
-        $this->assertEquals($statementMock, $this->model->build($websiteId, $productMock, true));
+        $this->assertSame($statementMock, $this->model->build($websiteId, $productMock, true));
     }
 }

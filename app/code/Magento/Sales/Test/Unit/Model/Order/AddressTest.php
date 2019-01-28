@@ -53,7 +53,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     public function testSetOrder()
     {
-        $this->assertEquals($this->address, $this->address->setOrder($this->orderMock));
+        $this->assertSame($this->address, $this->address->setOrder($this->orderMock));
     }
 
     public function testGetRegionCodeRegionIsSet()
@@ -75,7 +75,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->regionFactoryMock->expects(static::once())
             ->method('create')
             ->willReturn($this->regionMock);
-        $this->assertEquals('region', $this->address->getRegionCode());
+        $this->assertSame('region', $this->address->getRegionCode());
     }
 
     /**
@@ -107,7 +107,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->regionMock->expects($this->once())
             ->method('getCode')
             ->willReturn('region');
-        $this->assertEquals('region', $this->address->getRegionCode());
+        $this->assertSame('region', $this->address->getRegionCode());
     }
 
     public function testGetRegionCodeRegionFailure()
@@ -127,7 +127,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturn(2);
         $this->regionMock->expects($this->never())
             ->method('getCode');
-        $this->assertEquals(null, $this->address->getRegionCode());
+        $this->assertSame(null, $this->address->getRegionCode());
     }
 
     public function testGetName()
@@ -137,6 +137,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->setData('firstname', 'firstname');
         $this->address->setData('middlename', 'middlename');
         $this->address->setData('lastname', 'lastname');
-        $this->assertEquals('prefix firstname middlename lastname suffix', $this->address->getName());
+        $this->assertSame('prefix firstname middlename lastname suffix', $this->address->getName());
     }
 }

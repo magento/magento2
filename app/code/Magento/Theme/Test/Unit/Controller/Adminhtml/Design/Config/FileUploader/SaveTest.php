@@ -73,6 +73,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('setData')
             ->with($result)
             ->willReturn($resultJson);
-        $this->assertEquals($resultJson, $this->controller->execute());
+        $this->assertSame($resultJson, $this->controller->execute());
     }
 }

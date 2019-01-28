@@ -24,7 +24,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $model = new Validator();
 
-        $this->assertEquals($result, $model->validate($data));
+        $this->assertSame($result, $model->validate($data));
     }
 
     /**

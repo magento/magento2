@@ -181,7 +181,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method($methodName)
             ->with(...$params);
-        $this->assertEquals($this->dependencyDecorator, $this->dependencyDecorator->{$methodName}(...$params));
+        $this->assertSame($this->dependencyDecorator, $this->dependencyDecorator->{$methodName}(...$params));
     }
 
     /**

@@ -160,7 +160,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $requestMock->expects($this->once())->method('getScheme')->will($this->returnValue('http'));
         $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue($httpHost));
         $model = $this->getUrlModel(['request' => $requestMock]);
-        $this->assertEquals($url, $model->getCurrentUrl());
+        $this->assertSame($url, $model->getCurrentUrl());
     }
 
     /**
@@ -204,13 +204,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->scopeMock));
 
         $baseUrlParams = ['_scope' => $this->scopeMock, '_type' => $urlType, '_secure' => true];
-        $this->assertEquals($baseUrl, $model->getBaseUrl($baseUrlParams));
+        $this->assertSame($baseUrl, $model->getBaseUrl($baseUrlParams));
     }
 
     public function testGetUrlValidateFilter()
     {
         $model = $this->getUrlModel();
-        $this->assertEquals('http://test.com', $model->getUrl('http://test.com'));
+        $this->assertSame('http://test.com', $model->getUrl('http://test.com'));
     }
 
     /**
@@ -262,7 +262,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             '_nosid' => 0,
             'id' => 100
         ]);
-        $this->assertEquals($returnUri, $url);
+        $this->assertSame($returnUri, $url);
     }
 
     public function testGetUrlIdempotentSetRoutePath()
@@ -279,7 +279,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->urlModifier->expects($this->exactly(1))->method('execute');
 
-        $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
+        $this->assertSame('catalog/product/view', $model->getUrl('catalog/product/view'));
     }
 
     public function testGetUrlIdempotentSetRouteName()
@@ -295,7 +295,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('/product/view/', $model->getUrl('catalog/product/view'));
+        $this->assertSame('/product/view/', $model->getUrl('catalog/product/view'));
     }
 
     public function testGetUrlRouteHasParams()
@@ -312,7 +312,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('/index/index/foo/bar/', $model->getUrl('catalog'));
+        $this->assertSame('/index/index/foo/bar/', $model->getUrl('catalog'));
     }
 
     public function testGetUrlRouteUseRewrite()
@@ -337,7 +337,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('/catalog/product/view/', $model->getUrl('catalog', ['_use_rewrite' => 1]));
+        $this->assertSame('/catalog/product/view/', $model->getUrl('catalog', ['_use_rewrite' => 1]));
     }
 
     /**
@@ -397,7 +397,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $routeConfigMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue('catalog'));
 
         $url = $model->getUrl('*/*/*/key/value');
-        $this->assertEquals('http://localhost/index.php/catalog/product/view/key/value/', $url);
+        $this->assertSame('http://localhost/index.php/catalog/product/view/key/value/', $url);
     }
 
     public function testGetDirectUrl()
@@ -431,7 +431,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $requestMock->expects($this->once())->method('isDirectAccessFrontendName')->will($this->returnValue(true));
 
         $url = $model->getDirectUrl('direct-url');
-        $this->assertEquals('http://localhost/index.php/direct-url', $url);
+        $this->assertSame('http://localhost/index.php/direct-url', $url);
     }
 
     /**
@@ -453,7 +453,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->queryParamsResolverMock->expects($this->once())->method('getQuery')
             ->will($this->returnValue('query=123'));
 
-        $this->assertEquals($outputUrl, $model->getRebuiltUrl($inputUrl));
+        $this->assertSame($outputUrl, $model->getRebuiltUrl($inputUrl));
     }
 
     public function testGetRedirectUrl()
@@ -477,7 +477,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->method('getQuery')
             ->will($this->returnValue('foo=bar'));
 
-        $this->assertEquals('http://example.com/?foo=bar', $model->getRedirectUrl('http://example.com/'));
+        $this->assertSame('http://example.com/?foo=bar', $model->getRedirectUrl('http://example.com/'));
     }
 
     public function testGetRedirectUrlWithSessionId()
@@ -500,7 +500,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->method('getQuery')
             ->will($this->returnValue('foo=bar'));
 
-        $this->assertEquals('http://example.com/?foo=bar', $model->getRedirectUrl('http://example.com/'));
+        $this->assertSame('http://example.com/?foo=bar', $model->getRedirectUrl('http://example.com/'));
     }
 
     /**
@@ -529,7 +529,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $model = $this->getUrlModel(['routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false)]);
 
         $this->routeParamsResolverMock->expects($this->never())->method('unsetData');
-        $this->assertEquals('http://example.com', $model->getRouteUrl('http://example.com'));
+        $this->assertSame('http://example.com', $model->getRouteUrl('http://example.com'));
     }
 
     public function testAddSessionParam()
@@ -564,7 +564,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $requestMock->expects($this->once())->method('getServer')->with('HTTP_REFERER')
             ->will($this->returnValue($referrer));
 
-        $this->assertEquals($result, $model->isOwnOriginUrl());
+        $this->assertSame($result, $model->isOwnOriginUrl());
     }
 
     /**
@@ -616,7 +616,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $urlSecurityInfoMock->expects($this->exactly($isSecureCallCount))->method('isSecure')
             ->will($this->returnValue(false));
 
-        $this->assertEquals('http://localhost/', $model->getConfigData($key));
+        $this->assertSame('http://localhost/', $model->getConfigData($key));
     }
 
     /**
@@ -660,7 +660,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
-        $this->assertEquals('http://localhost/', $model->getConfigData('base_url_secure_forced'));
+        $this->assertSame('http://localhost/', $model->getConfigData('base_url_secure_forced'));
     }
 
     /**
@@ -693,7 +693,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->sidResolverMock->expects($this->never())
             ->method('getSessionIdQueryParam');
 
-        $this->assertEquals($result, $model->sessionUrlVar($html));
+        $this->assertSame($result, $model->sessionUrlVar($html));
     }
 
     public function testSessionUrlVarWithoutMatchedHostsAndBaseUrl()
@@ -721,7 +721,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())->method('getSessionId')
             ->will($this->returnValue('session-id'));
 
-        $this->assertEquals(
+        $this->assertSame(
             '<a href="http://example.com/?SID=session-id">www.example.com</a>',
             $model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>')
         );
@@ -763,6 +763,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getUrlModel(['request' => $initRequestMock]);
         $model->setRequest($requestMock);
-        $this->assertEquals('http://example.com', $model->getCurrentUrl());
+        $this->assertSame('http://example.com', $model->getCurrentUrl());
     }
 }

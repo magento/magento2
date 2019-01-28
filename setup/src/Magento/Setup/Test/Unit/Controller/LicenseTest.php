@@ -40,6 +40,6 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
         $viewModel = $this->controller->indexAction();
         $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertArrayHasKey('message', $viewModel->getVariables());
-        $this->assertEquals('error/404', $viewModel->getTemplate());
+        $this->assertSame('error/404', $viewModel->getTemplate());
     }
 }

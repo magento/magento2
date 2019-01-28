@@ -44,6 +44,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'country_postcodes',
             $this->serializerMock
         );
-        $this->assertEquals($expected, $configData->get());
+        $this->assertSame($expected, $configData->get());
     }
 }

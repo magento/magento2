@@ -70,8 +70,8 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             $this->stateMock
         );
 
-        $this->assertEquals($result, $model->isAllowed());
-        $this->assertEquals($result, $model->isAllowed());
+        $this->assertSame($result, $model->isAllowed());
+        $this->assertSame($result, $model->isAllowed());
     }
 
     /**
@@ -101,7 +101,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             $this->parserMock,
             $this->stateMock
         );
-        $this->assertEquals($this->parserMock, $model->getParser());
+        $this->assertSame($this->parserMock, $model->getParser());
     }
 
     /**
@@ -126,7 +126,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             $scope
         );
         $model->processResponseBody($body, true);
-        $this->assertEquals($body, $expected);
+        $this->assertSame($body, $expected);
     }
 
     /**
@@ -195,7 +195,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         );
 
         $model->processResponseBody($body, $isJson);
-        $this->assertEquals($body, $expected);
+        $this->assertSame($body, $expected);
     }
 
     /**
@@ -260,7 +260,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         );
 
         $model->processResponseBody($body, $isJson);
-        $this->assertEquals($body, $expected);
+        $this->assertSame($body, $expected);
     }
 
     /**

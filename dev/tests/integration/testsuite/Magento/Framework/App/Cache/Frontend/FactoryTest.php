@@ -57,27 +57,27 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->save($secondData, $secondIdentifier));
 
         //Checking data
-        $this->assertEquals($this->model->load($identifier), $data);
-        $this->assertEquals($this->model->load($secondIdentifier), $secondData);
+        $this->assertSame($this->model->load($identifier), $data);
+        $this->assertSame($this->model->load($secondIdentifier), $secondData);
 
         //Removing data
         sleep(2);
         $this->assertTrue($this->model->remove($secondIdentifier));
-        $this->assertEquals($this->model->load($identifier), false);
-        $this->assertEquals($this->model->load($secondIdentifier), false);
+        $this->assertSame($this->model->load($identifier), false);
+        $this->assertSame($this->model->load($secondIdentifier), false);
 
         //Saving data
         $this->assertTrue($this->model->save($data, $identifier));
         $this->assertTrue($this->model->save($secondData, $secondIdentifier));
 
         //Checking data
-        $this->assertEquals($this->model->load($identifier), $data);
-        $this->assertEquals($this->model->load($secondIdentifier), $secondData);
+        $this->assertSame($this->model->load($identifier), $data);
+        $this->assertSame($this->model->load($secondIdentifier), $secondData);
 
         //Removing data
         sleep(2);
         $this->assertTrue($this->model->remove($identifier));
-        $this->assertEquals($this->model->load($identifier), false);
-        $this->assertEquals($this->model->load($secondIdentifier), false);
+        $this->assertSame($this->model->load($identifier), false);
+        $this->assertSame($this->model->load($secondIdentifier), false);
     }
 }

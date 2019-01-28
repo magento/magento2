@@ -79,7 +79,7 @@ class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('where')
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->selectMock,
             $this->model->afterGetSelect($this->optionSelectBuilderMock, $this->selectMock)
         );

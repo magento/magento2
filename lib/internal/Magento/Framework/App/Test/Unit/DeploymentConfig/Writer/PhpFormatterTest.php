@@ -18,7 +18,7 @@ class PhpFormatterTest extends \PHPUnit\Framework\TestCase
     public function testFormat($data, $comments, $expectedResult)
     {
         $formatter = new PhpFormatter();
-        $this->assertEquals($expectedResult, $formatter->format($data, $comments));
+        $this->assertSame($expectedResult, $formatter->format($data, $comments));
     }
 
     /**

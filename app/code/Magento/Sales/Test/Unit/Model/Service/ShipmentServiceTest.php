@@ -111,7 +111,7 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getShippingLabel')
             ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->shipmentService->getLabel($id));
+        $this->assertSame($returnValue, $this->shipmentService->getLabel($id));
     }
 
     /**
@@ -151,7 +151,7 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteriaMock)
             ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->shipmentService->getCommentsList($id));
+        $this->assertSame($returnValue, $this->shipmentService->getCommentsList($id));
     }
 
     /**
@@ -178,6 +178,6 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
             ->with($modelMock)
             ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->shipmentService->notify($id));
+        $this->assertSame($returnValue, $this->shipmentService->notify($id));
     }
 }

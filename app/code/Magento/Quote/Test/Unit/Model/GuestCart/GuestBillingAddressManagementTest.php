@@ -78,7 +78,7 @@ class GuestBillingAddressManagementTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $this->billingAddressManagementMock->expects($this->once())->method('get')->willReturn($this->addressMock);
-        $this->assertEquals($this->addressMock, $this->model->get($this->maskedCartId));
+        $this->assertSame($this->addressMock, $this->model->get($this->maskedCartId));
     }
 
     /**
@@ -88,6 +88,6 @@ class GuestBillingAddressManagementTest extends \PHPUnit\Framework\TestCase
     {
         $addressId = 1;
         $this->billingAddressManagementMock->expects($this->once())->method('assign')->willReturn($addressId);
-        $this->assertEquals($addressId, $this->model->assign($this->maskedCartId, $this->addressMock));
+        $this->assertSame($addressId, $this->model->assign($this->maskedCartId, $this->addressMock));
     }
 }

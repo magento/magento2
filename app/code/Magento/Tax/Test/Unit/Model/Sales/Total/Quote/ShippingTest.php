@@ -156,7 +156,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             'shipping_incl_tax' => $value
         ];
 
-        $this->assertEquals($expectedResult, $this->model->fetch($this->quoteMock, $total));
+        $this->assertSame($expectedResult, $this->model->fetch($this->quoteMock, $total));
     }
 
     public function testFetchWithZeroShipping()

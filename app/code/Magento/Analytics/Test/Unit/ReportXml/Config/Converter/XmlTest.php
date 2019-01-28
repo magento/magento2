@@ -116,6 +116,6 @@ class XmlTest extends \PHPUnit\Framework\TestCase
 
         $dom->loadXML(file_get_contents(__DIR__ . '/../_files/valid_reports.xml'));
 
-        $this->assertEquals($expectedArray, $this->subject->convert($dom));
+        $this->assertSame($expectedArray, $this->subject->convert($dom));
     }
 }

@@ -344,7 +344,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($linkId, $this->service->save($productSku, $linkMock));
+        $this->assertSame($linkId, $this->service->save($productSku, $linkMock));
     }
 
     public function testUpdateWithExistingFile()
@@ -417,7 +417,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($linkId, $this->service->save($productSku, $linkMock));
+        $this->assertSame($linkId, $this->service->save($productSku, $linkMock));
     }
 
     /**
@@ -537,7 +537,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->setLinkAssertions($linkMock, $linkData);
         $this->linkDataObjectFactory->expects($this->once())->method('create')->willReturn($linkInterfaceMock);
 
-        $this->assertEquals([$linkInterfaceMock], $this->service->getList($productSku));
+        $this->assertSame([$linkInterfaceMock], $this->service->getList($productSku));
     }
 
     /**

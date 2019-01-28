@@ -56,7 +56,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         $this->_xmlParserMock->expects($this->once())->method('xmlToArray')->will($this->returnValue($returnArray));
         $expectedArray = ['key1' => 'test1', 'key2' => 'test2'];
         /** Initialize SUT. */
-        $this->assertEquals(
+        $this->assertSame(
             $expectedArray,
             $this->_xmlDeserializer->deserialize($validInputXml),
             'Request XML body was parsed incorrectly into array of params.'
@@ -105,8 +105,8 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $exceptionMessage = 'Decoding Error: End tag for "key1" was omitted.';
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
-            $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(
+            $this->assertSame($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
+            $this->assertSame(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),
                 'HTTP code is invalid'
@@ -130,8 +130,8 @@ class XmlTest extends \PHPUnit\Framework\TestCase
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
-            $this->assertEquals('Decoding error.', $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(
+            $this->assertSame('Decoding error.', $e->getMessage(), 'Exception message is invalid');
+            $this->assertSame(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),
                 'HTTP code is invalid'

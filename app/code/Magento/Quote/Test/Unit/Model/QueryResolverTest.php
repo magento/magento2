@@ -89,7 +89,7 @@ class QueryResolverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('save')
             ->with($serializedData, 'connection_config_cache', []);
-        $this->assertEquals($isSingleQuery, $this->quoteResolver->isSingleQuery());
+        $this->assertSame($isSingleQuery, $this->quoteResolver->isSingleQuery());
     }
 
     /**

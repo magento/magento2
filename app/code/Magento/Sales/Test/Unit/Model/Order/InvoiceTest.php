@@ -122,7 +122,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($canVoid);
 
         $this->model->setState(\Magento\Sales\Model\Order\Invoice::STATE_PAID);
-        $this->assertEquals($canVoid, $this->model->canVoid());
+        $this->assertSame($canVoid, $this->model->canVoid());
     }
 
     /**
@@ -134,7 +134,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState(\Magento\Sales\Model\Order\Invoice::STATE_PAID);
         $this->model->setCanVoidFlag($canVoid);
 
-        $this->assertEquals($canVoid, $this->model->canVoid());
+        $this->assertSame($canVoid, $this->model->canVoid());
     }
 
     /**
@@ -152,7 +152,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->with($this->entityType)
             ->will($this->returnSelf());
 
-        $this->assertEquals($this->order, $this->model->getOrder());
+        $this->assertSame($this->order, $this->model->getOrder());
     }
 
     public function testGetOrderLoadedById()
@@ -171,18 +171,18 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->order);
 
-        $this->assertEquals($this->order, $this->modelWithoutOrder->getOrder());
+        $this->assertSame($this->order, $this->modelWithoutOrder->getOrder());
     }
 
     public function testGetEntityType()
     {
-        $this->assertEquals($this->entityType, $this->model->getEntityType());
+        $this->assertSame($this->entityType, $this->model->getEntityType());
     }
 
     public function testGetIncrementId()
     {
         $this->model->setIncrementId('test_increment_id');
-        $this->assertEquals('test_increment_id', $this->model->getIncrementId());
+        $this->assertSame('test_increment_id', $this->model->getIncrementId());
     }
 
     public function testSetOrder()
@@ -194,24 +194,24 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getOrderId());
         $this->assertNull($this->model->getStoreId());
 
-        $this->assertEquals($this->model, $this->model->setOrder($this->order));
-        $this->assertEquals($this->order, $this->model->getOrder());
-        $this->assertEquals($orderId, $this->model->getOrderId());
-        $this->assertEquals($storeId, $this->model->getStoreId());
+        $this->assertSame($this->model, $this->model->setOrder($this->order));
+        $this->assertSame($this->order, $this->model->getOrder());
+        $this->assertSame($orderId, $this->model->getOrderId());
+        $this->assertSame($storeId, $this->model->getStoreId());
     }
 
     public function testGetStore()
     {
         $store = $this->helperManager->getObject(\Magento\Store\Model\Store::class, []);
         $this->order->expects($this->once())->method('getStore')->willReturn($store);
-        $this->assertEquals($store, $this->model->getStore());
+        $this->assertSame($store, $this->model->getStore());
     }
 
     public function testGetShippingAddress()
     {
         $address = $this->helperManager->getObject(\Magento\Sales\Model\Order\Address::class, []);
         $this->order->expects($this->once())->method('getShippingAddress')->willReturn($address);
-        $this->assertEquals($address, $this->model->getShippingAddress());
+        $this->assertSame($address, $this->model->getShippingAddress());
     }
 
     /**
@@ -230,7 +230,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             $this->order->expects($this->never())->method('getPayment');
             $this->paymentMock->expects($this->never())->method('canCapture');
         }
-        $this->assertEquals($expectedResult, $this->model->canCapture());
+        $this->assertSame($expectedResult, $this->model->canCapture());
     }
 
     /**
@@ -258,7 +258,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     public function testCanCancel($state, $expectedResult)
     {
         $this->model->setState($state);
-        $this->assertEquals($expectedResult, $this->model->canCancel());
+        $this->assertSame($expectedResult, $this->model->canCancel());
     }
 
     /**
@@ -287,7 +287,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState($state);
         $this->model->setBaseGrandTotal($baseGrandTotal);
         $this->model->setBaseTotalRefunded($baseTotalRefunded);
-        $this->assertEquals($expectedResult, $this->model->canRefund());
+        $this->assertSame($expectedResult, $this->model->canRefund());
     }
 
     /**
@@ -314,7 +314,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->paymentMock->expects($this->once())->method('capture')->with($this->model)->willReturnSelf();
         $this->paymentMock->expects($this->never())->method('pay');
-        $this->assertEquals($this->model, $this->model->capture());
+        $this->assertSame($this->model, $this->model->capture());
     }
 
     public function testCapturePaid()
@@ -331,7 +331,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->mockPay();
 
-        self::assertEquals($this->model, $this->model->capture());
+        self::assertSame($this->model, $this->model->capture());
     }
 
     public function mockPay()
@@ -371,15 +371,15 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($items);
 
         self::assertFalse($this->model->wasPayCalled());
-        self::assertEquals($this->model, $this->model->pay());
+        self::assertSame($this->model, $this->model->pay());
         self::assertTrue($this->model->wasPayCalled());
-        self::assertEquals($expectedState, $this->model->getState());
+        self::assertSame($expectedState, $this->model->getState());
 
         #second call of pay() method must do nothing
         $this->model->pay();
 
-        self::assertEquals($expectedBaseTotal, $this->order->getBaseTotalPaid());
-        self::assertEquals($expectedTotal, $this->order->getTotalPaid());
+        self::assertSame($expectedBaseTotal, $this->order->getBaseTotalPaid());
+        self::assertSame($expectedTotal, $this->order->getTotalPaid());
     }
 
     /**
@@ -441,7 +441,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState(Invoice::STATE_OPEN);
         $this->model->cancel();
 
-        self::assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
+        self::assertSame(Invoice::STATE_CANCELED, $this->model->getState());
     }
 
     /**
@@ -462,7 +462,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState($initialInvoiceStatus);
         $this->model->cancel();
 
-        self::assertEquals($finalInvoiceStatus, $this->model->getState());
+        self::assertSame($finalInvoiceStatus, $this->model->getState());
     }
 
     /**

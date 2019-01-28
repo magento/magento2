@@ -81,10 +81,10 @@ class EditorTest extends \PHPUnit\Framework\TestCase
 
     public function testConstruct()
     {
-        $this->assertEquals('textarea', $this->model->getType());
-        $this->assertEquals('textarea', $this->model->getExtType());
-        $this->assertEquals(Editor::DEFAULT_ROWS, $this->model->getRows());
-        $this->assertEquals(Editor::DEFAULT_COLS, $this->model->getCols());
+        $this->assertSame('textarea', $this->model->getType());
+        $this->assertSame('textarea', $this->model->getExtType());
+        $this->assertSame(Editor::DEFAULT_ROWS, $this->model->getRows());
+        $this->assertSame(Editor::DEFAULT_COLS, $this->model->getCols());
 
         $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
 
@@ -98,8 +98,8 @@ class EditorTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals('wysiwyg', $model->getType());
-        $this->assertEquals('wysiwyg', $model->getExtType());
+        $this->assertSame('wysiwyg', $model->getType());
+        $this->assertSame('wysiwyg', $model->getExtType());
     }
 
     public function testGetElementHtml()
@@ -152,7 +152,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
         if ($attributeFlag !== null) {
             $this->model->setData('wysiwyg', $attributeFlag);
         }
-        $this->assertEquals($expected, $this->model->isEnabled());
+        $this->assertSame($expected, $this->model->isEnabled());
     }
 
     /**
@@ -181,16 +181,16 @@ class EditorTest extends \PHPUnit\Framework\TestCase
 
     public function testTranslate()
     {
-        $this->assertEquals('Insert Image...', $this->model->translate('Insert Image...'));
+        $this->assertSame('Insert Image...', $this->model->translate('Insert Image...'));
     }
 
     public function testGetConfig()
     {
         $config = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
-        $this->assertEquals($config, $this->model->getConfig());
+        $this->assertSame($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');
-        $this->assertEquals('test', $this->model->getConfig('test'));
+        $this->assertSame('test', $this->model->getConfig('test'));
     }
 
     /**

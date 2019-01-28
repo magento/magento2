@@ -105,12 +105,12 @@ class RssTest extends \PHPUnit\Framework\TestCase
 
         $data = $this->block->getRssData();
 
-        $this->assertEquals($rssData['title'], $data['title']);
-        $this->assertEquals($rssData['description'], $data['description']);
-        $this->assertEquals($rssData['link'], $data['link']);
-        $this->assertEquals($rssData['charset'], $data['charset']);
-        $this->assertEquals($rssData['entries']['title'], $data['entries'][0]['title']);
-        $this->assertEquals($rssData['entries']['link'], $data['entries'][0]['link']);
+        $this->assertSame($rssData['title'], $data['title']);
+        $this->assertSame($rssData['description'], $data['description']);
+        $this->assertSame($rssData['link'], $data['link']);
+        $this->assertSame($rssData['charset'], $data['charset']);
+        $this->assertSame($rssData['entries']['title'], $data['entries'][0]['title']);
+        $this->assertSame($rssData['entries']['link'], $data['entries'][0]['link']);
         $this->assertContains($rssData['entries']['description']['rss_url'], $data['entries'][0]['description']);
         $this->assertContains($rssData['entries']['description']['name'], $data['entries'][0]['description']);
         $this->assertContains($rssData['entries']['description']['summary'], $data['entries'][0]['description']);
@@ -120,16 +120,16 @@ class RssTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(0, $this->block->getCacheLifetime());
+        $this->assertSame(0, $this->block->getCacheLifetime());
     }
 
     public function testIsAllowed()
     {
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertSame(true, $this->block->isAllowed());
     }
 
     public function testGetFeeds()
     {
-        $this->assertEquals([], $this->block->getFeeds());
+        $this->assertSame([], $this->block->getFeeds());
     }
 }

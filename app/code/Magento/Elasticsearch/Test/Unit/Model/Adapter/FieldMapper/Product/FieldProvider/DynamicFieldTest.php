@@ -257,7 +257,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                 }
             ));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->provider->getFields(['websiteId' => 1])
         );

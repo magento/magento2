@@ -113,7 +113,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        static::assertEquals(
+        static::assertSame(
             $expectedResult,
             $this->builder->build($buildSubject)
         );

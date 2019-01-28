@@ -82,6 +82,6 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
 
         $uses->expects($this->once())->method('getClassNameWithNamespace')->will($this->returnValue('\Object'));
 
-        $this->assertEquals(['\Object'], $throws->getDependencies($uses));
+        $this->assertSame(['\Object'], $throws->getDependencies($uses));
     }
 }

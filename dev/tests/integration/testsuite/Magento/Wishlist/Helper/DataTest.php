@@ -50,7 +50,7 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
         $json = $this->_wishlistHelper->getAddParams($product);
         $params = (array)json_decode($json);
         $data = (array)$params['data'];
-        $this->assertEquals('11', $data['product']);
+        $this->assertSame('11', $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith('wishlist/index/add/', $params['action']);
     }
@@ -60,7 +60,7 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
         $json = $this->_wishlistHelper->getMoveFromCartParams(11);
         $params = (array)json_decode($json);
         $data = (array)$params['data'];
-        $this->assertEquals('11', $data['item']);
+        $this->assertSame('11', $data['item']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith('wishlist/index/fromcart/', $params['action']);
     }
@@ -73,8 +73,8 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
         $json = $this->_wishlistHelper->getUpdateParams($product);
         $params = (array)json_decode($json);
         $data = (array)$params['data'];
-        $this->assertEquals('11', $data['product']);
-        $this->assertEquals('15', $data['id']);
+        $this->assertSame('11', $data['product']);
+        $this->assertSame('15', $data['id']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith('wishlist/index/updateItemOptions/', $params['action']);
     }
@@ -98,10 +98,10 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_wishlistHelper = $this->objectManager->get(\Magento\Wishlist\Helper\Data::class);
 
         $this->_customerSession->loginById(1);
-        $this->assertEquals($customer, $this->_wishlistHelper->getCustomer());
+        $this->assertSame($customer, $this->_wishlistHelper->getCustomer());
 
         /** @var \Magento\Customer\Helper\View $customerViewHelper */
         $customerViewHelper = $this->objectManager->create(\Magento\Customer\Helper\View::class);
-        $this->assertEquals($customerViewHelper->getCustomerName($customer), $this->_wishlistHelper->getCustomerName());
+        $this->assertSame($customerViewHelper->getCustomerName($customer), $this->_wishlistHelper->getCustomerName());
     }
 }

@@ -213,7 +213,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->prepareRedirect($path, $arguments, 0);
 
         $this->shipmentEmail->execute();
-        $this->assertEquals($this->response, $this->shipmentEmail->getResponse());
+        $this->assertSame($this->response, $this->shipmentEmail->getResponse());
     }
 
     /**

@@ -77,7 +77,7 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($additionalInfo);
 
         $actual = $this->builder->build($subject);
-        static::assertEquals($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**

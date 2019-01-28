@@ -28,7 +28,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     public function testGetAbsolutePath($basePath, $path, $expected)
     {
         $file = new File();
-        $this->assertEquals($expected, $file->getAbsolutePath($basePath, $path));
+        $this->assertSame($expected, $file->getAbsolutePath($basePath, $path));
     }
 
     /**
@@ -50,7 +50,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     public function testGetRelativePath($basePath, $path, $expected)
     {
         $file = new File();
-        $this->assertEquals($expected, $file->getRelativePath($basePath, $path));
+        $this->assertSame($expected, $file->getRelativePath($basePath, $path));
     }
 
     /**

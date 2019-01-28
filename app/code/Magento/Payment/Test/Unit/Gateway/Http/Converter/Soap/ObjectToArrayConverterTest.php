@@ -29,6 +29,6 @@ class ObjectToArrayConverterTest extends \PHPUnit\Framework\TestCase
         ];
 
         $converter = new ObjectToArrayConverter();
-        static::assertEquals($output, $converter->convert($input));
+        static::assertSame($output, $converter->convert($input));
     }
 }

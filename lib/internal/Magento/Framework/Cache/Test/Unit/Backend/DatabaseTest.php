@@ -86,8 +86,8 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->load(5));
-        $this->assertEquals($expected, $database->load(5, true));
+        $this->assertSame($expected, $database->load(5));
+        $this->assertSame($expected, $database->load(5, true));
     }
 
     /**
@@ -185,8 +185,8 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->load(5));
-        $this->assertEquals($expected, $database->load(5, true));
+        $this->assertSame($expected, $database->load(5));
+        $this->assertSame($expected, $database->load(5, true));
     }
 
     /**
@@ -203,7 +203,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->save('data', 4));
+        $this->assertSame($expected, $database->save('data', 4));
     }
 
     /**
@@ -272,7 +272,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->remove(3));
+        $this->assertSame($expected, $database->remove(3));
     }
 
     /**
@@ -317,7 +317,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->clean($mode));
+        $this->assertSame($expected, $database->clean($mode));
     }
 
     /**
@@ -407,7 +407,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->getIds());
+        $this->assertSame($expected, $database->getIds());
     }
 
     /**
@@ -478,7 +478,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
-        $this->assertEquals(['value_one', 'value_two'], $database->getIds());
+        $this->assertSame(['value_one', 'value_two'], $database->getIds());
     }
 
     public function testGetIdsMatchingTags()
@@ -527,7 +527,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
-        $this->assertEquals(['value_one', 'value_two'], $database->getIdsMatchingTags());
+        $this->assertSame(['value_one', 'value_two'], $database->getIdsMatchingTags());
     }
 
     public function testGetIdsNotMatchingTags()
@@ -580,7 +580,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
-        $this->assertEquals(['some_value_one'], $database->getIdsNotMatchingTags());
+        $this->assertSame(['some_value_one'], $database->getIdsNotMatchingTags());
     }
 
     public function testGetIdsMatchingAnyTags()
@@ -614,7 +614,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
-        $this->assertEquals(['some_value_one', 'some_value_two'], $database->getIds());
+        $this->assertSame(['some_value_one', 'some_value_two'], $database->getIds());
     }
 
     public function testGetMetadatas()
@@ -652,7 +652,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                'expire' => 3,
                 'mtime' => 2,
@@ -676,7 +676,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ['options' => $options]
         );
 
-        $this->assertEquals($expected, $database->touch(2, 100));
+        $this->assertSame($expected, $database->touch(2, 100));
     }
 
     /**

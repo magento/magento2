@@ -184,7 +184,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 ->willReturnOnConsecutiveCalls($minifyTemplates);
         }
 
-        $this->assertEquals(null, $this->service->deploy($options));
+        $this->assertSame(null, $this->service->deploy($options));
     }
 
     /**

@@ -54,7 +54,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $this->assertEquals([], $this->_webApiCall($this->getListServiceInfo($cartId), ["cartId" => $cartId]));
+        $this->assertSame([], $this->_webApiCall($this->getListServiceInfo($cartId), ["cartId" => $cartId]));
     }
 
     /**
@@ -86,7 +86,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $requestData = ["cartId" => $cartId];
 
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
-        $this->assertEquals($expectedData, $returnedRates);
+        $this->assertSame($expectedData, $returnedRates);
     }
 
     /**

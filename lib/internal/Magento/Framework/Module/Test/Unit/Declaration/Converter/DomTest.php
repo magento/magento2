@@ -23,7 +23,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFilePath));
         $expectedResult = include __DIR__ . '/_files/converted_valid_module.php';
-        $this->assertEquals($expectedResult, $this->_converter->convert($dom));
+        $this->assertSame($expectedResult, $this->_converter->convert($dom));
     }
 
     /**

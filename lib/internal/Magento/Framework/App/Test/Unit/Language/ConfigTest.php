@@ -56,11 +56,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testConfiguration()
     {
-        $this->assertEquals('en_GB', $this->config->getCode());
-        $this->assertEquals('Magento', $this->config->getVendor());
-        $this->assertEquals('en_GB', $this->config->getPackage());
-        $this->assertEquals('100', $this->config->getSortOrder());
-        $this->assertEquals(
+        $this->assertSame('en_GB', $this->config->getCode());
+        $this->assertSame('Magento', $this->config->getVendor());
+        $this->assertSame('en_GB', $this->config->getPackage());
+        $this->assertSame('100', $this->config->getSortOrder());
+        $this->assertSame(
             [
                 ['vendor' => 'oxford-university', 'package' => 'en_us'],
                 ['vendor' => 'oxford-university', 'package' => 'en_gb'],
@@ -73,7 +73,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $method = new \ReflectionMethod($this->config, 'getSchemaFile');
         $method->setAccessible(true);
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'),
             $method->invoke($this->config)
         );

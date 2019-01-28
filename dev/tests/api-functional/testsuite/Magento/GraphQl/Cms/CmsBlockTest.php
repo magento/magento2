@@ -59,9 +59,9 @@ QUERY;
         self::assertArrayHasKey('cmsBlocks', $response);
         self::assertArrayHasKey('items', $response['cmsBlocks']);
 
-        self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
-        self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
-        self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
+        self::assertSame($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
+        self::assertSame($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
+        self::assertSame($renderedContent, $response['cmsBlocks']['items'][0]['content']);
     }
 
     /**
@@ -161,8 +161,8 @@ QUERY;
         }
 
         self::assertNotEmpty($responseData);
-        self::assertEquals('enabled_block', $responseData['data']['cmsBlocks']['items'][0]['identifier']);
-        self::assertEquals(
+        self::assertSame('enabled_block', $responseData['data']['cmsBlocks']['items'][0]['identifier']);
+        self::assertSame(
             'The CMS block with the "disabled_block" ID doesn\'t exist.',
             $responseData['errors'][0]['message']
         );

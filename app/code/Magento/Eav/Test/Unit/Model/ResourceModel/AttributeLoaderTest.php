@@ -87,7 +87,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
             ->with($entityType, $searchCriteria)
             ->willReturn($searchResultMock);
 
-        $this->assertEquals([$attributeMock], $this->attributeLoader->getAttributes($entityType, $attributeSetId));
+        $this->assertSame([$attributeMock], $this->attributeLoader->getAttributes($entityType, $attributeSetId));
     }
 
     /**

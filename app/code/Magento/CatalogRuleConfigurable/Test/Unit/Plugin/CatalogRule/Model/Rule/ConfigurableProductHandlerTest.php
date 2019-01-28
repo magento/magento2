@@ -63,7 +63,7 @@ class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
         $this->configurableMock->expects($this->never())->method('getChildrenIds');
 
         $productIds = ['product' => 'valid results'];
-        $this->assertEquals(
+        $this->assertSame(
             $productIds,
             $this->configurableProductHandler->afterGetMatchingProductIds($this->ruleMock, $productIds)
         );
@@ -81,7 +81,7 @@ class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
             ['conf2', true, [ 0 => ['simple1', 'simple2']]],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'simple1' => [
                     0 => true,

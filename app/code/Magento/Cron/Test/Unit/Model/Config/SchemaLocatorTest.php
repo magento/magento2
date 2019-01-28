@@ -43,6 +43,6 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir/crontab.xsd', $this->_locator->getSchema());
+        $this->assertSame('schema_dir/crontab.xsd', $this->_locator->getSchema());
     }
 }

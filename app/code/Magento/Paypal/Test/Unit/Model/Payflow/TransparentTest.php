@@ -443,6 +443,6 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInfoBlockType()
     {
-        static::assertEquals(Info::class, $this->object->getInfoBlockType());
+        static::assertSame(Info::class, $this->object->getInfoBlockType());
     }
 }

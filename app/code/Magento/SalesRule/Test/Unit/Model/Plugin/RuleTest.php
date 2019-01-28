@@ -38,7 +38,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadRelations()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subject,
             $this->plugin->aroundLoadRelations($this->subject, $this->genericClosure)
         );

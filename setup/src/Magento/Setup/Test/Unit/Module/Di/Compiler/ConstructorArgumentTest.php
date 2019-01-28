@@ -11,8 +11,8 @@ class ConstructorArgumentTest extends \PHPUnit\Framework\TestCase
     {
         $argument = ['configuration', 'array', true, null];
         $model = new \Magento\Setup\Module\Di\Compiler\ConstructorArgument($argument);
-        $this->assertEquals($argument[0], $model->getName());
-        $this->assertEquals($argument[1], $model->getType());
+        $this->assertSame($argument[0], $model->getName());
+        $this->assertSame($argument[1], $model->getType());
         $this->assertTrue($model->isRequired());
         $this->assertNull($model->getDefaultValue());
     }

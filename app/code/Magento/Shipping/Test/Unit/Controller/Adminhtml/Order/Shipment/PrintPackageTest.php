@@ -168,7 +168,7 @@ class PrintPackageTest extends \PHPUnit\Framework\TestCase
                 'application/pdf'
             )->will($this->returnValue('result-pdf-content'));
 
-        $this->assertEquals('result-pdf-content', $this->controller->execute());
+        $this->assertSame('result-pdf-content', $this->controller->execute());
     }
 
     /**

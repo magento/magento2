@@ -184,10 +184,10 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
 
         $returnResult = $this->model->collectRates($request);
 
-        $this->assertEquals($rate['price'], $returnPrice);
-        $this->assertEquals($rate['cost'], $returnCost);
-        $this->assertEquals($method, $returnMethod);
-        $this->assertEquals($result, $returnResult);
+        $this->assertSame($rate['price'], $returnPrice);
+        $this->assertSame($rate['cost'], $returnCost);
+        $this->assertSame($method, $returnMethod);
+        $this->assertSame($result, $returnResult);
     }
 
     /**

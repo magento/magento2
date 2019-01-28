@@ -123,11 +123,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     {
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
         $this->_model->write(self::SESSION_ID, $data);
-        $this->assertEquals($data, $this->_model->read(self::SESSION_ID));
+        $this->assertSame($data, $this->_model->read(self::SESSION_ID));
 
         $data = serialize($this->_sessionData[self::SESSION_EXISTS]);
         $this->_model->write(self::SESSION_ID, $data);
-        $this->assertEquals($data, $this->_model->read(self::SESSION_ID));
+        $this->assertSame($data, $this->_model->read(self::SESSION_ID));
 
         $this->_model->destroy(self::SESSION_ID);
         $this->assertEmpty($this->_model->read(self::SESSION_ID));
@@ -139,7 +139,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     public function testGc()
     {
         $this->_model->write('test', 'test');
-        $this->assertEquals('test', $this->_model->read('test'));
+        $this->assertSame('test', $this->_model->read('test'));
         $this->_model->gc(-1);
         $this->assertEmpty($this->_model->read('test'));
     }
@@ -162,12 +162,12 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         $bind = [self::COLUMN_SESSION_ID => self::SESSION_ID];
         $session = $this->_connection->fetchRow($select, $bind);
 
-        $this->assertEquals(self::SESSION_ID, $session[self::COLUMN_SESSION_ID]);
+        $this->assertSame(self::SESSION_ID, $session[self::COLUMN_SESSION_ID]);
         $this->assertTrue(
             ctype_digit((string)$session[self::COLUMN_SESSION_EXPIRES]),
             'Value of session expire field must have integer type'
         );
-        $this->assertEquals($data, base64_decode($session[self::COLUMN_SESSION_DATA]));
+        $this->assertSame($data, base64_decode($session[self::COLUMN_SESSION_DATA]));
     }
 
     /**
@@ -201,6 +201,6 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         $this->_connection->insertOnDuplicate($this->_sessionTable, $sessionRecord, [self::COLUMN_SESSION_DATA]);
 
         $sessionData = $this->_model->read(self::SESSION_ID);
-        $this->assertEquals($this->_sourceData[self::SESSION_NEW], unserialize($sessionData));
+        $this->assertSame($this->_sourceData[self::SESSION_NEW], unserialize($sessionData));
     }
 }

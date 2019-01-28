@@ -51,6 +51,6 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             ->with($filename)
             ->willReturn($expected);
 
-        $this->assertEquals($expected, $this->fileResolver->get($filename, null));
+        $this->assertSame($expected, $this->fileResolver->get($filename, null));
     }
 }

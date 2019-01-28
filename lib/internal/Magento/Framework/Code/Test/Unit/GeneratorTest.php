@@ -85,7 +85,7 @@ class GeneratorTest extends TestCase
             ['factory', 'proxy', 'interceptor'],
             $this->definedClassesMock
         );
-        $this->assertEquals(array_values($this->expectedEntities), $this->model->getGeneratedEntities());
+        $this->assertSame(array_values($this->expectedEntities), $this->model->getGeneratedEntities());
     }
 
     /**
@@ -108,7 +108,7 @@ class GeneratorTest extends TestCase
 
     public function testGenerateClassWithWrongName()
     {
-        $this->assertEquals(
+        $this->assertSame(
             Generator::GENERATION_ERROR,
             $this->model->generateClass(self::SOURCE_CLASS)
         );
@@ -196,7 +196,7 @@ class GeneratorTest extends TestCase
         $includeFileInvokeCount = $fileExists ? 1 : 0;
         $this->ioObjectMock->expects($this->exactly($includeFileInvokeCount))->method('includeFile');
 
-        $this->assertEquals(
+        $this->assertSame(
             Generator::GENERATION_SKIP,
             $this->model->generateClass(GeneratedClassFactory::class)
         );

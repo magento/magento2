@@ -76,7 +76,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->model->afterLoad();
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [
                     'value' => 'value',

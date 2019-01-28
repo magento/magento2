@@ -32,7 +32,7 @@ class DeclarativeSchemaRuleTest extends \PHPUnit\Framework\TestCase
     public function testGetDependencyInfo($module, $file, $contents, array $expected)
     {
         $actualDependencies = $this->model->getDependencyInfo($module, 'db_schema', $file, $contents);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $actualDependencies
         );

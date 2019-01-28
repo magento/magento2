@@ -24,7 +24,7 @@ class WordWrapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testWrapping($inputData, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->wrapper->wrapWords($inputData['source'], $inputData['words'], $inputData['format'])
         );

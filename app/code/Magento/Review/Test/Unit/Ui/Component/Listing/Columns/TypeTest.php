@@ -62,6 +62,6 @@ class TypeTest extends AbstractColumnTest
             ],
         ];
 
-        $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
+        $this->assertSame($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
     }
 }

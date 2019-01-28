@@ -35,7 +35,7 @@ class ListStatusTest extends \PHPUnit\Framework\TestCase
         ];
         $result = $this->listStatus->addItem($origin, $code, $message, $additionalData);
         $items = $this->listStatus->getItems();
-        $this->assertEquals($mockItems, $items);
+        $this->assertSame($mockItems, $items);
         $this->assertInstanceOf(\Magento\Sales\Model\Status\ListStatus::class, $result);
     }
 
@@ -44,7 +44,7 @@ class ListStatusTest extends \PHPUnit\Framework\TestCase
         $presentAndAbsentIndex = [0, 1, 4];
         $mockItems = $this->addItems();
         $removedMockItems = $this->listStatus->removeItems($presentAndAbsentIndex);
-        $this->assertEquals($mockItems, $removedMockItems);
+        $this->assertSame($mockItems, $removedMockItems);
     }
 
     public function testRemoveItemsByPresentAndAbsentParams()
@@ -52,7 +52,7 @@ class ListStatusTest extends \PHPUnit\Framework\TestCase
         $items = $this->addItems();
         $presentAndAbsentParams = ['message', 'noneparam'];
         $result = $this->listStatus->removeItemsByParams($presentAndAbsentParams);
-        $this->assertEquals($items, $result);
+        $this->assertSame($items, $result);
     }
 
     public function testClear()
@@ -61,7 +61,7 @@ class ListStatusTest extends \PHPUnit\Framework\TestCase
         $expected = [];
         $result = $this->listStatus->clear();
         $this->assertInstanceOf(\Magento\Sales\Model\Status\ListStatus::class, $result);
-        $this->assertEquals($expected, $result->getItems());
+        $this->assertSame($expected, $result->getItems());
     }
 
     /**

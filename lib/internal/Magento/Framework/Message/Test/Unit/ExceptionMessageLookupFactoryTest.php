@@ -74,6 +74,6 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
             ->with($exception, MessageInterface::TYPE_ERROR)
             ->will($this->returnValue($messageError));
 
-        $this->assertEquals($messageError, $this->exceptionMessageLookupFactory->createMessage($exception));
+        $this->assertSame($messageError, $this->exceptionMessageLookupFactory->createMessage($exception));
     }
 }

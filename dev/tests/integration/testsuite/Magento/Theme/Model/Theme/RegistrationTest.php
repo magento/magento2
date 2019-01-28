@@ -95,7 +95,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
         $this->registerThemes();
         $parentId = $subVirtualTheme->getParentId();
         $subVirtualTheme->load($subVirtualTheme->getId());
-        $this->assertNotEquals($parentId, $subVirtualTheme->getParentId());
+        $this->assertNotSame($parentId, $subVirtualTheme->getParentId());
     }
 
     /**
@@ -112,7 +112,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
 
         $this->registerThemes();
         $testTheme->load($testTheme->getId());
-        $this->assertNotEquals(
+        $this->assertNotSame(
             (int)$testTheme->getType(),
             \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
         );
@@ -129,6 +129,6 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
             ['frontend', 'Test/test_theme']
         );
         $theme = $this->_model->getThemeFromDb($themePath);
-        $this->assertEquals($themePath, $theme->getFullPath());
+        $this->assertSame($themePath, $theme->getFullPath());
     }
 }

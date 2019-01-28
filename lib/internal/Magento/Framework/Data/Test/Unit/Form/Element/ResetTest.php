@@ -42,7 +42,7 @@ class ResetTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('text', $this->_model->getType());
-        $this->assertEquals('textfield', $this->_model->getExtType());
+        $this->assertSame('text', $this->_model->getType());
+        $this->assertSame('textfield', $this->_model->getExtType());
     }
 }

@@ -162,7 +162,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturnMap([[$group, null, $group], [$store, null, $store]]);
         $this->systemStoreMock->expects($this->any())->method('getStoresStructure')->willReturn($storeStructure);
-        $this->assertEquals($this->model->prepareDataSource($dataSource), $expectedResult);
+        $this->assertSame($this->model->prepareDataSource($dataSource), $expectedResult);
     }
 
     /**

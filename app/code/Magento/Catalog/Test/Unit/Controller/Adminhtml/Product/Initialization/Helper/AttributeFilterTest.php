@@ -67,7 +67,7 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         }
 
         $actualProductData = $this->model->prepareProductAttributes($productMockMap, $requestProductData, $useDefaults);
-        $this->assertEquals($expectedProductData, $actualProductData);
+        $this->assertSame($expectedProductData, $actualProductData);
     }
 
     /**

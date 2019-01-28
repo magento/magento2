@@ -99,8 +99,8 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->localeFormatMock->expects($this->once())->method('getNumber')->will($this->returnValue($price));
 
-        $this->assertEquals($result, $this->validator->isValid($valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($result, $this->validator->isValid($valueMock));
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 
     /**
@@ -135,7 +135,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
             'option values' => 'Invalid option value',
         ];
         $this->assertFalse($this->validator->isValid($valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 
     /**
@@ -174,6 +174,6 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
 
         $messages = [];
         $this->assertTrue($this->validator->isValid($valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 }

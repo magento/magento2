@@ -83,7 +83,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'attribute_visible_user' => $this->_userAttribute,
             'attribute_invisible_system' => $this->_systemAttribute,
         ];
-        $this->assertEquals($expected, $this->_model->getAttributes());
+        $this->assertSame($expected, $this->_model->getAttributes());
     }
 
     /**
@@ -92,7 +92,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testGetUserAttributes()
     {
         $expected = ['attribute_visible_user' => $this->_userAttribute];
-        $this->assertEquals($expected, $this->_model->getUserAttributes());
+        $this->assertSame($expected, $this->_model->getUserAttributes());
     }
 
     /**
@@ -101,7 +101,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testGetSystemAttributes()
     {
         $expected = ['attribute_invisible_system' => $this->_systemAttribute];
-        $this->assertEquals($expected, $this->_model->getSystemAttributes());
+        $this->assertSame($expected, $this->_model->getSystemAttributes());
     }
 
     /**
@@ -110,7 +110,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testGetAllowedAttributes()
     {
         $expected = ['attribute_visible_user' => $this->_userAttribute];
-        $this->assertEquals($expected, $this->_model->getAllowedAttributes());
+        $this->assertSame($expected, $this->_model->getAllowedAttributes());
     }
 
     /**
@@ -139,7 +139,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->_model->expects($this->once())->method('_getValidator')->will($this->returnValue($validator));
 
         $data = ['test' => true];
-        $this->assertEquals($expected, $this->_model->validateData($data));
+        $this->assertSame($expected, $this->_model->validateData($data));
     }
 
     /**

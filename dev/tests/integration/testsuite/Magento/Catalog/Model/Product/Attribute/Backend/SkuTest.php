@@ -21,9 +21,9 @@ class SkuTest extends \PHPUnit\Framework\TestCase
         );
         $product = $repository->get('simple');
         $product->setId(null);
-        $this->assertEquals('simple', $product->getSku());
+        $this->assertSame('simple', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
-        $this->assertEquals('simple-1', $product->getSku());
+        $this->assertSame('simple-1', $product->getSku());
     }
 
     /**
@@ -32,9 +32,9 @@ class SkuTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateUniqueSkuNotExistingProduct($product)
     {
-        $this->assertEquals('simple', $product->getSku());
+        $this->assertSame('simple', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
-        $this->assertEquals('simple', $product->getSku());
+        $this->assertSame('simple', $product->getSku());
     }
 
     /**
@@ -55,9 +55,9 @@ class SkuTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product\Copier::class
         );
         $copier->copy($product);
-        $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
+        $this->assertSame('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
-        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());
+        $this->assertSame('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());
     }
 
     /**

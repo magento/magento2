@@ -83,16 +83,16 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
     public function testSetGetArea()
     {
-        $this->assertEquals(\Magento\Framework\View\DesignInterface::DEFAULT_AREA, $this->_model->getArea());
+        $this->assertSame(\Magento\Framework\View\DesignInterface::DEFAULT_AREA, $this->_model->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
-        $this->assertEquals(\Magento\Framework\App\Area::AREA_ADMINHTML, $this->_model->getArea());
+        $this->assertSame(\Magento\Framework\App\Area::AREA_ADMINHTML, $this->_model->getArea());
     }
 
     public function testSetDesignTheme()
     {
         $this->_model->setDesignTheme('Magento/blank', 'frontend');
-        $this->assertEquals('Magento/blank', $this->_model->getDesignTheme()->getThemePath());
+        $this->assertSame('Magento/blank', $this->_model->getDesignTheme()->getThemePath());
     }
 
     public function testGetDesignTheme()
@@ -113,12 +113,12 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
         $model = $objectManager->get(\Magento\Theme\Model\View\Design::class);
 
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme());
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend'));
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => 0]));
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => null]));
-        $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml'));
-        $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml', ['store' => uniqid()]));
+        $this->assertSame('test_f', $model->getConfigurationDesignTheme());
+        $this->assertSame('test_f', $model->getConfigurationDesignTheme('frontend'));
+        $this->assertSame('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => 0]));
+        $this->assertSame('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => null]));
+        $this->assertSame('test_a', $model->getConfigurationDesignTheme('adminhtml'));
+        $this->assertSame('test_a', $model->getConfigurationDesignTheme('adminhtml', ['store' => uniqid()]));
     }
 
     /**
@@ -136,11 +136,11 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $storeId = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()
             ->getId();
-        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme());
-        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme(null, ['store' => $storeId]));
-        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme('frontend', ['store' => $storeId]));
-        $this->assertEquals('two', $this->_model->getConfigurationDesignTheme(null, ['store' => 'fixturestore']));
-        $this->assertEquals(
+        $this->assertSame('one', $this->_model->getConfigurationDesignTheme());
+        $this->assertSame('one', $this->_model->getConfigurationDesignTheme(null, ['store' => $storeId]));
+        $this->assertSame('one', $this->_model->getConfigurationDesignTheme('frontend', ['store' => $storeId]));
+        $this->assertSame('two', $this->_model->getConfigurationDesignTheme(null, ['store' => 'fixturestore']));
+        $this->assertSame(
             'two',
             $this->_model->getConfigurationDesignTheme('frontend', ['store' => 'fixturestore'])
         );
@@ -177,7 +177,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->_emulateFixtureTheme();
         $config = $this->_viewConfig->getViewConfig();
         $this->assertInstanceOf(\Magento\Framework\Config\View::class, $config);
-        $this->assertEquals(['var1' => 'value1', 'var2' => 'value2'], $config->getVars('Namespace_Module'));
+        $this->assertSame(['var1' => 'value1', 'var2' => 'value2'], $config->getVars('Namespace_Module'));
     }
 
     /**
@@ -205,7 +205,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
             $config = $this->_viewConfig->getViewConfig();
             $this->assertInstanceOf(\Magento\Framework\Config\View::class, $config);
-            $this->assertEquals(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
+            $this->assertSame(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
         } catch (\Exception $e) {
             $directory->delete($relativePath);
             throw $e;

@@ -29,6 +29,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->load($source);
         $expected = include $this->_filePath . 'product_types.php';
-        $this->assertEquals($expected, $this->_model->convert($dom));
+        $this->assertSame($expected, $this->_model->convert($dom));
     }
 }

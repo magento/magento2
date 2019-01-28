@@ -40,7 +40,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->builder->addField($field, $value);
         $result = $this->builder->build();
-        $this->assertEquals($document, $result);
+        $this->assertSame($document, $result);
     }
 
     /**
@@ -62,7 +62,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder->addField($fieldOne, $valueOne);
         $this->builder->addField($fieldTwo, $valueTwo);
         $result = $this->builder->build();
-        $this->assertEquals($document, $result);
+        $this->assertSame($document, $result);
     }
 
     /**
@@ -88,7 +88,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         );
 
         $result = $this->builder->build();
-        $this->assertEquals($document, $result);
+        $this->assertSame($document, $result);
     }
 
     /**
@@ -107,7 +107,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder->addField($field, $values);
 
         $result = $this->builder->build();
-        $this->assertEquals($document, $result);
+        $this->assertSame($document, $result);
     }
 
     /**
@@ -124,7 +124,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder->addField($field, $values);
 
         $result = $this->builder->build();
-        $this->assertEquals($document, $result);
+        $this->assertSame($document, $result);
     }
 
     /**
@@ -159,7 +159,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder->addField($docTwoFieldTwo, $docTwoValueTwo);
         $resultTwo = $this->builder->build();
 
-        $this->assertEquals($documentOne, $resultOne);
-        $this->assertEquals($documentTwo, $resultTwo);
+        $this->assertSame($documentOne, $resultOne);
+        $this->assertSame($documentTwo, $resultTwo);
     }
 }

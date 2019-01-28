@@ -117,7 +117,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getSession')
             ->willReturn($sessionMock);
 
-        $this->assertEquals($customerId, $this->additional->getCustomerId());
+        $this->assertSame($customerId, $this->additional->getCustomerId());
     }
 
     /**
@@ -137,6 +137,6 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->with($arrayToSerialize)
             ->willReturn($serializedArray);
 
-        $this->assertEquals($serializedArray, $this->additional->getConfig());
+        $this->assertSame($serializedArray, $this->additional->getConfig());
     }
 }

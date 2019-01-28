@@ -27,6 +27,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $inputData = new \DOMDocument();
         $inputData->load(__DIR__ . '/_files/api.xml');
         $expectedResult = require __DIR__ . '/_files/api.php';
-        $this->assertEquals($expectedResult, $this->model->convert($inputData));
+        $this->assertSame($expectedResult, $this->model->convert($inputData));
     }
 }

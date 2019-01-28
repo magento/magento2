@@ -100,7 +100,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($correctDateTime);
 
         $correctFileName = $basicFileName . '_' . $correctDateTime . '.' . $this->_exportFileExtension;
-        $this->assertEquals($correctFileName, $fileName);
+        $this->assertSame($correctFileName, $fileName);
     }
 
     /**
@@ -118,7 +118,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($correctDateTime);
 
         $correctFileName = $basicFileName . '_' . $correctDateTime . '.' . $this->_exportFileExtension;
-        $this->assertEquals($correctFileName, $fileName);
+        $this->assertSame($correctFileName, $fileName);
     }
 
     /**

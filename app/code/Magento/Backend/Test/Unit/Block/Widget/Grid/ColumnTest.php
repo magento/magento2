@@ -181,14 +181,14 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_block->setFilter('StdClass');
-        $this->assertEquals('test', $this->_block->getFilterHtml());
+        $this->assertSame('test', $this->_block->getFilterHtml());
     }
 
     public function testGetFilterHtmlWhenFilterNotExist()
     {
         $this->_block->setData('type', 'custom_type');
         $this->_block->setFilterType('custom_type', false);
-        $this->assertEquals('&nbsp;', $this->_block->getFilterHtml());
+        $this->assertSame('&nbsp;', $this->_block->getFilterHtml());
     }
 
     public function testGetRendererWhenRendererIsSet()
@@ -229,7 +229,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_blockMock)
         );
 
-        $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
+        $this->assertSame($this->_blockMock, $this->_block->getRenderer());
     }
 
     /**
@@ -253,7 +253,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_blockMock)
         );
 
-        $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
+        $this->assertSame($this->_blockMock, $this->_block->getRenderer());
     }
 
     /**
@@ -263,64 +263,64 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     public function testGetRendererWhenRendererWasSetPreviously()
     {
         $this->_block->setRenderer($this->_blockMock);
-        $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
+        $this->assertSame($this->_blockMock, $this->_block->getRenderer());
     }
 
     public function testGetExportHeaderWhenExportHeaderIsSet()
     {
         $this->_block->setData('header_export', 'test');
-        $this->assertEquals('test', $this->_block->getExportHeader());
+        $this->assertSame('test', $this->_block->getExportHeader());
     }
 
     public function testGetExportHeaderWhenExportHeaderIsNotSetAndHeaderIsSet()
     {
         $this->_block->setData('header', 'test');
-        $this->assertEquals('test', $this->_block->getExportHeader());
+        $this->assertSame('test', $this->_block->getExportHeader());
     }
 
     public function testGetHeaderHtmlPropertyWhenHeaderCssClassEmpty()
     {
-        $this->assertEquals(' class=" col-id"', $this->_block->getHeaderHtmlProperty());
+        $this->assertSame(' class=" col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testGetHeaderHtmlPropertyWhenHeaderCssClassIsSet()
     {
         $this->_block->setData('header_css_class', 'test');
-        $this->assertEquals(' class="test col-id"', $this->_block->getHeaderHtmlProperty());
+        $this->assertSame(' class="test col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testAddHeaderCssClassWhenHeaderCssClassEmpty()
     {
         $this->_block->addHeaderCssClass('test');
-        $this->assertEquals(' class="test col-id"', $this->_block->getHeaderHtmlProperty());
+        $this->assertSame(' class="test col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testAddHeaderCssClassWhenHeaderCssClassIsSet()
     {
         $this->_block->setData('header_css_class', 'test1');
         $this->_block->addHeaderCssClass('test2');
-        $this->assertEquals(' class="test1 test2 col-id"', $this->_block->getHeaderHtmlProperty());
+        $this->assertSame(' class="test1 test2 col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testGetHeaderCssClassWhenNotSortable()
     {
         $this->_block->setData('header_css_class', 'test');
         $this->_block->setSortable(false);
-        $this->assertEquals('test no-link col-id', $this->_block->getHeaderCssClass());
+        $this->assertSame('test no-link col-id', $this->_block->getHeaderCssClass());
     }
 
     public function testGetHeaderCssClassWhenIsSortable()
     {
         $this->_block->setData('header_css_class', 'test');
         $this->_block->setSortable(true);
-        $this->assertEquals('test col-id', $this->_block->getHeaderCssClass());
+        $this->assertSame('test col-id', $this->_block->getHeaderCssClass());
     }
 
     public function testGetCssClassWithAlignAndEditableAndWithoutColumnCssClass()
     {
         $this->_block->setAlign('left');
         $this->_block->setEditable(true);
-        $this->assertEquals('a-left editable col-id', $this->_block->getCssClass());
+        $this->assertSame('a-left editable col-id', $this->_block->getCssClass());
     }
 
     public function testGetCssClassWithAlignAndEditableAndWithColumnCssClass()
@@ -329,12 +329,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->_block->setEditable(true);
         $this->_block->setData('column_css_class', 'test');
 
-        $this->assertEquals('a-left test editable col-id', $this->_block->getCssClass());
+        $this->assertSame('a-left test editable col-id', $this->_block->getCssClass());
     }
 
     public function testGetCssClassWithoutAlignEditableAndColumnCssClass()
     {
-        $this->assertEquals(' col-id', $this->_block->getCssClass());
+        $this->assertSame(' col-id', $this->_block->getCssClass());
     }
 
     public function testSetGetGrid()
@@ -356,7 +356,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
 
         $grid = new \stdClass();
         $this->_block->setGrid($grid);
-        $this->assertEquals($grid, $this->_block->getGrid());
+        $this->assertSame($grid, $this->_block->getGrid());
     }
 
     /**
@@ -374,7 +374,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
-        $this->assertEquals($expected, $block->isGrouped());
+        $this->assertSame($expected, $block->isGrouped());
     }
 
     /**
@@ -426,8 +426,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->_block->setFrameCallback([$frameCallbackHostObject, 'decorate']);
         $renderResult = $this->_block->getRowField($row);
         $exportResult = $this->_block->getRowFieldExport($row);
-        $this->assertEquals('__callback_decorated_some item', $exportResult);
-        $this->assertEquals('__callback_decorated_some item', $renderResult);
+        $this->assertSame('__callback_decorated_some item', $exportResult);
+        $this->assertSame('__callback_decorated_some item', $renderResult);
     }
 
     /**

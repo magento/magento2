@@ -58,7 +58,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
         $attribute1->setAttributeSetInfo([0 => $attribute1Sort]);
         $attribute2 = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
         $attribute2->setAttributeSetInfo([0 => $attribute2Sort]);
-        $this->assertEquals($expected, $this->_model->attributesCompare($attribute1, $attribute2));
+        $this->assertSame($expected, $this->_model->attributesCompare($attribute1, $attribute2));
     }
 
     /**

@@ -73,7 +73,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('release-notification-popup-1')
             ->willReturn("0");
-        $this->assertEquals(false, $this->canViewNotification->isVisible([]));
+        $this->assertSame(false, $this->canViewNotification->isVisible([]));
     }
 
     /**
@@ -107,7 +107,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->cacheStorageMock->expects($this->once())
             ->method('save')
             ->with(false, 'release-notification-popup-1');
-        $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
+        $this->assertSame($expected, $this->canViewNotification->isVisible([]));
     }
 
     /**

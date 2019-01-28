@@ -85,7 +85,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             $objectResourceMock,
             $this->model->afterDelete($subjectMock, $objectResourceMock, $websiteMock)
         );
@@ -113,7 +113,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             $objectResourceMock,
             $this->model->afterDelete($subjectMock, $objectResourceMock, $websiteMock)
         );
@@ -144,7 +144,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('isObjectNew')
             ->willReturn(true);
 
-        $this->assertEquals(
+        $this->assertSame(
             $objectResourceMock,
             $this->model->afterSave($subjectMock, $objectResourceMock, $websiteMock)
         );
@@ -175,7 +175,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('isObjectNew')
             ->willReturn(true);
 
-        $this->assertEquals(
+        $this->assertSame(
             $objectResourceMock,
             $this->model->afterSave($subjectMock, $objectResourceMock, $websiteMock)
         );

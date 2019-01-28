@@ -76,7 +76,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->childrenCategoriesProvider->expects($this->once())->method('getChildrenIds')->with($this->category, true)
             ->will($this->returnValue([]));
 
-        $this->assertEquals([], $this->childrenUrlRewriteGenerator->generate('store_id', $this->category));
+        $this->assertSame([], $this->childrenUrlRewriteGenerator->generate('store_id', $this->category));
     }
 
     public function testGenerate()
@@ -110,7 +110,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with($childCategory, false, 1)
             ->will($this->returnValue([$url1, $url2, $url3]));
 
-        $this->assertEquals(
+        $this->assertSame(
             ['category-1_1'  => $url1, 'category-2_2' => $url2],
             $this->childrenUrlRewriteGenerator->generate($storeId, $this->category, 1)
         );

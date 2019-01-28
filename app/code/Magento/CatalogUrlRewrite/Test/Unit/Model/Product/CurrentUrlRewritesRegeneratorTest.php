@@ -86,7 +86,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('getData')->with('save_rewrites_history')
             ->will($this->returnValue(false));
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->currentUrlRewritesRegenerator->generate('store_id', $this->product, $this->objectRegistry)
         );
@@ -103,7 +103,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
         $this->productUrlPathGenerator->expects($this->once())->method('getUrlPathWithSuffix')
             ->will($this->returnValue('same-path'));
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->currentUrlRewritesRegenerator->generate('store_id', $this->product, $this->objectRegistry, 1)
         );
@@ -145,7 +145,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
             $description
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [$this->urlRewrite],
             $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->objectRegistry, 1)
         );
@@ -188,7 +188,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
             $description
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [$this->urlRewrite],
             $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->objectRegistry, 2)
         );
@@ -207,7 +207,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
         $this->productUrlPathGenerator->expects($this->once())->method('getUrlPathWithSuffix')
             ->will($this->returnValue('same-path'));
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->currentUrlRewritesRegenerator->generate('store_id', $this->product, $this->objectRegistry)
         );
@@ -245,7 +245,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
             $description
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [$this->urlRewrite],
             $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->objectRegistry)
         );
@@ -275,7 +275,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->any())->method('getEntityId')->will($this->returnValue($productId));
         $this->prepareUrlRewriteMock($storeId, $productId, $requestPath, $targetPath, 0, 'code', [], $description);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$this->urlRewrite],
             $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->objectRegistry)
         );

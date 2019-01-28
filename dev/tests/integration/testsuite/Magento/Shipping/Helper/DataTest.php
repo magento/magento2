@@ -52,7 +52,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         }
 
         $actual = $this->helper->getTrackingPopupUrlBySalesModel($model);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -96,7 +96,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         //Frontend URL should be used there
         $actual = $this->helper->getTrackingPopupUrlBySalesModel($model);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

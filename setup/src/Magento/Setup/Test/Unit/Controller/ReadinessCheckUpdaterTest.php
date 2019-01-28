@@ -27,7 +27,7 @@ class ReadinessCheckUpdaterTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($viewModel->terminate());
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('actionFrom', $variables);
-        $this->assertEquals('updater', $variables['actionFrom']);
+        $this->assertSame('updater', $variables['actionFrom']);
     }
 
     public function testProgressAction()

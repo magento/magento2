@@ -78,7 +78,7 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn($cachedDataUnsrl);
-        $this->assertEquals($cachedDataUnsrl, $this->countryOfManufacture->getAllOptions());
+        $this->assertSame($cachedDataUnsrl, $this->countryOfManufacture->getAllOptions());
     }
 
     /**

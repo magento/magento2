@@ -55,7 +55,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         # Load previously created block and compare identifiers
         $storeId = reset($pageData['stores']);
         $page = $getPageByIdentifierCommand->execute($pageData['identifier'], $storeId);
-        $this->assertEquals($pageData['identifier'], $page->getIdentifier());
+        $this->assertSame($pageData['identifier'], $page->getIdentifier());
     }
 
     /**
@@ -71,7 +71,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $page = $objectManager->create(\Magento\Cms\Model\Page::class);
         $page->setData($data);
         $page->save();
-        $this->assertEquals($expectedIdentifier, $page->getIdentifier());
+        $this->assertSame($expectedIdentifier, $page->getIdentifier());
     }
 
     /**

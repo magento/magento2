@@ -119,7 +119,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getWeeeTaxAppliedAmount')
             ->will($this->returnValue($hasWeeeAmount));
 
-        $this->assertEquals($expectedValue, $this->renderer->displayPriceWithWeeeDetails());
+        $this->assertSame($expectedValue, $this->renderer->displayPriceWithWeeeDetails());
     }
 
     /**
@@ -220,7 +220,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getUnitDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getUnitDisplayPriceInclTax());
     }
 
     /**
@@ -256,7 +256,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseUnitDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseUnitDisplayPriceInclTax());
     }
 
     /**
@@ -291,7 +291,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getUnitDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getUnitDisplayPriceExclTax());
     }
 
     /**
@@ -330,7 +330,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseUnitDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseUnitDisplayPriceExclTax());
     }
 
     /**
@@ -365,7 +365,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getRowDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getRowDisplayPriceExclTax());
     }
 
     /**
@@ -400,7 +400,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseRowDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseRowDisplayPriceExclTax());
     }
 
     /**
@@ -436,7 +436,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getRowDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getRowDisplayPriceInclTax());
     }
 
     /**
@@ -472,7 +472,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
             ->will($this->returnValue($includeWeee));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseRowDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseRowDisplayPriceInclTax());
     }
 
     /**
@@ -539,7 +539,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInclTax')
             ->will($this->returnValue($priceInclTax));
 
-        $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getFinalUnitDisplayPriceInclTax());
     }
 
     /**
@@ -568,7 +568,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getBasePriceInclTax')
             ->will($this->returnValue($basePriceInclTax));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceInclTax());
     }
 
     /**
@@ -596,7 +596,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getCalculationPrice')
             ->will($this->returnValue($priceExclTax));
 
-        $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getFinalUnitDisplayPriceExclTax());
     }
 
     /**
@@ -628,7 +628,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getQtyOrdered')
             ->will($this->returnValue(1));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
     }
 
     /**
@@ -656,7 +656,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getRowTotal')
             ->will($this->returnValue($rowTotal));
 
-        $this->assertEquals($expectedValue, $this->renderer->getFinalRowDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getFinalRowDisplayPriceExclTax());
     }
 
     /**
@@ -684,7 +684,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseRowTotal')
             ->will($this->returnValue($baseRowTotal));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceExclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceExclTax());
     }
 
     /**
@@ -713,7 +713,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getRowTotalInclTax')
             ->will($this->returnValue($rowTotalInclTax));
 
-        $this->assertEquals($expectedValue, $this->renderer->getFinalRowDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getFinalRowDisplayPriceInclTax());
     }
 
     /**
@@ -742,7 +742,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseRowTotalInclTax')
             ->will($this->returnValue($baseRowTotalInclTax));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceInclTax());
+        $this->assertSame($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceInclTax());
     }
 
     /**
@@ -811,7 +811,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($itemMock)
             ->will($this->returnValue($weeeAmount));
 
-        $this->assertEquals($expectedValue, $this->renderer->getTotalAmount($itemMock));
+        $this->assertSame($expectedValue, $this->renderer->getTotalAmount($itemMock));
     }
 
     public function testGetBaseTotalAmount()
@@ -859,6 +859,6 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($itemMock)
             ->will($this->returnValue($baseWeeeAmount));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
+        $this->assertSame($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
     }
 }

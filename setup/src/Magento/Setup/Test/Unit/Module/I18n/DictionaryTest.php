@@ -26,7 +26,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
         $this->_dictionary->addPhrase($phraseFirstMock);
         $this->_dictionary->addPhrase($phraseSecondMock);
 
-        $this->assertEquals([$phraseFirstMock, $phraseSecondMock], $this->_dictionary->getPhrases());
+        $this->assertSame([$phraseFirstMock, $phraseSecondMock], $this->_dictionary->getPhrases());
     }
 
     public function testGetDuplicates()
@@ -42,6 +42,6 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
         $this->_dictionary->addPhrase($phraseSecondMock);
         $this->_dictionary->addPhrase($phraseThirdMock);
 
-        $this->assertEquals([[$phraseFirstMock, $phraseSecondMock]], $this->_dictionary->getDuplicates());
+        $this->assertSame([[$phraseFirstMock, $phraseSecondMock]], $this->_dictionary->getDuplicates());
     }
 }

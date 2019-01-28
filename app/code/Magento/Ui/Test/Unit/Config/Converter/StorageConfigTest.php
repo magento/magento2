@@ -65,6 +65,6 @@ class StorageConfigTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
         ];
-        $this->assertEquals($expectedResult, $this->converter->convert($storageConfig));
+        $this->assertSame($expectedResult, $this->converter->convert($storageConfig));
     }
 }

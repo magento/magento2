@@ -50,7 +50,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
         $analyticsConnectorMockObject->expects($this->once())
             ->method('execute')
             ->with($notifyCommandName);
-        $this->assertEquals($expectedResult, $exportDataHandlerNotification->prepareExportData());
+        $this->assertSame($expectedResult, $exportDataHandlerNotification->prepareExportData());
     }
 
     /**

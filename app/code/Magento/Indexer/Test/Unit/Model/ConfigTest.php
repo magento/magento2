@@ -49,6 +49,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with($indexerId);
-        $this->assertEquals([], $this->model->getIndexer($indexerId));
+        $this->assertSame([], $this->model->getIndexer($indexerId));
     }
 }

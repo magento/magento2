@@ -87,7 +87,7 @@ class PaymentConfigurationProcessTest extends \PHPUnit\Framework\TestCase
             ->willReturn($activePaymentList);
 
         $result = $this->plugin->beforeProcess($this->layoutProcessor, $jsLayout);
-        $this->assertEquals($result[0], $expectedResult);
+        $this->assertSame($result[0], $expectedResult);
     }
 
     /**

@@ -92,7 +92,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` blob NULL COMMENT "Comment"',
             $this->blob->toDefinition($column)
         );
@@ -114,7 +114,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
             $expectedData['length'] = $expectedLength;
         }
         $result = $this->blob->fromDefinition(['definition' => $definition]);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     /**

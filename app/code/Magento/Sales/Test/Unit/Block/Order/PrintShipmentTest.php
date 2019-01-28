@@ -90,6 +90,6 @@ class PrintShipmentTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($items);
 
-        $this->assertEquals($items, $this->block->getItems());
+        $this->assertSame($items, $this->block->getItems());
     }
 }

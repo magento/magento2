@@ -39,7 +39,7 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Tax\Model\ClassModel::class
         )->load($classId, 'class_id');
-        $this->assertEquals($expectedData['class_name'], $class->getClassName());
+        $this->assertSame($expectedData['class_name'], $class->getClassName());
     }
 
     /**
@@ -68,8 +68,8 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Tax\Model\ClassModel::class
         )->load($taxClassId, 'class_id');
-        $this->assertEquals($taxClassData['class_name'], $class->getClassName());
-        $this->assertEquals($taxClassData['class_type'], $class->getClassType());
+        $this->assertSame($taxClassData['class_name'], $class->getClassName());
+        $this->assertSame($taxClassData['class_type'], $class->getClassType());
 
         $postData = [ 'class_id' => $taxClassId ];
         $this->getRequest()->setPostValue($postData);

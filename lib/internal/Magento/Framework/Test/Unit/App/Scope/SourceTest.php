@@ -64,6 +64,6 @@ class SourceTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($scopeName);
 
-        $this->assertEquals($result, $this->model->toOptionArray());
+        $this->assertSame($result, $this->model->toOptionArray());
     }
 }

@@ -110,7 +110,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
             ->with($value)
             ->willReturn($result);
 
-        $this->assertEquals($result, $refreshPath->execute());
+        $this->assertSame($result, $refreshPath->execute());
     }
 
     /**

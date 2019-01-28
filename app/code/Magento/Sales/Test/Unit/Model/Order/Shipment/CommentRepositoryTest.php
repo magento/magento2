@@ -136,7 +136,7 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->shipmentCommentSender->expects($this->once())
             ->method('send')
             ->with($this->shipmentMock, true, $comment);
-        $this->assertEquals($this->commentMock, $this->commentRepository->save($this->commentMock));
+        $this->assertSame($this->commentMock, $this->commentRepository->save($this->commentMock));
     }
 
     /**

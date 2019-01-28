@@ -98,7 +98,7 @@ class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($productSku);
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->returnValidator->validate($returnToStockItems, $this->creditMemoMock),
             $expectedResult
         );
@@ -115,7 +115,7 @@ class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
             ->with($returnToStockItems[0])
             ->willThrowException(new NoSuchEntityException());
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->returnValidator->validate($returnToStockItems, $this->creditMemoMock),
             __('The return to stock argument contains product item that is not part of the original order.')
         );

@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $result = $this->model->getTotalsRenderer($section, $group, $code);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testGetGroupTotals()
@@ -73,7 +73,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $result = $this->model->getGroupTotals($section, $group);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testGetAvailableProductTypes()
@@ -85,6 +85,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('order/available_product_types'))
             ->will($this->returnValue($productTypes));
         $result = $this->model->getAvailableProductTypes();
-        $this->assertEquals($productTypes, $result);
+        $this->assertSame($productTypes, $result);
     }
 }

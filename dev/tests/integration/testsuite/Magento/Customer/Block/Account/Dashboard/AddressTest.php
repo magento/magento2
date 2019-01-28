@@ -60,7 +60,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $customer = $customerRepository->getById(1);
         $this->_customerSession->setCustomerId(1);
         $object = $this->_block->getCustomer();
-        $this->assertEquals($customer, $object);
+        $this->assertSame($customer, $object);
         $layout->setIsCacheable(true);
     }
 
@@ -72,7 +72,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
             );
             $customerData = $customerDataFactory->create()->setGroupId($this->_customerSession->getCustomerGroupId());
-            $this->assertEquals($customerData, $this->_block->getCustomer());
+            $this->assertSame($customerData, $this->_block->getCustomer());
         } else {
             $this->assertNull($this->_block->getCustomer());
         }
@@ -92,7 +92,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->_customerSession->setCustomerId($customerId);
         }
         $html = $this->_block->getPrimaryShippingAddressHtml();
-        $this->assertEquals($expected, $html);
+        $this->assertSame($expected, $html);
     }
 
     public function getPrimaryShippingAddressHtmlDataProvider()
@@ -119,7 +119,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->_customerSession->setCustomerId($customerId);
         }
         $html = $this->_block->getPrimaryBillingAddressHtml();
-        $this->assertEquals($expected, $html);
+        $this->assertSame($expected, $html);
     }
 
     public function getPrimaryBillingAddressHtmlDataProvider()
@@ -145,7 +145,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->_customerSession->setCustomerId($customerId);
         }
         $url = $this->_block->getPrimaryShippingAddressEditUrl();
-        $this->assertEquals($expected, $url);
+        $this->assertSame($expected, $url);
     }
 
     /**
@@ -160,7 +160,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->_customerSession->setCustomerId($customerId);
         }
         $url = $this->_block->getPrimaryBillingAddressEditUrl();
-        $this->assertEquals($expected, $url);
+        $this->assertSame($expected, $url);
     }
 
     public function getPrimaryAddressEditUrlDataProvider()

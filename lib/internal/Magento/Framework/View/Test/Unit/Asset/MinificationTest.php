@@ -78,7 +78,7 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
             ->method('getMode')
             ->willReturn($appMode);
 
-        $this->assertEquals($result, $this->minification->isEnabled($contentType));
+        $this->assertSame($result, $this->minification->isEnabled($contentType));
     }
 
     /**
@@ -113,7 +113,7 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
             ->method('getMode')
             ->willReturn(State::MODE_DEFAULT);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->minification->addMinifiedSign($filename)
         );
@@ -148,7 +148,7 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
             ->method('getMode')
             ->willReturn(State::MODE_DEFAULT);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->minification->removeMinifiedSign($filename)
         );
@@ -174,7 +174,7 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMinifiedFilename($filename, $result)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->minification->isMinifiedFilename($filename)
         );
@@ -211,9 +211,9 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $expected = ['/tiny_mce/', '/tiny_mce2/'];
-        $this->assertEquals($expected, $this->minification->getExcludes('js'));
+        $this->assertSame($expected, $this->minification->getExcludes('js'));
         /** check cache: */
-        $this->assertEquals($expected, $this->minification->getExcludes('js'));
+        $this->assertSame($expected, $this->minification->getExcludes('js'));
     }
 
     /**
@@ -233,9 +233,9 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
             ->with('dev/js/minify_exclude')
             ->willReturn($value);
 
-        $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
+        $this->assertSame($expectedValue, $this->minification->getExcludes('js'));
         /** check cache: */
-        $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
+        $this->assertSame($expectedValue, $this->minification->getExcludes('js'));
     }
 
     /**

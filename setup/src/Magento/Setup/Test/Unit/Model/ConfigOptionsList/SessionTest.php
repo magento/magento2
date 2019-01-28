@@ -36,79 +36,79 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
-        $this->assertEquals('session-save', $options[0]->getName());
+        $this->assertSame('session-save', $options[0]->getName());
 
         $this->assertArrayHasKey(1, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[1]);
-        $this->assertEquals('session-save-redis-host', $options[1]->getName());
+        $this->assertSame('session-save-redis-host', $options[1]->getName());
 
         $this->assertArrayHasKey(2, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[2]);
-        $this->assertEquals('session-save-redis-port', $options[2]->getName());
+        $this->assertSame('session-save-redis-port', $options[2]->getName());
 
         $this->assertArrayHasKey(3, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[3]);
-        $this->assertEquals('session-save-redis-password', $options[3]->getName());
+        $this->assertSame('session-save-redis-password', $options[3]->getName());
 
         $this->assertArrayHasKey(4, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[4]);
-        $this->assertEquals('session-save-redis-timeout', $options[4]->getName());
+        $this->assertSame('session-save-redis-timeout', $options[4]->getName());
 
         $this->assertArrayHasKey(5, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[5]);
-        $this->assertEquals('session-save-redis-persistent-id', $options[5]->getName());
+        $this->assertSame('session-save-redis-persistent-id', $options[5]->getName());
 
         $this->assertArrayHasKey(6, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[6]);
-        $this->assertEquals('session-save-redis-db', $options[6]->getName());
+        $this->assertSame('session-save-redis-db', $options[6]->getName());
 
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('session-save-redis-compression-threshold', $options[7]->getName());
+        $this->assertSame('session-save-redis-compression-threshold', $options[7]->getName());
 
         $this->assertArrayHasKey(8, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[8]);
-        $this->assertEquals('session-save-redis-compression-lib', $options[8]->getName());
+        $this->assertSame('session-save-redis-compression-lib', $options[8]->getName());
 
         $this->assertArrayHasKey(9, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[9]);
-        $this->assertEquals('session-save-redis-log-level', $options[9]->getName());
+        $this->assertSame('session-save-redis-log-level', $options[9]->getName());
 
         $this->assertArrayHasKey(10, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[10]);
-        $this->assertEquals('session-save-redis-max-concurrency', $options[10]->getName());
+        $this->assertSame('session-save-redis-max-concurrency', $options[10]->getName());
 
         $this->assertArrayHasKey(11, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[11]);
-        $this->assertEquals('session-save-redis-break-after-frontend', $options[11]->getName());
+        $this->assertSame('session-save-redis-break-after-frontend', $options[11]->getName());
 
         $this->assertArrayHasKey(12, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[12]);
-        $this->assertEquals('session-save-redis-break-after-adminhtml', $options[12]->getName());
+        $this->assertSame('session-save-redis-break-after-adminhtml', $options[12]->getName());
 
         $this->assertArrayHasKey(13, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[13]);
-        $this->assertEquals('session-save-redis-first-lifetime', $options[13]->getName());
+        $this->assertSame('session-save-redis-first-lifetime', $options[13]->getName());
 
         $this->assertArrayHasKey(14, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[14]);
-        $this->assertEquals('session-save-redis-bot-first-lifetime', $options[14]->getName());
+        $this->assertSame('session-save-redis-bot-first-lifetime', $options[14]->getName());
 
         $this->assertArrayHasKey(15, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[15]);
-        $this->assertEquals('session-save-redis-bot-lifetime', $options[15]->getName());
+        $this->assertSame('session-save-redis-bot-lifetime', $options[15]->getName());
 
         $this->assertArrayHasKey(16, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[16]);
-        $this->assertEquals('session-save-redis-disable-locking', $options[16]->getName());
+        $this->assertSame('session-save-redis-disable-locking', $options[16]->getName());
 
         $this->assertArrayHasKey(17, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[17]);
-        $this->assertEquals('session-save-redis-min-lifetime', $options[17]->getName());
+        $this->assertSame('session-save-redis-min-lifetime', $options[17]->getName());
 
         $this->assertArrayHasKey(18, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[18]);
-        $this->assertEquals('session-save-redis-max-lifetime', $options[18]->getName());
+        $this->assertSame('session-save-redis-max-lifetime', $options[18]->getName());
     }
 
     public function testCreateConfig()
@@ -128,7 +128,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $options = ['session-save' => 'files'];
 
         $configData = $this->configList->createConfig($options, $this->deploymentConfigMock);
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     public function testCreateConfigWithSessionSaveRedis()
@@ -169,7 +169,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $options = ['session-save' => 'redis'];
 
         $configData = $this->configList->createConfig($options, $this->deploymentConfigMock);
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     public function testEmptyCreateConfig()
@@ -177,7 +177,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $expectedConfigData = [];
 
         $config = $this->configList->createConfig([], $this->deploymentConfigMock);
-        $this->assertEquals($expectedConfigData, $config->getData());
+        $this->assertSame($expectedConfigData, $config->getData());
     }
 
     public function testCreateConfigWithRedisInput()
@@ -226,7 +226,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $config = $this->configList->createConfig($options, $this->deploymentConfigMock);
         $actualConfigData = $config->getData();
 
-        $this->assertEquals($expectedConfigData, $actualConfigData);
+        $this->assertSame($expectedConfigData, $actualConfigData);
     }
 
     /**
@@ -240,7 +240,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $configData = $this->configList->createConfig([$option => $optionValue], $this->deploymentConfigMock);
         $redisConfigData = $configData->getData()['session']['redis'];
 
-        $this->assertEquals($redisConfigData[$configArrayKey], $optionValue);
+        $this->assertSame($redisConfigData[$configArrayKey], $optionValue);
     }
 
     public function testValidationWithValidOptions()

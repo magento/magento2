@@ -45,14 +45,14 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
         $this->structure->setElementAttribute($elementName1, $attributeName1, $attributeValue1);
         $this->structure->setElementAttribute($elementName2, $attributeName2, $attributeValue2);
-        $this->assertEquals($expected, $this->structure->getElementAttributes());
+        $this->assertSame($expected, $this->structure->getElementAttributes());
 
         $expectedAfterRemove = [
             'elementName2' => ['attributeName2' => 'attributeValue2'],
         ];
         $this->structure->setElementAttribute($elementName1, $attributeName1, false);
         $this->structure->processRemoveElementAttributes();
-        $this->assertEquals($expectedAfterRemove, $this->structure->getElementAttributes());
+        $this->assertSame($expectedAfterRemove, $this->structure->getElementAttributes());
     }
 
     public function testSetBodyClass()
@@ -62,7 +62,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $expected = [$class1, $class2];
         $this->structure->setBodyClass($class1);
         $this->structure->setBodyClass($class2);
-        $this->assertEquals($expected, $this->structure->getBodyClasses());
+        $this->assertSame($expected, $this->structure->getBodyClasses());
 
         $this->structure->setBodyClass('');
         $this->assertEmpty($this->structure->getBodyClasses());
@@ -72,7 +72,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     {
         $data = 'test';
         $this->structure->setTitle($data);
-        $this->assertEquals($data, $this->structure->getTitle());
+        $this->assertSame($data, $this->structure->getTitle());
     }
 
     public function testMetadata()
@@ -83,7 +83,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
         $this->structure->setMetadata($metadataName, $metadataContent);
 
-        $this->assertEquals($expected, $this->structure->getMetadata());
+        $this->assertSame($expected, $this->structure->getMetadata());
     }
 
     public function testAssets()
@@ -93,7 +93,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $expected = [$assetName => $assetAttributes];
 
         $this->structure->addAssets($assetName, $assetAttributes);
-        $this->assertEquals($expected, $this->structure->getAssets());
+        $this->assertSame($expected, $this->structure->getAssets());
     }
 
     public function testProcessRemoveAssets()
@@ -110,6 +110,6 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->structure->addAssets($assetName2, $assetAttributes2);
         $this->structure->removeAssets($assetName2);
         $this->structure->processRemoveAssets();
-        $this->assertEquals($expected, $this->structure->getAssets());
+        $this->assertSame($expected, $this->structure->getAssets());
     }
 }

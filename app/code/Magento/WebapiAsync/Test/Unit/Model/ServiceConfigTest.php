@@ -66,7 +66,7 @@ class ServiceConfigTest extends \PHPUnit\Framework\TestCase
             ->with($serializedData)
             ->willReturn($data);
         $this->config->getServices();
-        $this->assertEquals($data, $this->config->getServices());
+        $this->assertSame($data, $this->config->getServices());
     }
 
     public function testGetServicesNoCache()
@@ -94,6 +94,6 @@ class ServiceConfigTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->config->getServices();
-        $this->assertEquals($data, $this->config->getServices());
+        $this->assertSame($data, $this->config->getServices());
     }
 }

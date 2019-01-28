@@ -43,6 +43,6 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             ->with('sample_file.php', $sampleProxyCode);
 
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
-        $this->assertEquals('sample_file.php', $model->generate());
+        $this->assertSame('sample_file.php', $model->generate());
     }
 }

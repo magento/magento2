@@ -123,10 +123,10 @@ class ExtensionGridTest extends \PHPUnit\Framework\TestCase
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $this->assertEquals($this->extensionData, $variables['extensions']);
+        $this->assertSame($this->extensionData, $variables['extensions']);
         $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals(1, $variables['total']);
-        $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
+        $this->assertSame(1, $variables['total']);
+        $this->assertSame($this->lastSyncData, $variables['lastSyncData']);
     }
 
     public function testSyncAction()
@@ -151,6 +151,6 @@ class ExtensionGridTest extends \PHPUnit\Framework\TestCase
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
+        $this->assertSame($this->lastSyncData, $variables['lastSyncData']);
     }
 }

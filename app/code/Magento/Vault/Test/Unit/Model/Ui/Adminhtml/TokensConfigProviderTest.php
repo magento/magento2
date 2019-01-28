@@ -237,7 +237,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$token]);
 
-        static::assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        static::assertSame([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -312,7 +312,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$token]);
 
-        static::assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        static::assertSame([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**

@@ -47,6 +47,6 @@ class TaxSetupTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($refundable)
         );
-        $this->assertEquals($refundable, $this->taxSetup->getTaxableItems());
+        $this->assertSame($refundable, $this->taxSetup->getTaxableItems());
     }
 }

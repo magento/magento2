@@ -119,7 +119,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(2));
 
         /** Execute SUT. */
-        $this->assertEquals(
+        $this->assertSame(
             ['result' => $serviceResponse],
             $this->_handler->__call($operationName, [(object)['field' => 1]])
         );

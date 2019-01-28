@@ -22,6 +22,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expected);
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
         $object = new Config($config);
-        $this->assertEquals($expected, $object->getFileTypes());
+        $this->assertSame($expected, $object->getFileTypes());
     }
 }

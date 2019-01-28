@@ -69,6 +69,6 @@ class SynchronizePersistentOnLoginObserverTest extends \PHPUnit\Framework\TestCa
             \Magento\Persistent\Model\Session::class
         );
         $sessionModel->loadByCustomerId(1);
-        $this->assertEquals(1, $sessionModel->getCustomerId());
+        $this->assertSame(1, $sessionModel->getCustomerId());
     }
 }

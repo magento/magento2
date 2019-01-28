@@ -89,7 +89,7 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $controller->execute();
-        $this->assertEquals('success_msg', $controller->getResponse()->getBody());
+        $this->assertSame('success_msg', $controller->getResponse()->getBody());
     }
 
     public function testTunnelAction400()

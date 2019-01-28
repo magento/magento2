@@ -219,7 +219,7 @@ class BasePriceStorageTest extends \PHPUnit\Framework\TestCase
         ];
         $this->pricePersistence->expects($this->once())->method('update')->with($formattedPrices);
         $this->validationResult->expects($this->any())->method('getFailedItems')->willReturn([]);
-        $this->assertEquals([], $this->model->update([1 => $this->basePriceInterface]));
+        $this->assertSame([], $this->model->update([1 => $this->basePriceInterface]));
     }
 
     /**
@@ -278,7 +278,7 @@ class BasePriceStorageTest extends \PHPUnit\Framework\TestCase
         $this->pricePersistence->expects($this->once())->method('update')->with([]);
         $this->validationResult->expects($this->once())->method('getFailedItems')->willReturn([$priceUpdateResult]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$priceUpdateResult],
             $this->model->update([$this->basePriceInterface])
         );

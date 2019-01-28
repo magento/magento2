@@ -263,14 +263,14 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $productId = 1;
         $this->review->setEntityPkValue($productId);
         $this->review->setStatusId(Review::STATUS_PENDING);
-        $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
+        $this->assertSame([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
 
         $this->review->setEntityPkValue($productId);
         $this->review->setStatusId(Review::STATUS_APPROVED);
-        $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
+        $this->assertSame([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
 
         $this->review->setEntityPkValue($productId);
         $this->review->setStatusId(Review::STATUS_NOT_APPROVED);
-        $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
+        $this->assertSame([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
     }
 }

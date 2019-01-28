@@ -138,7 +138,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->stockItemRepository->expects($this->any())
             ->method('save')
             ->willReturn($this->item);
-        $this->assertEquals($this->item, $this->item->save());
+        $this->assertSame($this->item, $this->item->save());
     }
 
     /**
@@ -381,7 +381,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         // ensure we do *not* return '2015' due to casting to an int
         $date = '2015-4-17';
         $this->item->setLowStockDate($date);
-        $this->assertEquals($date, $this->item->getLowStockDate());
+        $this->assertSame($date, $this->item->getLowStockDate());
     }
 
     /**
@@ -403,7 +403,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         } else {
             $this->setDataArrayValue('qty_increments', $config['qty_increments']);
         }
-        $this->assertEquals($expected, $this->item->getQtyIncrements());
+        $this->assertSame($expected, $this->item->getQtyIncrements());
     }
 
     /**

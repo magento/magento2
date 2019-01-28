@@ -30,7 +30,7 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
         /** @var \Magento\Framework\App\Http\Context $httpContext */
         $httpContext = $this->_objectManager->get(\Magento\Framework\App\Http\Context::class);
         $httpContext->unsValue(\Magento\Store\Model\Store::ENTITY);
-        $this->assertEquals($modifiedDefaultCode, $httpContext->getValue(\Magento\Store\Model\Store::ENTITY));
+        $this->assertSame($modifiedDefaultCode, $httpContext->getValue(\Magento\Store\Model\Store::ENTITY));
 
         $this->changeStoreCode($modifiedDefaultCode, $defaultStoreCode);
     }

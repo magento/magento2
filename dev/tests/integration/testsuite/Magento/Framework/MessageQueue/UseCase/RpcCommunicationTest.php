@@ -21,6 +21,6 @@ class RpcCommunicationTest extends QueueTestCaseAbstract
     {
         $input = 'Input value';
         $response = $this->publisher->publish('synchronous.rpc.test', $input);
-        $this->assertEquals($input . ' processed by RPC handler', $response);
+        $this->assertSame($input . ' processed by RPC handler', $response);
     }
 }

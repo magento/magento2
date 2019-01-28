@@ -189,8 +189,8 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             \Magento\Wishlist\Model\Wishlist::class,
             $this->wishlist->loadByCustomerId($customerId, true)
         );
-        $this->assertEquals($customerId, $this->wishlist->getCustomerId());
-        $this->assertEquals($sharingCode, $this->wishlist->getSharingCode());
+        $this->assertSame($customerId, $this->wishlist->getCustomerId());
+        $this->assertSame($sharingCode, $this->wishlist->getSharingCode());
     }
 
     /**
@@ -358,6 +358,6 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->assertEquals($result, $this->wishlist->addNewItem($productMock, $buyRequest));
+        $this->assertSame($result, $this->wishlist->addNewItem($productMock, $buyRequest));
     }
 }

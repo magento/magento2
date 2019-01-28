@@ -32,6 +32,6 @@ class TrackTest extends \PHPUnit\Framework\TestCase
             ['carrierFactory' => $carrierFactory, 'shipmentRepository' => $shipmentRepository]
         );
         $model->setParentId(1);
-        $this->assertEquals('trackingInfo', $model->getNumberDetail());
+        $this->assertSame('trackingInfo', $model->getNumberDetail());
     }
 }

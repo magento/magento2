@@ -92,7 +92,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 'validResource' => ['connection' => 'validConnectionName'],
             ]);
-        $this->assertEquals($connectionName, $this->config->getConnectionName($resourceName));
+        $this->assertSame($connectionName, $this->config->getConnectionName($resourceName));
     }
 
     /**

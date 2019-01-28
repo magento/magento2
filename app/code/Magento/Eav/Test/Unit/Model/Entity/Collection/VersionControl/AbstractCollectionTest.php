@@ -60,11 +60,11 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         if (!$data) {
             $this->entitySnapshot->expects($this->never())->method('registerSnapshot');
 
-            $this->assertEquals(false, $this->subject->fetchItem());
+            $this->assertSame(false, $this->subject->fetchItem());
         } else {
             $this->entitySnapshot->expects($this->once())->method('registerSnapshot')->with($item);
 
-            $this->assertEquals($item, $this->subject->fetchItem());
+            $this->assertSame($item, $this->subject->fetchItem());
         }
     }
 

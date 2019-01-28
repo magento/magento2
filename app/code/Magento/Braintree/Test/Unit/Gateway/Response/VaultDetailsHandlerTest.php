@@ -107,11 +107,11 @@ class VaultDetailsHandlerTest extends TestCase
         $paymentToken = $this->payment->getExtensionAttributes()
             ->getVaultPaymentToken();
 
-        self::assertEquals(self::$token, $paymentToken->getGatewayToken());
-        self::assertEquals('2022-01-01 00:00:00', $paymentToken->getExpiresAt());
+        self::assertSame(self::$token, $paymentToken->getGatewayToken());
+        self::assertSame('2022-01-01 00:00:00', $paymentToken->getExpiresAt());
 
         $details = json_decode($paymentToken->getTokenDetails(), true);
-        self::assertEquals(
+        self::assertSame(
             [
                 'type' => 'AE',
                 'maskedCC' => 1231,

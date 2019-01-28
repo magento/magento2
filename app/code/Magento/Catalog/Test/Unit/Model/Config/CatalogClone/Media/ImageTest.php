@@ -110,6 +110,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             $this->equalTo(Product::ENTITY)
         )->will($this->returnValue($entityType));
 
-        $this->assertEquals([['field' => 'attributeCode_', 'label' => 'testLabel']], $this->model->getPrefixes());
+        $this->assertSame([['field' => 'attributeCode_', 'label' => 'testLabel']], $this->model->getPrefixes());
     }
 }

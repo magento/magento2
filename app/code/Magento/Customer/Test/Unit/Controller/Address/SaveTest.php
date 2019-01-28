@@ -208,6 +208,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             )->willReturnSelf();
 
-        $this->assertEquals($this->json, $this->model->execute());
+        $this->assertSame($this->json, $this->model->execute());
     }
 }

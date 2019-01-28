@@ -73,7 +73,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $titlesMock->expects($this->once())->method('getStoreId')->willReturn(1);
         $titlesMock->expects($this->once())->method('getValue')->willReturn('Value');
 
-        $this->assertEquals([1 => 'Value'], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
+        $this->assertSame([1 => 'Value'], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
     }
 
     public function testCreateTitlesFromServiceObjectWhenTitlesAreNotProvided()
@@ -82,7 +82,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([]);
 
-        $this->assertEquals([], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
+        $this->assertSame([], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
     }
 
     public function testCreateArrayFromServiceObject()
@@ -127,6 +127,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->format->expects($this->once())->method('getNumber')->willReturnArgument(0);
 
         $this->assertSame($taxRate, $this->converter->populateTaxRateData($dataArray));
-        $this->assertEquals($taxRate->getTitles(), $rateTitles);
+        $this->assertSame($taxRate->getTitles(), $rateTitles);
     }
 }

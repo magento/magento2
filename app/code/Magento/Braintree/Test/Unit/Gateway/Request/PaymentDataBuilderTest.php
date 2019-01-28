@@ -155,7 +155,7 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getOrderIncrementId')
             ->willReturn('000000101');
 
-        self::assertEquals(
+        self::assertSame(
             $expectedResult,
             $this->builder->build($buildSubject)
         );

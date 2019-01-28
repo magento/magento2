@@ -215,22 +215,22 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayNotHasKey('test_sensitive_environment6', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_environment9', $config['system']['default']['web']['test']);
         /** @see Magento/Deploy/_files/config_data.php */
-        $this->assertEquals(
+        $this->assertSame(
             'frontend/Magento/blank',
             $config['system']['default']['design']['theme']['theme_id']
         );
-        $this->assertEquals(
+        $this->assertSame(
             'frontend/Magento/luma',
             $config['system']['stores']['default']['design']['theme']['theme_id']
         );
-        $this->assertEquals(
+        $this->assertSame(
             'frontend/Magento/luma',
             $config['system']['websites']['base']['design']['theme']['theme_id']
         );
 
-        $this->assertEquals('value from the file', $config['system']['default']['web']['test']['test_value_3']);
-        $this->assertEquals('GB', $config['system']['default']['general']['country']['default']);
-        $this->assertEquals(
+        $this->assertSame('value from the file', $config['system']['default']['web']['test']['test_value_3']);
+        $this->assertSame('GB', $config['system']['default']['general']['country']['default']);
+        $this->assertSame(
             'HK,IE,MO,PA,GB',
             $config['system']['default']['general']['country']['optional_zip_countries']
         );
@@ -266,7 +266,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function validateThemesSection(array $config)
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'parent_id' => null,
                 'theme_path' => 'Magento/backend',
@@ -278,7 +278,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             ],
             $config['themes']['adminhtml/Magento/backend']
         );
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'parent_id' => null,
                 'theme_path' => 'Magento/blank',
@@ -290,7 +290,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             ],
             $config['themes']['frontend/Magento/blank']
         );
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'parent_id' => 'Magento/blank',
                 'theme_path' => 'Magento/luma',

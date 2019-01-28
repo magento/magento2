@@ -437,8 +437,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $this->returnValue([$attribute])
         );
         $expect = [$attribute];
-        $this->assertEquals($expect, $this->model->getAttributes(5));
-        $this->assertEquals($expect, $this->model->getAttributes());
+        $this->assertSame($expect, $this->model->getAttributes(5));
+        $this->assertSame($expect, $this->model->getAttributes());
     }
 
     public function testGetStoreIds()
@@ -447,16 +447,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $websiteIds = ['test'];
         $this->model->setWebsiteIds($websiteIds);
         $this->website->expects($this->once())->method('getStoreIds')->will($this->returnValue($expectedStoreIds));
-        $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
+        $this->assertSame($expectedStoreIds, $this->model->getStoreIds());
     }
 
     public function testGetStoreId()
     {
         $this->model->setStoreId(3);
-        $this->assertEquals(3, $this->model->getStoreId());
+        $this->assertSame(3, $this->model->getStoreId());
         $this->model->unsStoreId();
         $this->store->expects($this->once())->method('getId')->will($this->returnValue(5));
-        $this->assertEquals(5, $this->model->getStoreId());
+        $this->assertSame(5, $this->model->getStoreId());
     }
 
     public function testGetCategoryCollection()
@@ -515,8 +515,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $result = $product->getCategoryCollection();
 
         $productIdCachedActual = $this->getPropertyValue($product, '_productIdCached', $productIdCached);
-        $this->assertEquals($getIdResult, $productIdCachedActual);
-        $this->assertEquals($initCategoryCollection, $result);
+        $this->assertSame($getIdResult, $productIdCachedActual);
+        $this->assertSame($initCategoryCollection, $result);
     }
 
     /**
@@ -564,7 +564,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->at(0))->method('registry');
         $this->registry->expects($this->at(1))->method('registry')->will($this->returnValue($this->category));
         $this->assertFalse($this->model->getCategoryId());
-        $this->assertEquals(10, $this->model->getCategoryId());
+        $this->assertSame(10, $this->model->getCategoryId());
     }
 
     public function testGetCategoryIdWhenProductNotInCurrentCategory()
@@ -578,24 +578,24 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetIdBySku()
     {
         $this->resource->expects($this->once())->method('getIdBySku')->will($this->returnValue(5));
-        $this->assertEquals(5, $this->model->getIdBySku('someSku'));
+        $this->assertSame(5, $this->model->getIdBySku('someSku'));
     }
 
     public function testGetCategoryIds()
     {
         $this->model->lockAttribute('category_ids');
-        $this->assertEquals([], $this->model->getCategoryIds());
+        $this->assertSame([], $this->model->getCategoryIds());
     }
 
     public function testGetStatusInitial()
     {
-        $this->assertEquals(Status::STATUS_ENABLED, $this->model->getStatus());
+        $this->assertSame(Status::STATUS_ENABLED, $this->model->getStatus());
     }
 
     public function testGetStatus()
     {
         $this->model->setStatus(null);
-        $this->assertEquals(Status::STATUS_ENABLED, $this->model->getStatus());
+        $this->assertSame(Status::STATUS_ENABLED, $this->model->getStatus());
     }
 
     public function testIsInStock()
@@ -693,7 +693,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $this->model->setData($key, $value);
         }
         $this->model->isDeleted($isDeleted);
-        $this->assertEquals($expected, $this->model->getIdentities());
+        $this->assertSame($expected, $this->model->getIdentities());
     }
 
     /**
@@ -842,7 +842,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
             ->will($this->returnValue($this->_priceInfoMock));
-        $this->assertEquals($this->model->getPriceInfo(), $this->_priceInfoMock);
+        $this->assertSame($this->model->getPriceInfo(), $this->_priceInfoMock);
     }
 
     /**
@@ -858,10 +858,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         //initialize the priceInfo field
         $this->model->getPriceInfo();
         //Calling setQty will reset the priceInfo field
-        $this->assertEquals($this->model, $this->model->setQty(1));
+        $this->assertSame($this->model, $this->model->setQty(1));
         //Call the setQty method with the same qty, getPriceInfo should not be called this time
-        $this->assertEquals($this->model, $this->model->setQty(1));
-        $this->assertEquals($this->model->getPriceInfo(), $this->_priceInfoMock);
+        $this->assertSame($this->model, $this->model->setQty(1));
+        $this->assertSame($this->model->getPriceInfo(), $this->_priceInfoMock);
     }
 
     /**
@@ -873,8 +873,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
             ->will($this->returnValue($this->_priceInfoMock));
-        $this->assertEquals($this->_priceInfoMock, $this->model->getPriceInfo());
-        $this->assertEquals($this->_priceInfoMock, $this->model->reloadPriceInfo());
+        $this->assertSame($this->_priceInfoMock, $this->model->getPriceInfo());
+        $this->assertSame($this->_priceInfoMock, $this->model->reloadPriceInfo());
     }
 
     /**
@@ -883,7 +883,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetQty()
     {
         $this->model->setQty(1);
-        $this->assertEquals(1, $this->model->getQty());
+        $this->assertSame(1, $this->model->getQty());
     }
 
     /**
@@ -1008,7 +1008,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($stockItemMock));
         $stockItemMock->expects($this->once())->method('setProduct')->with($this->model);
 
-        $this->assertEquals($this->model, $this->model->fromArray($data));
+        $this->assertSame($this->model, $this->model->fromArray($data));
     }
 
     protected function prepareCategoryIndexer()
@@ -1033,7 +1033,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $expectedOutput = [$outputRelatedLink];
         $this->productLinkRepositoryMock->expects($this->once())->method('getList')->willReturn($expectedOutput);
         $links = $this->model->getProductLinks();
-        $this->assertEquals($links, $expectedOutput);
+        $this->assertSame($links, $expectedOutput);
     }
 
     /**
@@ -1049,7 +1049,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $link->setPosition(0);
         $productLinks = [$link];
         $this->model->setProductLinks($productLinks);
-        $this->assertEquals($productLinks, $this->model->getProductLinks());
+        $this->assertSame($productLinks, $this->model->getProductLinks());
     }
 
     /**
@@ -1101,7 +1101,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($mediaAttributes as $mediaAttribute) {
             $expected[$mediaAttribute->getAttributeCode()] = $mediaAttribute;
         }
-        $this->assertEquals($expected, $this->model->getMediaAttributes());
+        $this->assertSame($expected, $this->model->getMediaAttributes());
     }
 
     public function testGetMediaAttributeValues()
@@ -1115,7 +1115,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'image' => 'imageValue',
             'small_image' => 'smallImageValue',
         ];
-        $this->assertEquals($expectedMediaAttributeValues, $this->model->getMediaAttributeValues());
+        $this->assertSame($expectedMediaAttributeValues, $this->model->getMediaAttributeValues());
     }
 
     public function testGetMediaGalleryEntriesNone()
@@ -1159,7 +1159,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $entry2
         );
 
-        $this->assertEquals([$entry1, $entry2], $this->model->getMediaGalleryEntries());
+        $this->assertSame([$entry1, $entry2], $this->model->getMediaGalleryEntries());
     }
 
     public function testSetMediaGalleryEntries()
@@ -1220,7 +1220,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->converterMock->expects($this->once())->method('convertFrom')->with($entryMock)->willReturn($result);
 
         $this->model->setMediaGalleryEntries([$entryMock]);
-        $this->assertEquals($expectedResult, $this->model->getMediaGallery());
+        $this->assertSame($expectedResult, $this->model->getMediaGallery());
     }
 
     public function testGetMediaGalleryImagesMerging()
@@ -1303,7 +1303,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->setData($priceCode, 10);
 
         //The color attribute is not set, expect empty custom attribute array
-        $this->assertEquals([], $this->model->getCustomAttributes());
+        $this->assertSame([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
         $this->model->setData($customAttributeCode, $initialCustomAttributeValue);
@@ -1311,18 +1311,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
-        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertSame(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
-        $this->assertEquals(
+        $this->assertSame(
             $initialCustomAttributeValue,
             $this->model->getCustomAttribute($customAttributeCode)->getValue()
         );
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->model->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
-        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertSame(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
-        $this->assertEquals(
+        $this->assertSame(
             $newCustomAttributeValue,
             $this->model->getCustomAttribute($customAttributeCode)->getValue()
         );
@@ -1357,11 +1357,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $option2Id => $optionMock2
         ];
         $this->model->setOptions($expectedOptions);
-        $this->assertEquals($expectedOptions, $this->model->getOptions());
+        $this->assertSame($expectedOptions, $this->model->getOptions());
 
         //Calling the method again, empty options array will be returned
         $this->model->setOptions([]);
-        $this->assertEquals([], $this->model->getOptions());
+        $this->assertSame([], $this->model->getOptions());
     }
 
     /**
@@ -1411,7 +1411,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->with($this->model->getTypeId())
             ->will($this->returnValue($productTypePriceMock));
 
-        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
+        $this->assertSame($finalPrice, $this->model->getFinalPrice($qty));
         $this->model->setFinalPrice(9.99);
     }
 
@@ -1435,7 +1435,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->with($this->model->getTypeId())
             ->willReturn($productTypePriceMock);
 
-        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
+        $this->assertSame($finalPrice, $this->model->getFinalPrice($qty));
     }
 
     public function testGetTypeId()
@@ -1459,7 +1459,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $optionMock = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setOptions([$optionMock]);
         $optionMock->expects($this->once())->method('getId')->willReturn($optionId);
-        $this->assertEquals($optionMock, $this->model->getOptionById($optionId));
+        $this->assertSame($optionMock, $this->model->getOptionById($optionId));
     }
 
     public function testGetOptionByIdWithWrongOptionId()

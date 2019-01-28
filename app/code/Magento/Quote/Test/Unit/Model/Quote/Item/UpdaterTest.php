@@ -127,7 +127,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->productMock));
 
         $result = $this->object->update($this->itemMock, ['qty' => $qty]);
-        $this->assertEquals($result, $this->object);
+        $this->assertSame($result, $this->object);
     }
 
     /**
@@ -196,7 +196,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->productMock));
 
         $object = $this->object->update($this->itemMock, ['qty' => $qty]);
-        $this->assertEquals($this->object, $object);
+        $this->assertSame($this->object, $object);
     }
 
     public function testUpdateQtyDecimalWithConfiguredOption()
@@ -218,7 +218,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->productMock));
 
         $object = $this->object->update($this->itemMock, ['qty' => 3, 'use_discount' => true]);
-        $this->assertEquals($this->object, $object);
+        $this->assertSame($this->object, $object);
     }
 
     /**
@@ -285,7 +285,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(0));
 
         $object = $this->object->update($this->itemMock, ['qty' => $qty, 'custom_price' => $customPrice]);
-        $this->assertEquals($this->object, $object);
+        $this->assertSame($this->object, $object);
     }
 
     /**
@@ -372,6 +372,6 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(0));
 
         $object = $this->object->update($this->itemMock, ['qty' => $qty]);
-        $this->assertEquals($this->object, $object);
+        $this->assertSame($this->object, $object);
     }
 }

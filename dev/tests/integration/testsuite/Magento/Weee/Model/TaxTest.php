@@ -94,6 +94,6 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $amount = $this->_model->getProductWeeeAttributes($product, $shipping, null, null, true);
         $this->assertTrue(is_array($amount));
         $this->assertArrayHasKey(0, $amount);
-        $this->assertEquals(12.70, $amount[0]->getAmount());
+        $this->assertSame(12.70, $amount[0]->getAmount());
     }
 }

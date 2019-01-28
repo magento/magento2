@@ -34,7 +34,7 @@ class UrlRewriteTest extends AbstractController
         $code = $response->getHttpResponseCode();
         $location = $response->getHeader('Location')->getFieldValue();
 
-        $this->assertEquals($expectedCode, $code, 'Invalid response code');
+        $this->assertSame($expectedCode, $code, 'Invalid response code');
         $this->assertStringEndsWith(
             $redirect,
             $location,

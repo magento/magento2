@@ -105,7 +105,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             ->method('getColumns')
             ->willReturn($columns);
         $result = $this->import->getColumns();
-        $this->assertEquals($columns, $result);
+        $this->assertSame($columns, $result);
     }
 
     /**
@@ -156,9 +156,9 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         foreach ($this->import->getData($file, 1, 'short_name', 'full_name', 2) as $bunch) {
             $result[] = $bunch;
         }
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
         $this->assertFalse($this->import->hasErrors());
-        $this->assertEquals([], $this->import->getErrors());
+        $this->assertSame([], $this->import->getErrors());
     }
 
     /**
@@ -199,9 +199,9 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         foreach ($this->import->getData($file, 1, 'short_name', 'full_name', 2) as $bunch) {
             $result[] = $bunch;
         }
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
         $this->assertTrue($this->import->hasErrors());
-        $this->assertEquals(['Duplicate Row #3 (duplicates row #2)'], $this->import->getErrors());
+        $this->assertSame(['Duplicate Row #3 (duplicates row #2)'], $this->import->getErrors());
     }
 
     /**

@@ -32,8 +32,8 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $customerData = $customerRepository->getById(1);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
 
-        $this->assertEquals(1, $result['customer_id']);
-        $this->assertEquals('customer@example.com', $result['subscriber_email']);
+        $this->assertSame(1, $result['customer_id']);
+        $this->assertSame('customer@example.com', $result['subscriber_email']);
     }
 
     /**
@@ -48,7 +48,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $customerData = $customerRepository->getById(2);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
 
-        $this->assertEquals(0, $result['customer_id']);
-        $this->assertEquals('customer_two@example.com', $result['subscriber_email']);
+        $this->assertSame(0, $result['customer_id']);
+        $this->assertSame('customer_two@example.com', $result['subscriber_email']);
     }
 }

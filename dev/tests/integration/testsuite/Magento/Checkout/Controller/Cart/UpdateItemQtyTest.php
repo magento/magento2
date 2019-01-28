@@ -85,7 +85,7 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
         $this->dispatch('checkout/cart/updateItemQty');
         $response = $this->getResponse()->getBody();
 
-        $this->assertEquals($this->json->unserialize($response), $expectedResponse);
+        $this->assertSame($this->json->unserialize($response), $expectedResponse);
     }
 
     /**

@@ -75,7 +75,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('ClassWithAllArgumentTypes');
         $actualResult = $this->_model->getConstructorArguments($class);
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testGetConstructorArgumentsClassWithoutOwnConstructorInheritedFalse()
@@ -83,7 +83,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('classWithoutOwnConstruct');
         $actualResult = $this->_model->getConstructorArguments($class);
 
-        $this->assertEquals([], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
     public function testGetConstructorArgumentsClassWithoutOwnConstructorInheritedTrue()
@@ -142,7 +142,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('ClassWithoutOwnConstruct');
         $actualResult = $this->_model->getConstructorArguments($class, false, true);
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testGetConstructorArgumentsClassWithoutConstructInheridetFalse()
@@ -150,7 +150,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('ClassWithoutConstruct');
         $actualResult = $this->_model->getConstructorArguments($class);
 
-        $this->assertEquals([], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
     public function testGetConstructorArgumentsClassWithoutConstructInheridetTrue()
@@ -158,7 +158,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('ClassWithoutConstruct');
         $actualResult = $this->_model->getConstructorArguments($class, false, true);
 
-        $this->assertEquals([], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
     public function testGetConstructorArgumentsClassExtendsDefaultPhpTypeInheridetFalse()
@@ -166,7 +166,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('ClassExtendsDefaultPhpType');
         $actualResult = $this->_model->getConstructorArguments($class);
 
-        $this->assertEquals([], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
     public function testGetConstructorArgumentsClassExtendsDefaultPhpTypeInheridetTrue()
@@ -197,7 +197,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $class = new \ReflectionClass('ClassExtendsDefaultPhpTypeWithIOverrideConstructor');
         $actualResult = $this->_model->getConstructorArguments($class, false, true);
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testGetParentCallWithRightArgumentsOrder()
@@ -214,7 +214,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
             ['name' => 'stdClassObject', 'position' => 0, 'type' => '\stdClass'],
             ['name' => 'secondClass', 'position' => 1, 'type' => '\ClassExtendsDefaultPhpType'],
         ];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testGetParentCallWithWrongArgumentsOrder()
@@ -231,7 +231,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
             ['name' => 'secondClass', 'position' => 0, 'type' => '\ClassExtendsDefaultPhpType'],
             ['name' => 'stdClassObject', 'position' => 1, 'type' => '\stdClass'],
         ];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testGetParentCallWithSeparateLineFormat()
@@ -248,7 +248,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
             ['name' => 'stdClassObject', 'position' => 0, 'type' => '\stdClass'],
             ['name' => 'secondClass', 'position' => 1, 'type' => '\ClassExtendsDefaultPhpType'],
         ];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -260,7 +260,7 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
     public function testIsCompatibleType($requiredType, $actualType, $expectedResult)
     {
         $actualResult = $this->_model->isCompatibleType($requiredType, $actualType);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -282,6 +282,6 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
     {
         $class = new \ReflectionClass('\ClassWithSuppressWarnings');
         $expected = ['SuppressWarnings' => 'Magento.TypeDuplication'];
-        $this->assertEquals($expected, $this->_model->getAnnotations($class));
+        $this->assertSame($expected, $this->_model->getAnnotations($class));
     }
 }

@@ -27,7 +27,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateData($inputData, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->model->validateData($inputData));
+        $this->assertSame($expectedResult, $this->model->validateData($inputData));
     }
 
     /**

@@ -28,7 +28,7 @@ class AbstractMessageTest extends \PHPUnit\Framework\TestCase
     public function testSetTextGetText($text, $resultText)
     {
         $this->model->setText($text);
-        $this->assertEquals($resultText, $this->model->getText());
+        $this->assertSame($resultText, $this->model->getText());
     }
 
     /**
@@ -47,7 +47,7 @@ class AbstractMessageTest extends \PHPUnit\Framework\TestCase
     public function testSetIdentifierGetIdentifier($identifier)
     {
         $this->model->setIdentifier($identifier);
-        $this->assertEquals($identifier, $this->model->getIdentifier());
+        $this->assertSame($identifier, $this->model->getIdentifier());
     }
 
     /**
@@ -79,6 +79,6 @@ class AbstractMessageTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setIdentifier('testing_message');
         $this->model->setText($someText);
-        $this->assertEquals($expectedString, $this->model->toString());
+        $this->assertSame($expectedString, $this->model->toString());
     }
 }

@@ -81,7 +81,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     public function testGetCcExpYearReturnsValidValue($databaseValue, $expectedValue)
     {
         $this->model->setData('cc_exp_year', $databaseValue);
-        static::assertEquals($expectedValue, $this->model->getCcExpYear());
+        static::assertSame($expectedValue, $this->model->getCcExpYear());
     }
 
     /**

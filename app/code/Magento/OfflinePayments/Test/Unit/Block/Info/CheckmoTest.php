@@ -57,7 +57,7 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($details);
         $this->block->setData('info', $this->info);
 
-        static::assertEquals($expected, $this->block->getPayableTo());
+        static::assertSame($expected, $this->block->getPayableTo());
     }
 
     /**
@@ -86,7 +86,7 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($details);
         $this->block->setData('info', $this->info);
 
-        static::assertEquals($expected, $this->block->getMailingAddress());
+        static::assertSame($expected, $this->block->getMailingAddress());
     }
 
     /**
@@ -117,6 +117,6 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
         $this->block->getMailingAddress();
 
         // And now we get already setted property $this->_mailingAddress
-        static::assertEquals($mailingAddress, $this->block->getMailingAddress());
+        static::assertSame($mailingAddress, $this->block->getMailingAddress());
     }
 }

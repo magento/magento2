@@ -32,17 +32,17 @@ class SystemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValueDefaultScope()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'value1.db.default.test',
             $this->system->get('default/web/test/test_value_1')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'value1.db.website_base.test',
             $this->system->get('websites/base/web/test/test_value_1')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'value1.db.store_default.test',
             $this->system->get('stores/default/web/test/test_value_1')
         );

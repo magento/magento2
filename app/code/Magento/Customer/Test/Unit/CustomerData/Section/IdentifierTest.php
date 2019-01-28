@@ -40,7 +40,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
             ->method('getCookie')
             ->with(Identifier::COOKIE_KEY)
             ->willReturn($this->cookieMarkId);
-        $this->assertEquals($this->cookieMarkId, $this->model->initMark(false));
+        $this->assertSame($this->cookieMarkId, $this->model->initMark(false));
     }
 
     public function testMarkSectionsDontUpdate()
@@ -65,7 +65,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
         // third parameter is true to avoid diving deeply into initMark()
         $result = $this->model->markSections($sectionsData, $sectionNames, false);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     public function testMarkSectionsUpdate()
@@ -80,8 +80,8 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
         // third parameter is true to avoid diving deeply into initMark()
         $result = $this->model->markSections($sectionsData, $sectionNames, true);
         $this->assertArrayHasKey('data_id', $result['section1']);
-        $this->assertNotEquals(0, $result['section1']['data_id']);
+        $this->assertNotSame(0, $result['section1']['data_id']);
         $this->assertArrayHasKey('data_id', $result['section2']);
-        $this->assertNotEquals(0, $result['section2']['data_id']);
+        $this->assertNotSame(0, $result['section2']['data_id']);
     }
 }

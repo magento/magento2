@@ -156,7 +156,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->_model->setRequest($this->request);
         $this->objectManager->get(SessionManagerInterface::class)->setData('_form_key', 'salt');
 
-        $this->assertEquals($expectedHash, $this->_model->getSecretKey($routeName, $controller, $action));
+        $this->assertSame($expectedHash, $this->_model->getSecretKey($routeName, $controller, $action));
     }
 
     /**
@@ -228,7 +228,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->_model->setRequest($this->request);
         $this->objectManager->get(SessionManagerInterface::class)->setData('_form_key', 'salt');
 
-        $this->assertEquals($encryptor->getHash('controller' . 'action' . 'salt'), $this->_model->getSecretKey());
+        $this->assertSame($encryptor->getHash('controller' . 'action' . 'salt'), $this->_model->getSecretKey());
     }
 
     /**

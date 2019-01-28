@@ -58,7 +58,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                 $orderId
             )->willReturn($transaction);
         }
-        $this->assertEquals(
+        $this->assertSame(
             $transaction,
             $this->manager->getAuthorizationTransaction($parentTransactionId, $paymentId, $orderId)
         );
@@ -80,7 +80,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             $this->repositoryMock->expects($this->once())->method('getByTransactionId')->willReturn($transaction);
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->manager->isTransactionExists($transactionId, $paymentId, $orderId)
         );
@@ -119,7 +119,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             $transactionBasedOn ? $transactionBasedTxnId : $parentTransactionId
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->manager->generateTransactionId($payment, $type, $transactionBasedOn)
         );

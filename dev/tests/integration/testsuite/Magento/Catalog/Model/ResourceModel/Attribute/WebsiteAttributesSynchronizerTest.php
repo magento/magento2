@@ -85,9 +85,9 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
 
         $instance = $this->getWebsiteAttributesSynchronizer();
 
-        $this->assertNotEquals($firstStoreProduct->getStatus(), $secondStoreProduct->getStatus());
-        $this->assertEquals(AttributeStatus::STATUS_DISABLED, $firstStoreProduct->getStatus());
-        $this->assertEquals(AttributeStatus::STATUS_ENABLED, $secondStoreProduct->getStatus());
+        $this->assertNotSame($firstStoreProduct->getStatus(), $secondStoreProduct->getStatus());
+        $this->assertSame(AttributeStatus::STATUS_DISABLED, $firstStoreProduct->getStatus());
+        $this->assertSame(AttributeStatus::STATUS_ENABLED, $secondStoreProduct->getStatus());
         $this->assertTrue($instance->isSynchronizationRequired());
 
         $instance->synchronize();
@@ -106,7 +106,7 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
             self::PRODUCT_FORCE_RELOAD
         );
 
-        $this->assertEquals($firstStoreProductAfterSync->getStatus(), $secondStoreProductAfterSync->getStatus());
+        $this->assertSame($firstStoreProductAfterSync->getStatus(), $secondStoreProductAfterSync->getStatus());
         $this->assertFalse($instance->isSynchronizationRequired());
     }
 

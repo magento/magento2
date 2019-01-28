@@ -77,7 +77,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                     $_configData['payment/payflow_link/pwd']
                 );
             }
-            $this->assertEquals($expectedData, $_configData);
+            $this->assertSame($expectedData, $_configData);
         }
     }
 

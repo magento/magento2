@@ -51,7 +51,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $expected = 'test_attr_code1';
         $this->mockAttributeById($attributeId, $attributeCode);
         $result = $this->attribute->getAttributeCodeById($attributeId);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -62,7 +62,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeId = 'options';
         $expected = 'options';
         $result = $this->attribute->getAttributeCodeById($attributeId);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -74,7 +74,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'test_attribute_code';
         $this->mockAttributeByCode($attributeId, $attributeCode);
         $result = $this->attribute->getAttributeIdByCode($attributeCode);
-        $this->assertEquals($attributeId, $result);
+        $this->assertSame($attributeId, $result);
     }
 
     /**
@@ -85,7 +85,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'options';
         $expected = 'options';
         $result = $this->attribute->getAttributeIdByCode($attributeCode);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -96,12 +96,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $firstAttributeId = 100;
         $firstAttributeCode = 'test_attribute_code_100';
         $this->mockAttributeByCode($firstAttributeId, $firstAttributeCode, 0);
-        $this->assertEquals($firstAttributeId, $this->attribute->getAttributeIdByCode($firstAttributeCode));
+        $this->assertSame($firstAttributeId, $this->attribute->getAttributeIdByCode($firstAttributeCode));
 
         $secondAttributeId = 200;
         $secondAttributeCode = 'test_attribute_code_200';
         $this->mockAttributeByCode($secondAttributeId, $secondAttributeCode, 0);
-        $this->assertEquals($secondAttributeId, $this->attribute->getAttributeIdByCode($secondAttributeCode));
+        $this->assertSame($secondAttributeId, $this->attribute->getAttributeIdByCode($secondAttributeCode));
     }
 
     /**
@@ -113,8 +113,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'test_attr_code2';
         $expected = 'test_attr_code2';
         $this->mockAttributeById($attributeId, $attributeCode, 0);
-        $this->assertEquals($expected, $this->attribute->getAttributeCodeById($attributeId));
-        $this->assertEquals($expected, $this->attribute->getAttributeCodeById($attributeId));
+        $this->assertSame($expected, $this->attribute->getAttributeCodeById($attributeId));
+        $this->assertSame($expected, $this->attribute->getAttributeCodeById($attributeId));
     }
 
     /**
@@ -125,8 +125,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeId = 100;
         $attributeCode = 'test_attribute_code';
         $this->mockAttributeByCode($attributeId, $attributeCode);
-        $this->assertEquals($attributeId, $this->attribute->getAttributeIdByCode($attributeCode));
-        $this->assertEquals($attributeCode, $this->attribute->getAttributeCodeById($attributeId));
+        $this->assertSame($attributeId, $this->attribute->getAttributeIdByCode($attributeCode));
+        $this->assertSame($attributeCode, $this->attribute->getAttributeCodeById($attributeId));
     }
 
     /**
@@ -140,7 +140,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $attribute
         ];
         $this->mockAttributes($attributes);
-        $this->assertEquals($attribute, $this->attribute->getAttribute($attributeCode));
+        $this->assertSame($attribute, $this->attribute->getAttribute($attributeCode));
     }
 
     /**
@@ -153,7 +153,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->createAttributeMock(120, 'attribute_code')
         ];
         $this->mockAttributes($attributes);
-        $this->assertEquals(null, $this->attribute->getAttribute($attributeCode));
+        $this->assertSame(null, $this->attribute->getAttribute($attributeCode));
     }
 
     /**
@@ -171,7 +171,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             'attr_97_mock' => $this->createAttributeMock(97, 'attr_97_mock'),
         ];
         $this->mockAttributes($attributes);
-        $this->assertEquals($attributes, $this->attribute->getAttributes());
+        $this->assertSame($attributes, $this->attribute->getAttributes());
     }
 
     /**

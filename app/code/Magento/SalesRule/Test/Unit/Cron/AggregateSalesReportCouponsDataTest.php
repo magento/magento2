@@ -66,6 +66,6 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit\Framework\TestCase
 
         $scheduleMock = $this->createMock(\Magento\Cron\Model\Schedule::class);
 
-        $this->assertEquals($this->model, $this->model->execute($scheduleMock));
+        $this->assertSame($this->model, $this->model->execute($scheduleMock));
     }
 }

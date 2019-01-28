@@ -46,7 +46,7 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($serverVar)
         );
-        $this->assertEquals($expected, $this->_serverAddress->getServerAddress($ipToLong));
+        $this->assertSame($expected, $this->_serverAddress->getServerAddress($ipToLong));
     }
 
     /**

@@ -97,9 +97,9 @@ class XmlValidatorTest extends \PHPUnit\Framework\TestCase
         try {
             $this->xmlValidator->validate($rawXml);
         } catch (\Magento\Sales\Exception\DocumentValidationException $exception) {
-            $this->assertEquals($data['errorMessage'], $exception->getMessage());
+            $this->assertSame($data['errorMessage'], $exception->getMessage());
             if (isset($data['code'])) {
-                $this->assertEquals($data['code'], $exception->getCode());
+                $this->assertSame($data['code'], $exception->getCode());
             }
             return;
         }

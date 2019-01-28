@@ -69,7 +69,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->assertEquals($parser, $model->getParser());
+        $this->assertSame($parser, $model->getParser());
     }
 
     public function testProcessResponseBody()
@@ -98,7 +98,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         );
         $body = '';
 
-        $this->assertEquals($this->translateMock, $model->processResponseBody($body, $isJson));
+        $this->assertSame($this->translateMock, $model->processResponseBody($body, $isJson));
     }
 
     public function testGetAdditionalHtmlAttribute()
@@ -124,7 +124,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->assertEquals('some_value', $model->getAdditionalHtmlAttribute('some_value'));
+        $this->assertSame('some_value', $model->getAdditionalHtmlAttribute('some_value'));
         $this->assertNull($model->getAdditionalHtmlAttribute());
     }
 }

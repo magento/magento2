@@ -76,7 +76,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
         $this->_storeManagerMock->expects($this->any())->method('getStore')
             ->will($this->returnValue($testStoreMock));
-        $this->assertEquals($baseUrl, $this->_model->success($successUrl));
+        $this->assertSame($baseUrl, $this->_model->success($successUrl));
     }
 
     /**

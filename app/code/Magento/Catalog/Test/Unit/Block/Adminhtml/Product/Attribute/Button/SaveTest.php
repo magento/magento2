@@ -25,7 +25,7 @@ class SaveTest extends GenericTest
 
     public function testGetButtonData()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'label' => __('Save Attribute'),
                 'class' => 'save primary',

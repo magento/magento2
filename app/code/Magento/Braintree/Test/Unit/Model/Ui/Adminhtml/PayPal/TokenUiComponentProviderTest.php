@@ -108,7 +108,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($tokenComponent);
 
         $component = $this->tokenUiComponentProvider->getComponentForToken($paymentToken);
-        static::assertEquals($tokenComponent, $component);
-        static::assertEquals($expected, $component->getConfig());
+        static::assertSame($tokenComponent, $component);
+        static::assertSame($expected, $component->getConfig());
     }
 }

@@ -24,6 +24,6 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
         /** @var Order $order */
         $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->load('100000001', 'increment_id');
-        $this->assertEquals(Order::STATE_CANCELED, $order->getStatus());
+        $this->assertSame(Order::STATE_CANCELED, $order->getStatus());
     }
 }

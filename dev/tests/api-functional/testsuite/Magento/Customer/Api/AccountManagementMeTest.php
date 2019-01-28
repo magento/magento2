@@ -120,7 +120,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
 
         $customerResponseData = $this->customerAccountManagement
             ->authenticate($this->customerData[CustomerInterface::EMAIL], '123@test');
-        $this->assertEquals($this->customerData[CustomerInterface::ID], $customerResponseData->getId());
+        $this->assertSame($this->customerData[CustomerInterface::ID], $customerResponseData->getId());
     }
 
     public function testUpdateCustomer()
@@ -145,10 +145,10 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $requestData = ['customer' => $updatedCustomerData];
 
         $response = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($lastName . "Updated", $response[CustomerInterface::LASTNAME]);
+        $this->assertSame($lastName . "Updated", $response[CustomerInterface::LASTNAME]);
 
         $customerData = $this->_getCustomerData($this->customerData[CustomerInterface::ID]);
-        $this->assertEquals($lastName . "Updated", $customerData->getLastname());
+        $this->assertSame($lastName . "Updated", $customerData->getLastname());
     }
 
     public function testGetCustomerData()
@@ -177,7 +177,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         unset($expectedCustomerDetails['custom_attributes']);
         unset($customerDetailsResponse['custom_attributes']); //for REST
 
-        $this->assertEquals($expectedCustomerDetails, $customerDetailsResponse);
+        $this->assertSame($expectedCustomerDetails, $customerDetailsResponse);
     }
 
     public function testGetCustomerActivateCustomer()
@@ -191,7 +191,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         ];
         $requestData = ['confirmationKey' => $this->customerData[CustomerInterface::CONFIRMATION]];
         $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($this->customerData[CustomerInterface::ID], $customerResponseData[CustomerInterface::ID]);
+        $this->assertSame($this->customerData[CustomerInterface::ID], $customerResponseData[CustomerInterface::ID]);
         // Confirmation key is removed after confirmation
         $this->assertFalse(isset($customerResponseData[CustomerInterface::CONFIRMATION]));
     }
@@ -223,7 +223,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         ];
         $requestData = ['customerId' => $fixtureCustomerId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $this->getFirstFixtureAddressData(),
             $addressData,
             "Default billing address data is invalid."
@@ -244,7 +244,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         ];
         $requestData = ['customerId' => $fixtureCustomerId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $this->getFirstFixtureAddressData(),
             $addressData,
             "Default shipping address data is invalid."

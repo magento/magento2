@@ -51,8 +51,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($currentStorage));
 
-        $this->assertEquals($currentStorage, $this->helper->getCurrentStorageCode());
-        $this->assertEquals($currentStorage, $this->helper->getCurrentStorageCode());
+        $this->assertSame($currentStorage, $this->helper->getCurrentStorageCode());
+        $this->assertSame($currentStorage, $this->helper->getCurrentStorageCode());
     }
 
     public function testGetStorageFileModel()
@@ -74,7 +74,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($currentStorage));
 
-        $this->assertEquals($expected, $this->helper->isInternalStorage($storage));
+        $this->assertSame($expected, $this->helper->isInternalStorage($storage));
     }
 
     /**
@@ -146,7 +146,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with($fileMock, true)
             ->will($this->returnValue(1));
 
-        $this->assertEquals($expected, $this->helper->processStorageFile($filename));
+        $this->assertSame($expected, $this->helper->processStorageFile($filename));
     }
 
     /**
@@ -168,6 +168,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('saveFile')
             ->with($file, true)
             ->will($this->returnValue(1));
-        $this->assertEquals(1, $this->helper->saveFileToFileSystem($file));
+        $this->assertSame(1, $this->helper->saveFileToFileSystem($file));
     }
 }

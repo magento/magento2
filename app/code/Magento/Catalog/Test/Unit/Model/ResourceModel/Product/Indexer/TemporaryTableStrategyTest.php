@@ -45,7 +45,7 @@ class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
     public function testSetUseIdxTable()
     {
         $this->tableStrategyMock->expects($this->once())->method('setUseIdxTable')->with(true)->willReturnSelf();
-        $this->assertEquals($this->tableStrategyMock, $this->model->setUseIdxTable(true));
+        $this->assertSame($this->tableStrategyMock, $this->model->setUseIdxTable(true));
     }
 
     public function testGetTableName()
@@ -57,7 +57,7 @@ class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->with($expectedResult)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->model->getTableName($tablePrefix));
+        $this->assertSame($expectedResult, $this->model->getTableName($tablePrefix));
     }
 
     public function testPrepareTableName()
@@ -85,6 +85,6 @@ class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
             ->method('createTemporaryTableLike')
             ->with($expectedResult, $tempTableName, true);
 
-        $this->assertEquals($expectedResult, $this->model->prepareTableName($tablePrefix));
+        $this->assertSame($expectedResult, $this->model->prepareTableName($tablePrefix));
     }
 }

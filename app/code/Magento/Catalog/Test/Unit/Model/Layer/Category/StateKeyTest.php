@@ -47,6 +47,6 @@ class StateKeyTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('3'));
 
-        $this->assertEquals('STORE_2_CAT_1_CUSTGROUP_3', $this->model->toString($categoryMock));
+        $this->assertSame('STORE_2_CAT_1_CUSTGROUP_3', $this->model->toString($categoryMock));
     }
 }

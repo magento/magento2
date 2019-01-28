@@ -94,6 +94,6 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getStores')
             ->willReturn([$storeMock, $storeMock, $storeMock]);
 
-        $this->assertEquals($result, $this->model->get());
+        $this->assertSame($result, $this->model->get());
     }
 }

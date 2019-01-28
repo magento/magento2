@@ -104,7 +104,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('size', $result);
-        $this->assertEquals(1, $result['size']);
+        $this->assertSame(1, $result['size']);
     }
 
     public function testIsExist()
@@ -138,7 +138,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($fileUrl);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertEquals($fileUrl, $model->getViewUrl($filePath, 'image'));
+        $this->assertSame($fileUrl, $model->getViewUrl($filePath, 'image'));
     }
 
     public function testGetViewUrlCustomerAddress()
@@ -159,7 +159,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($relativeUrl);
 
         $model = $this->getModel(AddressMetadataInterface::ENTITY_TYPE_ADDRESS);
-        $this->assertEquals($baseUrl . $relativeUrl, $model->getViewUrl($filePath, 'image'));
+        $this->assertSame($baseUrl . $relativeUrl, $model->getViewUrl($filePath, 'image'));
     }
 
     public function testRemoveUploadedFile()
@@ -231,7 +231,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $allowedExtensions);
         $result = $model->saveTemporaryFile('customer[' . $attributeCode . ']');
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -357,7 +357,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertEquals('/f/i' . $filePath, $model->moveTemporaryFile($filePath));
+        $this->assertSame('/f/i' . $filePath, $model->moveTemporaryFile($filePath));
     }
 
     /**
@@ -414,6 +414,6 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $this->assertEquals($expected, $model->getMimeType($fileName));
+        $this->assertSame($expected, $model->getMimeType($fileName));
     }
 }

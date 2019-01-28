@@ -109,7 +109,7 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
         $this->_dictionaryMock->expects($this->at(1))->method('addPhrase')->with($phraseSecondMock);
 
         /** @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile $abstractLoaderMock */
-        $this->assertEquals($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
+        $this->assertSame($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
     }
 
     /**
@@ -151,6 +151,6 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
         );
 
         /** @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile $abstractLoaderMock */
-        $this->assertEquals($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
+        $this->assertSame($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
     }
 }

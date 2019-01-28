@@ -84,7 +84,7 @@ class ThemeDependencyCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$childThemeC, $childThemeD]));
 
-        $this->assertEquals($expected, $this->themeDependencyChecker->checkChildTheme($input));
+        $this->assertSame($expected, $this->themeDependencyChecker->checkChildTheme($input));
     }
 
     /**

@@ -119,7 +119,7 @@ class RemoteServiceGeneratorTest extends \PHPUnit\Framework\TestCase
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
         $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->generator);
-        self::assertEquals($expectedResult, $generatedCode);
+        self::assertSame($expectedResult, $generatedCode);
     }
 
     /**

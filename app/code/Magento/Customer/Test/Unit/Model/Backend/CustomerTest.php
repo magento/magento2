@@ -49,7 +49,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $this->_model->setStoreId($storeId);
             $this->_storeManager->expects($this->never())->method('getWebsite');
         }
-        $this->assertEquals($result, $this->_model->getStoreId());
+        $this->assertSame($result, $this->_model->getStoreId());
     }
 
     /**

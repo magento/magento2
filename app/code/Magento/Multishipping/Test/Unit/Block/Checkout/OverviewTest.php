@@ -98,7 +98,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
             ->with('shipping method')
             ->willReturn($rateMock);
 
-        $this->assertEquals($rateMock, $this->model->getShippingAddressRate($this->addressMock));
+        $this->assertSame($rateMock, $this->model->getShippingAddressRate($this->addressMock));
     }
 
     public function testGetShippingRateByCodeWithEmptyRate()
@@ -116,7 +116,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingAddressItems()
     {
         $this->addressMock->expects($this->once())->method('getAllVisibleItems')->willReturn(['expected array']);
-        $this->assertEquals(['expected array'], $this->model->getShippingAddressItems($this->addressMock));
+        $this->assertSame(['expected array'], $this->model->getShippingAddressItems($this->addressMock));
     }
 
     public function testGetShippingAddressTotals()
@@ -130,7 +130,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
         $totalMock->expects($this->once())->method('setTitle')->with('Total');
 
-        $this->assertEquals([$totalMock], $this->model->getShippingAddressTotals($this->addressMock));
+        $this->assertSame([$totalMock], $this->model->getShippingAddressTotals($this->addressMock));
     }
 
     public function testGetShippingAddressTotalsWithNotBillingAddress()
@@ -144,7 +144,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
         $totalMock->expects($this->once())->method('setTitle')->with('Total for this address');
 
-        $this->assertEquals([$totalMock], $this->model->getShippingAddressTotals($this->addressMock));
+        $this->assertSame([$totalMock], $this->model->getShippingAddressTotals($this->addressMock));
     }
 
     /**
@@ -177,6 +177,6 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'http://example.com';
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart', [])->willReturn($url);
-        $this->assertEquals($url, $this->model->getVirtualProductEditUrl());
+        $this->assertSame($url, $this->model->getVirtualProductEditUrl());
     }
 }

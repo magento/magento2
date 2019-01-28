@@ -41,7 +41,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
     {
         $id = 1;
         $this->block->setPage($this->page);
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Cms\Model\Page::CACHE_TAG . '_' . $id],
             $this->block->getIdentities()
         );

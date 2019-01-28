@@ -54,6 +54,6 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertEquals($expected, $this->model->process($data));
+        $this->assertSame($expected, $this->model->process($data));
     }
 }

@@ -81,7 +81,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
 
         $collection = $this->getPasswordResetRequestEventCollection();
         $sizeAfter = $collection->getSize();
-        $this->assertEquals(1, $sizeAfter - $sizeBefore);
+        $this->assertSame(1, $sizeAfter - $sizeBefore);
     }
 
     /**
@@ -119,7 +119,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
                 $this->securityManager->performSecurityCheck($requestType, $accountReference, $longIp);
             }
         } catch (\Magento\Framework\Exception\SecurityViolationException $e) {
-            $this->assertEquals(1, $i);
+            $this->assertSame(1, $i);
             throw new \Magento\Framework\Exception\SecurityViolationException(
                 __($e->getMessage())
             );
@@ -153,7 +153,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
                 $this->securityManager->performSecurityCheck($requestType, $accountReference, $longIp);
             }
         } catch (\Magento\Framework\Exception\SecurityViolationException $e) {
-            $this->assertEquals(1, $i);
+            $this->assertSame(1, $i);
             throw new \Magento\Framework\Exception\SecurityViolationException(
                 __($e->getMessage())
             );

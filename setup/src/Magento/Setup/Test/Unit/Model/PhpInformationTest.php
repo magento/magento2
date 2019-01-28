@@ -16,7 +16,7 @@ class PhpInformationTest extends \PHPUnit\Framework\TestCase
     public function testGetRequiredMinimumXDebugNestedLevel()
     {
         $phpInformation = new PhpInformation();
-        $this->assertEquals(200, $phpInformation->getRequiredMinimumXDebugNestedLevel());
+        $this->assertSame(200, $phpInformation->getRequiredMinimumXDebugNestedLevel());
     }
 
     public function testGetCurrent()

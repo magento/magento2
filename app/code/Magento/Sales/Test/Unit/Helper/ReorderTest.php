@@ -86,7 +86,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     public function testIsAllowedScopeConfigReorder($scopeConfigValue)
     {
         $this->setupScopeConfigMock($scopeConfigValue);
-        $this->assertEquals($scopeConfigValue, $this->helper->isAllowed($this->storeParam));
+        $this->assertSame($scopeConfigValue, $this->helper->isAllowed($this->storeParam));
     }
 
     /**
@@ -99,7 +99,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     {
         $this->storeParam = null;
         $this->setupScopeConfigMock($scopeConfigValue);
-        $this->assertEquals($scopeConfigValue, $this->helper->isAllow());
+        $this->assertSame($scopeConfigValue, $this->helper->isAllow());
     }
 
     /**
@@ -187,7 +187,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(1)
             ->willReturn($this->orderMock);
-        $this->assertEquals($orderCanReorder, $this->helper->canReorder(1));
+        $this->assertSame($orderCanReorder, $this->helper->canReorder(1));
     }
 
     /**

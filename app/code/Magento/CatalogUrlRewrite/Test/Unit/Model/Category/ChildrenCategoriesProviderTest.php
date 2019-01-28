@@ -63,7 +63,7 @@ class ChildrenCategoriesProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetChildrenForNewCategory()
     {
         $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
-        $this->assertEquals([], $this->childrenCategoriesProvider->getChildren($this->category));
+        $this->assertSame([], $this->childrenCategoriesProvider->getChildren($this->category));
     }
 
     public function testGetChildren()

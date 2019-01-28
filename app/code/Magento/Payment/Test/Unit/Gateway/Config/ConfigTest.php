@@ -45,7 +45,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             )->willReturn($expected);
 
         $this->model = new Config($this->scopeConfigMock, $methodCode, $pathPattern);
-        $this->assertEquals($expected, $this->model->getValue($field, $storeId));
+        $this->assertSame($expected, $this->model->getValue($field, $storeId));
     }
 
     public function testGetValueWithDefaultPathPattern()
@@ -64,6 +64,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             )->willReturn($expected);
 
         $this->model = new Config($this->scopeConfigMock, $methodCode);
-        $this->assertEquals($expected, $this->model->getValue($field, $storeId));
+        $this->assertSame($expected, $this->model->getValue($field, $storeId));
     }
 }

@@ -106,7 +106,7 @@ class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('getIsVisibleOnFront')
             ->willReturn(false);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->invoiceMock,
             $this->invoiceDocumentFactory->create($this->orderMock, [$this->itemMock], $this->commentMock)
         );

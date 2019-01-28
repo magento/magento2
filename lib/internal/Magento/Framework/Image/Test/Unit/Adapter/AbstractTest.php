@@ -71,7 +71,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
         $result = $method->invoke($this->_model, $width, $height);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -106,7 +106,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
         $result = $method->invoke($this->_model, $destination, $newName);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

@@ -108,6 +108,6 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             'package/parent_theme/path/one',
             'package/parent_theme/path/two',
         ];
-        $this->assertEquals($expectedResult, $this->model->getPatternDirs(['theme' => $theme, 'file' => 'test.css']));
+        $this->assertSame($expectedResult, $this->model->getPatternDirs(['theme' => $theme, 'file' => 'test.css']));
     }
 }

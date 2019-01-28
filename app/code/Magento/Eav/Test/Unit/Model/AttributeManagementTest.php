@@ -242,7 +242,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())->method('get')->willReturn($attributeGroup);
         $attributeGroup->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId);
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributeMock,
             $this->attributeManagement->assign(
                 $entityTypeCode,
@@ -443,7 +443,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->attributeCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->attributeCollectionMock->expects($this->once())->method('getItems')->willReturn([$attributeMock]);
 
-        $this->assertEquals([$attributeMock], $this->attributeManagement->getAttributes($entityType, $attributeSetId));
+        $this->assertSame([$attributeMock], $this->attributeManagement->getAttributes($entityType, $attributeSetId));
     }
 
     /**

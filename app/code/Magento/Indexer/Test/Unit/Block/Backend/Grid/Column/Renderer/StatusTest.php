@@ -27,7 +27,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $model->setColumn($obj);
         $model->setIndex($indexValues[0]);
         $result = $model->render($obj);
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>'
         );

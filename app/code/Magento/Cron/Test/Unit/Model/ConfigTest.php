@@ -41,6 +41,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_configData->expects($this->once())->method('getJobs')->will($this->returnValue($jobList));
         $result = $this->_config->getJobs();
-        $this->assertEquals($jobList, $result);
+        $this->assertSame($jobList, $result);
     }
 }

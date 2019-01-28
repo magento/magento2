@@ -46,7 +46,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
     {
         $value = 'test_value';
         $this->title->set($value);
-        $this->assertEquals($value, $this->title->get());
+        $this->assertSame($value, $this->title->get());
     }
 
     /**
@@ -56,7 +56,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
     {
         $value = 'test';
         $this->title->set($value);
-        $this->assertEquals($value, $this->title->get());
+        $this->assertSame($value, $this->title->get());
         $this->title->unsetValue();
         $this->assertEmpty($this->title->get());
     }
@@ -80,7 +80,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $this->title->set($value);
-        $this->assertEquals($expected, $this->title->get());
+        $this->assertSame($expected, $this->title->get());
     }
 
     /**
@@ -93,7 +93,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         $this->title->prepend($value);
         $this->title->append($value);
 
-        $this->assertEquals($value, $this->title->getShort());
+        $this->assertSame($value, $this->title->getShort());
     }
 
     /**
@@ -116,7 +116,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($expected, $this->title->getShort());
+        $this->assertSame($expected, $this->title->getShort());
     }
 
     /**
@@ -130,7 +130,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
 
-        $this->assertEquals($value, $this->title->getShortHeading());
+        $this->assertSame($value, $this->title->getShortHeading());
     }
 
     /**
@@ -152,7 +152,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
                     ['design/head/default_title', ScopeInterface::SCOPE_STORE, null, $defaultTitle],
                 ]
             );
-        $this->assertEquals($expected, $this->title->getDefault());
+        $this->assertSame($expected, $this->title->getDefault());
     }
 
     /**
@@ -169,6 +169,6 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         $this->title->prepend($prepend);
         $this->title->append($append);
 
-        $this->assertEquals($expected, $this->title->get());
+        $this->assertSame($expected, $this->title->get());
     }
 }

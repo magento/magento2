@@ -71,7 +71,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
             ]));
 
         $result = $this->parser->parse($options);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

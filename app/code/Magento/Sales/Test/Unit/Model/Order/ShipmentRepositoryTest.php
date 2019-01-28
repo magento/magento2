@@ -94,7 +94,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
                 $this->subject->get($id);
             } else {
-                $this->assertEquals($shipment, $this->subject->get($id));
+                $this->assertSame($shipment, $this->subject->get($id));
 
                 $shipment->expects($this->never())
                     ->method('load')
@@ -109,7 +109,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
                     ->willReturn($shipment);
 
                 // Retrieve Shipment from registry.
-                $this->assertEquals($shipment, $this->subject->get($id));
+                $this->assertSame($shipment, $this->subject->get($id));
             }
         }
     }
@@ -138,7 +138,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->subject->getList($searchCriteria));
+        $this->assertSame($collection, $this->subject->getList($searchCriteria));
     }
 
     public function testDelete()
@@ -222,7 +222,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($shipment, $this->subject->save($shipment));
+        $this->assertSame($shipment, $this->subject->save($shipment));
     }
 
     /**
@@ -252,7 +252,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($shipment, $this->subject->save($shipment));
+        $this->assertSame($shipment, $this->subject->save($shipment));
     }
 
     public function testCreate()
@@ -263,6 +263,6 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getNewInstance')
             ->willReturn($shipment);
 
-        $this->assertEquals($shipment, $this->subject->create());
+        $this->assertSame($shipment, $this->subject->create());
     }
 }

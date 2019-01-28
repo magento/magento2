@@ -82,7 +82,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
             [DirectoryList::ROOT => [DirectoryList::PATH => '/test/root']];
 
         $directoryList = $this->listener->createDirectoryList($initParams);
-        $this->assertEquals('/test/root/app', $directoryList->getPath(DirectoryList::APP));
+        $this->assertSame('/test/root/app', $directoryList->getPath(DirectoryList::APP));
     }
 
     /**
@@ -105,7 +105,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
-        $this->assertEquals([], $this->listener->createService($serviceLocator));
+        $this->assertSame([], $this->listener->createService($serviceLocator));
     }
 
     /**
@@ -141,7 +141,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
 
-        $this->assertEquals($expectedArray, $listener->createService($serviceLocator));
+        $this->assertSame($expectedArray, $listener->createService($serviceLocator));
     }
 
     /**
@@ -220,7 +220,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $filesystem = $this->listener->createFilesystem($directoryList);
 
         // Verifies the filesystem was created with the directory list passed in
-        $this->assertEquals($testPath, $filesystem->getDirectoryRead('app')->getAbsolutePath());
+        $this->assertSame($testPath, $filesystem->getDirectoryRead('app')->getAbsolutePath());
     }
 
     /**

@@ -65,7 +65,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
             ->method('addBodyClass')
             ->withConsecutive(['class_1'], ['class--2']);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->bodyGenerator,
             $this->bodyGenerator->process($readerContextMock, $generatorContextMock)
         );

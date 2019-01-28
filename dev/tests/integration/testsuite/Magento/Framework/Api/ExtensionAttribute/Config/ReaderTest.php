@@ -103,6 +103,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedArray, $model->read('global'));
+        $this->assertSame($expectedArray, $model->read('global'));
     }
 }

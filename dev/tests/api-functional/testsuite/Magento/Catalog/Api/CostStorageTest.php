@@ -58,7 +58,7 @@ class CostStorageTest extends WebapiAbstract
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
 
         $this->assertNotEmpty($response);
-        $this->assertEquals($product->getCost(), $cost);
+        $this->assertSame($product->getCost(), $cost);
     }
 
     /**
@@ -97,7 +97,7 @@ class CostStorageTest extends WebapiAbstract
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
         $this->assertEmpty($response);
-        $this->assertEquals($product->getCost(), $newCost);
+        $this->assertSame($product->getCost(), $newCost);
     }
 
     /**
@@ -156,7 +156,7 @@ class CostStorageTest extends WebapiAbstract
             ]
         ];
 
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertSame($expectedResponse, $response);
     }
 
     /**

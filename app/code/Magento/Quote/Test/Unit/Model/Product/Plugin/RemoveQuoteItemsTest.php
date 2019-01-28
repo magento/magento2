@@ -32,6 +32,6 @@ class RemoveQuoteItemsTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteItemsCleanerMock->expects($this->once())->method('execute')->with($productMock);
         $result = $this->model->afterDelete($productResourceMock, $productResourceMock, $productMock);
-        $this->assertEquals($result, $productResourceMock);
+        $this->assertSame($result, $productResourceMock);
     }
 }

@@ -49,7 +49,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertEquals('button', $this->button->getType());
+        $this->assertSame('button', $this->button->getType());
     }
 
     public function testGetAttributesHtml()
@@ -61,7 +61,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
         $this->button->setData('class', 'classValue');
         $this->button->setDataAttribute(['attributeKey' => 'attributeValue']);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->withAnyParameters()->willReturnArgument(0);
-        $this->assertEquals($expected, $this->button->getAttributesHtml());
+        $this->assertSame($expected, $this->button->getAttributesHtml());
     }
 
     /**
@@ -84,7 +84,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
             ->with('', [])
             ->willReturn($getUrl);
 
-        $this->assertEquals($result, $this->button->getOnClick());
+        $this->assertSame($result, $this->button->getOnClick());
     }
 
     /**

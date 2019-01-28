@@ -139,6 +139,6 @@ class Gd2Test extends \PHPUnit\Framework\TestCase
         $this->adapter->open('file');
         $type2 = $this->adapter->getImageType();
 
-        $this->assertNotEquals($type1, $type2);
+        $this->assertNotSame($type1, $type2);
     }
 }

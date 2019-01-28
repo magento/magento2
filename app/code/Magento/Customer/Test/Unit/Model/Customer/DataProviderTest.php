@@ -117,7 +117,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertEquals($expected, $meta);
+        $this->assertSame($expected, $meta);
     }
 
     /**
@@ -619,7 +619,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerFormData')
             ->willReturn(null);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 '' => [
                     'customer' => [
@@ -744,7 +744,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerFormData');
 
-        $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
+        $this->assertSame([$customerId => $customerFormData], $dataProvider->getData());
     }
 
     /**
@@ -957,7 +957,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -1018,7 +1018,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertEquals($this->getExpectationForVisibleAttributes(), $meta);
+        $this->assertSame($this->getExpectationForVisibleAttributes(), $meta);
     }
 
     /**
@@ -1087,7 +1087,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertEquals($this->getExpectationForVisibleAttributes(false), $meta);
+        $this->assertSame($this->getExpectationForVisibleAttributes(false), $meta);
     }
 
     /**

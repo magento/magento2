@@ -82,7 +82,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         $sessionId = $this->authSession->getSessionId();
         $this->auth->logout();
         $this->adminSessionInfo->load($sessionId, 'session_id');
-        $this->assertEquals($this->adminSessionInfo->getStatus(), AdminSessionInfo::LOGGED_OUT);
+        $this->assertSame($this->adminSessionInfo->getStatus(), AdminSessionInfo::LOGGED_OUT);
     }
 
     /**
@@ -123,7 +123,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
         $session->load('669e2e3d752e8', 'session_id');
-        $this->assertEquals(
+        $this->assertSame(
             AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
             (int) $session->getStatus()
         );
@@ -142,7 +142,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         );
         $sessionId = $this->authSession->getSessionId();
         $this->adminSessionInfo->load($sessionId, 'session_id');
-        $this->assertEquals(
+        $this->assertSame(
             $this->adminSessionInfo->getSessionId(),
             $this->adminSessionsManager->getCurrentSession()->getSessionId()
         );
@@ -173,7 +173,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertGreaterThanOrEqual(1, $collection->getSize());
         $this->adminSessionsManager->logoutOtherUserSessions();
         $collection = $this->getCollectionForLogoutOtherUserSessions($session);
-        $this->assertEquals(0, $collection->getSize());
+        $this->assertSame(0, $collection->getSize());
     }
 
     /**

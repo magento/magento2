@@ -124,7 +124,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(25);
 
         $result = $this->builder->build($buildSubject);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**

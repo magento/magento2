@@ -45,7 +45,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
     public function testSetMethod($method, $expected)
     {
         $this->assertSame($this->config, $this->config->setMethod($method));
-        $this->assertEquals($expected, $this->config->getMethodCode());
+        $this->assertSame($expected, $this->config->getMethodCode());
     }
 
     public function testSetMethodInstance()
@@ -81,7 +81,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetMethod()
     {
         $this->config->setMethod('method');
-        $this->assertEquals('method', $this->config->getMethodCode());
+        $this->assertSame('method', $this->config->getMethodCode());
     }
 
     public function testSetStoreId()
@@ -104,7 +104,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturnMap($returnMap);
 
-        $this->assertEquals($expectedValue, $this->config->getValue($key));
+        $this->assertSame($expectedValue, $this->config->getValue($key));
     }
 
     /**
@@ -196,7 +196,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturnMap($returnMap);
 
-        $this->assertEquals($expectedValue, $this->config->isWppApiAvailable());
+        $this->assertSame($expectedValue, $this->config->isWppApiAvailable());
     }
 
     /**
@@ -311,7 +311,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             $productMetadata
         );
 
-        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+        self::assertSame('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
     }
 
     /**
@@ -325,6 +325,6 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             ->with(self::equalTo('paypal/notation_code'), self::equalTo('stores'))
             ->willReturn($notationCode);
 
-        self::assertEquals($notationCode, $this->config->getBuildNotationCode());
+        self::assertSame($notationCode, $this->config->getBuildNotationCode());
     }
 }

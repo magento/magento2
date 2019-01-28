@@ -23,8 +23,8 @@ class ListTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedMode = 'a mode';
-        $this->assertNotEquals($expectedMode, $block->getMode());
+        $this->assertNotSame($expectedMode, $block->getMode());
         $childBlock->setCurrentMode($expectedMode);
-        $this->assertEquals($expectedMode, $block->getMode());
+        $this->assertSame($expectedMode, $block->getMode());
     }
 }

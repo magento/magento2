@@ -69,7 +69,7 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
             ->with($minimumAmount, true, false)
             ->will($this->returnValue($minimumAmountCurrency));
 
-        $this->assertEquals(__('Minimum order amount is %1', $minimumAmountCurrency), $this->model->getMessage());
+        $this->assertSame(__('Minimum order amount is %1', $minimumAmountCurrency), $this->model->getMessage());
     }
     public function testGetConfigMessage()
     {
@@ -81,7 +81,7 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
 
         $message = $this->model->getMessage();
 
-        $this->assertEquals(Phrase::class, get_class($message));
-        $this->assertEquals($configMessage, $message->__toString());
+        $this->assertSame(Phrase::class, get_class($message));
+        $this->assertSame($configMessage, $message->__toString());
     }
 }

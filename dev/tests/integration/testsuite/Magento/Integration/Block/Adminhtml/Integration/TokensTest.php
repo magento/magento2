@@ -63,7 +63,7 @@ class TokensTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $this->assertEquals($expectedData, $this->tokensBlock->getFormFields());
+        $this->assertSame($expectedData, $this->tokensBlock->getFormFields());
     }
 
     public function testToHtml()

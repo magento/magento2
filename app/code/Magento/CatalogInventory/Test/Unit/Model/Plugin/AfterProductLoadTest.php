@@ -80,7 +80,7 @@ class AfterProductLoadTest extends \PHPUnit\Framework\TestCase
         $this->productExtensionFactoryMock->expects($this->never())
             ->method('create');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->plugin->afterLoad($this->productMock)
         );

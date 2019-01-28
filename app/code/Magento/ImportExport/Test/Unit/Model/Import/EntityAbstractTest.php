@@ -399,7 +399,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
 
         $rowData[$attributeCode] = $data['invalid_value'];
         $this->assertFalse($this->_model->isAttributeValid($attributeCode, $attributeParams, $rowData, 0));
-        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount(), 'Wrong count of errors');
+        $this->assertSame(1, $this->_model->getErrorAggregator()->getErrorsCount(), 'Wrong count of errors');
     }
 
     /**
@@ -518,7 +518,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $property->setValue($this->_model, $permanentAttributes);
 
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertSame(1, $errorAggregator->getErrorsCount());
     }
 
     /**
@@ -530,7 +530,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     {
         $this->_createSourceAdapterMock(['']);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertSame(1, $errorAggregator->getErrorsCount());
     }
 
     /**
@@ -543,7 +543,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $this->_createSourceAdapterMock(['  ']);
         $this->_model->validateData();
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertSame(1, $errorAggregator->getErrorsCount());
     }
 
     /**
@@ -555,7 +555,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     {
         $this->_createSourceAdapterMock(['_test1']);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertSame(1, $errorAggregator->getErrorsCount());
     }
 
     /**

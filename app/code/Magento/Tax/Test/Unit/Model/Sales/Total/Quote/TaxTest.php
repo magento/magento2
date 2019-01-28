@@ -698,8 +698,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($totalsMock->getTaxAmount());
         $totalsArray = $taxTotalsCalcModel->fetch($quote, $totalsMock);
         $this->assertArrayHasKey('value', $totalsArray[0]);
-        $this->assertEquals($taxAmount, $totalsArray[0]['value']);
-        $this->assertEquals(json_decode($appliedTaxesData, true), $totalsArray[0]['full_info']);
+        $this->assertSame($taxAmount, $totalsArray[0]['value']);
+        $this->assertSame(json_decode($appliedTaxesData, true), $totalsArray[0]['full_info']);
     }
 
     /**
@@ -753,7 +753,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject(\Magento\Tax\Model\Sales\Total\Quote\Tax::class);
-        $this->assertEquals($taxTotalsCalcModel->getLabel(), __('Tax'));
+        $this->assertSame($taxTotalsCalcModel->getLabel(), __('Tax'));
     }
 
     /**
@@ -798,15 +798,15 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxCollector = $objectManager->getObject(\Magento\Tax\Model\Sales\Total\Quote\Tax::class);
         $taxCollector->collect($quote, $shippingAssignmentMock, $totalsMock);
 
-        $this->assertEquals(0, $address->getTotalAmount('subtotal'));
-        $this->assertEquals(0, $address->getTotalAmount('tax'));
-        $this->assertEquals(0, $address->getTotalAmount('discount_tax_compensation'));
-        $this->assertEquals(0, $address->getTotalAmount('shipping_discount_tax_compensation'));
-        $this->assertEquals(0, $address->getBaseTotalAmount('subtotal'));
-        $this->assertEquals(0, $address->getBaseTotalAmount('tax'));
-        $this->assertEquals(0, $address->getBaseTotalAmount('discount_tax_compensation'));
-        $this->assertEquals(0, $address->getBaseTotalAmount('shipping_discount_tax_compensation'));
-        $this->assertEquals(0, $address->getSubtotalInclTax());
-        $this->assertEquals(0, $address->getBaseSubtotalInclTax());
+        $this->assertSame(0, $address->getTotalAmount('subtotal'));
+        $this->assertSame(0, $address->getTotalAmount('tax'));
+        $this->assertSame(0, $address->getTotalAmount('discount_tax_compensation'));
+        $this->assertSame(0, $address->getTotalAmount('shipping_discount_tax_compensation'));
+        $this->assertSame(0, $address->getBaseTotalAmount('subtotal'));
+        $this->assertSame(0, $address->getBaseTotalAmount('tax'));
+        $this->assertSame(0, $address->getBaseTotalAmount('discount_tax_compensation'));
+        $this->assertSame(0, $address->getBaseTotalAmount('shipping_discount_tax_compensation'));
+        $this->assertSame(0, $address->getSubtotalInclTax());
+        $this->assertSame(0, $address->getBaseSubtotalInclTax());
     }
 }

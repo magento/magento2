@@ -27,8 +27,8 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
 
         $validator = new \Magento\Framework\View\Design\Theme\Validator();
 
-        $this->assertEquals($result, $validator->validate($themeMock));
-        $this->assertEquals($messages, $validator->getErrorMessages());
+        $this->assertSame($result, $validator->validate($themeMock));
+        $this->assertSame($messages, $validator->getErrorMessages());
     }
 
     /**

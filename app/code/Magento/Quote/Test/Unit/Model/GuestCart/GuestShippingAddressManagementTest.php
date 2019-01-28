@@ -74,7 +74,7 @@ class GuestShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
     {
         $addressId = 1;
         $this->shippingAddressManagementMock->expects($this->once())->method('assign')->willReturn($addressId);
-        $this->assertEquals($addressId, $this->model->assign($this->maskedCartId, $this->quoteAddressMock));
+        $this->assertSame($addressId, $this->model->assign($this->maskedCartId, $this->quoteAddressMock));
     }
 
     public function testGet()
@@ -82,6 +82,6 @@ class GuestShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $this->shippingAddressManagementMock->expects($this->once())->method('get')->willReturn(
             $this->quoteAddressMock
         );
-        $this->assertEquals($this->quoteAddressMock, $this->model->get($this->maskedCartId));
+        $this->assertSame($this->quoteAddressMock, $this->model->get($this->maskedCartId));
     }
 }

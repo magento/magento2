@@ -94,7 +94,7 @@ class GiftMessageTest extends AbstractModifierTest
             ],
         ]];
 
-        $this->assertEquals($expectedResult, $this->getModel()->modifyData($data));
+        $this->assertSame($expectedResult, $this->getModel()->modifyData($data));
     }
 
     public function testModifyDataUsesConfigurationValuesForNewProduct()
@@ -113,6 +113,6 @@ class GiftMessageTest extends AbstractModifierTest
             ],
         ]];
 
-        $this->assertEquals($expectedResult, $this->getModel()->modifyData([]));
+        $this->assertSame($expectedResult, $this->getModel()->modifyData([]));
     }
 }

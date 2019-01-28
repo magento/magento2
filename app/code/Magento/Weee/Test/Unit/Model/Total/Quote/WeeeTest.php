@@ -227,7 +227,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     public function verifyItem(\Magento\Quote\Model\Quote\Item $item, $itemData)
     {
         foreach ($itemData as $key => $value) {
-            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+            $this->assertSame($value, $item->getData($key), 'item ' . $key . ' is incorrect');
         }
     }
 
@@ -240,7 +240,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     public function verifyAddress($address, $addressData)
     {
         foreach ($addressData as $key => $value) {
-            $this->assertEquals($value, $address->getData($key), 'address ' . $key . ' is incorrect');
+            $this->assertSame($value, $address->getData($key), 'address ' . $key . ' is incorrect');
         }
     }
 

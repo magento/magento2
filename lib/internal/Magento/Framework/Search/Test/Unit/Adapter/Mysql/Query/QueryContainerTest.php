@@ -60,7 +60,7 @@ class QueryContainerTest extends \PHPUnit\Framework\TestCase
             $this->requestQuery,
             BoolExpression::QUERY_CONDITION_MUST
         );
-        $this->assertEquals($this->select, $result);
+        $this->assertSame($this->select, $result);
     }
 
     public function testGetDerivedQueries()
@@ -73,10 +73,10 @@ class QueryContainerTest extends \PHPUnit\Framework\TestCase
             $this->requestQuery,
             BoolExpression::QUERY_CONDITION_MUST
         );
-        $this->assertEquals($this->select, $result);
+        $this->assertSame($this->select, $result);
 
         $queries = $this->queryContainer->getMatchQueries();
         $this->assertCount(1, $queries);
-        $this->assertEquals('asdf', reset($queries));
+        $this->assertSame('asdf', reset($queries));
     }
 }

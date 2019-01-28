@@ -79,7 +79,7 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('cms/page/view/page_id/' . $cmsPageId);
 
         $urls = $this->urlRewriteGenerator->generate($cmsPage);
-        $this->assertEquals($initializesStores[0], $urls[0]->getStoreId());
+        $this->assertSame($initializesStores[0], $urls[0]->getStoreId());
         $this->assertFalse(isset($urls[1]));
     }
 
@@ -118,7 +118,7 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->urlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')->with($cmsPage)
             ->willReturn('cms/page/view/page_id/' . $cmsPageId);
         $urls = $this->urlRewriteGenerator->generate($cmsPage);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $initializesStores[0],
                 $initializesStores[1]

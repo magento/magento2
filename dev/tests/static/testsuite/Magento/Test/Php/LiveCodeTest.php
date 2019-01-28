@@ -269,7 +269,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
         $report = file_get_contents($reportFile);
-        $this->assertEquals(
+        $this->assertSame(
             0,
             $result,
             "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . $report
@@ -295,7 +295,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             $output = file_get_contents($reportFile);
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             Command::EXIT_SUCCESS,
             $result,
             "PHP Code Mess has found error(s):" . PHP_EOL . $output
@@ -368,7 +368,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             0,
             count($filesMissingStrictTyping),
             "Following files are missing strict type declaration:"

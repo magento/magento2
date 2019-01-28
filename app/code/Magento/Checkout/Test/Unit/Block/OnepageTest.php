@@ -70,7 +70,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
-        $this->assertEquals($baseUrl, $this->model->getBaseUrl());
+        $this->assertSame($baseUrl, $this->model->getBaseUrl());
     }
 
     public function testGetCheckoutConfig()
@@ -78,7 +78,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $checkoutConfig = ['checkout', 'config'];
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
 
-        $this->assertEquals($checkoutConfig, $this->model->getCheckoutConfig());
+        $this->assertSame($checkoutConfig, $this->model->getCheckoutConfig());
     }
 
     public function testGetFormKey()
@@ -86,7 +86,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $formKey = 'form_key';
         $this->formKeyMock->expects($this->once())->method('getFormKey')->willReturn($formKey);
 
-        $this->assertEquals($formKey, $this->model->getFormKey());
+        $this->assertSame($formKey, $this->model->getFormKey());
     }
 
     public function testGetJsLayout()
@@ -96,7 +96,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
         $this->serializerMock->expects($this->once())->method('serialize')->willReturn($jsonLayout);
 
-        $this->assertEquals($jsonLayout, $this->model->getJsLayout());
+        $this->assertSame($jsonLayout, $this->model->getJsLayout());
     }
 
     public function testGetSerializedCheckoutConfig()
@@ -105,6 +105,6 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
         $this->serializerMock->expects($this->once())->method('serialize')->willReturn(json_encode($checkoutConfig));
 
-        $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
+        $this->assertSame(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }
 }

@@ -70,7 +70,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
             ->willReturn('123');
         $this->versionStorageMock->expects($this->never())
             ->method('save');
-        $this->assertEquals('123', $this->object->getValue());
+        $this->assertSame('123', $this->object->getValue());
         $this->object->getValue(); // Ensure caching in memory
     }
 
@@ -93,7 +93,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->willReturn($version);
 
-        $this->assertEquals($version, $this->object->getValue());
+        $this->assertSame($version, $this->object->getValue());
         $this->object->getValue();
     }
 

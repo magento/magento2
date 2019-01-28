@@ -101,15 +101,15 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getCurrencyInfo();
 
-        $this->assertEquals($currencyInformation, $result);
-        $this->assertEquals('USD', $result->getBaseCurrencyCode());
-        $this->assertEquals('$', $result->getBaseCurrencySymbol());
-        $this->assertEquals('USD', $result->getDefaultDisplayCurrencyCode());
-        $this->assertEquals('$', $result->getDefaultDisplayCurrencySymbol());
-        $this->assertEquals(['AUD'], $result->getAvailableCurrencyCodes());
+        $this->assertSame($currencyInformation, $result);
+        $this->assertSame('USD', $result->getBaseCurrencyCode());
+        $this->assertSame('$', $result->getBaseCurrencySymbol());
+        $this->assertSame('USD', $result->getDefaultDisplayCurrencyCode());
+        $this->assertSame('$', $result->getDefaultDisplayCurrencySymbol());
+        $this->assertSame(['AUD'], $result->getAvailableCurrencyCodes());
         $this->assertTrue(is_array($result->getExchangeRates()));
-        $this->assertEquals([$exchangeRate], $result->getExchangeRates());
-        $this->assertEquals('0.80', $result->getExchangeRates()[0]->getRate());
-        $this->assertEquals('AUD', $result->getExchangeRates()[0]->getCurrencyTo());
+        $this->assertSame([$exchangeRate], $result->getExchangeRates());
+        $this->assertSame('0.80', $result->getExchangeRates()[0]->getRate());
+        $this->assertSame('AUD', $result->getExchangeRates()[0]->getCurrencyTo());
     }
 }

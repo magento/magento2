@@ -34,8 +34,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->item->setLink($liParams, $innerText);
 
-        $this->assertEquals($liParams, $this->item->getLiParams());
-        $this->assertEquals($innerText, $this->item->getInnerText());
+        $this->assertSame($liParams, $this->item->getLiParams());
+        $this->assertSame($innerText, $this->item->getInnerText());
     }
 
     /**
@@ -48,7 +48,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $this->item->setLink($liParams, $innerText);
 
-        $this->assertEquals($expectedHtml, $this->item->toHtml());
+        $this->assertSame($expectedHtml, $this->item->toHtml());
     }
 
     /**

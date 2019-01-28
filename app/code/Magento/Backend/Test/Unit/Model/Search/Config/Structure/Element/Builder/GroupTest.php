@@ -37,7 +37,7 @@ class GroupTest extends TestCase
         $this->structureElementMock->expects($this->once())
             ->method('getPath')
             ->willReturn($structureElementPath);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'section' => 'path_part_1',
                 'group'   => 'path_part_2',

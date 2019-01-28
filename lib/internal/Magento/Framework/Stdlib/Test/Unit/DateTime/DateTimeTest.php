@@ -29,7 +29,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
         $expected = gmdate('U', strtotime($this->testDate));
-        $this->assertEquals($expected, (new DateTime($timezone))->gmtTimestamp($input));
+        $this->assertSame($expected, (new DateTime($timezone))->gmtTimestamp($input));
     }
 
     /**
@@ -43,7 +43,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
         $expected = gmdate('U', strtotime($this->testDate));
-        $this->assertEquals($expected, (new DateTime($timezone))->timestamp($input));
+        $this->assertSame($expected, (new DateTime($timezone))->timestamp($input));
     }
 
     /**

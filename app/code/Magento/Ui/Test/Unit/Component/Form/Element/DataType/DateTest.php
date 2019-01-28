@@ -69,7 +69,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
-        $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
+        $this->assertSame($localeDateFormat, $config['options']['dateFormat']);
     }
 
     public function testPrepareWithoutTimeOffset()
@@ -107,7 +107,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
-        $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
+        $this->assertSame($localeDateFormat, $config['options']['dateFormat']);
     }
 
     /**
@@ -127,7 +127,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->localeDateMock->expects($this->any())->method('getConfigTimezone')->willReturn('America/Chicago');
         $this->date->prepare();
         $configArray = $this->date->getData('config');
-        $this->assertEquals('America/Chicago', $configArray['storeTimeZone']);
-        $this->assertEquals('de-DE', $configArray['options']['storeLocale']);
+        $this->assertSame('America/Chicago', $configArray['storeTimeZone']);
+        $this->assertSame('de-DE', $configArray['options']['storeLocale']);
     }
 }

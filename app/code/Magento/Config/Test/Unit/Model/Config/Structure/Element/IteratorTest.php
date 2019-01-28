@@ -40,10 +40,10 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $this->_flyweightMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
         $counter = 0;
         foreach ($this->_model as $item) {
-            $this->assertEquals($this->_flyweightMock, $item);
+            $this->assertSame($this->_flyweightMock, $item);
             $counter++;
         }
-        $this->assertEquals(3, $counter);
+        $this->assertSame(3, $counter);
     }
 
     public function testIteratorSkipsNonValidElements()
@@ -65,7 +65,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
     {
         $elementMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
         $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
-        $this->assertEquals($result, $this->_model->isLast($elementMock));
+        $this->assertSame($result, $this->_model->isLast($elementMock));
     }
 
     /**

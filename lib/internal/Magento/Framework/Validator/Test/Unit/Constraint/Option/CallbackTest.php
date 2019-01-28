@@ -32,7 +32,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
     public function testGetValue($callback, $expectedResult, $arguments = null, $createInstance = false)
     {
         $option = new Callback($callback, $arguments, $createInstance);
-        $this->assertEquals($expectedResult, $option->getValue());
+        $this->assertSame($expectedResult, $option->getValue());
     }
 
     /**
@@ -106,7 +106,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
         $option = new Callback(function () {
         });
         $option->setArguments($value);
-        $this->assertAttributeEquals($expectedValue, '_arguments', $option);
+        $this->assertAttributeSame($expectedValue, '_arguments', $option);
     }
 
     /**

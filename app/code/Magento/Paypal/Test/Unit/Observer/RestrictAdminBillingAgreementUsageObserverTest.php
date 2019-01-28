@@ -98,6 +98,6 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\
         $result->setData('is_available', true);
         $this->_event->setResult($result);
         $this->_model->execute($this->_observer);
-        $this->assertEquals($isAvailable, $result->getData('is_available'));
+        $this->assertSame($isAvailable, $result->getData('is_available'));
     }
 }

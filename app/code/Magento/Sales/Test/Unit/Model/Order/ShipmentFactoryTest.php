@@ -154,7 +154,7 @@ class ShipmentFactoryTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals($shipment, $this->subject->create($order, ['1' => 5], $tracks));
+        $this->assertSame($shipment, $this->subject->create($order, ['1' => 5], $tracks));
     }
 
     /**

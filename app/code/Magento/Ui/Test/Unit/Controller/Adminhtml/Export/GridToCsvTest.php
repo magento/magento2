@@ -66,6 +66,6 @@ class GridToCsvTest extends \PHPUnit\Framework\TestCase
             ->with('export.csv', $content, 'var')
             ->willReturn($content);
 
-        $this->assertEquals($content, $this->controller->execute());
+        $this->assertSame($content, $this->controller->execute());
     }
 }

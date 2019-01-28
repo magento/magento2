@@ -150,7 +150,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
         $totalMock->expects($this->once())->method('getShippingAmount')->willReturn($shippingAmount);
         $totalMock->expects($this->once())->method('getShippingDescription')->willReturn($shippingDescription);
-        $this->assertEquals($expectedResult, $this->shippingModel->fetch($quoteMock, $totalMock));
+        $this->assertSame($expectedResult, $this->shippingModel->fetch($quoteMock, $totalMock));
     }
 
     /**

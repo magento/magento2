@@ -163,7 +163,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
             )->getHomePageUrl(),
         ];
         $expected = json_encode($data);
-        $this->assertEquals($expected, $this->getResponse()->getBody());
+        $this->assertSame($expected, $this->getResponse()->getBody());
         $this->_logout();
     }
 

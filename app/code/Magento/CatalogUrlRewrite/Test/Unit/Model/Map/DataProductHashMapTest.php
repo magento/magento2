@@ -103,12 +103,12 @@ class DataProductHashMapTest extends \PHPUnit\Framework\TestCase
         $this->hashMapPoolMock->expects($this->any())
             ->method('resetMap')
             ->with(DataCategoryHashMap::class, 1);
-        $this->assertEquals($productIds, $this->model->getAllData(1));
-        $this->assertEquals($productIds[2], $this->model->getData(1, 2));
-        $this->assertEquals($productIdsOther, $this->model->getAllData(2));
-        $this->assertEquals($productIdsOther[2], $this->model->getData(2, 2));
+        $this->assertSame($productIds, $this->model->getAllData(1));
+        $this->assertSame($productIds[2], $this->model->getData(1, 2));
+        $this->assertSame($productIdsOther, $this->model->getAllData(2));
+        $this->assertSame($productIdsOther[2], $this->model->getData(2, 2));
         $this->model->resetData(1);
-        $this->assertEquals($productIds[2], $this->model->getData(1, 2));
-        $this->assertEquals($productIds, $this->model->getAllData(1));
+        $this->assertSame($productIds[2], $this->model->getData(1, 2));
+        $this->assertSame($productIds, $this->model->getAllData(1));
     }
 }

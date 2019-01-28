@@ -100,7 +100,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         // Verify no files were returned
-        $this->assertEquals([], $this->themeFileCollector->getFiles($this->themeMock, ''));
+        $this->assertSame([], $this->themeFileCollector->getFiles($this->themeMock, ''));
     }
 
     public function testGetFilesSingle()
@@ -130,7 +130,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($fileMock);
 
         // One file was returned from search
-        $this->assertEquals([$fileMock], $this->themeFileCollector->getFiles($this->themeMock, $searchPath));
+        $this->assertSame([$fileMock], $this->themeFileCollector->getFiles($this->themeMock, $searchPath));
     }
 
     public function testGetFilesMultiple()
@@ -167,7 +167,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($fileMock);
 
         // Only two files should be in array, which were returned from search
-        $this->assertEquals(
+        $this->assertSame(
             [$fileMock, $fileMock],
             $this->themeFileCollector->getFiles($this->themeMock, $searchPath)
         );

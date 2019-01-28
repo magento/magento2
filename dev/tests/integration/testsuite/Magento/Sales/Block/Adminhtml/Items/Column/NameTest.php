@@ -29,7 +29,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function testTruncateString() : void
     {
         $remainder = '';
-        $this->assertEquals(
+        $this->assertSame(
             '12345',
             $this->block->truncateString('1234567890', 5, '', $remainder)
         );
@@ -37,7 +37,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFormattedOptiong() : void
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'value' => '1234567890123456789012345678901234567890123456789012345',
                 'remainder' => '67890',

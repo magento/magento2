@@ -52,7 +52,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->with('*/*/cleanImages')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
+        $this->assertSame($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
     }
 
     public function testGetCleanMediaUrl()
@@ -62,7 +62,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->with('*/*/cleanMedia')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
+        $this->assertSame($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
     }
 
     public function testGetCleanStaticFiles()
@@ -72,7 +72,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->with('*/*/cleanStaticFiles')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
+        $this->assertSame($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
     }
 
     /**
@@ -85,7 +85,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($mode);
-        $this->assertEquals($expected, $this->additionalBlock->isInProductionMode());
+        $this->assertSame($expected, $this->additionalBlock->isInProductionMode());
     }
 
     /**

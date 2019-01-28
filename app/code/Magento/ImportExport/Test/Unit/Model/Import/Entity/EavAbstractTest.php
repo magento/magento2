@@ -125,6 +125,6 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
      */
     public function testGetEntityTypeId()
     {
-        $this->assertEquals(self::ENTITY_TYPE_ID, $this->_model->getEntityTypeId());
+        $this->assertSame(self::ENTITY_TYPE_ID, $this->_model->getEntityTypeId());
     }
 }

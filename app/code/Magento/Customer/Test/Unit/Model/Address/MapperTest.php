@@ -58,7 +58,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         );
         $addressData = $this->createAddressMock();
         $result = $this->addressMapper->toFlatArray($addressData);
-        $this->assertEquals($expectedResultWithStreet, $result);
+        $this->assertSame($expectedResultWithStreet, $result);
     }
 
     /**

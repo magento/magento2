@@ -61,7 +61,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($paypalConfig));
 
-        $this->assertEquals($expected, $this->helper->isContextAvailable('payment_code', true));
+        $this->assertSame($expected, $this->helper->isContextAvailable('payment_code', true));
     }
 
     /**
@@ -109,7 +109,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->with($currentProduct)
             ->will($this->returnValue(false));
 
-        $this->assertEquals($expected, $this->helper->isPriceOrSetAvailable($isInCatalog));
+        $this->assertSame($expected, $this->helper->isPriceOrSetAvailable($isInCatalog));
     }
 
     /**
@@ -145,7 +145,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 $this->returnValue($methodInstance)
             );
 
-        $this->assertEquals($expected, $this->helper->isMethodAvailable('payment_code'));
+        $this->assertSame($expected, $this->helper->isMethodAvailable('payment_code'));
     }
 
     /**

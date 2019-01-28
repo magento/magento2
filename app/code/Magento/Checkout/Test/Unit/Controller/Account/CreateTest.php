@@ -99,7 +99,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                     'message' => __('Customer is already registered')
                 ]
             )->willReturn($resultJson);
-        $this->assertEquals($resultJson, $this->action->execute());
+        $this->assertSame($resultJson, $this->action->execute());
     }
 
     public function testExecute()
@@ -125,6 +125,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                     'message' => __('A letter with further instructions will be sent to your email.')
                 ]
             )->willReturn($resultJson);
-        $this->assertEquals($resultJson, $this->action->execute());
+        $this->assertSame($resultJson, $this->action->execute());
     }
 }

@@ -29,7 +29,7 @@ class GiftmessageTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedHtml)
         );
 
-        $this->assertEquals($expectedHtml, $block->getSaveButtonHtml());
+        $this->assertSame($expectedHtml, $block->getSaveButtonHtml());
         $this->assertNotEmpty($item->getOnclick());
     }
 }

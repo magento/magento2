@@ -26,7 +26,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
-        $this->assertEquals(['synonyms'], $config->getDeclaredFeatures('mysql'));
+        $this->assertSame(['synonyms'], $config->getDeclaredFeatures('mysql'));
     }
 
     public function testIsFeatureSupported()
@@ -36,6 +36,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
-        $this->assertEquals(true, $config->isFeatureSupported('synonyms', 'mysql'));
+        $this->assertSame(true, $config->isFeatureSupported('synonyms', 'mysql'));
     }
 }

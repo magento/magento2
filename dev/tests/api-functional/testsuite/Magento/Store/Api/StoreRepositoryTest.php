@@ -39,6 +39,6 @@ class StoreRepositoryTest extends WebapiAbstract
         $this->assertNotNull($storeViews);
         $this->assertGreaterThan(1, count($storeViews));
         $keys = ['id', 'code', 'name', 'website_id', 'store_group_id', 'is_active'];
-        $this->assertEquals($keys, array_keys($storeViews[0]));
+        $this->assertSame($keys, array_keys($storeViews[0]));
     }
 }

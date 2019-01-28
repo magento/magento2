@@ -41,7 +41,7 @@ class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($actionAmount)
             ->willReturn($actionAmount);
 
-        $this->assertEquals($actionAmount, $this->model->calculate($ruleData, $productData));
+        $this->assertSame($actionAmount, $this->model->calculate($ruleData, $productData));
     }
 
     public function testCalculateToPercentPrice()
@@ -60,7 +60,7 @@ class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($expectedPrice)
             ->willReturn($expectedPrice);
 
-        $this->assertEquals($expectedPrice, $this->model->calculate($ruleData, $productData));
+        $this->assertSame($expectedPrice, $this->model->calculate($ruleData, $productData));
     }
 
     public function testCalculateByFixedPrice()
@@ -79,7 +79,7 @@ class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($expectedPrice)
             ->willReturn($expectedPrice);
 
-        $this->assertEquals($expectedPrice, $this->model->calculate($ruleData, $productData));
+        $this->assertSame($expectedPrice, $this->model->calculate($ruleData, $productData));
     }
 
     public function testCalculateByPercentPrice()
@@ -98,6 +98,6 @@ class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($expectedPrice)
             ->willReturn($expectedPrice);
 
-        $this->assertEquals($expectedPrice, $this->model->calculate($ruleData, $productData));
+        $this->assertSame($expectedPrice, $this->model->calculate($ruleData, $productData));
     }
 }

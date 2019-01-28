@@ -154,6 +154,6 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\App\Action\Forward::class)
             ->willReturn($actionMock);
 
-        $this->assertEquals($actionMock, $this->router->match($requestMock));
+        $this->assertSame($actionMock, $this->router->match($requestMock));
     }
 }

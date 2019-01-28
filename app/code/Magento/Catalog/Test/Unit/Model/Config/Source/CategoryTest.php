@@ -78,6 +78,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->expects($this->once())->method('getName')->will($this->returnValue('name'));
         $this->category->expects($this->once())->method('getId')->will($this->returnValue(3));
 
-        $this->assertEquals($expect, $this->model->toOptionArray());
+        $this->assertSame($expect, $this->model->toOptionArray());
     }
 }

@@ -47,7 +47,7 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
 
         $url = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
         $actualResult = $this->object->afterGetBaseUrl($url, 'http://127.0.0.1/magento/pub/static/', $inputUrlType);
-        $this->assertEquals('http://127.0.0.1/magento/pub/static/', $actualResult);
+        $this->assertSame('http://127.0.0.1/magento/pub/static/', $actualResult);
     }
 
     /**
@@ -76,6 +76,6 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
             'http://127.0.0.1/magento/pub/static/',
             \Magento\Framework\UrlInterface::URL_TYPE_STATIC
         );
-        $this->assertEquals('http://127.0.0.1/magento/pub/static/version123/', $actualResult);
+        $this->assertSame('http://127.0.0.1/magento/pub/static/version123/', $actualResult);
     }
 }

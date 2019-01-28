@@ -120,7 +120,7 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
             ->with($this->entityMock)
             ->willReturn($entityType);
         $this->sequenceRegistryMock->expects($this->once())->method('retrieve')->with($entityType)->willReturn(null);
-        $this->assertEquals($this->entityMock, $this->sequenceApplier->apply($this->entityMock));
+        $this->assertSame($this->entityMock, $this->sequenceApplier->apply($this->entityMock));
     }
 
     public function testApplyEntityHasIdentifier()
@@ -157,7 +157,7 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
                 $entityData[$identifierField]
             );
 
-        $this->assertEquals($this->entityMock, $this->sequenceApplier->apply($this->entityMock));
+        $this->assertSame($this->entityMock, $this->sequenceApplier->apply($this->entityMock));
     }
 
     public function testApplyEntityDoesNotHaveIdentifier()
@@ -198,6 +198,6 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
             ->with($this->entityMock, $entityData)
             ->willReturn($this->entityMock);
 
-        $this->assertEquals($this->entityMock, $this->sequenceApplier->apply($this->entityMock));
+        $this->assertSame($this->entityMock, $this->sequenceApplier->apply($this->entityMock));
     }
 }

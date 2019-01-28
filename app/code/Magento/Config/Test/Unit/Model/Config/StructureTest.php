@@ -105,7 +105,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             $this->_scopeDefinerMock
         );
 
-        $this->assertEquals($this->_tabIteratorMock, $model->getTabs());
+        $this->assertSame($this->_tabIteratorMock, $model->getTabs());
     }
 
     public function testGetSectionList()
@@ -148,7 +148,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             $this->_scopeDefinerMock
         );
 
-        $this->assertEquals($expected, $model->getSectionList());
+        $this->assertSame($expected, $model->getSectionList());
     }
 
     /**
@@ -170,7 +170,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             $expectedPath
         );
 
-        $this->assertEquals($elementMock, $this->_model->getElement($path));
+        $this->assertSame($elementMock, $this->_model->getElement($path));
     }
 
     /**
@@ -192,7 +192,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             $expectedPath
         );
 
-        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath($path));
+        $this->assertSame($elementMock, $this->_model->getElementByConfigPath($path));
     }
 
     /**
@@ -238,14 +238,14 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     {
         $elementMock = $this->getElementPathReturnsProperElementByPath();
 
-        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+        $this->assertSame($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
     }
 
     public function testGetElementByConfigPathReturnsProperElementByPath()
     {
         $elementMock = $this->getElementPathReturnsProperElementByPath();
 
-        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
+        $this->assertSame($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
     }
 
     /**
@@ -305,7 +305,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             $this->_scopeDefinerMock
         );
 
-        $this->assertEquals($elementMock, $structureMock->getElementByPathParts($pathParts));
+        $this->assertSame($elementMock, $structureMock->getElementByPathParts($pathParts));
     }
 
     public function testGetFirstSectionReturnsFirstAllowedSection()
@@ -339,23 +339,23 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             ->method('current')
             ->willReturn($tabMock);
 
-        $this->assertEquals('currentSection', $this->_model->getFirstSection()->getData());
+        $this->assertSame('currentSection', $this->_model->getFirstSection()->getData());
     }
 
     public function testGetElementReturnsProperElementByPathCachesObject()
     {
         $elementMock = $this->getElementReturnsProperElementByPathCachesObject();
 
-        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
-        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+        $this->assertSame($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+        $this->assertSame($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
     }
 
     public function testGetElementByConfigPathReturnsProperElementByPathCachesObject()
     {
         $elementMock = $this->getElementReturnsProperElementByPathCachesObject();
 
-        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
-        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
+        $this->assertSame($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
+        $this->assertSame($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
     }
 
     /**
@@ -389,7 +389,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFieldPathsByAttribute($attributeName, $attributeValue, $paths)
     {
-        $this->assertEquals($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
+        $this->assertSame($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
     }
 
     /**

@@ -70,6 +70,6 @@ class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $this->quoteRepositoryMock->expects($this->once())->method('get')->willReturn($this->quoteMock);
-        $this->assertEquals($this->quoteMock, $this->model->get($this->maskedCartId));
+        $this->assertSame($this->quoteMock, $this->model->get($this->maskedCartId));
     }
 }

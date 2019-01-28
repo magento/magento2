@@ -52,7 +52,7 @@ class PagerTest extends \PHPUnit\Framework\TestCase
     public function testStorageSet()
     {
         $result = $this->_helper->setItems([1]);
-        $this->assertEquals($result, $this->_helper);
+        $this->assertSame($result, $this->_helper);
     }
 
     /**
@@ -60,7 +60,7 @@ class PagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNextItem()
     {
-        $this->assertEquals(2, $this->_helper->getNextItemId(3));
+        $this->assertSame(2, $this->_helper->getNextItemId(3));
     }
 
     /**
@@ -77,7 +77,7 @@ class PagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPreviousItem()
     {
-        $this->assertEquals(2, $this->_helper->getPreviousItemId(6));
+        $this->assertSame(2, $this->_helper->getPreviousItemId(6));
     }
 
     /**

@@ -68,11 +68,11 @@ class DeployTranslationsDictionaryTest extends \PHPUnit\Framework\TestCase
         $this->deployStaticFile->expects($this->exactly(1))->method('deployFile')
             ->willReturnCallback(
                 function ($checkDictionary, $params) use ($dictionary, $area, $theme, $locale) {
-                    $this->assertEquals($dictionary, $checkDictionary);
-                    $this->assertEquals($dictionary, $params['fileName']);
-                    $this->assertEquals($area, $params['area']);
-                    $this->assertEquals($theme, $params['theme']);
-                    $this->assertEquals($locale, $params['locale']);
+                    $this->assertSame($dictionary, $checkDictionary);
+                    $this->assertSame($dictionary, $params['fileName']);
+                    $this->assertSame($area, $params['area']);
+                    $this->assertSame($theme, $params['theme']);
+                    $this->assertSame($locale, $params['locale']);
                 }
             );
 
@@ -83,7 +83,7 @@ class DeployTranslationsDictionaryTest extends \PHPUnit\Framework\TestCase
         $this->state->expects($this->exactly(1))->method('emulateAreaCode')
             ->willReturnCallback(
                 function ($area, $callback) {
-                    $this->assertEquals('adminhtml', $area);
+                    $this->assertSame('adminhtml', $area);
                     $callback();
                 }
             );

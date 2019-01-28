@@ -60,7 +60,7 @@ class AVSResponseTest extends \PHPUnit\Framework\TestCase
         $this->config->method('getValue')
             ->willReturnMap($configMap);
 
-        static::assertEquals($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
+        static::assertSame($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
 
         if (!$expectedResult) {
             static::assertNotEmpty($response->getRespmsg());

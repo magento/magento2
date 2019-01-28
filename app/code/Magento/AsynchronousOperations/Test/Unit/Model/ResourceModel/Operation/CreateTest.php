@@ -90,7 +90,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('insertOnDuplicate')
             ->with($operationTable, [$operationData], ['status', 'error_code', 'result_message'])->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
-        $this->assertEquals($operationList, $this->create->execute($operationList));
+        $this->assertSame($operationList, $this->create->execute($operationList));
     }
 
     /**

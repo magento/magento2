@@ -64,31 +64,31 @@ class RefundOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $actualCreditmemoItems = $this->getCreditmemoItems($creditmemo);
             $actualRefundedOrderItems = $this->getRefundedOrderItems($updatedOrder);
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedItems,
                 $actualCreditmemoItems,
                 'Failed asserting that the Creditmemo contains all requested items'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedItems,
                 $actualRefundedOrderItems,
                 'Failed asserting that all requested order items were refunded'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $creditmemo->getShippingAmount(),
                 $existingOrder->getShippingAmount(),
                 'Failed asserting that the Creditmemo contains correct shipping amount'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $creditmemo->getShippingAmount(),
                 $updatedOrder->getShippingRefunded(),
                 'Failed asserting that proper shipping amount of the Order was refunded'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 Order::STATE_COMPLETE,
                 $updatedOrder->getStatus(),
                 'Failed asserting that order status has not changed'
@@ -149,49 +149,49 @@ class RefundOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $actualCreditmemoComment = $this->getRecentComment($creditmemo);
             $actualRefundedOrderItems = $this->getRefundedOrderItems($updatedOrder);
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedItems,
                 $actualCreditmemoItems,
                 'Failed asserting that the Creditmemo contains all requested items'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedItems,
                 $actualRefundedOrderItems,
                 'Failed asserting that all requested order items were refunded'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedComment,
                 $actualCreditmemoComment,
                 'Failed asserting that the Creditmemo contains correct comment'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedShippingAmount,
                 $creditmemo->getShippingAmount(),
                 'Failed asserting that the Creditmemo contains correct shipping amount'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedShippingAmount,
                 $updatedOrder->getShippingRefunded(),
                 'Failed asserting that proper shipping amount of the Order was refunded'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedAdjustmentPositive,
                 $creditmemo->getAdjustmentPositive(),
                 'Failed asserting that the Creditmemo contains correct positive adjustment'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedAdjustmentNegative,
                 $creditmemo->getAdjustmentNegative(),
                 'Failed asserting that the Creditmemo contains correct negative adjustment'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $existingOrder->getStatus(),
                 $updatedOrder->getStatus(),
                 'Failed asserting that order status was NOT changed'

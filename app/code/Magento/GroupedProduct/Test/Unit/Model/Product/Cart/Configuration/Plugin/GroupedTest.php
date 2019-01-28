@@ -47,7 +47,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
         );
-        $this->assertEquals(
+        $this->assertSame(
             true,
             $this->groupedPlugin->aroundIsProductConfigured(
                 $this->subjectMock,
@@ -62,7 +62,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $config = ['super_group' => 'product'];
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('product'));
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->groupedPlugin->aroundIsProductConfigured(
                 $this->subjectMock,

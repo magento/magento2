@@ -470,7 +470,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->with(null, ['_direct' => $pageIdentifier])
             ->willReturn($url);
 
-        $this->assertEquals($expectedResult, $this->object->getPageUrl($pageId));
+        $this->assertSame($expectedResult, $this->object->getPageUrl($pageId));
     }
 
     /**

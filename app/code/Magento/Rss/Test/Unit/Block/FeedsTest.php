@@ -64,6 +64,6 @@ class FeedsTest extends \PHPUnit\Framework\TestCase
         $this->rssManagerInterface->expects($this->once())->method('getProviders')
             ->will($this->returnValue([$provider1, $provider2]));
 
-        $this->assertEquals([$feed2, $feed1], $this->block->getFeeds());
+        $this->assertSame([$feed2, $feed1], $this->block->getFeeds());
     }
 }

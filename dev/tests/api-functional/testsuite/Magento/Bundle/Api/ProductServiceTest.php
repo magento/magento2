@@ -90,15 +90,15 @@ class ProductServiceTest extends WebapiAbstract
 
         $response = $this->createProduct($product);
 
-        $this->assertEquals(self::BUNDLE_PRODUCT_ID, $response[ProductInterface::SKU]);
-        $this->assertEquals(50, $response['price']);
+        $this->assertSame(self::BUNDLE_PRODUCT_ID, $response[ProductInterface::SKU]);
+        $this->assertSame(50, $response['price']);
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"])
         );
         $resultBundleProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"];
         $this->assertTrue(isset($resultBundleProductOptions[0]["product_links"][0]["sku"]));
-        $this->assertEquals('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
+        $this->assertSame('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
 
         $response = $this->getProduct(self::BUNDLE_PRODUCT_ID);
         $this->assertTrue(
@@ -107,7 +107,7 @@ class ProductServiceTest extends WebapiAbstract
         $resultBundleProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"];
         $this->assertTrue(isset($resultBundleProductOptions[0]["product_links"][0]["sku"]));
-        $this->assertEquals('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
+        $this->assertSame('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
     }
 
     /**
@@ -131,11 +131,11 @@ class ProductServiceTest extends WebapiAbstract
         $updatedProduct = $this->saveProduct($bundleProduct);
 
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
-        $this->assertEquals('select', $bundleOptions[0]['type']);
-        $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
-        $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
-        $this->assertEquals(10, $bundleOptions[0]['product_links'][0]['price']);
-        $this->assertEquals(1, $bundleOptions[0]['product_links'][0]['price_type']);
+        $this->assertSame('select', $bundleOptions[0]['type']);
+        $this->assertSame('simple2', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertSame(2, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertSame(10, $bundleOptions[0]['product_links'][0]['price']);
+        $this->assertSame(1, $bundleOptions[0]['product_links'][0]['price_type']);
     }
 
     /**
@@ -155,11 +155,11 @@ class ProductServiceTest extends WebapiAbstract
         $updatedProduct = $this->saveProduct($bundleProduct);
 
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
-        $this->assertEquals('select', $bundleOptions[0]['type']);
-        $this->assertEquals('simple', $bundleOptions[0]['product_links'][0]['sku']);
-        $this->assertEquals(1, $bundleOptions[0]['product_links'][0]['qty']);
-        $this->assertEquals(20, $bundleOptions[0]['product_links'][0]['price']);
-        $this->assertEquals(1, $bundleOptions[0]['product_links'][0]['price_type']);
+        $this->assertSame('select', $bundleOptions[0]['type']);
+        $this->assertSame('simple', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertSame(1, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertSame(20, $bundleOptions[0]['product_links'][0]['price']);
+        $this->assertSame(1, $bundleOptions[0]['product_links'][0]['price_type']);
     }
 
     /**
@@ -180,12 +180,12 @@ class ProductServiceTest extends WebapiAbstract
         $updatedProduct = $this->saveProduct($bundleProduct);
 
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
-        $this->assertEquals('checkbox', $bundleOptions[0]['type']);
-        $this->assertEquals('simple', $bundleOptions[0]['product_links'][0]['sku']);
-        $this->assertEquals(1, $bundleOptions[0]['product_links'][0]['qty']);
-        $this->assertEquals($existingSelectionId, $bundleOptions[0]['product_links'][0]['id']);
-        $this->assertEquals(20, $bundleOptions[0]['product_links'][0]['price']);
-        $this->assertEquals(1, $bundleOptions[0]['product_links'][0]['price_type']);
+        $this->assertSame('checkbox', $bundleOptions[0]['type']);
+        $this->assertSame('simple', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertSame(1, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertSame($existingSelectionId, $bundleOptions[0]['product_links'][0]['id']);
+        $this->assertSame(20, $bundleOptions[0]['product_links'][0]['price']);
+        $this->assertSame(1, $bundleOptions[0]['product_links'][0]['price_type']);
     }
 
     /**
@@ -209,9 +209,9 @@ class ProductServiceTest extends WebapiAbstract
         $updatedProduct = $this->saveProduct($bundleProduct);
 
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
-        $this->assertEquals('simple', $bundleOptions[0]['product_links'][0]['sku']);
-        $this->assertEquals('simple2', $bundleOptions[0]['product_links'][1]['sku']);
-        $this->assertEquals(2, $bundleOptions[0]['product_links'][1]['qty']);
+        $this->assertSame('simple', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertSame('simple2', $bundleOptions[0]['product_links'][1]['sku']);
+        $this->assertSame(2, $bundleOptions[0]['product_links'][1]['qty']);
         $this->assertGreaterThan(
             $bundleOptions[0]['product_links'][0]['id'],
             $bundleOptions[0]['product_links'][1]['id']
@@ -249,13 +249,13 @@ class ProductServiceTest extends WebapiAbstract
 
         $updatedProduct = $this->getProduct(self::BUNDLE_PRODUCT_ID);
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
-        $this->assertEquals('new option', $bundleOptions[0]['title']);
+        $this->assertSame('new option', $bundleOptions[0]['title']);
         $this->assertTrue($bundleOptions[0]['required']);
-        $this->assertEquals('select', $bundleOptions[0]['type']);
+        $this->assertSame('select', $bundleOptions[0]['type']);
         $this->assertGreaterThan($oldOptionId, $bundleOptions[0]['option_id']);
         $this->assertFalse(isset($bundleOptions[1]));
-        $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
-        $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertSame('simple2', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertSame(2, $bundleOptions[0]['product_links'][0]['qty']);
     }
 
     /**
@@ -337,13 +337,13 @@ class ProductServiceTest extends WebapiAbstract
         $resultBundleProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"];
         $this->assertTrue(isset($resultBundleProductOptions[0]["product_links"][0]["sku"]));
-        $this->assertEquals('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
+        $this->assertSame('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
         $this->assertTrue(isset($response['custom_attributes']));
         $customAttributes = $this->convertCustomAttributes($response['custom_attributes']);
         $this->assertTrue(isset($customAttributes['price_type']));
-        $this->assertEquals(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC, $customAttributes['price_type']);
+        $this->assertSame(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC, $customAttributes['price_type']);
         $this->assertTrue(isset($customAttributes['price_view']));
-        $this->assertEquals(1, $customAttributes['price_view']);
+        $this->assertSame(1, $customAttributes['price_view']);
         return $response;
     }
 
@@ -396,13 +396,13 @@ class ProductServiceTest extends WebapiAbstract
         $response = $this->createProduct($product);
         $resultBundleProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"];
-        $this->assertEquals('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
+        $this->assertSame('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
         $this->assertTrue(isset($response['custom_attributes']));
         $customAttributes = $this->convertCustomAttributes($response['custom_attributes']);
         $this->assertTrue(isset($customAttributes['price_type']));
-        $this->assertEquals(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED, $customAttributes['price_type']);
+        $this->assertSame(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED, $customAttributes['price_type']);
         $this->assertTrue(isset($customAttributes['price_view']));
-        $this->assertEquals(1, $customAttributes['price_view']);
+        $this->assertSame(1, $customAttributes['price_view']);
         return $response;
     }
 

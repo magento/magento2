@@ -44,7 +44,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $simpleProduct = $collection->getFirstItem();
         $simpleProduct->setPriceCalculation(false);
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, $customerGroupId, $simpleProductId);
-        $this->assertEquals($rulePrice, $simpleProduct->getFinalPrice());
+        $this->assertSame($rulePrice, $simpleProduct->getFinalPrice());
 
         $confProductId = 666;
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
@@ -53,7 +53,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $collection->load();
         /** @var \Magento\Catalog\Model\Product $confProduct */
         $confProduct = $collection->getFirstItem();
-        $this->assertEquals($simpleProduct->getFinalPrice(), $confProduct->getMinimalPrice());
+        $this->assertSame($simpleProduct->getFinalPrice(), $confProduct->getMinimalPrice());
     }
 
     /**
@@ -76,8 +76,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $product1 = $products[0];
         $product1->setPriceCalculation(false);
-        $this->assertEquals('simple1', $product1->getSku());
+        $this->assertSame('simple1', $product1->getSku());
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product1->getId());
-        $this->assertEquals($rulePrice, $product1->getFinalPrice());
+        $this->assertSame($rulePrice, $product1->getFinalPrice());
     }
 }

@@ -64,6 +64,6 @@ class RowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
             ->method('group')
             ->with('product_id')
             ->willReturnSelf();
-        $this->assertEquals(2500, $this->model->estimateRowSize());
+        $this->assertSame(2500, $this->model->estimateRowSize());
     }
 }

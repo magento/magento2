@@ -88,7 +88,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         
         $filters = $this->_model->getLayer()->getState()->getFilters();
         $this->assertArrayHasKey(0, $filters);
-        $this->assertEquals(
+        $this->assertSame(
             '<span class="price">$100.00</span> - <span class="price">$199.99</span>',
             (string)$filters[0]->getLabel()
         );
@@ -96,7 +96,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetCustomerGroupId()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             $this->_model->getCustomerGroupId()
         );
@@ -104,16 +104,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $customerGroupId = 123;
         $this->_model->setCustomerGroupId($customerGroupId);
 
-        $this->assertEquals($customerGroupId, $this->_model->getCustomerGroupId());
+        $this->assertSame($customerGroupId, $this->_model->getCustomerGroupId());
     }
 
     public function testGetSetCurrencyRate()
     {
-        $this->assertEquals(1, $this->_model->getCurrencyRate());
+        $this->assertSame(1, $this->_model->getCurrencyRate());
 
         $currencyRate = 42;
         $this->_model->setCurrencyRate($currencyRate);
 
-        $this->assertEquals($currencyRate, $this->_model->getCurrencyRate());
+        $this->assertSame($currencyRate, $this->_model->getCurrencyRate());
     }
 }

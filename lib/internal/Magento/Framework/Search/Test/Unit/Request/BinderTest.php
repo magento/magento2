@@ -95,6 +95,6 @@ class BinderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->binder->bind($requestData, $bindData);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 }

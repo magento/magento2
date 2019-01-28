@@ -136,7 +136,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($elementType)
             ->willReturn($attributes);
 
-        $this->assertEquals($expected, $this->renderer->renderElementAttributes($elementType));
+        $this->assertSame($expected, $this->renderer->renderElementAttributes($elementType));
     }
 
     public function testRenderMetadata()
@@ -171,7 +171,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getMetadata')
             ->will($this->returnValue($metadata));
 
-        $this->assertEquals($expected, $this->renderer->renderMetadata());
+        $this->assertSame($expected, $this->renderer->renderMetadata());
     }
 
     public function testRenderTitle()
@@ -191,7 +191,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->assertEquals($expected, $this->renderer->renderTitle());
+        $this->assertSame($expected, $this->renderer->renderTitle());
     }
 
     public function testPrepareFavicon()
@@ -328,7 +328,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with('', ['_direct' => 'core/index/notFound'])
             ->willReturn($assetNoRoutUrl);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
         );

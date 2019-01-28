@@ -32,6 +32,6 @@ class ArgumentInterpreterTest extends \PHPUnit\Framework\TestCase
     public function testEvaluate()
     {
         $expected = ['argument' => 'init_param_value'];
-        $this->assertEquals($expected, $this->object->evaluate(['value' => 'FIXTURE_INIT_PARAMETER']));
+        $this->assertSame($expected, $this->object->evaluate(['value' => 'FIXTURE_INIT_PARAMETER']));
     }
 }

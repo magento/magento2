@@ -61,7 +61,7 @@ class ArchiveTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsArchive($file, $isArchive)
     {
-        $this->assertEquals($isArchive, $this->archive->isArchive($file));
+        $this->assertSame($isArchive, $this->archive->isArchive($file));
     }
 
     /**
@@ -98,7 +98,7 @@ class ArchiveTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsTar($file, $isArchive)
     {
-        $this->assertEquals($isArchive, $this->archive->isTar($file));
+        $this->assertSame($isArchive, $this->archive->isTar($file));
     }
 
     /**
@@ -141,7 +141,7 @@ class ArchiveTest extends \PHPUnit\Framework\TestCase
         $this->packed = $this->archive->pack($this->sourceFilePath, $this->destinationDir . $destinationFile);
 
         $this->assertFileExists($this->packed);
-        $this->assertEquals($this->destinationDir . $destinationFile, $this->packed);
+        $this->assertSame($this->destinationDir . $destinationFile, $this->packed);
 
         $this->unpacked = $this->archive->unpack($this->packed, $this->destinationDir);
 
@@ -177,7 +177,7 @@ class ArchiveTest extends \PHPUnit\Framework\TestCase
         $this->packed = $this->archive->pack($this->sourceFilePath, $this->destinationDir . $destinationFile);
 
         $this->assertFileExists($this->packed);
-        $this->assertEquals($this->destinationDir . $destinationFile, $this->packed);
+        $this->assertSame($this->destinationDir . $destinationFile, $this->packed);
 
         $unpacked = $this->archive->unpack($this->packed, $this->destinationDir);
 
@@ -200,7 +200,7 @@ class ArchiveTest extends \PHPUnit\Framework\TestCase
         $this->packed = $this->archive->pack($this->sourceFilePath, $this->destinationDir . $destinationFile);
 
         $this->assertFileExists($this->packed);
-        $this->assertEquals($this->destinationDir . $destinationFile, $this->packed);
+        $this->assertSame($this->destinationDir . $destinationFile, $this->packed);
 
         $filename = pathinfo($this->sourceFilePath, PATHINFO_BASENAME);
         $this->unpacked = $this->archive->extract($filename, $this->packed, $this->destinationDir);

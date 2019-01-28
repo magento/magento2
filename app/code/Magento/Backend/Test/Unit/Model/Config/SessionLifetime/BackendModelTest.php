@@ -26,7 +26,7 @@ class BackendModelTest extends \PHPUnit\Framework\TestCase
         }
         $model->setValue($value);
         $object = $model->beforeSave();
-        $this->assertEquals($model, $object);
+        $this->assertSame($model, $object);
     }
 
     /**

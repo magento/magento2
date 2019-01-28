@@ -30,7 +30,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
             ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
 
         $metaResult = $this->getModel()->modifyMeta($metaInput);
-        $this->assertEquals($metaResult, $metaOutput);
+        $this->assertSame($metaResult, $metaOutput);
     }
 
     /**

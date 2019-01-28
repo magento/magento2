@@ -79,7 +79,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCart()
     {
-        $this->assertEquals($this->cartMock, $this->helper->getCart());
+        $this->assertSame($this->cartMock, $this->helper->getCart());
     }
 
     public function testGetRemoveUrl()
@@ -107,28 +107,28 @@ class CartTest extends \PHPUnit\Framework\TestCase
     {
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->assertEquals($quoteMock, $this->helper->getQuote());
+        $this->assertSame($quoteMock, $this->helper->getQuote());
     }
 
     public function testGetItemsCount()
     {
         $itemsCount = 1;
         $this->cartMock->expects($this->any())->method('getItemsCount')->will($this->returnValue($itemsCount));
-        $this->assertEquals($itemsCount, $this->helper->getItemsCount());
+        $this->assertSame($itemsCount, $this->helper->getItemsCount());
     }
 
     public function testGetItemsQty()
     {
         $itemsQty = 1;
         $this->cartMock->expects($this->any())->method('getItemsQty')->will($this->returnValue($itemsQty));
-        $this->assertEquals($itemsQty, $this->helper->getItemsQty());
+        $this->assertSame($itemsQty, $this->helper->getItemsQty());
     }
 
     public function testGetSummaryCount()
     {
         $summaryQty = 1;
         $this->cartMock->expects($this->any())->method('getSummaryQty')->will($this->returnValue($summaryQty));
-        $this->assertEquals($summaryQty, $this->helper->getSummaryCount());
+        $this->assertSame($summaryQty, $this->helper->getSummaryCount());
     }
 
     public function testAddUrlWithUencPlaceholder()
@@ -169,7 +169,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
-        $this->assertEquals($isVirtual, $this->helper->getIsVirtualQuote());
+        $this->assertSame($isVirtual, $this->helper->getIsVirtualQuote());
     }
 
     public function testGetShouldRedirectToCart()
@@ -246,7 +246,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($url));
 
         $result = $this->helper->getDeletePostJson($item);
-        $this->assertEquals($expectedPostData, $result);
+        $this->assertSame($expectedPostData, $result);
     }
 
     /**

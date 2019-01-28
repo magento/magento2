@@ -65,7 +65,7 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
             ->with($serializedIntegrations)
             ->willReturn($integrations);
 
-        $this->assertEquals($integrations, $this->integrationConfigModel->getIntegrations());
+        $this->assertSame($integrations, $this->integrationConfigModel->getIntegrations());
     }
 
     public function testGetIntegrationsFromConfigReader()
@@ -88,6 +88,6 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
             ->with($serializedIntegrations, IntegrationConfig::CACHE_ID, [TypeIntegration::CACHE_TAG])
             ->will($this->returnValue(null));
 
-        $this->assertEquals($integrations, $this->integrationConfigModel->getIntegrations());
+        $this->assertSame($integrations, $this->integrationConfigModel->getIntegrations());
     }
 }

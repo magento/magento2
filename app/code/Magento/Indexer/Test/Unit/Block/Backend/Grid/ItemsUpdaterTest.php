@@ -25,7 +25,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
 
         $model = new \Magento\Indexer\Block\Backend\Grid\ItemsUpdater($auth);
         $params = $model->update($params);
-        $this->assertEquals(
+        $this->assertSame(
             $argument,
             (isset($params['change_mode_onthefly']) && isset($params['change_mode_changelog']))
         );

@@ -169,8 +169,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_initConfig();
         $validator = $this->_config->createValidator($entityName, $groupName);
         $actualResult = $validator->isValid($value);
-        $this->assertEquals($expectedMessages, $validator->getMessages());
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedMessages, $validator->getMessages());
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -283,7 +283,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'type' => 'property'
             ],
         ];
-        $this->assertAttributeEquals($expected, '_constraints', $builder);
+        $this->assertAttributeSame($expected, '_constraints', $builder);
     }
 
     /**
@@ -330,7 +330,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetSchemaFile()
     {
         $this->_initConfig();
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'),
             $this->_config->getSchemaFile()
         );

@@ -64,7 +64,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $this->assertEquals($expectedResult, $this->model->dataModelToArray($dataModelMock));
+        $this->assertSame($expectedResult, $this->model->dataModelToArray($dataModelMock));
     }
 
     public function testArrayToDataModel()
@@ -107,6 +107,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $conditionChildMock->expects($this->once())->method('setOperator')->with('child-operator')->willReturnSelf();
         $conditionChildMock->expects($this->once())->method('setIsValueParsed')->with(false)->willReturnSelf();
 
-        $this->assertEquals($conditionMock, $this->model->arrayToDataModel($array));
+        $this->assertSame($conditionMock, $this->model->arrayToDataModel($array));
     }
 }

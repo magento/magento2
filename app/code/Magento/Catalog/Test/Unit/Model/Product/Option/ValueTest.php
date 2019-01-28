@@ -64,13 +64,13 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $price = 1000;
         $this->model->setPrice($price);
         $this->model->setPriceType(Value::TYPE_PERCENT);
-        $this->assertEquals($price, $this->model->getPrice(false));
+        $this->assertSame($price, $this->model->getPrice(false));
 
         $percentPice = 100;
         $this->customOptionPriceCalculatorMock->expects($this->atLeastOnce())
             ->method('getOptionPriceByPriceCode')
             ->willReturn($percentPice);
-        $this->assertEquals($percentPice, $this->model->getPrice(true));
+        $this->assertSame($percentPice, $this->model->getPrice(true));
     }
 
     public function testGetValuesCollection()

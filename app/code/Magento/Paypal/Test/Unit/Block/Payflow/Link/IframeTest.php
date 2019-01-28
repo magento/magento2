@@ -124,7 +124,7 @@ class IframeTest extends \PHPUnit\Framework\TestCase
             $this->reader,
             $this->paymentDataMock
         );
-        $this->assertEquals($expected, $block->getTransactionUrl());
+        $this->assertSame($expected, $block->getTransactionUrl());
     }
 
     public function testGetTransactionUrlTest()
@@ -153,6 +153,6 @@ class IframeTest extends \PHPUnit\Framework\TestCase
             $this->reader,
             $this->paymentDataMock
         );
-        $this->assertEquals($expected, $block->getTransactionUrl());
+        $this->assertSame($expected, $block->getTransactionUrl());
     }
 }

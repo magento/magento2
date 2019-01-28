@@ -63,13 +63,13 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->_resourceLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
 
-        $this->assertEquals($this->_aclMock, $this->_model->getAcl());
+        $this->assertSame($this->_aclMock, $this->_model->getAcl());
     }
 
     public function testGetAclReturnsAclStoredInCache()
     {
-        $this->assertEquals($this->_aclMock, $this->_model->getAcl());
-        $this->assertEquals($this->_aclMock, $this->_model->getAcl());
+        $this->assertSame($this->_aclMock, $this->_model->getAcl());
+        $this->assertSame($this->_aclMock, $this->_model->getAcl());
     }
 
     /**

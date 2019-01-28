@@ -60,7 +60,7 @@ class DepersonalizeCheckerTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->any())->method('isCacheable')->willReturn($layoutResult);
 
         $object = new DepersonalizeChecker($this->requestMock, $this->moduleManagerMock, $this->cacheConfigMock);
-        $this->assertEquals($canDepersonalize, $object->checkIfDepersonalize($layoutMock));
+        $this->assertSame($canDepersonalize, $object->checkIfDepersonalize($layoutMock));
     }
 
     /**

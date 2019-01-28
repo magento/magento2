@@ -78,14 +78,14 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtmlWithLinks')
             ->with($item['comment'], ['b', 'br', 'strong', 'i', 'u', 'a'])
             ->willReturn($expectation);
-        $this->assertEquals($expectation, $this->commentsHistory->getItemComment($item));
+        $this->assertSame($expectation, $this->commentsHistory->getItemComment($item));
     }
 
     public function testGetItemCommentIsNotSet()
     {
         $item = [];
         $this->adminHelperMock->expects($this->never())->method('escapeHtmlWithLinks');
-        $this->assertEquals('', $this->commentsHistory->getItemComment($item));
+        $this->assertSame('', $this->commentsHistory->getItemComment($item));
     }
 
     public function testGetItemCreatedAtDate()
@@ -98,7 +98,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
             ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE)
             ->willReturn('date');
 
-        $this->assertEquals('date', $this->commentsHistory->getItemCreatedAt($item));
+        $this->assertSame('date', $this->commentsHistory->getItemCreatedAt($item));
     }
 
     public function testGetItemCreatedAtTime()
@@ -111,7 +111,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
             ->with($date, \IntlDateFormatter::NONE, \IntlDateFormatter::MEDIUM)
             ->willReturn('time');
 
-        $this->assertEquals('time', $this->commentsHistory->getItemCreatedAt($item, 'time'));
+        $this->assertSame('time', $this->commentsHistory->getItemCreatedAt($item, 'time'));
     }
 
     public function testGetItemCreatedAtEmpty()
@@ -119,7 +119,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $item = ['title' => "Test" ];
 
         $this->localeDateMock->expects($this->never())->method('formatDateTime');
-        $this->assertEquals('', $this->commentsHistory->getItemCreatedAt($item));
-        $this->assertEquals('', $this->commentsHistory->getItemCreatedAt($item, 'time'));
+        $this->assertSame('', $this->commentsHistory->getItemCreatedAt($item));
+        $this->assertSame('', $this->commentsHistory->getItemCreatedAt($item, 'time'));
     }
 }

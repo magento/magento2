@@ -312,7 +312,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['data'];
         self::assertInstanceOf(Address::class, $this->address->setAppliedTaxes($data));
-        self::assertEquals($data, $this->address->getAppliedTaxes());
+        self::assertSame($data, $this->address->getAppliedTaxes());
     }
 
     /**
@@ -321,7 +321,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testGetAppliedTaxesWithEmptyValue()
     {
         $this->address->setData('applied_taxes', null);
-        self::assertEquals([], $this->address->getAppliedTaxes());
+        self::assertSame([], $this->address->getAppliedTaxes());
     }
 
     /**

@@ -38,7 +38,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->with('fieldset.xml', 'global')
             ->willReturn([file_get_contents(__DIR__ . '/_files/fieldset.xml')]);
         $expected = include __DIR__ . '/_files/expectedArray.php';
-        $this->assertEquals($expected, $this->model->read('global'));
+        $this->assertSame($expected, $this->model->read('global'));
     }
 
     public function testMergeCompleteAndPartial()
@@ -60,6 +60,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $this->assertEquals($expected, $this->model->read('global'));
+        $this->assertSame($expected, $this->model->read('global'));
     }
 }

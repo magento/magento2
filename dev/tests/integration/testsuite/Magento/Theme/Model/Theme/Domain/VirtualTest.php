@@ -83,7 +83,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         $virtualTheme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $virtualTheme->load($this->_virtualThemeId);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_physicalThemeId,
             $virtualTheme->getDomainModel(
                 \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL

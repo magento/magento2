@@ -57,7 +57,7 @@ mutation {
 MUTATION;
         $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('deleteCustomerAddress', $response);
-        $this->assertEquals(true, $response['deleteCustomerAddress']);
+        $this->assertSame(true, $response['deleteCustomerAddress']);
     }
 
     /**

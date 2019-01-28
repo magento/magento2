@@ -74,7 +74,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->create(SaveHandler::class, ['sessionConfig' => $sessionConfig]);
 
         // Test expectation
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $sessionConfig->getOption('session.save_handler')
         );
@@ -134,7 +134,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->create(SaveHandler::class, ['sessionConfig' => $sessionConfig]);
 
         // Test expectation
-        $this->assertEquals(
+        $this->assertSame(
             'db',
             $sessionConfig->getOption('session.save_handler')
         );

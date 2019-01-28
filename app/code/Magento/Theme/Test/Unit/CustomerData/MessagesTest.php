@@ -58,7 +58,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($messages);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['messages' => [['type' => $msgType, 'text' => $msgText]]],
             $this->object->getSectionData()
         );

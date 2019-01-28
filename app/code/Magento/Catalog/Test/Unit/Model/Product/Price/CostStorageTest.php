@@ -280,7 +280,7 @@ class CostStorageTest extends \PHPUnit\Framework\TestCase
         $this->pricePersistence->expects($this->once())->method('update')->with([]);
         $this->validationResult->expects($this->once())->method('getFailedItems')->willReturn([$priceUpdateResult]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$priceUpdateResult],
             $this->model->update([$this->costInterface])
         );

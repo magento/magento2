@@ -33,14 +33,14 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $expected = 'California';
         $this->orderAddressMock->expects($this->once())->method('getRegionCode')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getRegionCode());
+        $this->assertSame($expected, $this->model->getRegionCode());
     }
 
     public function testGetCountryId()
     {
         $expected = '10';
         $this->orderAddressMock->expects($this->once())->method('getCountryId')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getCountryId());
+        $this->assertSame($expected, $this->model->getCountryId());
     }
 
     /**
@@ -51,7 +51,7 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     public function testStreetLine1($street, $expected)
     {
         $this->orderAddressMock->expects($this->once())->method('getStreet')->willReturn($street);
-        $this->assertEquals($expected, $this->model->getStreetLine1());
+        $this->assertSame($expected, $this->model->getStreetLine1());
     }
 
     /**
@@ -73,7 +73,7 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     public function testStreetLine2($street, $expected)
     {
         $this->orderAddressMock->expects($this->once())->method('getStreet')->willReturn($street);
-        $this->assertEquals($expected, $this->model->getStreetLine2());
+        $this->assertSame($expected, $this->model->getStreetLine2());
     }
 
     /**
@@ -92,55 +92,55 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $expected = '555-234-456';
         $this->orderAddressMock->expects($this->once())->method('getTelephone')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getTelephone());
+        $this->assertSame($expected, $this->model->getTelephone());
     }
 
     public function testGetPostcode()
     {
         $expected = '90232';
         $this->orderAddressMock->expects($this->once())->method('getPostcode')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getPostcode());
+        $this->assertSame($expected, $this->model->getPostcode());
     }
 
     public function testGetCity()
     {
         $expected = 'New York';
         $this->orderAddressMock->expects($this->once())->method('getCity')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getCity());
+        $this->assertSame($expected, $this->model->getCity());
     }
 
     public function testGetFirstname()
     {
         $expected = 'John';
         $this->orderAddressMock->expects($this->once())->method('getFirstname')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getFirstname());
+        $this->assertSame($expected, $this->model->getFirstname());
     }
 
     public function testGetLastname()
     {
         $expected = 'Doe';
         $this->orderAddressMock->expects($this->once())->method('getLastname')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getLastname());
+        $this->assertSame($expected, $this->model->getLastname());
     }
 
     public function testGetMiddlename()
     {
         $expected = 'Middlename';
         $this->orderAddressMock->expects($this->once())->method('getMiddlename')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getMiddlename());
+        $this->assertSame($expected, $this->model->getMiddlename());
     }
 
     public function testGetCustomerId()
     {
         $expected = 1;
         $this->orderAddressMock->expects($this->once())->method('getCustomerId')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getCustomerId());
+        $this->assertSame($expected, $this->model->getCustomerId());
     }
 
     public function testGetEmail()
     {
         $expected = 'test@gmail.com';
         $this->orderAddressMock->expects($this->once())->method('getEmail')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getEmail());
+        $this->assertSame($expected, $this->model->getEmail());
     }
 }

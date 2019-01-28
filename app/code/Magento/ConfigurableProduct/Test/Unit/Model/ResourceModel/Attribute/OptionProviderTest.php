@@ -60,6 +60,6 @@ class OptionProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getLinkField')
             ->willReturn($linkField);
 
-        $this->assertEquals($linkField, $this->model->getProductEntityLinkField());
+        $this->assertSame($linkField, $this->model->getProductEntityLinkField());
     }
 }

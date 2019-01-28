@@ -89,6 +89,6 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
     public function testGetSynonymsForPhrase($phrase, $expectedResult)
     {
         $synonyms = $this->synAnalyzer->getSynonymsForPhrase($phrase);
-        $this->assertEquals($expectedResult, $synonyms);
+        $this->assertSame($expectedResult, $synonyms);
     }
 }

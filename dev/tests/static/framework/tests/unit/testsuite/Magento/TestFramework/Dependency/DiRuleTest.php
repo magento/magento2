@@ -24,7 +24,7 @@ class DiRuleTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]));
         $file = '/some/path/scope/di.xml';
-        static::assertEquals($expected, $diRule->getDependencyInfo($module, null, $file, $contents));
+        static::assertSame($expected, $diRule->getDependencyInfo($module, null, $file, $contents));
     }
 
     /**

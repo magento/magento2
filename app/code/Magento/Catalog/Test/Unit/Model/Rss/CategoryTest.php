@@ -185,6 +185,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('setStore')
             ->with($storeId)
             ->will($this->returnValue($layer));
-        $this->assertEquals($products, $this->model->getProductCollection($category, $storeId));
+        $this->assertSame($products, $this->model->getProductCollection($category, $storeId));
     }
 }

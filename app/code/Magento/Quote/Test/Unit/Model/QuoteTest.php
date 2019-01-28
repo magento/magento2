@@ -316,7 +316,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(new \ArrayIterator($addresses))
         );
 
-        $this->assertEquals($expected, $this->quote->isMultipleShippingAddresses());
+        $this->assertSame($expected, $this->quote->isMultipleShippingAddresses());
     }
 
     /**
@@ -324,7 +324,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerGroupIdNotSet()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             $this->quote->getCustomerGroupId(),
             "Customer group ID is invalid"
@@ -341,7 +341,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setCustomerGroupId($customerGroupId);
 
         /** SUT execution */
-        $this->assertEquals($customerGroupId, $this->quote->getCustomerGroupId(), "Customer group ID is invalid");
+        $this->assertSame($customerGroupId, $this->quote->getCustomerGroupId(), "Customer group ID is invalid");
     }
 
     /**
@@ -398,7 +398,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
 
         $result = $this->quote->setStoreId($storeId)->getStoreId();
-        $this->assertEquals($storeId, $result);
+        $this->assertSame($storeId, $result);
     }
 
     public function testGetStore()
@@ -448,7 +448,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setData('shared_store_ids', $sharedIds);
         $this->quote->setWebsite($websiteMock);
         $result = $this->quote->getSharedStoreIds();
-        $this->assertEquals($storeIds, $result);
+        $this->assertSame($storeIds, $result);
     }
 
     public function testGetSharedStoreIds()
@@ -479,7 +479,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setData('shared_store_ids', $sharedIds);
         $this->quote->setStoreId($storeId);
         $result = $this->quote->getSharedStoreIds();
-        $this->assertEquals($storeIds, $result);
+        $this->assertSame($storeIds, $result);
     }
 
     public function testLoadActive()
@@ -571,7 +571,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($requestMock));
         $result = $this->quote->setCustomerAddressData([$addressMock]);
         $this->assertInstanceOf(\Magento\Quote\Model\Quote::class, $result);
-        $this->assertEquals($customerResultMock, $this->quote->getCustomer());
+        $this->assertSame($customerResultMock, $this->quote->getCustomer());
     }
 
     public function testGetCustomerTaxClassId()
@@ -588,7 +588,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($groupMock));
         $this->quote->setData('customer_group_id', $groupId);
         $result = $this->quote->getCustomerTaxClassId();
-        $this->assertEquals($taxClassId, $result);
+        $this->assertSame($taxClassId, $result);
     }
 
     public function testGetAllAddresses()
@@ -610,7 +610,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         $this->quote->setId($id);
         $result = $this->quote->getAllAddresses();
-        $this->assertEquals([$this->quoteAddressMock], $result);
+        $this->assertSame([$this->quoteAddressMock], $result);
     }
 
     /**
@@ -636,7 +636,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setId($id);
         $result = $this->quote->getAddressById($addressId);
 
-        $this->assertEquals((bool)$expected, (bool)$result);
+        $this->assertSame((bool)$expected, (bool)$result);
     }
 
     /**
@@ -680,7 +680,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setId($id);
         $result = $this->quote->getAddressByCustomerAddressId($id);
 
-        $this->assertEquals((bool)$expected, (bool)$result);
+        $this->assertSame((bool)$expected, (bool)$result);
     }
 
     /**
@@ -729,7 +729,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setId($id);
 
         $result = $this->quote->getShippingAddressByCustomerAddressId($id);
-        $this->assertEquals($expected, (bool)$result);
+        $this->assertSame($expected, (bool)$result);
     }
 
     /**
@@ -847,7 +847,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($typeInstanceMock));
 
         $result = $this->quote->addProduct($this->productMock, null);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testAddProductItemPreparation()
@@ -900,7 +900,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($typeInstanceMock));
 
         $result = $this->quote->addProduct($this->productMock, null);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testAddProductItemNew()
@@ -963,7 +963,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($typeInstanceMock));
 
         $result = $this->quote->addProduct($this->productMock, null);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testValidateMinimumAmount()
@@ -1176,7 +1176,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($collectionMock));
 
         $this->quote->beforeSave();
-        $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+        $this->assertSame($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
         $this->assertNull($this->quote->getUpdatedAt());
     }
 
@@ -1236,7 +1236,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $itemResult = [$itemOneMock];
         $this->quote->setData('items_collection', $items);
 
-        $this->assertEquals($itemResult, $this->quote->getAllItems());
+        $this->assertSame($itemResult, $this->quote->getAllItems());
     }
 
     /**
@@ -1255,7 +1255,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->with(1000001)->willReturn($isReservedOrderIdExist);
         $this->resourceMock->expects($this->any())->method('getReservedOrderId')->willReturn($reservedOrderId);
         $this->quote->reserveOrderId();
-        $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId());
+        $this->assertSame($reservedOrderId, $this->quote->getReservedOrderId());
     }
 
     /**

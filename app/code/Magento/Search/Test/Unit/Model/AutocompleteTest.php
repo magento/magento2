@@ -67,6 +67,6 @@ class AutocompleteTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$secondItemMock]);
 
-        $this->assertEquals([$secondItemMock, $firstItemMock], $this->model->getItems());
+        $this->assertSame([$secondItemMock, $firstItemMock], $this->model->getItems());
     }
 }

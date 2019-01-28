@@ -38,7 +38,7 @@ class CommandRendererBackgroundTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($isWindows));
 
         $commandRenderer = new CommandRendererBackground($this->osInfo);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResults,
             $commandRenderer->render($this->testCommand)
         );

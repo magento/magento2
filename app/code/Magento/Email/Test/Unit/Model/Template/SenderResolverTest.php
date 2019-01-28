@@ -74,10 +74,10 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
         $result = $this->senderResolver->resolve($sender);
 
         $this->assertTrue(isset($result['name']));
-        $this->assertEquals('Test Name', $result['name']);
+        $this->assertSame('Test Name', $result['name']);
 
         $this->assertTrue(isset($result['email']));
-        $this->assertEquals('test@email.com', $result['email']);
+        $this->assertSame('test@email.com', $result['email']);
     }
 
     /**

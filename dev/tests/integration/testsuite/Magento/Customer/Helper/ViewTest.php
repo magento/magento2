@@ -61,7 +61,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedCustomerName,
             $this->_helper->getCustomerName($customerData),
             'Full customer name is invalid'

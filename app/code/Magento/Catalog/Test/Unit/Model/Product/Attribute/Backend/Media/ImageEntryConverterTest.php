@@ -88,7 +88,7 @@ class ImageEntryConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMediaEntryType()
     {
-        $this->assertEquals($this->modelObject->getMediaEntryType(), 'image');
+        $this->assertSame($this->modelObject->getMediaEntryType(), 'image');
     }
 
     public function testConvertTo()
@@ -148,7 +148,7 @@ class ImageEntryConverterTest extends \PHPUnit\Framework\TestCase
             'media_type' => null,
         ];
 
-        $this->assertEquals($expectedResult, $this->modelObject->convertFrom($this->mediaGalleryEntryMock));
+        $this->assertSame($expectedResult, $this->modelObject->convertFrom($this->mediaGalleryEntryMock));
     }
 
     public function testConvertFrom()
@@ -194,6 +194,6 @@ class ImageEntryConverterTest extends \PHPUnit\Framework\TestCase
                 'media_type' => null,
         ];
 
-        $this->assertEquals($expectedResult, $this->modelObject->convertFrom($this->mediaGalleryEntryMock));
+        $this->assertSame($expectedResult, $this->modelObject->convertFrom($this->mediaGalleryEntryMock));
     }
 }

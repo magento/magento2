@@ -63,6 +63,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
         $this->renderer->setItem($item);
-        $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
+        $this->assertSame(array_merge($productTags, $productTags), $this->renderer->getIdentities());
     }
 }

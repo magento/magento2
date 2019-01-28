@@ -78,7 +78,7 @@ class ProductFrontendActionSectionTest extends \PHPUnit\Framework\TestCase
             ->method('getActionsByType')
             ->willReturn($actions);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'count' => 2,
                 'items' => [
@@ -103,7 +103,7 @@ class ProductFrontendActionSectionTest extends \PHPUnit\Framework\TestCase
             ->with(Synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)
             ->willReturn(0);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'count' => 0,
                 'items' => [

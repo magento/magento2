@@ -145,7 +145,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
         }
         $this->_model->execute($this->_observerMock);
 
-        $this->assertEquals($expectedOutput, $this->_transport['output']);
+        $this->assertSame($expectedOutput, $this->_transport['output']);
     }
 
     public function testExecuteWithBase64Encode()
@@ -205,7 +205,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->execute($this->_observerMock);
 
-        $this->assertEquals($expectedOutput, $this->_transport['output']);
+        $this->assertSame($expectedOutput, $this->_transport['output']);
     }
 
     /**

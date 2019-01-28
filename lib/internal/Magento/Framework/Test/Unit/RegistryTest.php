@@ -39,7 +39,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testRegistry()
     {
-        $this->assertEquals($this->data['value'], $this->registry->registry($this->data['key']));
+        $this->assertSame($this->data['value'], $this->registry->registry($this->data['key']));
         $this->assertNull($this->registry->registry($this->data['value']));
     }
 
@@ -48,7 +48,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $key = 'email';
         $value = 'test@magento.com';
         $this->registry->register($key, $value);
-        $this->assertEquals($value, $this->registry->registry($key));
+        $this->assertSame($value, $this->registry->registry($key));
         $key = 'name';
         $graceful = true;
         $this->registry->register($key, $value, $graceful);
@@ -67,7 +67,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $key = 'csv_adapter';
         $valueObj = $this->createMock(\Magento\ImportExport\Model\Export\Adapter\Csv::class);
         $this->registry->register($key, $valueObj);
-        $this->assertEquals($valueObj, $this->registry->registry($key));
+        $this->assertSame($valueObj, $this->registry->registry($key));
         $this->registry->unregister($key);
         $this->assertNull($this->registry->registry($key));
         $this->registry->unregister($this->data['key']);

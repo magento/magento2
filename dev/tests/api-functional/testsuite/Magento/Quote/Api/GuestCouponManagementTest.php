@@ -73,7 +73,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($couponCode, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertSame($couponCode, $this->_webApiCall($serviceInfo, $requestData));
     }
 
     /**
@@ -99,7 +99,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         $requestData = ["cartId" => $cartId];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
         $quote->load('test_order_1', 'reserved_order_id');
-        $this->assertEquals('', $quote->getCouponCode());
+        $this->assertSame('', $quote->getCouponCode());
     }
 
     /**
@@ -173,6 +173,6 @@ class GuestCouponManagementTest extends WebapiAbstract
         $quoteWithCoupon = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quoteWithCoupon->load('test01', 'reserved_order_id');
 
-        $this->assertEquals($quoteWithCoupon->getCouponCode(), $couponCode);
+        $this->assertSame($quoteWithCoupon->getCouponCode(), $couponCode);
     }
 }

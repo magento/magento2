@@ -46,7 +46,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
             ->with('DefaultClass')
             ->will($this->returnValue($expectedClass));
 
-        $this->assertEquals($expectedClass, $this->model->current());
+        $this->assertSame($expectedClass, $this->model->current());
     }
 
     public function testNext()
@@ -58,7 +58,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedClass));
 
         $this->model->next();
-        $this->assertEquals($expectedClass, $this->model->current());
+        $this->assertSame($expectedClass, $this->model->current());
     }
 
     public function testValid()
@@ -89,10 +89,10 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
             ->with('FrontClass')
             ->will($this->returnValue($frontClass));
 
-        $this->assertEquals($defaultClass, $this->model->current());
+        $this->assertSame($defaultClass, $this->model->current());
         $this->model->next();
-        $this->assertEquals($frontClass, $this->model->current());
+        $this->assertSame($frontClass, $this->model->current());
         $this->model->rewind();
-        $this->assertEquals($defaultClass, $this->model->current());
+        $this->assertSame($defaultClass, $this->model->current());
     }
 }

@@ -56,10 +56,10 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
         $packages = [['1'], ['2']];
         $shipment->setPackages($packages);
-        $this->assertEquals($packages, $shipment->getPackages());
+        $this->assertSame($packages, $shipment->getPackages());
         $shipment->save();
         $shipment->save();
         $shipment->load($shipment->getId());
-        $this->assertEquals($packages, $shipment->getPackages());
+        $this->assertSame($packages, $shipment->getPackages());
     }
 }

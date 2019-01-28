@@ -58,7 +58,7 @@ class AbstractFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanCreateFilter($alias, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->_factory->canCreateFilter($alias));
+        $this->assertSame($expectedResult, $this->_factory->canCreateFilter($alias));
     }
 
     /**
@@ -76,7 +76,7 @@ class AbstractFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsShared($alias, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->_factory->isShared($alias));
+        $this->assertSame($expectedResult, $this->_factory->isShared($alias));
     }
 
     /**
@@ -114,11 +114,11 @@ class AbstractFactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($filterMock)
         );
 
-        $this->assertEquals($filterMock, $this->_factory->createFilter($alias, $arguments));
+        $this->assertSame($filterMock, $this->_factory->createFilter($alias, $arguments));
         if ($isShared) {
             $sharedList = $property->getValue($this->_factory);
             $this->assertTrue(array_key_exists($alias, $sharedList));
-            $this->assertEquals($filterMock, $sharedList[$alias]);
+            $this->assertSame($filterMock, $sharedList[$alias]);
         } else {
             $this->assertEmpty($property->getValue($this->_factory));
         }

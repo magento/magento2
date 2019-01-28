@@ -63,13 +63,13 @@ class ShipmentGetTest extends WebapiAbstract
                     foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                         $methodName = 'get' .
                             SimpleDataObjectConverter::snakeCaseToUpperCamelCase($extensionAttributeKey);
-                        $this->assertEquals(
+                        $this->assertSame(
                             $shipment->getExtensionAttributes()->$methodName(),
                             $extensionAttributeValue
                         );
                     }
                 } else {
-                    $this->assertEquals($shipment->getData($key), $value, $key);
+                    $this->assertSame($shipment->getData($key), $value, $key);
                 }
             }
         }
@@ -77,14 +77,14 @@ class ShipmentGetTest extends WebapiAbstract
         foreach ($result['items'] as $item) {
             $shipmentItem->load($item['entity_id']);
             foreach ($item as $key => $value) {
-                $this->assertEquals($shipmentItem->getData($key), $value, $key);
+                $this->assertSame($shipmentItem->getData($key), $value, $key);
             }
         }
         $shipmentTrack = $this->objectManager->get(\Magento\Sales\Model\Order\Shipment\Track::class);
         foreach ($result['tracks'] as $item) {
             $shipmentTrack->load($item['entity_id']);
             foreach ($item as $key => $value) {
-                $this->assertEquals($shipmentTrack->getData($key), $value, $key);
+                $this->assertSame($shipmentTrack->getData($key), $value, $key);
             }
         }
     }

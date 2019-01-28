@@ -86,11 +86,11 @@ class DiffOldSchemaTest extends SetupTestCase
         $diff = $this->schemaDiff->diff($declarativeSchema, $generatedSchema);
         $allChanges = $diff->getAll();
         self::assertCount(1, $allChanges);
-        self::assertEquals(
+        self::assertSame(
             $this->getBigIntKeyXmlSensitiveData(),
             reset($allChanges)['modify_column'][0]->getNew()->getDiffSensitiveParams()
         );
-        self::assertEquals(
+        self::assertSame(
             $this->getBigIntKeyDbSensitiveData(),
             reset($allChanges)['modify_column'][0]->getOld()->getDiffSensitiveParams()
         );

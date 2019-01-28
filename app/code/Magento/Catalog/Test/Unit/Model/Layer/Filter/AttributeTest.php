@@ -210,7 +210,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->target->apply($this->request);
 
-        $this->assertEquals($this->target, $result);
+        $this->assertSame($this->target, $result);
     }
 
     public function testGetItems()
@@ -246,7 +246,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->target->apply($this->request)->getItems();
 
-        $this->assertEquals($expectedFilterItems, $result);
+        $this->assertSame($expectedFilterItems, $result);
     }
 
     /**

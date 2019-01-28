@@ -107,6 +107,6 @@ class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn('tempTableName');
 
-        $this->assertEquals($productStoreIds[3], $this->model->getData(1, '3_1'));
+        $this->assertSame($productStoreIds[3], $this->model->getData(1, '3_1'));
     }
 }

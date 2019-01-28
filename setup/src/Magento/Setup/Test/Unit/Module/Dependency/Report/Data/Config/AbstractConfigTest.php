@@ -17,6 +17,6 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             ['modules' => $modules]
         );
 
-        $this->assertEquals($modules, $config->getModules());
+        $this->assertSame($modules, $config->getModules());
     }
 }

@@ -23,6 +23,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10.00;
         $priceHtml = '<span class="price">$10.00</span>';
-        $this->assertEquals($priceHtml, $this->helper->currency($price));
+        $this->assertSame($priceHtml, $this->helper->currency($price));
     }
 }

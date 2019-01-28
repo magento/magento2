@@ -41,7 +41,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
 
-        $this->assertEquals($expectedResult, $this->model->displayShipping());
+        $this->assertSame($expectedResult, $this->model->displayShipping());
     }
 
     /**

@@ -23,6 +23,6 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
         $lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
         $lists->expects($this->any())->method('getLocaleList')->will($this->returnValue($this->expectedLocales));
         $locale = new \Magento\Framework\Validator\Locale($lists);
-        $this->assertEquals(true, $locale->isValid('en_US'));
+        $this->assertSame(true, $locale->isValid('en_US'));
     }
 }

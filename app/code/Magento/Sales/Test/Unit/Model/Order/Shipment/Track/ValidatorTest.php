@@ -49,7 +49,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($trackData));
         $actualWarnings = $this->validator->validate($this->trackModelMock);
-        $this->assertEquals($expectedWarnings, $actualWarnings);
+        $this->assertSame($expectedWarnings, $actualWarnings);
     }
 
     /**

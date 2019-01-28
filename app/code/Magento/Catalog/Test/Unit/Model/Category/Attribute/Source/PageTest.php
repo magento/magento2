@@ -24,7 +24,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
     {
         $assertArray = $this->testArray;
         array_unshift($assertArray, ['value' => '', 'label' => __('Please select a static block.')]);
-        $this->assertEquals($assertArray, $this->model->getAllOptions());
+        $this->assertSame($assertArray, $this->model->getAllOptions());
     }
 
     protected function setUp()

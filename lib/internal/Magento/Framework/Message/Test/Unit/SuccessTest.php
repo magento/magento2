@@ -25,6 +25,6 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertEquals(MessageInterface::TYPE_SUCCESS, $this->model->getType());
+        $this->assertSame(MessageInterface::TYPE_SUCCESS, $this->model->getType());
     }
 }

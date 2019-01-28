@@ -108,7 +108,7 @@ class DenyPaymentTest extends \PHPUnit\Framework\TestCase
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $case = $caseRepository->getByCaseId(self::$caseId);
 
-        self::assertEquals(CaseInterface::GUARANTEE_CANCELED, $case->getGuaranteeDisposition());
+        self::assertSame(CaseInterface::GUARANTEE_CANCELED, $case->getGuaranteeDisposition());
     }
 
     /**

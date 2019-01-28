@@ -51,7 +51,7 @@ class DescriptionSentenceGeneratorTest extends \PHPUnit\Framework\TestCase
                 'adipiscing'
             ));
 
-        $this->assertEquals(
+        $this->assertSame(
             'Lorem ipsum dolor sit amet consectetur adipiscing.',
             $this->sentenceGenerator->generate()
         );

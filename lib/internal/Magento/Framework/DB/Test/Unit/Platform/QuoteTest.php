@@ -47,7 +47,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->zendDbExprMock->expects($this->once())
             ->method('__toString')
             ->willReturn($quoted);
-        $this->assertEquals($quoted, $this->model->quoteIdentifier($this->zendDbExprMock));
+        $this->assertSame($quoted, $this->model->quoteIdentifier($this->zendDbExprMock));
     }
 
     public function testQuoteIdentifierWithSelect()
@@ -57,7 +57,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())
             ->method('assemble')
             ->willReturn($quoted);
-        $this->assertEquals($expectedResult, $this->model->quoteIdentifier($this->selectMock));
+        $this->assertSame($expectedResult, $this->model->quoteIdentifier($this->selectMock));
     }
 
     public function testQuoteIdentifierWithArrayExpr()
@@ -67,7 +67,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->zendDbExprMock->expects($this->exactly(2))
             ->method('__toString')
             ->will($this->onConsecutiveCalls('string1', 'string2'));
-        $this->assertEquals($expectedResult, $this->model->quoteIdentifier($identifier));
+        $this->assertSame($expectedResult, $this->model->quoteIdentifier($identifier));
     }
 
     /**
@@ -78,7 +78,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testQuoteIdentifier($identifier, $alias, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->model->quoteIdentifier($identifier));
+        $this->assertSame($expectedResult, $this->model->quoteIdentifier($identifier));
     }
 
     /**
@@ -92,7 +92,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->zendDbExprMock->expects($this->once())
             ->method('__toString')
             ->willReturn($string);
-        $this->assertEquals($expectedResult, $this->model->quoteColumnAs($this->zendDbExprMock, $alias));
+        $this->assertSame($expectedResult, $this->model->quoteColumnAs($this->zendDbExprMock, $alias));
     }
 
     /**
@@ -106,7 +106,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())
             ->method('assemble')
             ->willReturn($string);
-        $this->assertEquals($expectedResult, $this->model->quoteColumnAs($this->selectMock, $alias));
+        $this->assertSame($expectedResult, $this->model->quoteColumnAs($this->selectMock, $alias));
     }
 
     /**
@@ -116,7 +116,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testQuoteColumn($identifier, $alias, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->model->quoteColumnAs($identifier, $alias));
+        $this->assertSame($expectedResult, $this->model->quoteColumnAs($identifier, $alias));
     }
 
     /**
@@ -130,7 +130,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->zendDbExprMock->expects($this->once())
             ->method('__toString')
             ->willReturn($string);
-        $this->assertEquals($expectedResult, $this->model->quoteTableAs($this->zendDbExprMock, $alias));
+        $this->assertSame($expectedResult, $this->model->quoteTableAs($this->zendDbExprMock, $alias));
     }
 
     /**
@@ -144,7 +144,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())
             ->method('assemble')
             ->willReturn($string);
-        $this->assertEquals($expectedResult, $this->model->quoteTableAs($this->selectMock, $alias));
+        $this->assertSame($expectedResult, $this->model->quoteTableAs($this->selectMock, $alias));
     }
 
     /**
@@ -154,7 +154,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testQuoteTableAs($identifier, $alias, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->model->quoteTableAs($identifier, $alias));
+        $this->assertSame($expectedResult, $this->model->quoteTableAs($identifier, $alias));
     }
 
     /**

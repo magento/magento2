@@ -63,7 +63,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
         }
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
-            $this->assertEquals($contents[$index++], $fileContent);
+            $this->assertSame($contents[$index++], $fileContent);
         }
     }
 
@@ -82,6 +82,6 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
                 ->method('readAll')
                 ->will($this->returnValue($contents[$index++]));
         }
-        $this->assertEquals($expectedArray, $this->fileIterator->toArray());
+        $this->assertSame($expectedArray, $this->fileIterator->toArray());
     }
 }

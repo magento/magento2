@@ -71,7 +71,7 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $redirectUrl = "http://domain.com/{$product->getUrlKey()}.html";
         $expectedUrl = $toStore->getBaseUrl();
 
-        $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+        $this->assertSame($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
 
     /**
@@ -94,7 +94,7 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
 
         $redirectUrl = $expectedUrl = "http://localhost/page-c";
 
-        $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+        $this->assertSame($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
 
     /**

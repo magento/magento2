@@ -21,6 +21,6 @@ class SharedTest extends \Magento\TestFramework\TestCase\AbstractController
         $cart = $this->_objectManager->get(\Magento\Checkout\Model\Cart::class);
         $quoteCount = $cart->getQuote()->getItemsCollection()->count();
 
-        $this->assertEquals(1, $quoteCount);
+        $this->assertSame(1, $quoteCount);
     }
 }

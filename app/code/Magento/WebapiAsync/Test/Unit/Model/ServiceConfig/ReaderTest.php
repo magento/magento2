@@ -54,6 +54,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $mergedConfiguration = include __DIR__ . '/_files/Reader/webapi_async.php';
         $readConfiguration = $this->reader->read();
 
-        $this->assertEquals($mergedConfiguration, $readConfiguration);
+        $this->assertSame($mergedConfiguration, $readConfiguration);
     }
 }

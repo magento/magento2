@@ -404,7 +404,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             'bundle_shipment_type' => 'separately',
             'bundle_price_view' => 'bundle_price_view'
         ];
-        $this->assertEquals($this->bundle->isRowValid($rowData, 0), true);
+        $this->assertSame($this->bundle->isRowValid($rowData, 0), true);
     }
 
     /**

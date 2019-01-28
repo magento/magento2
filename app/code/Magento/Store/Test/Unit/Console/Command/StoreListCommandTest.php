@@ -50,10 +50,10 @@ class StoreListCommandTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception("Dummy test exception"));
 
         $tester = new CommandTester($this->command);
-        $this->assertEquals(Cli::RETURN_FAILURE, $tester->execute([]));
+        $this->assertSame(Cli::RETURN_FAILURE, $tester->execute([]));
 
         $linesOutput = array_filter(explode(PHP_EOL, $tester->getDisplay()));
-        $this->assertEquals('Dummy test exception', $linesOutput[0]);
+        $this->assertSame('Dummy test exception', $linesOutput[0]);
     }
 
     public function testExecute()
@@ -77,31 +77,31 @@ class StoreListCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn($stores);
 
         $tester = new CommandTester($this->command);
-        $this->assertEquals(Cli::RETURN_SUCCESS, $tester->execute([]));
+        $this->assertSame(Cli::RETURN_SUCCESS, $tester->execute([]));
 
         $linesOutput = array_filter(explode(PHP_EOL, $tester->getDisplay()));
         $this->assertCount(5, $linesOutput, 'There should be 5 lines output. 3 Spacers, 1 header, 1 content.');
 
-        $this->assertEquals($linesOutput[0], $linesOutput[2], "Lines 0, 2, 4 should be spacer lines");
-        $this->assertEquals($linesOutput[2], $linesOutput[4], "Lines 0, 2, 4 should be spacer lines");
+        $this->assertSame($linesOutput[0], $linesOutput[2], "Lines 0, 2, 4 should be spacer lines");
+        $this->assertSame($linesOutput[2], $linesOutput[4], "Lines 0, 2, 4 should be spacer lines");
 
         $headerValues = array_values(array_filter(explode('|', $linesOutput[1])));
         //trim to remove the whitespace left from the exploding pipe separation
-        $this->assertEquals('ID', trim($headerValues[0]));
-        $this->assertEquals('Website ID', trim($headerValues[1]));
-        $this->assertEquals('Group ID', trim($headerValues[2]));
-        $this->assertEquals('Name', trim($headerValues[3]));
-        $this->assertEquals('Code', trim($headerValues[4]));
-        $this->assertEquals('Sort Order', trim($headerValues[5]));
-        $this->assertEquals('Is Active', trim($headerValues[6]));
+        $this->assertSame('ID', trim($headerValues[0]));
+        $this->assertSame('Website ID', trim($headerValues[1]));
+        $this->assertSame('Group ID', trim($headerValues[2]));
+        $this->assertSame('Name', trim($headerValues[3]));
+        $this->assertSame('Code', trim($headerValues[4]));
+        $this->assertSame('Sort Order', trim($headerValues[5]));
+        $this->assertSame('Is Active', trim($headerValues[6]));
 
         $storeValues = array_values(array_filter(explode('|', $linesOutput[3])));
-        $this->assertEquals('999', trim($storeValues[0]));
-        $this->assertEquals('888', trim($storeValues[1]));
-        $this->assertEquals('777', trim($storeValues[2]));
-        $this->assertEquals('unit test store', trim($storeValues[3]));
-        $this->assertEquals('unit_test_store', trim($storeValues[4]));
-        $this->assertEquals('123', trim($storeValues[5]));
-        $this->assertEquals('1', trim($storeValues[6]));
+        $this->assertSame('999', trim($storeValues[0]));
+        $this->assertSame('888', trim($storeValues[1]));
+        $this->assertSame('777', trim($storeValues[2]));
+        $this->assertSame('unit test store', trim($storeValues[3]));
+        $this->assertSame('unit_test_store', trim($storeValues[4]));
+        $this->assertSame('123', trim($storeValues[5]));
+        $this->assertSame('1', trim($storeValues[6]));
     }
 }

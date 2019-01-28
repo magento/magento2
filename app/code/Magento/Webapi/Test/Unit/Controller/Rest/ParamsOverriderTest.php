@@ -42,7 +42,7 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
             ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
         );
 
-        $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));
+        $this->assertSame($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));
     }
 
     /**

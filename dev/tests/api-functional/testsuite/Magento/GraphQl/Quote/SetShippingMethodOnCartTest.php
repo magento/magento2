@@ -78,10 +78,10 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertEquals($maskedQuoteId, $response['setShippingMethodsOnCart']['cart']['cart_id']);
+        self::assertSame($maskedQuoteId, $response['setShippingMethodsOnCart']['cart']['cart_id']);
         $addressesInformation = $response['setShippingMethodsOnCart']['cart']['addresses'];
         self::assertCount(2, $addressesInformation);
-        self::assertEquals(
+        self::assertSame(
             $addressesInformation[0]['selected_shipping_method']['code'],
             $shippingCarrierCode . '_' . $shippingMethodCode
         );

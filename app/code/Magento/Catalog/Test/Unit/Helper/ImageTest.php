@@ -281,7 +281,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->prepareAttributes($data, $imageId);
 
         $this->helper->init($productMock, $imageId, $attributes);
-        $this->assertEquals($data['type'], $this->helper->getType());
+        $this->assertSame($data['type'], $this->helper->getType());
     }
 
     public function testGetWidth()
@@ -300,7 +300,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->prepareAttributes($data, $imageId);
 
         $this->helper->init($productMock, $imageId, $attributes);
-        $this->assertEquals($data['width'], $this->helper->getWidth());
+        $this->assertSame($data['width'], $this->helper->getWidth());
     }
 
     /**
@@ -321,7 +321,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $height = isset($data['height']) ? $data['height'] : $data['width'];
 
         $this->helper->init($productMock, $imageId, $attributes);
-        $this->assertEquals($height, $this->helper->getHeight());
+        $this->assertSame($height, $this->helper->getHeight());
     }
 
     /**
@@ -361,7 +361,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->prepareAttributes($data, $imageId);
 
         $this->helper->init($productMock, $imageId, $attributes);
-        $this->assertEquals($data['frame'], $this->helper->getFrame());
+        $this->assertSame($data['frame'], $this->helper->getFrame());
     }
 
     /**
@@ -406,7 +406,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->prepareAttributes($data, $imageId);
 
         $this->helper->init($productMock, $imageId, $attributes);
-        $this->assertEquals($expected, $this->helper->getLabel());
+        $this->assertSame($expected, $this->helper->getLabel());
     }
 
     /**
@@ -496,7 +496,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = $this->helper->getResizedImageInfo();
-        $this->assertEquals($resizedImageInfo, $result);
+        $this->assertSame($resizedImageInfo, $result);
     }
 
     /**

@@ -94,6 +94,6 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
 
         $this->resetButton->prepare();
         $actions = $this->resetButton->getData("config/actions");
-        $this->assertEquals(json_encode($robotsContent), $actions[0]["params"][0]);
+        $this->assertSame(json_encode($robotsContent), $actions[0]["params"][0]);
     }
 }

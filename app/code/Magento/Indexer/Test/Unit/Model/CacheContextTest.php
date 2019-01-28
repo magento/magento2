@@ -30,7 +30,7 @@ class CacheContextTest extends \PHPUnit\Framework\TestCase
         $expectedIds = [1, 2, 3];
         $this->context->registerEntities($cacheTag, $expectedIds);
         $actualIds = $this->context->getRegisteredEntity($cacheTag);
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     /**
@@ -48,6 +48,6 @@ class CacheContextTest extends \PHPUnit\Framework\TestCase
         $this->context->registerEntities($productTag, $productIds);
         $this->context->registerEntities($categoryTag, $categoryIds);
         $actualIdentities = $this->context->getIdentities();
-        $this->assertEquals($expectedIdentities, $actualIdentities);
+        $this->assertSame($expectedIdentities, $actualIdentities);
     }
 }

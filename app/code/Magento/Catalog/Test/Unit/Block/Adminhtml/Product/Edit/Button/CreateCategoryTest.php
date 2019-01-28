@@ -14,7 +14,7 @@ class CreateCategoryTest extends GenericTest
 {
     public function testGetButtonData()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'label' => __('Create Category'),
                 'class' => 'save primary',

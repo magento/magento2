@@ -103,6 +103,6 @@ class AttributeColumnTest extends \PHPUnit\Framework\TestCase
 
         $dataSource = $this->component->prepareDataSource($dataSource);
 
-        $this->assertEquals($expectedSource, $dataSource);
+        $this->assertSame($expectedSource, $dataSource);
     }
 }

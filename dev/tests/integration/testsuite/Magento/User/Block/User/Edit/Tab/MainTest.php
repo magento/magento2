@@ -47,7 +47,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $this->_user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $actualHtml = $this->_block->toHtml();
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"required-entry") and @type="password"]',
@@ -55,14 +55,14 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ),
             'There should be 1 required password entry: current user password.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"validate-admin-password") and @type="password" and @name="password"]',
                 $actualHtml
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"validate-cpassword") and @type="password" and ' .
@@ -70,7 +70,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 $actualHtml
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"validate-current-password") and @type="password" and @name="'
@@ -83,7 +83,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testToHtmlPasswordFieldsNewEntry()
     {
         $actualHtml = $this->_block->toHtml();
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"validate-admin-password") and contains(@class,"required-entry") and  '
@@ -91,7 +91,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 $actualHtml
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"validate-cpassword") and contains(@class,"required-entry") and  '

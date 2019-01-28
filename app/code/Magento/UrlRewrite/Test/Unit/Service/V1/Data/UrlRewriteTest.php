@@ -47,6 +47,6 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setMetadata($testData);
 
-        $this->assertEquals($testData, $this->model->getMetadata());
+        $this->assertSame($testData, $this->model->getMetadata());
     }
 }

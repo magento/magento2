@@ -50,7 +50,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
         $profiler->expects($this->once())->method('getQueryProfiles')->willReturn([]);
 
         $this->unit->disable();
-        $this->assertEquals([], $this->unit->getSql());
+        $this->assertSame([], $this->unit->getSql());
     }
 
     public function testGetEmptySqlWhenSelectQueryProcessed()
@@ -69,7 +69,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
         $profiler->expects($this->once())->method('getQueryProfiles')->willReturn([$query]);
 
         $this->unit->disable();
-        $this->assertEquals([], $this->unit->getSql());
+        $this->assertSame([], $this->unit->getSql());
     }
 
     public function testGetSql()
@@ -95,7 +95,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
         $profiler->expects($this->once())->method('getQueryProfiles')->willReturn([$query]);
 
         $this->unit->disable();
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [
                     [

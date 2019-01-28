@@ -57,7 +57,7 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedResult = $this->createMock(\Magento\Eav\Api\Data\AttributeGroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('save')->with($groupMock)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->model->save($groupMock));
+        $this->assertSame($expectedResult, $this->model->save($groupMock));
     }
 
     public function testGetList()
@@ -66,7 +66,7 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedResult = $this->createMock(\Magento\Eav\Api\Data\AttributeGroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($expectedResult, $this->model->getList($searchCriteriaMock));
     }
 
     public function testGet()
@@ -76,7 +76,7 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
         $this->groupResourceMock->expects($this->once())->method('load')->with($groupMock, $groupId)->willReturnSelf();
         $groupMock->expects($this->once())->method('getId')->willReturn($groupId);
-        $this->assertEquals($groupMock, $this->model->get($groupId));
+        $this->assertSame($groupMock, $this->model->get($groupId));
     }
 
     /**

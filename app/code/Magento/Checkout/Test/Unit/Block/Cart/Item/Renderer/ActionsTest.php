@@ -57,8 +57,8 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertEquals($this->model, $this->model->setItem($itemMock));
-        $this->assertEquals($itemMock, $this->model->getItem());
+        $this->assertSame($this->model, $this->model->setItem($itemMock));
+        $this->assertSame($itemMock, $this->model->getItem());
     }
 
     public function testToHtml()
@@ -108,6 +108,6 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($childNameTextOne, $this->model->toHtml());
+        $this->assertSame($childNameTextOne, $this->model->toHtml());
     }
 }

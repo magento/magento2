@@ -112,6 +112,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $product
         );
 
-        $this->assertEquals($subject->getTypeId(), $return->getTypeId());
+        $this->assertSame($subject->getTypeId(), $return->getTypeId());
     }
 }

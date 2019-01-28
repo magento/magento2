@@ -46,6 +46,6 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($customInstructions);
 
-        $this->assertEquals($customInstructions, $this->model->getData());
+        $this->assertSame($customInstructions, $this->model->getData());
     }
 }

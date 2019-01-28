@@ -122,7 +122,7 @@ class FromAssemblerTest extends \PHPUnit\Framework\TestCase
             ->method('setColumns')
             ->with(['entity_id' => 'sales.entity_id']);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->selectBuilderMock,
             $this->subject->assemble($this->selectBuilderMock, $queryConfig)
         );

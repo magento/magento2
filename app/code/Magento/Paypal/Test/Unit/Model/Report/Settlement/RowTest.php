@@ -28,7 +28,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetReferenceType($code, $expectation)
     {
-        $this->assertEquals($expectation, $this->row->getReferenceType($code));
+        $this->assertSame($expectation, $this->row->getReferenceType($code));
     }
 
     /**
@@ -38,7 +38,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTransactionEvent($code, $expectation)
     {
-        $this->assertEquals($expectation, $this->row->getTransactionEvent($code));
+        $this->assertSame($expectation, $this->row->getTransactionEvent($code));
     }
 
     /**
@@ -48,7 +48,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDebitCreditText($code, $expectation)
     {
-        $this->assertEquals($expectation, $this->row->getDebitCreditText($code));
+        $this->assertSame($expectation, $this->row->getDebitCreditText($code));
     }
 
     /**
@@ -60,7 +60,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
     public function testGetCastedAmount($code, $modelData, $expectation)
     {
         $this->row->setData($modelData);
-        $this->assertEquals($expectation, $this->row->getCastedAmount($code));
+        $this->assertSame($expectation, $this->row->getCastedAmount($code));
     }
 
     public function testGetTransactionEvents()

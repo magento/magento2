@@ -92,7 +92,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->clientMock->expects($this->once())->method('query')->willThrowException($exception);
         $actualResponse = $this->adapter->query($queryRequest);
         $this->assertEmpty($actualResponse->getAggregations()->getBuckets());
-        $this->assertEquals(0, $actualResponse->count());
+        $this->assertSame(0, $actualResponse->count());
     }
 
     /**

@@ -53,7 +53,7 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
             ->method('getTables')
             ->willReturn([$table]);
 
-        self::assertEquals(
+        self::assertSame(
             [
                 [
                     'column' => 'name.float',

@@ -72,6 +72,6 @@ class ModificationChainTest extends \PHPUnit\Framework\TestCase
 
         $chain = new ModificationChain($modificationsList);
 
-        $this->assertEquals($expectedArray2, $chain->modify($inputArray));
+        $this->assertSame($expectedArray2, $chain->modify($inputArray));
     }
 }

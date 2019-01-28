@@ -42,7 +42,7 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit\Framework\TestC
             \Magento\Persistent\Model\Session::class
         );
         $sessionModel->loadByCookieKey();
-        $this->assertEquals(1, $sessionModel->getCustomerId());
+        $this->assertSame(1, $sessionModel->getCustomerId());
 
         $this->_customerSession->logout();
 

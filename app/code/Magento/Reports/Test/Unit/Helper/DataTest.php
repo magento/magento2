@@ -54,7 +54,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIntervals($from, $to, $period, $results)
     {
-        $this->assertEquals($this->data->getIntervals($from, $to, $period), $results);
+        $this->assertSame($this->data->getIntervals($from, $to, $period), $results);
     }
 
     /**

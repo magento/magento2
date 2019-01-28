@@ -52,7 +52,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
                     $serviceInfo['rest']['resourcePath']
                 )
             );
-            $this->assertEquals(WebapiException::HTTP_UNAUTHORIZED, $e->getCode());
+            $this->assertSame(WebapiException::HTTP_UNAUTHORIZED, $e->getCode());
         }
     }
 
@@ -83,8 +83,8 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\Exception $e) {
             $error = json_decode($e->getMessage(), true);
-            $this->assertEquals('Request does not match any route.', $error['message']);
-            $this->assertEquals(WebapiException::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame('Request does not match any route.', $error['message']);
+            $this->assertSame(WebapiException::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 

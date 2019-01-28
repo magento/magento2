@@ -139,7 +139,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigData')
             ->with('active', static::isNull())
             ->willReturn($isActive);
-        static::assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
+        static::assertSame($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
     }
 
     /**
@@ -156,7 +156,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->dataStorage->expects($this->once())->method('get')->with('credit_cards')->will(
             $this->returnValue($expected)
         );
-        $this->assertEquals($expected, $this->config->getCcTypes());
+        $this->assertSame($expected, $this->config->getCcTypes());
     }
 
     public function testGetMethodsInfo()
@@ -165,7 +165,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->dataStorage->expects($this->once())->method('get')->with('methods')->will(
             $this->returnValue($expected)
         );
-        $this->assertEquals($expected, $this->config->getMethodsInfo());
+        $this->assertSame($expected, $this->config->getMethodsInfo());
     }
 
     public function testGetGroups()
@@ -174,19 +174,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->dataStorage->expects($this->once())->method('get')->with('groups')->will(
             $this->returnValue($expected)
         );
-        $this->assertEquals($expected, $this->config->getGroups());
+        $this->assertSame($expected, $this->config->getGroups());
     }
 
     public function testGetMonths()
     {
         $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('en_US');
-        $this->assertEquals($this->expectedMonthList, $this->config->getMonths());
+        $this->assertSame($this->expectedMonthList, $this->config->getMonths());
     }
 
     public function testGetYears()
     {
         $this->date->expects($this->once())->method('date')->with('Y')->will($this->returnValue(self::CURRENT_YEAR));
-        $this->assertEquals($this->_getPreparedYearsList(), $this->config->getYears());
+        $this->assertSame($this->_getPreparedYearsList(), $this->config->getYears());
     }
 
     /**

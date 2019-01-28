@@ -26,27 +26,27 @@ class StatusMapperTest extends \PHPUnit\Framework\TestCase
 
     public function testOperationStatusToBulkSummaryStatus()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->operationStatusToBulkSummaryStatus(OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED),
             BulkSummaryInterface::FINISHED_WITH_FAILURE
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->operationStatusToBulkSummaryStatus(OperationInterface::STATUS_TYPE_RETRIABLY_FAILED),
             BulkSummaryInterface::FINISHED_WITH_FAILURE
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->operationStatusToBulkSummaryStatus(OperationInterface::STATUS_TYPE_COMPLETE),
             BulkSummaryInterface::FINISHED_SUCCESSFULLY
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->operationStatusToBulkSummaryStatus(OperationInterface::STATUS_TYPE_OPEN),
             BulkSummaryInterface::IN_PROGRESS
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->operationStatusToBulkSummaryStatus(0),
             BulkSummaryInterface::NOT_STARTED
         );
@@ -59,17 +59,17 @@ class StatusMapperTest extends \PHPUnit\Framework\TestCase
 
     public function testBulkSummaryStatusToOperationStatus()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->bulkSummaryStatusToOperationStatus(BulkSummaryInterface::FINISHED_SUCCESSFULLY),
             OperationInterface::STATUS_TYPE_COMPLETE
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->bulkSummaryStatusToOperationStatus(BulkSummaryInterface::IN_PROGRESS),
             OperationInterface::STATUS_TYPE_OPEN
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->bulkSummaryStatusToOperationStatus(BulkSummaryInterface::FINISHED_WITH_FAILURE),
             [
                 OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
@@ -78,7 +78,7 @@ class StatusMapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->bulkSummaryStatusToOperationStatus(BulkSummaryInterface::NOT_STARTED),
             0
         );

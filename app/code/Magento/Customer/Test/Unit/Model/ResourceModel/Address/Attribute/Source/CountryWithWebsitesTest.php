@@ -113,7 +113,7 @@ class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
                 ['value' => 'AM', 'label' => 'UZ']
             ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             ['value' => 'AM', 'label' => 'UZ', 'website_ids' => [1, 2]]
         ], $this->countryByWebsite->getAllOptions());
     }

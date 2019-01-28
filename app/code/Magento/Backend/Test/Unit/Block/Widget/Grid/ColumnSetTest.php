@@ -117,7 +117,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRowUrlIfUrlPathNotSet()
     {
-        $this->assertEquals('#', $this->_block->getRowUrl(new \stdClass()));
+        $this->assertSame('#', $this->_block->getRowUrl(new \stdClass()));
     }
 
     public function testGetRowUrl()
@@ -166,7 +166,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
         $model = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\ColumnSet::class, $arguments);
 
         $url = $model->getRowUrl($itemMock);
-        $this->assertEquals('http://localhost/mng/item/edit', $url);
+        $this->assertSame('http://localhost/mng/item/edit', $url);
     }
 
     public function testItemHasMultipleRows()
@@ -254,7 +254,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
         $expectedItem->setChildren($subCollection);
 
         $this->_block->updateItemByFirstMultiRow($item);
-        $this->assertEquals($expectedItem, $item);
+        $this->assertSame($expectedItem, $item);
     }
 
     public function testGetSubTotals()
@@ -280,7 +280,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
         $item = new \Magento\Framework\DataObject(['test1' => '1']);
         $item->setChildren($subCollection);
 
-        $this->assertEquals(new \Magento\Framework\DataObject(['column' => '2']), $this->_block->getSubTotals($item));
+        $this->assertSame(new \Magento\Framework\DataObject(['column' => '2']), $this->_block->getSubTotals($item));
     }
 
     public function testGetTotals()
@@ -298,7 +298,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(new \Magento\Framework\DataObject(['test1' => '3', 'test2' => '2']))
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             new \Magento\Framework\DataObject(['test1' => '3', 'test2' => '2']),
             $this->_block->getTotals()
         );

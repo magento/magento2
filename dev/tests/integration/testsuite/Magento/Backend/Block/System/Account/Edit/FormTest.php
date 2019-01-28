@@ -36,9 +36,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form = $block->getForm();
 
         $this->assertInstanceOf(\Magento\Framework\Data\Form::class, $form);
-        $this->assertEquals('post', $form->getData('method'));
-        $this->assertEquals($block->getUrl('adminhtml/system_account/save'), $form->getData('action'));
-        $this->assertEquals('edit_form', $form->getId());
+        $this->assertSame('post', $form->getData('method'));
+        $this->assertSame($block->getUrl('adminhtml/system_account/save'), $form->getData('action'));
+        $this->assertSame('edit_form', $form->getId());
         $this->assertTrue($form->getUseContainer());
 
         $expectedFieldset = [
@@ -74,15 +74,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedFieldset as $fieldId => $field) {
             $element = $form->getElement($fieldId);
             $this->assertInstanceOf(\Magento\Framework\Data\Form\Element\AbstractElement::class, $element);
-            $this->assertEquals($field['name'], $element->getName(), 'Wrong \'' . $fieldId . '\' field name');
-            $this->assertEquals($field['type'], $element->getType(), 'Wrong \'' . $fieldId . ' field type');
-            $this->assertEquals(
+            $this->assertSame($field['name'], $element->getName(), 'Wrong \'' . $fieldId . '\' field name');
+            $this->assertSame($field['type'], $element->getType(), 'Wrong \'' . $fieldId . ' field type');
+            $this->assertSame(
                 $field['required'],
                 $element->getData('required'),
                 'Wrong \'' . $fieldId . '\' requirement state'
             );
             if (array_key_exists('value', $field)) {
-                $this->assertEquals($field['value'], $element->getData('value'), 'Wrong \'' . $fieldId . '\' value');
+                $this->assertSame($field['value'], $element->getData('value'), 'Wrong \'' . $fieldId . '\' value');
             }
         }
     }

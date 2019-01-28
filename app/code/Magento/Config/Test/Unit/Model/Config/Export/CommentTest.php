@@ -94,7 +94,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
             ->method('generate')
             ->willReturnMap($expectedMocks['placeholderMock']['generate']['returnMap']);
 
-        $this->assertEquals($expectedMessage, $this->model->get());
+        $this->assertSame($expectedMessage, $this->model->get());
     }
 
     /**

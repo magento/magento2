@@ -130,7 +130,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $vars = ['var1' => 'value1', 'var2' => 'value2'];
         $this->templateEngine->expects($this->once())->method('render')->willReturn($output);
         $this->block->assign($vars);
-        $this->assertEquals($output, $this->block->fetchView($template));
+        $this->assertSame($output, $this->block->fetchView($template));
     }
 
     public function testFetchViewWithNoFileName()
@@ -152,7 +152,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->method('critical')
             ->with($exception)
             ->willReturn(null);
-        $this->assertEquals($output, $this->block->fetchView($template));
+        $this->assertSame($output, $this->block->fetchView($template));
     }
 
     public function testFetchViewWithNoFileNameDeveloperMode()
@@ -195,7 +195,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheKeyInfo()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'BLOCK_TPL',
                 'storeCode',

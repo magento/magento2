@@ -163,7 +163,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
             ->will($this->returnValue($url));
 
-        $this->assertEquals($url, $this->model->getAddToCartUrl('%item%'));
+        $this->assertSame($url, $this->model->getAddToCartUrl('%item%'));
     }
 
     public function testGetConfigureUrl()
@@ -189,7 +189,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
             ->will($this->returnValue($url));
 
-        $this->assertEquals($url, $this->model->getConfigureUrl($wishlistItem));
+        $this->assertSame($url, $this->model->getConfigureUrl($wishlistItem));
     }
 
     public function testGetWishlist()
@@ -198,7 +198,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getWishlist')
             ->will($this->returnValue($this->wishlist));
 
-        $this->assertEquals($this->wishlist, $this->model->getWishlist());
+        $this->assertSame($this->wishlist, $this->model->getWishlist());
     }
 
     public function testGetWishlistWithCoreRegistry()
@@ -207,7 +207,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('registry')
             ->willReturn($this->wishlist);
 
-        $this->assertEquals($this->wishlist, $this->model->getWishlist());
+        $this->assertSame($this->wishlist, $this->model->getWishlist());
     }
 
     public function testGetAddToCartParams()
@@ -255,7 +255,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($url, $expected)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem));
+        $this->assertSame($url, $this->model->getAddToCartParams($this->wishlistItem));
     }
 
     public function testGetAddToCartParamsWithReferer()
@@ -309,7 +309,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($url, $expected)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem, true));
+        $this->assertSame($url, $this->model->getAddToCartParams($this->wishlistItem, true));
     }
 
     public function testGetRemoveParams()
@@ -337,7 +337,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($url, ['item' => $wishlistItemId, ActionInterface::PARAM_NAME_URL_ENCODED => ''])
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getRemoveParams($this->wishlistItem));
+        $this->assertSame($url, $this->model->getRemoveParams($this->wishlistItem));
     }
 
     public function testGetRemoveParamsWithReferer()
@@ -371,7 +371,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($url, ['item' => $wishlistItemId, ActionInterface::PARAM_NAME_URL_ENCODED => $refererEncoded])
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getRemoveParams($this->wishlistItem, true));
+        $this->assertSame($url, $this->model->getRemoveParams($this->wishlistItem, true));
     }
 
     public function testGetSharedAddToCartUrl()
@@ -412,7 +412,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($url, $expected)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getSharedAddToCartUrl($this->wishlistItem));
+        $this->assertSame($url, $this->model->getSharedAddToCartUrl($this->wishlistItem));
     }
 
     public function testGetSharedAddAllToCartUrl()
@@ -429,6 +429,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($url)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getSharedAddAllToCartUrl());
+        $this->assertSame($url, $this->model->getSharedAddAllToCartUrl());
     }
 }

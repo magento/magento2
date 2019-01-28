@@ -106,6 +106,6 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     {
         $expected = implode("\n", $this->mockConfigData + ['country' => 'Rohan', 'region' => 'Edoras']);
         $result = $this->model->getFormattedAddress($this->store);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

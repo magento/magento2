@@ -155,7 +155,7 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
         $this->setPropertyValue($this->categoryProcessor, 'categoriesCache', $categoriesCache);
 
         $actualResult = $this->categoryProcessor->getCategoryById($categoryId);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

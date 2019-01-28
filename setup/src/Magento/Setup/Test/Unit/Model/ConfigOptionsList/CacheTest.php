@@ -49,27 +49,27 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
-        $this->assertEquals('cache-backend', $options[0]->getName());
+        $this->assertSame('cache-backend', $options[0]->getName());
 
         $this->assertArrayHasKey(1, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[1]);
-        $this->assertEquals('cache-backend-redis-server', $options[1]->getName());
+        $this->assertSame('cache-backend-redis-server', $options[1]->getName());
 
         $this->assertArrayHasKey(2, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[2]);
-        $this->assertEquals('cache-backend-redis-db', $options[2]->getName());
+        $this->assertSame('cache-backend-redis-db', $options[2]->getName());
 
         $this->assertArrayHasKey(3, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[3]);
-        $this->assertEquals('cache-backend-redis-port', $options[3]->getName());
+        $this->assertSame('cache-backend-redis-port', $options[3]->getName());
 
         $this->assertArrayHasKey(4, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[4]);
-        $this->assertEquals('cache-backend-redis-password', $options[4]->getName());
+        $this->assertSame('cache-backend-redis-password', $options[4]->getName());
 
         $this->assertArrayHasKey(5, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[5]);
-        $this->assertEquals('cache-id-prefix', $options[5]->getName());
+        $this->assertSame('cache-id-prefix', $options[5]->getName());
     }
 
     /**
@@ -98,7 +98,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $configData = $this->configOptionsList->createConfig(['cache-backend'=>'redis'], $this->deploymentConfigMock);
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
@@ -131,7 +131,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $configData = $this->configOptionsList->createConfig($options, $this->deploymentConfigMock);
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
@@ -153,7 +153,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $configData = $this->configOptionsList->createConfig([], $this->deploymentConfigMock);
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
@@ -179,7 +179,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             $this->deploymentConfigMock
         );
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
@@ -212,7 +212,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);
 
         $this->assertCount(1, $errors);
-        $this->assertEquals("Invalid cache handler 'clay-tablet'", $errors[0]);
+        $this->assertSame("Invalid cache handler 'clay-tablet'", $errors[0]);
     }
 
     /**

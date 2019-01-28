@@ -68,7 +68,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testStat()
     {
         $this->driver->expects($this->once())->method('stat')->will($this->returnValue(['some-stat-data']));
-        $this->assertEquals(['some-stat-data'], $this->read->stat('correct-path'));
+        $this->assertSame(['some-stat-data'], $this->read->stat('correct-path'));
     }
 
     public function testReadFile()
@@ -87,6 +87,6 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->with($path, $flag, $context)
             ->will($this->returnValue($contents));
 
-        $this->assertEquals($contents, $this->read->readFile($path, $flag, $context));
+        $this->assertSame($contents, $this->read->readFile($path, $flag, $context));
     }
 }

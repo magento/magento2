@@ -77,11 +77,11 @@ class SilentPostTest extends AbstractController
 
         $this->dispatch('paypal/payflow/silentPost');
 
-        self::assertEquals(200, $this->getResponse()->getStatusCode());
+        self::assertSame(200, $this->getResponse()->getStatusCode());
 
         $order = $this->getOrder($orderIncrementId);
-        self::assertEquals($orderState, $order->getState());
-        self::assertEquals($orderStatus, $order->getStatus());
+        self::assertSame($orderState, $order->getState());
+        self::assertSame($orderStatus, $order->getStatus());
     }
 
     /**
@@ -123,7 +123,7 @@ class SilentPostTest extends AbstractController
 
         $this->dispatch('paypal/payflow/silentPost');
 
-        self::assertEquals(200, $this->getResponse()->getStatusCode());
+        self::assertSame(200, $this->getResponse()->getStatusCode());
 
         $this->_objectManager->removeSharedInstance(Monolog::class);
     }

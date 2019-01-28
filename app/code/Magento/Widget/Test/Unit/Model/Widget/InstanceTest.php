@@ -145,7 +145,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
 
         $expectedConfigFile = __DIR__ . '/../_files/mappedConfigArray1.php';
         $expectedConfig = include $expectedConfigFile;
-        $this->assertEquals($expectedConfig, $result);
+        $this->assertSame($expectedConfig, $result);
     }
 
     public function testGetWidgetTemplates()
@@ -170,7 +170,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
                 'label' => 'Product Link Inline Template',
             ],
         ];
-        $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
+        $this->assertSame($expectedTemplates, $this->_model->getWidgetTemplates());
     }
 
     public function testGetWidgetTemplatesValueOnly()
@@ -204,7 +204,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $expectedTemplates = [
             'default' => ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Template'],
         ];
-        $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
+        $this->assertSame($expectedTemplates, $this->_model->getWidgetTemplates());
     }
 
     public function testGetWidgetTemplatesNoTemplate()
@@ -226,7 +226,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         );
         $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [];
-        $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
+        $this->assertSame($expectedTemplates, $this->_model->getWidgetTemplates());
     }
 
     public function testGetWidgetSupportedContainers()
@@ -242,7 +242,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         );
         $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = ['left', 'content'];
-        $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedContainers());
+        $this->assertSame($expectedContainers, $this->_model->getWidgetSupportedContainers());
     }
 
     public function testGetWidgetSupportedContainersNoContainer()
@@ -263,7 +263,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         );
         $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = [];
-        $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedContainers());
+        $this->assertSame($expectedContainers, $this->_model->getWidgetSupportedContainers());
     }
 
     public function testGetWidgetSupportedTemplatesByContainers()
@@ -282,7 +282,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
             ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Product Link Block Template'],
             ['value' => 'product/widget/link/link_inline.phtml', 'label' => 'Product Link Inline Template'],
         ];
-        $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('left'));
+        $this->assertSame($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('left'));
     }
 
     public function testGetWidgetSupportedTemplatesByContainers2()
@@ -300,7 +300,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $expectedTemplates = [
             ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Product Link Block Template'],
         ];
-        $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('content'));
+        $this->assertSame($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('content'));
     }
 
     public function testGetWidgetSupportedTemplatesByContainersNoSupportedContainersSpecified()
@@ -334,7 +334,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $expectedContainers = [
             'default' => ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Template'],
         ];
-        $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedTemplatesByContainer('content'));
+        $this->assertSame($expectedContainers, $this->_model->getWidgetSupportedTemplatesByContainer('content'));
     }
 
     public function testGetWidgetSupportedTemplatesByContainersUnknownContainer()
@@ -350,7 +350,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         );
         $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [];
-        $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('unknown'));
+        $this->assertSame($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('unknown'));
     }
 
     public function testGetWidgetParameters()
@@ -361,7 +361,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(json_decode($serializedArray, true));
 
         $this->_model->setData('widget_parameters', $serializedArray);
-        $this->assertEquals(
+        $this->assertSame(
             json_decode($serializedArray, true),
             $this->_model->getWidgetParameters()
         );

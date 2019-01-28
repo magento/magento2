@@ -36,7 +36,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
     {
         $this->minSaleQtyConfig->setValue($value);
         $this->minSaleQtyConfig->save();
-        $this->assertEquals($encodedExpectedValue, $this->minSaleQtyConfig->getValue());
+        $this->assertSame($encodedExpectedValue, $this->minSaleQtyConfig->getValue());
 
         $this->minSaleQtyConfig->load($this->minSaleQtyConfig->getId());
         $hashedConfig = $this->minSaleQtyConfig->getValue();
@@ -46,7 +46,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
         }
 
         $indexedConfig = array_values($hashedConfig);
-        $this->assertEquals($decodedExpectedValue, $indexedConfig);
+        $this->assertSame($decodedExpectedValue, $indexedConfig);
     }
 
     /**

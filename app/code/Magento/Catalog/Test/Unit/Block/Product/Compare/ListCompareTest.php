@@ -75,6 +75,6 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
             ->with($blockName)
             ->will($this->returnValue($blockMock));
 
-        $this->assertEquals($expectedResult, $this->block->getProductPrice($product, '-compare-list-top'));
+        $this->assertSame($expectedResult, $this->block->getProductPrice($product, '-compare-list-top'));
     }
 }

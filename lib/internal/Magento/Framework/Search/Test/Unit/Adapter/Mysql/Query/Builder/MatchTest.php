@@ -129,6 +129,6 @@ class MatchTest extends \PHPUnit\Framework\TestCase
             [$this->preprocessor]
         );
 
-        $this->assertEquals($select, $result);
+        $this->assertSame($select, $result);
     }
 }

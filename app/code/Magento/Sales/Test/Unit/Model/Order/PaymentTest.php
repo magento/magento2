@@ -314,7 +314,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->method('canVoid')
             ->willReturn(false);
 
-        $this->assertEquals($this->payment, $this->payment->cancel());
+        $this->assertSame($this->payment, $this->payment->cancel());
     }
 
     public function testPlace()
@@ -339,7 +339,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
 
         $this->mockPlaceEvents();
 
-        $this->assertEquals($this->payment, $this->payment->place());
+        $this->assertSame($this->payment, $this->payment->place());
     }
 
     public function testPlaceActionOrder()
@@ -390,7 +390,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with(true)
             ->willReturn($statusHistory);
 
-        $this->assertEquals($this->payment, $this->payment->place());
+        $this->assertSame($this->payment, $this->payment->place());
     }
 
     protected function mockPlaceEvents()
@@ -450,7 +450,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->method('setIsCustomerNotified')
             ->with(true)
             ->willReturn($statusHistory);
-        $this->assertEquals($this->payment, $this->payment->place());
+        $this->assertSame($this->payment, $this->payment->place());
     }
 
     public function testPlaceActionAuthorizeFraud()
@@ -495,9 +495,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->paymentMethod->expects($this->once())
             ->method('getConfigPaymentAction')
             ->willReturn(null);
-        $this->assertEquals($this->payment, $this->payment->place());
+        $this->assertSame($this->payment, $this->payment->place());
         //maybe we don't need write authorised sum when fraud was detected
-        $this->assertEquals($sum, $this->payment->getAmountAuthorized());
+        $this->assertSame($sum, $this->payment->getAmountAuthorized());
     }
 
     public function testPlaceActionAuthorizeCapture()
@@ -538,10 +538,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigPaymentAction')
             ->willReturn(null);
 
-        $this->assertEquals($this->payment, $this->payment->place());
+        $this->assertSame($this->payment, $this->payment->place());
 
-        $this->assertEquals($sum, $this->payment->getAmountAuthorized());
-        $this->assertEquals($sum, $this->payment->getBaseAmountAuthorized());
+        $this->assertSame($sum, $this->payment->getAmountAuthorized());
+        $this->assertSame($sum, $this->payment->getBaseAmountAuthorized());
     }
 
     /**
@@ -555,7 +555,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->method('authorize')
             ->with($this->payment, $isOnline, $amount)
             ->willReturn($this->payment);
-        $this->assertEquals($this->payment, $this->payment->authorize($isOnline, $amount));
+        $this->assertSame($this->payment, $this->payment->authorize($isOnline, $amount));
     }
 
     /**
@@ -597,7 +597,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($acceptPayment);
 
         $this->payment->accept();
-        self::assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+        self::assertSame($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
     /**
@@ -651,7 +651,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($acceptPayment);
 
         $this->payment->accept();
-        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
+        $this->assertSame($this->transactionId, $this->payment->getLastTransId());
     }
 
     /**
@@ -692,7 +692,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($acceptPayment);
 
         $this->payment->accept();
-        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
+        $this->assertSame($this->transactionId, $this->payment->getLastTransId());
     }
 
     public function testDenyPaymentFalse()
@@ -897,7 +897,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with($this->payment, $this->transactionId);
 
         $this->payment->update();
-        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+        $this->assertSame($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
     /**
@@ -927,7 +927,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->method('fetchTransactionInfo');
 
         $this->payment->update($isOnline);
-        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+        $this->assertSame($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
     public function testUpdateOnlineTransactionDenied()
@@ -999,7 +999,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with($this->payment, $this->transactionId);
 
         $this->payment->update();
-        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
+        $this->assertSame($this->transactionId, $this->payment->getLastTransId());
     }
 
     public function testUpdateOnlineTransactionDeniedFalseHistoryComment()
@@ -1041,7 +1041,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with($this->payment, $this->transactionId);
 
         $this->payment->update();
-        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
+        $this->assertSame($this->transactionId, $this->payment->getLastTransId());
     }
 
     /**
@@ -1115,7 +1115,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, __('Approved the payment online.'));
 
         $this->payment->accept();
-        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+        $this->assertSame($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
     public function testDenyWithoutInvoiceResultFalse()
@@ -1150,7 +1150,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, __('Denied the payment online'));
 
         $this->payment->deny();
-        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+        $this->assertSame($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
     public function testCanCaptureNoAuthorizationTransaction()
@@ -1231,10 +1231,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->invoice->setBaseShippingAmount($shippingCaptured);
 
         self::assertSame($this->payment, $this->payment->pay($this->invoice));
-        self::assertEquals($amountPaid, $this->payment->getAmountPaid());
-        self::assertEquals($amountPaid, $this->payment->getBaseAmountPaid());
-        self::assertEquals($shippingCaptured, $this->payment->getShippingCaptured());
-        self::assertEquals($shippingCaptured, $this->payment->getBaseShippingCaptured());
+        self::assertSame($amountPaid, $this->payment->getAmountPaid());
+        self::assertSame($amountPaid, $this->payment->getBaseAmountPaid());
+        self::assertSame($shippingCaptured, $this->payment->getShippingCaptured());
+        self::assertSame($shippingCaptured, $this->payment->getBaseShippingCaptured());
     }
 
     /**
@@ -1257,8 +1257,8 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
 
         $this->payment->pay($this->invoice);
 
-        self::assertEquals(10, $this->payment->getAmountPaid());
-        self::assertEquals(5, $this->payment->getShippingCaptured());
+        self::assertSame(10, $this->payment->getAmountPaid());
+        self::assertSame(5, $this->payment->getShippingCaptured());
     }
 
     public function testGetOrder()
@@ -1306,10 +1306,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ['payment' => $this->payment, 'invoice' => $this->invoice]
         );
         $this->assertSame($this->payment, $this->payment->cancelInvoice($this->invoice));
-        $this->assertEquals(-1 * $expects['amount_paid'], $this->payment->getData('amount_paid'));
-        $this->assertEquals(-1 * $expects['base_amount_paid'], $this->payment->getData('base_amount_paid'));
-        $this->assertEquals(-1 * $expects['shipping_captured'], $this->payment->getData('shipping_captured'));
-        $this->assertEquals(
+        $this->assertSame(-1 * $expects['amount_paid'], $this->payment->getData('amount_paid'));
+        $this->assertSame(-1 * $expects['base_amount_paid'], $this->payment->getData('base_amount_paid'));
+        $this->assertSame(-1 * $expects['shipping_captured'], $this->payment->getData('shipping_captured'));
+        $this->assertSame(
             -1 * $expects['base_shipping_captured'],
             $this->payment->getData('base_shipping_captured')
         );
@@ -1411,7 +1411,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
         $this->assertSame($this->creditMemoMock, $this->payment->getData('created_creditmemo'));
-        $this->assertEquals($grandTotalCreditMemo, $this->payment->getData('amount_refunded'));
+        $this->assertSame($grandTotalCreditMemo, $this->payment->getData('amount_refunded'));
     }
 
     public function testRegisterRefundNotificationWrongAmount()
@@ -1459,7 +1459,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->paymentMethod->expects($this->once())
             ->method('canRefund')
             ->willReturn($canRefund);
-        $this->assertEquals($canRefund, $this->payment->canRefund());
+        $this->assertSame($canRefund, $this->payment->canRefund());
     }
 
     /**
@@ -1530,9 +1530,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
 
         static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
-        static::assertEquals($amount, $this->payment->getData('amount_refunded'));
-        static::assertEquals($amount, $this->payment->getData('base_amount_refunded_online'));
-        static::assertEquals($amount, $this->payment->getData('base_amount_refunded'));
+        static::assertSame($amount, $this->payment->getData('amount_refunded'));
+        static::assertSame($amount, $this->payment->getData('base_amount_refunded_online'));
+        static::assertSame($amount, $this->payment->getData('base_amount_refunded'));
     }
 
     /**

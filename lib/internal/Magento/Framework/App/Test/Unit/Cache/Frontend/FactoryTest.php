@@ -48,8 +48,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $frontend = $result->getLowLevelFrontend();
         $backend = $result->getBackend();
 
-        $this->assertEquals(2601, $frontend->getOption('lifetime'));
-        $this->assertEquals('.wtf', $backend->getOption('file_extension'));
+        $this->assertSame(2601, $frontend->getOption('lifetime'));
+        $this->assertSame('.wtf', $backend->getOption('file_extension'));
     }
 
     public function testCreateEnforcedOptions()
@@ -71,7 +71,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $result = $model->create($options);
 
         $frontend = $result->getLowLevelFrontend();
-        $this->assertEquals($expectedPrefix, $frontend->getOption('cache_id_prefix'));
+        $this->assertSame($expectedPrefix, $frontend->getOption('cache_id_prefix'));
     }
 
     /**
@@ -113,7 +113,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $params = $result->getParams();
         $this->assertArrayHasKey('param', $params);
-        $this->assertEquals($params['param'], 'value');
+        $this->assertSame($params['param'], 'value');
     }
 
     /**

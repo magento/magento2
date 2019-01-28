@@ -27,7 +27,7 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
     public function testTokenize($string, $expectedValue)
     {
         $this->_filter->setString($string);
-        $this->assertEquals($expectedValue, $this->_filter->tokenize());
+        $this->assertSame($expectedValue, $this->_filter->tokenize());
     }
 
     /**
@@ -38,7 +38,7 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
     public function testGetValue($string, $expectedValue)
     {
         $this->_filter->setString($string);
-        $this->assertEquals($expectedValue, $this->_filter->getValue());
+        $this->assertSame($expectedValue, $this->_filter->getValue());
     }
 
     /**

@@ -28,6 +28,6 @@ class RendererProxyTest extends \PHPUnit\Framework\TestCase
             ->willReturn('sql');
 
         $model = new \Magento\Framework\DB\Select\RendererProxy($objectManager);
-        $this->assertEquals('sql', $model->render($selectMock, ''));
+        $this->assertSame('sql', $model->render($selectMock, ''));
     }
 }

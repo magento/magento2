@@ -74,7 +74,7 @@ class IncludeElementTest extends \PHPUnit\Framework\TestCase
             $processedObjectMock
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '<?xml version="1.0"?><rootConfig><item id="1"><test/></item><item id="2"/></rootConfig>',
             str_replace(PHP_EOL, '', $document->saveXML())
         );

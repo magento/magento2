@@ -63,7 +63,7 @@ class BaseSelectAttributesSearchStrategyTest extends \PHPUnit\Framework\TestCase
         $select = $selectContainer->getSelect();
         $expectedSelect = $this->getMainSelect();
 
-        $this->assertEquals((string) $expectedSelect, (string) $select);
+        $this->assertSame((string) $expectedSelect, (string) $select);
     }
 
     public function testCreateBaseSelectWithFullTextSearch()
@@ -73,7 +73,7 @@ class BaseSelectAttributesSearchStrategyTest extends \PHPUnit\Framework\TestCase
         $select = $selectContainer->getSelect();
         $expectedSelect = $this->getFulltextSelect();
 
-        $this->assertEquals((string) $expectedSelect, (string) $select);
+        $this->assertSame((string) $expectedSelect, (string) $select);
     }
 
     private function getMainSelect()

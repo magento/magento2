@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals($messages, $this->model->getItemsByType(MessageInterface::TYPE_ERROR));
+        $this->assertSame($messages, $this->model->getItemsByType(MessageInterface::TYPE_ERROR));
         $this->assertEmpty($this->model->getItemsByType(MessageInterface::TYPE_SUCCESS));
         $this->assertEmpty($this->model->getItemsByType(MessageInterface::TYPE_NOTICE));
         $this->assertEmpty($this->model->getItemsByType(MessageInterface::TYPE_WARNING));
@@ -70,8 +70,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals($messages, $this->model->getItems());
-        $this->assertEquals(end($messages), $this->model->getLastAddedMessage());
+        $this->assertSame($messages, $this->model->getItems());
+        $this->assertSame(end($messages), $this->model->getLastAddedMessage());
     }
 
     /**
@@ -103,16 +103,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertSame(count($messages), $this->model->getCount());
 
         foreach ($messageTypes as $type => $count) {
             $messagesByType = $this->model->getItemsByType($type);
-            $this->assertEquals($count, $this->model->getCountByType($type));
-            $this->assertEquals($count, count($messagesByType));
+            $this->assertSame($count, $this->model->getCountByType($type));
+            $this->assertSame($count, count($messagesByType));
 
             /** @var MessageInterface $message */
             foreach ($messagesByType as $message) {
-                $this->assertEquals($type, $message->getType());
+                $this->assertSame($type, $message->getType());
             }
         }
     }
@@ -136,8 +136,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals($this->model->getItemsByType(MessageInterface::TYPE_ERROR), $this->model->getErrors());
-        $this->assertEquals(4, count($this->model->getErrors()));
+        $this->assertSame($this->model->getItemsByType(MessageInterface::TYPE_ERROR), $this->model->getErrors());
+        $this->assertSame(4, count($this->model->getErrors()));
     }
 
     /**
@@ -157,12 +157,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }
 
         $message = $this->model->getMessageByIdentifier('notice_id');
-        $this->assertEquals(MessageInterface::TYPE_NOTICE, $message->getType());
-        $this->assertEquals('notice_id', $message->getIdentifier());
+        $this->assertSame(MessageInterface::TYPE_NOTICE, $message->getType());
+        $this->assertSame('notice_id', $message->getIdentifier());
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertSame(count($messages), $this->model->getCount());
         $this->model->deleteMessageByIdentifier('notice_id');
-        $this->assertEquals(count($messages) - 1, $this->model->getCount());
+        $this->assertSame(count($messages) - 1, $this->model->getCount());
 
         $this->assertEmpty($this->model->getMessageByIdentifier('notice_id'));
     }
@@ -183,7 +183,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertSame(count($messages), $this->model->getCount());
         $this->model->clear();
         $this->assertEmpty($this->model->getCount());
     }
@@ -204,8 +204,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertSame(count($messages), $this->model->getCount());
         $this->model->clear();
-        $this->assertEquals(1, $this->model->getCount());
+        $this->assertSame(1, $this->model->getCount());
     }
 }

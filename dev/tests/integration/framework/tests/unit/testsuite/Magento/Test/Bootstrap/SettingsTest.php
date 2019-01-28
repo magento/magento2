@@ -146,7 +146,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         if (is_array($actualResult)) {
             sort($actualResult);
         }
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function getAsMatchingPathsDataProvider()
@@ -180,7 +180,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         if (is_array($actualResult)) {
             sort($actualResult);
         }
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function getAsConfigFileDataProvider()

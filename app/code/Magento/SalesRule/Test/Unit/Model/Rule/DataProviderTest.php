@@ -100,8 +100,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $ruleMock->expects($this->once())->method('getDiscountQty')->willReturn(20.010);
         $ruleMock->expects($this->once())->method('setDiscountQty')->with(20.01)->willReturn($ruleMock);
 
-        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        $this->assertSame([$ruleId => $ruleData], $this->model->getData());
         // Load from object-cache the second time
-        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        $this->assertSame([$ruleId => $ruleData], $this->model->getData());
     }
 }

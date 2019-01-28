@@ -137,7 +137,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->with(['transactionId' => $transactionId, 'payment' => $paymentDO])
             ->willReturn($transactionInfo);
 
-        $this->assertEquals(
+        $this->assertSame(
             $transactionInfo,
             $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
         );

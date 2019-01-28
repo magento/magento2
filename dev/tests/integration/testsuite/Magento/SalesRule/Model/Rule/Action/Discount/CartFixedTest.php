@@ -79,7 +79,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $cartTotalRepository = Bootstrap::getObjectManager()->get(GuestCartTotalRepositoryInterface::class);
         $total = $cartTotalRepository->get($cartId);
 
-        $this->assertEquals($expectedDiscount, $total->getBaseDiscountAmount());
+        $this->assertSame($expectedDiscount, $total->getBaseDiscountAmount());
     }
 
     /**
@@ -120,7 +120,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $cartTotalRepository = Bootstrap::getObjectManager()->get(GuestCartTotalRepositoryInterface::class);
         $total = $cartTotalRepository->get($cartId);
 
-        $this->assertEquals($expectedDiscount, $total->getBaseDiscountAmount());
+        $this->assertSame($expectedDiscount, $total->getBaseDiscountAmount());
     }
 
     /**

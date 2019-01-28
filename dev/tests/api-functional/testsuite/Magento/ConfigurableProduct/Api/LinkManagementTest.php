@@ -56,7 +56,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $this->assertContains('simple_', $product['sku']);
 
             $this->assertArrayHasKey('status', $product);
-            $this->assertEquals('1', $product['status']);
+            $this->assertSame('1', $product['status']);
         }
     }
 

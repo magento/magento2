@@ -31,7 +31,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateHash($merchantMd5, $merchantApiLogin, $amount, $amountTestFunc, $transactionId)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->generateHash($merchantMd5, $merchantApiLogin, $amountTestFunc, $transactionId),
             $this->responseModel->generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)
         );
@@ -86,7 +86,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->responseModel->setXAmount($amount);
         $this->responseModel->setXTransId($transactionId);
         $this->responseModel->setData('x_MD5_Hash', $hash);
-        $this->assertEquals($expectedValue, $this->responseModel->isValidHash($merchantMd5, $merchantApiLogin));
+        $this->assertSame($expectedValue, $this->responseModel->isValidHash($merchantMd5, $merchantApiLogin));
     }
 
     /**

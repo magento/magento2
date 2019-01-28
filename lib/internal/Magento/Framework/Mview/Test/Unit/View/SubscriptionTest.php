@@ -84,17 +84,17 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetView()
     {
-        $this->assertEquals($this->viewMock, $this->model->getView());
+        $this->assertSame($this->viewMock, $this->model->getView());
     }
 
     public function testGetTableName()
     {
-        $this->assertEquals($this->tableName, $this->model->getTableName());
+        $this->assertSame($this->tableName, $this->model->getTableName());
     }
 
     public function testGetColumnName()
     {
-        $this->assertEquals('columnName', $this->model->getColumnName());
+        $this->assertSame('columnName', $this->model->getColumnName());
     }
 
     /**

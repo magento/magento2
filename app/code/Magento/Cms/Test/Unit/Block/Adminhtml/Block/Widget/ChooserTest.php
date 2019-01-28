@@ -230,7 +230,7 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
             ->with('after_element_html', $html)
             ->willReturnSelf();
 
-        $this->assertEquals($this->elementMock, $this->this->prepareElementHtml($this->elementMock));
+        $this->assertSame($this->elementMock, $this->this->prepareElementHtml($this->elementMock));
     }
 
     /**
@@ -266,6 +266,6 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
             ->with('cms/block_widget/chooser', ['_current' => true])
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->this->getGridUrl());
+        $this->assertSame($url, $this->this->getGridUrl());
     }
 }

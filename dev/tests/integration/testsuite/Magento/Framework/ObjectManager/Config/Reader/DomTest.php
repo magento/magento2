@@ -90,6 +90,6 @@ class DomTest extends \PHPUnit\Framework\TestCase
             $this->_schemaLocator,
             $this->_validationState
         );
-        $this->assertEquals($this->_mapper->convert($this->_mergedConfig), $model->read('scope'));
+        $this->assertSame($this->_mapper->convert($this->_mergedConfig), $model->read('scope'));
     }
 }

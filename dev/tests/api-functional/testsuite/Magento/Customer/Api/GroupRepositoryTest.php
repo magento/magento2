@@ -95,7 +95,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $requestData = [CustomerGroup::ID => $groupId];
         $groupData = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals($testGroup, $groupData, "The group data does not match.");
+        $this->assertSame($testGroup, $groupData, "The group data does not match.");
     }
 
     /**
@@ -166,9 +166,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId(), 'The group id does not match.');
-        $this->assertEquals($groupData[CustomerGroup::CODE], $newGroup->getCode(), 'The group code does not match.');
-        $this->assertEquals(
+        $this->assertSame($groupId, $newGroup->getId(), 'The group id does not match.');
+        $this->assertSame($groupData[CustomerGroup::CODE], $newGroup->getCode(), 'The group code does not match.');
+        $this->assertSame(
             $groupData[CustomerGroup::TAX_CLASS_ID],
             $newGroup->getTaxClassId(),
             'The group tax class id does not match.'
@@ -210,11 +210,11 @@ class GroupRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $errorData = json_decode($e->getMessage(), true);
 
-            $this->assertEquals(
+            $this->assertSame(
                 'Customer Group already exists.',
                 $errorData['message']
             );
-            $this->assertEquals(400, $e->getCode(), 'Invalid HTTP code');
+            $this->assertSame(400, $e->getCode(), 'Invalid HTTP code');
         }
     }
 
@@ -243,9 +243,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId(), 'The group id does not match.');
-        $this->assertEquals($groupData[CustomerGroup::CODE], $newGroup->getCode(), 'The group code does not match.');
-        $this->assertEquals(
+        $this->assertSame($groupId, $newGroup->getId(), 'The group id does not match.');
+        $this->assertSame($groupData[CustomerGroup::CODE], $newGroup->getCode(), 'The group code does not match.');
+        $this->assertSame(
             GroupRepository::DEFAULT_TAX_CLASS_ID,
             $newGroup->getTaxClassId(),
             'The group tax class id does not match.'
@@ -416,11 +416,11 @@ class GroupRepositoryTest extends WebapiAbstract
         ];
         $requestData = ['group' => $groupData];
 
-        $this->assertEquals($groupId, $this->_webApiCall($serviceInfo, $requestData)[CustomerGroup::ID]);
+        $this->assertSame($groupId, $this->_webApiCall($serviceInfo, $requestData)[CustomerGroup::ID]);
 
         $group = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupData[CustomerGroup::CODE], $group->getCode(), 'The group code did not change.');
-        $this->assertEquals(
+        $this->assertSame($groupData[CustomerGroup::CODE], $group->getCode(), 'The group code did not change.');
+        $this->assertSame(
             $groupData[CustomerGroup::TAX_CLASS_ID],
             $group->getTaxClassId(),
             'The group tax class id did not change'
@@ -490,9 +490,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId(), "The group id does not match.");
-        $this->assertEquals($groupData[CustomerGroup::CODE], $newGroup->getCode(), "The group code does not match.");
-        $this->assertEquals(
+        $this->assertSame($groupId, $newGroup->getId(), "The group id does not match.");
+        $this->assertSame($groupData[CustomerGroup::CODE], $newGroup->getCode(), "The group code does not match.");
+        $this->assertSame(
             $groupData['taxClassId'],
             $newGroup->getTaxClassId(),
             "The group tax class id does not match."
@@ -570,9 +570,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId(), "The group id does not match.");
-        $this->assertEquals($groupData[CustomerGroup::CODE], $newGroup->getCode(), "The group code does not match.");
-        $this->assertEquals(
+        $this->assertSame($groupId, $newGroup->getId(), "The group id does not match.");
+        $this->assertSame($groupData[CustomerGroup::CODE], $newGroup->getCode(), "The group code does not match.");
+        $this->assertSame(
             GroupRepository::DEFAULT_TAX_CLASS_ID,
             $newGroup->getTaxClassId(),
             "The group tax class id does not match."
@@ -679,8 +679,8 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, ['group' => $groupData]);
 
         $group = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupData[CustomerGroup::CODE], $group->getCode(), 'The group code did not change.');
-        $this->assertEquals(
+        $this->assertSame($groupData[CustomerGroup::CODE], $group->getCode(), 'The group code did not change.');
+        $this->assertSame(
             $groupData['taxClassId'],
             $group->getTaxClassId(),
             'The group tax class id did not change'
@@ -756,7 +756,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->fail('An expected NoSuchEntityException was not thrown.');
         } catch (NoSuchEntityException $e) {
             $exception = NoSuchEntityException::singleField(CustomerGroup::ID, $groupId);
-            $this->assertEquals(
+            $this->assertSame(
                 $exception->getMessage(),
                 $e->getMessage(),
                 'Exception message does not match expected message.'
@@ -793,8 +793,8 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->assertContains($expectedMessage, $e->getMessage(), "SoapFault does not contain expected message.");
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals($expectedParameters, $errorObj['parameters']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame($expectedParameters, $errorObj['parameters']);
         }
     }
 
@@ -853,9 +853,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId(), 'The group id does not match.');
-        $this->assertEquals($group->getCode(), $newGroup->getCode(), 'The group code does not match.');
-        $this->assertEquals(
+        $this->assertSame($groupId, $newGroup->getId(), 'The group id does not match.');
+        $this->assertSame($group->getCode(), $newGroup->getCode(), 'The group code does not match.');
+        $this->assertSame(
             $group->getTaxClassId(),
             $newGroup->getTaxClassId(),
             'The group tax class id does not match.'
@@ -956,11 +956,11 @@ class GroupRepositoryTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
         if (is_null($expectedResult)) {
-            $this->assertEquals(0, $searchResult['total_count']);
+            $this->assertSame(0, $searchResult['total_count']);
         } elseif (is_array($expectedResult)) {
             $this->assertGreaterThan(0, $searchResult['total_count']);
             if (!empty($expectedResult)) {
-                $this->assertEquals($expectedResult, $searchResult['items'][0]);
+                $this->assertSame($expectedResult, $searchResult['items'][0]);
             }
         }
     }
@@ -1013,9 +1013,9 @@ class GroupRepositoryTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(3, $searchResult['items'][0][GroupInterface::ID]);
-        $this->assertEquals(2, $searchResult['items'][1][GroupInterface::ID]);
+        $this->assertSame(2, $searchResult['total_count']);
+        $this->assertSame(3, $searchResult['items'][0][GroupInterface::ID]);
+        $this->assertSame(2, $searchResult['items'][1][GroupInterface::ID]);
     }
 
     /**
@@ -1051,11 +1051,11 @@ class GroupRepositoryTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo);
 
         if (is_null($expectedResult)) {
-            $this->assertEquals(0, $searchResult['total_count']);
+            $this->assertSame(0, $searchResult['total_count']);
         } elseif (is_array($expectedResult)) {
             $this->assertGreaterThan(0, $searchResult['total_count']);
             if (!empty($expectedResult)) {
-                $this->assertEquals($expectedResult, $searchResult['items'][0]);
+                $this->assertSame($expectedResult, $searchResult['items'][0]);
             }
         }
     }

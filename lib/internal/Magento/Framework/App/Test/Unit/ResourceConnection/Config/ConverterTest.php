@@ -33,6 +33,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $this->_source->loadXML(file_get_contents($this->_filePath . 'resources.xml'));
         $convertedFile = include $this->_filePath . 'resources.php';
-        $this->assertEquals($convertedFile, $this->_model->convert($this->_source));
+        $this->assertSame($convertedFile, $this->_model->convert($this->_source));
     }
 }

@@ -148,7 +148,7 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteriaMock)
             ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->creditmemoService->getCommentsList($id));
+        $this->assertSame($returnValue, $this->creditmemoService->getCommentsList($id));
     }
 
     /**
@@ -175,7 +175,7 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
             ->with($modelMock)
         ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->creditmemoService->notify($id));
+        $this->assertSame($returnValue, $this->creditmemoService->notify($id));
     }
 
     public function testRefund()

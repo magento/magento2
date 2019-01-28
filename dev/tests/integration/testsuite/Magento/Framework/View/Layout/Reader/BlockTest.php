@@ -56,11 +56,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
         $structure = $this->readerContext->getScheduledStructure();
         $this->assertArrayHasKey($this->blockName, $structure->getStructure());
-        $this->assertEquals('block', $structure->getStructure()[$this->blockName][self::IDX_TYPE]);
+        $this->assertSame('block', $structure->getStructure()[$this->blockName][self::IDX_TYPE]);
 
         $resultElementData = $structure->getStructureElementData($this->blockName);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 Block::ATTRIBUTE_GROUP => 'test.group',
                 Block::ATTRIBUTE_CLASS => 'Dummy\Class',
@@ -72,13 +72,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             ],
             $resultElementData['attributes']
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['test_arg' => 'test-argument-value'],
             $resultElementData['arguments']
         );
 
-        $this->assertEquals('block', $structure->getStructure()[$this->childBlockName][self::IDX_TYPE]);
-        $this->assertEquals($this->blockName, $structure->getStructure()[$this->childBlockName][self::IDX_PARENT]);
+        $this->assertSame('block', $structure->getStructure()[$this->childBlockName][self::IDX_TYPE]);
+        $this->assertSame($this->blockName, $structure->getStructure()[$this->childBlockName][self::IDX_PARENT]);
     }
 
     public function testInterpretReferenceBlockDirective()
@@ -97,11 +97,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
         $structure = $this->readerContext->getScheduledStructure();
         $this->assertArrayHasKey($this->blockName, $structure->getStructure());
-        $this->assertEquals('block', $structure->getStructure()[$this->blockName][self::IDX_TYPE]);
+        $this->assertSame('block', $structure->getStructure()[$this->blockName][self::IDX_TYPE]);
 
         $resultElementData = $structure->getStructureElementData($this->blockName);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['test_arg' => 'test-argument-value'],
             $resultElementData['arguments']
         );

@@ -52,7 +52,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($expectedValue)
         );
-        $this->assertEquals($expectedValue, $this->_block->getConfig($key));
+        $this->assertSame($expectedValue, $this->_block->getConfig($key));
     }
 
     /**
@@ -70,7 +70,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldIdFormatHasData()
     {
         $this->_block->setData(self::KEY_FIELD_ID_FORMAT, self::FORMAT_D);
-        $this->assertEquals(self::FORMAT_D, $this->_block->getFieldIdFormat());
+        $this->assertSame(self::FORMAT_D, $this->_block->getFieldIdFormat());
     }
 
     /**
@@ -78,7 +78,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFieldIdFormatHasNoData()
     {
-        $this->assertEquals(self::FORMAT_S, $this->_block->getFieldIdFormat());
+        $this->assertSame(self::FORMAT_S, $this->_block->getFieldIdFormat());
     }
 
     /**
@@ -88,7 +88,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldNameFormatHasData()
     {
         $this->_block->setData(self::KEY_FIELD_NAME_FORMAT, self::FORMAT_D);
-        $this->assertEquals(self::FORMAT_D, $this->_block->getFieldNameFormat());
+        $this->assertSame(self::FORMAT_D, $this->_block->getFieldNameFormat());
     }
 
     /**
@@ -96,7 +96,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFieldNameFormatHasNoData()
     {
-        $this->assertEquals(self::FORMAT_S, $this->_block->getFieldNameFormat());
+        $this->assertSame(self::FORMAT_S, $this->_block->getFieldNameFormat());
     }
 
     /**
@@ -144,7 +144,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setData(self::KEY_FIELD_NAME_FORMAT, $format);
         $this->assertTrue(call_user_func($method, $blockFieldName = $this->_block->getFieldName($fieldName)));
-        $this->assertEquals($expectedValue, $blockFieldName);
+        $this->assertSame($expectedValue, $blockFieldName);
     }
 
     /**

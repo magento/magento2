@@ -58,7 +58,7 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIndexerId()
     {
-        $this->assertEquals(self::INDEXER_ID, $this->model->getIndexerId());
+        $this->assertSame(self::INDEXER_ID, $this->model->getIndexerId());
     }
 
     /**
@@ -73,14 +73,14 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
-            $this->assertEquals(null, $this->model->reindexRow($id));
+            $this->assertSame(null, $this->model->reindexRow($id));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexRow')->with($id)->willReturnSelf();
-            $this->assertEquals(null, $this->model->reindexRow($id));
+            $this->assertSame(null, $this->model->reindexRow($id));
         }
     }
 
@@ -96,14 +96,14 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
-            $this->assertEquals(null, $this->model->reindexList($ids));
+            $this->assertSame(null, $this->model->reindexList($ids));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexList')->with($ids)->willReturnSelf();
-            $this->assertEquals(null, $this->model->reindexList($ids));
+            $this->assertSame(null, $this->model->reindexList($ids));
         }
     }
 

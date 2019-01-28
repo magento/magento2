@@ -42,6 +42,6 @@ class StoreCookieManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayNotHasKey(StoreCookieManager::COOKIE_NAME, $_COOKIE);
         $this->storeCookieManager->setStoreCookie($store);
         $this->assertArrayHasKey(StoreCookieManager::COOKIE_NAME, $_COOKIE);
-        $this->assertEquals($storeCode, $_COOKIE[StoreCookieManager::COOKIE_NAME]);
+        $this->assertSame($storeCode, $_COOKIE[StoreCookieManager::COOKIE_NAME]);
     }
 }

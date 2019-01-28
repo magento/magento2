@@ -204,7 +204,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
         $matchingProducts = $this->rule->getMatchingProductIds();
         foreach ($matchingProducts['1'] as $matchingRules) {
-            $this->assertEquals($validate, $matchingRules);
+            $this->assertSame($validate, $matchingRules);
         }
     }
 
@@ -233,7 +233,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     public function testValidateData($data, $expected)
     {
         $result = $this->rule->validateData(new \Magento\Framework\DataObject($data));
-        $this->assertEquals($result, $expected);
+        $this->assertSame($result, $expected);
     }
 
     /**
@@ -352,7 +352,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         foreach ($originDataArray as $data) {
             $this->rule->setOrigData($data);
         }
-        $this->assertEquals($result, $this->rule->isRuleBehaviorChanged());
+        $this->assertSame($result, $this->rule->isRuleBehaviorChanged());
     }
 
     /**
@@ -377,7 +377,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $formName = 'form_name';
         $this->rule->setId(100);
         $expectedResult = 'form_namerule_conditions_fieldset_100';
-        $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
+        $this->assertSame($expectedResult, $this->rule->getConditionsFieldSetId($formName));
     }
 
     public function testReindex()

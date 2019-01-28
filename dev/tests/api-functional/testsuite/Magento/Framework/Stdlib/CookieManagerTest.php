@@ -46,11 +46,11 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $cookie = $this->findCookie($cookieParams['cookie_name'], $response['cookies']);
         $this->assertNotNull($cookie);
-        $this->assertEquals($cookieParams['cookie_name'], $cookie['name']);
-        $this->assertEquals($cookieParams['cookie_value'], $cookie['value']);
+        $this->assertSame($cookieParams['cookie_name'], $cookie['name']);
+        $this->assertSame($cookieParams['cookie_value'], $cookie['value']);
         $this->assertFalse(isset($cookie['domain']));
         $this->assertFalse(isset($cookie['path']));
-        $this->assertEquals('true', $cookie['httponly']);
+        $this->assertSame('true', $cookie['httponly']);
         $this->assertFalse(isset($cookie['secure']));
         $this->assertFalse(isset($cookie['max-age']));
     }
@@ -72,8 +72,8 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $cookie = $this->findCookie($cookieParams['cookie_name'], $response['cookies']);
         $this->assertNotNull($cookie);
-        $this->assertEquals($cookieParams['cookie_name'], $cookie['name']);
-        $this->assertEquals($cookieParams['cookie_value'], $cookie['value']);
+        $this->assertSame($cookieParams['cookie_name'], $cookie['name']);
+        $this->assertSame($cookieParams['cookie_value'], $cookie['value']);
         $this->assertFalse(isset($cookie['domain']));
         $this->assertFalse(isset($cookie['path']));
         $this->assertFalse(isset($cookie['httponly']));
@@ -103,14 +103,14 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $cookie = $this->findCookie($cookieParams['cookie_name'], $response['cookies']);
         $this->assertNotNull($cookie);
-        $this->assertEquals($cookieParams['cookie_name'], $cookie['name']);
-        $this->assertEquals($cookieParams['cookie_value'], $cookie['value']);
-        $this->assertEquals($cookieParams['cookie_domain'], $cookie['domain']);
-        $this->assertEquals($cookieParams['cookie_path'], $cookie['path']);
-        $this->assertEquals($cookieParams['cookie_httponly'], $cookie['httponly']);
-        $this->assertEquals($cookieParams['cookie_secure'], $cookie['secure']);
+        $this->assertSame($cookieParams['cookie_name'], $cookie['name']);
+        $this->assertSame($cookieParams['cookie_value'], $cookie['value']);
+        $this->assertSame($cookieParams['cookie_domain'], $cookie['domain']);
+        $this->assertSame($cookieParams['cookie_path'], $cookie['path']);
+        $this->assertSame($cookieParams['cookie_httponly'], $cookie['httponly']);
+        $this->assertSame($cookieParams['cookie_secure'], $cookie['secure']);
         if (isset($cookie['max-age'])) {
-            $this->assertEquals($cookieParams['cookie_duration'], $cookie['max-age']);
+            $this->assertSame($cookieParams['cookie_duration'], $cookie['max-age']);
         }
         $this->assertTrue(isset($cookie['expires']));
     }
@@ -136,16 +136,16 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $cookie = $this->findCookie($cookieParams['cookie_name'], $response['cookies']);
         $this->assertNotNull($cookie);
-        $this->assertEquals($cookieParams['cookie_name'], $cookie['name']);
-        $this->assertEquals('deleted', $cookie['value']);
+        $this->assertSame($cookieParams['cookie_name'], $cookie['name']);
+        $this->assertSame('deleted', $cookie['value']);
         $this->assertFalse(isset($cookie['domain']));
         $this->assertFalse(isset($cookie['path']));
         $this->assertFalse(isset($cookie['httponly']));
         $this->assertFalse(isset($cookie['secure']));
         if (isset($cookie['max-age'])) {
-            $this->assertEquals(0, $cookie['max-age']);
+            $this->assertSame(0, $cookie['max-age']);
         }
-        $this->assertEquals('Thu, 01-Jan-1970 00:00:01 GMT', $cookie['expires']);
+        $this->assertSame('Thu, 01-Jan-1970 00:00:01 GMT', $cookie['expires']);
     }
 
     /**

@@ -57,7 +57,7 @@ class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
             ['localeCurrency' => $localeCurrency]
         );
         foreach ($associatedProducts->getProductMatrix() as $productMatrixId => $productMatrixData) {
-            $this->assertEquals(
+            $this->assertSame(
                 $associatedProductsData[$productMatrixId][$productMatrixData['id']],
                 $productMatrixData['price']
             );

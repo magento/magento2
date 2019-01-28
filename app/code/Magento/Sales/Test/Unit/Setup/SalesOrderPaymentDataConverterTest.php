@@ -65,6 +65,6 @@ class SalesOrderPaymentDataConverterTest extends \PHPUnit\Framework\TestCase
             ->with($convertedUnserializedData)
             ->willReturn($jsonEncodedData);
 
-        $this->assertEquals($jsonEncodedData, $this->salesOrderPaymentDataConverter->convert($serializedData));
+        $this->assertSame($jsonEncodedData, $this->salesOrderPaymentDataConverter->convert($serializedData));
     }
 }

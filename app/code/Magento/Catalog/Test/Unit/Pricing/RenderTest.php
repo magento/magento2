@@ -93,7 +93,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             )
             ->will($this->returnValue($expectedValue));
 
-        $this->assertEquals($expectedValue, $this->object->toHtml());
+        $this->assertSame($expectedValue, $this->object->toHtml());
     }
 
     public function testToHtmlProductFromParentBlock()
@@ -130,6 +130,6 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->method('getBlock')
             ->will($this->returnValue($block));
 
-        $this->assertEquals($expectedValue, $this->object->toHtml());
+        $this->assertSame($expectedValue, $this->object->toHtml());
     }
 }

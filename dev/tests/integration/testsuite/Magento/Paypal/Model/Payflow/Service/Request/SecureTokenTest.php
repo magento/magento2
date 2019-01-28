@@ -189,7 +189,7 @@ class SecureTokenTest extends TestCase
      */
     private function performAssertion(string $expected, string $actual, string $property): void
     {
-        self::assertEquals($expected, $actual, "$property should match.");
+        self::assertSame($expected, $actual, "$property should match.");
     }
 
     /**

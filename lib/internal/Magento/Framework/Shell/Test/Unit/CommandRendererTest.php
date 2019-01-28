@@ -18,7 +18,7 @@ class CommandRendererTest extends \PHPUnit\Framework\TestCase
     public function testRender($expectedCommand, $actualCommand, $testArguments)
     {
         $commandRenderer = new CommandRenderer();
-        $this->assertEquals(
+        $this->assertSame(
             $expectedCommand,
             $commandRenderer->render($actualCommand, $testArguments)
         );

@@ -22,6 +22,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $document->load(__DIR__ . '../../../_files/search_request.xml');
         $result = $this->object->convert($document);
         $expected = include __DIR__ . '/../../_files/search_request_config.php';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

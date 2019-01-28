@@ -90,20 +90,20 @@ namespace Magento\Framework\Session {
             $path = ini_get('session.save_path') ?:
                 $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath();
 
-            $this->assertEquals(
+            $this->assertSame(
                 $path,
                 $model->getSavePath()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 \Magento\Framework\Session\Config::COOKIE_LIFETIME_DEFAULT,
                 $model->getCookieLifetime()
             );
-            $this->assertEquals($this->_cacheLimiter, $model->getCacheLimiter());
-            $this->assertEquals('/', $model->getCookiePath());
-            $this->assertEquals('localhost', $model->getCookieDomain());
-            $this->assertEquals(false, $model->getCookieSecure());
-            $this->assertEquals(true, $model->getCookieHttpOnly());
-            $this->assertEquals($model->getSavePath(), $model->getOption('save_path'));
+            $this->assertSame($this->_cacheLimiter, $model->getCacheLimiter());
+            $this->assertSame('/', $model->getCookiePath());
+            $this->assertSame('localhost', $model->getCookieDomain());
+            $this->assertSame(false, $model->getCookieSecure());
+            $this->assertSame(true, $model->getCookieHttpOnly());
+            $this->assertSame($model->getSavePath(), $model->getOption('save_path'));
         }
 
         public function testSetOptionsInvalidValue()
@@ -111,7 +111,7 @@ namespace Magento\Framework\Session {
             $model = $this->getModel();
             $preValue = $model->getOptions();
             $model->setOptions('');
-            $this->assertEquals($preValue, $model->getOptions());
+            $this->assertSame($preValue, $model->getOptions());
         }
 
         /**
@@ -157,21 +157,21 @@ namespace Magento\Framework\Session {
         {
             $model = $this->getModel();
             $model->setName('FOOBAR');
-            $this->assertEquals('FOOBAR', $model->getName());
+            $this->assertSame('FOOBAR', $model->getName());
         }
 
         public function testCookieLifetimeIsMutable()
         {
             $model = $this->getModel();
             $model->setCookieLifetime(20);
-            $this->assertEquals(20, $model->getCookieLifetime());
+            $this->assertSame(20, $model->getCookieLifetime());
         }
 
         public function testCookieLifetimeCanBeZero()
         {
             $model = $this->getModel();
             $model->setCookieLifetime(0);
-            $this->assertEquals(0, $model->getCookieLifetime());
+            $this->assertSame(0, $model->getCookieLifetime());
         }
 
         public function testSettingInvalidCookieLifetime()
@@ -179,7 +179,7 @@ namespace Magento\Framework\Session {
             $model = $this->getModel();
             $preVal = $model->getCookieLifetime();
             $model->setCookieLifetime('foobar_bogus');
-            $this->assertEquals($preVal, $model->getCookieLifetime());
+            $this->assertSame($preVal, $model->getCookieLifetime());
         }
       
         public function testSettingInvalidCookieLifetime2()
@@ -187,7 +187,7 @@ namespace Magento\Framework\Session {
             $model = $this->getModel();
             $preVal = $model->getCookieLifetime();
             $model->setCookieLifetime(-1);
-            $this->assertEquals($preVal, $model->getCookieLifetime());
+            $this->assertSame($preVal, $model->getCookieLifetime());
         }
 
         public function testWrongMethodCall()
@@ -217,14 +217,14 @@ namespace Magento\Framework\Session {
         {
             $model = $this->getModel();
             $model->setCookieDomain('example.com');
-            $this->assertEquals('example.com', $model->getCookieDomain());
+            $this->assertSame('example.com', $model->getCookieDomain());
         }
 
         public function testCookieDomainCanBeEmpty()
         {
             $model = $this->getModel();
             $model->setCookieDomain('');
-            $this->assertEquals('', $model->getCookieDomain());
+            $this->assertSame('', $model->getCookieDomain());
         }
 
         public function testSettingInvalidCookieDomain()
@@ -232,7 +232,7 @@ namespace Magento\Framework\Session {
             $model = $this->getModel();
             $preVal = $model->getCookieDomain();
             $model->setCookieDomain(24);
-            $this->assertEquals($preVal, $model->getCookieDomain());
+            $this->assertSame($preVal, $model->getCookieDomain());
         }
 
         public function testSettingInvalidCookieDomain2()
@@ -240,7 +240,7 @@ namespace Magento\Framework\Session {
             $model = $this->getModel();
             $preVal = $model->getCookieDomain();
             $model->setCookieDomain('D:\\WINDOWS\\System32\\drivers\\etc\\hosts');
-            $this->assertEquals($preVal, $model->getCookieDomain());
+            $this->assertSame($preVal, $model->getCookieDomain());
         }
 
         public function testSetCookieHttpOnlyInOptions()
@@ -286,21 +286,21 @@ namespace Magento\Framework\Session {
         {
             $model = $this->getModel();
             $model->setOption('referer_check', 'FOOBAR');
-            $this->assertEquals('FOOBAR', $model->getOption('referer_check'));
+            $this->assertSame('FOOBAR', $model->getOption('referer_check'));
         }
 
         public function testRefererCheckMayBeEmpty()
         {
             $model = $this->getModel();
             $model->setOption('referer_check', '');
-            $this->assertEquals('', $model->getOption('referer_check'));
+            $this->assertSame('', $model->getOption('referer_check'));
         }
 
         public function testSetSavePath()
         {
             $model = $this->getModel();
             $model->setSavePath('some_save_path');
-            $this->assertEquals($model->getOption('save_path'), 'some_save_path');
+            $this->assertSame($model->getOption('save_path'), 'some_save_path');
         }
 
         /**
@@ -349,8 +349,8 @@ namespace Magento\Framework\Session {
                 \Magento\Framework\Session\Config::class,
                 ['deploymentConfig' => $deploymentConfigMock]
             );
-            $this->assertEquals($expectedSavePath, $model->getOption('save_path'));
-            $this->assertEquals($expectedSaveHandler, $model->getOption('session.save_handler'));
+            $this->assertSame($expectedSavePath, $model->getOption('save_path'));
+            $this->assertSame($expectedSaveHandler, $model->getOption('session.save_handler'));
             global $mockPHPFunctions;
             $mockPHPFunctions = false;
         }

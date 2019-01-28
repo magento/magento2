@@ -219,7 +219,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->returnSelf()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
@@ -246,7 +246,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->productFactoryMock->expects($this->never())->method('create');
         $this->configurableMock->expects($this->never())->method('getTypeInstance');
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
@@ -262,7 +262,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->productFactoryMock->expects($this->never())->method('create');
         $this->configurableMock->expects($this->never())->method('getTypeInstance');
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );

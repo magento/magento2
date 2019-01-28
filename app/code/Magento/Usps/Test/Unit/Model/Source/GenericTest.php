@@ -41,7 +41,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
     {
         $this->_uspsModel->expects($this->any())->method('getCode')->will($this->returnValue($options));
 
-        $this->assertEquals($expected, $this->_generic->toOptionArray());
+        $this->assertSame($expected, $this->_generic->toOptionArray());
     }
 
     /**

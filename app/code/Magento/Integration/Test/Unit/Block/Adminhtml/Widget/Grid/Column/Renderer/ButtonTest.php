@@ -67,6 +67,6 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
 
         $object = new \Magento\Framework\DataObject(['name' => 'my button']);
         $actualResult = $this->buttonRenderer->render($object);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

@@ -69,6 +69,6 @@ class TopicConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->load($xmlFile);
         $result = $this->converter->convert($dom);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 }

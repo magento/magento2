@@ -23,7 +23,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
         $code = $this->getResponse()->getStatusCode();
         $location = $this->getResponse()->getHeader('Location')->getFieldValue();
 
-        $this->assertEquals(301, $code, 'Invalid response code');
+        $this->assertSame(301, $code, 'Invalid response code');
         $this->assertStringEndsWith('/enable-cookies', $location, 'Invalid location header');
     }
 

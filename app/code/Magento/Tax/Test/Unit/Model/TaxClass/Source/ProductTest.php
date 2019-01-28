@@ -159,7 +159,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $result=($this->product->getAllOptions(false));
         $expected=$value;
-        $this->assertEquals([$expected], $result);
+        $this->assertSame([$expected], $result);
     }
 
     /**

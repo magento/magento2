@@ -51,7 +51,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
     {
         $name = 'some name';
         $this->abstractComponent->setData('name', $name);
-        $this->assertEquals($name, $this->abstractComponent->getName());
+        $this->assertSame($name, $this->abstractComponent->getName());
     }
 
     /**
@@ -82,7 +82,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
     {
         $renderResult = 'some html code';
         $this->initTestRender($renderResult);
-        $this->assertEquals($renderResult, $this->abstractComponent->render());
+        $this->assertSame($renderResult, $this->abstractComponent->render());
     }
 
     /**
@@ -98,7 +98,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetChildComponentsEmptyArray()
     {
-        $this->assertEquals([], $this->abstractComponent->getChildComponents());
+        $this->assertSame([], $this->abstractComponent->getChildComponents());
     }
 
     /**
@@ -111,7 +111,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
         $name = 'componentName';
 
         $this->abstractComponent->addComponent($name, $uiComponentMock);
-        $this->assertEquals($uiComponentMock, $this->abstractComponent->getComponent($name));
+        $this->assertSame($uiComponentMock, $this->abstractComponent->getComponent($name));
     }
 
     /**
@@ -125,7 +125,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [$name => $uiComponentMock];
 
         $this->abstractComponent->addComponent($name, $uiComponentMock);
-        $this->assertEquals($expectedResult, $this->abstractComponent->getChildComponents());
+        $this->assertSame($expectedResult, $this->abstractComponent->getChildComponents());
     }
 
     /**
@@ -133,7 +133,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderChildComponentNotExists()
     {
-        $this->assertEquals(null, $this->abstractComponent->renderChildComponent('someComponent'));
+        $this->assertSame(null, $this->abstractComponent->renderChildComponent('someComponent'));
     }
 
     /**
@@ -150,7 +150,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectedResult);
 
         $this->abstractComponent->addComponent($name, $uiComponentMock);
-        $this->assertEquals($expectedResult, $this->abstractComponent->renderChildComponent($name));
+        $this->assertSame($expectedResult, $this->abstractComponent->renderChildComponent($name));
     }
 
     /**
@@ -161,7 +161,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
         $template = 'sample';
         $this->abstractComponent->setData('template', $template);
 
-        $this->assertEquals($template . '.xhtml', $this->abstractComponent->getTemplate());
+        $this->assertSame($template . '.xhtml', $this->abstractComponent->getTemplate());
     }
 
     /**
@@ -212,7 +212,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
             ->method('getNamespace')
             ->willReturn($namespace);
 
-        $this->assertEquals($expectedResult, $this->abstractComponent->getJsConfig($uiComponentMock));
+        $this->assertSame($expectedResult, $this->abstractComponent->getJsConfig($uiComponentMock));
     }
 
     /**

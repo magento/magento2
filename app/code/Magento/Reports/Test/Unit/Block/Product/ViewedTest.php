@@ -34,6 +34,6 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
         $collection->setAccessible(true);
         $collection->setValue($this->block, [$product]);
 
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertSame($productTags, $this->block->getIdentities());
     }
 }

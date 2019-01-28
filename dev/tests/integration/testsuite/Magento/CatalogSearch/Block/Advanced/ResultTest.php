@@ -53,9 +53,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedOptions = ['option1' => 'Label Option 1', 'option3' => 'Label Option 2'];
-        $this->assertNotEquals($expectedOptions, $childBlock->getAvailableOrders());
+        $this->assertNotSame($expectedOptions, $childBlock->getAvailableOrders());
         $this->_block->setListOrders();
-        $this->assertEquals($expectedOptions, $childBlock->getAvailableOrders());
+        $this->assertSame($expectedOptions, $childBlock->getAvailableOrders());
     }
 
     /**

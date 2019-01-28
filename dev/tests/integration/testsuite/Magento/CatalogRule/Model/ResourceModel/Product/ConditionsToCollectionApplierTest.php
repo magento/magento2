@@ -78,7 +78,7 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
             asort($expectedSkuList);
             asort($resultSkuList);
 
-            $this->assertEquals($expectedSkuList, $resultSkuList, sprintf('%s failed', $variationName));
+            $this->assertSame($expectedSkuList, $resultSkuList, sprintf('%s failed', $variationName));
         }
     }
 

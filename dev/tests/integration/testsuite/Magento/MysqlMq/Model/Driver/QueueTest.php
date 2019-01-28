@@ -60,9 +60,9 @@ class QueueTest extends \PHPUnit\Framework\TestCase
 
         $messageFromQueue = $this->queue->dequeue();
 
-        $this->assertEquals($messageBody, $messageFromQueue->getBody());
+        $this->assertSame($messageBody, $messageFromQueue->getBody());
         $actualMessageProperties = $messageFromQueue->getProperties();
         $this->assertArrayHasKey('topic_name', $actualMessageProperties);
-        $this->assertEquals($topicName, $actualMessageProperties['topic_name']);
+        $this->assertSame($topicName, $actualMessageProperties['topic_name']);
     }
 }

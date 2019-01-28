@@ -34,6 +34,6 @@ class CompositeProductBatchSizeAdjusterTest extends \PHPUnit\Framework\TestCase
         $this->relationsCalculatorMock->expects($this->once())
             ->method('getMaxRelationsCount')
             ->willReturn(200);
-        $this->assertEquals(25, $this->model->adjust(5000));
+        $this->assertSame(25, $this->model->adjust(5000));
     }
 }

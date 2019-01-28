@@ -109,13 +109,13 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     public function testGetFileSizeUrl()
     {
         $this->_setupUrlMocks();
-        $this->assertEquals(self::FILE_SIZE, $this->_helper->getFileSize());
+        $this->assertSame(self::FILE_SIZE, $this->_helper->getFileSize());
     }
 
     public function testGetFileSize()
     {
         $this->_setupFileMocks();
-        $this->assertEquals(self::FILE_SIZE, $this->_helper->getFileSize());
+        $this->assertSame(self::FILE_SIZE, $this->_helper->getFileSize());
     }
 
     /**
@@ -132,7 +132,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     {
         $this->_setupFileMocks();
         $this->_downloadableFileMock->expects($this->never())->method('getFileType');
-        $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
+        $this->assertSame(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
     /**
@@ -152,7 +152,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(self::MIME_TYPE)
         );
 
-        $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
+        $this->assertSame(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
     /**
@@ -166,7 +166,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     public function testGetContentTypeUrl()
     {
         $this->_setupUrlMocks();
-        $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
+        $this->assertSame(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
     public function testGetFilename()
@@ -174,20 +174,20 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
         $baseName = 'base_name.file';
         $path = TESTS_TEMP_DIR . '/' . $baseName;
         $this->_setupFileMocks(true, self::FILE_SIZE, $path);
-        $this->assertEquals($baseName, $this->_helper->getFilename());
+        $this->assertSame($baseName, $this->_helper->getFilename());
     }
 
     public function testGetFileNameUrl()
     {
         $this->_setupUrlMocks();
-        $this->assertEquals('example.com', $this->_helper->getFilename());
+        $this->assertSame('example.com', $this->_helper->getFilename());
     }
 
     public function testGetFileNameUrlWithContentDisposition()
     {
         $fileName = 'some_other.file';
         $this->_setupUrlMocks(self::FILE_SIZE, self::URL, ['disposition' => "inline; filename={$fileName}"]);
-        $this->assertEquals($fileName, $this->_helper->getFilename());
+        $this->assertSame($fileName, $this->_helper->getFilename());
     }
 
     /**

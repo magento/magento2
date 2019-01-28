@@ -59,7 +59,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             );
 
             if ($previousResult) {
-                $this->assertEquals(
+                $this->assertSame(
                     $previousResult,
                     array_keys($items),
                     "Search result must be the same for the same requests"

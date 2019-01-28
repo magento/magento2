@@ -27,7 +27,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
     {
         // invalid handler
         $this->_helper->addHandler('method', 'handler');
-        $this->assertEquals([], $this->_helper->getHandlers('method'));
+        $this->assertSame([], $this->_helper->getHandlers('method'));
 
         // add one handler
         $objectOne = new \StdClass();
@@ -69,7 +69,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDirective($html, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->_helper->isDirectivesExists($html));
+        $this->assertSame($expectedResult, $this->_helper->isDirectivesExists($html));
     }
 
     public function isDirectiveDataProvider()
@@ -120,7 +120,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
         $attribute->setIsHtmlAllowedOnFront(0)->setIsWysiwygEnabled(0);
 
         try {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedResult,
                 $this->_helper->{$method}(uniqid(), "<p>line1</p>\nline2", $attributeName)
             );

@@ -59,7 +59,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
      */
     private function assertEqualsSorted(array $expected, array $actual)
     {
-        $this->assertEquals($expected, $actual, 'Array contents should be equal.');
-        $this->assertEquals(array_keys($expected), array_keys($actual), 'Array sort order should be equal.');
+        $this->assertSame($expected, $actual, 'Array contents should be equal.');
+        $this->assertSame(array_keys($expected), array_keys($actual), 'Array sort order should be equal.');
     }
 }

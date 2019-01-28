@@ -218,8 +218,8 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 

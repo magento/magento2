@@ -50,10 +50,10 @@ class NewTest extends \PHPUnit\Framework\TestCase
         /** order and values of cache key info elements is important */
 
         $this->assertSame(0, array_shift($keys));
-        $this->assertEquals('CATALOG_PRODUCT_NEW', $info[0]);
+        $this->assertSame('CATALOG_PRODUCT_NEW', $info[0]);
 
         $this->assertSame(1, array_shift($keys));
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->getId(),
@@ -66,10 +66,10 @@ class NewTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\DesignInterface::class
         )->getDesignTheme();
 
-        $this->assertEquals($themeModel->getId() ?: null, $info[2]);
+        $this->assertSame($themeModel->getId() ?: null, $info[2]);
 
         $this->assertSame(3, array_shift($keys));
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Customer\Model\Session::class
             )->getCustomerGroupId(),
@@ -83,17 +83,17 @@ class NewTest extends \PHPUnit\Framework\TestCase
          * Having the cache key fragment with empty value can potentially lead to caching bugs
          */
         $this->assertSame(4, array_shift($keys));
-        $this->assertNotEquals('', $info[4]);
+        $this->assertNotSame('', $info[4]);
     }
 
     public function testSetGetProductsCount()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Catalog\Block\Product\NewProduct::DEFAULT_PRODUCTS_COUNT,
             $this->_block->getProductsCount()
         );
         $this->_block->setProductsCount(100);
-        $this->assertEquals(100, $this->_block->getProductsCount());
+        $this->assertSame(100, $this->_block->getProductsCount());
     }
 
     public function testToHtml()
@@ -134,7 +134,7 @@ class NewTest extends \PHPUnit\Framework\TestCase
 
         $info = $block->getCacheKeyInfo();
 
-        $this->assertEquals('CATALOG_PRODUCT_NEW', $info[0]);
-        $this->assertEquals(json_encode($requestParams), $info[8]);
+        $this->assertSame('CATALOG_PRODUCT_NEW', $info[0]);
+        $this->assertSame(json_encode($requestParams), $info[8]);
     }
 }

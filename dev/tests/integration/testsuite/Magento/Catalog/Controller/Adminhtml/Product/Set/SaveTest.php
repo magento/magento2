@@ -37,7 +37,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $jsonResponse = json_decode($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
-        $this->assertEquals(1, $jsonResponse->error);
+        $this->assertSame(1, $jsonResponse->error);
         $this->assertContains(
             'Attribute group with same code already exist. Please rename &quot;attribute-group-name&quot; group',
             $jsonResponse->message

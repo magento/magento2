@@ -37,7 +37,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($expected));
         $result = $this->_model->getFieldsets('global');
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testGetFieldset()
@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $fieldsets = ['test' => $expectedFieldset, 'test_second' => ['aspect' => 'secondAspect']];
         $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($fieldsets));
         $result = $this->_model->getFieldset('test');
-        $this->assertEquals($expectedFieldset, $result);
+        $this->assertSame($expectedFieldset, $result);
     }
 
     public function testGetFieldsetIfFieldsetIsEmpty()
@@ -54,6 +54,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_storageMock->expects($this->once())->method('get')
             ->will($this->returnValue([]));
         $result = $this->_model->getFieldset('test');
-        $this->assertEquals(null, $result);
+        $this->assertSame(null, $result);
     }
 }

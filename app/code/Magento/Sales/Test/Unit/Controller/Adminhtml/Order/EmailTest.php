@@ -188,7 +188,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\View\Result\Redirect::class,
             $this->orderEmail->execute()
         );
-        $this->assertEquals($this->response, $this->orderEmail->getResponse());
+        $this->assertSame($this->response, $this->orderEmail->getResponse());
     }
 
     /**

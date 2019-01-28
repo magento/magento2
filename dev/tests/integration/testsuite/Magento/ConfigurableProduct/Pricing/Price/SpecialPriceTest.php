@@ -51,7 +51,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
         /** @var FinalPrice $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
 
-        self::assertEquals($specialPrice, $finalPrice->getMinimalPrice()->getValue());
+        self::assertSame($specialPrice, $finalPrice->getMinimalPrice()->getValue());
     }
 
     /**
@@ -77,8 +77,8 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         /** @var Product[] $items */
         $items = array_values($collection->getItems());
-        self::assertEquals('configurable', $items[0]->getSku());
-        self::assertEquals('simple_77', $items[1]->getSku());
+        self::assertSame('configurable', $items[0]->getSku());
+        self::assertSame('simple_77', $items[1]->getSku());
     }
 
     /**
@@ -109,7 +109,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         /** @var Product[] $items */
         $items = array_values($collection->getItems());
-        self::assertEquals('simple_77', $items[0]->getSku());
-        self::assertEquals('configurable', $items[1]->getSku());
+        self::assertSame('simple_77', $items[0]->getSku());
+        self::assertSame('configurable', $items[1]->getSku());
     }
 }

@@ -76,6 +76,6 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('isAllowed')
             ->with('Magento_Sales::sales_invoice', null)
             ->willReturn($isAllowed);
-        $this->assertEquals($url, $this->urlGenerator->getUrl(new \Magento\Framework\DataObject()));
+        $this->assertSame($url, $this->urlGenerator->getUrl(new \Magento\Framework\DataObject()));
     }
 }

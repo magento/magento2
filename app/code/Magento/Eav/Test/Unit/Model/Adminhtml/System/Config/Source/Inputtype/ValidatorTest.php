@@ -28,6 +28,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testAddInputType()
     {
         $this->model->addInputType('new_type');
-        $this->assertEquals(['type', 'new_type'], $this->model->getHaystack());
+        $this->assertSame(['type', 'new_type'], $this->model->getHaystack());
     }
 }

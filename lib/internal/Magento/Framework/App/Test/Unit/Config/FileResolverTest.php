@@ -119,7 +119,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($fileList)
         );
-        $this->assertEquals($fileList, $this->model->get($filename, $scope));
+        $this->assertSame($fileList, $this->model->get($filename, $scope));
     }
 
     /**
@@ -141,7 +141,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($fileList)
         );
-        $this->assertEquals($fileList, $this->model->get($filename, $scope));
+        $this->assertSame($fileList, $this->model->get($filename, $scope));
     }
 
     /**

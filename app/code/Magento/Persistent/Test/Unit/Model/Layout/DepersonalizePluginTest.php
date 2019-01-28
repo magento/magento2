@@ -85,7 +85,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('setCustomerId')->with(null);
 
-        $this->assertEquals($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
+        $this->assertSame($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
     }
 
     public function testAfterGenerateXmlNoDepersonalize()
@@ -114,6 +114,6 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->persistentSessionMock->expects($this->never())->method('setCustomerId');
 
-        $this->assertEquals($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
+        $this->assertSame($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
     }
 }

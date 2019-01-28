@@ -29,6 +29,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->booleanUtilsMock->expects($this->any())->method('toBoolean')->willReturn(true);
         $inputData->load(__DIR__ . '/../../../../_files/zip_codes.xml');
         $expectedResult = require __DIR__ . '/../../../../_files/zip_codes.php';
-        $this->assertEquals($expectedResult, $this->model->convert($inputData));
+        $this->assertSame($expectedResult, $this->model->convert($inputData));
     }
 }

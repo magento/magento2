@@ -84,7 +84,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->selectionSecond->expects($this->any())->method('getIsDefault')->will($this->returnValue(false));
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
-        $this->assertEquals($this->selectionFirst, $this->model->getDefaultSelection());
+        $this->assertSame($this->selectionFirst, $this->model->getDefaultSelection());
     }
 
     public function testGetDefaultSelectionNegative()
@@ -105,7 +105,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setType($type);
 
-        $this->assertEquals($expectedValue, $this->model->isMultiSelection());
+        $this->assertSame($expectedValue, $this->model->isMultiSelection());
     }
 
     /**
@@ -129,7 +129,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->any())->method('getSearchableData')->with($productId, $storeId)
             ->will($this->returnValue($data));
 
-        $this->assertEquals($data, $this->model->getSearchableData($productId, $storeId));
+        $this->assertSame($data, $this->model->getSearchableData($productId, $storeId));
     }
 
     public function testGetSelectionById()
@@ -140,7 +140,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->selectionSecond->expects($this->any())->method('getSelectionId')->will($this->returnValue(16));
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
-        $this->assertEquals($this->selectionFirst, $this->model->getSelectionById($selectionId));
+        $this->assertSame($this->selectionFirst, $this->model->getSelectionById($selectionId));
     }
 
     public function testGetSelectionByIdNegative()

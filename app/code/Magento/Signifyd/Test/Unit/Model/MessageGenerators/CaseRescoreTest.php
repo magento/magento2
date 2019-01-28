@@ -118,7 +118,7 @@ class CaseRescoreTest extends \PHPUnit\Framework\TestCase
 
         $message = $this->caseRescore->generate(self::$data);
 
-        $this->assertEquals($phrase, $message);
+        $this->assertSame($phrase, $message);
     }
 
     /**
@@ -143,6 +143,6 @@ class CaseRescoreTest extends \PHPUnit\Framework\TestCase
 
         $message = $this->caseRescore->generate(self::$data);
 
-        $this->assertEquals($phrase, $message);
+        $this->assertSame($phrase, $message);
     }
 }

@@ -81,7 +81,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testAfterSaveNonScheduled()
     {
         $this->categoryResourceMock->expects($this->once())->method('addCommitCallback');
-        $this->assertEquals(
+        $this->assertSame(
             $this->categoryResourceMock,
             $this->model->aroundSave($this->categoryResourceMock, $this->proceed, $this->categoryMock)
         );
@@ -90,7 +90,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testAfterSaveScheduled()
     {
         $this->categoryResourceMock->expects($this->once())->method('addCommitCallback');
-        $this->assertEquals(
+        $this->assertSame(
             $this->categoryResourceMock,
             $this->model->aroundSave($this->categoryResourceMock, $this->proceed, $this->categoryMock)
         );

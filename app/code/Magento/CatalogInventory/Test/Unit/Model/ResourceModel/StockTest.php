@@ -172,7 +172,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
 
         $lockResult = $this->stock->lockProductsStock($productIds, $websiteId);
 
-        $this->assertEquals($result, $lockResult);
+        $this->assertSame($result, $lockResult);
     }
 
     /**

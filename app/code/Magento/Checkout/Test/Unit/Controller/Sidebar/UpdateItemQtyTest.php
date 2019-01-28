@@ -110,7 +110,7 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertSame('json represented', $this->updateItemQty->execute());
     }
 
     public function testExecuteWithLocalizedException()
@@ -154,7 +154,7 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertSame('json represented', $this->updateItemQty->execute());
     }
 
     public function testExecuteWithException()
@@ -205,6 +205,6 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertSame('json represented', $this->updateItemQty->execute());
     }
 }

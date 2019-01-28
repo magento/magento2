@@ -121,7 +121,7 @@ class AbstractCartTest extends \PHPUnit\Framework\TestCase
             \Magento\Checkout\Block\Cart\AbstractCart::class,
             ['checkoutSession' => $checkoutSessionMock]
         );
-        $this->assertEquals($expectedResult, $model->getTotalsCache());
+        $this->assertSame($expectedResult, $model->getTotalsCache());
     }
 
     /**

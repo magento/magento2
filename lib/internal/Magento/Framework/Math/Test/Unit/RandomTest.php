@@ -20,7 +20,7 @@ class RandomTest extends \PHPUnit\Framework\TestCase
         $mathRandom = new \Magento\Framework\Math\Random();
         $string = $mathRandom->getRandomString($length, $chars);
 
-        $this->assertEquals($length, strlen($string));
+        $this->assertSame($length, strlen($string));
         if ($chars !== null) {
             $this->_assertContainsOnlyChars($string, $chars);
         }
@@ -53,7 +53,7 @@ class RandomTest extends \PHPUnit\Framework\TestCase
         $hashTwo = $mathRandom->getUniqueHash();
         $this->assertTrue(is_string($hashOne));
         $this->assertTrue(is_string($hashTwo));
-        $this->assertNotEquals($hashOne, $hashTwo);
+        $this->assertNotSame($hashOne, $hashTwo);
     }
 
     /**

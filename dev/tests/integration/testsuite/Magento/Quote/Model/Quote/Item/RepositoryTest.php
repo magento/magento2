@@ -35,15 +35,15 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Quote\Api\Data\CartItemInterface::class, $actualQuoteItem);
         /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
         $testAttribute = $actualQuoteItem->getExtensionAttributes()->__toArray();
-        $this->assertEquals(
+        $this->assertSame(
             $expectedExtensionAttributes['firstname'],
             $testAttribute['quoteItemTestAttribute']['firstname']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedExtensionAttributes['lastname'],
             $testAttribute['quoteItemTestAttribute']['lastname']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedExtensionAttributes['email'],
             $testAttribute['quoteItemTestAttribute']['email']
         );

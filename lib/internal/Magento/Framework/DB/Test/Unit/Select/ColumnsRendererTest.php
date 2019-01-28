@@ -79,7 +79,7 @@ class ColumnsRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getPart')
             ->with(Select::COLUMNS)
             ->willReturn($columns);
-        $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 
     /**

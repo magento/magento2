@@ -148,7 +148,7 @@ class SpecificationPluginTest extends \PHPUnit\Framework\TestCase
             ->method('count')
             ->willReturn($count);
 
-        $this->assertEquals(
+        $this->assertSame(
             $count > 0,
             $this->plugin->afterIsApplicable($this->specificationMock, true, $this->paymentMethodMock, $this->quoteMock)
         );

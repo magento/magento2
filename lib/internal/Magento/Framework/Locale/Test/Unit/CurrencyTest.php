@@ -69,7 +69,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     {
         $expectedDefaultCurrency = Currency::DEFAULT_CURRENCY;
         $retrievedDefaultCurrency = $this->testCurrencyObject->getDefaultCurrency();
-        $this->assertEquals($expectedDefaultCurrency, $retrievedDefaultCurrency);
+        $this->assertSame($expectedDefaultCurrency, $retrievedDefaultCurrency);
     }
 
     public function testGetCurrencyNonCached()
@@ -89,9 +89,9 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getCurrency(self::TEST_NONCACHED_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_NONCACHED_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
-        $this->assertEquals('US Dollar', $retrievedCurrencyObject->getName());
-        $this->assertEquals([self::TEST_NONCACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
+        $this->assertSame(self::TEST_NONCACHED_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertSame('US Dollar', $retrievedCurrencyObject->getName());
+        $this->assertSame([self::TEST_NONCACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
     }
 
     public function testGetCurrencyCached()
@@ -111,9 +111,9 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getCurrency(self::TEST_CACHED_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_CACHED_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
-        $this->assertEquals('Canadian Dollar', $retrievedCurrencyObject->getName());
-        $this->assertEquals([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
+        $this->assertSame(self::TEST_CACHED_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertSame('Canadian Dollar', $retrievedCurrencyObject->getName());
+        $this->assertSame([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
 
         /*
          * Since the CAD currency object was previously retrieved, getCurrency()
@@ -134,9 +134,9 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getCurrency(self::TEST_CACHED_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_CACHED_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
-        $this->assertEquals('Canadian Dollar', $retrievedCurrencyObject->getName());
-        $this->assertEquals([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
+        $this->assertSame(self::TEST_CACHED_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertSame('Canadian Dollar', $retrievedCurrencyObject->getName());
+        $this->assertSame([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
     }
 
     public function testGetNonExistantCurrency()
@@ -160,9 +160,9 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getCurrency(self::TEST_NONEXISTANT_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_NONEXISTANT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
-        $this->assertEquals('euro', $retrievedCurrencyObject->getName());
-        $this->assertEquals(['EUR'], $retrievedCurrencyObject->getCurrencyList());
+        $this->assertSame(self::TEST_NONEXISTANT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertSame('euro', $retrievedCurrencyObject->getName());
+        $this->assertSame(['EUR'], $retrievedCurrencyObject->getCurrencyList());
     }
 
     public function testExceptionCase()
@@ -191,8 +191,8 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getCurrency(self::TEST_EXCEPTION_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_EXCEPTION_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
-        $this->assertEquals(self::TEST_EXCEPTION_CURRENCY, $retrievedCurrencyObject->getName());
-        $this->assertEquals(['EUR'], $retrievedCurrencyObject->getCurrencyList());
+        $this->assertSame(self::TEST_EXCEPTION_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertSame(self::TEST_EXCEPTION_CURRENCY, $retrievedCurrencyObject->getName());
+        $this->assertSame(['EUR'], $retrievedCurrencyObject->getCurrencyList());
     }
 }

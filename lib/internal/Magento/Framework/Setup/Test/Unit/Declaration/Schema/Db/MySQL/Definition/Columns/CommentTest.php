@@ -41,7 +41,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('getComment')
             ->willReturn('comment');
-        $this->assertEquals(
+        $this->assertSame(
             'COMMENT "comment"',
             $this->comment->toDefinition($column)
         );

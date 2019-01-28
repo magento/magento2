@@ -64,7 +64,7 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->taxRuleModelMock));
         $this->taxRuleRegistry->registerTaxRule($this->taxRuleModelMock);
         $expected = $this->taxRuleRegistry->retrieveTaxRule(self::TAX_RULE_ID);
-        $this->assertEquals($this->taxRuleModelMock, $expected);
+        $this->assertSame($this->taxRuleModelMock, $expected);
 
         // Remove the tax rule
         $this->taxRuleRegistry->removeTaxRule(self::TAX_RULE_ID);
@@ -78,7 +78,7 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
                 'fieldName' => 'taxRuleId',
                 'fieldValue' => self::TAX_RULE_ID,
             ];
-            $this->assertEquals($expectedParams, $e->getParameters());
+            $this->assertSame($expectedParams, $e->getParameters());
         }
     }
 }

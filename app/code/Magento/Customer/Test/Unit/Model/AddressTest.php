@@ -74,10 +74,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testCustomerId()
     {
         $this->address->setParentId(self::ORIG_PARENT_ID);
-        $this->assertEquals(self::ORIG_PARENT_ID, $this->address->getCustomerId());
+        $this->assertSame(self::ORIG_PARENT_ID, $this->address->getCustomerId());
 
         $this->address->setCustomerId(self::ORIG_CUSTOMER_ID);
-        $this->assertEquals(self::ORIG_CUSTOMER_ID, $this->address->getCustomerId());
+        $this->assertSame(self::ORIG_CUSTOMER_ID, $this->address->getCustomerId());
     }
 
     public function testCustomer()
@@ -88,7 +88,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->setCustomerId(self::ORIG_CUSTOMER_ID);
 
         $customer = $this->address->getCustomer();
-        $this->assertEquals(self::ORIG_CUSTOMER_ID, $customer->getId());
+        $this->assertSame(self::ORIG_CUSTOMER_ID, $customer->getId());
 
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
@@ -99,7 +99,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(self::ORIG_CUSTOMER_ID + 1));
 
         $this->address->setCustomer($customer);
-        $this->assertEquals(self::ORIG_CUSTOMER_ID + 1, $this->address->getCustomerId());
+        $this->assertSame(self::ORIG_CUSTOMER_ID + 1, $this->address->getCustomerId());
     }
 
     public function testGetAttributes()
@@ -113,13 +113,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getSortedAttributes')
             ->will($this->returnValue($resultValue));
 
-        $this->assertEquals($resultValue, $this->address->getAttributes());
+        $this->assertSame($resultValue, $this->address->getAttributes());
     }
 
     public function testRegionId()
     {
         $this->address->setRegionId(1);
-        $this->assertEquals(1, $this->address->getRegionId());
+        $this->assertSame(1, $this->address->getRegionId());
     }
 
     public function testGetEntityTypeId()
@@ -135,6 +135,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityType')
             ->will($this->returnValue($mockEntityType));
 
-        $this->assertEquals(self::ORIG_CUSTOMER_ID, $this->address->getEntityTypeId());
+        $this->assertSame(self::ORIG_CUSTOMER_ID, $this->address->getEntityTypeId());
     }
 }

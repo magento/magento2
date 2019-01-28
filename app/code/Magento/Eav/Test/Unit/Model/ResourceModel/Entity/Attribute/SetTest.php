@@ -240,7 +240,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $this->resourceMock->expects($this->any())->method('getTableName')->willReturn('_TABLE_');
-        $this->assertEquals(
+        $this->assertSame(
             $setData,
             $this->model->getSetInfo([1, 2, 3], 1)
         );
@@ -284,7 +284,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
 
         $this->eavConfigMock->expects($this->any())->method('getCache')->willReturn($cacheMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $setData,
             $this->model->getSetInfo([1, 2, 3], 1)
         );

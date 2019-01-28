@@ -184,7 +184,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             'test7' => 'test1/0',
         ];
 
-        $this->assertEquals($expected, $this->_model->getColumns());
+        $this->assertSame($expected, $this->_model->getColumns());
     }
 
     public function testCountTotals()
@@ -192,7 +192,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
         $expected = new \Magento\Framework\DataObject(
             ['test1' => 2, 'test2' => 2, 'test3' => 4, 'test4' => 0, 'test5' => 4, 'test6' => 1, 'test7' => 0]
         );
-        $this->assertEquals($expected, $this->_model->countTotals($this->_getTestCollection()));
+        $this->assertSame($expected, $this->_model->countTotals($this->_getTestCollection()));
     }
 
     public function testReset()
@@ -200,7 +200,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
         $this->_model->countTotals($this->_getTestCollection());
         $this->_model->reset();
 
-        $this->assertEquals(new \Magento\Framework\DataObject(), $this->_model->getTotals());
+        $this->assertSame(new \Magento\Framework\DataObject(), $this->_model->getTotals());
         $this->assertNotEmpty($this->_model->getColumns());
     }
 
@@ -209,7 +209,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
         $this->_model->countTotals($this->_getTestCollection());
         $this->_model->reset(true);
 
-        $this->assertEquals(new \Magento\Framework\DataObject(), $this->_model->getTotals());
+        $this->assertSame(new \Magento\Framework\DataObject(), $this->_model->getTotals());
         $this->assertEmpty($this->_model->getColumns());
     }
 }

@@ -83,7 +83,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
         $this->session->expects($this->atLeastOnce())->method('getVisitorData')
             ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);
-        $this->assertEquals($newSessionId, $this->visitor->getSessionId());
+        $this->assertSame($newSessionId, $this->visitor->getSessionId());
     }
 
     public function testSaveByRequest()
@@ -119,13 +119,13 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
         $this->visitor->bindCustomerLogin($observer);
         $this->assertTrue($this->visitor->getDoCustomerLogin());
-        $this->assertEquals($customer->getId(), $this->visitor->getCustomerId());
+        $this->assertSame($customer->getId(), $this->visitor->getCustomerId());
 
         $this->visitor->unsetData();
         $this->visitor->setCustomerId('2');
         $this->visitor->bindCustomerLogin($observer);
         $this->assertNull($this->visitor->getDoCustomerLogin());
-        $this->assertEquals('2', $this->visitor->getCustomerId());
+        $this->assertSame('2', $this->visitor->getCustomerId());
     }
 
     public function testBindCustomerLogout()

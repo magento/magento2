@@ -162,7 +162,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->with($actualPrice)
             ->will($this->returnValue($expectedPrice));
 
-        $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
+        $this->assertSame($expectedPrice, $this->selectionPrice->getValue());
     }
 
     /**
@@ -227,7 +227,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->with($actualPrice)
             ->willReturn($expectedPrice);
 
-        $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
+        $this->assertSame($expectedPrice, $this->selectionPrice->getValue());
     }
 
     /**
@@ -275,7 +275,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->with($actualPrice)
             ->will($this->returnValue($expectedPrice));
 
-        $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
+        $this->assertSame($expectedPrice, $this->selectionPrice->getValue());
     }
 
     /**
@@ -336,7 +336,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->with($actualPrice)
             ->will($this->returnValue($expectedPrice));
 
-        $this->assertEquals($expectedPrice, $selectionPrice->getValue());
+        $this->assertSame($expectedPrice, $selectionPrice->getValue());
     }
 
     /**
@@ -360,7 +360,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceType')
             ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED));
         $product = $this->selectionPrice->getProduct();
-        $this->assertEquals($this->bundleMock, $product);
+        $this->assertSame($this->bundleMock, $product);
     }
 
     public function testGetProductDynamicBundle()
@@ -369,7 +369,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceType')
             ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC));
         $product = $this->selectionPrice->getProduct();
-        $this->assertEquals($this->productMock, $product);
+        $this->assertSame($this->productMock, $product);
     }
 
     public function testGetAmount()
@@ -407,6 +407,6 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->with($price, $this->productMock, null)
             ->willReturn($amount);
 
-        $this->assertEquals($amount, $this->selectionPrice->getAmount());
+        $this->assertSame($amount, $this->selectionPrice->getAmount());
     }
 }

@@ -72,7 +72,7 @@ class CanRefundTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->never())
             ->method('getTotalRefunded')
             ->willReturn(14);
-        $this->assertEquals(
+        $this->assertSame(
             [__('A creditmemo can not be created when an order has a status of %1', 'status')],
             $this->model->validate($this->orderMock)
         );
@@ -103,7 +103,7 @@ class CanRefundTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getTotalRefunded')
             ->willReturn(15);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 __('The order does not allow a creditmemo to be created.')
             ],

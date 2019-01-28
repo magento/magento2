@@ -405,7 +405,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->execute(
                 $this->orderMock,

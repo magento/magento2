@@ -92,7 +92,7 @@ class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->once())->method('getSku')->willReturn('sku_1');
         $product->expects($this->once())->method('getData')->with('entity_id')->willReturn(1);
         $product->expects($this->once())->method('getTypeId')->willReturn('simple');
-        $this->assertEquals(
+        $this->assertSame(
             ['sku_1' => [1 => 'simple']],
             $this->model->retrieveProductIdsBySkus($skus)
         );

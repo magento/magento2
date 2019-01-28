@@ -66,7 +66,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $virtualModelMock->prepareAttributesWithDefaultValueForSave($rowData);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

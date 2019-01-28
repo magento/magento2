@@ -94,6 +94,6 @@ class FilterRendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $result = $this->plugin->aroundRender($this->filterRendererMock, $this->closureMock, $this->filterMock);
-        $this->assertEquals($result, $this->filterMock);
+        $this->assertSame($result, $this->filterMock);
     }
 }

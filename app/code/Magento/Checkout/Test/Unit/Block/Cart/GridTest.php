@@ -108,13 +108,13 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTemplate()
     {
-        $this->assertEquals('cart/form1.phtml', $this->block->getTemplate());
+        $this->assertSame('cart/form1.phtml', $this->block->getTemplate());
     }
 
     public function testGetItemsForGrid()
     {
         $this->getMockItemsForGrid();
-        $this->assertEquals($this->itemCollectionMock, $this->block->getItemsForGrid());
+        $this->assertSame($this->itemCollectionMock, $this->block->getItemsForGrid());
     }
 
     /**
@@ -160,7 +160,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->getMockItemsForGrid();
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(20);
         $this->itemCollectionMock->expects($this->once())->method('getItems')->willReturn(['expected']);
-        $this->assertEquals(['expected'], $this->block->getItems());
+        $this->assertSame(['expected'], $this->block->getItems());
     }
 
     private function getMockItemsForGrid()
@@ -205,11 +205,11 @@ class GridTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $storeManager
             ]
         );
-        $this->assertEquals([$itemMock], $this->block->getItems());
+        $this->assertSame([$itemMock], $this->block->getItems());
     }
 
     public function testGetItemsWhenPagerNotVisible()
     {
-        $this->assertEquals([], $this->block->getItems());
+        $this->assertSame([], $this->block->getItems());
     }
 }

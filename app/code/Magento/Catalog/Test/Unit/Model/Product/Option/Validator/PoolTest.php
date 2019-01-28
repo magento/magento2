@@ -36,11 +36,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSelectValidator()
     {
-        $this->assertEquals($this->selectValidatorMock, $this->pool->get('select'));
+        $this->assertSame($this->selectValidatorMock, $this->pool->get('select'));
     }
 
     public function testGetDefaultValidator()
     {
-        $this->assertEquals($this->defaultValidatorMock, $this->pool->get('default'));
+        $this->assertSame($this->defaultValidatorMock, $this->pool->get('default'));
     }
 }

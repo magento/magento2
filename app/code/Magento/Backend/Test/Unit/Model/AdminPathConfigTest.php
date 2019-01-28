@@ -69,7 +69,7 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
         );
         $request->expects($this->once())->method('getPathInfo')->willReturn('/info');
         $this->url->expects($this->once())->method('getBaseUrl')->with('link', true)->willReturn('localhost/');
-        $this->assertEquals('localhost/info', $this->adminPathConfig->getCurrentSecureUrl($request));
+        $this->assertSame('localhost/info', $this->adminPathConfig->getCurrentSecureUrl($request));
     }
 
     /**
@@ -105,7 +105,7 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->backendConfig->expects($this->atMost(2))->method('isSetFlag')
             ->will($backendConfigFlagsMap);
-        $this->assertEquals($expected, $this->adminPathConfig->shouldBeSecure(''));
+        $this->assertSame($expected, $this->adminPathConfig->shouldBeSecure(''));
     }
 
     /**
@@ -130,6 +130,6 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('web/default/admin')
             ->willReturn('default/path');
-        $this->assertEquals('default/path', $this->adminPathConfig->getDefaultPath());
+        $this->assertSame('default/path', $this->adminPathConfig->getDefaultPath());
     }
 }

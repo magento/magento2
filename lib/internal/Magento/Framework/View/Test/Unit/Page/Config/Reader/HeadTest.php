@@ -98,6 +98,6 @@ class HeadTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));
+        $this->assertSame($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));
     }
 }

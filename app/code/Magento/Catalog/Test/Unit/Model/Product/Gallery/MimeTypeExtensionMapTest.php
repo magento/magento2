@@ -21,11 +21,11 @@ class MimeTypeExtensionMapTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMimeTypeExtension()
     {
-        $this->assertEquals("jpg", $this->model->getMimeTypeExtension("image/jpeg"));
-        $this->assertEquals("jpg", $this->model->getMimeTypeExtension("image/jpg"));
-        $this->assertEquals("png", $this->model->getMimeTypeExtension("image/png"));
-        $this->assertEquals("gif", $this->model->getMimeTypeExtension("image/gif"));
-        $this->assertEquals("", $this->model->getMimeTypeExtension("unknown"));
-        $this->assertEquals("", $this->model->getMimeTypeExtension(null));
+        $this->assertSame("jpg", $this->model->getMimeTypeExtension("image/jpeg"));
+        $this->assertSame("jpg", $this->model->getMimeTypeExtension("image/jpg"));
+        $this->assertSame("png", $this->model->getMimeTypeExtension("image/png"));
+        $this->assertSame("gif", $this->model->getMimeTypeExtension("image/gif"));
+        $this->assertSame("", $this->model->getMimeTypeExtension("unknown"));
+        $this->assertSame("", $this->model->getMimeTypeExtension(null));
     }
 }

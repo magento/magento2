@@ -58,7 +58,7 @@ class FieldDataConverterFactoryTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($fieldDataConverterInstance);
-        $this->assertEquals(
+        $this->assertSame(
             $fieldDataConverterInstance,
             $this->fieldDataConverterFactory->create($dataConverterClassName)
         );

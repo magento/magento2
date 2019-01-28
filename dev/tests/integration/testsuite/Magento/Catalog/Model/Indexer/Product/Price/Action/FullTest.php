@@ -47,9 +47,9 @@ class FullTest extends \PHPUnit\Framework\TestCase
 
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals('Simple Product', $product->getName());
-            $this->assertEquals('Short description', $product->getShortDescription());
-            $this->assertEquals(10, $product->getPrice());
+            $this->assertSame('Simple Product', $product->getName());
+            $this->assertSame('Short description', $product->getShortDescription());
+            $this->assertSame(10, $product->getPrice());
         }
     }
 }

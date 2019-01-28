@@ -21,6 +21,6 @@ class SnapshotTest extends \PHPUnit\Framework\TestCase
 
         $model = new \Magento\Framework\Backup\Snapshot($filesystem, $backupFactory);
         $model->setDbBackupManager($manager);
-        $this->assertEquals($file, $model->getDbBackupFilename());
+        $this->assertSame($file, $model->getDbBackupFilename());
     }
 }

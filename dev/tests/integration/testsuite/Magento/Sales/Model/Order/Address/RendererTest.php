@@ -98,9 +98,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         /** @var OrderAddress $address */
         $address = $order->getBillingAddress();
 
-        $this->assertEquals($addressTemplates['text'], $this->orderAddressRenderer->format($address, 'text'));
-        $this->assertEquals($addressTemplates['oneline'], $this->orderAddressRenderer->format($address, 'oneline'));
-        $this->assertEquals($addressTemplates['html'], $this->orderAddressRenderer->format($address, 'html'));
-        $this->assertEquals($addressTemplates['pdf'], $this->orderAddressRenderer->format($address, 'pdf'));
+        $this->assertSame($addressTemplates['text'], $this->orderAddressRenderer->format($address, 'text'));
+        $this->assertSame($addressTemplates['oneline'], $this->orderAddressRenderer->format($address, 'oneline'));
+        $this->assertSame($addressTemplates['html'], $this->orderAddressRenderer->format($address, 'html'));
+        $this->assertSame($addressTemplates['pdf'], $this->orderAddressRenderer->format($address, 'pdf'));
     }
 }

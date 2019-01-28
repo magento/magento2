@@ -73,7 +73,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($stateHtml));
 
         $this->model->setLayout($this->layoutMock);
-        $this->assertEquals($stateHtml, $this->model->getStateHtml());
+        $this->assertSame($stateHtml, $this->model->getStateHtml());
     }
 
     /**
@@ -89,7 +89,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $this->filterListMock->expects($this->exactly(2))->method('getFilters')
             ->with($this->catalogLayerMock)
             ->will($this->returnValue($filters));
-        $this->assertEquals($filters, $this->model->getFilters());
+        $this->assertSame($filters, $this->model->getFilters());
 
         // canShowBlock()
         $enabled = true;
@@ -98,7 +98,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
             ->will($this->returnValue($enabled));
-        $this->assertEquals($enabled, $this->model->canShowBlock());
+        $this->assertSame($enabled, $this->model->canShowBlock());
     }
 
     public function testGetClearUrl()
@@ -117,6 +117,6 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $blockMock->setClearUrl($clearUrl);
 
         $this->layoutMock->expects($this->once())->method('getBlock')->will($this->returnValue($blockMock));
-        $this->assertEquals($clearUrl, $this->model->getClearUrl());
+        $this->assertSame($clearUrl, $this->model->getClearUrl());
     }
 }

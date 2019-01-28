@@ -19,6 +19,6 @@ class CssMinTest extends \PHPUnit\Framework\TestCase
 
         $expectedResult = 'minified content';
         $cssMinMock->expects($this->once())->method('run')->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $cssMinAdapter->minify('not minified'));
+        $this->assertSame($expectedResult, $cssMinAdapter->minify('not minified'));
     }
 }

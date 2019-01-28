@@ -27,7 +27,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testConfigureActionNoCustomerId()
     {
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
-        $this->assertEquals(
+        $this->assertSame(
             '{"error":true,"message":"The customer ID isn\'t defined."}',
             $this->getResponse()->getBody()
         );
@@ -41,7 +41,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setParam('customer_id', 1);
         $this->getRequest()->setParam('website_id', 1);
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
-        $this->assertEquals(
+        $this->assertSame(
             '{"error":true,"message":"The quote items are incorrect. Verify the quote items and try again."}',
             $this->getResponse()->getBody()
         );

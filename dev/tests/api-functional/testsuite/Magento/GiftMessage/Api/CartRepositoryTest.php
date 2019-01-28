@@ -58,7 +58,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertCount(5, $resultMessage);
         unset($resultMessage['gift_message_id']);
         unset($resultMessage['customer_id']);
-        $this->assertEquals($expectedMessage, $resultMessage);
+        $this->assertSame($expectedMessage, $resultMessage);
     }
 
     /**
@@ -94,7 +94,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertCount(5, $resultMessage);
         unset($resultMessage['gift_message_id']);
         unset($resultMessage['customer_id']);
-        $this->assertEquals($expectedMessage, $resultMessage);
+        $this->assertSame($expectedMessage, $resultMessage);
     }
 
     /**
@@ -136,9 +136,9 @@ class CartRepositoryTest extends WebapiAbstract
         /** @var  \Magento\GiftMessage\Model\Message $message */
         $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)
             ->load($quote->getGiftMessageId());
-        $this->assertEquals('John Doe', $message->getRecipient());
-        $this->assertEquals('Jane Roe', $message->getSender());
-        $this->assertEquals('Gift Message Text New', $message->getMessage());
+        $this->assertSame('John Doe', $message->getRecipient());
+        $this->assertSame('Jane Roe', $message->getSender());
+        $this->assertSame('Gift Message Text New', $message->getMessage());
     }
 
     /**
@@ -183,8 +183,8 @@ class CartRepositoryTest extends WebapiAbstract
         /** @var  \Magento\GiftMessage\Model\Message $message */
         $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)
             ->load($quote->getGiftMessageId());
-        $this->assertEquals('John Doe', $message->getRecipient());
-        $this->assertEquals('Jane Roe', $message->getSender());
-        $this->assertEquals('Gift Message Text New', $message->getMessage());
+        $this->assertSame('John Doe', $message->getRecipient());
+        $this->assertSame('Jane Roe', $message->getSender());
+        $this->assertSame('Gift Message Text New', $message->getMessage());
     }
 }

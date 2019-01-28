@@ -76,7 +76,7 @@ class BillingAddressManagementTest extends WebapiAbstract
 
         asort($data);
         asort($response);
-        $this->assertEquals($data, $response);
+        $this->assertSame($data, $response);
     }
 
     /**
@@ -128,17 +128,17 @@ class BillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
         $address->getRegionCode();
         $savedData  = $address->getData();
-        $this->assertEquals($addressId, $savedData['address_id']);
+        $this->assertSame($addressId, $savedData['address_id']);
         //custom checks for street, region and address_type
         foreach ($addressData['street'] as $streetLine) {
             $this->assertContains($streetLine, $quote->getBillingAddress()->getStreet());
         }
         unset($addressData['street']);
         unset($addressData['email']);
-        $this->assertEquals('billing', $savedData['address_type']);
+        $this->assertSame('billing', $savedData['address_type']);
         //check the rest of fields
         foreach ($addressData as $key => $value) {
-            $this->assertEquals($value, $savedData[$key]);
+            $this->assertSame($value, $savedData[$key]);
         }
     }
 
@@ -195,7 +195,7 @@ class BillingAddressManagementTest extends WebapiAbstract
 
         asort($data);
         asort($response);
-        $this->assertEquals($data, $response);
+        $this->assertSame($data, $response);
     }
 
     /**
@@ -250,16 +250,16 @@ class BillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
         $address->getRegionCode();
         $savedData = $address->getData();
-        $this->assertEquals($addressId, $savedData['address_id']);
+        $this->assertSame($addressId, $savedData['address_id']);
         //custom checks for street, region and address_type
         foreach ($addressData['street'] as $streetLine) {
             $this->assertContains($streetLine, $quote->getBillingAddress()->getStreet());
         }
         unset($addressData['street']);
-        $this->assertEquals('billing', $savedData['address_type']);
+        $this->assertSame('billing', $savedData['address_type']);
         //check the rest of fields
         foreach ($addressData as $key => $value) {
-            $this->assertEquals($value, $savedData[$key]);
+            $this->assertSame($value, $savedData[$key]);
         }
     }
 }

@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $value = 1;
         $this->model->setValue($path, $value, 'default', 'one');
 
-        $this->assertEquals($value, $this->model->get($configType, 'default/stores/one'));
+        $this->assertSame($value, $this->model->get($configType, 'default/stores/one'));
     }
 
     public function testClean()
@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $path = "stores/one";
         $value = 1;
         $this->model->setValue($path, $value, 'default', 'one');
-        $this->assertEquals($value, $this->model->get($configType, 'default/stores/one'));
+        $this->assertSame($value, $this->model->get($configType, 'default/stores/one'));
         $this->model->clean();
         $this->assertNull($this->model->get($configType, 'default/stores/one'));
     }

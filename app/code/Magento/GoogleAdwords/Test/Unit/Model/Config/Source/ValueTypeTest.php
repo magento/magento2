@@ -20,7 +20,7 @@ class ValueTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [
                     'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC,

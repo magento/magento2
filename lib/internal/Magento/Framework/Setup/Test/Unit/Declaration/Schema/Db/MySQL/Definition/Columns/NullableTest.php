@@ -43,7 +43,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('isNullable')
             ->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             'NULL',
             $this->nullable->toDefinition($column)
         );
@@ -62,7 +62,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('isNullable')
             ->willReturn(false);
-        $this->assertEquals(
+        $this->assertSame(
             'NOT NULL',
             $this->nullable->toDefinition($column)
         );
@@ -77,7 +77,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
         $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $this->nullable->toDefinition($column)
         );

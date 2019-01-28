@@ -154,7 +154,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             ['test_tag_one', 'test_tag_two']
         );
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

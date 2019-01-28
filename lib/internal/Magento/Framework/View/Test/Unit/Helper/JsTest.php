@@ -13,7 +13,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
     public function testGetScript()
     {
         $helper = new \Magento\Framework\View\Helper\Js();
-        $this->assertEquals(
+        $this->assertSame(
             "<script type=\"text/javascript\">//<![CDATA[\ntest\n//]]></script>",
             $helper->getScript('test')
         );

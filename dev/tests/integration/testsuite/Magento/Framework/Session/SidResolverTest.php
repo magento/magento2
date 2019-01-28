@@ -127,8 +127,8 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         if ($testSid) {
             $this->request->getQuery()->set($this->model->getSessionIdQueryParam($this->session), $testSid);
         }
-        $this->assertEquals($sid, $this->model->getSid($this->session));
-        $this->assertEquals($useFrontedSid, $this->model->getUseSessionInUrl());
+        $this->assertSame($sid, $this->model->getSid($this->session));
+        $this->assertSame($useFrontedSid, $this->model->getUseSessionInUrl());
     }
 
     /**
@@ -149,7 +149,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSessionIdQueryParam()
     {
-        $this->assertEquals(SidResolver::SESSION_ID_QUERY_PARAM, $this->model->getSessionIdQueryParam($this->session));
+        $this->assertSame(SidResolver::SESSION_ID_QUERY_PARAM, $this->model->getSessionIdQueryParam($this->session));
     }
 
     public function testGetSessionIdQueryParamCustom()
@@ -157,7 +157,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         $this->session->destroy();
         $oldSessionName = $this->session->getName();
         $this->session->setName($this->customSessionName);
-        $this->assertEquals($this->customSessionQueryParam, $this->model->getSessionIdQueryParam($this->session));
+        $this->assertSame($this->customSessionQueryParam, $this->model->getSessionIdQueryParam($this->session));
         $this->session->setName($oldSessionName);
         $this->session->start();
     }
@@ -203,8 +203,8 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($configValue)
         );
 
-        $this->assertEquals($configValue, $this->model->getUseSessionInUrl());
+        $this->assertSame($configValue, $this->model->getUseSessionInUrl());
         $this->model->setUseSessionInUrl(!$configValue);
-        $this->assertEquals(!$configValue, $this->model->getUseSessionInUrl());
+        $this->assertSame(!$configValue, $this->model->getUseSessionInUrl());
     }
 }

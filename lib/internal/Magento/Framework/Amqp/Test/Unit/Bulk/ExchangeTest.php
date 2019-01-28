@@ -124,6 +124,6 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
             ->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->exchange->expects($this->once())->method('enqueue')->with($topicName, $envelope)->willReturn($response);
-        $this->assertEquals([$response], $this->bulkExchange->enqueue($topicName, [$envelope]));
+        $this->assertSame([$response], $this->bulkExchange->enqueue($topicName, [$envelope]));
     }
 }

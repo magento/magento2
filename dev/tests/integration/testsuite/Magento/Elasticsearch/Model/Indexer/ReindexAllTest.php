@@ -93,7 +93,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         self::assertCount(1, $result);
 
         $specificProduct = $this->productRepository->get('configurable_12345');
-        self::assertEquals($specificProduct->getId(), $result[0]['_id']);
+        self::assertSame($specificProduct->getId(), $result[0]['_id']);
     }
 
     /**

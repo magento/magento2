@@ -78,7 +78,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $config = $this->model->getConfig();
         unset($config['captcha'][$this->formId]['timestamp']);
-        $this->assertEquals($config, $expectedConfig);
+        $this->assertSame($config, $expectedConfig);
     }
 
     /**

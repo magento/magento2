@@ -104,7 +104,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_validatorMock)
         );
 
-        $this->assertEquals($this->_validatorMock, $this->_factory->createColorValidator($currentColor));
+        $this->assertSame($this->_validatorMock, $this->_factory->createColorValidator($currentColor));
     }
 
     public function testCreateConversionIdValidator()
@@ -150,6 +150,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_validatorMock)
         );
 
-        $this->assertEquals($this->_validatorMock, $this->_factory->createConversionIdValidator($conversionId));
+        $this->assertSame($this->_validatorMock, $this->_factory->createConversionIdValidator($conversionId));
     }
 }

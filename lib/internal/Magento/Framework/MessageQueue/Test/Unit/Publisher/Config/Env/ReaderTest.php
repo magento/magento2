@@ -79,7 +79,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock->expects($this->once())->method('getConfigData')
             ->with('queue')->willReturn($configData);
         $actualResult = $this->reader->read();
-        $this->assertEquals($configData['config']['publishers'], $actualResult);
+        $this->assertSame($configData['config']['publishers'], $actualResult);
     }
 
     public function testReadPreviousConfig()
@@ -100,6 +100,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
                 'disabled' => false
             ]
         ];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

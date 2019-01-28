@@ -81,7 +81,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
         $schemaMock->expects(self::once())
             ->method('getTables')
             ->willReturn([$table]);
-        self::assertEquals(
+        self::assertSame(
             [
                 [
                         'column' => 'ref_decimal',

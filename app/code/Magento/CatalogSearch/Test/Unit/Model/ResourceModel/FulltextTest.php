@@ -85,7 +85,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->with('table_name_search_query', ['is_processed' => 0], ['is_processed != ?' => 0, 'store_id = ?' => 1])
             ->willReturn(10);
         $result = $this->target->resetSearchResultsByStore(1);
-        $this->assertEquals($this->target, $result);
+        $this->assertSame($this->target, $result);
     }
 
     /**

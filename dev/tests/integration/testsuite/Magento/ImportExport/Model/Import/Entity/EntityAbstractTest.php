@@ -63,6 +63,6 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
         $method->invoke($model);
 
-        $this->assertEquals(1, $model->getProcessedEntitiesCount());
+        $this->assertSame(1, $model->getProcessedEntitiesCount());
     }
 }

@@ -59,7 +59,7 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
         $method =
             new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'getFilterFactories');
         $method->setAccessible(true);
-        $this->assertEquals([$this->_factoryMock], $method->invoke($this->_filterManager));
+        $this->assertSame([$this->_factoryMock], $method->invoke($this->_filterManager));
     }
 
     /**
@@ -104,7 +104,7 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
 
         $method = new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'createFilterInstance');
         $method->setAccessible(true);
-        $this->assertEquals($filterMock, $method->invoke($this->_filterManager, 'alias', ['123']));
+        $this->assertSame($filterMock, $method->invoke($this->_filterManager, 'alias', ['123']));
     }
 
     /**
@@ -174,6 +174,6 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($value)
         );
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
-        $this->assertEquals($value, $this->_filterManager->alias($value, ['123']));
+        $this->assertSame($value, $this->_filterManager->alias($value, ['123']));
     }
 }

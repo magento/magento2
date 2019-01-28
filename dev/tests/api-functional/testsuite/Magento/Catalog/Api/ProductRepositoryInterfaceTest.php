@@ -63,9 +63,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData = $this->productData[0];
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
-            $this->assertEquals($productData[$key], $response[$key]);
+            $this->assertSame($productData[$key], $response[$key]);
         }
-        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
+        $this->assertSame([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
     }
 
     /**
@@ -119,8 +119,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 
@@ -176,7 +176,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
-        $this->assertEquals(
+        $this->assertSame(
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
         );
@@ -195,7 +195,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
-        $this->assertEquals(
+        $this->assertSame(
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
         );
@@ -220,7 +220,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
-        $this->assertEquals(
+        $this->assertSame(
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
         );
@@ -247,7 +247,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
-        $this->assertEquals(
+        $this->assertSame(
             $websitesData["website_ids"],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
         );
@@ -275,7 +275,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
-        $this->assertEquals(
+        $this->assertSame(
             $websitesData["website_ids"],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
         );
@@ -294,11 +294,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $productBuilder[ProductInterface::NAME] = $newName;
         $response = $this->updateProduct($productBuilder);
-        $this->assertEquals(
+        $this->assertSame(
             $newName,
             $response[ProductInterface::NAME]
         );
-        $this->assertEquals(
+        $this->assertSame(
             $originalProduct[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
         );
@@ -383,8 +383,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->fail("Expected exception was not raised");
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 
@@ -451,8 +451,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
-        $this->assertEquals($productLinkData, $links[0]);
+        $this->assertSame(1, count($links));
+        $this->assertSame($productLinkData, $links[0]);
 
         // update link information
         $productLinkData = [
@@ -478,8 +478,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
-        $this->assertEquals($productLinkData, $links[0]);
+        $this->assertSame(1, count($links));
+        $this->assertSame($productLinkData, $links[0]);
 
         // Remove link
         $productWithNoLinkData = [
@@ -497,7 +497,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct("product_simple_with_related_500");
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals([], $links);
+        $this->assertSame([], $links);
 
         $this->deleteProduct("product_simple_500");
         $this->deleteProduct("product_simple_with_related_500");
@@ -554,9 +554,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
-        $this->assertEquals(2, count($options));
-        $this->assertEquals(1, count($options[0]['values']));
-        $this->assertEquals(1, count($options[1]['values']));
+        $this->assertSame(2, count($options));
+        $this->assertSame(1, count($options[0]['values']));
+        $this->assertSame(1, count($options[1]['values']));
 
         //update the product options, adding a value to option 1, delete an option and create a new option
         $options[0]['values'][] = [
@@ -584,9 +584,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->updateProduct($response);
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
-        $this->assertEquals(2, count($options));
-        $this->assertEquals(2, count($options[0]['values']));
-        $this->assertEquals(1, count($options[1]['values']));
+        $this->assertSame(2, count($options));
+        $this->assertSame(2, count($options[0]['values']));
+        $this->assertSame(1, count($options[1]['values']));
 
         //update product without setting options field, option should not be changed
         unset($response['options']);
@@ -594,7 +594,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
-        $this->assertEquals(2, count($options));
+        $this->assertSame(2, count($options));
 
         //update product with empty options, options should be removed
         $response['options'] = [];
@@ -616,7 +616,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
-        $this->assertEquals(2, count($mediaGalleryEntries));
+        $this->assertSame(2, count($mediaGalleryEntries));
         $id = $mediaGalleryEntries[0]['id'];
         foreach ($mediaGalleryEntries as &$entry) {
             unset($entry['id']);
@@ -639,7 +639,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'file' => '/t/i/' . $filename2,
             ],
         ];
-        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+        $this->assertSame($expectedValue, $mediaGalleryEntries);
         //update the product media gallery
         $response['media_gallery_entries'] = [
             [
@@ -654,7 +654,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $response = $this->updateProduct($response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
-        $this->assertEquals(1, count($mediaGalleryEntries));
+        $this->assertSame(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
         $expectedValue = [
             [
@@ -666,18 +666,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'file' => '/t/i/' . $filename1,
             ]
         ];
-        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+        $this->assertSame($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
         $response = $this->updateProduct($response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
-        $this->assertEquals(1, count($mediaGalleryEntries));
+        $this->assertSame(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+        $this->assertSame($expectedValue, $mediaGalleryEntries);
         //pass empty array, delete all existing media gallery entries
         $response['media_gallery_entries'] = [];
         $response = $this->updateProduct($response);
-        $this->assertEquals(true, empty($response['media_gallery_entries']));
+        $this->assertSame(true, empty($response['media_gallery_entries']));
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
 
@@ -695,8 +695,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
         $this->assertArrayHasKey(ProductInterface::NAME, $response);
-        $this->assertEquals($productData[ProductInterface::NAME], $response[ProductInterface::NAME]);
-        $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
+        $this->assertSame($productData[ProductInterface::NAME], $response[ProductInterface::NAME]);
+        $this->assertSame($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
     }
 
     /**
@@ -721,7 +721,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $linkData = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY][$linksKey][0];
 
         self::assertArrayHasKey(Link::KEY_LINK_URL, $linkData);
-        self::assertEquals('http://example.com/downloadable.txt', $linkData[Link::KEY_LINK_URL]);
+        self::assertSame('http://example.com/downloadable.txt', $linkData[Link::KEY_LINK_URL]);
     }
 
     /**
@@ -810,13 +810,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
-        $this->assertEquals('simple', $response['items'][0]['sku']);
+        $this->assertSame('simple', $response['items'][0]['sku']);
 
         $index = null;
         foreach ($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
@@ -828,7 +828,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertNotNull($index, 'Category information wasn\'t set');
 
         $expectedResult = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ? ['string' => '2'] : ['2'];
-        $this->assertEquals($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);
+        $this->assertSame($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);
     }
 
     /**
@@ -912,7 +912,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey('items', $response);
         $this->assertTrue(count($response['items']) == 1);
         $this->assertTrue(isset($response['items'][0]['sku']));
-        $this->assertEquals('simple-2', $response['items'][0]['sku']);
+        $this->assertSame('simple-2', $response['items'][0]['sku']);
         $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
     }
 
@@ -1057,9 +1057,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(3, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
-        $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
+        $this->assertSame(3, $searchResult['total_count']);
+        $this->assertSame(1, count($searchResult['items']));
+        $this->assertSame('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
         $this->assertNotNull(
             $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
         );
@@ -1113,7 +1113,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $customAttributesData = $this->convertCustomAttributesToAssociativeArray($response['custom_attributes']);
         $this->assertTrue(isset($customAttributesData['description']));
-        $this->assertEquals($descriptionValue, $customAttributesData['description']);
+        $this->assertSame($descriptionValue, $customAttributesData['description']);
 
         $this->deleteProduct('simple');
     }
@@ -1224,12 +1224,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $tierPrices = $response[self::KEY_TIER_PRICES];
         $this->assertNotNull($tierPrices, "CREATE: expected to have tier prices");
         $this->assertCount(2, $tierPrices, "CREATE: expected to have 2 'tier_prices' objects");
-        $this->assertEquals(3.14, $tierPrices[0]['value']);
-        $this->assertEquals(5, $tierPrices[0]['qty']);
-        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
-        $this->assertEquals(3.45, $tierPrices[1]['value']);
-        $this->assertEquals(10, $tierPrices[1]['qty']);
-        $this->assertEquals($custGroup2, $tierPrices[1]['customer_group_id']);
+        $this->assertSame(3.14, $tierPrices[0]['value']);
+        $this->assertSame(5, $tierPrices[0]['qty']);
+        $this->assertSame($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertSame(3.45, $tierPrices[1]['value']);
+        $this->assertSame(10, $tierPrices[1]['qty']);
+        $this->assertSame($custGroup2, $tierPrices[1]['customer_group_id']);
 
         // update the product's tier prices: update 1st tier price, (delete the 2nd tier price), add a new one
         $custGroup3 = 1;
@@ -1247,12 +1247,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $tierPrices = $response[self::KEY_TIER_PRICES];
         $this->assertNotNull($tierPrices, "UPDATE 1: expected to have tier prices");
         $this->assertCount(2, $tierPrices, "UPDATE 1: expected to have 2 'tier_prices' objects");
-        $this->assertEquals(3.33, $tierPrices[0]['value']);
-        $this->assertEquals(6, $tierPrices[0]['qty']);
-        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
-        $this->assertEquals(2.10, $tierPrices[1]['value']);
-        $this->assertEquals(12, $tierPrices[1]['qty']);
-        $this->assertEquals($custGroup3, $tierPrices[1]['customer_group_id']);
+        $this->assertSame(3.33, $tierPrices[0]['value']);
+        $this->assertSame(6, $tierPrices[0]['qty']);
+        $this->assertSame($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertSame(2.10, $tierPrices[1]['value']);
+        $this->assertSame(12, $tierPrices[1]['qty']);
+        $this->assertSame($custGroup3, $tierPrices[1]['customer_group_id']);
 
         // update the product without any mention of tier prices; no change expected for tier pricing
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -1263,12 +1263,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $tierPrices = $response[self::KEY_TIER_PRICES];
         $this->assertNotNull($tierPrices, "UPDATE 2: expected to have tier prices");
         $this->assertCount(2, $tierPrices, "UPDATE 2: expected to have 2 'tier_prices' objects");
-        $this->assertEquals(3.33, $tierPrices[0]['value']);
-        $this->assertEquals(6, $tierPrices[0]['qty']);
-        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
-        $this->assertEquals(2.10, $tierPrices[1]['value']);
-        $this->assertEquals(12, $tierPrices[1]['qty']);
-        $this->assertEquals($custGroup3, $tierPrices[1]['customer_group_id']);
+        $this->assertSame(3.33, $tierPrices[0]['value']);
+        $this->assertSame(6, $tierPrices[0]['qty']);
+        $this->assertSame($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertSame(2.10, $tierPrices[1]['value']);
+        $this->assertSame(12, $tierPrices[1]['qty']);
+        $this->assertSame($custGroup3, $tierPrices[1]['customer_group_id']);
 
         // update the product with empty tier prices; expect to have the existing tier prices removed
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -1325,7 +1325,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             self::KEY_CATEGORY_LINKS => [['category_id' => 333, 'position' => 0]]
         ];
         $response = $this->saveProduct($productData);
-        $this->assertEquals(
+        $this->assertSame(
             [['category_id' => 333, 'position' => 0]],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
         );
@@ -1333,7 +1333,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey(ProductInterface::EXTENSION_ATTRIBUTES_KEY, $response);
         $extensionAttributes = $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
         $this->assertArrayHasKey(self::KEY_CATEGORY_LINKS, $extensionAttributes);
-        $this->assertEquals([['category_id' => 333, 'position' => 0]], $extensionAttributes[self::KEY_CATEGORY_LINKS]);
+        $this->assertSame([['category_id' => 333, 'position' => 0]], $extensionAttributes[self::KEY_CATEGORY_LINKS]);
     }
 
     /**
@@ -1345,13 +1345,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // update product without category_link or category_link is null
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = null;
         $response = $this->updateProduct($response);
-        $this->assertEquals(
+        $this->assertSame(
             [['category_id' => 333, 'position' => 0]],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
         );
         unset($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]);
         $response = $this->updateProduct($response);
-        $this->assertEquals(
+        $this->assertSame(
             [['category_id' => 333, 'position' => 0]],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
         );
@@ -1368,7 +1368,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ['category_id' => 333, 'position' => 10]
         ];
         $response = $this->updateProduct($response);
-        $this->assertEquals(
+        $this->assertSame(
             [['category_id' => 333, 'position' => 10]],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
         );
@@ -1435,8 +1435,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $missingAttributes = ['news_from_date', 'custom_design_from'];
         $expectedAttribute = ['special_price', 'special_from_date'];
         $attributeCodes = array_column($customAttributes, 'attribute_code');
-        $this->assertEquals(0, count(array_intersect($attributeCodes, $missingAttributes)));
-        $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
+        $this->assertSame(0, count(array_intersect($attributeCodes, $missingAttributes)));
+        $this->assertSame(2, count(array_intersect($attributeCodes, $expectedAttribute)));
     }
 
     /**
@@ -1461,7 +1461,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
-        $this->assertEquals(5, $customAttributes[self::KEY_SPECIAL_PRICE]);
+        $this->assertSame(5, $customAttributes[self::KEY_SPECIAL_PRICE]);
         $productData['custom_attributes'] = [
             ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => null]
         ];
@@ -1488,7 +1488,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // Save product with status disabled
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $this->assertEquals(0, $response['status']);
+        $this->assertSame(0, $response['status']);
 
         // Update the product
         $productData[ProductInterface::PRICE] = 200;
@@ -1496,9 +1496,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct($productData[ProductInterface::SKU]);
 
         // Status should still be disabled
-        $this->assertEquals(0, $response['status']);
+        $this->assertSame(0, $response['status']);
         // Price should be updated
-        $this->assertEquals(200, $response['price']);
+        $this->assertSame(200, $response['price']);
     }
 
     /**
@@ -1580,6 +1580,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 break;
             }
         }
-        $this->assertEquals($expectedMultiselectValue, $multiselectValue);
+        $this->assertSame($expectedMultiselectValue, $multiselectValue);
     }
 }

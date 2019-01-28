@@ -108,7 +108,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     public function testIsAllowed($configValue, $expectedResult)
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue($configValue));
-        $this->assertEquals($expectedResult, $this->block->isAllowed());
+        $this->assertSame($expectedResult, $this->block->isAllowed());
     }
 
     /**
@@ -167,7 +167,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $rssData = $this->block->getRssData();
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
-        $this->assertEquals($data, $rssData);
+        $this->assertSame($data, $rssData);
         $this->assertContains('<a href="http://magento.com/product-name.html">', $description);
         $this->assertContains('<img src="image_link" border="0" align="left" height="75" width="75">', $description);
         $this->assertContains('<td style="text-decoration:none;">Product Description </td>', $description);
@@ -175,7 +175,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(600, $this->block->getCacheLifetime());
+        $this->assertSame(600, $this->block->getCacheLifetime());
     }
 
     public function testGetFeeds()
@@ -189,6 +189,6 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
             'label' => 'New Products',
             'link' => $rssUrl,
         ];
-        $this->assertEquals($expected, $this->block->getFeeds());
+        $this->assertSame($expected, $this->block->getFeeds());
     }
 }

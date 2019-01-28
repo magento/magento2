@@ -89,7 +89,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
-        $this->assertEquals($paymentMock, $this->model->get($cartId));
+        $this->assertSame($paymentMock, $this->model->get($cartId));
     }
 
     public function testGetList()
@@ -106,7 +106,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getAvailableMethods')
             ->with($quoteMock)
             ->will($this->returnValue([$paymentMethod]));
-        $this->assertEquals([$paymentMethod], $this->model->getList($cartId));
+        $this->assertSame([$paymentMethod], $this->model->getList($cartId));
     }
 
     public function testSetVirtualProduct()
@@ -169,7 +169,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('save')->willReturnSelf();
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
-        $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
+        $this->assertSame($paymentId, $this->model->set($cartId, $methodMock));
     }
 
     /**
@@ -295,7 +295,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('save')->willReturnSelf();
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
-        $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
+        $this->assertSame($paymentId, $this->model->set($cartId, $methodMock));
     }
 
     /**

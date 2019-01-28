@@ -234,7 +234,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             $aclMock->expects($this->once())->method('isAllowed')->with($userAclRole)->willReturn($isAllowed);
         }
 
-        $this->assertEquals($expectedResult, $this->session->isAllowed('resource'));
+        $this->assertSame($expectedResult, $this->session->isAllowed('resource'));
     }
 
     /**
@@ -257,7 +257,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function testFirstPageAfterLogin($isFirstPageAfterLogin)
     {
         $this->session->setIsFirstPageAfterLogin($isFirstPageAfterLogin);
-        $this->assertEquals($isFirstPageAfterLogin, $this->session->isFirstPageAfterLogin());
+        $this->assertSame($isFirstPageAfterLogin, $this->session->isFirstPageAfterLogin());
     }
 
     /**

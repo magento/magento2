@@ -28,6 +28,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->with('parent_id')
             ->will($this->returnValue(false));
         $validator = new Validator();
-        $this->assertEquals(['"Order Id" is required. Enter and try again.'], $validator->validate($history));
+        $this->assertSame(['"Order Id" is required. Enter and try again.'], $validator->validate($history));
     }
 }

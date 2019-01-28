@@ -23,7 +23,7 @@ class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\We
         $this->assertTrue(is_array($attribute));
         $this->assertArrayHasKey('attribute_id', $attribute);
         $this->assertArrayHasKey('attribute_code', $attribute);
-        $this->assertEquals($attributeCode, $attribute['attribute_code']);
+        $this->assertSame($attributeCode, $attribute['attribute_code']);
     }
 
     public function testGetList()
@@ -65,7 +65,7 @@ class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\We
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 

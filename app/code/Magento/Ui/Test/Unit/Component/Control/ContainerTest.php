@@ -50,6 +50,6 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $container->setButtonItem($itemMock);
         $container->setData('context', $abstractContextMock);
 
-        $this->assertEquals($expectedHtml, $container->toHtml());
+        $this->assertSame($expectedHtml, $container->toHtml());
     }
 }

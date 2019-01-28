@@ -95,7 +95,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` BOOLEAN NULL DEFAULT 0 COMMENT "Comment"',
             $this->boolean->toDefinition($column)
         );
@@ -118,7 +118,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'default' => '1'
             ]
         );
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
         $expectedData = [
             'type' => 'boolean',
             'unsigned' => false,
@@ -129,6 +129,6 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'padding' => '1',
             ]
         );
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 }

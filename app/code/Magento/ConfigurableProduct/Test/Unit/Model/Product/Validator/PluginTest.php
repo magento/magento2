@@ -131,7 +131,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $this->responseMock->expects($this->never())->method('setError');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->proceedResult,
             $plugin->afterValidate(
                 $this->subjectMock,
@@ -177,7 +177,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->responseMock->expects($this->once())->method('setError')->with(true)->will($this->returnSelf());
         $this->responseMock->expects($this->once())->method('setMessage')->will($this->returnSelf());
         $this->responseMock->expects($this->once())->method('setAttributes')->will($this->returnSelf());
-        $this->assertEquals(
+        $this->assertSame(
             $this->proceedResult,
             $plugin->afterValidate(
                 $this->subjectMock,
@@ -302,7 +302,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->requestMock,
             $this->responseMock
         );
-        $this->assertEquals(
+        $this->assertSame(
             $this->proceedResult,
             $result
         );

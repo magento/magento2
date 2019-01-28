@@ -54,7 +54,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             ->method('getById');
 
         $attribute = $this->document->getCustomAttribute('state');
-        static::assertEquals('Paid', $attribute->getValue());
+        static::assertSame('Paid', $attribute->getValue());
     }
 
     /**
@@ -75,7 +75,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             ->willReturn('General');
 
         $attribute = $this->document->getCustomAttribute('customer_group_id');
-        static::assertEquals('General', $attribute->getValue());
+        static::assertSame('General', $attribute->getValue());
     }
 
     /**

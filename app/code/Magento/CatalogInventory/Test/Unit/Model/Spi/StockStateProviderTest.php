@@ -154,7 +154,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testVerifyStock(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->verifyStock($stockItem)
         );
@@ -167,7 +167,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testVerifyNotification(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->verifyNotification($stockItem)
         );
@@ -180,7 +180,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckQty(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->checkQty($stockItem, $this->qty)
         );
@@ -193,7 +193,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testSuggestQty(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->suggestQty($stockItem, $this->qty)
         );
@@ -206,7 +206,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStockQty(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->getStockQty($stockItem)
         );
@@ -219,7 +219,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckQtyIncrements(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->checkQtyIncrements($stockItem, $this->qty)->getHasError()
         );
@@ -232,7 +232,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckQuoteItemQty(StockItemInterface $stockItem, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->stockStateProvider->checkQuoteItemQty(
                 $stockItem,
@@ -455,7 +455,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->stockStateProvider->checkQtyIncrements($stockItem, $qty);
         $this->assertTrue($result->getHasError());
-        $this->assertEquals($expectedMsg, $result->getMessage()->render());
+        $this->assertSame($expectedMsg, $result->getMessage()->render());
     }
 
     /**

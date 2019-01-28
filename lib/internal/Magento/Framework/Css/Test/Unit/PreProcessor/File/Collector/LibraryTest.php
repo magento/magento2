@@ -161,7 +161,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
         $inheritedThemeMock->expects($this->any())->method('getFullPath')->will($this->returnValue($themePath));
         $this->themeMock->expects($this->any())->method('getInheritedThemes')
             ->will($this->returnValue([$inheritedThemeMock]));
-        $this->assertEquals(['returnedFile'], $this->library->getFiles($this->themeMock, $subPath));
+        $this->assertSame(['returnedFile'], $this->library->getFiles($this->themeMock, $subPath));
     }
 
     /**

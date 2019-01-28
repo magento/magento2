@@ -74,7 +74,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             BP . '/generated'
         ];
 
-        $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
+        $this->assertSame($expected, $this->filePermissions->getInstallationWritableDirectories());
     }
 
     public function testGetInstallationWritableDirectoriesInProduction()
@@ -91,7 +91,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             BP . '/pub/static'
         ];
 
-        $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
+        $this->assertSame($expected, $this->filePermissions->getInstallationWritableDirectories());
     }
 
     public function testGetApplicationNonWritableDirectories()
@@ -103,7 +103,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(BP . '/app/etc'));
 
         $expected = [BP . '/app/etc'];
-        $this->assertEquals($expected, $this->filePermissions->getApplicationNonWritableDirectories());
+        $this->assertSame($expected, $this->filePermissions->getApplicationNonWritableDirectories());
     }
 
     public function testGetInstallationCurrentWritableDirectories()
@@ -115,7 +115,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             BP . '/app/etc',
         ];
         $this->filePermissions->getInstallationWritableDirectories();
-        $this->assertEquals($expected, $this->filePermissions->getInstallationCurrentWritableDirectories());
+        $this->assertSame($expected, $this->filePermissions->getInstallationCurrentWritableDirectories());
     }
 
     /**
@@ -141,7 +141,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->filePermissions->getApplicationNonWritableDirectories();
-        $this->assertEquals($expected, $this->filePermissions->getApplicationCurrentNonWritableDirectories());
+        $this->assertSame($expected, $this->filePermissions->getApplicationCurrentNonWritableDirectories());
     }
 
     /**
@@ -186,12 +186,12 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             BP . '/generated'
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             array_values($this->filePermissions->getMissingWritableDirectoriesForInstallation())
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             array_values($this->filePermissions->getMissingWritablePathsForInstallation())
         );
@@ -211,12 +211,12 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             BP . '/pub/static'
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             array_values($this->filePermissions->getMissingWritableDirectoriesForInstallation())
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             array_values($this->filePermissions->getMissingWritablePathsForInstallation())
         );
@@ -256,7 +256,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             $index += 1;
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             array_values($this->filePermissions->getUnnecessaryWritableDirectoriesForApplication())
         );

@@ -64,6 +64,6 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([XmlCatalogGenerateCommand::IDE_FILE_PATH_ARGUMENT => 'test']);
-        $this->assertEquals('', $commandTester->getDisplay());
+        $this->assertSame('', $commandTester->getDisplay());
     }
 }

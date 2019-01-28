@@ -48,7 +48,7 @@ class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getAdditionalInformation')
             ->willReturn(['cvvResponseCode' => $cvvCode]);
 
-        self::assertEquals($expected, $this->mapper->getCode($orderPayment));
+        self::assertSame($expected, $this->mapper->getCode($orderPayment));
     }
 
     /**

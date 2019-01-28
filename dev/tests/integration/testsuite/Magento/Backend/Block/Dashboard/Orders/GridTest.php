@@ -37,7 +37,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $collection = $this->block->getPreparedCollection();
         foreach ($collection->getItems() as $item) {
             if ($item->getIncrementId() == '100000001') {
-                $this->assertEquals('firstname lastname', $item->getCustomer());
+                $this->assertSame('firstname lastname', $item->getCustomer());
             }
         }
     }

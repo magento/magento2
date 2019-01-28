@@ -64,16 +64,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $collection->getFirstItem();
 
-        $this->assertEquals(10, $product->getPrice(), 'Wrong downloadable product price');
-        $this->assertEquals($specialPrice, $product->getMinimalPrice());
+        $this->assertSame(10, $product->getPrice(), 'Wrong downloadable product price');
+        $this->assertSame($specialPrice, $product->getMinimalPrice());
 
         $resultTiers = $product->getTierPrices();
         $this->assertTrue(is_array($resultTiers), 'Tiers not found');
-        $this->assertEquals(count($tierData), count($resultTiers), 'Incorrect number of result tiers');
+        $this->assertSame(count($tierData), count($resultTiers), 'Incorrect number of result tiers');
 
         for ($i = 0; $i < count($tierData); $i++) {
-            $this->assertEquals($tierData[$i]['price_qty'], $resultTiers[$i]->getQty(), 'Wrong tier price quantity');
-            $this->assertEquals($tierData[$i]['price'], $resultTiers[$i]->getValue(), 'Wrong tier price value');
+            $this->assertSame($tierData[$i]['price_qty'], $resultTiers[$i]->getQty(), 'Wrong tier price quantity');
+            $this->assertSame($tierData[$i]['price'], $resultTiers[$i]->getValue(), 'Wrong tier price value');
         }
     }
 }

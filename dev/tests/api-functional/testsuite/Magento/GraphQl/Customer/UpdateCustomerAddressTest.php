@@ -131,11 +131,11 @@ MUTATION;
         $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
-        $this->assertEquals($customerId, $response['updateCustomerAddress']['customer_id']);
+        $this->assertSame($customerId, $response['updateCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
 
         $address = $this->addressRepository->getById($addressId);
-        $this->assertEquals($address->getId(), $response['updateCustomerAddress']['id']);
+        $this->assertSame($address->getId(), $response['updateCustomerAddress']['id']);
         $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $updateAddress);
     }

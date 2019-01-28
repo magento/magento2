@@ -83,7 +83,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER);
         $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
-        $this->assertEquals(3, $category->getId());
+        $this->assertSame(3, $category->getId());
 
         return $this->_model;
     }
@@ -93,12 +93,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResetValueApplied(\Magento\CatalogSearch\Model\Layer\Filter\Category $modelApplied)
     {
-        $this->assertEquals(2, $modelApplied->getResetValue());
+        $this->assertSame(2, $modelApplied->getResetValue());
     }
 
     public function testGetName()
     {
-        $this->assertEquals('Category', $this->_model->getName());
+        $this->assertSame('Category', $this->_model->getName());
     }
 
     /**
@@ -114,25 +114,25 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER);
         $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
-        $this->assertEquals(3, $category->getId());
+        $this->assertSame(3, $category->getId());
 
         $items = $this->_model->getItems();
 
         $this->assertInternalType('array', $items);
-        $this->assertEquals(2, count($items));
+        $this->assertSame(2, count($items));
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];
         $this->assertInstanceOf(\Magento\Catalog\Model\Layer\Filter\Item::class, $item);
         $this->assertSame($this->_model, $item->getFilter());
-        $this->assertEquals('Category 1.1', $item->getLabel());
-        $this->assertEquals(4, $item->getValue());
-        $this->assertEquals(2, $item->getCount());
+        $this->assertSame('Category 1.1', $item->getLabel());
+        $this->assertSame(4, $item->getValue());
+        $this->assertSame(2, $item->getCount());
 
         $item = $items[1];
         $this->assertInstanceOf(\Magento\Catalog\Model\Layer\Filter\Item::class, $item);
-        $this->assertEquals('Category 1.2', $item->getLabel());
-        $this->assertEquals(13, $item->getValue());
-        $this->assertEquals(2, $item->getCount());
+        $this->assertSame('Category 1.2', $item->getLabel());
+        $this->assertSame(13, $item->getValue());
+        $this->assertSame(2, $item->getCount());
     }
 }

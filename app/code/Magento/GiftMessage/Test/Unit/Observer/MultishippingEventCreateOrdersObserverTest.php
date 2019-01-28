@@ -32,7 +32,7 @@ class MultishippingEventCreateOrdersObserverTest extends \PHPUnit\Framework\Test
         $addressMock->expects($this->once())->method('getGiftMessageId')->willReturn($giftMessageId);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
         $orderMock->expects($this->once())->method('setGiftMessageId')->with($giftMessageId);
-        $this->assertEquals(
+        $this->assertSame(
             $this->multishippingEventCreateOrdersObserver,
             $this->multishippingEventCreateOrdersObserver->execute($observerMock)
         );

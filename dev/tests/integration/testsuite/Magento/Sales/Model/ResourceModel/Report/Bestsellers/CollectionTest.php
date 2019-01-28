@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($this->_collection->getItems() as $reportItem) {
             $actualResult[$reportItem->getData('product_id')] = $reportItem->getData('qty_ordered');
         }
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -56,7 +56,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('tableName', $from[$dbTableName]);
         $actualTable = $from[$dbTableName]['tableName'];
 
-        $this->assertEquals($dbTableName, $actualTable);
+        $this->assertSame($dbTableName, $actualTable);
     }
 
     /**

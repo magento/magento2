@@ -37,7 +37,7 @@ class PresentationTest extends \PHPUnit\Framework\TestCase
     {
         $this->attributeMock->expects($this->once())->method('getFrontendInput')->willReturn($inputType);
         $this->attributeMock->expects($this->any())->method('getIsWysiwygEnabled')->willReturn($isWysiwygEnabled);
-        $this->assertEquals($expectedResult, $this->presentation->getPresentationInputType($this->attributeMock));
+        $this->assertSame($expectedResult, $this->presentation->getPresentationInputType($this->attributeMock));
     }
 
     /**
@@ -59,7 +59,7 @@ class PresentationTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertPresentationDataToInputType(array $data, array $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->presentation->convertPresentationDataToInputType($data));
+        $this->assertSame($expectedResult, $this->presentation->convertPresentationDataToInputType($data));
     }
 
     /**

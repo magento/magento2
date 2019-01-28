@@ -150,7 +150,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->model->expects($this->once())
             ->method('getCurrentPage')
             ->will($this->returnValue($page));
-        $this->assertEquals($page, $this->block->getCurrentPage());
+        $this->assertSame($page, $this->block->getCurrentPage());
     }
 
     public function testGetPagerEncodedUrl()
@@ -165,7 +165,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('encode')
             ->with($url)
             ->will($this->returnValue($encodedUrl));
-        $this->assertEquals($encodedUrl, $this->block->getPagerEncodedUrl());
+        $this->assertSame($encodedUrl, $this->block->getPagerEncodedUrl());
     }
 
     public function testGetCurrentOrder()
@@ -178,7 +178,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeUsedForSortByArray')
             ->will($this->returnValue(['name' => [], 'price' => []]));
 
-        $this->assertEquals($order, $this->block->getCurrentOrder());
+        $this->assertSame($order, $this->block->getCurrentOrder());
     }
 
     public function testGetCurrentDirection()
@@ -189,7 +189,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getDirection')
             ->will($this->returnValue($direction));
 
-        $this->assertEquals($direction, $this->block->getCurrentDirection());
+        $this->assertSame($direction, $this->block->getCurrentDirection());
     }
 
     public function testGetCurrentMode()
@@ -203,7 +203,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getMode')
             ->will($this->returnValue($mode));
 
-        $this->assertEquals($mode, $this->block->getCurrentMode());
+        $this->assertSame($mode, $this->block->getCurrentMode());
     }
 
     public function testGetModes()
@@ -213,8 +213,8 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getAvailableViewMode')
             ->will($this->returnValue($mode));
 
-        $this->assertEquals($mode, $this->block->getModes());
-        $this->assertEquals($mode, $this->block->getModes());
+        $this->assertSame($mode, $this->block->getModes());
+        $this->assertSame($mode, $this->block->getModes());
     }
 
     /**
@@ -229,7 +229,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($mode));
 
         $block = $this->block->setModes(['mode' => 'mode']);
-        $this->assertEquals($expected, $block->getModes());
+        $this->assertSame($expected, $block->getModes());
     }
 
     /**
@@ -266,7 +266,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getAvailableViewMode')
             ->will($this->returnValue(['list' => 'List']));
 
-        $this->assertEquals($limit, $this->block->getLimit());
+        $this->assertSame($limit, $this->block->getLimit());
     }
 
     public function testGetPagerHtml()
@@ -330,8 +330,8 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeUsedForSortByArray')
             ->will($this->returnValue($data));
 
-        $this->assertEquals($data, $this->block->getAvailableOrders());
-        $this->assertEquals($data, $this->block->getAvailableOrders());
+        $this->assertSame($data, $this->block->getAvailableOrders());
+        $this->assertSame($data, $this->block->getAvailableOrders());
     }
 
     public function testAddOrderToAvailableOrders()
@@ -343,7 +343,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $expected = $data;
         $expected['order'] = 'value';
         $toolbar = $this->block->addOrderToAvailableOrders('order', 'value');
-        $this->assertEquals($expected, $toolbar->getAvailableOrders());
+        $this->assertSame($expected, $toolbar->getAvailableOrders());
     }
 
     public function testRemoveOrderFromAvailableOrders()
@@ -353,8 +353,8 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeUsedForSortByArray')
             ->will($this->returnValue($data));
         $toolbar = $this->block->removeOrderFromAvailableOrders('order', 'value');
-        $this->assertEquals($data, $toolbar->getAvailableOrders());
+        $this->assertSame($data, $toolbar->getAvailableOrders());
         $toolbar2 = $this->block->removeOrderFromAvailableOrders('name');
-        $this->assertEquals(['price' => []], $toolbar2->getAvailableOrders());
+        $this->assertSame(['price' => []], $toolbar2->getAvailableOrders());
     }
 }

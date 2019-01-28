@@ -59,7 +59,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->with($amount, $includeContainer, $precision)
             ->will($this->returnValue($result));
 
-        $this->assertEquals($result, $this->model->convertAndFormatCurrency($amount, $includeContainer, $precision));
+        $this->assertSame($result, $this->model->convertAndFormatCurrency($amount, $includeContainer, $precision));
     }
 
     public function testRender()
@@ -83,7 +83,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->with($this->data);
 
         $result = $this->model->render($amountRender, $arguments);
-        $this->assertEquals($renderText, $result);
+        $this->assertSame($renderText, $result);
     }
 
     public function testGetAmountRender()
@@ -93,7 +93,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($this->data));
         $this->model->render($amountRender);
-        $this->assertEquals($amountRender, $this->model->getAmountRender());
+        $this->assertSame($amountRender, $this->model->getAmountRender());
     }
 
     public function testGetPriceType()
@@ -119,7 +119,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($this->data));
         $this->model->render($amountRender);
-        $this->assertEquals($price, $this->model->getPriceType($priceCode));
+        $this->assertSame($price, $this->model->getPriceType($priceCode));
     }
 
     public function testGetPrice()
@@ -135,7 +135,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($this->data));
         $this->model->render($amountRender);
-        $this->assertEquals($price, $this->model->getPrice());
+        $this->assertSame($price, $this->model->getPrice());
     }
 
     public function testGetSealableItem()
@@ -151,7 +151,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($this->data));
         $this->model->render($amountRender);
-        $this->assertEquals($sealableItem, $this->model->getSaleableItem());
+        $this->assertSame($sealableItem, $this->model->getSaleableItem());
     }
 
     public function testGetAdjustment()
@@ -180,7 +180,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getAdjustmentCode')
             ->will($this->returnValue($adjustmentCode));
         $this->model->render($amountRender);
-        $this->assertEquals($adjustment, $this->model->getAdjustment());
+        $this->assertSame($adjustment, $this->model->getAdjustment());
     }
 
     public function testFormatCurrency()
@@ -197,6 +197,6 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $result = $this->model->formatCurrency($amount, $includeContainer, $precision);
-        $this->assertEquals($expected, $result, 'formatCurrent returned unexpected result');
+        $this->assertSame($expected, $result, 'formatCurrent returned unexpected result');
     }
 }

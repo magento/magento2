@@ -205,7 +205,7 @@ class WebsitesTest extends AbstractModifierTest
             ],
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedData,
             $this->getModel()->modifyData([])
         );

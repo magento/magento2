@@ -73,7 +73,7 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
         $this->requestFilter->expects($this->once())->method('getValue')->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

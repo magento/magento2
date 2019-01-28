@@ -83,7 +83,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     public function testLoad($loadId, $expectedId)
     {
         $this->model->load($loadId);
-        $this->assertEquals($expectedId, $this->model->getId());
+        $this->assertSame($expectedId, $this->model->getId());
     }
 
     /**
@@ -139,7 +139,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode, ScopeInterface::SCOPE_STORE);
 
         $actual = $this->model->getBaseUrl($type);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -185,8 +185,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->_getStoreModel();
         $this->model->load('default');
 
-        $this->assertEquals('http://localhost/pub/static/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_STATIC));
-        $this->assertEquals('http://localhost/pub/media/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
+        $this->assertSame('http://localhost/pub/static/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_STATIC));
+        $this->assertSame('http://localhost/pub/media/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
     }
 
     /**
@@ -219,7 +219,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             $property->setValue($this->model, $useCustomEntryPoint);
         }
         $actual = $this->model->getBaseUrl($type);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -258,7 +258,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     {
         /* currency operations require store to be loaded */
         $this->model->load('default');
-        $this->assertEquals($this->model->getDefaultCurrencyCode(), $this->model->getDefaultCurrency()->getCode());
+        $this->assertSame($this->model->getDefaultCurrencyCode(), $this->model->getDefaultCurrency()->getCode());
     }
 
     public function testIsCanDelete()
@@ -297,15 +297,15 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $product->setStoreId($secondStore->getId());
         $url = $product->getUrlInStore();
 
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl().'catalog/product/view/id/1/s/simple-product/',
             $url
         );
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl().'?___from_store=default',
             $secondStore->getCurrentUrl()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl(),
             $secondStore->getCurrentUrl(false)
         );
@@ -336,20 +336,20 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
         $category = $categoryRepository->get(333, $secondStore->getStoreId());
 
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl().'catalog/category/view/s/category-1/id/333/',
             $category->getUrl()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl().
             'catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store',
             $url
         );
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl().'?___store=fixture_second_store&___from_store=default',
             $secondStore->getCurrentUrl()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getBaseUrl().'?___store=fixture_second_store',
             $secondStore->getCurrentUrl(false)
         );
@@ -438,7 +438,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $params['config'] = $configMock;
         $model = $objectManager->create(\Magento\Store\Model\Store::class, $params);
         $model->setDisableStoreInUrl($disableStoreInUrl);
-        $this->assertEquals($expectedResult, $model->isUseStoreInUrl());
+        $this->assertSame($expectedResult, $model->isUseStoreInUrl());
     }
 
     /**
@@ -472,7 +472,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $request->setServer(new Parameters(array_merge($_SERVER, $serverValues)));
 
-        $this->assertEquals($expected, $model->isCurrentlySecure());
+        $this->assertSame($expected, $model->isCurrentlySecure());
     }
 
     public function isCurrentlySecureDataProvider()

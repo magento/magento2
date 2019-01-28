@@ -57,6 +57,6 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         $ruleCollection->expects($this->once())->method('addFieldToFilter')->will($this->returnSelf());
         $ruleCollection->expects($this->once())->method('setOrder')->will($this->returnSelf());
         $ruleCollection->expects($this->once())->method('load')->will($this->returnSelf());
-        $this->assertEquals($ruleCollection, $this->discounts->getDiscountCollection(1, 1));
+        $this->assertSame($ruleCollection, $this->discounts->getDiscountCollection(1, 1));
     }
 }

@@ -105,7 +105,7 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->connection->expects($this->once())->method('fetchCol')->will($this->returnValue($fetchedStoreIds));
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($storeId, $productId, $entityType)
         );

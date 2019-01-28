@@ -70,7 +70,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $instanceMock->expects($this->never())->method('setStoreFilter');
 
-        $this->assertEquals($this->productMock, $this->block->getProduct());
+        $this->assertSame($this->productMock, $this->block->getProduct());
     }
 
     /**
@@ -108,7 +108,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $instanceMock->expects($this->once())->method('setStoreFilter')->with($storeMock, $this->productMock);
 
-        $this->assertEquals($this->productMock, $this->block->getProduct());
+        $this->assertSame($this->productMock, $this->block->getProduct());
     }
 
     /**
@@ -138,7 +138,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
 
-        $this->assertEquals([$associatedProduct], $this->block->getAssociatedProducts());
+        $this->assertSame([$associatedProduct], $this->block->getAssociatedProducts());
     }
 
     /**
@@ -179,7 +179,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
 
-        $this->assertEquals($this->block, $this->block->setPreconfiguredValue());
+        $this->assertSame($this->block, $this->block->setPreconfiguredValue());
     }
 
     /**
@@ -187,7 +187,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanShowProductPrice()
     {
-        $this->assertEquals(true, $this->block->getCanShowProductPrice($this->productMock));
+        $this->assertSame(true, $this->block->getCanShowProductPrice($this->productMock));
     }
 
     /**
@@ -199,7 +199,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->never())->method('getOptions');
 
-        $this->assertEquals(true, $this->block->getIsLastFieldset());
+        $this->assertSame(true, $this->block->getIsLastFieldset());
     }
 
     /**
@@ -221,7 +221,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $instanceMock->expects($this->once())->method('getStoreFilter')->will($this->returnValue(true));
 
-        $this->assertEquals($expectedResult, $this->block->getIsLastFieldset());
+        $this->assertSame($expectedResult, $this->block->getIsLastFieldset());
     }
 
     /**
@@ -266,6 +266,6 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedPrice)
         );
 
-        $this->assertEquals($expectedPrice, $this->block->getCurrencyPrice($price));
+        $this->assertSame($expectedPrice, $this->block->getCurrencyPrice($price));
     }
 }

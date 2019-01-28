@@ -88,6 +88,6 @@ class SearchTest extends \PHPUnit\Framework\TestCase
         $block->expects($this->once())->method('setFirstShow')->with(true)->willReturnSelf();
         $block->expects($this->once())->method('toHtml')->willReturnSelf();
 
-        $this->assertEquals($this->response, $this->controller->execute());
+        $this->assertSame($this->response, $this->controller->execute());
     }
 }

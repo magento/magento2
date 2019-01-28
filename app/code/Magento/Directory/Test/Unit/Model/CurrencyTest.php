@@ -53,7 +53,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn($currencyMock);
-        $this->assertEquals($currencySymbol, $this->currency->getCurrencySymbol());
+        $this->assertSame($currencySymbol, $this->currency->getCurrencySymbol());
     }
 
     /**
@@ -77,7 +77,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn($currencyMock);
-        $this->assertEquals($expected, $this->currency->getOutputFormat());
+        $this->assertSame($expected, $this->currency->getOutputFormat());
     }
 
     /**

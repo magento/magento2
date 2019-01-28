@@ -59,7 +59,7 @@ class BundleTest extends AbstractProductExportImportTestCase
         $expectedBundleProductOptions = $expectedProduct->getExtensionAttributes()->getBundleProductOptions();
         $actualBundleProductOptions = $actualProduct->getExtensionAttributes()->getBundleProductOptions();
 
-        $this->assertEquals(count($expectedBundleProductOptions), count($actualBundleProductOptions));
+        $this->assertSame(count($expectedBundleProductOptions), count($actualBundleProductOptions));
 
         $expectedBundleProductOptionsToCompare = [];
         foreach ($expectedBundleProductOptions as $expectedBundleProductOption) {
@@ -81,10 +81,10 @@ class BundleTest extends AbstractProductExportImportTestCase
             }
         }
 
-        $this->assertEquals(count($expectedBundleProductOptions), count($actualBundleProductOptions));
+        $this->assertSame(count($expectedBundleProductOptions), count($actualBundleProductOptions));
 
         foreach ($expectedBundleProductOptionsToCompare as $key => $expectedBundleProductOption) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedBundleProductOption['type'],
                 $actualBundleProductOptionsToCompare[$key]['type']
             );
@@ -95,7 +95,7 @@ class BundleTest extends AbstractProductExportImportTestCase
             sort($expectedProductLinks);
             sort($actualProductLinks);
 
-            $this->assertEquals($expectedProductLinks, $actualProductLinks);
+            $this->assertSame($expectedProductLinks, $actualProductLinks);
         }
     }
 }

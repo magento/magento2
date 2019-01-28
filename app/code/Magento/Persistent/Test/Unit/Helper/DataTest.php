@@ -39,6 +39,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('path123')
         );
-        $this->assertEquals('path123/persistent.xml', $this->_helper->getPersistentConfigFilePath());
+        $this->assertSame('path123/persistent.xml', $this->_helper->getPersistentConfigFilePath());
     }
 }

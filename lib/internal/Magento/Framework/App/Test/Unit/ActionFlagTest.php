@@ -44,7 +44,7 @@ class ActionFlagTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('action_name'));
         $this->_requestMock->expects($this->once())->method('getRouteName');
         $this->_requestMock->expects($this->once())->method('getControllerName');
-        $this->assertEquals([], $this->_actionFlag->get(''));
+        $this->assertSame([], $this->_actionFlag->get(''));
     }
 
     public function testGetIfFlagExist()
@@ -65,7 +65,7 @@ class ActionFlagTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('controller')
         );
         $this->_actionFlag->set('action', 'flag', 'value');
-        $this->assertEquals('value', $this->_actionFlag->get('action', 'flag'));
+        $this->assertSame('value', $this->_actionFlag->get('action', 'flag'));
     }
 
     public function testGetIfFlagWithControllerKryNotExist()
@@ -85,6 +85,6 @@ class ActionFlagTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('controller')
         );
-        $this->assertEquals(false, $this->_actionFlag->get('action', 'flag'));
+        $this->assertSame(false, $this->_actionFlag->get('action', 'flag'));
     }
 }

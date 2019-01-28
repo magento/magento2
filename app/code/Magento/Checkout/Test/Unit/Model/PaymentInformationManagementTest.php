@@ -77,7 +77,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
 
-        $this->assertEquals(
+        $this->assertSame(
             $orderId,
             $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock)
         );
@@ -114,7 +114,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
 
-        $this->assertEquals(
+        $this->assertSame(
             $orderId,
             $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock)
         );

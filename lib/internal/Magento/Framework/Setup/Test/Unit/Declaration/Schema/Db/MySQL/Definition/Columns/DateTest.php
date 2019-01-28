@@ -92,7 +92,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` DATE NULL COMMENT "Comment"',
             $this->date->toDefinition($column)
         );

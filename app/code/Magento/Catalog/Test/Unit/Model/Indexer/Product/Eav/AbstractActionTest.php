@@ -71,7 +71,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($expectedIndexers['decimal']));
 
-        $this->assertEquals($expectedIndexers, $this->_model->getIndexers());
+        $this->assertSame($expectedIndexers, $this->_model->getIndexers());
     }
 
     /**
@@ -105,7 +105,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue('decimal_return_value'));
 
-        $this->assertEquals('source_return_value', $this->_model->getIndexer('source'));
+        $this->assertSame('source_return_value', $this->_model->getIndexer('source'));
     }
 
     /**

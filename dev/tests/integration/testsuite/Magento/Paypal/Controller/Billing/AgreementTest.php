@@ -112,8 +112,8 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractController
         );
         /** @var \Magento\Paypal\Model\Billing\Agreement $createdBillingAgreement */
         $createdBillingAgreement = $billingAgreementCollection->getLastItem();
-        $this->assertEquals($fixtureCustomerId, $createdBillingAgreement->getCustomerId(), "Customer ID is invalid.");
-        $this->assertEquals($referenceId, $createdBillingAgreement->getReferenceId(), "Reference ID is invalid.");
-        $this->assertEquals($paymentMethod, $createdBillingAgreement->getMethodCode(), "Method code is invalid.");
+        $this->assertSame($fixtureCustomerId, $createdBillingAgreement->getCustomerId(), "Customer ID is invalid.");
+        $this->assertSame($referenceId, $createdBillingAgreement->getReferenceId(), "Reference ID is invalid.");
+        $this->assertSame($paymentMethod, $createdBillingAgreement->getMethodCode(), "Method code is invalid.");
     }
 }

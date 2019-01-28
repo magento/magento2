@@ -21,12 +21,12 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getEntity());
         $this->assertEmpty($childBlock->getTitle());
-        $this->assertNotEquals($expectedHtml, $block->getCommentsHtml($shipment));
+        $this->assertNotSame($expectedHtml, $block->getCommentsHtml($shipment));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $block->getCommentsHtml($shipment);
         $this->assertSame($shipment, $childBlock->getEntity());
         $this->assertNotEmpty($childBlock->getTitle());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 }

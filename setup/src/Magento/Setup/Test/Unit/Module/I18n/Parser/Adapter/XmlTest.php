@@ -33,7 +33,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     {
         $this->_adapter->parse($file);
 
-        $this->assertEquals($expectedResult, $this->_adapter->getPhrases());
+        $this->assertSame($expectedResult, $this->_adapter->getPhrases());
     }
 
     /**

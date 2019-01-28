@@ -65,7 +65,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        $this->assertEquals($expected, $this->config->getType('global'));
+        $this->assertSame($expected, $this->config->getType('global'));
     }
 
     /**
@@ -98,7 +98,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        $this->assertEquals($expected, $this->config->getAll());
+        $this->assertSame($expected, $this->config->getAll());
     }
 
     public function testIsProductSet()
@@ -119,6 +119,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        $this->assertEquals(false, $this->config->isProductSet('typeId'));
+        $this->assertSame(false, $this->config->isProductSet('typeId'));
     }
 }

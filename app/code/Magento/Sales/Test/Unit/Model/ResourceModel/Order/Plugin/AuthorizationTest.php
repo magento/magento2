@@ -62,7 +62,7 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
         $this->userContextMock->expects($this->once())
             ->method('getUserType')
             ->willReturn('testType');
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->plugin->afterLoad($this->subjectMock, $this->subjectMock, $this->orderMock)
         );

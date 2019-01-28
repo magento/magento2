@@ -53,7 +53,7 @@ class RetryButtonTest extends \PHPUnit\Framework\TestCase
             ->with($uuid)
             ->willReturn($details);
 
-        $this->assertEquals($expectedResult, $this->block->getButtonData());
+        $this->assertSame($expectedResult, $this->block->getButtonData());
     }
 
     /**

@@ -47,7 +47,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             $this->returnSelf()
         );
         $this->_collectionMock->expects($this->once())->method('toOptionArray')->will($this->returnValue([]));
-        $this->assertEquals($this->_model->toOptionArray($isMultiselect, $foregroundCountries), $expectedResult);
+        $this->assertSame($this->_model->toOptionArray($isMultiselect, $foregroundCountries), $expectedResult);
     }
 
     /**

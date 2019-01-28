@@ -79,7 +79,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($metadata);
 
         $result = $this->model->execute(RuleInterface::class, $entityData);
-        $this->assertEquals($entityData, $result);
+        $this->assertSame($entityData, $result);
     }
 
     public function testExecute()
@@ -109,7 +109,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('bindRuleToEntity');
 
         $result = $this->model->execute(RuleInterface::class, $entityData);
-        $this->assertEquals($entityData, $result);
+        $this->assertSame($entityData, $result);
     }
 
     public function testExecuteWithString()
@@ -140,6 +140,6 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive([1, [3, 4, 5]], [1, [1, 2]]);
 
         $result = $this->model->execute(RuleInterface::class, $entityData);
-        $this->assertEquals($entityData, $result);
+        $this->assertSame($entityData, $result);
     }
 }

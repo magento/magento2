@@ -80,7 +80,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->_object->setData('info', $paymentInfo);
         $this->_object->setData('is_secure_mode', $isSecureMode);
         $result = $this->_object->getIsSecureMode();
-        $this->assertEquals($result, $expectedResult);
+        $this->assertSame($result, $expectedResult);
     }
 
     /**
@@ -149,7 +149,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     public function testGetValueAsArray($value, $escapeHtml, $expected)
     {
         $result = $this->_object->getValueAsArray($value, $escapeHtml);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

@@ -127,7 +127,7 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($requestData)
             ->willReturnSelf();
 
-        $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
+        $this->assertSame($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }
 
     /**

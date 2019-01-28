@@ -39,7 +39,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         unset($this->declaredExchanges[$name]['message_stats']);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedConfig,
             $this->declaredExchanges[$name],
             'Invalid exchange configuration: ' . $name
@@ -50,7 +50,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
             unset($value['properties_key']);
             return $value;
         }, $bindings);
-        $this->assertEquals(
+        $this->assertSame(
             $bindingConfig,
             $bindings,
             'Invalid exchange bindings configuration: ' . $name

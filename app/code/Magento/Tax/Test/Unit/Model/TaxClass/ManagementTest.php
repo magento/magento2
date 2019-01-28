@@ -57,7 +57,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getType')
             ->willReturn(\Magento\Tax\Api\Data\TaxClassKeyInterface::TYPE_ID);
         $taxClassKey->expects($this->once())->method('getValue')->willReturn('value');
-        $this->assertEquals('value', $this->model->getTaxClassId($taxClassKey));
+        $this->assertSame('value', $this->model->getTaxClassId($taxClassKey));
     }
 
     public function testGetTaxClassIdByNameType()

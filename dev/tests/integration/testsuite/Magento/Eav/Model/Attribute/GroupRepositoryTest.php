@@ -76,10 +76,10 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $searchResult = $this->repository->getList($searchCriteria);
 
-        $this->assertEquals(2, $searchResult->getTotalCount());
+        $this->assertSame(2, $searchResult->getTotalCount());
 
         $items = array_values($searchResult->getItems());
-        $this->assertEquals(1, count($items));
-        $this->assertEquals('attribute_group_3_for_search', $items[0]['attribute_group_code']);
+        $this->assertSame(1, count($items));
+        $this->assertSame('attribute_group_3_for_search', $items[0]['attribute_group_code']);
     }
 }

@@ -81,7 +81,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->never())
             ->method('warning');
 
-        $this->assertEquals($response, $this->httpContentProvider->getContent($version, $edition, $locale));
+        $this->assertSame($response, $this->httpContentProvider->getContent($version, $edition, $locale));
     }
 
     public function testGetContentFailure()
@@ -134,7 +134,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->never())
             ->method('warning');
 
-        $this->assertEquals($response, $this->httpContentProvider->getContent($version, $edition, $locale));
+        $this->assertSame($response, $this->httpContentProvider->getContent($version, $edition, $locale));
     }
 
     /**
@@ -170,7 +170,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->never())
             ->method('warning');
 
-        $this->assertEquals($response, $this->httpContentProvider->getContent($version, $edition, $locale));
+        $this->assertSame($response, $this->httpContentProvider->getContent($version, $edition, $locale));
     }
 
     /**

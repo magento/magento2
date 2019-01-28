@@ -12,6 +12,6 @@ class ResponseQueueNameBuilderTest extends \PHPUnit\Framework\TestCase
     public function testGetQueueName()
     {
         $model = new ResponseQueueNameBuilder();
-        $this->assertEquals('responseQueue.topic.01', $model->getQueueName('topic.01'));
+        $this->assertSame('responseQueue.topic.01', $model->getQueueName('topic.01'));
     }
 }

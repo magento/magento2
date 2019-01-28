@@ -70,7 +70,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $collection->addPriceData()->addFieldToFilter(ProductInterface::SKU, 'grouped-product');
         /** @var \Magento\Catalog\Model\Product $item */
         $item = $collection->getFirstItem();
-        $this->assertEquals($virtualProductPrice, $item->getData('min_price'));
-        $this->assertEquals($simpleProductPrice, $item->getData('max_price'));
+        $this->assertSame($virtualProductPrice, $item->getData('min_price'));
+        $this->assertSame($simpleProductPrice, $item->getData('max_price'));
     }
 }

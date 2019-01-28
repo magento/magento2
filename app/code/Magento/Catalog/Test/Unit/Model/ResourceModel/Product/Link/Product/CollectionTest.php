@@ -159,6 +159,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $productStore = new \Magento\Framework\DataObject(['id' => 33]);
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
-        $this->assertEquals(33, $this->collection->getStoreId());
+        $this->assertSame(33, $this->collection->getStoreId());
     }
 }

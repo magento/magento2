@@ -59,7 +59,7 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($cacheTypes)
         );
-        $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
+        $this->assertSame($expectedSum, $this->_messageModel->getIdentity());
     }
 
     /**
@@ -95,7 +95,7 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($cacheTypes)
         );
-        $this->assertEquals($expected, $this->_messageModel->isDisplayed());
+        $this->assertSame($expected, $this->_messageModel->isDisplayed());
     }
 
     /**
@@ -127,6 +127,6 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'backend/admin/cache';
         $this->_urlInterfaceMock->expects($this->once())->method('getUrl')->will($this->returnValue($url));
-        $this->assertEquals($url, $this->_messageModel->getLink());
+        $this->assertSame($url, $this->_messageModel->getLink());
     }
 }

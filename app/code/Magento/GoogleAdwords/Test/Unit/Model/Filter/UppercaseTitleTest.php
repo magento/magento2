@@ -32,6 +32,6 @@ class UppercaseTitleTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter($inputValue, $returnValue)
     {
-        $this->assertEquals($returnValue, $this->_model->filter($inputValue));
+        $this->assertSame($returnValue, $this->_model->filter($inputValue));
     }
 }

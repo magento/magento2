@@ -56,12 +56,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
         $indexerId = 'indexer_id';
         $this->_resourceMock->expects($this->once())->method('load')->with($this->model, $indexerId)->willReturnSelf();
         $this->model->loadByIndexer($indexerId);
-        $this->assertEquals($indexerId, $this->model->getIndexerId());
+        $this->assertSame($indexerId, $this->model->getIndexerId());
     }
 
     public function testBeforeSave()
     {
-        $this->assertEquals(null, $this->model->getUpdated());
+        $this->assertSame(null, $this->model->getUpdated());
         $this->model->beforeSave();
         $this->assertTrue(($this->model->getUpdated() != null));
     }
@@ -70,6 +70,6 @@ class StateTest extends \PHPUnit\Framework\TestCase
     {
         $setData = 'data';
         $this->model->setStatus($setData);
-        $this->assertEquals($setData, $this->model->getStatus());
+        $this->assertSame($setData, $this->model->getStatus());
     }
 }

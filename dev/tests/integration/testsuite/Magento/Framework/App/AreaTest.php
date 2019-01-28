@@ -44,8 +44,8 @@ class AreaTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\DesignInterface::class
         )->setDefaultDesignTheme();
 
-        $this->assertEquals($defaultTheme->getThemePath(), $design->getDesignTheme()->getThemePath());
-        $this->assertEquals('frontend', $design->getArea());
+        $this->assertSame($defaultTheme->getThemePath(), $design->getDesignTheme()->getThemePath());
+        $this->assertSame('frontend', $design->getArea());
 
         // try second time and make sure it won't load second time
         $this->_model->load(\Magento\Framework\App\Area::PART_DESIGN);
@@ -76,7 +76,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
         );
-        $this->assertEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
+        $this->assertSame('Magento/blank', $design->getDesignTheme()->getThemePath());
     }
 
     // @codingStandardsIgnoreStart
@@ -92,7 +92,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
         );
-        $this->assertEquals('Magento/luma', $design->getDesignTheme()->getThemePath());
+        $this->assertSame('Magento/luma', $design->getDesignTheme()->getThemePath());
     }
 
     // @codingStandardsIgnoreStart
@@ -113,6 +113,6 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         $request->setServer(new Parameters(['HTTP_USER_AGENT' => 'Mozilla Firefox']));
         $model->detectDesign($request);
         $design = $objectManager->get(\Magento\Framework\View\DesignInterface::class);
-        $this->assertNotEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
+        $this->assertNotSame('Magento/blank', $design->getDesignTheme()->getThemePath());
     }
 }

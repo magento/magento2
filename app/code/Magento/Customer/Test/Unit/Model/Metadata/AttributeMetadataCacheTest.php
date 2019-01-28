@@ -146,7 +146,7 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
         $this->attributeMetadataCache->save($entityType, $attributes, $suffix);
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->attributeMetadataCache->load($entityType, $suffix)
         );

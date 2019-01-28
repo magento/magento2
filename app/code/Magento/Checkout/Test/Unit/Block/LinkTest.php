@@ -30,7 +30,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ['urlBuilder' => $urlBuilder]
         );
         $link = $this->_objectManagerHelper->getObject(\Magento\Checkout\Block\Link::class, ['context' => $context]);
-        $this->assertEquals($url . $path, $link->getHref());
+        $this->assertSame($url . $path, $link->getHref());
     }
 
     /**
@@ -65,7 +65,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($isOutputEnabled)
         );
-        $this->assertEquals('', $block->toHtml());
+        $this->assertSame('', $block->toHtml());
     }
 
     /**

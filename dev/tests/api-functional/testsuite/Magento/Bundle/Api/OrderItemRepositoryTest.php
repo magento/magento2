@@ -115,14 +115,14 @@ class OrderItemRepositoryTest extends WebapiAbstract
 
         $actualOptions = $response['product_option']['extension_attributes']['bundle_options'];
 
-        $this->assertEquals(array_keys($bundleOption), array_column($actualOptions, 'option_id'));
-        $this->assertEquals($bundleOptionQty, array_column($actualOptions, 'option_qty', 'option_id'));
+        $this->assertSame(array_keys($bundleOption), array_column($actualOptions, 'option_id'));
+        $this->assertSame($bundleOptionQty, array_column($actualOptions, 'option_qty', 'option_id'));
 
         foreach ($actualOptions as $option) {
             $expectedSelections = is_array($bundleOption[$option['option_id']])
                 ? $bundleOption[$option['option_id']]
                 : [$bundleOption[$option['option_id']]];
-            $this->assertEquals($expectedSelections, $option['option_selections']);
+            $this->assertSame($expectedSelections, $option['option_selections']);
         }
     }
 }

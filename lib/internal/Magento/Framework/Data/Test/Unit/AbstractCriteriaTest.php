@@ -41,7 +41,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
     public function testAddField($field, $alias, array $result)
     {
         $this->criteria->addField($field, $alias);
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FIELDS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_FIELDS]['list']);
     }
 
     /**
@@ -59,7 +59,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
     public function testAddFilter($name, $field, $condition, $type, array $result)
     {
         $this->criteria->addFilter($name, $field, $condition, $type);
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
     }
 
     /**
@@ -76,7 +76,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
     public function testAddOrder($field, $direction, $unShift, array $result)
     {
         $this->criteria->addOrder($field, $direction, $unShift);
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_ORDERS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_ORDERS]['list']);
     }
 
     /**
@@ -92,7 +92,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
     public function testSetLimit($offset, $size, array $result)
     {
         $this->criteria->setLimit($offset, $size);
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_LIMIT]);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_LIMIT]);
     }
 
     /**
@@ -112,7 +112,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
         $this->criteria->addField($name, $alias);
 
         $this->criteria->removeField($field, $isAlias);
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FIELDS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_FIELDS]['list']);
     }
 
     /**
@@ -130,7 +130,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
         $this->criteria->addField($name, $alias);
 
         $this->criteria->removeAllFields();
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FIELDS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_FIELDS]['list']);
     }
 
     /**
@@ -149,7 +149,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
         $this->criteria->addFilter($filterName, $field, $condition, $type);
 
         $this->criteria->removeFilter($name);
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
     }
 
     /**
@@ -167,7 +167,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
         $this->criteria->addFilter($filterName, $field, $condition, $type);
 
         $this->criteria->removeAllFilters();
-        $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
+        $this->assertSame($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
     }
 
     /**
@@ -181,7 +181,7 @@ class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
     public function testReset(array $result)
     {
         $this->criteria->reset();
-        $this->assertEquals($result, $this->criteria->toArray());
+        $this->assertSame($result, $this->criteria->toArray());
     }
 
     /**

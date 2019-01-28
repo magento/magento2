@@ -108,8 +108,8 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(\Magento\Customer\Model\GroupManagement::CUST_GROUP_ALL);
         $this->groupManagement->expects($this->any())->method('getAllCustomersGroup')
             ->will($this->returnValue($group));
-        $this->assertEquals($expectedResult, $this->model->getTierPriceList());
-        $this->assertEquals(count($expectedResult), $this->model->getTierPriceCount());
+        $this->assertSame($expectedResult, $this->model->getTierPriceList());
+        $this->assertSame(count($expectedResult), $this->model->getTierPriceCount());
     }
 
     /**
@@ -202,7 +202,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getPrice')
             ->will($this->returnValue($price));
 
-        $this->assertEquals($savePercent, $this->model->getSavePercent($amount));
+        $this->assertSame($savePercent, $this->model->getSavePercent($amount));
     }
 
     /**

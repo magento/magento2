@@ -85,7 +85,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('theme_area')
         );
 
-        $this->assertEquals($this->themeMock, $this->model->get());
+        $this->assertSame($this->themeMock, $this->model->get());
     }
 
     public function testGetByAreaWithDesignDefaultArea()
@@ -124,7 +124,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('design_area')
         );
 
-        $this->assertEquals($this->themeMock, $this->model->get());
+        $this->assertSame($this->themeMock, $this->model->get());
     }
 
     public function testGetByAreaWithOtherAreaAndStringThemeId()
@@ -185,7 +185,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('other_area')
         );
 
-        $this->assertEquals($this->themeMock, $this->model->get());
+        $this->assertSame($this->themeMock, $this->model->get());
     }
 
     public function testGetByAreaWithOtherAreaAndNumericThemeId()
@@ -246,6 +246,6 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('other_area')
         );
 
-        $this->assertEquals($this->themeMock, $this->model->get());
+        $this->assertSame($this->themeMock, $this->model->get());
     }
 }

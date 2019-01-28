@@ -39,7 +39,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             'magento/package-a' => ['magento/package-b', 'magento/package-c'],
             'magento/package-b' => ['magento/package-c', 'magento/package-d'],
         ];
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $dependencyChecker->checkDependencies(['magento/package-a', 'magento/package-b'])
         );
@@ -83,7 +83,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             'magento/package-b' => ['magento/package-d'],
             'magento/package-c' => ['magento/package-d'],
         ];
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $dependencyChecker->checkDependencies(
                 ['magento/package-a', 'magento/package-b', 'magento/package-c'],

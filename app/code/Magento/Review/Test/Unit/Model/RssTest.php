@@ -66,6 +66,6 @@ class RssTest extends \PHPUnit\Framework\TestCase
         $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
         $productCollection->expects($this->once())->method('setDateOrder')->will($this->returnSelf());
         $this->managerInterface->expects($this->once())->method('dispatch')->will($this->returnSelf());
-        $this->assertEquals($productCollection, $this->rss->getProductCollection());
+        $this->assertSame($productCollection, $this->rss->getProductCollection());
     }
 }

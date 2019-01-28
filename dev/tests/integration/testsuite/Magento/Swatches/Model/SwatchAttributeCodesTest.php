@@ -37,6 +37,6 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
         ];
         $swatchAttributeCodes = $this->swatchAttributeCodes->getCodes();
 
-        $this->assertEquals($expected, $swatchAttributeCodes);
+        $this->assertSame($expected, $swatchAttributeCodes);
     }
 }

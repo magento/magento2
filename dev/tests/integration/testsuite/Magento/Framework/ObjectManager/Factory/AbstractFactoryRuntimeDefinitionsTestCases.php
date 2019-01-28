@@ -97,11 +97,11 @@ abstract class AbstractFactoryRuntimeDefinitionsTestCases extends \PHPUnit\Frame
             HasOptionalParameters::class,
             $this->complexDependenciesObject->getHasOptionalParameters()
         );
-        $this->assertEquals(
+        $this->assertSame(
             HasOptionalParameters::CONSTRUCTOR_INT_PARAM_DEFAULT,
             $this->complexDependenciesObject->getHasOptionalParameters()->getOptionalIntegerParameter()
         );
-        $this->assertEquals(
+        $this->assertSame(
             HasOptionalParameters::CONSTRUCTOR_STRING_PARAM_DEFAULT,
             $this->complexDependenciesObject->getHasOptionalParameters()->getOptionalStringParameter()
         );
@@ -118,11 +118,11 @@ abstract class AbstractFactoryRuntimeDefinitionsTestCases extends \PHPUnit\Frame
     public function testCreateObjectDependsOnAlias()
     {
         $this->assertInstanceOf(DependsOnAlias::class, $this->complexDependenciesObject->getDependsOnAlias());
-        $this->assertEquals(
+        $this->assertSame(
             self::ALIAS_OVERRIDDEN_STRING,
             $this->complexDependenciesObject->getDependsOnAlias()->getOverriddenString()
         );
-        $this->assertEquals(
+        $this->assertSame(
             self::ALIAS_OVERRIDDEN_INT,
             $this->complexDependenciesObject->getDependsOnAlias()->getOverRiddenInteger()
         );

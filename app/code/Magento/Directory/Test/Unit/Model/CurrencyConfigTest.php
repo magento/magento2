@@ -109,7 +109,7 @@ class CurrencyConfigTest extends TestCase
 
         $result = $this->testSubject->getConfigCurrencies($path);
 
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**

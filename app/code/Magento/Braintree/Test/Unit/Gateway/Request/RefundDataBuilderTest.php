@@ -73,7 +73,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($buildSubject['amount']);
 
-        static::assertEquals(
+        static::assertSame(
             [
                 'transaction_id' => $this->transactionId,
                 PaymentDataBuilder::AMOUNT => '12.36',
@@ -99,7 +99,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
 
-        static::assertEquals(
+        static::assertSame(
             [
                 'transaction_id' => $this->transactionId,
                 PaymentDataBuilder::AMOUNT => null,
@@ -126,7 +126,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
 
-        static::assertEquals(
+        static::assertSame(
             [
                 'transaction_id' => $this->transactionId,
                 PaymentDataBuilder::AMOUNT => null,

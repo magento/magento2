@@ -116,6 +116,6 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
         $this->categoryCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->extensionAttributesJoinProcessor->expects($this->once())->method('process')->with($collection);
 
-        $this->assertEquals($searchResult, $this->model->getList($searchCriteria));
+        $this->assertSame($searchResult, $this->model->getList($searchCriteria));
     }
 }

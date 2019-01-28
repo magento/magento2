@@ -80,7 +80,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->will($this->returnValue($price));
         $result = $this->model->getValue();
-        $this->assertEquals($price, $result);
+        $this->assertSame($price, $result);
     }
 
     /**
@@ -101,10 +101,10 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getMinimalPrice')
             ->will($this->returnValue(null));
         $result = $this->model->getMinimalPrice();
-        $this->assertEquals($minimalPrice, $result);
+        $this->assertSame($minimalPrice, $result);
         //The second time will return cached value
         $result = $this->model->getMinimalPrice();
-        $this->assertEquals($minimalPrice, $result);
+        $this->assertSame($minimalPrice, $result);
     }
 
     /**
@@ -130,10 +130,10 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getMinimalPrice')
             ->will($this->returnValue($minimalPrice));
         $result = $this->model->getMinimalPrice();
-        $this->assertEquals($finalPrice, $result);
+        $this->assertSame($finalPrice, $result);
         //The second time will return cached value
         $result = $this->model->getMinimalPrice();
-        $this->assertEquals($finalPrice, $result);
+        $this->assertSame($finalPrice, $result);
     }
 
     /**
@@ -151,9 +151,9 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($basePrice))
             ->will($this->returnValue($minimalPrice));
         $result = $this->model->getMaximalPrice();
-        $this->assertEquals($minimalPrice, $result);
+        $this->assertSame($minimalPrice, $result);
         //The second time will return cached value
         $result = $this->model->getMaximalPrice();
-        $this->assertEquals($minimalPrice, $result);
+        $this->assertSame($minimalPrice, $result);
     }
 }

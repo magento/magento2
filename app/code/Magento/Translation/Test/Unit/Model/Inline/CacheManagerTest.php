@@ -78,6 +78,6 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->translateResourceMock->expects($this->once())->method('getTranslationArray')->willReturn($translations);
         $this->localeResolverMock->expects($this->once())->method('getLocale')->willReturn('en_US');
         $this->fileManagerMock->expects($this->once())->method('updateTranslationFileContent');
-        $this->assertEquals($translations, $this->model->updateAndGetTranslations());
+        $this->assertSame($translations, $this->model->updateAndGetTranslations());
     }
 }

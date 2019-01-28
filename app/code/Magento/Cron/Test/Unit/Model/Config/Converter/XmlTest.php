@@ -71,7 +71,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

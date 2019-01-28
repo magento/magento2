@@ -144,7 +144,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($requestData)
             ->willReturn($buyRequestMock);
 
-        $this->assertEquals($buyRequestMock, $this->model->convertToBuyRequest($cartItemMock));
+        $this->assertSame($buyRequestMock, $this->model->convertToBuyRequest($cartItemMock));
     }
 
     public function testProcessProductOptionsIfOptionNotSelected()
@@ -157,7 +157,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
 
         $cartItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getProduct']);
         $cartItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
-        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 
     public function testProcessProductOptions()
@@ -201,7 +201,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 
-        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 
     public function testProcessProductOptionsIfOptionsExist()
@@ -245,6 +245,6 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 
-        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 }

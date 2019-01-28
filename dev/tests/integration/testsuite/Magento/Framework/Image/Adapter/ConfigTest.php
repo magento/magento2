@@ -12,6 +12,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /** @var Config $config */
         $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Image\Adapter\Config::class);
-        $this->assertEquals(\Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2, $config->getAdapterAlias());
+        $this->assertSame(\Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2, $config->getAdapterAlias());
     }
 }

@@ -77,6 +77,6 @@ class ThrowsTest extends \PHPUnit\Framework\TestCase
 
         $uses->expects($this->once())->method('getClassNameWithNamespace')->will($this->returnValue('\Exception'));
 
-        $this->assertEquals(['\Exception'], $throws->getDependencies($uses));
+        $this->assertSame(['\Exception'], $throws->getDependencies($uses));
     }
 }

@@ -28,7 +28,7 @@ class SourceArgumentsReaderTest extends \PHPUnit\Framework\TestCase
     {
         $class = new \ReflectionClass($class);
         $actualResult = $this->sourceArgumentsReader->getConstructorArgumentTypes($class);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function getConstructorArgumentTypesDataProvider()

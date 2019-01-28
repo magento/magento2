@@ -59,6 +59,6 @@ class ConfigurationScannerTest extends \PHPUnit\Framework\TestCase
         $iteratorMock->expects($this->exactly($counts))
             ->method('toArray')
             ->willReturn($files);
-        $this->assertEquals(array_keys($files), $this->model->scan('di.xml'));
+        $this->assertSame(array_keys($files), $this->model->scan('di.xml'));
     }
 }

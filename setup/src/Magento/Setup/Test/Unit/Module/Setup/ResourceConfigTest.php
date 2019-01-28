@@ -16,7 +16,7 @@ class ResourceConfigTest extends \PHPUnit\Framework\TestCase
     {
         $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
         $resourceConfig = new \Magento\Setup\Module\Setup\ResourceConfig();
-        $this->assertEquals($connectionName, $resourceConfig->getConnectionName($resourceName));
+        $this->assertSame($connectionName, $resourceConfig->getConnectionName($resourceName));
     }
 
     /**

@@ -139,7 +139,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             // checking of a lack of re-initialization
             for ($i = 10; --$i;) {
                 $result = $this->customer->getAllOptions();
-                $this->assertEquals($expected, $result);
+                $this->assertSame($expected, $result);
             }
         } else {
             $items = [];
@@ -229,7 +229,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $result=($this->customer->getAllOptions());
         $expected=$value;
-        $this->assertEquals([$expected], $result);
+        $this->assertSame([$expected], $result);
     }
 
     /**

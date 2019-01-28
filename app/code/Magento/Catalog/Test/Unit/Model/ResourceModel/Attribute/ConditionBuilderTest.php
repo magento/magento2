@@ -61,7 +61,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             $linkFieldValue
         );
 
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     /**
@@ -122,7 +122,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             $linkFieldValue
         );
 
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     /**
@@ -197,7 +197,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             $linkFieldValue
         );
 
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     /**
@@ -306,7 +306,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             $linkFieldValue
         );
 
-        $this->assertEquals($expectedConditions, $result);
+        $this->assertSame($expectedConditions, $result);
     }
 
     /**
@@ -417,7 +417,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             $linkFieldValue
         );
 
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     /**
@@ -485,7 +485,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             $linkFieldValue
         );
 
-        $this->assertEquals($expectedConditions, $result);
+        $this->assertSame($expectedConditions, $result);
     }
 
     /**

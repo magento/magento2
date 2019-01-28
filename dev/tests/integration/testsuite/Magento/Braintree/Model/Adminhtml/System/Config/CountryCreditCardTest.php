@@ -35,13 +35,13 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
     {
         $this->countryCreditCardConfig->setValue($value);
         $this->countryCreditCardConfig->save();
-        $this->assertEquals($encodedExpectedValue, $this->countryCreditCardConfig->getValue());
+        $this->assertSame($encodedExpectedValue, $this->countryCreditCardConfig->getValue());
 
         $this->countryCreditCardConfig->load($this->countryCreditCardConfig->getId());
         $loadedHashedArray = $this->countryCreditCardConfig->getValue();
         // strip the random hashes added by routine before assertion
         $loadedIndexedArray = array_values($loadedHashedArray);
-        $this->assertEquals($value, $loadedIndexedArray);
+        $this->assertSame($value, $loadedIndexedArray);
     }
 
     public function saveAndLoadDataProvider()

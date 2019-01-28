@@ -86,6 +86,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedTopic = 'async.magento.catalog.api.productrepositoryinterface.save.post';
         $lookupKey = 'async.V1.products.POST';
         $this->assertArrayHasKey($lookupKey, $result);
-        $this->assertEquals($result[$lookupKey]['topic'], $expectedTopic);
+        $this->assertSame($result[$lookupKey]['topic'], $expectedTopic);
     }
 }

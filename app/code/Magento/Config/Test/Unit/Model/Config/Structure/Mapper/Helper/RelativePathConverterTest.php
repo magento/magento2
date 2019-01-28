@@ -49,7 +49,7 @@ class RelativePathConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert($nodePath, $relativePath, $result)
     {
-        $this->assertEquals($result, $this->_sut->convert($nodePath, $relativePath));
+        $this->assertSame($result, $this->_sut->convert($nodePath, $relativePath));
     }
 
     /**

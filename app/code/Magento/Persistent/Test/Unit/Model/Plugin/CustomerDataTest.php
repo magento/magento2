@@ -57,7 +57,7 @@ class CustomerDataTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
 
-        $this->assertEquals([], $this->plugin->aroundGetSectionData($this->subjectMock, $proceed));
+        $this->assertSame([], $this->plugin->aroundGetSectionData($this->subjectMock, $proceed));
     }
 
     public function testAroundGetSectionData()
@@ -71,6 +71,6 @@ class CustomerDataTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
 
-        $this->assertEquals($result, $this->plugin->aroundGetSectionData($this->subjectMock, $proceed));
+        $this->assertSame($result, $this->plugin->aroundGetSectionData($this->subjectMock, $proceed));
     }
 }

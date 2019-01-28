@@ -50,9 +50,9 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGetGroup($testGroup)
     {
         $group = $this->groupRepository->getById($testGroup[GroupInterface::ID]);
-        $this->assertEquals($testGroup[GroupInterface::ID], $group->getId());
-        $this->assertEquals($testGroup[GroupInterface::CODE], $group->getCode());
-        $this->assertEquals($testGroup[GroupInterface::TAX_CLASS_ID], $group->getTaxClassId());
+        $this->assertSame($testGroup[GroupInterface::ID], $group->getId());
+        $this->assertSame($testGroup[GroupInterface::CODE], $group->getCode());
+        $this->assertSame($testGroup[GroupInterface::TAX_CLASS_ID], $group->getTaxClassId());
     }
 
     /**
@@ -87,9 +87,9 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId());
-        $this->assertEquals($group->getCode(), $newGroup->getCode());
-        $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
+        $this->assertSame($groupId, $newGroup->getId());
+        $this->assertSame($group->getCode(), $newGroup->getCode());
+        $this->assertSame($group->getTaxClassId(), $newGroup->getTaxClassId());
     }
 
     /**
@@ -102,9 +102,9 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId());
-        $this->assertEquals($group->getCode(), $newGroup->getCode());
-        $this->assertEquals(GroupRepository::DEFAULT_TAX_CLASS_ID, $newGroup->getTaxClassId());
+        $this->assertSame($groupId, $newGroup->getId());
+        $this->assertSame($group->getCode(), $newGroup->getCode());
+        $this->assertSame(GroupRepository::DEFAULT_TAX_CLASS_ID, $newGroup->getTaxClassId());
     }
 
     /**
@@ -117,15 +117,15 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId());
-        $this->assertEquals($group->getCode(), $newGroup->getCode());
-        $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
+        $this->assertSame($groupId, $newGroup->getId());
+        $this->assertSame($group->getCode(), $newGroup->getCode());
+        $this->assertSame($group->getTaxClassId(), $newGroup->getTaxClassId());
 
         $updates = $this->groupFactory->create()->setId($groupId)->setCode('Updated Group')->setTaxClassId(3);
         $this->assertNotNull($this->groupRepository->save($updates));
         $updatedGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($updates->getCode(), $updatedGroup->getCode(), 'Code not updated.');
-        $this->assertEquals($updates->getTaxClassId(), $updatedGroup->getTaxClassId(), 'Tax Class should not change.');
+        $this->assertSame($updates->getCode(), $updatedGroup->getCode(), 'Code not updated.');
+        $this->assertSame($updates->getTaxClassId(), $updatedGroup->getTaxClassId(), 'Tax Class should not change.');
     }
 
     /**
@@ -140,15 +140,15 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($groupId);
 
         $newGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($groupId, $newGroup->getId());
-        $this->assertEquals($group->getCode(), $newGroup->getCode());
-        $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
+        $this->assertSame($groupId, $newGroup->getId());
+        $this->assertSame($group->getCode(), $newGroup->getCode());
+        $this->assertSame($group->getTaxClassId(), $newGroup->getTaxClassId());
 
         $updates = $this->groupFactory->create()->setId($groupId)->setCode('Updated Group')->setTaxClassId(9999);
         $this->groupRepository->save($updates);
         $updatedGroup = $this->groupRepository->getById($groupId);
-        $this->assertEquals($updates->getCode(), $updatedGroup->getCode());
-        $this->assertEquals($updates->getTaxClassId(), $updatedGroup->getTaxClassId());
+        $this->assertSame($updates->getCode(), $updatedGroup->getCode());
+        $this->assertSame($updates->getTaxClassId(), $updatedGroup->getTaxClassId());
     }
 
     /**
@@ -186,7 +186,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $searchResults = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
         /** @var GroupInterface[] $results */
         $results = $searchResults->getItems();
-        $this->assertEquals(4, count($results));
+        $this->assertSame(4, count($results));
     }
 
     /**
@@ -209,8 +209,8 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
         /** @var $item GroupInterface */
         foreach ($searchResults->getItems() as $item) {
-            $this->assertEquals($expectedResult[$item->getId()][GroupInterface::CODE], $item->getCode());
-            $this->assertEquals($expectedResult[$item->getId()][GroupInterface::TAX_CLASS_ID], $item->getTaxClassId());
+            $this->assertSame($expectedResult[$item->getId()][GroupInterface::CODE], $item->getCode());
+            $this->assertSame($expectedResult[$item->getId()][GroupInterface::TAX_CLASS_ID], $item->getTaxClassId());
             unset($expectedResult[$item->getId()]);
         }
     }
@@ -300,7 +300,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             /** @var \Magento\Customer\Model\Data\Group $item */
             $result[] = $item->$methodName();
         }
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

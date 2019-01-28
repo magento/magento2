@@ -72,6 +72,6 @@ class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($childIdentities);
 
         $productIdentities = $this->plugin->afterGetIdentities($this->product, $identities);
-        $this->assertEquals($expectedIdentities, $productIdentities);
+        $this->assertSame($expectedIdentities, $productIdentities);
     }
 }

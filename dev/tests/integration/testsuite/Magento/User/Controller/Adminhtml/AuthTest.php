@@ -69,7 +69,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         );
         $message = $transportMock->getSentMessage();
         $this->assertNotEmpty($message);
-        $this->assertEquals(
+        $this->assertSame(
             __('Password Reset Confirmation for %1', ['John Doe'])->render(),
             $message->getSubject()
         );
@@ -100,9 +100,9 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setQueryValue('token', $resetPasswordToken)->setQueryValue('id', $user->getId());
         $this->dispatch('backend/admin/auth/resetpassword');
 
-        $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
-        $this->assertEquals('auth', $this->getRequest()->getControllerName());
-        $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
+        $this->assertSame('adminhtml', $this->getRequest()->getRouteName());
+        $this->assertSame('auth', $this->getRequest()->getControllerName());
+        $this->assertSame('resetpassword', $this->getRequest()->getActionName());
         $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
     }
 
@@ -179,7 +179,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($password, $user->getPassword()));
         } else {
-            $this->assertEquals($oldPassword, $user->getPassword());
+            $this->assertSame($oldPassword, $user->getPassword());
         }
     }
 

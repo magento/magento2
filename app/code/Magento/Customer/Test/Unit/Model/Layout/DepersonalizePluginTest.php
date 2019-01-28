@@ -98,7 +98,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with($this->equalTo(\Magento\Framework\Data\Form\FormKey::FORM_KEY));
         $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals([], $output);
+        $this->assertSame([], $output);
     }
 
     public function testBeforeGenerateXmlNoDepersonalize()
@@ -109,7 +109,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('getData');
         $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals([], $output);
+        $this->assertSame([], $output);
     }
 
     public function testAfterGenerateXml()

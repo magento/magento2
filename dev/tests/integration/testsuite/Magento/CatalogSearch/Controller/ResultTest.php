@@ -74,7 +74,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $query \Magento\Search\Model\Query */
         $query = $objectManager->create(\Magento\Search\Model\Query::class);
         $query->loadByQueryText('query_text');
-        $this->assertEquals(1, $query->getPopularity());
+        $this->assertSame(1, $query->getPopularity());
 
         $this->dispatch('catalogsearch/searchTermsLog/save?q=query_text');
 
@@ -83,7 +83,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains($data, $responseBody);
 
         $query->loadByQueryText('query_text');
-        $this->assertEquals(2, $query->getPopularity());
+        $this->assertSame(2, $query->getPopularity());
     }
 
     /**
@@ -98,7 +98,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $query \Magento\Search\Model\Query */
         $query = $objectManager->create(\Magento\Search\Model\Query::class);
         $query->loadByQueryText('popular_query_text');
-        $this->assertEquals(100, $query->getPopularity());
+        $this->assertSame(100, $query->getPopularity());
 
         $this->dispatch('/catalogsearch/result/?q=popular_query_text');
 
@@ -107,7 +107,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('popular_query_text');
-        $this->assertEquals(100, $query->getPopularity());
+        $this->assertSame(100, $query->getPopularity());
     }
 
     /**
@@ -122,7 +122,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $query \Magento\Search\Model\Query */
         $query = $objectManager->create(\Magento\Search\Model\Query::class);
         $query->loadByQueryText('popular_query_text');
-        $this->assertEquals(100, $query->getPopularity());
+        $this->assertSame(100, $query->getPopularity());
 
         $this->dispatch('/catalogsearch/result/?q=popular_query_text&additional_parameters=some');
 
@@ -131,7 +131,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertNotContains('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('popular_query_text');
-        $this->assertEquals(101, $query->getPopularity());
+        $this->assertSame(101, $query->getPopularity());
     }
 
     /**
@@ -146,7 +146,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $query \Magento\Search\Model\Query */
         $query = $objectManager->create(\Magento\Search\Model\Query::class);
         $query->loadByQueryText('query_text');
-        $this->assertEquals(1, $query->getPopularity());
+        $this->assertSame(1, $query->getPopularity());
 
         $this->dispatch('/catalogsearch/result/?q=query_text');
 
@@ -155,7 +155,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertNotContains('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('query_text');
-        $this->assertEquals(2, $query->getPopularity());
+        $this->assertSame(2, $query->getPopularity());
     }
 
     private function cacheAndPopularitySetup()

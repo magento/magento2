@@ -59,7 +59,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get('simple');
         $fileOption = $product->getOptions()[0];
         $actualExtensions = $fileOption->getFileExtension();
-        $this->assertEquals($expectedExtensions, $actualExtensions);
+        $this->assertSame($expectedExtensions, $actualExtensions);
     }
 
     /**

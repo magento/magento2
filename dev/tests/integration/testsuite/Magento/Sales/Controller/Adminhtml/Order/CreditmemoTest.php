@@ -24,7 +24,7 @@ class CreditmemoTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
 
         /** @var \Magento\CatalogInventory\Api\StockStateInterface $stockState */
         $stockState = $objectManager->create(\Magento\CatalogInventory\Api\StockStateInterface::class);
-        $this->assertEquals(95, $stockState->getStockQty(1, 1));
+        $this->assertSame(95, $stockState->getStockQty(1, 1));
 
         /** @var \Magento\Sales\Model\Order $order */
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
@@ -40,6 +40,6 @@ class CreditmemoTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
 
         /** @var \Magento\CatalogInventory\Api\StockStateInterface $stockState */
         $stockState = $objectManager->create(\Magento\CatalogInventory\Api\StockStateInterface::class);
-        $this->assertEquals(95, $stockState->getStockQty(1, 1));
+        $this->assertSame(95, $stockState->getStockQty(1, 1));
     }
 }

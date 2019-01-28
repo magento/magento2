@@ -32,22 +32,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $consumers = $config->getConsumers();
         $consumer = $config->getConsumer('consumer1');
 
-        $this->assertEquals(
+        $this->assertSame(
             $consumer,
             $consumers['consumer1'],
             'Consumers received from collection and via getter must be the same'
         );
 
-        $this->assertEquals('consumer1', $consumer->getName());
-        $this->assertEquals('queue1', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
-        $this->assertEquals(\Magento\Framework\MessageQueue\BatchConsumer::class, $consumer->getConsumerInstance());
-        $this->assertEquals('100', $consumer->getMaxMessages());
+        $this->assertSame('consumer1', $consumer->getName());
+        $this->assertSame('queue1', $consumer->getQueue());
+        $this->assertSame('amqp', $consumer->getConnection());
+        $this->assertSame(\Magento\Framework\MessageQueue\BatchConsumer::class, $consumer->getConsumerInstance());
+        $this->assertSame('100', $consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(1, $handlers);
-        $this->assertEquals('handlerMethodOne', $handlers[0]->getMethod());
-        $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\HandlerOne', $handlers[0]->getType());
+        $this->assertSame('handlerMethodOne', $handlers[0]->getMethod());
+        $this->assertSame('Magento\TestModuleMessageQueueConfiguration\HandlerOne', $handlers[0]->getType());
     }
 
     public function testGetConsumerWithDefaultValues()
@@ -57,11 +57,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $consumer = $config->getConsumer('consumer5');
 
-        $this->assertEquals('consumer5', $consumer->getName());
-        $this->assertEquals('queue5', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
-        $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
-        $this->assertEquals(null, $consumer->getMaxMessages());
+        $this->assertSame('consumer5', $consumer->getName());
+        $this->assertSame('queue5', $consumer->getQueue());
+        $this->assertSame('amqp', $consumer->getConnection());
+        $this->assertSame(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
+        $this->assertSame(null, $consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(0, $handlers);

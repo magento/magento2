@@ -24,7 +24,7 @@ class StatusResolverTest extends \PHPUnit\Framework\TestCase
     {
         $actualReturn = (new StatusResolver())->getOrderStatusByState($order, 'new');
 
-        self::assertEquals($expectedReturn, $actualReturn);
+        self::assertSame($expectedReturn, $actualReturn);
     }
 
     /**

@@ -77,7 +77,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             ->method('fetchAll');
         $this->cacheMock->expects($this->never())
             ->method('save');
-        $this->assertEquals(
+        $this->assertSame(
             $data,
             $this->fetchStrategyCache->fetchAll($this->selectMock, [])
         );
@@ -115,7 +115,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                 ['fixture_tag_one', 'fixture_tag_two'],
                 86400
             );
-        $this->assertEquals(
+        $this->assertSame(
             $data,
             $this->fetchStrategyCache->fetchAll($this->selectMock, $bindParams)
         );

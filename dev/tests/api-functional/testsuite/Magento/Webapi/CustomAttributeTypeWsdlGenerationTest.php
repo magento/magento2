@@ -47,7 +47,7 @@ class CustomAttributeTypeWsdlGenerationTest extends \Magento\TestFramework\TestC
             }
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $testCustomTypeCount,
             'Incorrect count for Custom attribute types. Found "' . $testCustomTypeCount . ' type(s)" expected 2.'

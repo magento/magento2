@@ -63,7 +63,7 @@ class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->productMetadata->method('getEdition')
             ->willReturn($edition);
 
-        self::assertEquals($expected, $this->builder->build($buildSubject));
+        self::assertSame($expected, $this->builder->build($buildSubject));
     }
 
     /**
@@ -80,7 +80,7 @@ class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->productMetadata->expects(self::never())
             ->method('getEdition');
 
-        self::assertEquals(
+        self::assertSame(
             [
                 'channel' => $channel
             ],

@@ -32,7 +32,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
     {
         $this->source->loadXML(file_get_contents(__DIR__ . '/_files/sections.xml'));
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'sections' => [
                     'customer/account/logout' => '*',

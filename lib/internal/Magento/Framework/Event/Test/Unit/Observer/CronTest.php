@@ -34,7 +34,7 @@ class CronTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNumeric($value, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->cron->getNumeric($value));
+        $this->assertSame($expectedResult, $this->cron->getNumeric($value));
     }
 
     /**
@@ -78,7 +78,7 @@ class CronTest extends \PHPUnit\Framework\TestCase
      */
     public function testMatchCronExpression($expression, $number, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->cron->matchCronExpression($expression, $number));
+        $this->assertSame($expectedResult, $this->cron->matchCronExpression($expression, $number));
     }
 
     /**
@@ -110,7 +110,7 @@ class CronTest extends \PHPUnit\Framework\TestCase
         $this->cron->setCronExpr($expression);
         $this->cron->setNow($time);
 
-        $this->assertEquals($expectedResult, $this->cron->isValidFor($eventMock));
+        $this->assertSame($expectedResult, $this->cron->isValidFor($eventMock));
     }
 
     /**

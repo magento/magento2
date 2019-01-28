@@ -81,8 +81,8 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Code\Generator\EntityAbstract::class,
             [$this->sourceClass]
         );
-        $this->assertAttributeEquals($this->sourceClass, '_sourceClassName', $this->_model);
-        $this->assertAttributeEquals($this->sourceClass . 'Abstract', '_resultClassName', $this->_model);
+        $this->assertAttributeSame($this->sourceClass, '_sourceClassName', $this->_model);
+        $this->assertAttributeSame($this->sourceClass . 'Abstract', '_resultClassName', $this->_model);
 
         // with all arguments
         // Configure IoObject mock
@@ -97,9 +97,9 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Code\Generator\EntityAbstract::class,
             [$this->sourceClass, $this->resultClass, $ioObject, $codeGenerator]
         );
-        $this->assertAttributeEquals($this->resultClass, '_resultClassName', $this->_model);
-        $this->assertAttributeEquals($ioObject, '_ioObject', $this->_model);
-        $this->assertAttributeEquals($codeGenerator, '_classGenerator', $this->_model);
+        $this->assertAttributeSame($this->resultClass, '_resultClassName', $this->_model);
+        $this->assertAttributeSame($ioObject, '_ioObject', $this->_model);
+        $this->assertAttributeSame($codeGenerator, '_classGenerator', $this->_model);
     }
 
     /**
@@ -202,9 +202,9 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $result = $this->_model->generate();
         if ($errors) {
             $this->assertFalse($result);
-            $this->assertEquals($errors, $this->_model->getErrors());
+            $this->assertSame($errors, $this->_model->getErrors());
         } else {
-            $this->assertEquals('MyResult/MyResult.php', $result);
+            $this->assertSame('MyResult/MyResult.php', $result);
             $this->assertEmpty($this->_model->getErrors());
         }
     }

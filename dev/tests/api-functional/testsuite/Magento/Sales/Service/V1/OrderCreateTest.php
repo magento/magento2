@@ -228,13 +228,13 @@ class OrderCreateTest extends WebapiAbstract
         $model = $this->objectManager->get(\Magento\Sales\Model\Order::class);
         $model->load($order['customer_email'], 'customer_email');
         $this->assertTrue((bool)$model->getId());
-        $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());
-        $this->assertEquals($order['grand_total'], $model->getGrandTotal());
+        $this->assertSame($order['base_grand_total'], $model->getBaseGrandTotal());
+        $this->assertSame($order['grand_total'], $model->getGrandTotal());
         $this->assertNotNull($model->getShippingAddress());
         $this->assertTrue((bool)$model->getShippingAddress()->getId());
-        $this->assertEquals('Flat Rate - Fixed', $model->getShippingDescription());
+        $this->assertSame('Flat Rate - Fixed', $model->getShippingDescription());
         $shippingMethod = $model->getShippingMethod(true);
-        $this->assertEquals('flatrate', $shippingMethod['carrier_code']);
-        $this->assertEquals('flatrate', $shippingMethod['method']);
+        $this->assertSame('flatrate', $shippingMethod['carrier_code']);
+        $this->assertSame('flatrate', $shippingMethod['method']);
     }
 }

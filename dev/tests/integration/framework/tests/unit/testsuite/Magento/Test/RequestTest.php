@@ -27,8 +27,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHttpHost()
     {
-        $this->assertEquals('localhost', $this->_model->getHttpHost());
-        $this->assertEquals('localhost:81', $this->_model->getHttpHost(false));
+        $this->assertSame('localhost', $this->_model->getHttpHost());
+        $this->assertSame('localhost:81', $this->_model->getHttpHost(false));
     }
 
     public function testSetGetServerValue()
@@ -40,7 +40,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             $this->_model->setServer(new Parameters(['test' => 'value', 'null' => null]))
         );
         $this->assertSame(['test' => 'value', 'null' => null], $this->_model->getServer()->toArray());
-        $this->assertEquals('value', $this->_model->getServer('test'));
+        $this->assertSame('value', $this->_model->getServer('test'));
         $this->assertSame(null, $this->_model->getServer('non-existing'));
         $this->assertSame('default', $this->_model->getServer('non-existing', 'default'));
         $this->assertSame(null, $this->_model->getServer('null'));

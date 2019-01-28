@@ -86,11 +86,11 @@ class BCPatchTest extends SetupTestCase
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule5']);
         self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
         self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertEquals(
+        self::assertSame(
             [6,12],
             $this->tableData->describeTableData('reference_table', 'some_integer')
         );
-        self::assertEquals(
+        self::assertSame(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );
@@ -116,7 +116,7 @@ class BCPatchTest extends SetupTestCase
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule5']);
         self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
         self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertEquals(
+        self::assertSame(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );
@@ -160,11 +160,11 @@ class BCPatchTest extends SetupTestCase
         self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
         self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
         //Old scripts should be skipped because we do not have version
-        self::assertEquals(
+        self::assertSame(
             [],
             $this->tableData->describeTableData('reference_table', 'some_integer')
         );
-        self::assertEquals(
+        self::assertSame(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );

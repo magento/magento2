@@ -23,6 +23,6 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
         $lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
         $lists->expects($this->any())->method('getTimezoneList')->will($this->returnValue($this->expectedTimezones));
         $timezone = new \Magento\Framework\Validator\Timezone($lists);
-        $this->assertEquals(true, $timezone->isValid('America/Los_Angeles'));
+        $this->assertSame(true, $timezone->isValid('America/Los_Angeles'));
     }
 }

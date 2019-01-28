@@ -90,9 +90,9 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         foreach ($this->_model as $item) {
             $items[] = $item;
         }
-        $this->assertEquals($this->_groupMock, $items[0]);
-        $this->assertEquals($this->_fieldMock, $items[1]);
-        $this->assertEquals($this->_groupMock, $items[2]);
-        $this->assertEquals($this->_fieldMock, $items[3]);
+        $this->assertSame($this->_groupMock, $items[0]);
+        $this->assertSame($this->_fieldMock, $items[1]);
+        $this->assertSame($this->_groupMock, $items[2]);
+        $this->assertSame($this->_fieldMock, $items[3]);
     }
 }

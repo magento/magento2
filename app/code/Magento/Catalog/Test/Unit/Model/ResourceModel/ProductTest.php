@@ -76,6 +76,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attributeSetMock->expects($this->once())->method('getEntityTypeId')->will($this->returnValue(3));
         $entityTypeMock->expects($this->once())->method('getId')->will($this->returnValue($productTypeId));
 
-        $this->assertEquals($expectedErrorMessage, $this->model->validate($productMock));
+        $this->assertSame($expectedErrorMessage, $this->model->validate($productMock));
     }
 }

@@ -148,14 +148,14 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 ])
             ->will($this->returnValue($rewrite));
 
-        $this->assertEquals($url . $separator . '___store=' . $storeCode, $this->block->getHref());
+        $this->assertSame($url . $separator . '___store=' . $storeCode, $this->block->getHref());
     }
 
     public function testGetLabelWithCustomText()
     {
         $customText = 'Some text';
         $this->block->setData('anchor_text', $customText);
-        $this->assertEquals($customText, $this->block->getLabel());
+        $this->assertSame($customText, $this->block->getLabel());
     }
 
     public function testGetLabelWithoutCustomText()
@@ -169,7 +169,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         $this->entityResource->expects($this->once())->method('getAttributeRawValue')->with($id, 'name', $store)
             ->will($this->returnValue($category));
-        $this->assertEquals($category, $this->block->getLabel());
+        $this->assertSame($category, $this->block->getLabel());
     }
 
     /**

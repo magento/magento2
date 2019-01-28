@@ -157,7 +157,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             $resultExtensionAttributes->expects($this->once())->method('setIsSubscribed')->with($subscriptionNewValue);
         }
 
-        $this->assertEquals($result, $this->plugin->afterSave($subject, $result, $this->customerMock));
+        $this->assertSame($result, $this->plugin->afterSave($subject, $result, $this->customerMock));
     }
 
     /**
@@ -182,7 +182,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->afterDelete($subject, true, $customer));
+        $this->assertSame(true, $this->plugin->afterDelete($subject, true, $customer));
     }
 
     public function testAroundDeleteById()
@@ -199,7 +199,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
+        $this->assertSame(true, $this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
     }
 
     /**
@@ -234,7 +234,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->willReturn($subscriber);
         $this->customerExtensionMock->expects($this->once())->method('setIsSubscribed')->with($isSubscribed);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->customerMock,
             $this->plugin->afterGetById($subject, $this->customerMock)
         );
@@ -260,7 +260,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->method('setIsSubscribed')
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->customerMock,
             $this->plugin->afterGetById($subject, $this->customerMock)
         );

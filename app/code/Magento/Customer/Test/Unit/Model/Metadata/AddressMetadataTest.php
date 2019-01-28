@@ -82,7 +82,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with($attributeMock)
             ->willReturn($metadataMock);
 
-        $this->assertEquals($result, $this->model->getAttributes($formCode));
+        $this->assertSame($result, $this->model->getAttributes($formCode));
     }
 
     /**
@@ -141,7 +141,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with($attributeMock)
             ->willReturn($metadataMock);
 
-        $this->assertEquals($metadataMock, $this->model->getAttributeMetadata($attributeCode));
+        $this->assertSame($metadataMock, $this->model->getAttributeMetadata($attributeCode));
     }
 
     public function testGetAttributeMetadataWithCodeId()
@@ -168,7 +168,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with($attributeMock)
             ->willReturn($metadataMock);
 
-        $this->assertEquals($metadataMock, $this->model->getAttributeMetadata($attributeCode));
+        $this->assertSame($metadataMock, $this->model->getAttributeMetadata($attributeCode));
     }
 
     /**
@@ -218,7 +218,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with($attributeMock)
             ->willReturn($metadataMock);
 
-        $this->assertEquals($result, $this->model->getAllAttributesMetadata());
+        $this->assertSame($result, $this->model->getAllAttributesMetadata());
     }
 
     public function testGetAllAttributesMetadataWithoutEntity()
@@ -238,7 +238,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
         $result = [];
 
-        $this->assertEquals($result, $this->model->getAllAttributesMetadata());
+        $this->assertSame($result, $this->model->getAllAttributesMetadata());
     }
 
     public function testGetCustomAttributesMetadata()
@@ -285,7 +285,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('isSystem')
             ->willReturn(false);
 
-        $this->assertEquals($result, $this->model->getCustomAttributesMetadata());
+        $this->assertSame($result, $this->model->getCustomAttributesMetadata());
     }
 
     public function testGetCustomAttributesMetadataWithSystemAttribute()
@@ -332,7 +332,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('isSystem')
             ->willReturn(true);
 
-        $this->assertEquals($result, $this->model->getCustomAttributesMetadata());
+        $this->assertSame($result, $this->model->getCustomAttributesMetadata());
     }
 
     public function testGetCustomAttributesMetadataWithoutAttributes()
@@ -370,6 +370,6 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-        $this->assertEquals($result, $this->model->getCustomAttributesMetadata());
+        $this->assertSame($result, $this->model->getCustomAttributesMetadata());
     }
 }

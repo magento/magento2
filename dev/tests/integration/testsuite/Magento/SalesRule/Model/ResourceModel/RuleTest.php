@@ -21,6 +21,6 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         );
         $items = $resource->getActiveAttributes();
 
-        $this->assertEquals([['attribute_code' => 'attribute_for_sales_rule_1']], $items);
+        $this->assertSame([['attribute_code' => 'attribute_for_sales_rule_1']], $items);
     }
 }

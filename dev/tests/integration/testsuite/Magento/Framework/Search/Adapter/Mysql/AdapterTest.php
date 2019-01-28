@@ -85,7 +85,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     protected function assertPreConditions()
     {
         $currentEngine = $this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
-        $this->assertEquals($this->searchEngine, $currentEngine);
+        $this->assertSame($this->searchEngine, $currentEngine);
     }
 
     /**
@@ -122,7 +122,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         }
         sort($actualIds);
         sort($expectedIds);
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     /**
@@ -136,7 +136,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             /** @var \Magento\Framework\Api\Search\Document $document */
             $actualIds[] = $document->getId();
         }
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     /**
@@ -149,7 +149,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
         $queryResponse = $this->executeQuery();
 
-        $this->assertEquals(1, $queryResponse->count());
+        $this->assertSame(1, $queryResponse->count());
     }
 
     /**
@@ -166,7 +166,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('one_match');
         $queryResponse = $this->executeQuery();
 
-        $this->assertEquals(5, $queryResponse->count());
+        $this->assertSame(5, $queryResponse->count());
         $this->assertOrderedProductIds($queryResponse, $expectedIds);
     }
 
@@ -180,8 +180,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
         $queryResponse = $this->executeQuery();
 
-        $this->assertEquals(2, $queryResponse->count());
-        $this->assertEquals(
+        $this->assertSame(2, $queryResponse->count());
+        $this->assertSame(
             ['weight_bucket', 'price_bucket', 'dynamic_price'],
             $queryResponse->getAggregations()->getBucketNames()
         );
@@ -199,7 +199,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('one_match_filters');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(1, $queryResponse->count());
+        $this->assertSame(1, $queryResponse->count());
     }
 
     /**
@@ -214,7 +214,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('range_filter');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(3, $queryResponse->count());
+        $this->assertSame(3, $queryResponse->count());
     }
 
     /**
@@ -228,7 +228,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('range_filter_without_from_field');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(4, $queryResponse->count());
+        $this->assertSame(4, $queryResponse->count());
     }
 
     /**
@@ -242,7 +242,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('range_filter_without_to_field');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(4, $queryResponse->count());
+        $this->assertSame(4, $queryResponse->count());
     }
 
     /**
@@ -256,8 +256,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('term_filter');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(1, $queryResponse->count());
-        $this->assertEquals(4, $queryResponse->getIterator()->offsetGet(0)->getId());
+        $this->assertSame(1, $queryResponse->count());
+        $this->assertSame(4, $queryResponse->getIterator()->offsetGet(0)->getId());
     }
 
     /**
@@ -271,7 +271,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('term_filter');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(2, $queryResponse->count());
+        $this->assertSame(2, $queryResponse->count());
     }
 
     /**
@@ -286,7 +286,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('one_wildcard');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(3, $queryResponse->count());
+        $this->assertSame(3, $queryResponse->count());
         $this->assertProductIds($queryResponse, $expectedIds);
     }
 
@@ -303,7 +303,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('one_wildcard');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(2, $queryResponse->count());
+        $this->assertSame(2, $queryResponse->count());
     }
 
     /**
@@ -325,7 +325,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('bool_filter');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(count($expectedIds), $queryResponse->count());
+        $this->assertSame(count($expectedIds), $queryResponse->count());
         $this->assertProductIds($queryResponse, $expectedIds);
     }
 
@@ -343,7 +343,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('bool_filter_with_nested_bool_filter');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(count($expectedIds), $queryResponse->count());
+        $this->assertSame(count($expectedIds), $queryResponse->count());
         $this->assertProductIds($queryResponse, $expectedIds);
     }
 
@@ -360,7 +360,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('bool_filter_with_range_in_nested_negative_filter');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(count($expectedIds), $queryResponse->count());
+        $this->assertSame(count($expectedIds), $queryResponse->count());
         $this->assertProductIds($queryResponse, $expectedIds);
     }
 
@@ -387,7 +387,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('advanced_search_test');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals($expectedRecordsCount, $queryResponse->count());
+        $this->assertSame($expectedRecordsCount, $queryResponse->count());
     }
 
     /**
@@ -433,7 +433,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->bind('category_ids', 2);
         $this->requestBuilder->setRequestName('filterable_custom_attributes');
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(1, $queryResponse->count());
+        $this->assertSame(1, $queryResponse->count());
     }
 
     /**
@@ -499,7 +499,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         }
         $this->requestBuilder->setRequestName($requestName);
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(1, $queryResponse->count());
+        $this->assertSame(1, $queryResponse->count());
     }
 
     /**
@@ -518,7 +518,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('advanced_search_date_field');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals($expectedRecordsCount, $queryResponse->count());
+        $this->assertSame($expectedRecordsCount, $queryResponse->count());
     }
 
     /**
@@ -547,7 +547,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(0, $queryResponse->count());
+        $this->assertSame(0, $queryResponse->count());
 
         $secondOption = $selectOptions->getLastItem();
         $secondOptionId = $secondOption->getId();
@@ -556,7 +556,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(1, $queryResponse->count());
+        $this->assertSame(1, $queryResponse->count());
     }
 
     /**
@@ -579,7 +579,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(0, $queryResponse->count());
+        $this->assertSame(0, $queryResponse->count());
 
         $secondOption = $selectOptions->getLastItem();
         $secondOptionId = $secondOption->getId();
@@ -587,7 +587,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(0, $queryResponse->count());
+        $this->assertSame(0, $queryResponse->count());
     }
 
     /**
@@ -602,7 +602,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->bind('query', 'antarctica');
         $this->requestBuilder->setRequestName('search_boost');
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(2, $queryResponse->count());
+        $this->assertSame(2, $queryResponse->count());
 
         /** @var \Magento\Framework\Api\Search\DocumentInterface $products */
         $products = iterator_to_array($queryResponse);
@@ -614,9 +614,9 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
          *  and therefore will be first in the search result.
          */
         $firstProduct = reset($products);
-        $this->assertEquals(1222, $firstProduct->getId());
+        $this->assertSame(1222, $firstProduct->getId());
         $secondProduct = end($products);
-        $this->assertEquals(1221, $secondProduct->getId());
+        $this->assertSame(1221, $secondProduct->getId());
 
         /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository */
         $productAttributeRepository = $this->objectManager->get(
@@ -635,7 +635,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->bind('query', 'antarctica');
         $this->requestBuilder->setRequestName('search_boost_name');
         $queryResponse = $this->executeQuery();
-        $this->assertEquals(2, $queryResponse->count());
+        $this->assertSame(2, $queryResponse->count());
 
         /** @var \Magento\Framework\Api\Search\DocumentInterface $products */
         $products = iterator_to_array($queryResponse);
@@ -650,10 +650,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
          *   will be prioritized higher than more relevant, but less boosted product.
          */
         $firstProduct = reset($products);
-        $this->assertEquals(1221, $firstProduct->getId());
+        $this->assertSame(1221, $firstProduct->getId());
         //$firstProduct
         $secondProduct = end($products);
-        $this->assertEquals(1222, $secondProduct->getId());
+        $this->assertSame(1222, $secondProduct->getId());
     }
 
     public function dateDataProvider()

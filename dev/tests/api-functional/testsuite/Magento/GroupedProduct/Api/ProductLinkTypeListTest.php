@@ -59,6 +59,6 @@ class ProductLinkTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbst
             ['code' => 'position', 'type' => 'int'],
             ['code' => 'qty', 'type' => 'decimal'],
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

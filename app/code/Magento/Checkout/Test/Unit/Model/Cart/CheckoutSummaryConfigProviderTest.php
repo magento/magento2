@@ -50,6 +50,6 @@ class CheckoutSummaryConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->with('checkout/options/max_items_display_count', ScopeInterface::SCOPE_STORE)
             ->willReturn($maxItemsCount);
 
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 }

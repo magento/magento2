@@ -78,7 +78,7 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
             ->method('read')
             ->willReturn([]);
         $this->_model->merge($testData);
-        $this->assertEquals($expectedValue, $this->_model->get($path, $default));
+        $this->assertSame($expectedValue, $this->_model->get($path, $default));
     }
 
     /**
@@ -145,10 +145,10 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
             ->with($serializedData, 'adminhtml::tag');
 
         /** test config value existence */
-        $this->assertEquals('testValue', $this->_model->get('some'));
+        $this->assertSame('testValue', $this->_model->get('some'));
 
         /** test preventing of double config data loading from reader */
-        $this->assertEquals('testValue', $this->_model->get('some'));
+        $this->assertSame('testValue', $this->_model->get('some'));
     }
 
     public function testGetScopeSwitchingWithCachedData()
@@ -183,9 +183,9 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
         $this->_cacheMock->expects($this->never())->method('save');
 
         /** test config value existence */
-        $this->assertEquals('testValue', $this->_model->get('some'));
+        $this->assertSame('testValue', $this->_model->get('some'));
 
         /** test preventing of double config data loading from reader */
-        $this->assertEquals('testValue', $this->_model->get('some'));
+        $this->assertSame('testValue', $this->_model->get('some'));
     }
 }

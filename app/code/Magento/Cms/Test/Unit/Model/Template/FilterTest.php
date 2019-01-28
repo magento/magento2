@@ -60,7 +60,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->once())
             ->method('getBaseMediaDir')
             ->willReturn($baseMediaDir);
-        $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+        $this->assertSame($expectedResult, $this->filter->mediaDirective($construction));
     }
 
     public function testMediaDirectiveWithEncodedQuotes()
@@ -76,6 +76,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->once())
             ->method('getBaseMediaDir')
             ->willReturn($baseMediaDir);
-        $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+        $this->assertSame($expectedResult, $this->filter->mediaDirective($construction));
     }
 }

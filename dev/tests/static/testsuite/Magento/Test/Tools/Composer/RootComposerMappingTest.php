@@ -29,7 +29,7 @@ class RootComposerMappingTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals($count, $counter);
+        $this->assertSame($count, $counter);
 
         //Checking existence of customizable paths
         $customizablePaths = $reader->getCustomizablePaths();
@@ -41,6 +41,6 @@ class RootComposerMappingTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals($count, $counter);
+        $this->assertSame($count, $counter);
     }
 }

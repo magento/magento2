@@ -57,13 +57,13 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      */
     public function testLockedAttributeApi()
     {
-        $this->assertEquals([], $this->_model->getLockedAttributes());
+        $this->assertSame([], $this->_model->getLockedAttributes());
         $this->assertFalse($this->_model->hasLockedAttributes());
         $this->assertFalse($this->_model->isLockedAttribute('some_code'));
 
         $this->_model->lockAttribute('code');
         $this->assertTrue($this->_model->isLockedAttribute('code'));
-        $this->assertEquals(['code'], $this->_model->getLockedAttributes());
+        $this->assertSame(['code'], $this->_model->getLockedAttributes());
         $this->assertTrue($this->_model->hasLockedAttributes());
 
         $this->_model->unlockAttribute('code');
@@ -72,7 +72,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->_model->lockAttribute('code1');
         $this->_model->lockAttribute('code2');
         $this->_model->unlockAttributes();
-        $this->assertEquals([], $this->_model->getLockedAttributes());
+        $this->assertSame([], $this->_model->getLockedAttributes());
         $this->assertFalse($this->_model->hasLockedAttributes());
     }
 
@@ -81,18 +81,18 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         // locked filter on setting all
         $this->_model->lockAttribute('key1');
         $this->_model->setData(['key1' => 'value1', 'key2' => 'value2']);
-        $this->assertEquals(['key2' => 'value2'], $this->_model->getData());
+        $this->assertSame(['key2' => 'value2'], $this->_model->getData());
 
         // locked filter per setting one
         $this->_model->setData('key1', 'value1');
         $this->_model->setData('key3', 'value3');
-        $this->assertEquals(['key2' => 'value2', 'key3' => 'value3'], $this->_model->getData());
+        $this->assertSame(['key2' => 'value2', 'key3' => 'value3'], $this->_model->getData());
 
         // set one with read only
         $this->_model->unlockAttributes()->unsetData();
         $this->_model->setIsReadonly(true);
         $this->_model->setData(uniqid(), uniqid());
-        $this->assertEquals([], $this->_model->getData());
+        $this->assertSame([], $this->_model->getData());
     }
 
     public function testUnsetData()
@@ -102,15 +102,15 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
         // unset one locked
         $this->_model->lockAttribute('key1')->unsetData('key1');
-        $this->assertEquals($data, $this->_model->getData());
+        $this->assertSame($data, $this->_model->getData());
 
         // unset all with read only
         $this->_model->setIsReadonly(true)->unsetData();
-        $this->assertEquals($data, $this->_model->getData());
+        $this->assertSame($data, $this->_model->getData());
 
         // unset all
         $this->_model->unlockAttributes()->setIsReadonly(false)->unsetData();
-        $this->assertEquals([], $this->_model->getData());
+        $this->assertSame([], $this->_model->getData());
     }
 
     public function testGetResourceCollection()
@@ -121,7 +121,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection::class,
             $collection
         );
-        $this->assertEquals(99, $collection->getStoreId());
+        $this->assertSame(99, $collection->getStoreId());
     }
 
     /**
@@ -155,14 +155,14 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->getId();
-        $this->assertEquals([$storeId => $storeId], $ids);
+        $this->assertSame([$storeId => $storeId], $ids);
     }
 
     public function testSetGetAttributeDefaultValue()
     {
         $this->assertFalse($this->_model->getAttributeDefaultValue('key'));
         $this->_model->setAttributeDefaultValue('key', 'value');
-        $this->assertEquals('value', $this->_model->getAttributeDefaultValue('key'));
+        $this->assertSame('value', $this->_model->getAttributeDefaultValue('key'));
     }
 
     public function testSetGetExistsStoreValueFlag()

@@ -71,7 +71,7 @@ class OrderStatusHistoryRepositoryInterfaceTest extends \PHPUnit\Framework\TestC
         $searchResult = $this->repository->getList($searchCriteria);
 
         $items = array_values($searchResult->getItems());
-        $this->assertEquals(1, count($items));
-        $this->assertEquals('comment 2', $items[0][OrderStatusHistoryInterface::COMMENT]);
+        $this->assertSame(1, count($items));
+        $this->assertSame('comment 2', $items[0][OrderStatusHistoryInterface::COMMENT]);
     }
 }

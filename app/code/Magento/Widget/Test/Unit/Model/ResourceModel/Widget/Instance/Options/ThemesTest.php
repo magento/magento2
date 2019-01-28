@@ -50,6 +50,6 @@ class ThemesTest extends \PHPUnit\Framework\TestCase
         $this->themeCollectionMock->expects($this->once())->method('loadRegisteredThemes')->willReturnSelf();
         $this->themeCollectionMock->expects($this->once())->method('toOptionHash')->willReturn($expectedResult);
 
-        $this->assertEquals($expectedResult, $this->model->toOptionArray());
+        $this->assertSame($expectedResult, $this->model->toOptionArray());
     }
 }

@@ -88,13 +88,13 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with CMS page link is invalid'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 'CMS page:',
                 $cmsPageLinkBlock->getLabel(),
                 'Child block with CMS page has invalid item label'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expected['cms_page_link']['name'],
                 $cmsPageLinkBlock->getItemName(),
                 'Child block with CMS page has invalid item name'
@@ -123,7 +123,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCmsPage()->getId()) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         1,
                         \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                             '//button[contains(@class, "back") and contains(@onclick, "/cms_page")]',
@@ -132,7 +132,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                         'Back button is not present in CMS page URL rewrite edit block'
                     );
                 } else {
-                    $this->assertEquals(
+                    $this->assertSame(
                         1,
                         \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                             '//button[contains(@class,"back")]',
@@ -142,7 +142,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                     );
                 }
             } else {
-                $this->assertEquals(
+                $this->assertSame(
                     0,
                     \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                         '//button[contains(@class,"back")]',
@@ -154,7 +154,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['save_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"save")]',
@@ -163,7 +163,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Save button is not present in CMS page URL rewrite edit block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"save")]',
@@ -174,7 +174,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['reset_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[@title="Reset"]',
@@ -183,7 +183,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Reset button is not present in CMS page URL rewrite edit block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[@title="Reset"]',
@@ -194,7 +194,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['delete_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"delete")]',
@@ -203,7 +203,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Delete button is not present in CMS page URL rewrite edit block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"delete")]',

@@ -114,10 +114,10 @@ class GuestCartManagementTest extends WebapiAbstract
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
         // Reload target quote
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
-        $this->assertEquals(0, $quote->getCustomerIsGuest());
-        $this->assertEquals($customer->getId(), $quote->getCustomerId());
-        $this->assertEquals($customer->getFirstname(), $quote->getCustomerFirstname());
-        $this->assertEquals($customer->getLastname(), $quote->getCustomerLastname());
+        $this->assertSame(0, $quote->getCustomerIsGuest());
+        $this->assertSame($customer->getId(), $quote->getCustomerId());
+        $this->assertSame($customer->getFirstname(), $quote->getCustomerFirstname());
+        $this->assertSame($customer->getLastname(), $quote->getCustomerLastname());
         $this->assertNull($quoteIdMaskFactory->create()->load($cartId, 'masked_id')->getId());
     }
 
@@ -326,7 +326,7 @@ class GuestCartManagementTest extends WebapiAbstract
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
-        $this->assertEquals('Simple Product', $items[0]->getName());
+        $this->assertSame('Simple Product', $items[0]->getName());
     }
 
     /**

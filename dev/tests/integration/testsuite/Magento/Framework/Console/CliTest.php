@@ -103,7 +103,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
         $documentRootResolver = $cliReflection->getMethod('documentRootResolver');
         $documentRootResolver->setAccessible(true);
 
-        self::assertEquals($params, $documentRootResolver->invoke($cli));
+        self::assertSame($params, $documentRootResolver->invoke($cli));
     }
 
     /**

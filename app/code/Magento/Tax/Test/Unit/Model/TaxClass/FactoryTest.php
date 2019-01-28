@@ -36,7 +36,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $taxClassFactory = new \Magento\Tax\Model\TaxClass\Factory($objectManager);
-        $this->assertEquals($classTypeMock, $taxClassFactory->create($classMock));
+        $this->assertSame($classTypeMock, $taxClassFactory->create($classMock));
     }
 
     /**

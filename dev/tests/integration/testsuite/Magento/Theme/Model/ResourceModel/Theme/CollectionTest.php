@@ -40,8 +40,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $newThemes = $newThemeCollection->toArray();
 
         $expectedTotalRecords = $oldTotalRecords + count(self::getThemeList());
-        $this->assertEquals($expectedTotalRecords, $newThemes['totalRecords']);
-        $this->assertEquals($oldThemes['items'], $newThemes['items']);
+        $this->assertSame($expectedTotalRecords, $newThemes['totalRecords']);
+        $this->assertSame($oldThemes['items'], $newThemes['items']);
     }
 
     /**
@@ -62,7 +62,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             }
         }
         $message = $shouldExist ? 'Theme not found' : 'Theme is found but it should not';
-        $this->assertEquals($shouldExist, $hasFound, $message);
+        $this->assertSame($shouldExist, $hasFound, $message);
     }
 
     /**
@@ -175,14 +175,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             if ($themeData['parent_id']) {
                 $parentFullPath = trim($themeData['parent_id'], '{}');
                 $parentIdExpected = (int)$collection->clear()->getThemeByFullPath($parentFullPath)->getId();
-                $this->assertEquals(
+                $this->assertSame(
                     $parentIdActual,
                     $parentIdExpected,
                     sprintf('Invalid parent_id for theme "%s"', $fullPath)
                 );
             } else {
                 $parentIdExpected = 0;
-                $this->assertEquals(
+                $this->assertSame(
                     $parentIdExpected,
                     $parentIdActual,
                     sprintf('Parent id should be null for "%s"', $fullPath)
@@ -359,8 +359,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($collection as $theme) {
-            $this->assertEquals(\Magento\Framework\App\Area::AREA_FRONTEND, $theme->getArea());
-            $this->assertEquals(ThemeInterface::TYPE_PHYSICAL, $theme->getType());
+            $this->assertSame(\Magento\Framework\App\Area::AREA_FRONTEND, $theme->getArea());
+            $this->assertSame(ThemeInterface::TYPE_PHYSICAL, $theme->getType());
         }
     }
 
@@ -375,8 +375,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($collection as $theme) {
-            $this->assertEquals(\Magento\Framework\App\Area::AREA_FRONTEND, $theme->getArea());
-            $this->assertEquals(ThemeInterface::TYPE_PHYSICAL, $theme->getType());
+            $this->assertSame(\Magento\Framework\App\Area::AREA_FRONTEND, $theme->getArea());
+            $this->assertSame(ThemeInterface::TYPE_PHYSICAL, $theme->getType());
         }
     }
 }

@@ -69,7 +69,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->configWriter->write(self::CACHE_ID, $testConfig);
         $config = $this->getConfig();
 
-        $this->assertEquals($testConfig, $config->load(self::CACHE_ID));
+        $this->assertSame($testConfig, $config->load(self::CACHE_ID));
     }
 
     /**
@@ -82,7 +82,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->cache->save($this->serializer->serialize($testConfig), self::CACHE_ID);
         $config = $this->getConfig();
 
-        $this->assertEquals($testConfig, $config->load(self::CACHE_ID));
+        $this->assertSame($testConfig, $config->load(self::CACHE_ID));
     }
 
     public function interceptionCompiledConfigDataProvider()

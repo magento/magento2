@@ -40,7 +40,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPrices()
     {
-        $this->assertEquals($this->priceCollection, $this->model->getPrices());
+        $this->assertSame($this->priceCollection, $this->model->getPrices());
     }
 
     /**
@@ -60,7 +60,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         foreach ($entryParams as $params) {
             list($priceCode) = array_values($params);
-            $this->assertEquals('basePrice', $this->model->getPrice($priceCode));
+            $this->assertSame('basePrice', $this->model->getPrice($priceCode));
         }
     }
 
@@ -100,7 +100,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function testGetAdjustments()
     {
         $this->adjustmentCollection->expects($this->once())->method('getItems')->will($this->returnValue('result'));
-        $this->assertEquals('result', $this->model->getAdjustments());
+        $this->assertSame('result', $this->model->getAdjustments());
     }
 
     /**
@@ -111,6 +111,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->adjustmentCollection->expects($this->any())->method('getItemByCode')
             ->with('test1')
             ->will($this->returnValue('adjustment'));
-        $this->assertEquals('adjustment', $this->model->getAdjustment('test1'));
+        $this->assertSame('adjustment', $this->model->getAdjustment('test1'));
     }
 }

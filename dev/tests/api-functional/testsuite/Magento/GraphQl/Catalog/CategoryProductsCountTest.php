@@ -48,7 +48,7 @@ class CategoryProductsCountTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertEquals(1, $response['category']['product_count']);
+        self::assertSame(1, $response['category']['product_count']);
     }
 
     /**
@@ -73,7 +73,7 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertEquals(0, $response['category']['product_count']);
+        self::assertSame(0, $response['category']['product_count']);
     }
 
     /**
@@ -93,7 +93,7 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertEquals(0, $response['category']['product_count']);
+        self::assertSame(0, $response['category']['product_count']);
     }
 
     /**
@@ -113,7 +113,7 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertEquals(1, $response['category']['product_count']);
+        self::assertSame(1, $response['category']['product_count']);
     }
 
     /**
@@ -138,6 +138,6 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertEquals(0, $response['category']['product_count']);
+        self::assertSame(0, $response['category']['product_count']);
     }
 }

@@ -89,7 +89,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($selectionQty);
 
-        $this->assertEquals($selectionQty, $this->helper->getSelectionQty($product, $selectionId));
+        $this->assertSame($selectionQty, $this->helper->getSelectionQty($product, $selectionId));
     }
 
     public function testGetSelectionQtyIfCustomOptionIsNotSet()
@@ -100,7 +100,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->once())->method('getCustomOption')->with('selection_qty_' . $selectionId)
             ->will($this->returnValue(null));
 
-        $this->assertEquals(0, $this->helper->getSelectionQty($product, $selectionId));
+        $this->assertSame(0, $this->helper->getSelectionQty($product, $selectionId));
     }
 
     public function testGetSelectionFinalPrice()
@@ -132,7 +132,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->item->expects($this->once())->method('getOptionByCode')->with('bundle_option_ids')
             ->will($this->returnValue(null));
 
-        $this->assertEquals([], $this->helper->getBundleOptions($this->item));
+        $this->assertSame([], $this->helper->getBundleOptions($this->item));
     }
 
     public function testGetBundleOptionsEmptyBundleSelectionIds()
@@ -179,7 +179,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->with('bundle_selection_ids')
             ->willReturn($selectionOption);
 
-        $this->assertEquals([], $this->helper->getBundleOptions($this->item));
+        $this->assertSame([], $this->helper->getBundleOptions($this->item));
     }
 
     /**
@@ -267,7 +267,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->productConfiguration->expects($this->once())->method('getCustomOptions')->with($this->item)
             ->will($this->returnValue([0 => ['label' => 'title', 'value' => 'value']]));
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [
                     'label' => 'title',

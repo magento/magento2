@@ -82,7 +82,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($orderMock);
         $creditmemoMock->expects($this->once())->method('getGrandTotal')
             ->willReturn(0);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 __('The credit memo\'s total must be positive.')
             ],
@@ -98,7 +98,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->once())->method('getOrderId')
             ->willReturn(null);
         $creditmemoMock->expects($this->never())->method('getItems');
-        $this->assertEquals(
+        $this->assertSame(
             [__('Order Id is required for creditmemo document')],
             $this->validator->validate($creditmemoMock)
         );
@@ -138,7 +138,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->once())->method('getGrandTotal')
             ->willReturn(12);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 __(
                     'The creditmemo contains product SKU "%1" that is not part of the original order.',
@@ -203,7 +203,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->willReturn($orderMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->validator->validate($creditmemoMock)
         );

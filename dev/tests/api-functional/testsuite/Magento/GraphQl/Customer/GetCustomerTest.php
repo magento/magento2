@@ -58,9 +58,9 @@ query {
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
 
-        $this->assertEquals('John', $response['customer']['firstname']);
-        $this->assertEquals('Smith', $response['customer']['lastname']);
-        $this->assertEquals($currentEmail, $response['customer']['email']);
+        $this->assertSame('John', $response['customer']['firstname']);
+        $this->assertSame('Smith', $response['customer']['lastname']);
+        $this->assertSame($currentEmail, $response['customer']['email']);
     }
 
     /**

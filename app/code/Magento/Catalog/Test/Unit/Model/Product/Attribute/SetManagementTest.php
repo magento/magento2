@@ -67,7 +67,7 @@ class SetManagementTest extends \PHPUnit\Framework\TestCase
                 $attributeSetMock,
                 $skeletonId
             )->willReturn($attributeSetMock);
-        $this->assertEquals($attributeSetMock, $this->model->create($attributeSetMock, $skeletonId));
+        $this->assertSame($attributeSetMock, $this->model->create($attributeSetMock, $skeletonId));
     }
 
     /**

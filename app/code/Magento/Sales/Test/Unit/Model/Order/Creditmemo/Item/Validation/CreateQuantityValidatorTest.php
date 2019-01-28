@@ -94,7 +94,7 @@ class CreateQuantityValidatorTest extends \PHPUnit\Framework\TestCase
             $this->contexMock
         );
 
-        $this->assertEquals($expectedResult, $this->createQuantityValidator->validate($this->entity));
+        $this->assertSame($expectedResult, $this->createQuantityValidator->validate($this->entity));
     }
 
     /**

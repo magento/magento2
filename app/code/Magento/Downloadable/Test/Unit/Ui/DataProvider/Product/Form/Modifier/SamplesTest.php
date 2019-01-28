@@ -124,7 +124,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
             ->method('getSamplesData')
             ->willReturn($samplesData);
 
-        $this->assertEquals($resultData, $this->samples->modifyData([]));
+        $this->assertSame($resultData, $this->samples->modifyData([]));
     }
 
     /**
@@ -150,6 +150,6 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
             ->method('set')
             ->willReturn([]);
 
-        $this->assertEquals([], $this->samples->modifyMeta([]));
+        $this->assertSame([], $this->samples->modifyMeta([]));
     }
 }

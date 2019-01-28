@@ -24,7 +24,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
         // Visitor has not customer ID yet
         $this->assertTrue($visitor->getDoCustomerLogin());
-        $this->assertEquals($customer->getId(), $visitor->getCustomerId());
+        $this->assertSame($customer->getId(), $visitor->getCustomerId());
 
         // Visitor already has customer ID
         $visitor->unsDoCustomerLogin();
@@ -87,10 +87,10 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
         $visitor->clean();
         $visitor->load($visitorIdPast);
-        $this->assertEquals([], $visitor->getData());
+        $this->assertSame([], $visitor->getData());
         $visitor->unsetData();
         $visitor->load($visitorIdNow);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'visitor_id' => $visitorIdNow,
                 'customer_id' => $customerIdNow,

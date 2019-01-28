@@ -129,7 +129,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testIsVirtual($type, $isVirtual)
     {
         $this->_model->setType($type);
-        $this->assertEquals($isVirtual, $this->_model->isVirtual());
+        $this->assertSame($isVirtual, $this->_model->isVirtual());
     }
 
     /**
@@ -153,7 +153,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testIsPhysical($type, $isPhysical)
     {
         $this->_model->setType($type);
-        $this->assertEquals($isPhysical, $this->_model->isPhysical());
+        $this->assertSame($isPhysical, $this->_model->isPhysical());
     }
 
     /**
@@ -177,7 +177,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testIsVisible($type, $isVisible)
     {
         $this->_model->setType($type);
-        $this->assertEquals($isVisible, $this->_model->isVisible());
+        $this->assertSame($isVisible, $this->_model->isVisible());
     }
 
     /**
@@ -205,7 +205,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $themeModel = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getType']);
         $themeModel->expects($this->once())->method('getType')->will($this->returnValue($themeType));
         /** @var $themeModel \Magento\Theme\Model\Theme */
-        $this->assertEquals($isDeletable, $themeModel->isDeletable());
+        $this->assertSame($isDeletable, $themeModel->isDeletable());
     }
 
     /**
@@ -349,7 +349,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with($this->_model)
             ->willReturn($result);
-        $this->assertEquals($result, $this->_model->getDomainModel());
+        $this->assertSame($result, $this->_model->getDomainModel());
     }
 
     /**
@@ -457,7 +457,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $path = 'some/path';
         $this->_model->setThemePath($path);
 
-        $this->assertEquals($areaCode . Theme::PATH_SEPARATOR . $path, $this->_model->getFullPath());
+        $this->assertSame($areaCode . Theme::PATH_SEPARATOR . $path, $this->_model->getFullPath());
     }
 
     /**
@@ -467,7 +467,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function getParentTheme()
     {
         $this->_model->setParentTheme('parent_theme');
-        $this->assertEquals('parent_theme', $this->_model->getParentTheme());
+        $this->assertSame('parent_theme', $this->_model->getParentTheme());
     }
 
     /**
@@ -478,7 +478,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testToArray(array $themeData, array $expected)
     {
         $this->_model->setData($themeData);
-        $this->assertEquals($expected, $this->_model->toArray());
+        $this->assertSame($expected, $this->_model->toArray());
     }
 
     /**
@@ -555,7 +555,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($themeMock);
 
         $this->_model->populateFromArray($value);
-        $this->assertEquals($expected, $this->_model->getData());
+        $this->assertSame($expected, $this->_model->getData());
     }
 
     /**

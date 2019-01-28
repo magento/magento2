@@ -72,7 +72,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $object->setTearPrice([['price_id' => 10]]);
         $object->setId(555);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'table' => [
                     ['value_id' => $valueId, 'attribute_id' => $attributeId, 'entity_id' => $object->getId()]

@@ -118,7 +118,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
             ->with($amount, $includeContainer, $precision)
             ->will($this->returnValue($result));
 
-        $this->assertEquals($result, $this->model->formatCurrency($amount, $includeContainer, $precision));
+        $this->assertSame($result, $this->model->formatCurrency($amount, $includeContainer, $precision));
     }
 
     public function testGetDisplayCurrencySymbol()
@@ -127,7 +127,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency->expects($this->once())
             ->method('getCurrencySymbol')
             ->willReturn($currencySymbol);
-        $this->assertEquals($currencySymbol, $this->model->getDisplayCurrencySymbol());
+        $this->assertSame($currencySymbol, $this->model->getDisplayCurrencySymbol());
     }
 
     /**
@@ -169,7 +169,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($adjustmentRenders));
 
         $this->model->toHtml();
-        $this->assertEquals($expected, $this->model->getAdjustmentsHtml());
+        $this->assertSame($expected, $this->model->getAdjustmentsHtml());
     }
 
     /**
@@ -217,7 +217,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     {
         $displayValue = 5.99;
         $this->model->setDisplayValue($displayValue);
-        $this->assertEquals($displayValue, $this->model->getDisplayValue());
+        $this->assertSame($displayValue, $this->model->getDisplayValue());
     }
 
     public function testGetDisplayValue()
@@ -226,22 +226,22 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $this->amount->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($amountValue));
-        $this->assertEquals($amountValue, $this->model->getDisplayValue());
+        $this->assertSame($amountValue, $this->model->getDisplayValue());
     }
 
     public function testGetAmount()
     {
-        $this->assertEquals($this->amount, $this->model->getAmount());
+        $this->assertSame($this->amount, $this->model->getAmount());
     }
 
     public function testGetSealableItem()
     {
-        $this->assertEquals($this->saleableItemMock, $this->model->getSaleableItem());
+        $this->assertSame($this->saleableItemMock, $this->model->getSaleableItem());
     }
 
     public function testGetPrice()
     {
-        $this->assertEquals($this->priceMock, $this->model->getPrice());
+        $this->assertSame($this->priceMock, $this->model->getPrice());
     }
 
     public function testAdjustmentsHtml()
@@ -274,7 +274,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->model->hasAdjustmentsHtml());
 
-        $this->assertEquals($adjustmentHtml1 . $adjustmentHtml2, $this->model->getAdjustmentsHtml());
+        $this->assertSame($adjustmentHtml1 . $adjustmentHtml2, $this->model->getAdjustmentsHtml());
     }
 
     /**

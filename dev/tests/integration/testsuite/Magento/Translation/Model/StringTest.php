@@ -33,6 +33,6 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $expectedString = __METHOD__;
         $this->_model->setString($expectedString);
         $actualString = $this->_model->getString();
-        $this->assertEquals($expectedString, $actualString);
+        $this->assertSame($expectedString, $actualString);
     }
 }

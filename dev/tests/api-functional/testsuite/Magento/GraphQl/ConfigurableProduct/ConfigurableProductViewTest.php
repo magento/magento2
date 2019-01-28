@@ -210,7 +210,7 @@ QUERY;
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertSame(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertConfigurableProductOptions($response['products']['items'][0]);
@@ -318,7 +318,7 @@ QUERY;
 
             $actualValue
                 = $actualResponse['variants'][$variantKey]['product']['categories'][0];
-            $this->assertEquals($actualValue, ['id' => $id]);
+            $this->assertSame($actualValue, ['id' => $id]);
             unset($variantArray['product']['categories']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
@@ -376,11 +376,11 @@ QUERY;
 
             foreach ($variantArray['product'] as $key => $value) {
                 if ($key !== 'price') {
-                    $this->assertEquals($value, $childProduct->getData($key));
+                    $this->assertSame($value, $childProduct->getData($key));
                 }
             }
             //assert prices
-            $this->assertEquals(
+            $this->assertSame(
                 [
                     'minimalPrice' => [
                         'amount' => [
@@ -412,12 +412,12 @@ QUERY;
                 foreach ($configurableOptions as $option) {
                     foreach ($option['options'] as $value) {
                         if ((int)$value['value_index'] === (int)$attribute['value_index']) {
-                            $this->assertEquals((int)$attribute['value_index'], (int)$value['value_index']);
-                            $this->assertEquals($attribute['label'], $value['label']);
+                            $this->assertSame((int)$attribute['value_index'], (int)$value['value_index']);
+                            $this->assertSame($attribute['label'], $value['label']);
                             $hasAssertion = true;
                         }
                     }
-                    $this->assertEquals($attribute['code'], $option['attribute_code']);
+                    $this->assertSame($attribute['code'], $option['attribute_code']);
                 }
                 if (!$hasAssertion) {
                     $this->fail('variant did not contain correct attributes');
@@ -435,52 +435,52 @@ QUERY;
         $configurableAttributeOptions = $this->getConfigurableOptions();
         $configurableAttributeOption = array_shift($configurableAttributeOptions);
 
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['id'],
             $configurableAttributeOption['id']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['use_default'],
             (bool)$configurableAttributeOption['use_default']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['attribute_id'],
             $configurableAttributeOption['attribute_id']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['label'],
             $configurableAttributeOption['label']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['position'],
             $configurableAttributeOption['position']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['product_id'],
             $configurableAttributeOption['product_id']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $actualResponse['configurable_options'][0]['attribute_code'],
             $configurableAttributeOption['attribute_code']
         );
         foreach ($actualResponse['configurable_options'][0]['values'] as $key => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value['label'],
                 $configurableAttributeOption['options'][$key]['label']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $value['store_label'],
                 $configurableAttributeOption['options'][$key]['store_label']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $value['default_label'],
                 $configurableAttributeOption['options'][$key]['default_label']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $value['use_default_value'],
                 $configurableAttributeOption['options'][$key]['use_default_value']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 (int)$value['value_index'],
                 (int)$configurableAttributeOption['options'][$key]['value_index']
             );

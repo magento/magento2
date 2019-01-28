@@ -140,11 +140,11 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
                 function (array $config) {
                     $this->assertTrue(isset($config['system']['default']['some']['config']['path_two']));
                     $this->assertTrue(isset($config['system']['default']['some']['config']['path_three']));
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_three']
                     );
@@ -155,11 +155,11 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
                 'test',
                 function (array $config) {
                     $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_two']));
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_three']
                     );
@@ -212,15 +212,15 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
                     $this->assertTrue(isset($config['system']['default']['some']['config']['path_one']));
                     $this->assertTrue(isset($config['system']['default']['some']['config']['path_two']));
                     $this->assertTrue(isset($config['system']['default']['some']['config']['path_three']));
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_one']
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_three']
                     );
@@ -233,15 +233,15 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
                     $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_one']));
                     $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_two']));
                     $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_three']));
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_one']
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_three']
                     );

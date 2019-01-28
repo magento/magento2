@@ -74,6 +74,6 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedResult));
         $this->factoryMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
 
-        $this->assertEquals($expectedResult, $this->model->getList($attributeSetName));
+        $this->assertSame($expectedResult, $this->model->getList($attributeSetName));
     }
 }

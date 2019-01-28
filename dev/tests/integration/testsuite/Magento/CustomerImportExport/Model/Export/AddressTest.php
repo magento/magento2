@@ -76,7 +76,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $data = $this->_csvToArray($this->_model->export(), $entityIdCode);
 
-        $this->assertEquals(
+        $this->assertSame(
             count($expectedAttributes),
             count(array_intersect($expectedAttributes, $data['header'])),
             'Expected attribute codes were not exported'
@@ -105,7 +105,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 // Check by expected attributes
                 foreach ($expectedAttributes as $code) {
                     if (!in_array($code, $this->_model->getDisabledAttributes())) {
-                        $this->assertEquals(
+                        $this->assertSame(
                             $address->getData($code),
                             $data['data'][$address->getId()][$code],
                             'Attribute "' . $code . '" is not equal'
@@ -115,7 +115,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
                 // Check customer default addresses column name to customer attribute mapping array
                 foreach ($defaultAddressMap as $exportCode => $code) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         $address->getData($code),
                         (int)$data['data'][$address->getId()][$exportCode],
                         'Attribute "' . $code . '" is not equal'
@@ -183,7 +183,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntityTypeCode()
     {
-        $this->assertEquals('customer_address', $this->_model->getEntityTypeCode());
+        $this->assertSame('customer_address', $this->_model->getEntityTypeCode());
     }
 
     /**
@@ -230,6 +230,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFileName()
     {
-        $this->assertEquals($this->_model->getEntityTypeCode(), $this->_model->getFileName());
+        $this->assertSame($this->_model->getEntityTypeCode(), $this->_model->getFileName());
     }
 }

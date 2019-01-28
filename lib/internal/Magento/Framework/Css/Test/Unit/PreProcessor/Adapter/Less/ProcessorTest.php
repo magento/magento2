@@ -167,7 +167,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('critical');
 
         $clearSymbol = ["\n", "\r", "\t", ' '];
-        self::assertEquals(
+        self::assertSame(
             trim(str_replace($clearSymbol, '', file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS))),
             trim(str_replace($clearSymbol, '', $this->processor->processContent($assetMock)))
         );

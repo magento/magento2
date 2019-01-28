@@ -119,7 +119,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $priceBox->toHtml();
-        $this->assertEquals($cssClasses, $priceBox->getData('css_classes'));
+        $this->assertSame($cssClasses, $priceBox->getData('css_classes'));
     }
 
     /**
@@ -142,12 +142,12 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSaleableItem()
     {
-        $this->assertEquals($this->saleable, $this->model->getSaleableItem());
+        $this->assertSame($this->saleable, $this->model->getSaleableItem());
     }
 
     public function testGetPrice()
     {
-        $this->assertEquals($this->price, $this->model->getPrice());
+        $this->assertSame($this->price, $this->model->getPrice());
     }
 
     public function testGetPriceType()
@@ -166,7 +166,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($priceInfo));
 
-        $this->assertEquals($price, $this->model->getPriceType($priceCode));
+        $this->assertSame($price, $this->model->getPriceType($priceCode));
     }
 
     public function testRenderAmount()
@@ -188,14 +188,14 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
             ->with($amount, $this->saleable, $this->price, $arguments)
             ->will($this->returnValue($amountRender));
 
-        $this->assertEquals($resultHtml, $this->model->renderAmount($amount, $arguments));
+        $this->assertSame($resultHtml, $this->model->renderAmount($amount, $arguments));
     }
 
     public function testGetPriceIdHasDataPriceId()
     {
         $priceId = 'data_price_id';
         $this->model->setData('price_id', $priceId);
-        $this->assertEquals($priceId, $this->model->getPriceId());
+        $this->assertSame($priceId, $this->model->getPriceId());
     }
 
     /**
@@ -225,7 +225,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
             $expectedPriceId = $expectedPriceId . $defaultSuffix;
         }
 
-        $this->assertEquals($expectedPriceId, $this->model->getPriceId($defaultPrefix, $defaultSuffix));
+        $this->assertSame($expectedPriceId, $this->model->getPriceId($defaultPrefix, $defaultSuffix));
     }
 
     /**
@@ -246,7 +246,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRendererPool()
     {
-        $this->assertEquals($this->rendererPool, $this->model->getRendererPool());
+        $this->assertSame($this->rendererPool, $this->model->getRendererPool());
     }
 
     /**

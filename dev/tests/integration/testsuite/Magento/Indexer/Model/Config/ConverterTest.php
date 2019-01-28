@@ -28,7 +28,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $domDocument = new \DOMDocument();
         $domDocument->load($path);
         $result = $this->model->convert($domDocument);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

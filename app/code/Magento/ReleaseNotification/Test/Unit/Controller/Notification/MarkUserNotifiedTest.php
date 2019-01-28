@@ -128,7 +128,7 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
                 false,
                 []
             )->willReturnSelf();
-        $this->assertEquals($this->resultMock, $this->action->execute());
+        $this->assertSame($this->resultMock, $this->action->execute());
     }
 
     public function testExecuteFailedWithLocalizedException()
@@ -155,7 +155,7 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
                 false,
                 []
             )->willReturnSelf();
-        $this->assertEquals($this->resultMock, $this->action->execute());
+        $this->assertSame($this->resultMock, $this->action->execute());
     }
 
     public function testExecuteFailedWithException()
@@ -182,6 +182,6 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
                 false,
                 []
             )->willReturnSelf();
-        $this->assertEquals($this->resultMock, $this->action->execute());
+        $this->assertSame($this->resultMock, $this->action->execute());
     }
 }

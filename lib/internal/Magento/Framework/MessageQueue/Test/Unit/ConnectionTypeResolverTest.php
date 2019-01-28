@@ -19,7 +19,7 @@ class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
         $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn('some-type');
 
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);
-        $this->assertEquals('some-type', $model->getConnectionType('test'));
+        $this->assertSame('some-type', $model->getConnectionType('test'));
     }
 
     /**

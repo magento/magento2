@@ -43,7 +43,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $defaultWaitTimeout = $this->getWaitTimeout();
             $minWaitTimeout = 1;
             $this->setWaitTimeout($minWaitTimeout);
-            $this->assertEquals($minWaitTimeout, $this->getWaitTimeout(), 'Wait timeout was not changed');
+            $this->assertSame($minWaitTimeout, $this->getWaitTimeout(), 'Wait timeout was not changed');
 
             // Sleep for time greater than wait_timeout and try to perform query
             sleep($minWaitTimeout + 1);
@@ -51,7 +51,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->assertInstanceOf(\Magento\Framework\DB\Statement\Pdo\Mysql::class, $result);
             // Restore wait_timeout
             $this->setWaitTimeout($defaultWaitTimeout);
-            $this->assertEquals(
+            $this->assertSame(
                 $defaultWaitTimeout,
                 $this->getWaitTimeout(),
                 'Default wait timeout was not restored'
@@ -126,7 +126,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testGetCreateTable()
     {
         $tableName = $this->resourceConnection->getTableName('core_config_data');
-        $this->assertEquals(
+        $this->assertSame(
             $this->getDbAdapter()->getCreateTable($tableName),
             $this->getDbAdapter()->getCreateTable($tableName)
         );
@@ -135,7 +135,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testGetForeignKeys()
     {
         $tableName = $this->resourceConnection->getTableName('core_config_data');
-        $this->assertEquals(
+        $this->assertSame(
             $this->getDbAdapter()->getForeignKeys($tableName),
             $this->getDbAdapter()->getForeignKeys($tableName)
         );
@@ -144,7 +144,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testGetIndexList()
     {
         $tableName = $this->resourceConnection->getTableName('core_config_data');
-        $this->assertEquals(
+        $this->assertSame(
             $this->getDbAdapter()->getIndexList($tableName),
             $this->getDbAdapter()->getIndexList($tableName)
         );
@@ -153,7 +153,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testDescribeTable()
     {
         $tableName = $this->resourceConnection->getTableName('core_config_data');
-        $this->assertEquals(
+        $this->assertSame(
             $this->getDbAdapter()->describeTable($tableName),
             $this->getDbAdapter()->describeTable($tableName)
         );
@@ -210,18 +210,18 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $stringColumn = $tableDescription['string_column'];
 
         //Test default value with expression
-        $this->assertEquals('created_at', $dateColumn['COLUMN_NAME'], 'Incorrect column name');
-        $this->assertEquals(Table::TYPE_DATETIME, $dateColumn['DATA_TYPE'], 'Incorrect column type');
-        $this->assertEquals('CURRENT_TIMESTAMP', $dateColumn['DEFAULT'], 'Incorrect column default expression value');
+        $this->assertSame('created_at', $dateColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertSame(Table::TYPE_DATETIME, $dateColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertSame('CURRENT_TIMESTAMP', $dateColumn['DEFAULT'], 'Incorrect column default expression value');
 
         //Test default value with integer value
-        $this->assertEquals('integer_column', $intColumn['COLUMN_NAME'], 'Incorrect column name');
-        $this->assertEquals('int', $intColumn['DATA_TYPE'], 'Incorrect column type');
-        $this->assertEquals(123456, $intColumn['DEFAULT'], 'Incorrect column default integer value');
+        $this->assertSame('integer_column', $intColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertSame('int', $intColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertSame(123456, $intColumn['DEFAULT'], 'Incorrect column default integer value');
 
         //Test default value with string value
-        $this->assertEquals('string_column', $stringColumn['COLUMN_NAME'], 'Incorrect column name');
-        $this->assertEquals('varchar', $stringColumn['DATA_TYPE'], 'Incorrect column type');
-        $this->assertEquals('default test text', $stringColumn['DEFAULT'], 'Incorrect column default string value');
+        $this->assertSame('string_column', $stringColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertSame('varchar', $stringColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertSame('default test text', $stringColumn['DEFAULT'], 'Incorrect column default string value');
     }
 }

@@ -172,7 +172,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('setUrl')
             ->with('url');
 
-        $this->assertEquals(
+        $this->assertSame(
             $imageHelperMock,
             $this->model->emulateImageCreating($productMock, 'widget_recently_viewed', 1, $imageMock)
         );

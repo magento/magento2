@@ -42,7 +42,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
 
         $resultModel = new JsonModel(['successUrl' => $successUrl, 'successSecureUrl' => $successSecureUrl]);
 
-        $this->assertEquals($resultModel, $this->controller->indexAction());
+        $this->assertSame($resultModel, $this->controller->indexAction());
     }
 
     /**

@@ -134,7 +134,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
 
         $this->uploader->setDestDir($destDir);
         $result = $this->uploader->move($fileUrl);
-        $this->assertEquals(['name' => $expectedFileName], $result);
+        $this->assertSame(['name' => $expectedFileName], $result);
         $this->assertArrayNotHasKey('path', $result);
     }
 
@@ -154,7 +154,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['name' => $fileName]);
 
         $this->uploader->setDestDir($destDir);
-        $this->assertEquals(['name' => $fileName], $this->uploader->move($fileName));
+        $this->assertSame(['name' => $fileName], $this->uploader->move($fileName));
     }
 
     /**

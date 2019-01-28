@@ -132,6 +132,6 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
             $this->orderConfig,
             $data
         );
-        $this->assertEquals($orderCollection, $this->model->getOrders());
+        $this->assertSame($orderCollection, $this->model->getOrders());
     }
 }

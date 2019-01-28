@@ -77,7 +77,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue($custMaxValue));
         }
 
-        $this->assertEquals($expectedShowRange, $this->model->showRangePrice());
+        $this->assertSame($expectedShowRange, $this->model->showRangePrice());
     }
 
     /**

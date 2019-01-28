@@ -29,7 +29,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         foreach ($model as $row) {
             $rows[] = $row;
         }
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['id' => '1', 'name' => 'Static', 'calculated' => 10],
                 ['id' => '2', 'name' => 'Static', 'calculated' => 20],

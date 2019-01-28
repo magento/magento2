@@ -27,7 +27,7 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlWithoutProducts()
     {
-        $this->assertEquals(json_encode([]), $this->_block->toHtml());
+        $this->assertSame(json_encode([]), $this->_block->toHtml());
     }
 
     /**
@@ -49,6 +49,6 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
 
         $result = json_decode($this->_block->toHtml(), true);
 
-        $this->assertEquals('test_option_code_1', $result[0]['title']);
+        $this->assertSame('test_option_code_1', $result[0]['title']);
     }
 }

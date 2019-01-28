@@ -63,7 +63,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $customer = $this->customerGenerator->generate(42);
 
-        $this->assertEquals('user_42@example.com', $customer['customer']['email']);
+        $this->assertSame('user_42@example.com', $customer['customer']['email']);
     }
 
     public function testAddressGeneration()
@@ -80,7 +80,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testCustomerGroup()
     {
         $customer = $this->customerGenerator->generate(1);
-        $this->assertEquals(1, $customer['customer']['group_id']);
+        $this->assertSame(1, $customer['customer']['group_id']);
     }
 
     public function testCustomerStructure()

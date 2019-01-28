@@ -42,7 +42,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('isUnsigned')
             ->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             'UNSIGNED',
             $this->unsigned->toDefinition($column)
         );
@@ -61,7 +61,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('isUnsigned')
             ->willReturn(false);
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $this->unsigned->toDefinition($column)
         );
@@ -74,7 +74,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedData = $data;
         $expectedData['unsigned'] = true;
-        $this->assertEquals(
+        $this->assertSame(
             $expectedData,
             $this->unsigned->fromDefinition($data)
         );
@@ -87,7 +87,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedData = $data;
         $expectedData['unsigned'] = false;
-        $this->assertEquals(
+        $this->assertSame(
             $expectedData,
             $this->unsigned->fromDefinition($data)
         );

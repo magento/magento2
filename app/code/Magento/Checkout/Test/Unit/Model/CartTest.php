@@ -276,7 +276,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $qtyMethodName = ($useQty) ? 'getItemsQty' : 'getItemsCount';
         $quoteMock->expects($this->once())->method($qtyMethodName)->will($this->returnValue($itemsCount));
 
-        $this->assertEquals($itemsCount, $this->cart->getSummaryQty());
+        $this->assertSame($itemsCount, $this->cart->getSummaryQty());
     }
 
     /**

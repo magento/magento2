@@ -235,17 +235,17 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
             MessageInterface::TYPE_NOTICE,
             MessageInterface::TYPE_SUCCESS,
         ];
-        $this->assertEquals($types, $this->messages->getMessageTypes());
+        $this->assertSame($types, $this->messages->getMessageTypes());
     }
 
     public function testGetCacheKeyInfo()
     {
         $emptyMessagesCacheKey = ['storage_types' => ''];
-        $this->assertEquals($emptyMessagesCacheKey, $this->messages->getCacheKeyInfo());
+        $this->assertSame($emptyMessagesCacheKey, $this->messages->getCacheKeyInfo());
 
         $messagesCacheKey = ['storage_types' => 'default'];
         $this->messages->addStorageType(Manager::DEFAULT_GROUP);
-        $this->assertEquals($messagesCacheKey, $this->messages->getCacheKeyInfo());
+        $this->assertSame($messagesCacheKey, $this->messages->getCacheKeyInfo());
     }
 
     public function testGetGroupedHtml()
@@ -317,6 +317,6 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($resultHtml, $this->messages->getGroupedHtml());
+        $this->assertSame($resultHtml, $this->messages->getGroupedHtml());
     }
 }

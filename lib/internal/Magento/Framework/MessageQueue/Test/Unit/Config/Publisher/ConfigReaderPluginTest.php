@@ -94,6 +94,6 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($finalResult, $this->plugin->afterRead($this->subjectMock, $result));
+        $this->assertSame($finalResult, $this->plugin->afterRead($this->subjectMock, $result));
     }
 }

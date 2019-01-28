@@ -42,6 +42,6 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         ];
         $block = $objectManager->getObject(\Magento\Theme\Block\Html\Header\Logo::class, $arguments);
 
-        $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
+        $this->assertSame('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
     }
 }

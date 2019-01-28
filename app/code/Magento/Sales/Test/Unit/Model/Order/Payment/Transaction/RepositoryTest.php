@@ -129,7 +129,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $expected = "expect";
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($expected);
-        $this->assertEquals($expected, $this->repository->create());
+        $this->assertSame($expected, $this->repository->create());
     }
 
     /**
@@ -261,7 +261,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->entityStorage->expects($this->once())
             ->method('addByIdentifyingFields')
             ->with($transaction, $identityFieldsForCache, $cacheStorage);
-        $this->assertEquals($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
+        $this->assertSame($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
     }
 
     /**
@@ -287,7 +287,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             $transactionId
         )->willReturn(false);
         $transaction->expects($this->once())->method('getId')->willReturn(false);
-        $this->assertEquals(
+        $this->assertSame(
             false,
             $this->repository->getByTransactionId($transactionId, $paymentId, $orderId)
         );
@@ -307,7 +307,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->entityStorage->method('getByIdentifyingFields')
             ->with($identityFieldsForCache, $cacheStorage)
             ->willReturn($transaction);
-        $this->assertEquals(
+        $this->assertSame(
             $transaction,
             $this->repository->getByTransactionId($transactionId, $paymentId, $orderId)
         );
@@ -370,7 +370,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->entityStorage->expects($this->once())
             ->method('addByIdentifyingFields')
             ->with($transaction, $identityFieldsForCache, $cacheStorage);
-        $this->assertEquals(
+        $this->assertSame(
             $transaction,
             $this->repository->getByTransactionType($transactionType, $paymentId)
         );
@@ -389,7 +389,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->entityStorage->method('getByIdentifyingFields')
             ->with($identityFieldsForCache, $cacheStorage)
             ->willReturn($transaction);
-        $this->assertEquals(
+        $this->assertSame(
             $transaction,
             $this->repository->getByTransactionType($transactionType, $paymentId)
         );

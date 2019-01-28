@@ -69,7 +69,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->configMock->method('getDynamicDescriptors')->willReturn($descriptors);
 
         $actual = $this->builder->build(['payment' => $paymentDOMock]);
-        static::assertEquals($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**

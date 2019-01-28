@@ -82,7 +82,7 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
         );
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
-        $this->assertEquals(15, $this->catalogPrice->getCatalogPrice($this->productMock));
+        $this->assertSame(15, $this->catalogPrice->getCatalogPrice($this->productMock));
     }
 
     public function testGetCatalogPriceWithCustomStore()
@@ -120,11 +120,11 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->at(1))->method('setCurrentStore')->with('store_id');
         $this->storeManagerMock->expects($this->at(2))->method('setCurrentStore')->with('current_store_id');
 
-        $this->assertEquals(15, $this->catalogPrice->getCatalogPrice($this->productMock, $storeMock, true));
+        $this->assertSame(15, $this->catalogPrice->getCatalogPrice($this->productMock, $storeMock, true));
     }
 
     public function testGetCatalogRegularPrice()
     {
-        $this->assertEquals(null, $this->catalogPrice->getCatalogRegularPrice($this->productMock));
+        $this->assertSame(null, $this->catalogPrice->getCatalogRegularPrice($this->productMock));
     }
 }

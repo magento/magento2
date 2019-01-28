@@ -34,13 +34,13 @@ class LandingInstallerTest extends \PHPUnit\Framework\TestCase
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
-        $this->assertEquals('/magento/setup/landing.phtml', $viewModel->getTemplate());
+        $this->assertSame('/magento/setup/landing.phtml', $viewModel->getTemplate());
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('version', $variables);
-        $this->assertEquals($this::TEST_PRODUCT_VERSION, $variables['version']);
+        $this->assertSame($this::TEST_PRODUCT_VERSION, $variables['version']);
         $this->assertArrayHasKey('welcomeMsg', $variables);
         $this->assertArrayHasKey('docRef', $variables);
         $this->assertArrayHasKey('agreeButtonText', $variables);
-        $this->assertEquals('Agree and Setup Magento', $variables['agreeButtonText']);
+        $this->assertSame('Agree and Setup Magento', $variables['agreeButtonText']);
     }
 }

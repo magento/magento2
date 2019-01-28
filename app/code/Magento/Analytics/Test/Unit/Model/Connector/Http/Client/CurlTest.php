@@ -135,7 +135,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
             ->with($responseString)
             ->willReturn($response);
 
-        $this->assertEquals(
+        $this->assertSame(
             $response,
             $this->curl->request(
                 $data['method'],
@@ -182,7 +182,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $response,
             $this->curl->request(
                 $data['method'],

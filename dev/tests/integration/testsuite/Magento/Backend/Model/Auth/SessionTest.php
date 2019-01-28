@@ -56,7 +56,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                 \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
             );
         }
-        $this->assertEquals($loggedIn, $this->authSession->isLoggedIn());
+        $this->assertSame($loggedIn, $this->authSession->isLoggedIn());
     }
 
     public function loginDataProvider()

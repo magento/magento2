@@ -30,7 +30,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     {
         $expected = ['some_key' => 'some_value'];
         \Magento\Framework\Profiler::setDefaultTags($expected);
-        $this->assertAttributeEquals($expected, '_defaultTags', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame($expected, '_defaultTags', \Magento\Framework\Profiler::class);
     }
 
     public function testAddTagFilter()
@@ -40,8 +40,8 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\Profiler::addTagFilter('tag1', 'value_1.2');
 
         $expected = ['tag1' => ['value_1.1', 'value_1.2'], 'tag2' => ['value_2.1']];
-        $this->assertAttributeEquals($expected, '_tagFilters', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals(true, '_hasTagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame($expected, '_tagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame(true, '_hasTagFilters', \Magento\Framework\Profiler::class);
     }
 
     public function testAdd()
@@ -52,7 +52,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(\Magento\Framework\Profiler::isEnabled());
 
         $expected = [$mock];
-        $this->assertAttributeEquals($expected, '_drivers', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame($expected, '_drivers', \Magento\Framework\Profiler::class);
     }
 
     /**
@@ -223,13 +223,13 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\Profiler::add($driver);
         \Magento\Framework\Profiler::reset();
 
-        $this->assertAttributeEquals([], '_currentPath', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals([], '_tagFilters', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals([], '_defaultTags', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals([], '_drivers', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals(false, '_hasTagFilters', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals(0, '_pathCount', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals([], '_pathIndex', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame([], '_currentPath', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame([], '_tagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame([], '_defaultTags', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame([], '_drivers', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame(false, '_hasTagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame(0, '_pathCount', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame([], '_pathIndex', \Magento\Framework\Profiler::class);
     }
 
     /**
@@ -309,13 +309,13 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         );
 
         \Magento\Framework\Profiler::applyConfig($config, '');
-        $this->assertAttributeEquals([$mockDriver], '_drivers', \Magento\Framework\Profiler::class);
-        $this->assertAttributeEquals(
+        $this->assertAttributeSame([$mockDriver], '_drivers', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame(
             ['tagName' => ['tagValue']],
             '_tagFilters',
             \Magento\Framework\Profiler::class
         );
-        $this->assertAttributeEquals(true, '_enabled', \Magento\Framework\Profiler::class);
+        $this->assertAttributeSame(true, '_enabled', \Magento\Framework\Profiler::class);
     }
 
     /**
@@ -328,7 +328,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     {
         $method = new \ReflectionMethod(\Magento\Framework\Profiler::class, '_parseConfig');
         $method->setAccessible(true);
-        $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
+        $this->assertSame($expected, $method->invoke(null, $data, '', $isAjax));
     }
 
     /**

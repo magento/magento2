@@ -13,7 +13,7 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
     public function testRoot()
     {
         $object = new DirectoryList('/root/dir');
-        $this->assertEquals($object->getRoot(), $object->getPath(DirectoryList::ROOT));
+        $this->assertSame($object->getRoot(), $object->getPath(DirectoryList::ROOT));
     }
 
     public function testDirectoriesCustomization()
@@ -21,8 +21,8 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
         $config = [DirectoryList::APP => [DirectoryList::PATH => 'foo', DirectoryList::URL_PATH => 'bar']];
         $object = new DirectoryList('/root/dir', $config);
         $this->assertFileExists($object->getPath(DirectoryList::SYS_TMP));
-        $this->assertEquals('/root/dir/foo', $object->getPath(DirectoryList::APP));
-        $this->assertEquals('bar', $object->getUrlPath(DirectoryList::APP));
+        $this->assertSame('/root/dir/foo', $object->getPath(DirectoryList::APP));
+        $this->assertSame('bar', $object->getUrlPath(DirectoryList::APP));
         $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
         $this->expectExceptionMessage("Unknown directory type: 'unknown'");
         $object->getPath('unknown');

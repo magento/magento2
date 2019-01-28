@@ -18,7 +18,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             \Magento\Widget\Model\Template\Filter::class
         );
         $result = $filter->mediaDirective($construction);
-        $this->assertEquals($baseUrl . $image, $result);
+        $this->assertSame($baseUrl . $image, $result);
     }
 
     public function testMediaDirectiveWithEncodedQuotes()
@@ -32,6 +32,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             \Magento\Widget\Model\Template\Filter::class
         );
         $result = $filter->mediaDirective($construction);
-        $this->assertEquals($baseUrl . $image, $result);
+        $this->assertSame($baseUrl . $image, $result);
     }
 }

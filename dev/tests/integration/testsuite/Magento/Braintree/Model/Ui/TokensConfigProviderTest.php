@@ -81,7 +81,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $actual = $this->configProvider->getConfig()['payment']['vault'];
         static::assertCount(1, $actual);
         static::assertNotEmpty($actual[$item]);
-        static::assertEquals(PayPalConfigProvider::PAYPAL_VAULT_CODE, $actual[$item]['config']['code']);
-        static::assertEquals($payerEmail, $actual[$item]['config']['details']['payerEmail']);
+        static::assertSame(PayPalConfigProvider::PAYPAL_VAULT_CODE, $actual[$item]['config']['code']);
+        static::assertSame($payerEmail, $actual[$item]['config']['details']['payerEmail']);
     }
 }

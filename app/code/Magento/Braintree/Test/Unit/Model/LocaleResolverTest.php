@@ -55,7 +55,7 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
         $expected = 'general/locale/code';
         $this->resolverMock->expects($this->once())->method('getDefaultLocalePath')->willReturn($expected);
         $actual = $this->localeResolver->getDefaultLocalePath();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -80,7 +80,7 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
         $expected = 'fr_FR';
         $this->resolverMock->expects($this->once())->method('getDefaultLocale')->willReturn($expected);
         $actual = $this->localeResolver->getDefaultLocale();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -110,7 +110,7 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
 
         $expected = 'en_US';
         $actual = $this->localeResolver->getLocale();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**

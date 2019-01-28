@@ -71,7 +71,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->_initProduct();
         $productForThumbnail = $this->renderer->getProductForThumbnail();
-        $this->assertEquals($product->getName(), $productForThumbnail->getName(), 'Invalid product was returned.');
+        $this->assertSame($product->getName(), $productForThumbnail->getName(), 'Invalid product was returned.');
     }
 
     /**
@@ -109,7 +109,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getIdentities')
             ->willReturn($identities);
 
-        $this->assertEquals($product->getIdentities(), $this->renderer->getIdentities());
+        $this->assertSame($product->getIdentities(), $this->renderer->getIdentities());
     }
 
     public function testGetIdentitiesFromEmptyItem()
@@ -149,7 +149,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 ]
             )->willReturn($priceHtml);
 
-        $this->assertEquals($priceHtml, $this->renderer->getProductPriceHtml($product));
+        $this->assertSame($priceHtml, $this->renderer->getProductPriceHtml($product));
     }
 
     public function testGetActions()
@@ -187,7 +187,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->willReturn($blockHtml);
 
-        $this->assertEquals($blockHtml, $this->renderer->getActions($itemMock));
+        $this->assertSame($blockHtml, $this->renderer->getActions($itemMock));
     }
 
     public function testGetActionsWithNoBlock()
@@ -204,7 +204,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertEquals('', $this->renderer->getActions($itemMock));
+        $this->assertSame('', $this->renderer->getActions($itemMock));
     }
 
     public function testGetImage()

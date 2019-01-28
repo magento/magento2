@@ -285,7 +285,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('Please specify product option(s).', $result);
+        $this->assertSame('Please specify product option(s).', $result);
     }
 
     /**
@@ -529,7 +529,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(314);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals([$product, $productType], $result);
+        $this->assertSame([$product, $productType], $result);
     }
 
     /**
@@ -754,7 +754,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('We can\'t add this item to your shopping cart right now.', $result);
+        $this->assertSame('We can\'t add this item to your shopping cart right now.', $result);
     }
 
     /**
@@ -978,7 +978,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn('string');
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('string', $result);
+        $this->assertSame('string', $result);
     }
 
     /**
@@ -1087,7 +1087,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product, 'single');
-        $this->assertEquals([$product], $result);
+        $this->assertSame([$product], $result);
     }
 
     /**
@@ -1214,7 +1214,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(3);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('Please specify product option(s).', $result);
+        $this->assertSame('Please specify product option(s).', $result);
     }
 
     /**
@@ -1344,7 +1344,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('The required options you selected are not available.', $result);
+        $this->assertSame('The required options you selected are not available.', $result);
     }
 
     /**
@@ -1379,7 +1379,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
 
-        $this->assertEquals($exceptedResult, $result);
+        $this->assertSame($exceptedResult, $result);
     }
 
     /**
@@ -1480,7 +1480,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('Please select all required options.', $result);
+        $this->assertSame('Please select all required options.', $result);
     }
 
     /**
@@ -1533,7 +1533,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn([0, '', 'str']);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('Please specify product option(s).', $result);
+        $this->assertSame('Please specify product option(s).', $result);
     }
 
     /**
@@ -1573,7 +1573,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('getSelections')
             ->will($this->returnValue([$productMock]));
-        $this->assertEquals($identities, $this->model->getIdentities($productMock));
+        $this->assertSame($identities, $this->model->getIdentities($productMock));
     }
 
     /**
@@ -1594,7 +1594,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->with('sku_type')
             ->will($this->returnValue('some_data'));
 
-        $this->assertEquals($sku, $this->model->getSku($productMock));
+        $this->assertSame($sku, $this->model->getSku($productMock));
     }
 
     /**
@@ -1652,7 +1652,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getSku')
             ->will($this->returnValue($itemSku));
 
-        $this->assertEquals($sku . '-' . $itemSku, $this->model->getSku($productMock));
+        $this->assertSame($sku . '-' . $itemSku, $this->model->getSku($productMock));
     }
 
     /**
@@ -1675,7 +1675,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->with('weight')
             ->will($this->returnValue($weight));
 
-        $this->assertEquals($weight, $this->model->getWeight($productMock));
+        $this->assertSame($weight, $this->model->getWeight($productMock));
     }
 
     /**
@@ -1728,7 +1728,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getWeight')
             ->will($this->returnValue($weight));
 
-        $this->assertEquals($weight, $this->model->getWeight($productMock));
+        $this->assertSame($weight, $this->model->getWeight($productMock));
     }
 
     /**
@@ -1789,7 +1789,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getWeight')
             ->will($this->returnValue($weight));
 
-        $this->assertEquals($weight * $qtyOption, $this->model->getWeight($productMock));
+        $this->assertSame($weight * $qtyOption, $this->model->getWeight($productMock));
     }
 
     /**
@@ -1937,7 +1937,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getSelectionId')
             ->will($this->returnValue($secondId));
 
-        $this->assertEquals($expected, $this->model->shakeSelections($firstItemMock, $secondItemMock));
+        $this->assertSame($expected, $this->model->shakeSelections($firstItemMock, $secondItemMock));
     }
 
     /**
@@ -2484,7 +2484,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $store->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
         $selectionCollection->expects($this->any())->method('joinPrices')->with('website_id')->willReturnSelf();
 
-        $this->assertEquals($selectionCollection, $this->model->getSelectionsCollection($optionIds, $product));
+        $this->assertSame($selectionCollection, $this->model->getSelectionsCollection($optionIds, $product));
     }
 
     /**
@@ -2522,7 +2522,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $buyRequest->expects($this->once())->method('getBundleOption')->willReturn('bundleOption');
         $buyRequest->expects($this->once())->method('getBundleOptionQty')->willReturn('optionId');
 
-        $this->assertEquals($result, $this->model->processBuyRequest($product, $buyRequest));
+        $this->assertSame($result, $this->model->processBuyRequest($product, $buyRequest));
     }
 
     public function testGetProductsToPurchaseByReqGroups()
@@ -2560,7 +2560,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$selectionItem]));
-        $this->assertEquals([[$selectionItem]], $this->model->getProductsToPurchaseByReqGroups($product));
+        $this->assertSame([[$selectionItem]], $this->model->getProductsToPurchaseByReqGroups($product));
     }
 
     public function testGetSearchableData()
@@ -2580,7 +2580,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->bundleOptionFactory->expects($this->once())->method('create')->willReturn($option);
         $option->expects($this->once())->method('getSearchableData')->willReturn(['optionSearchdata']);
 
-        $this->assertEquals(['optionSearchdata'], $this->model->getSearchableData($product));
+        $this->assertSame(['optionSearchdata'], $this->model->getSearchableData($product));
     }
 
     public function testHasOptions()

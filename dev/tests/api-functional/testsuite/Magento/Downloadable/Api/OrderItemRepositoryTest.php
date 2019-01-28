@@ -115,6 +115,6 @@ class OrderItemRepositoryTest extends WebapiAbstract
         $actualOptions = $response['product_option']['extension_attributes']['downloadable_option'];
 
         $this->assertArrayHasKey('downloadable_links', $actualOptions);
-        $this->assertEquals($expected, $actualOptions['downloadable_links']);
+        $this->assertSame($expected, $actualOptions['downloadable_links']);
     }
 }

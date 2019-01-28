@@ -66,7 +66,7 @@ class StockItemTest extends WebapiAbstract
         $arguments = ['productSku' => $productSku];
         $apiResult = $this->_webApiCall($serviceInfo, $arguments);
         $result['item_id'] = $apiResult['item_id'];
-        $this->assertEquals($result, array_intersect_key($apiResult, $result), 'The stock data does not match.');
+        $this->assertSame($result, array_intersect_key($apiResult, $result), 'The stock data does not match.');
         return $apiResult;
     }
 
@@ -111,7 +111,7 @@ class StockItemTest extends WebapiAbstract
         $data = $stockItemDetailsDo->getData();
         $data['show_default_notification_message'] = false;
         $arguments = ['productSku' => $productSku, 'stockItem' => $data];
-        $this->assertEquals($stockItemOld['item_id'], $this->_webApiCall($serviceInfo, $arguments));
+        $this->assertSame($stockItemOld['item_id'], $this->_webApiCall($serviceInfo, $arguments));
 
         /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory */
         $stockItemFactory = $this->objectManager
@@ -121,7 +121,7 @@ class StockItemTest extends WebapiAbstract
         $stockItemResource = $this->objectManager->get(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
         $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['stock_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
-        $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
+        $this->assertSame($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
     }
 
     /**

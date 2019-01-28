@@ -202,6 +202,6 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        static::assertEquals($expected, $this->model->getList());
+        static::assertSame($expected, $this->model->getList());
     }
 }

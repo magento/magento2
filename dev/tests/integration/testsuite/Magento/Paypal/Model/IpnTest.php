@@ -64,16 +64,16 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
         $creditmemo = current($creditmemoItems);
 
-        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(1, count($creditmemoItems));
-        $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
-        $this->assertEquals(10, $order->getSubtotalRefunded());
-        $this->assertEquals(10, $order->getBaseSubtotalRefunded());
-        $this->assertEquals(20, $order->getShippingRefunded());
-        $this->assertEquals(20, $order->getBaseShippingRefunded());
-        $this->assertEquals(30, $order->getTotalRefunded());
-        $this->assertEquals(30, $order->getBaseTotalRefunded());
-        $this->assertEquals(30, $order->getTotalOnlineRefunded());
+        $this->assertSame(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertSame(1, count($creditmemoItems));
+        $this->assertSame(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
+        $this->assertSame(10, $order->getSubtotalRefunded());
+        $this->assertSame(10, $order->getBaseSubtotalRefunded());
+        $this->assertSame(20, $order->getShippingRefunded());
+        $this->assertSame(20, $order->getBaseShippingRefunded());
+        $this->assertSame(30, $order->getTotalRefunded());
+        $this->assertSame(30, $order->getBaseTotalRefunded());
+        $this->assertSame(30, $order->getTotalOnlineRefunded());
         $this->assertEmpty($order->getTotalOfflineRefunded());
     }
 
@@ -114,10 +114,10 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             $ipnData['txn_id']
         );
 
-        $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
+        $this->assertSame(Order::STATE_PROCESSING, $order->getState()) ;
         $this->assertEmpty(count($creditmemoItems));
-        $this->assertEquals(1, count($comments));
-        $this->assertEquals($commentOrigin, $commentData->getComment());
+        $this->assertSame(1, count($comments));
+        $this->assertSame($commentOrigin, $commentData->getComment());
     }
 
     /**
@@ -146,15 +146,15 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
-        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(1, count($creditmemoItems));
-        $this->assertEquals(10, $order->getSubtotalRefunded());
-        $this->assertEquals(10, $order->getBaseSubtotalRefunded());
-        $this->assertEquals(20, $order->getShippingRefunded());
-        $this->assertEquals(20, $order->getBaseShippingRefunded());
-        $this->assertEquals(30, $order->getTotalRefunded());
-        $this->assertEquals(30, $order->getBaseTotalRefunded());
-        $this->assertEquals(30, $order->getTotalOnlineRefunded());
+        $this->assertSame(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertSame(1, count($creditmemoItems));
+        $this->assertSame(10, $order->getSubtotalRefunded());
+        $this->assertSame(10, $order->getBaseSubtotalRefunded());
+        $this->assertSame(20, $order->getShippingRefunded());
+        $this->assertSame(20, $order->getBaseShippingRefunded());
+        $this->assertSame(30, $order->getTotalRefunded());
+        $this->assertSame(30, $order->getBaseTotalRefunded());
+        $this->assertSame(30, $order->getTotalOnlineRefunded());
         $this->assertEmpty($order->getTotalOfflineRefunded());
     }
 
@@ -188,11 +188,11 @@ class IpnTest extends \PHPUnit\Framework\TestCase
     protected function _assertOrder($order, $currencyCode)
     {
         if ($currencyCode == 'USD') {
-            $this->assertEquals('complete', $order->getState());
-            $this->assertEquals('complete', $order->getStatus());
+            $this->assertSame('complete', $order->getState());
+            $this->assertSame('complete', $order->getStatus());
         } else {
-            $this->assertEquals('payment_review', $order->getState());
-            $this->assertEquals('fraud', $order->getStatus());
+            $this->assertSame('payment_review', $order->getState());
+            $this->assertSame('fraud', $order->getStatus());
         }
     }
 

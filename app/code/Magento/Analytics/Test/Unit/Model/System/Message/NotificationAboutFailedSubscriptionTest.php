@@ -84,7 +84,7 @@ class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCas
             ->willReturn($retryUrl);
         $messageDetails = 'Failed to synchronize data to the Magento Business Intelligence service. ';
         $messageDetails .= sprintf('<a href="%s">Retry Synchronization</a>', $retryUrl);
-        $this->assertEquals($messageDetails, $this->notification->getText());
+        $this->assertSame($messageDetails, $this->notification->getText());
     }
 
     /**

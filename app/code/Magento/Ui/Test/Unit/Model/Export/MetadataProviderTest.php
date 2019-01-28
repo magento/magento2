@@ -88,7 +88,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getHeaders($component);
         $this->assertTrue(is_array($result));
         $this->assertCount(1, $result);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -117,7 +117,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getFields($component);
         $this->assertTrue(is_array($result));
         $this->assertCount(1, $result);
-        $this->assertEquals($columnName, $result[0]);
+        $this->assertSame($columnName, $result[0]);
     }
 
     /**
@@ -219,7 +219,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getRowData($document, $fields, $options);
         $this->assertTrue(is_array($result));
         $this->assertCount(1, $result);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -312,7 +312,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getOptions();
         $this->assertTrue(is_array($result));
         $this->assertCount(1, $result);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

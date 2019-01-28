@@ -27,6 +27,6 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
         CacheCleaner::cleanAll();
         $allOptions = $this->model->getAllOptions();
         $cachedAllOptions = $this->model->getAllOptions();
-        $this->assertEquals($allOptions, $cachedAllOptions);
+        $this->assertSame($allOptions, $cachedAllOptions);
     }
 }

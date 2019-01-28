@@ -83,8 +83,8 @@ class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
         $result = $this->repository->getList($searchCriteria);
         $items = $result->getItems();
         $this->assertCount(2, $items);
-        $this->assertEquals('second', array_shift($items)->getPaymentMethodCode());
-        $this->assertEquals('first', array_shift($items)->getPaymentMethodCode());
+        $this->assertSame('second', array_shift($items)->getPaymentMethodCode());
+        $this->assertSame('first', array_shift($items)->getPaymentMethodCode());
     }
 
     /**
@@ -104,7 +104,7 @@ class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $deletedToken = $tokenRepository->getById($token->getEntityId());
 
-        static::assertEquals('public_hash', $deletedToken->getPublicHash());
+        static::assertSame('public_hash', $deletedToken->getPublicHash());
         static::assertFalse($deletedToken->getIsActive());
         static::assertFalse($deletedToken->getIsVisible());
     }

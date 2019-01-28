@@ -302,7 +302,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expected);
 
         $actual = $this->command->execute(['publicHash' => $publicHash, 'customerId' => $customerId]);
-        self::assertEquals($expected, $actual);
-        self::assertEquals($nonce, $actual->get()['paymentMethodNonce']);
+        self::assertSame($expected, $actual);
+        self::assertSame($nonce, $actual->get()['paymentMethodNonce']);
     }
 }

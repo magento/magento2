@@ -96,7 +96,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($isTaxClassIdChanged));
 
         $closureMock = function (\Magento\Customer\Model\Group $object) use ($groupMock) {
-            $this->assertEquals($object, $groupMock);
+            $this->assertSame($object, $groupMock);
             return $this->subjectMock;
         };
 
@@ -106,7 +106,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $closureMock, $groupMock)
         );

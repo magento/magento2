@@ -97,7 +97,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         CacheCleaner::cleanAll();
         $this->translate->loadData()->getData();
         $dataCached = $this->translate->loadData()->getData();
-        $this->assertEquals($data, $dataCached);
+        $this->assertSame($data, $dataCached);
     }
 
     /**
@@ -113,7 +113,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     {
         $this->translate->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
         $actualTranslation = new \Magento\Framework\Phrase($inputText);
-        $this->assertEquals($expectedTranslation, $actualTranslation);
+        $this->assertSame($expectedTranslation, $actualTranslation);
     }
 
     /**

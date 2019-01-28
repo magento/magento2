@@ -220,7 +220,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedChildData as $itemId => $expectedItemData) {
             $childItem = $childItems[$itemId];
             foreach ($expectedItemData as $key => $value) {
-                $this->assertEquals($value, $childItem->getData($key), 'Incorrect value for ' . $key);
+                $this->assertSame($value, $childItem->getData($key), 'Incorrect value for ' . $key);
             }
         }
     }
@@ -359,6 +359,6 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
         $totalMock->expects($this->once())->method('getDiscountAmount')->willReturn($discountAmount);
         $totalMock->expects($this->once())->method('getDiscountDescription')->willReturn($discountDescription);
-        $this->assertEquals($expectedResult, $this->discount->fetch($quoteMock, $totalMock));
+        $this->assertSame($expectedResult, $this->discount->fetch($quoteMock, $totalMock));
     }
 }

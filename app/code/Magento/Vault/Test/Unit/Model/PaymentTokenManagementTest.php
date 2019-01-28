@@ -170,7 +170,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$tokenMock]);
 
-        self::assertEquals([$tokenMock], $this->paymentTokenManagement->getListByCustomerId(1));
+        self::assertSame([$tokenMock], $this->paymentTokenManagement->getListByCustomerId(1));
     }
 
     /**
@@ -192,7 +192,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
             ->with(['data' => ['token-data']])
             ->willReturn($tokenMock);
 
-        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByPaymentId(1));
+        self::assertSame($tokenMock, $this->paymentTokenManagement->getByPaymentId(1));
     }
 
     /**
@@ -208,7 +208,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPaymentId(1));
+        self::assertSame(null, $this->paymentTokenManagement->getByPaymentId(1));
     }
 
     /**
@@ -230,7 +230,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
             ->with(['data' => ['token-data']])
             ->willReturn($tokenMock);
 
-        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1, 1));
+        self::assertSame($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1, 1));
     }
 
     /**
@@ -246,7 +246,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
+        self::assertSame(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
     }
 
     /**
@@ -262,7 +262,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
+        self::assertSame(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
     }
 
     /**
@@ -502,7 +502,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$token]);
 
-        static::assertEquals(
+        static::assertSame(
             [$token],
             $this->paymentTokenManagement->getVisibleAvailableTokens($customerId)
         );

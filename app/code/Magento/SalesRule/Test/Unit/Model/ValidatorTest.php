@@ -235,9 +235,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->model->process($this->item);
 
-        $this->assertEquals(0, $this->item->getDiscountAmount());
-        $this->assertEquals(0, $this->item->getBaseDiscountAmount());
-        $this->assertEquals(0, $this->item->getDiscountPercent());
+        $this->assertSame(0, $this->item->getDiscountAmount());
+        $this->assertSame(0, $this->item->getBaseDiscountAmount());
+        $this->assertSame(0, $this->item->getDiscountPercent());
     }
 
     public function testApplyRulesThatAppliedRuleIdsAreCollected()
@@ -374,7 +374,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('base_items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('items_count', $this->model->getRuleItemTotalsInfo($rule->getId()));
-        $this->assertEquals(1, $this->model->getRuleItemTotalsInfo($rule->getId())['items_count']);
+        $this->assertSame(1, $this->model->getRuleItemTotalsInfo($rule->getId())['items_count']);
     }
 
     public function testInitTotalsNoItems()

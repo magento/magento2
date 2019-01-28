@@ -63,7 +63,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($paymentAction);
 
-        $this->assertEquals($expectedValue, $this->config->getTrxType());
+        $this->assertSame($expectedValue, $this->config->getTrxType());
     }
 
     /**
@@ -90,7 +90,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($paymentAction);
 
-        $this->assertEquals($expectedValue, $this->config->getPaymentAction());
+        $this->assertSame($expectedValue, $this->config->getPaymentAction());
     }
 
     /**
@@ -115,7 +115,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn('transaction_url_test_mode');
 
         $this->config->setMethodInstance($this->methodInterfaceMock);
-        $this->assertEquals('transaction_url_test_mode', $this->config->getTransactionUrl(1));
+        $this->assertSame('transaction_url_test_mode', $this->config->getTransactionUrl(1));
     }
 
     public function testGetTransactionUrlWithTestModeOff()
@@ -128,7 +128,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn('transaction_url');
 
         $this->config->setMethodInstance($this->methodInterfaceMock);
-        $this->assertEquals('transaction_url', $this->config->getTransactionUrl(0));
+        $this->assertSame('transaction_url', $this->config->getTransactionUrl(0));
     }
 
     public function testGetTransactionUrlWithTestModeEmptyAndSandboxOn()
@@ -142,7 +142,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn('transaction_url_test_mode');
 
         $this->config->setMethodInstance($this->methodInterfaceMock);
-        $this->assertEquals('transaction_url_test_mode', $this->config->getTransactionUrl());
+        $this->assertSame('transaction_url_test_mode', $this->config->getTransactionUrl());
     }
 
     public function testGetTransactionUrlWithTestModeEmptyAndSandboxOff()
@@ -156,7 +156,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn('transaction_url');
 
         $this->config->setMethodInstance($this->methodInterfaceMock);
-        $this->assertEquals('transaction_url', $this->config->getTransactionUrl());
+        $this->assertSame('transaction_url', $this->config->getTransactionUrl());
     }
 
     /**
@@ -186,7 +186,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
                 )->willReturn($isActive);
         }
 
-        $this->assertEquals($result, $this->config->isMethodActive($currentMethod));
+        $this->assertSame($result, $this->config->isMethodActive($currentMethod));
     }
 
     /**

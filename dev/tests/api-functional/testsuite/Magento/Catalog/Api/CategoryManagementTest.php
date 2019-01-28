@@ -43,7 +43,7 @@ class CategoryManagementTest extends WebapiAbstract
             }
             $result = $result['children_data'][0];
         }
-        $this->assertEquals($expectedId, $result['id']);
+        $this->assertSame($expectedId, $result['id']);
         $this->assertEmpty($result['children_data']);
     }
 
@@ -81,9 +81,9 @@ class CategoryManagementTest extends WebapiAbstract
         /** @var \Magento\Catalog\Model\Category $model */
         $readService = Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $model = $readService->get($categoryId);
-        $this->assertEquals($expectedPath, $model->getPath());
-        $this->assertEquals($expectedPosition, $model->getPosition());
-        $this->assertEquals($parentId, $model->getParentId());
+        $this->assertSame($expectedPath, $model->getPath());
+        $this->assertSame($expectedPosition, $model->getPosition());
+        $this->assertSame($parentId, $model->getParentId());
     }
 
     public function updateMoveDataProvider()

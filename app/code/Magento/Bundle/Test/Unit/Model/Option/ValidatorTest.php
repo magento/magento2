@@ -61,8 +61,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('getType')
             ->willReturn($type);
 
-        $this->assertEquals($isValid, $this->validator->isValid($option));
-        $this->assertEquals($expectedMessages, $this->validator->getMessages());
+        $this->assertSame($isValid, $this->validator->isValid($option));
+        $this->assertSame($expectedMessages, $this->validator->getMessages());
     }
 
     /**

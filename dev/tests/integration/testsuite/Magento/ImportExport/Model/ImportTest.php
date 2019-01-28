@@ -165,7 +165,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
         foreach ($this->_entityBehaviors as $entityKey => $behaviorData) {
             $this->assertArrayHasKey($entityKey, $actualBehaviors);
-            $this->assertEquals($behaviorData, $actualBehaviors[$entityKey]);
+            $this->assertSame($behaviorData, $actualBehaviors[$entityKey]);
         }
     }
 
@@ -198,7 +198,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
         foreach ($this->_uniqueBehaviors as $behaviorCode => $behaviorClass) {
             $this->assertArrayHasKey($behaviorCode, $actualBehaviors);
-            $this->assertEquals($behaviorClass, $actualBehaviors[$behaviorCode]);
+            $this->assertSame($behaviorClass, $actualBehaviors[$behaviorCode]);
         }
     }
 

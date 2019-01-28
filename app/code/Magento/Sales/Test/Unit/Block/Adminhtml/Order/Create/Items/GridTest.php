@@ -154,7 +154,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $itemMock = $this->prepareItem($itemData, $productType);
         $result = $this->block->getTierHtml($itemMock);
-        $this->assertEquals($expectedMessage, $result);
+        $this->assertSame($expectedMessage, $result);
     }
 
     /**
@@ -264,8 +264,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->block->getQuote()->setIsSuperMode(true);
         $items = $this->block->setLayout($layoutMock)->getItems();
 
-        $this->assertEquals('Message', $items[0]->getMessage());
-        $this->assertEquals(true, $this->block->getQuote()->getIsSuperMode());
+        $this->assertSame('Message', $items[0]->getMessage());
+        $this->assertSame(true, $this->block->getQuote()->getIsSuperMode());
     }
 
     /**
@@ -306,7 +306,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $grid->getItemUnitPriceHtml($this->itemMock));
+        $this->assertSame($html, $grid->getItemUnitPriceHtml($this->itemMock));
     }
 
     public function testGetItemRowTotalHtml()
@@ -328,7 +328,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $grid->getItemRowTotalHtml($this->itemMock));
+        $this->assertSame($html, $grid->getItemRowTotalHtml($this->itemMock));
     }
 
     public function testGetItemRowTotalWithDiscountHtml()
@@ -350,7 +350,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $grid->getItemRowTotalWithDiscountHtml($this->itemMock));
+        $this->assertSame($html, $grid->getItemRowTotalWithDiscountHtml($this->itemMock));
     }
 
     /**
@@ -391,7 +391,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('getDiscountAmount')
             ->will($this->returnValue($orderData['discountAmount']));
 
-        $this->assertEquals($expected, $gridMock->getSubtotalWithDiscount());
+        $this->assertSame($expected, $gridMock->getSubtotalWithDiscount());
     }
 
     /**

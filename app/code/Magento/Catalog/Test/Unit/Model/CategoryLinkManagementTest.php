@@ -83,7 +83,7 @@ class CategoryLinkManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setCategoryId')
             ->with($categoryId)
             ->willReturnSelf();
-        $this->assertEquals([$categoryProductLinkMock], $this->model->getAssignedProducts($categoryId));
+        $this->assertSame([$categoryProductLinkMock], $this->model->getAssignedProducts($categoryId));
     }
 
     /**

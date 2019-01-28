@@ -59,7 +59,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $rate,
             $this->currencyRate->load($currencyCode)->getRate($currencyTo),
             'Currency rate has not been saved'

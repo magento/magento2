@@ -65,13 +65,13 @@ class IoTest extends \PHPUnit\Framework\TestCase
     public function testGetResultFileDirectory()
     {
         $expectedDirectory = self::GENERATION_DIRECTORY . '/' . 'class/';
-        $this->assertEquals($expectedDirectory, $this->_object->getResultFileDirectory(self::CLASS_NAME));
+        $this->assertSame($expectedDirectory, $this->_object->getResultFileDirectory(self::CLASS_NAME));
     }
 
     public function testGetResultFileName()
     {
         $expectedFileName = self::GENERATION_DIRECTORY . '/class/name.php';
-        $this->assertEquals($expectedFileName, $this->_object->generateResultFileName(self::CLASS_NAME));
+        $this->assertSame($expectedFileName, $this->_object->generateResultFileName(self::CLASS_NAME));
     }
 
     /**
@@ -182,7 +182,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetGenerationDirectory()
     {
-        $this->assertEquals($this->_generationDirectory, $this->_object->getGenerationDirectory());
+        $this->assertSame($this->_generationDirectory, $this->_object->getGenerationDirectory());
     }
 
     /**

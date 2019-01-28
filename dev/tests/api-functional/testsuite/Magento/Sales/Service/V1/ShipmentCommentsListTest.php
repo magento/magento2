@@ -50,7 +50,7 @@ class ShipmentCommentsListTest extends WebapiAbstract
             /** @var \Magento\Sales\Model\Order\Shipment\Comment $shipmentHistoryStatus */
             $shipmentHistoryStatus = $objectManager->get(\Magento\Sales\Model\Order\Shipment\Comment::class)
                 ->load($item['entity_id']);
-            $this->assertEquals($shipmentHistoryStatus->getComment(), $item['comment']);
+            $this->assertSame($shipmentHistoryStatus->getComment(), $item['comment']);
         }
     }
 }

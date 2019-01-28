@@ -129,6 +129,6 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
             $storeId
         );
 
-        $this->assertEquals([1], array_keys($indexData));
+        $this->assertSame([1], array_keys($indexData));
     }
 }

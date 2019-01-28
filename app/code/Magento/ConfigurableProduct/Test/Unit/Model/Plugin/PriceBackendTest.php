@@ -74,7 +74,7 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
             $this->closure,
             $this->product
         );
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

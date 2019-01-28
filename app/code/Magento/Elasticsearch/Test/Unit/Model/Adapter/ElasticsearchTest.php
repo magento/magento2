@@ -186,7 +186,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->client->expects($this->once())
             ->method('ping')
             ->willReturn(true);
-        $this->assertEquals(true, $this->model->ping());
+        $this->assertSame(true, $this->model->ping());
     }
 
     /**
@@ -206,7 +206,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareDocsPerStoreEmpty()
     {
-        $this->assertEquals([], $this->model->prepareDocsPerStore([], 1));
+        $this->assertSame([], $this->model->prepareDocsPerStore([], 1));
     }
 
     /**
@@ -366,7 +366,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->client->expects($this->never())
             ->method('updateAlias');
 
-        $this->assertEquals($model, $model->updateAlias(1, 'product'));
+        $this->assertSame($model, $model->updateAlias(1, 'product'));
     }
 
     /**
@@ -412,7 +412,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->willReturn('_product_1_v1');
 
         $this->model->cleanIndex(1, 'product');
-        $this->assertEquals($this->model, $this->model->updateAlias(1, 'product'));
+        $this->assertSame($this->model, $this->model->updateAlias(1, 'product'));
     }
 
     /**
@@ -440,7 +440,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->with('indexName')
             ->willReturn(['indexName_product_1_v' => 'indexName_product_1_v']);
 
-        $this->assertEquals($this->model, $this->model->updateAlias(1, 'product'));
+        $this->assertSame($this->model, $this->model->updateAlias(1, 'product'));
     }
 
     /**
@@ -459,7 +459,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->with('indexName')
             ->willReturn(['indexName_product_1_v2' => 'indexName_product_1_v2']);
 
-        $this->assertEquals($this->model, $this->model->updateAlias(1, 'product'));
+        $this->assertSame($this->model, $this->model->updateAlias(1, 'product'));
     }
 
     /**

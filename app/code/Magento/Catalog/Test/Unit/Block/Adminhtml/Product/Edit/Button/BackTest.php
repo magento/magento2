@@ -19,7 +19,7 @@ class BackTest extends GenericTest
             ->with('*/*/', [])
             ->willReturn('/');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'label' => __('Back'),
                 'on_click' => sprintf("location.href = '%s';", '/'),

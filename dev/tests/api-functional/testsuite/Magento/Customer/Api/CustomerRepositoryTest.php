@@ -251,9 +251,9 @@ class CustomerRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['fieldName' => 'customerId', 'fieldValue' => $invalidId], $errorObj['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(['fieldName' => 'customerId', 'fieldValue' => $invalidId], $errorObj['parameters']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 
@@ -291,7 +291,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         //Verify if the customer is updated
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
-        $this->assertEquals($lastName . "Updated", $existingCustomerDataObject->getLastname());
+        $this->assertSame($lastName . "Updated", $existingCustomerDataObject->getLastname());
     }
 
     /**
@@ -340,8 +340,8 @@ class CustomerRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj =  $this->customerHelper->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message'], 'Invalid message: "' . $e->getMessage() . '"');
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message'], 'Invalid message: "' . $e->getMessage() . '"');
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 
@@ -391,9 +391,9 @@ class CustomerRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['fieldName' => 'customerId', 'fieldValue' => -1], $errorObj['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(['fieldName' => 'customerId', 'fieldValue' => -1], $errorObj['parameters']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 
@@ -443,13 +443,13 @@ class CustomerRepositoryTest extends WebapiAbstract
                     $expectedException->getParameters() // expected error parameters
                 );
             } else {
-                $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+                $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
                     'message' => '"%fieldName" is required. Enter and try again.',
                     'parameters' => ['fieldName' => Address::FIRSTNAME],
                 ];
-                $this->assertEquals($expectedExceptionData, $exceptionData);
+                $this->assertSame($expectedExceptionData, $exceptionData);
             }
         }
 
@@ -466,7 +466,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'websiteId',
                 $customerDataArray[Customer::WEBSITE_ID]
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $exception->getMessage(),
                 $e->getMessage(),
                 'Exception message does not match expected message.'
@@ -503,8 +503,8 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($customerData[Customer::ID], $searchResults['items'][0][Customer::ID]);
+        $this->assertSame(1, $searchResults['total_count']);
+        $this->assertSame($customerData[Customer::ID], $searchResults['items'][0][Customer::ID]);
     }
 
     /**
@@ -531,8 +531,8 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo);
-        $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($customerData[Customer::ID], $searchResults['items'][0][Customer::ID]);
+        $this->assertSame(1, $searchResults['total_count']);
+        $this->assertSame($customerData[Customer::ID], $searchResults['items'][0][Customer::ID]);
     }
 
     /**
@@ -550,7 +550,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo);
         } catch (\Exception $e) {
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
                 'message' => '"%fieldName" is required. Enter and try again.',
@@ -558,7 +558,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                     'fieldName' => 'searchCriteria'
                 ],
             ];
-            $this->assertEquals($expectedExceptionData, $exceptionData);
+            $this->assertSame($expectedExceptionData, $exceptionData);
         }
     }
 
@@ -605,9 +605,9 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(2, $searchResults['total_count']);
-        $this->assertEquals($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
-        $this->assertEquals($customerData2[Customer::ID], $searchResults['items'][1][Customer::ID]);
+        $this->assertSame(2, $searchResults['total_count']);
+        $this->assertSame($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
+        $this->assertSame($customerData2[Customer::ID], $searchResults['items'][1][Customer::ID]);
     }
 
     /**
@@ -642,9 +642,9 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo);
-        $this->assertEquals(2, $searchResults['total_count']);
-        $this->assertEquals($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
-        $this->assertEquals($customerData2[Customer::ID], $searchResults['items'][1][Customer::ID]);
+        $this->assertSame(2, $searchResults['total_count']);
+        $this->assertSame($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
+        $this->assertSame($customerData2[Customer::ID], $searchResults['items'][1][Customer::ID]);
     }
 
     /**
@@ -681,7 +681,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(0, $searchResults['total_count'], 'No results expected for non-existent email.');
+        $this->assertSame(0, $searchResults['total_count'], 'No results expected for non-existent email.');
     }
 
     /**
@@ -715,7 +715,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(0, $searchResults['total_count'], 'No results expected for non-existent email.');
+        $this->assertSame(0, $searchResults['total_count'], 'No results expected for non-existent email.');
     }
 
     /**
@@ -758,8 +758,8 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
+        $this->assertSame(1, $searchResults['total_count']);
+        $this->assertSame($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
 
         // Add an invalid And-ed data with multiple groups to yield no result
         $filter4 = $builder->setField(Customer::LASTNAME)
@@ -774,7 +774,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo['rest']['resourcePath'] = self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData);
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(0, $searchResults['total_count']);
+        $this->assertSame(0, $searchResults['total_count']);
     }
 
     /**

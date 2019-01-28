@@ -101,7 +101,7 @@ class BookmarkManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($searchResult);
-        $this->assertEquals($searchResult, $this->bookmarkManagement->loadByNamespace($namespace));
+        $this->assertSame($searchResult, $this->bookmarkManagement->loadByNamespace($namespace));
     }
 
     public function testGetByIdentifierNamespace()
@@ -165,7 +165,7 @@ class BookmarkManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getById')
             ->with($bookmarkId)
             ->willReturn($bookmark);
-        $this->assertEquals(
+        $this->assertSame(
             $bookmark,
             $this->bookmarkManagement->getByIdentifierNamespace($identifier, $namespace)
         );

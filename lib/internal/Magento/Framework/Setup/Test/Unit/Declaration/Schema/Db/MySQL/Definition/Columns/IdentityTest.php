@@ -50,7 +50,7 @@ class IdentityTest extends \PHPUnit\Framework\TestCase
         $this->columnMock->expects($this->any())
             ->method('isIdentity')
             ->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             'AUTO_INCREMENT',
             $this->identity->toDefinition($this->columnMock)
         );
@@ -64,7 +64,7 @@ class IdentityTest extends \PHPUnit\Framework\TestCase
         $this->columnMock->expects($this->any())
             ->method('isIdentity')
             ->willReturn(false);
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $this->identity->toDefinition($this->columnMock)
         );
@@ -80,7 +80,7 @@ class IdentityTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedData = $data;
         $expectedData['identity'] = true;
-        $this->assertEquals(
+        $this->assertSame(
             $expectedData,
             $this->identity->fromDefinition($data)
         );

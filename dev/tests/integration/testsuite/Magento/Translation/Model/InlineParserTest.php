@@ -58,7 +58,7 @@ class InlineParserTest extends \PHPUnit\Framework\TestCase
         );
         $model->load($originalText);
         try {
-            $this->assertEquals($translatedText, $model->getTranslate());
+            $this->assertSame($translatedText, $model->getTranslate());
             $model->delete();
         } catch (\Exception $e) {
             $model->delete();

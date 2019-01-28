@@ -119,11 +119,11 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->joinProcessor->process($collection, \Magento\Catalog\Api\Data\ProductInterface::class);
         $expectedTableName = 'reviews';
-        $this->assertEquals($expectedTableName, $extensionAttributeJoinData->getReferenceTable());
-        $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
-        $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
-        $this->assertEquals('id', $extensionAttributeJoinData->getJoinField());
-        $this->assertEquals(
+        $this->assertSame($expectedTableName, $extensionAttributeJoinData->getReferenceTable());
+        $this->assertSame('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
+        $this->assertSame('product_id', $extensionAttributeJoinData->getReferenceField());
+        $this->assertSame('id', $extensionAttributeJoinData->getJoinField());
+        $this->assertSame(
             [
                 [
                     'external_alias' => 'review_id',
@@ -276,7 +276,7 @@ EXPECTED_SQL;
         $firstStockItem = $productRepository->getById($firstProductId)->getExtensionAttributes()->getStockItem();
         $firstStockItem->setQty($firstProductQty);
         $stockItemRepository->save($firstStockItem);
-        $this->assertEquals(
+        $this->assertSame(
             $firstProductQty,
             $productRepository->getById($firstProductId)->getExtensionAttributes()->getStockItem()->getQty(),
             'Precondition failed.'
@@ -284,7 +284,7 @@ EXPECTED_SQL;
         $secondStockItem = $productRepository->getById($secondProductId)->getExtensionAttributes()->getStockItem();
         $secondStockItem->setQty($secondProductQty);
         $stockItemRepository->save($secondStockItem);
-        $this->assertEquals(
+        $this->assertSame(
             $secondProductQty,
             $productRepository->getById($secondProductId)->getExtensionAttributes()->getStockItem()->getQty(),
             'Precondition failed.'
@@ -298,17 +298,17 @@ EXPECTED_SQL;
         $products = $productRepository->getList($searchCriteria)->getItems();
 
         /** Ensure that simple extension attributes were populated correctly */
-        $this->assertEquals(
+        $this->assertSame(
             $firstProductQty,
             $products[$firstProductId]->getExtensionAttributes()->getTestStockItemQty()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $secondProductQty,
             $products[$secondProductId]->getExtensionAttributes()->getTestStockItemQty()
         );
 
         /** Check population of complex extension attributes */
-        $this->assertEquals(
+        $this->assertSame(
             $firstProductQty,
             $products[$firstProductId]->getExtensionAttributes()->getTestStockItem()->getQty()
         );
@@ -344,12 +344,12 @@ EXPECTED_SQL;
 
         /** Ensure that simple extension attributes were populated correctly */
         $customer = $customers[0];
-        $this->assertEquals($customerId, $customer->getId(), 'Precondition failed');
-        $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getTestGroupCode());
+        $this->assertSame($customerId, $customer->getId(), 'Precondition failed');
+        $this->assertSame($customerGroupName, $customer->getExtensionAttributes()->getTestGroupCode());
 
         /** Check population of complex extension attributes */
-        $this->assertEquals($taxClassId, $customer->getExtensionAttributes()->getTestGroup()->getTaxClassId());
-        $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getTestGroup()->getCode());
+        $this->assertSame($taxClassId, $customer->getExtensionAttributes()->getTestGroup()->getTaxClassId());
+        $this->assertSame($customerGroupName, $customer->getExtensionAttributes()->getTestGroup()->getCode());
     }
 
     public function testGetListWithFilterBySimpleDummyAttributeWithMapping()
@@ -369,9 +369,9 @@ EXPECTED_SQL;
         $items = $searchResults->getItems();
         $this->assertCount(1, $items, 'Filtration by extension attribute does not work.');
         $expectedGroupCode = 'General';
-        $this->assertEquals($expectedGroupCode, $items[0]->getCode(), 'Invalid group loaded.');
+        $this->assertSame($expectedGroupCode, $items[0]->getCode(), 'Invalid group loaded.');
         $this->assertNotNull($items[0]->getExtensionAttributes(), "Extension attributes not loaded");
-        $this->assertEquals(
+        $this->assertSame(
             $joinedExtensionAttributeValue,
             $items[0]->getExtensionAttributes()->getTestDummyAttribute(),
             "Extension attributes were not loaded correctly"
@@ -395,18 +395,18 @@ EXPECTED_SQL;
         $items = $searchResults->getItems();
         $this->assertCount(1, $items, 'Filtration by extension attribute does not work.');
         $expectedGroupCode = 'General';
-        $this->assertEquals($expectedGroupCode, $items[0]->getCode(), 'Invalid group loaded.');
+        $this->assertSame($expectedGroupCode, $items[0]->getCode(), 'Invalid group loaded.');
         $this->assertNotNull($items[0]->getExtensionAttributes(), "Extension attributes not loaded");
         $this->assertNotNull(
             $items[0]->getExtensionAttributes()->getTestComplexDummyAttribute(),
             "Complex extension attribute not loaded"
         );
-        $this->assertEquals(
+        $this->assertSame(
             'user',
             $items[0]->getExtensionAttributes()->getTestComplexDummyAttribute()->getAttributeCode(),
             "Extension attributes were not loaded correctly"
         );
-        $this->assertEquals(
+        $this->assertSame(
             $joinedExtensionAttributeValue,
             $items[0]->getExtensionAttributes()->getTestComplexDummyAttribute()->getFrontendLabel(),
             "Extension attributes were not loaded correctly"
@@ -435,7 +435,7 @@ EXPECTED_SQL;
         $joinedExtensionAttributeValue = $joinedEntity->getAttributeCode();
 
         $this->assertNotNull($invoice->getExtensionAttributes(), "Extension attributes not loaded");
-        $this->assertEquals(
+        $this->assertSame(
             $joinedExtensionAttributeValue,
             $invoice->getExtensionAttributes()->getTestDummyAttribute(),
             "Extension attributes were not loaded correctly"

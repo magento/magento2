@@ -59,7 +59,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
             ->with([$text], $arguments)
             ->willReturn($result);
 
-        $this->assertEquals($result, $phrase->render());
+        $this->assertSame($result, $phrase->render());
     }
 
     /**
@@ -93,7 +93,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
             ->with([$text], $arguments)
             ->willReturn($result);
 
-        $this->assertEquals($result, (string)$phrase);
+        $this->assertSame($result, (string)$phrase);
     }
 
     /**
@@ -106,7 +106,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $text = 'some text';
         $phrase = new Phrase($text);
 
-        $this->assertEquals($text, $phrase->getText());
+        $this->assertSame($text, $phrase->getText());
     }
 
     /**
@@ -121,8 +121,8 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase1 = new Phrase($text);
         $phrase2 = new Phrase($text, $arguments);
 
-        $this->assertEquals([], $phrase1->getArguments());
-        $this->assertEquals($arguments, $phrase2->getArguments());
+        $this->assertSame([], $phrase1->getArguments());
+        $this->assertSame($arguments, $phrase2->getArguments());
     }
 
     public function testToStringWithExceptionOnRender()
@@ -135,7 +135,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->willThrowException($exception);
 
-        $this->assertEquals($text, (string)$phrase);
+        $this->assertSame($text, (string)$phrase);
     }
 
     /**

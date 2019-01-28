@@ -27,7 +27,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     public function testTokenize($string, $expectedValue)
     {
         $this->_filter->setString($string);
-        $this->assertEquals($expectedValue, $this->_filter->tokenize());
+        $this->assertSame($expectedValue, $this->_filter->tokenize());
     }
 
     /**

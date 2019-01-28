@@ -53,6 +53,6 @@ class GenerateMapperTest extends \PHPUnit\Framework\TestCase
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertEquals('SampleMapper.php', $model->generate());
+        $this->assertSame('SampleMapper.php', $model->generate());
     }
 }

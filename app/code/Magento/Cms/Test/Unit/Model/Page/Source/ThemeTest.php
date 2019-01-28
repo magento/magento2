@@ -62,7 +62,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->method('getLabels')
             ->willReturn($options);
 
-        $this->assertEquals($expected, $this->object->toOptionArray());
+        $this->assertSame($expected, $this->object->toOptionArray());
     }
 
     /**

@@ -76,7 +76,7 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $savedQuote = $this->quoteRepository->get($quote->getId());
 
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getId(),
             $savedQuote->getStoreId(),
             'Quote store id should be equal with store id value in DB'
@@ -216,9 +216,9 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
         $testAttribute = $actualQuote->getExtensionAttributes()->getQuoteTestAttribute();
 
         $this->assertInstanceOf(CartInterface::class, $actualQuote);
-        $this->assertEquals('test01', $actualQuote->getReservedOrderId());
-        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
-        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
-        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute->getEmail());
+        $this->assertSame('test01', $actualQuote->getReservedOrderId());
+        $this->assertSame($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
+        $this->assertSame($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
+        $this->assertSame($expectedExtensionAttributes['email'], $testAttribute->getEmail());
     }
 }

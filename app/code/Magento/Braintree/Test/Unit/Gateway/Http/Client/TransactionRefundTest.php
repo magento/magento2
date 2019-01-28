@@ -122,7 +122,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
         $actualResult = $this->client->placeRequest($this->getTransferObjectMock());
 
         $this->assertTrue(is_object($actualResult['object']));
-        $this->assertEquals(['object' => $response], $actualResult);
+        $this->assertSame(['object' => $response], $actualResult);
     }
 
     /**

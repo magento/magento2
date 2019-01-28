@@ -62,7 +62,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $this->_reader->get();
-        $this->assertEquals($expected['default']['job1']['schedule'], $result['default']['job1']['schedule']);
-        $this->assertEquals($expected['default']['job2']['schedule'], $result['default']['job2']['schedule']);
+        $this->assertSame($expected['default']['job1']['schedule'], $result['default']['job1']['schedule']);
+        $this->assertSame($expected['default']['job2']['schedule'], $result['default']['job2']['schedule']);
     }
 }

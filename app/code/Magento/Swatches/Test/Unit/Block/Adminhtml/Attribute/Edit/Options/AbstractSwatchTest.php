@@ -157,7 +157,7 @@ class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
             ];
         }
         $result = $this->block->getStoreOptionValues(1);
-        $this->assertEquals($result, $values);
+        $this->assertSame($result, $values);
     }
 
     /**

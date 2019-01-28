@@ -25,9 +25,9 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadById()
     {
-        $this->assertEquals(1, $this->_model->getId());
-        $this->assertEquals('base', $this->_model->getCode());
-        $this->assertEquals('Main Website', $this->_model->getName());
+        $this->assertSame(1, $this->_model->getId());
+        $this->assertSame('base', $this->_model->getCode());
+        $this->assertSame('Main Website', $this->_model->getName());
     }
 
     /**
@@ -36,9 +36,9 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testLoadByCode()
     {
         $this->_model->load('admin');
-        $this->assertEquals(0, $this->_model->getId());
-        $this->assertEquals('admin', $this->_model->getCode());
-        $this->assertEquals('Admin', $this->_model->getName());
+        $this->assertSame(0, $this->_model->getId());
+        $this->assertSame('admin', $this->_model->getCode());
+        $this->assertSame('Admin', $this->_model->getName());
     }
 
     /**
@@ -74,26 +74,26 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testGetGroups()
     {
         $groups = $this->_model->getGroups();
-        $this->assertEquals([1], array_keys($groups));
+        $this->assertSame([1], array_keys($groups));
         $this->assertInstanceOf(\Magento\Store\Model\Group::class, $groups[1]);
-        $this->assertEquals(1, $groups[1]->getId());
+        $this->assertSame(1, $groups[1]->getId());
     }
 
     public function testGetGroupIds()
     {
-        $this->assertEquals([1 => 1], $this->_model->getGroupIds());
+        $this->assertSame([1 => 1], $this->_model->getGroupIds());
     }
 
     public function testGetGroupsCount()
     {
-        $this->assertEquals(1, $this->_model->getGroupsCount());
+        $this->assertSame(1, $this->_model->getGroupsCount());
     }
 
     public function testGetDefaultGroup()
     {
         $defaultGroup = $this->_model->getDefaultGroup();
         $this->assertInstanceOf(\Magento\Store\Model\Group::class, $defaultGroup);
-        $this->assertEquals(1, $defaultGroup->getId());
+        $this->assertSame(1, $defaultGroup->getId());
 
         $this->_model->setDefaultGroupId(null);
         $this->assertFalse($this->_model->getDefaultGroup());
@@ -102,24 +102,24 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testGetStores()
     {
         $stores = $this->_model->getStores();
-        $this->assertEquals([1], array_keys($stores));
+        $this->assertSame([1], array_keys($stores));
         $this->assertInstanceOf(\Magento\Store\Model\Store::class, $stores[1]);
-        $this->assertEquals(1, $stores[1]->getId());
+        $this->assertSame(1, $stores[1]->getId());
     }
 
     public function testGetStoreIds()
     {
-        $this->assertEquals([1 => 1], $this->_model->getStoreIds());
+        $this->assertSame([1 => 1], $this->_model->getStoreIds());
     }
 
     public function testGetStoreCodes()
     {
-        $this->assertEquals([1 => 'default'], $this->_model->getStoreCodes());
+        $this->assertSame([1 => 'default'], $this->_model->getStoreCodes());
     }
 
     public function testGetStoresCount()
     {
-        $this->assertEquals(1, $this->_model->getStoresCount());
+        $this->assertSame(1, $this->_model->getStoresCount());
     }
 
     public function testIsCanDelete()
@@ -131,29 +131,29 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
 
     public function testGetWebsiteGroupStore()
     {
-        $this->assertEquals('1--', $this->_model->getWebsiteGroupStore());
+        $this->assertSame('1--', $this->_model->getWebsiteGroupStore());
         $this->_model->setGroupId(123);
         $this->_model->setStoreId(456);
-        $this->assertEquals('1-123-456', $this->_model->getWebsiteGroupStore());
+        $this->assertSame('1-123-456', $this->_model->getWebsiteGroupStore());
     }
 
     public function testGetDefaultGroupId()
     {
-        $this->assertEquals(1, $this->_model->getDefaultGroupId());
+        $this->assertSame(1, $this->_model->getDefaultGroupId());
     }
 
     public function testGetBaseCurrency()
     {
         $currency = $this->_model->getBaseCurrency();
         $this->assertInstanceOf(\Magento\Directory\Model\Currency::class, $currency);
-        $this->assertEquals('USD', $currency->getCode());
+        $this->assertSame('USD', $currency->getCode());
     }
 
     public function testGetDefaultStore()
     {
         $defaultStore = $this->_model->getDefaultStore();
         $this->assertInstanceOf(\Magento\Store\Model\Store::class, $defaultStore);
-        $this->assertEquals(1, $defaultStore->getId());
+        $this->assertSame(1, $defaultStore->getId());
     }
 
     public function testGetDefaultStoresSelect()
@@ -184,6 +184,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testCollection()
     {
         $collection = $this->_model->getCollection()->joinGroupAndStore()->addIdFilter(1);
-        $this->assertEquals(1, count($collection->getItems()));
+        $this->assertSame(1, count($collection->getItems()));
     }
 }

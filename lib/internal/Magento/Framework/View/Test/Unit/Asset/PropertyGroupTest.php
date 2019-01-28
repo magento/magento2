@@ -19,12 +19,12 @@ class PropertyGroupTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProperties()
     {
-        $this->assertEquals(['test_property' => 'test_value'], $this->_object->getProperties());
+        $this->assertSame(['test_property' => 'test_value'], $this->_object->getProperties());
     }
 
     public function testGetProperty()
     {
-        $this->assertEquals('test_value', $this->_object->getProperty('test_property'));
+        $this->assertSame('test_value', $this->_object->getProperty('test_property'));
         $this->assertNull($this->_object->getProperty('non_existing_property'));
     }
 }

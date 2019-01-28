@@ -50,6 +50,6 @@ class RuleProductTest extends \PHPUnit\Framework\TestCase
         // apply all rules
         $this->indexBuilder->reindexFull();
 
-        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
+        $this->assertSame(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
     }
 }

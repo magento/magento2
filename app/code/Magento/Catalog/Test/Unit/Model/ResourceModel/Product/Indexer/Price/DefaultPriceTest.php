@@ -36,6 +36,6 @@ class DefaultPriceTest extends \PHPUnit\Framework\TestCase
     public function testGetMainTable()
     {
         $this->resourceMock->expects($this->once())->method('getTableName')->willReturn('catalog_product_index_price');
-        $this->assertEquals('catalog_product_index_price', $this->model->getMainTable());
+        $this->assertSame('catalog_product_index_price', $this->model->getMainTable());
     }
 }

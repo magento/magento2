@@ -63,10 +63,10 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $menu = new \SimpleXMLElement($menuHtml);
 
         $item = $menu->xpath('/ul/li/a/span')[0];
-        $this->assertEquals('System', (string)$item, '"System" item is absent or located on wrong menu level.');
+        $this->assertSame('System', (string)$item, '"System" item is absent or located on wrong menu level.');
 
         $item = $menu->xpath('/ul//ul/li/strong/span')[0];
-        $this->assertEquals('Report', (string)$item, '"Report" item is absent or located on wrong menu level.');
+        $this->assertSame('Report', (string)$item, '"Report" item is absent or located on wrong menu level.');
 
         $liTitles = [
             'Private Sales',
@@ -74,7 +74,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             'Invited Customers',
         ];
         foreach ($menu->xpath('/ul//ul//ul/li/a/span') as $sortOrder => $item) {
-            $this->assertEquals(
+            $this->assertSame(
                 $liTitles[$sortOrder],
                 (string)$item,
                 '"' . $liTitles[$sortOrder] . '" item is absent or located on wrong menu level.'

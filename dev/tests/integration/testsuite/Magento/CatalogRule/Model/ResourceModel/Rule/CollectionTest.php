@@ -59,12 +59,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $resourceRuleCollection = $this->objectManager->create(RuleCollection::class);
         $resourceRuleCollection->addFilter('is_active', 1);
-        $this->assertEquals(3, $resourceRuleCollection->count());
+        $this->assertSame(3, $resourceRuleCollection->count());
 
         $resourceRuleCollection = $this->objectManager->create(RuleCollection::class);
         $resourceRuleCollection->addFilter('is_active', 1);
         $resourceRuleCollection->addFilter('name', 'test_rule');
-        $this->assertEquals(1, $resourceRuleCollection->count());
+        $this->assertSame(1, $resourceRuleCollection->count());
 
         $model = $this->objectManager->create(Attribute::class);
         $model->loadByCode($installer->getEntityTypeId('catalog_product'), 'test_attribute');
@@ -72,11 +72,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $resourceRuleCollection = $this->objectManager->create(RuleCollection::class);
         $resourceRuleCollection->addFilter('is_active', 1);
-        $this->assertEquals(2, $resourceRuleCollection->count());
+        $this->assertSame(2, $resourceRuleCollection->count());
 
         $resourceRuleCollection = $this->objectManager->create(RuleCollection::class);
         $resourceRuleCollection->addFilter('is_active', 1);
         $resourceRuleCollection->addFilter('name', 'test_rule');
-        $this->assertEquals(0, $resourceRuleCollection->count());
+        $this->assertSame(0, $resourceRuleCollection->count());
     }
 }

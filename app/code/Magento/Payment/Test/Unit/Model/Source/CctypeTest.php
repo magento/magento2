@@ -55,20 +55,20 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
     public function testSetAndGetAllowedTypes()
     {
         $model = $this->_model->setAllowedTypes($this->_allowedTypes);
-        $this->assertEquals($this->_allowedTypes, $model->getAllowedTypes());
+        $this->assertSame($this->_allowedTypes, $model->getAllowedTypes());
     }
 
     public function testToOptionArrayEmptyAllowed()
     {
         $this->_preparePaymentConfig();
-        $this->assertEquals($this->_expectedToOptionsArray, $this->_model->toOptionArray());
+        $this->assertSame($this->_expectedToOptionsArray, $this->_model->toOptionArray());
     }
 
     public function testToOptionArrayNotEmptyAllowed()
     {
         $this->_preparePaymentConfig();
         $this->_model->setAllowedTypes($this->_allowedTypes);
-        $this->assertEquals($this->_expectedToOptionsArray, $this->_model->toOptionArray());
+        $this->assertSame($this->_expectedToOptionsArray, $this->_model->toOptionArray());
     }
 
     private function _preparePaymentConfig()

@@ -128,6 +128,6 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->productScopeRewriteGenerator->expects($this->once())
             ->method('generateForSpecificStoreView')
             ->willReturn($urls);
-        $this->assertEquals($urls, $this->productUrlRewriteGenerator->generate($productMock, 1));
+        $this->assertSame($urls, $this->productUrlRewriteGenerator->generate($productMock, 1));
     }
 }

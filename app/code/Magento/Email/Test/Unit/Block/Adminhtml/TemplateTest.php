@@ -108,7 +108,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHeaderText()
     {
-        $this->assertEquals('Transactional Emails', $this->template->getHeaderText());
+        $this->assertSame('Transactional Emails', $this->template->getHeaderText());
     }
 
     public function testCanRender()

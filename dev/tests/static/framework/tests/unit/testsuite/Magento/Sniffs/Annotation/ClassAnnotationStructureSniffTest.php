@@ -79,7 +79,7 @@ class ClassAnnotationStructureSniffTest extends \PHPUnit\Framework\TestCase
             TESTS_TEMP_DIR . $expectedReportFile
         );
         unlink($reportFile);
-        $this->assertEquals(2, $result);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame(2, $result);
+        $this->assertSame($expected, $actual);
     }
 }

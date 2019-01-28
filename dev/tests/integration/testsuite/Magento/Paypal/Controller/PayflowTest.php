@@ -125,8 +125,8 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('paypal/payflow/cancelpayment');
 
         $order = $this->_objectManager->create(OrderRepositoryInterface::class)->get($orderId);
-        $this->assertEquals('canceled', $order->getState());
-        $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
-        $this->assertEquals($session->getQuote()->getItemsCount(), $quote->getItemsCount());
+        $this->assertSame('canceled', $order->getState());
+        $this->assertSame($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
+        $this->assertSame($session->getQuote()->getItemsCount(), $quote->getItemsCount());
     }
 }

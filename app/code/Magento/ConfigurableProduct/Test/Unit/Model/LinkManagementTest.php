@@ -119,7 +119,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
         $products = $this->object->getChildren($productId);
         $this->assertCount(1, $products);
-        $this->assertEquals($productMock, $products[0]);
+        $this->assertSame($productMock, $products[0]);
     }
 
     public function testGetWithNonConfigurableProduct()

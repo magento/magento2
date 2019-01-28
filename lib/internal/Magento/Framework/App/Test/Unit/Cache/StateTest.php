@@ -44,7 +44,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
         }
         $this->writer->expects($this->never())->method('update');
         $actualIsEnabled = $model->isEnabled($cacheType);
-        $this->assertEquals($expectedIsEnabled, $actualIsEnabled);
+        $this->assertSame($expectedIsEnabled, $actualIsEnabled);
     }
 
     /**

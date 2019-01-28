@@ -276,7 +276,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($sampleId, $this->service->save($productSku, $sampleMock));
+        $this->assertSame($sampleId, $this->service->save($productSku, $sampleMock));
     }
 
     public function testUpdateWithExistingFile()
@@ -337,7 +337,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($sampleId, $this->service->save($productSku, $sampleMock));
+        $this->assertSame($sampleId, $this->service->save($productSku, $sampleMock));
     }
 
     /**
@@ -445,7 +445,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->sampleDataObjectFactory->expects($this->once())->method('create')->willReturn($sampleInterfaceMock);
 
-        $this->assertEquals([$sampleInterfaceMock], $this->service->getList($productSku));
+        $this->assertSame([$sampleInterfaceMock], $this->service->getList($productSku));
     }
 
     /**

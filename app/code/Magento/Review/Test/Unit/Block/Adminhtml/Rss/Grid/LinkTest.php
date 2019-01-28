@@ -45,16 +45,16 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     {
         $rssUrl = 'http://rss.magento.com';
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
-        $this->assertEquals($rssUrl, $this->link->getLink());
+        $this->assertSame($rssUrl, $this->link->getLink());
     }
 
     public function testGetLabel()
     {
-        $this->assertEquals('Pending Reviews RSS', $this->link->getLabel());
+        $this->assertSame('Pending Reviews RSS', $this->link->getLabel());
     }
 
     public function testIsRssAllowed()
     {
-        $this->assertEquals(true, $this->link->isRssAllowed());
+        $this->assertSame(true, $this->link->isRssAllowed());
     }
 }

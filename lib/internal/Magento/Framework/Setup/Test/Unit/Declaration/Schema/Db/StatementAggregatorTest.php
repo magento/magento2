@@ -54,7 +54,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->willReturn('first_table');
         $this->model->addStatements($statementsBank);
-        self::assertEquals(
+        self::assertSame(
             [$statementsBank],
             $this->model->getStatementsBank()
         );
@@ -81,7 +81,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->willReturn('first_table');
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        self::assertSame(
             [[$statementOne, $statementThree], [$statementTwo]],
             $this->model->getStatementsBank()
         );
@@ -102,7 +102,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->method('getResource')
             ->willReturn('non_default');
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        self::assertSame(
             [[$statementOne], [$statementTwo, $statementThree]],
             $this->model->getStatementsBank()
         );
@@ -128,7 +128,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        self::assertSame(
             [[$statementOne, $statementTwo, $statementThree]],
             $this->model->getStatementsBank()
         );
@@ -154,7 +154,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        self::assertSame(
             [[$statementOne], [$statementTwo, $statementThree]],
             $this->model->getStatementsBank()
         );
@@ -178,7 +178,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn('some_foreign_key');
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        self::assertSame(
             [[$statementOne, $statementTwo], [$statementThree]],
             $this->model->getStatementsBank()
         );

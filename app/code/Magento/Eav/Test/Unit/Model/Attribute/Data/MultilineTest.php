@@ -62,7 +62,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('attributeCode'));
 
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->extractValue($requestMock));
+        $this->assertSame($expectedResult, $this->model->extractValue($requestMock));
     }
 
     /**
@@ -102,7 +102,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->outputValue($format));
+        $this->assertSame($expectedResult, $this->model->outputValue($format));
     }
 
     /**
@@ -164,7 +164,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->validateValue($value));
+        $this->assertSame($expectedResult, $this->model->validateValue($value));
     }
 
     /**

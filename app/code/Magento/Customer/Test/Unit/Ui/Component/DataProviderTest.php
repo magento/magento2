@@ -140,10 +140,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('totalRecords', $result);
-        $this->assertEquals(1, $result['totalRecords']);
+        $this->assertSame(1, $result['totalRecords']);
         $this->assertArrayHasKey('items', $result);
         $this->assertTrue(is_array($result['items']));
-        $this->assertEquals($result['items'], $expected);
+        $this->assertSame($result['items'], $expected);
     }
 
     /**

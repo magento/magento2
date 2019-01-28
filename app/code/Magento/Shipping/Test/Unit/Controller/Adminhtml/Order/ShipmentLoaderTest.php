@@ -133,7 +133,7 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
         $this->registryMock->expects($this->once())
             ->method('register')
             ->with('current_shipment', $shipmentModelMock);
-        $this->assertEquals($shipmentModelMock, $this->loader->load());
+        $this->assertSame($shipmentModelMock, $this->loader->load());
     }
 
     public function testLoadOrderId()
@@ -181,6 +181,6 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($itemMock));
         $this->documentFactoryMock->expects($this->once())->method('create')->willReturn($shipmentModelMock);
 
-        $this->assertEquals($shipmentModelMock, $this->loader->load());
+        $this->assertSame($shipmentModelMock, $this->loader->load());
     }
 }

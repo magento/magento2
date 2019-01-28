@@ -162,7 +162,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('setStoreId')
             ->with($productStore);
 
-        $this->assertEquals($this->productMock, $this->builder->build($this->requestMock));
+        $this->assertSame($this->productMock, $this->builder->build($this->requestMock));
     }
 
     public function testBuildWhenImpossibleLoadProduct()
@@ -234,7 +234,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('setStoreId')
             ->with($productStore);
 
-        $this->assertEquals($this->productMock, $this->builder->build($this->requestMock));
+        $this->assertSame($this->productMock, $this->builder->build($this->requestMock));
     }
 
     public function testBuildWhenProductNotExist()
@@ -303,6 +303,6 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('setStoreId')
             ->with($productStore);
 
-        $this->assertEquals($this->productMock, $this->builder->build($this->requestMock));
+        $this->assertSame($this->productMock, $this->builder->build($this->requestMock));
     }
 }

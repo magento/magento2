@@ -49,9 +49,9 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
         $message = $this->giftMessageOrderRepository->get($order->getEntityId());
-        $this->assertEquals('Romeo', $message->getSender());
-        $this->assertEquals('Mercutio', $message->getRecipient());
-        $this->assertEquals('I thought all for the best.', $message->getMessage());
+        $this->assertSame('Romeo', $message->getSender());
+        $this->assertSame('Mercutio', $message->getRecipient());
+        $this->assertSame('I thought all for the best.', $message->getMessage());
     }
 
     /**
@@ -69,9 +69,9 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         $message = $this->giftMessageOrderRepository->get($order->getEntityId());
 
         $this->assertTrue($result);
-        $this->assertEquals('Romeo', $message->getSender());
-        $this->assertEquals('Mercutio', $message->getRecipient());
-        $this->assertEquals('I thought all for the best.', $message->getMessage());
+        $this->assertSame('Romeo', $message->getSender());
+        $this->assertSame('Mercutio', $message->getRecipient());
+        $this->assertSame('I thought all for the best.', $message->getMessage());
     }
 
     /**

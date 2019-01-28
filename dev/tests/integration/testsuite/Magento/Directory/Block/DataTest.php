@@ -25,7 +25,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         CacheCleaner::cleanAll();
         $result = $this->block->getCountryHtmlSelect();
         $resultTwo = $this->block->getCountryHtmlSelect();
-        $this->assertEquals($result, $resultTwo);
+        $this->assertSame($result, $resultTwo);
     }
 
     public function testGetRegionHtmlSelect()
@@ -33,6 +33,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
         CacheCleaner::cleanAll();
         $result = $this->block->getRegionHtmlSelect();
         $resultTwo = $this->block->getRegionHtmlSelect();
-        $this->assertEquals($result, $resultTwo);
+        $this->assertSame($result, $resultTwo);
     }
 }

@@ -36,16 +36,16 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     public function testGetSchema()
     {
         $actualResult = $this->_model->getSchema();
-        $this->assertEquals('fixture_dir/email_templates.xsd', $actualResult);
+        $this->assertSame('fixture_dir/email_templates.xsd', $actualResult);
         // Makes sure the value is calculated only once
-        $this->assertEquals($actualResult, $this->_model->getSchema());
+        $this->assertSame($actualResult, $this->_model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
         $actualResult = $this->_model->getPerFileSchema();
-        $this->assertEquals('fixture_dir/email_templates.xsd', $actualResult);
+        $this->assertSame('fixture_dir/email_templates.xsd', $actualResult);
         // Makes sure the value is calculated only once
-        $this->assertEquals($actualResult, $this->_model->getPerFileSchema());
+        $this->assertSame($actualResult, $this->_model->getPerFileSchema());
     }
 }

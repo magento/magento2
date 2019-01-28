@@ -92,7 +92,7 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['someObject']);
 
         $expected = ['someObject'];
-        $this->assertEquals($expected, $this->model->generateVariation($this->product, [$this->option]));
+        $this->assertSame($expected, $this->model->generateVariation($this->product, [$this->option]));
     }
 
     public function testGetEnabledCount()
@@ -116,7 +116,7 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn('expected');
 
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getCount($statusEnabled)
         );
@@ -143,7 +143,7 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn('expected');
 
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getCount($statusDisabled)
         );

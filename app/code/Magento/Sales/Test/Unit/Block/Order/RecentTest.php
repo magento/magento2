@@ -132,6 +132,6 @@ class RecentTest extends \PHPUnit\Framework\TestCase
             [],
             $this->storeManagerMock
         );
-        $this->assertEquals($orderCollection, $this->block->getOrders());
+        $this->assertSame($orderCollection, $this->block->getOrders());
     }
 }

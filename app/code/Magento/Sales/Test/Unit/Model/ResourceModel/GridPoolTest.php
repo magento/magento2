@@ -91,6 +91,6 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
             ->method('refresh')
             ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
             ->will($this->returnValue($this->statementMock));
-        $this->assertEquals($this->gridPool, $this->gridPool->refreshByOrderId($orderId));
+        $this->assertSame($this->gridPool, $this->gridPool->refreshByOrderId($orderId));
     }
 }

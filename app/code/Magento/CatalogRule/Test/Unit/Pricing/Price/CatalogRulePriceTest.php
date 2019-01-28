@@ -188,7 +188,7 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
             ->with($catalogRulePrice)
             ->will($this->returnValue($convertedPrice));
 
-        $this->assertEquals($convertedPrice, $this->object->getValue());
+        $this->assertSame($convertedPrice, $this->object->getValue());
     }
 
     public function testGetValueFromData()
@@ -206,7 +206,7 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
         $this->saleableItemMock->expects($this->once())->method('getData')
             ->with('catalog_rule_price')->willReturn($catalogRulePrice);
 
-        $this->assertEquals($convertedPrice, $this->object->getValue());
+        $this->assertSame($convertedPrice, $this->object->getValue());
     }
 
     public function testGetAmountNoBaseAmount()

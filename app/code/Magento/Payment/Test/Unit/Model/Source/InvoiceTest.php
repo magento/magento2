@@ -30,6 +30,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ['value' => '', 'label' => __('No')],
         ];
 
-        $this->assertEquals($expectedResult, $this->_model->toOptionArray());
+        $this->assertSame($expectedResult, $this->_model->toOptionArray());
     }
 }

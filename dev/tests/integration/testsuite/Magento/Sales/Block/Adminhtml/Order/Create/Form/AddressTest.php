@@ -77,7 +77,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->block->getAddressCollection();
         self::assertNotEmpty($actual);
-        self::assertEquals($addresses, $actual);
+        self::assertSame($addresses, $actual);
     }
 
     /**
@@ -139,7 +139,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         ];
 
         $actual = json_decode($this->block->getAddressCollectionJson(), true);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -161,7 +161,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         ];
         $address = $this->objectManager->create(AddressInterface::class, ['data' => $data]);
         $expected = 'John Smith, Green str, 67, Culver City, California 90230, United States';
-        self::assertEquals($expected, $this->block->getAddressAsString($address));
+        self::assertSame($expected, $this->block->getAddressAsString($address));
     }
 
     public function testGetForm()
@@ -185,11 +185,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         ];
 
         $form = $this->block->getForm();
-        self::assertEquals(1, $form->getElements()->count(), 'Form has invalid number of fieldsets');
+        self::assertSame(1, $form->getElements()->count(), 'Form has invalid number of fieldsets');
 
         /** @var Fieldset $fieldset */
         $fieldset = $form->getElements()[0];
-        self::assertEquals(
+        self::assertSame(
             count($expectedFields),
             $fieldset->getElements()->count(),
             'Form has invalid number of fields'
@@ -206,7 +206,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Data\Form\Element\Select $countryIdField */
         $countryIdField = $fieldset->getElements()->searchById('country_id');
         $actual = Xpath::getElementsCountForXpath('//option', $countryIdField->getElementHtml());
-        self::assertEquals($this->getNumberOfCountryOptions(), $actual);
+        self::assertSame($this->getNumberOfCountryOptions(), $actual);
     }
 
     /**

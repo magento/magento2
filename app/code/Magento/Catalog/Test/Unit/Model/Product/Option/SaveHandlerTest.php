@@ -67,6 +67,6 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->optionRepository->expects($this->once())->method('delete');
         $this->optionRepository->expects($this->once())->method('save')->with($this->optionMock);
 
-        $this->assertEquals($this->entity, $this->model->execute($this->entity));
+        $this->assertSame($this->entity, $this->model->execute($this->entity));
     }
 }

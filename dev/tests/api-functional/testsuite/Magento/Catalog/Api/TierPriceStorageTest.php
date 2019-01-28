@@ -52,7 +52,7 @@ class TierPriceStorageTest extends WebapiAbstract
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
         $this->assertNotEmpty($response);
-        $this->assertEquals(count($response), count($tierPrices));
+        $this->assertSame(count($response), count($tierPrices));
 
         foreach ($response as $item) {
             $this->assertTrue($this->isPriceCorrect($item, $tierPrices));
@@ -135,17 +135,17 @@ class TierPriceStorageTest extends WebapiAbstract
         $message = 'Invalid attribute Website ID = %websiteId. '
             . 'Row ID: SKU = %SKU, Website ID: %websiteId, '
             . 'Customer Group: %customerGroup, Quantity: %qty.';
-        $this->assertEquals($message, $response[0]['message']);
-        $this->assertEquals('simple', $response[0]['parameters'][0]);
-        $this->assertEquals('2', $response[0]['parameters'][1]);
+        $this->assertSame($message, $response[0]['message']);
+        $this->assertSame('simple', $response[0]['parameters'][0]);
+        $this->assertSame('2', $response[0]['parameters'][1]);
         $message = 'We found a duplicate website, tier price, customer group and quantity: '
             . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
             . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
-        $this->assertEquals($message, $response[1]['message']);
-        $this->assertEquals('simple', $response[1]['parameters'][0]);
-        $this->assertEquals('0', $response[1]['parameters'][1]);
-        $this->assertEquals('NOT LOGGED IN', $response[1]['parameters'][2]);
-        $this->assertEquals('3.0000', $response[1]['parameters'][3]);
+        $this->assertSame($message, $response[1]['message']);
+        $this->assertSame('simple', $response[1]['parameters'][0]);
+        $this->assertSame('0', $response[1]['parameters'][1]);
+        $this->assertSame('NOT LOGGED IN', $response[1]['parameters'][2]);
+        $this->assertSame('3.0000', $response[1]['parameters'][3]);
     }
 
     /**
@@ -189,7 +189,7 @@ class TierPriceStorageTest extends WebapiAbstract
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
         $this->assertEmpty($response);
-        $this->assertEquals(count($newPrices), count($tierPrices));
+        $this->assertSame(count($newPrices), count($tierPrices));
     }
 
     /**
@@ -238,8 +238,8 @@ class TierPriceStorageTest extends WebapiAbstract
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
         $tierPrice = $tierPrices[0];
         $this->assertEmpty($response);
-        $this->assertEquals(1, count($tierPrices));
-        $this->assertEquals($pricesToStore, $tierPrice);
+        $this->assertSame(1, count($tierPrices));
+        $this->assertSame($pricesToStore, $tierPrice);
     }
 
     /**

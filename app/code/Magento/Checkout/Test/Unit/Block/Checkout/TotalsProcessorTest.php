@@ -47,6 +47,6 @@ class TotalsProcessorTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with('sales/totals_sort')
             ->willReturn($configData);
 
-        $this->assertEquals($expectedResult, $this->model->process($jsLayout));
+        $this->assertSame($expectedResult, $this->model->process($jsLayout));
     }
 }

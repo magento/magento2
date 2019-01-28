@@ -43,6 +43,6 @@ class CategoryAttributeOptionManagementInterfaceTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, ['attributeCode' => $testAttributeCode]);
 
         $this->assertTrue(is_array($response));
-        $this->assertEquals($expectedOptions, $response);
+        $this->assertSame($expectedOptions, $response);
     }
 }

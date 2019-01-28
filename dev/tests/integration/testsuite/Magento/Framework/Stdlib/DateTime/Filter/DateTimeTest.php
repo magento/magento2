@@ -55,7 +55,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
     public function testLocaleDatetimeFilter($locale, $inputData, $expectedDate)
     {
         $this->localeResolver->setLocale($locale);
-        $this->assertEquals($expectedDate, $this->dateTimeFilter->filter($inputData));
+        $this->assertSame($expectedDate, $this->dateTimeFilter->filter($inputData));
     }
 
     /**

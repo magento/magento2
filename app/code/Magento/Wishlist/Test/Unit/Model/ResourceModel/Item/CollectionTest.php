@@ -182,6 +182,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $collection = $this->collection->addProductNameFilter('TestProductName');
         $sql = $collection->getSelect()->__toString();
         $sql = trim(preg_replace('/\s+/', ' ', $sql));
-        $this->assertEquals(trim(preg_replace('/\s+/', ' ', $this->sql)), $sql);
+        $this->assertSame(trim(preg_replace('/\s+/', ' ', $this->sql)), $sql);
     }
 }

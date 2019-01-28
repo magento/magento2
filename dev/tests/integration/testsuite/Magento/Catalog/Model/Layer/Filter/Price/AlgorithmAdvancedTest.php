@@ -32,7 +32,7 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
         $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', null);
         $model = $this->_prepareFilter($layer, $priceResource);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 0 => ['from' => 0, 'to' => 20, 'count' => 3],
                 1 => ['from' => 20, 'to' => '', 'count' => 4],
@@ -107,7 +107,7 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
         $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', '10-100');
         $model = $this->_prepareFilter($layer, $priceResource, $request);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 0 => ['from' => 10, 'to' => 20, 'count' => 2],
                 1 => ['from' => 20, 'to' => 100, 'count' => 2],

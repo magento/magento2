@@ -53,7 +53,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public function testFormatUrlKey()
     {
-        $this->assertEquals('abc-test', $this->_model->formatUrlKey('AbC#-$^test'));
+        $this->assertSame('abc-test', $this->_model->formatUrlKey('AbC#-$^test'));
     }
 
     public function testGetUrlPath()
@@ -71,8 +71,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
         $category->setOrigData();
 
-        $this->assertEquals('product.html', $this->urlPathGenerator->getUrlPath($product));
-        $this->assertEquals('category/product.html', $this->urlPathGenerator->getUrlPath($product, $category));
+        $this->assertSame('product.html', $this->urlPathGenerator->getUrlPath($product));
+        $this->assertSame('category/product.html', $this->urlPathGenerator->getUrlPath($product, $category));
     }
 
     /**

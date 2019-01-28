@@ -59,7 +59,7 @@ class CcTest extends \PHPUnit\Framework\TestCase
             ->method('getCcType')
             ->will($this->returnValue($ccType));
         $this->model->setData('info', $paymentInfo);
-        $this->assertEquals($expected, $this->model->getCcTypeName());
+        $this->assertSame($expected, $this->model->getCcTypeName());
     }
 
     /**
@@ -87,7 +87,7 @@ class CcTest extends \PHPUnit\Framework\TestCase
             ->method('getCcExpYear')
             ->will($this->returnValue($ccExpYear));
         $this->model->setData('info', $paymentInfo);
-        $this->assertEquals($expected, $this->model->hasCcExpDate());
+        $this->assertSame($expected, $this->model->hasCcExpDate());
     }
 
     /**
@@ -112,7 +112,7 @@ class CcTest extends \PHPUnit\Framework\TestCase
             ->method('getCcExpMonth')
             ->will($this->returnValue($ccExpMonth));
         $this->model->setData('info', $paymentInfo);
-        $this->assertEquals($expected, $this->model->getCcExpMonth());
+        $this->assertSame($expected, $this->model->getCcExpMonth());
     }
 
     /**
@@ -147,8 +147,8 @@ class CcTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigTimezone')
             ->willReturn('America/Los_Angeles');
 
-        $this->assertEquals($ccExpYear, $this->model->getCcExpDate()->format('Y'));
-        $this->assertEquals($ccExpMonth, $this->model->getCcExpDate()->format('m'));
+        $this->assertSame($ccExpYear, $this->model->getCcExpDate()->format('Y'));
+        $this->assertSame($ccExpMonth, $this->model->getCcExpDate()->format('m'));
     }
 
     /**

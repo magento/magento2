@@ -191,7 +191,7 @@ class PublisherConsumerTest extends \PHPUnit\Framework\TestCase
         $consumersOutput = ob_get_contents();
         ob_end_clean();
         if ($outputPattern) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedNumberOfProcessedMessages,
                 preg_match_all($outputPattern, $consumersOutput)
             );

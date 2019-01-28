@@ -75,7 +75,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendNewOrderConfirmationEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendNewOrderConfirmationEmail($this->storeMock));
     }
 
     /**
@@ -89,7 +89,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendNewOrderEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendNewOrderEmail($this->storeMock));
     }
 
     /**
@@ -103,7 +103,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendOrderCommentEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendOrderCommentEmail($this->storeMock));
     }
 
     /**
@@ -117,7 +117,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendNewShipmentEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendNewShipmentEmail($this->storeMock));
     }
 
     /**
@@ -131,7 +131,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendShipmentCommentEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendShipmentCommentEmail($this->storeMock));
     }
 
     /**
@@ -144,7 +144,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendNewInvoiceEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendNewInvoiceEmail($this->storeMock));
     }
 
     /**
@@ -157,7 +157,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendInvoiceCommentEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendInvoiceCommentEmail($this->storeMock));
     }
 
     /**
@@ -171,7 +171,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendNewCreditmemoEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendNewCreditmemoEmail($this->storeMock));
     }
 
     /**
@@ -185,7 +185,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $scopeConfigValue
         );
 
-        $this->assertEquals($scopeConfigValue, $this->helper->canSendCreditmemoCommentEmail($this->storeMock));
+        $this->assertSame($scopeConfigValue, $this->helper->canSendCreditmemoCommentEmail($this->storeMock));
     }
 
     /**

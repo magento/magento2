@@ -52,6 +52,6 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('build')
             ->willReturn($this->transferMock);
 
-        $this->assertEquals($this->transferMock, $this->transferFactory->create($request));
+        $this->assertSame($this->transferMock, $this->transferFactory->create($request));
     }
 }

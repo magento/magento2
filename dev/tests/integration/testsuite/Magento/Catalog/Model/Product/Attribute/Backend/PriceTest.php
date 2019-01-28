@@ -65,12 +65,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testSetScopeDefault()
     {
         /* validate result of setAttribute */
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
             $this->model->getAttribute()->getIsGlobal()
         );
         $this->model->setScope($this->model->getAttribute());
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
             $this->model->getAttribute()->getIsGlobal()
         );
@@ -83,7 +83,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testSetScope()
     {
         $this->model->setScope($this->model->getAttribute());
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
             $this->model->getAttribute()->getIsGlobal()
         );
@@ -105,7 +105,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->setStoreId($globalStoreId);
         $product->getResource()->save($product);
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
     }
 
     /**
@@ -137,13 +137,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->getResource()->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
     }
 
     /**
@@ -176,13 +176,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->getResource()->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
     }
 
     /**
@@ -215,26 +215,26 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->getResource()->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertSame('9.99', $product->getPrice());
 
         $product->setStoreId($thirdStoreId);
         $product->setPrice(null);
         $product->getResource()->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
     }
 
     /**
@@ -284,13 +284,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->getResource()->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals(100, $product->getPrice());
+        $this->assertSame(100, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals(100, $product->getPrice());
+        $this->assertSame(100, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals(100, $product->getPrice());
+        $this->assertSame(100, $product->getPrice());
     }
 
     public static function tearDownAfterClass()

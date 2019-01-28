@@ -56,7 +56,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     {
         $href = 'localhost';
         $this->linkElement->setData('href', $href);
-        $this->assertEquals($href, $this->linkElement->getHref());
+        $this->assertSame($href, $this->linkElement->getHref());
     }
 
     public function testGetHrefByPageId()
@@ -66,7 +66,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('getPageUrl')
             ->willReturn($href);
         $this->linkElement->setData('page_id', 1);
-        $this->assertEquals($href, $this->linkElement->getHref());
+        $this->assertSame($href, $this->linkElement->getHref());
     }
 
     public function testGetTitleEmpty()
@@ -78,7 +78,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     {
         $title = 'Title';
         $this->linkElement->setData('title', $title);
-        $this->assertEquals($title, $this->linkElement->getTitle());
+        $this->assertSame($title, $this->linkElement->getTitle());
     }
 
     public function testGetTitleByPageId()
@@ -90,7 +90,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with($pageId)
             ->willReturn($title);
         $this->linkElement->setData('page_id', $pageId);
-        $this->assertEquals($title, $this->linkElement->getTitle());
+        $this->assertSame($title, $this->linkElement->getTitle());
     }
 
     public function testGetTitleByHref()
@@ -105,21 +105,21 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with($href)
             ->willReturn($title);
         $this->linkElement->setData('href', $href);
-        $this->assertEquals($title, $this->linkElement->getTitle());
+        $this->assertSame($title, $this->linkElement->getTitle());
     }
 
     public function testGetLabelByAnchorText()
     {
         $label = 'Test label';
         $this->linkElement->setData('anchor_text', $label);
-        $this->assertEquals($label, $this->linkElement->getLabel());
+        $this->assertSame($label, $this->linkElement->getLabel());
     }
 
     public function testGetLabelLikeTitle()
     {
         $label = 'Test title';
         $this->linkElement->setData('title', $label);
-        $this->assertEquals($label, $this->linkElement->getLabel());
+        $this->assertSame($label, $this->linkElement->getLabel());
     }
 
     public function testGetLabelByHref()
@@ -134,7 +134,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with($href)
             ->willReturn($label);
         $this->linkElement->setData('href', $href);
-        $this->assertEquals($label, $this->linkElement->getLabel());
+        $this->assertSame($label, $this->linkElement->getLabel());
     }
 
     public function testGetLabelByPageId()
@@ -146,7 +146,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with($pageId)
             ->willReturn($label);
         $this->linkElement->setData('page_id', $pageId);
-        $this->assertEquals($label, $this->linkElement->getLabel());
+        $this->assertSame($label, $this->linkElement->getLabel());
     }
 
     public function testGetLabelEmpty()

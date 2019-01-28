@@ -138,7 +138,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(\Magento\Store\Model\Store::class);
         $model->setWebsite($website);
-        $this->assertEquals(2, $model->getWebsiteId());
+        $this->assertSame(2, $model->getWebsiteId());
     }
 
     /**
@@ -164,7 +164,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         );
         $model->setWebsiteId($websiteId);
 
-        $this->assertEquals($website, $model->getWebsite());
+        $this->assertSame($website, $model->getWebsite());
     }
 
     /**
@@ -211,7 +211,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         );
         $model->setGroupId($groupId);
 
-        $this->assertEquals($group, $model->getGroup());
+        $this->assertSame($group, $model->getGroup());
     }
 
     /**
@@ -261,7 +261,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ['storeManager' => $storeManager, 'url' => $url]
         );
         $model->setStoreId(2);
-        $this->assertEquals('http://test/url', $model->getUrl('test/route'));
+        $this->assertSame('http://test/url', $model->getUrl('test/route'));
     }
 
     /**
@@ -306,7 +306,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         $this->setUrlModifier($model);
 
-        $this->assertEquals($expectedBaseUrl, $model->getBaseUrl($type, $secure));
+        $this->assertSame($expectedBaseUrl, $model->getBaseUrl($type, $secure));
     }
 
     /**
@@ -396,7 +396,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         $server = $_SERVER;
         $_SERVER['SCRIPT_FILENAME'] = 'test_script.php';
-        $this->assertEquals(
+        $this->assertSame(
             $expectedBaseUrl,
             $model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false)
         );
@@ -477,7 +477,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $model->setStoreId(2);
         $model->setCode('scope_code');
 
-        $this->assertEquals($expected, $model->getCurrentUrl($fromStore));
+        $this->assertSame($expected, $model->getCurrentUrl($fromStore));
     }
 
     /**
@@ -556,7 +556,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ['currencyFactory' => $currencyFactory, 'config' => $config, 'appState' => $appState]
         );
         $model->setCode('scope_code');
-        $this->assertEquals($currency, $model->getBaseCurrency());
+        $this->assertSame($currency, $model->getBaseCurrency());
     }
 
     /**
@@ -595,7 +595,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ['config' => $configMock, 'currencyInstalled' => $currencyPath,]
         );
 
-        $this->assertEquals($expectedResult, $model->getAllowedCurrencies());
+        $this->assertSame($expectedResult, $model->getAllowedCurrencies());
     }
 
     /**
@@ -682,7 +682,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->method('getUri')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->store->getBaseMediaDir());
+        $this->assertSame($expectedResult, $this->store->getBaseMediaDir());
     }
 
     /**
@@ -695,7 +695,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->method('getUri')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
+        $this->assertSame($expectedResult, $this->store->getBaseStaticDir());
     }
 
     /**
@@ -703,7 +703,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetScopeType()
     {
-        $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
+        $this->assertSame(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
     }
 
     /**
@@ -711,7 +711,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetScopeTypeName()
     {
-        $this->assertEquals('Store View', $this->store->getScopeTypeName());
+        $this->assertSame('Store View', $this->store->getScopeTypeName());
     }
 
     /**
@@ -736,7 +736,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturn($defaultCode);
 
         $code = $this->store->getCurrentCurrencyCode();
-        $this->assertEquals($expectedCode, $code);
+        $this->assertSame($expectedCode, $code);
     }
 
     /**

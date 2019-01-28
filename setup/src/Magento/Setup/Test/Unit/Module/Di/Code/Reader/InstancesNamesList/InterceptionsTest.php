@@ -94,7 +94,7 @@ class InterceptionsTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getList($path);
 
-        $this->assertEquals($result, $classes);
+        $this->assertSame($result, $classes);
     }
 
     public function testGetListNoValidation()
@@ -118,7 +118,7 @@ class InterceptionsTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getList($path);
 
-        $this->assertEquals($result, $classes);
+        $this->assertSame($result, $classes);
     }
 
     /**
@@ -151,7 +151,7 @@ class InterceptionsTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getList($path);
 
-        $this->assertEquals($result, []);
+        $this->assertSame($result, []);
     }
 
     /**

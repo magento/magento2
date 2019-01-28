@@ -64,7 +64,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
 
-        $this->assertEquals($product1, $this->finalPrice->getMinProduct());
+        $this->assertSame($product1, $this->finalPrice->getMinProduct());
     }
 
     public function testGetValue()
@@ -82,7 +82,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
 
-        $this->assertEquals(10, $this->finalPrice->getValue());
+        $this->assertSame(10, $this->finalPrice->getValue());
     }
 
     public function testGetValueWithoutMinProduct()
@@ -99,7 +99,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
 
-        $this->assertEquals(0.00, $this->finalPrice->getValue());
+        $this->assertSame(0.00, $this->finalPrice->getValue());
     }
 
     /**

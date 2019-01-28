@@ -97,7 +97,7 @@ class ConditionResolverTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $result = "(`n`.`id` != 1 OR ((`n`.`first_name` = 'John'))) OR (`n`.`last_name` = `other_field`)";
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->conditionResolver->getFilter($this->selectBuilderMock, $filterConfig, $aliasName)
         );

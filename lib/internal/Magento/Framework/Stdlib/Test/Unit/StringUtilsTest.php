@@ -27,14 +27,14 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrSplit()
     {
-        $this->assertEquals([], $this->_string->split(''));
-        $this->assertEquals(['1', '2', '3', '4'], $this->_string->split('1234', 1));
-        $this->assertEquals(['1', '2', ' ', '3', '4'], $this->_string->split('12 34', 1, false, true));
-        $this->assertEquals(
+        $this->assertSame([], $this->_string->split(''));
+        $this->assertSame(['1', '2', '3', '4'], $this->_string->split('1234', 1));
+        $this->assertSame(['1', '2', ' ', '3', '4'], $this->_string->split('12 34', 1, false, true));
+        $this->assertSame(
             ['12345', '123', '12345', '6789'],
             $this->_string->split('12345  123    123456789', 5, true, true)
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['1234', '5', '123', '1234', '5678', '9'],
             $this->_string->split('12345  123    123456789', 4, true, true)
         );
@@ -46,7 +46,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     public function testSplitInjection()
     {
         $string = '1234567890';
-        $this->assertEquals('1234 5678 90', $this->_string->splitInjection($string, 4));
+        $this->assertSame('1234 5678 90', $this->_string->splitInjection($string, 4));
     }
 
     /**
@@ -55,7 +55,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     public function testCleanString()
     {
         $string = '12345';
-        $this->assertEquals($string, $this->_string->cleanString($string));
+        $this->assertSame($string, $this->_string->cleanString($string));
     }
 
     public function testSubstr()
@@ -74,7 +74,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrpos()
     {
-        $this->assertEquals(1, $this->_string->strpos('123', 2));
+        $this->assertSame(1, $this->_string->strpos('123', 2));
     }
 
     /**
@@ -86,7 +86,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     public function testUpperCaseWords($testString, $expected)
     {
         $actual = $this->_string->upperCaseWords($testString);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -112,7 +112,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     public function testUpperCaseWordsWithSeparators($testString, $sourceSeparator, $destinationSeparator, $expected)
     {
         $actual = $this->_string->upperCaseWords($testString, $sourceSeparator, $destinationSeparator);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

@@ -95,10 +95,10 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
 
         $this->directPost->capture($payment, $amount);
 
-        static::assertEquals($transactionId, $payment->getTransactionId());
+        static::assertSame($transactionId, $payment->getTransactionId());
         static::assertFalse($payment->getIsTransactionClosed());
-        static::assertEquals('US', $payment->getOrder()->getBillingAddress()->getCountryId());
-        static::assertEquals('UK', $payment->getOrder()->getShippingAddress()->getCountryId());
+        static::assertSame('US', $payment->getOrder()->getBillingAddress()->getCountryId());
+        static::assertSame('UK', $payment->getOrder()->getShippingAddress()->getCountryId());
     }
 
     /**
@@ -126,7 +126,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $payment = $this->getPayment($orderId);
         $this->objectManager->removeSharedInstance(TransactionService::class);
 
-        static::assertEquals($expectedOrderState, $payment->getOrder()->getState());
+        static::assertSame($expectedOrderState, $payment->getOrder()->getState());
     }
 
     /**

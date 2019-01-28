@@ -40,7 +40,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $expected['key'] = 'from_value';
         $expected['map_value'] = 'from_value';
         $expected['new_key'] = 'default_value';
-        $this->assertEquals($expected, $this->mapper->accumulateByMap($this->fromMock, $to, $map, $default));
+        $this->assertSame($expected, $this->mapper->accumulateByMap($this->fromMock, $to, $map, $default));
     }
 
     public function testAccumulateByMapWhenToAndFromAreObjects()
@@ -57,7 +57,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $map['key'] = ['value'];
         $this->fromMock->expects($this->once())->method('hasData')->with('key')->will($this->returnValue(false));
         $this->fromMock->expects($this->once())->method('getData')->with('key')->will($this->returnValue(true));
-        $this->assertEquals($this->toMock, $this->mapper->accumulateByMap($from, $to, $map, $default));
+        $this->assertSame($this->toMock, $this->mapper->accumulateByMap($from, $to, $map, $default));
     }
 
     public function testAccumulateByMapWhenFromIsArrayToIsObject()
@@ -66,7 +66,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $from['key'] = 'from_value';
         $default['new_key'] = 'default_value';
         $this->toMock->expects($this->exactly(2))->method('setData');
-        $this->assertEquals($this->toMock, $this->mapper->accumulateByMap($from, $this->toMock, $map, $default));
+        $this->assertSame($this->toMock, $this->mapper->accumulateByMap($from, $this->toMock, $map, $default));
     }
 
     public function testAccumulateByMapFromAndToAreArrays()
@@ -78,6 +78,6 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $expected['key'] = 'to_value';
         $expected['value'] = 'from_value';
         $expected['new_key'] = 'value';
-        $this->assertEquals($expected, $this->mapper->accumulateByMap($from, $to, $map, $default));
+        $this->assertSame($expected, $this->mapper->accumulateByMap($from, $to, $map, $default));
     }
 }

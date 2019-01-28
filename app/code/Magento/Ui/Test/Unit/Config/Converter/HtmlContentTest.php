@@ -64,6 +64,6 @@ class HtmlContentTest extends \PHPUnit\Framework\TestCase
         $actualResult['item']['layout']['value'] = '';
 
         // assert that all expected keys in array are exists
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

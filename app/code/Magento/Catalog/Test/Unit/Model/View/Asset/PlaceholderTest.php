@@ -51,17 +51,17 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
     public function testModuleAndContentAndContentType()
     {
         $contentType = 'image';
-        $this->assertEquals($contentType, $this->model->getContentType());
-        $this->assertEquals($contentType, $this->model->getSourceContentType());
+        $this->assertSame($contentType, $this->model->getContentType());
+        $this->assertSame($contentType, $this->model->getSourceContentType());
         $this->assertNull($this->model->getContent());
-        $this->assertEquals('placeholder', $this->model->getModule());
+        $this->assertSame('placeholder', $this->model->getModule());
     }
 
     public function testGetFilePath()
     {
         $this->assertNull($this->model->getFilePath());
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn('default/thumbnail.jpg');
-        $this->assertEquals('default/thumbnail.jpg', $this->model->getFilePath());
+        $this->assertSame('default/thumbnail.jpg', $this->model->getFilePath());
     }
 
     public function testGetContext()
@@ -106,8 +106,8 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
                 . DIRECTORY_SEPARATOR . $placeholderPath;
         }
 
-        $this->assertEquals($expectedResult, $imageModel->getPath());
-        $this->assertEquals($expectedResult, $imageModel->getSourceFile());
+        $this->assertSame($expectedResult, $imageModel->getPath());
+        $this->assertSame($expectedResult, $imageModel->getSourceFile());
     }
 
     /**
@@ -144,7 +144,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
                 . DIRECTORY_SEPARATOR . $placeholderPath;
         }
 
-        $this->assertEquals($expectedResult, $imageModel->getUrl());
+        $this->assertSame($expectedResult, $imageModel->getUrl());
     }
 
     /**

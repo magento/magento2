@@ -34,6 +34,6 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'http://example.com';
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart', [])->willReturn($url);
-        $this->assertEquals($url, $this->model->getVirtualProductEditUrl());
+        $this->assertSame($url, $this->model->getVirtualProductEditUrl());
     }
 }

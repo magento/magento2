@@ -75,7 +75,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
 
         $taxObserverObject->execute($observerObject);
 
-        $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
+        $this->assertSame($expected, $frameworkObject->getAdditionalOptions());
     }
 
     /**

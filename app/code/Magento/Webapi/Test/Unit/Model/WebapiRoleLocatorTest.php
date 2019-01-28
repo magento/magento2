@@ -101,7 +101,7 @@ class WebapiRoleLocatorTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->will($this->returnValue(null));
 
-        $this->assertEquals('', $this->locator->getAclRoleId());
+        $this->assertSame('', $this->locator->getAclRoleId());
     }
 
     public function testGetAclRoleId()
@@ -112,6 +112,6 @@ class WebapiRoleLocatorTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->will($this->returnValue($roleId));
 
-        $this->assertEquals($roleId, $this->locator->getAclRoleId());
+        $this->assertSame($roleId, $this->locator->getAclRoleId());
     }
 }

@@ -67,11 +67,11 @@ class CategoryListTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['name']);
-        $this->assertEquals('Category 1', $response['items'][0]['name']);
+        $this->assertSame('Category 1', $response['items'][0]['name']);
     }
 }

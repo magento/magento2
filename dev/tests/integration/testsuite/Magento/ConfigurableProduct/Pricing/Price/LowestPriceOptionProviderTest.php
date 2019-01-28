@@ -41,7 +41,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(10, $lowestPriceChildrenProduct->getPrice());
 
         // load full aggregation root
         $lowestPriceChildProduct = $this->productRepository->get(
@@ -60,7 +60,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
@@ -72,7 +72,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(10, $lowestPriceChildrenProduct->getPrice());
 
         // load full aggregation root
         $lowestPriceChildProduct = $this->productRepository->get(
@@ -92,7 +92,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
@@ -104,7 +104,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(10, $lowestPriceChildrenProduct->getPrice());
 
         // load full aggregation root
         $lowestPriceChildProduct = $this->productRepository->get(
@@ -119,7 +119,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
@@ -132,7 +132,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(10, $lowestPriceChildrenProduct->getPrice());
 
         /** @var \Magento\Store\Api\WebsiteRepositoryInterface $webSiteRepository */
         $webSiteRepository = Bootstrap::getObjectManager()->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
@@ -147,7 +147,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         self::assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        self::assertSame(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**

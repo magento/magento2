@@ -58,7 +58,7 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
         $this->urlConverter->expects($this->any())
             ->method('convert')
             ->willReturn($urlResult);
-        $this->assertEquals($expectedResult, $this->converter->convert($actions));
+        $this->assertSame($expectedResult, $this->converter->convert($actions));
     }
 
     /**

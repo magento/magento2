@@ -70,7 +70,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->method('getFullActionName')
             ->willReturn('Module_Controller_Action');
 
-        $this->assertEquals('module_controller_action', $this->resultLayout->getDefaultLayoutHandle());
+        $this->assertSame('module_controller_action', $this->resultLayout->getDefaultLayoutHandle());
     }
 
     public function testAddHandle()

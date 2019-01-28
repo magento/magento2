@@ -85,7 +85,7 @@ class TransactionsTest extends \PHPUnit\Framework\TestCase
             ->method('getMethodInstance')
             ->willReturn($methodInstance);
 
-        $this->assertEquals($expectedResult, $this->transactionsTab->canShowTab());
+        $this->assertSame($expectedResult, $this->transactionsTab->canShowTab());
     }
 
     /**
@@ -114,7 +114,7 @@ class TransactionsTest extends \PHPUnit\Framework\TestCase
             ->with('Magento_Sales::transactions_fetch')
             ->willReturn($isAllowed);
 
-        $this->assertEquals($expectedResult, $this->transactionsTab->isHidden());
+        $this->assertSame($expectedResult, $this->transactionsTab->isHidden());
     }
 
     /**

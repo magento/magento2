@@ -54,6 +54,6 @@ class CompositeScannerTest extends \PHPUnit\Framework\TestCase
         $actual = $this->_model->collectEntities($files);
         $expected = [$scannerPhpExpected, $scannerXmlExpected];
 
-        $this->assertEquals($expected, array_values($actual));
+        $this->assertSame($expected, array_values($actual));
     }
 }

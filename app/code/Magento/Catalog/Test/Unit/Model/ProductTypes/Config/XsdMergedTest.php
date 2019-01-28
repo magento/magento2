@@ -38,7 +38,7 @@ class XsdMergedTest extends \PHPUnit\Framework\TestCase
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertSame($expectedError, $actualError);
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()

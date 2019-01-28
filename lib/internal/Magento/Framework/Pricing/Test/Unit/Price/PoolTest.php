@@ -58,7 +58,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             'regular_price' => 'RegularPrice',
             'special_price' => 'SpecialPrice',
         ]);
-        $this->assertEquals($expected, $this->pool);
+        $this->assertSame($expected, $this->pool);
     }
 
     /**
@@ -66,8 +66,8 @@ class PoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet()
     {
-        $this->assertEquals('RegularPrice', $this->pool->get('regular_price'));
-        $this->assertEquals('SpecialPrice', $this->pool->get('special_price'));
+        $this->assertSame('RegularPrice', $this->pool->get('regular_price'));
+        $this->assertSame('SpecialPrice', $this->pool->get('special_price'));
     }
 
     /**
@@ -75,10 +75,10 @@ class PoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testArrayAccess()
     {
-        $this->assertEquals('RegularPrice', $this->pool['regular_price']);
-        $this->assertEquals('SpecialPrice', $this->pool['special_price']);
+        $this->assertSame('RegularPrice', $this->pool['regular_price']);
+        $this->assertSame('SpecialPrice', $this->pool['special_price']);
         $this->pool['fake_price'] = 'FakePrice';
-        $this->assertEquals('FakePrice', $this->pool['fake_price']);
+        $this->assertSame('FakePrice', $this->pool['fake_price']);
         $this->assertTrue(isset($this->pool['fake_price']));
         unset($this->pool['fake_price']);
         $this->assertFalse(isset($this->pool['fake_price']));
@@ -91,7 +91,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     public function testIterator()
     {
         foreach ($this->pool as $code => $class) {
-            $this->assertEquals($this->pool[$code], $class);
+            $this->assertSame($this->pool[$code], $class);
         }
     }
 }

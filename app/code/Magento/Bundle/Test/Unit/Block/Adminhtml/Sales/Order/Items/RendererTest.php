@@ -241,7 +241,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($unserializedResult));
         $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($options));
 
-        $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
+        $this->assertSame($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
     }
 
     public function testGetOrderOptions()
@@ -253,7 +253,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         ];
         $this->model->setItem($this->orderItem);
         $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
-        $this->assertEquals(['attributes_info', 'options', 'additional_options'], $this->model->getOrderOptions());
+        $this->assertSame(['attributes_info', 'options', 'additional_options'], $this->model->getOrderOptions());
     }
 
     public function testGetOrderItem()

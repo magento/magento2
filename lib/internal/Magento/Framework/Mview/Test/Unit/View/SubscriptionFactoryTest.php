@@ -38,6 +38,6 @@ class SubscriptionFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(\Magento\Framework\Mview\View\SubscriptionInterface::class, ['some_data'])
             ->will($this->returnValue($subscriptionInterfaceMock));
-        $this->assertEquals($subscriptionInterfaceMock, $this->model->create(['some_data']));
+        $this->assertSame($subscriptionInterfaceMock, $this->model->create(['some_data']));
     }
 }

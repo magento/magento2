@@ -193,7 +193,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $adapter = $this->_getAdapter($adapterType);
         try {
             $adapter->open($image);
-            $this->assertEquals(
+            $this->assertSame(
                 $this->_getFixtureImageSize(),
                 [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]
             );
@@ -250,7 +250,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $adapter->open($image);
         try {
             $adapter->resize($dims[0], $dims[1]);
-            $this->assertEquals($dims, [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]);
+            $this->assertSame($dims, [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]);
         } catch (\Exception $e) {
             $result = $dims[0] !== null && $dims[0] <= 0 ||
                 $dims[1] !== null && $dims[1] <= 0 ||
@@ -611,7 +611,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
 
         $newSize = [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()];
 
-        $this->assertEquals($expectedSize, $newSize);
+        $this->assertSame($expectedSize, $newSize);
     }
 
     public function cropDataProvider()
@@ -649,11 +649,11 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
 
         $color1 = $adapter->getColorAt($pixel1['x'], $pixel1['y']);
         unset($color1['alpha']);
-        $this->assertEquals($expectedColor1, $color1);
+        $this->assertSame($expectedColor1, $color1);
 
         $color2 = $adapter->getColorAt($pixel2['x'], $pixel2['y']);
         unset($color2['alpha']);
-        $this->assertEquals($expectedColor2, $color2);
+        $this->assertSame($expectedColor2, $color2);
     }
 
     /**

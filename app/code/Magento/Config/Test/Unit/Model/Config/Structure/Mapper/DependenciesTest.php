@@ -25,6 +25,6 @@ class DependenciesTest extends \PHPUnit\Framework\TestCase
         $expected = require_once realpath(__DIR__ . '/../../../') . '/_files/dependencies_mapped.php';
 
         $actual = $this->_model->map($data);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

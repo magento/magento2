@@ -26,7 +26,7 @@ class CheckoutAgreementsListTest extends WebapiAbstract
 
         // Checkout agreements are disabled by default
         $agreements = $this->_webApiCall($this->getServiceInfo($requestData), $requestData);
-        $this->assertEquals(2, count($agreements));
+        $this->assertSame(2, count($agreements));
     }
 
     /**
@@ -47,9 +47,9 @@ class CheckoutAgreementsListTest extends WebapiAbstract
 
         $agreements = $this->_webApiCall($this->getServiceInfo($requestData), $requestData);
 
-        $this->assertEquals(1, count($agreements));
-        $this->assertEquals(1, $agreements[0]['is_active']);
-        $this->assertEquals('Checkout Agreement (active)', $agreements[0]['name']);
+        $this->assertSame(1, count($agreements));
+        $this->assertSame(1, $agreements[0]['is_active']);
+        $this->assertSame('Checkout Agreement (active)', $agreements[0]['name']);
     }
 
     /**

@@ -159,7 +159,7 @@ class GuestItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($messageId)
             ->will($this->returnValue($this->messageMock));
 
-        $this->assertEquals($this->messageMock, $this->itemRepository->get($this->cartId, $itemId));
+        $this->assertSame($this->messageMock, $this->itemRepository->get($this->cartId, $itemId));
     }
 
     /**

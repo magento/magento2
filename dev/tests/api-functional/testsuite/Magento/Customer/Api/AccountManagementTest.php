@@ -203,12 +203,12 @@ class AccountManagementTest extends WebapiAbstract
                     $expectedException->getParameters() // expected error parameters
                 );
             } else {
-                $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+                $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
                     'message' => '"Email" is not a valid email address.',
                 ];
-                $this->assertEquals($expectedExceptionData, $exceptionData);
+                $this->assertSame($expectedExceptionData, $exceptionData);
             }
         }
     }
@@ -270,7 +270,7 @@ class AccountManagementTest extends WebapiAbstract
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
+        $this->assertSame($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
         $this->assertTrue(
             !isset($result[Customer::CONFIRMATION]) || $result[Customer::CONFIRMATION] === null,
             'Customer is not activated!'
@@ -299,7 +299,7 @@ class AccountManagementTest extends WebapiAbstract
 
         $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals($customerData[Customer::ID], $customerResponseData[Customer::ID]);
+        $this->assertSame($customerData[Customer::ID], $customerResponseData[Customer::ID]);
         // Confirmation key is removed after confirmation
         $this->assertFalse(isset($customerResponseData[Customer::CONFIRMATION]));
     }
@@ -371,8 +371,8 @@ class AccountManagementTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 
@@ -389,7 +389,7 @@ class AccountManagementTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo);
         } catch (\Exception $e) {
-            $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
                 'message' => 'One or more input exceptions have occurred.',
@@ -408,7 +408,7 @@ class AccountManagementTest extends WebapiAbstract
                     ],
                 ],
             ];
-            $this->assertEquals($expectedExceptionData, $exceptionData);
+            $this->assertSame($expectedExceptionData, $exceptionData);
         }
     }
 
@@ -469,12 +469,12 @@ class AccountManagementTest extends WebapiAbstract
 
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
-                $this->assertEquals(
+                $this->assertSame(
                     'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
-                $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
-                $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+                $this->assertSame($expectedErrorParameters, $errorObj['parameters']);
+                $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
             } else {
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
@@ -505,7 +505,7 @@ class AccountManagementTest extends WebapiAbstract
 
         $confirmationResponse = $this->_webApiCall($serviceInfo, ['customerId' => $customerData['id']]);
 
-        $this->assertEquals(AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED, $confirmationResponse);
+        $this->assertSame(AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED, $confirmationResponse);
     }
 
     public function testResendConfirmation()
@@ -562,12 +562,12 @@ class AccountManagementTest extends WebapiAbstract
                 ];
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
-                $this->assertEquals(
+                $this->assertSame(
                     'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
-                $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
-                $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+                $this->assertSame($expectedErrorParameters, $errorObj['parameters']);
+                $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
             } else {
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
@@ -604,11 +604,11 @@ class AccountManagementTest extends WebapiAbstract
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
 
-        $this->assertEquals(
+        $this->assertSame(
             'The "First Name" attribute value is empty. Set the attribute and try again.',
             $validationResponse['messages'][0]
         );
-        $this->assertEquals(
+        $this->assertSame(
             'The "Last Name" attribute value is empty. Set the attribute and try again.',
             $validationResponse['messages'][1]
         );
@@ -757,7 +757,7 @@ class AccountManagementTest extends WebapiAbstract
         ];
         $requestData = ['customerId' => $fixtureCustomerId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $this->getFirstFixtureAddressData(),
             $addressData,
             "Default billing address data is invalid."
@@ -784,7 +784,7 @@ class AccountManagementTest extends WebapiAbstract
         ];
         $requestData = ['customerId' => $fixtureCustomerId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $this->getFirstFixtureAddressData(),
             $addressData,
             "Default shipping address data is invalid."
@@ -837,7 +837,7 @@ class AccountManagementTest extends WebapiAbstract
         $this->subscriber->loadByCustomerId($customerData['id']);
 
         $this->assertNotNull($this->subscriber->getId());
-        $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
+        $this->assertSame($customerData['id'], $this->subscriber->getCustomerId());
     }
 
     public function testUnsubscribeCustomer()
@@ -852,7 +852,7 @@ class AccountManagementTest extends WebapiAbstract
         $subscriptionId = $this->subscriber->getId();
 
         $this->assertNotNull($subscriptionId);
-        $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
+        $this->assertSame($customerData['id'], $this->subscriber->getCustomerId());
         //Manage customer in order to unsubscribe
         $this->customerHelper->updateSampleCustomer(
             $customerData["id"],
@@ -864,6 +864,6 @@ class AccountManagementTest extends WebapiAbstract
         $this->initSubscriber();
 
         $this->subscriber->loadByCustomerId($customerData['id']);
-        $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $this->subscriber->getStatus());
+        $this->assertSame(Subscriber::STATUS_UNSUBSCRIBED, $this->subscriber->getStatus());
     }
 }

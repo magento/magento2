@@ -42,7 +42,7 @@ class AccountLockTest extends \PHPUnit\Framework\TestCase
     {
         $dataSource = $this->component->prepareDataSource($lockExpirationDate);
 
-        $this->assertEquals($expectedResult, $dataSource);
+        $this->assertSame($expectedResult, $dataSource);
     }
 
     /**

@@ -44,7 +44,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtmlWithLinks')
             ->will($this->returnValue($expected));
         $actual = $this->commentsView->escapeHtml($data, $allowedTags);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

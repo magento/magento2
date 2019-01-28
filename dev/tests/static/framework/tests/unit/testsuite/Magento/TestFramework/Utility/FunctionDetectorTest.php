@@ -17,6 +17,6 @@ class FunctionDetectorTest extends \PHPUnit\Framework\TestCase
         ];
         $functionDetector = new FunctionDetector();
         $lines = $functionDetector->detect($fixturePath, ['foo', 'strtoupper', 'test', 'strtolower']);
-        $this->assertEquals($expectedResults, $lines);
+        $this->assertSame($expectedResults, $lines);
     }
 }

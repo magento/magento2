@@ -73,7 +73,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
 
         $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
 
-        $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
+        $this->assertSame($expectedResult, $this->_messageModel->isDisplayed());
     }
 
     /**

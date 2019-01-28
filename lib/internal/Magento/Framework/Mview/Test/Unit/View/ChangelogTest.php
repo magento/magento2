@@ -61,7 +61,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     public function testGetName()
     {
         $this->model->setViewId('ViewIdTest');
-        $this->assertEquals(
+        $this->assertSame(
             'ViewIdTest' . '_' . \Magento\Framework\Mview\View\Changelog::NAME_SUFFIX,
             $this->model->getName()
         );
@@ -70,7 +70,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     public function testGetViewId()
     {
         $this->model->setViewId('ViewIdTest');
-        $this->assertEquals('ViewIdTest', $this->model->getViewId());
+        $this->assertSame('ViewIdTest', $this->model->getViewId());
     }
 
     /**
@@ -84,7 +84,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
 
     public function testGetColumnName()
     {
-        $this->assertEquals(\Magento\Framework\Mview\View\Changelog::COLUMN_NAME, $this->model->getColumnName());
+        $this->assertSame(\Magento\Framework\Mview\View\Changelog::COLUMN_NAME, $this->model->getColumnName());
     }
 
     public function testGetVersion()
@@ -98,7 +98,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(['Auto_increment' => 11]));
 
         $this->model->setViewId('viewIdtest');
-        $this->assertEquals(10, $this->model->getVersion());
+        $this->assertSame(10, $this->model->getVersion());
     }
 
     public function testGetVersionWithExceptionNoAutoincrement()
@@ -218,7 +218,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(['some_data']));
 
         $this->model->setViewId('viewIdtest');
-        $this->assertEquals(['some_data'], $this->model->getList(1, 2));
+        $this->assertSame(['some_data'], $this->model->getList(1, 2));
     }
 
     public function testGetListWithException()

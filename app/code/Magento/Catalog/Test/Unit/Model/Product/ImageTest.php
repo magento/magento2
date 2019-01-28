@@ -180,7 +180,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testSetGetQuality()
     {
         $this->image->setQuality(100);
-        $this->assertEquals(100, $this->image->getQuality());
+        $this->assertSame(100, $this->image->getQuality());
     }
 
     public function testSetGetKeepAspectRatio()
@@ -216,7 +216,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testSetSize()
     {
         $this->image->setSize('99xsadf');
-        $this->assertEquals(99, $this->image->getWidth());
+        $this->assertSame(99, $this->image->getWidth());
         $this->assertNull($this->image->getHeight());
     }
 
@@ -255,8 +255,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
         $this->image->setBaseFile('/somefile.png');
-        $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
-        $this->assertEquals(
+        $this->assertSame('catalog/product/somefile.png', $this->image->getBaseFile());
+        $this->assertSame(
             null,
             $this->image->getNewFile()
         );
@@ -267,7 +267,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->viewAssetPlaceholderFactory->expects($this->once())->method('create')->willReturn($this->imageAsset);
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('Default Placeholder Path');
         $this->image->setBaseFile('no_selection');
-        $this->assertEquals('Default Placeholder Path', $this->image->getBaseFile());
+        $this->assertSame('Default Placeholder Path', $this->image->getBaseFile());
     }
 
     public function testSetGetImageProcessor()
@@ -380,7 +380,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     {
         $this->testSetGetBaseFile();
         $this->imageAsset->expects($this->any())->method('getUrl')->will($this->returnValue('url of exist image'));
-        $this->assertEquals('url of exist image', $this->image->getUrl());
+        $this->assertSame('url of exist image', $this->image->getUrl());
     }
 
     public function testGetUrlNoSelection()
@@ -388,13 +388,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->viewAssetPlaceholderFactory->expects($this->once())->method('create')->willReturn($this->imageAsset);
         $this->imageAsset->expects($this->any())->method('getUrl')->will($this->returnValue('Default Placeholder URL'));
         $this->image->setBaseFile('no_selection');
-        $this->assertEquals('Default Placeholder URL', $this->image->getUrl());
+        $this->assertSame('Default Placeholder URL', $this->image->getUrl());
     }
 
     public function testSetGetDestinationSubdir()
     {
         $this->image->setDestinationSubdir('image_type');
-        $this->assertEquals('image_type', $this->image->getDestinationSubdir());
+        $this->assertSame('image_type', $this->image->getDestinationSubdir());
     }
 
     public function testIsCached()
@@ -444,7 +444,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             json_encode(['size' => ['image data']])
         );
         $this->cacheManager->expects($this->never())->method('save');
-        $this->assertEquals(['image data'], $this->image->getResizedImageInfo());
+        $this->assertSame(['image data'], $this->image->getResizedImageInfo());
     }
 
     public function testGetResizedImageInfoEmptyCache()

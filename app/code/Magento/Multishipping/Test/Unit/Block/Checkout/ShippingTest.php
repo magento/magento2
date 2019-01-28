@@ -63,7 +63,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->multiShippingMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())
             ->method('getAllShippingAddresses')->will($this->returnValue(['expected array']));
-        $this->assertEquals(['expected array'], $this->model->getAddresses());
+        $this->assertSame(['expected array'], $this->model->getAddresses());
     }
 
     public function testGetAddressShippingMethod()
@@ -74,7 +74,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         );
         $addressMock->expects($this->once())
             ->method('getShippingMethod')->will($this->returnValue('expected shipping method'));
-        $this->assertEquals('expected shipping method', $this->model->getAddressShippingMethod($addressMock));
+        $this->assertSame('expected shipping method', $this->model->getAddressShippingMethod($addressMock));
     }
 
     public function testGetShippingRates()
@@ -86,7 +86,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
         $addressMock->expects($this->once())
             ->method('getGroupedAllShippingRates')->will($this->returnValue(['expected array']));
-        $this->assertEquals(['expected array'], $this->model->getShippingRates($addressMock));
+        $this->assertSame(['expected array'], $this->model->getShippingRates($addressMock));
     }
 
     public function testGetCarrierName()
@@ -98,7 +98,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will($this->returnValue($name));
 
-        $this->assertEquals($name, $this->model->getCarrierName($carrierCode));
+        $this->assertSame($name, $this->model->getCarrierName($carrierCode));
     }
 
     public function testGetCarrierNameWithEmptyName()
@@ -109,7 +109,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will($this->returnValue(null));
 
-        $this->assertEquals($carrierCode, $this->model->getCarrierName($carrierCode));
+        $this->assertSame($carrierCode, $this->model->getCarrierName($carrierCode));
     }
 
     public function testGetShippingPrice()

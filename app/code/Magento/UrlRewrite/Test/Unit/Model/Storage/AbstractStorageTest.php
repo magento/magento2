@@ -69,7 +69,7 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($urlRewrites[1]));
 
-        $this->assertEquals($urlRewrites, $this->storage->findAllByData($data));
+        $this->assertSame($urlRewrites, $this->storage->findAllByData($data));
     }
 
     public function testFindOneByDataIfNotFound()
@@ -104,7 +104,7 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($urlRewrite));
 
-        $this->assertEquals($urlRewrite, $this->storage->findOneByData($data));
+        $this->assertSame($urlRewrite, $this->storage->findOneByData($data));
     }
 
     public function testReplaceIfUrlsAreEmpty()

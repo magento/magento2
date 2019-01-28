@@ -82,19 +82,19 @@ QUERY;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $responseDataObject = new DataObject($response);
         //Some sort of smoke testing
-        self::assertEquals(
+        self::assertSame(
             'Ololo',
             $responseDataObject->getData('category/children/7/children/1/description')
         );
-        self::assertEquals(
+        self::assertSame(
             'default-category',
             $responseDataObject->getData('category/url_key')
         );
-        self::assertEquals(
+        self::assertSame(
             [],
             $responseDataObject->getData('category/children/0/available_sort_by')
         );
-        self::assertEquals(
+        self::assertSame(
             'name',
             $responseDataObject->getData('category/children/0/default_sort_by')
         );
@@ -106,7 +106,7 @@ QUERY;
             2,
             $responseDataObject->getData('category/children/7/children')
         );
-        self::assertEquals(
+        self::assertSame(
             5,
             $responseDataObject->getData('category/children/7/children/1/children/0/id')
         );
@@ -264,8 +264,8 @@ QUERY;
         $this->assertArrayHasKey('products', $response['category']);
         $this->assertArrayHasKey('total_count', $response['category']['products']);
         $this->assertGreaterThanOrEqual(1, $response['category']['products']['total_count']);
-        $this->assertEquals(1, $response['category']['products']['page_info']['current_page']);
-        $this->assertEquals(20, $response['category']['products']['page_info']['page_size']);
+        $this->assertSame(1, $response['category']['products']['page_info']['current_page']);
+        $this->assertSame(20, $response['category']['products']['page_info']['page_size']);
 
         $this->assertArrayHasKey('sku', $response['category']['products']['items'][0]);
         $firstProductSku = $response['category']['products']['items'][0]['sku'];
@@ -322,7 +322,7 @@ QUERY;
                 ]
             ]
         ];
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertSame($expectedResponse, $response);
     }
 
     /**
@@ -386,7 +386,7 @@ QUERY;
             ]
         ];
 
-        $this->assertEquals($actualResponse, $assertionMap);
+        $this->assertSame($actualResponse, $assertionMap);
     }
 
     /**

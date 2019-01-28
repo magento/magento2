@@ -61,12 +61,12 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')
             ->with(['type' => 'new_order'])
             ->will($this->returnValue($link));
-        $this->assertEquals($link, $this->link->getLink());
+        $this->assertSame($link, $this->link->getLink());
     }
 
     public function testGetLabel()
     {
-        $this->assertEquals('New Order RSS', $this->link->getLabel());
+        $this->assertSame('New Order RSS', $this->link->getLabel());
     }
 
     public function testIsRssAllowed()

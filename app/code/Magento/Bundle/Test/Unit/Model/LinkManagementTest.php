@@ -232,7 +232,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
         $this->link->expects($this->once())->method('setId')->willReturnSelf();
         $this->linkFactory->expects($this->once())->method('create')->willReturn($this->link);
 
-        $this->assertEquals([$this->link], $this->model->getChildren($productSku));
+        $this->assertSame([$this->link], $this->model->getChildren($productSku));
     }
 
     public function testGetChildrenWithOptionId()
@@ -265,7 +265,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->dataObjectHelperMock->expects($this->never())->method('populateWithArray');
 
-        $this->assertEquals([], $this->model->getChildren($productSku, 1));
+        $this->assertSame([], $this->model->getChildren($productSku, 1));
     }
 
     /**
@@ -280,7 +280,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->product->expects($this->once())->method('getTypeId')->will($this->returnValue('simple'));
 
-        $this->assertEquals([$this->link], $this->model->getChildren($productSku));
+        $this->assertSame([$this->link], $this->model->getChildren($productSku));
     }
 
     /**
@@ -604,7 +604,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
         $selection->expects($this->once())->method('getId')->will($this->returnValue(42));
         $this->bundleSelectionMock->expects($this->once())->method('create')->will($this->returnValue($selection));
         $result = $this->model->addChild($productMock, 1, $productLink);
-        $this->assertEquals(42, $result);
+        $this->assertSame(42, $result);
     }
 
     public function testSaveChild()

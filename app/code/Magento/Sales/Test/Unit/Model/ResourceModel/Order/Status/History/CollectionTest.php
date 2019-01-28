@@ -146,6 +146,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 )
             );
         $result = $this->collection->getUnnotifiedForInstance($order);
-        $this->assertEquals($this->historyItemMock, $result);
+        $this->assertSame($this->historyItemMock, $result);
     }
 }

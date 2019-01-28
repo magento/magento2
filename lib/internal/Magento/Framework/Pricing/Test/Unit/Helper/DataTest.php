@@ -47,7 +47,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue($result));
         }
         $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
-        $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
+        $this->assertSame($result, $helper->currency($amount, $format, $includeContainer));
     }
 
     /**
@@ -84,7 +84,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue($result));
         }
         $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
-        $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
+        $this->assertSame($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
     }
 
     /**

@@ -79,7 +79,7 @@ class InstructionsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getInstructions')
             ->willReturn($instructionsTwo);
 
-        $this->assertEquals($result, $this->model->getConfig());
+        $this->assertSame($result, $this->model->getConfig());
     }
 
     /**

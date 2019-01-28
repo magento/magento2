@@ -22,18 +22,18 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED,
             $details
         );
-        $this->assertEquals(
+        $this->assertSame(
             $apiException->getHttpCode(),
             \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED,
             'Exception code is set incorrectly in construct.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $apiException->getMessage(),
             'Message',
             'Exception message is set incorrectly in construct.'
         );
-        $this->assertEquals($apiException->getCode(), $code, 'Exception code is set incorrectly in construct.');
-        $this->assertEquals($apiException->getDetails(), $details, 'Details are set incorrectly in construct.');
+        $this->assertSame($apiException->getCode(), $code, 'Exception code is set incorrectly in construct.');
+        $this->assertSame($apiException->getDetails(), $details, 'Details are set incorrectly in construct.');
     }
 
     /**
@@ -58,7 +58,7 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED
         );
         /** Check that Webapi \Exception object with code 401 matches Sender originator.*/
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_SENDER,
             $apiException->getOriginator(),
             'Wrong Sender originator detecting.'
@@ -73,7 +73,7 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
         );
         /** Check that Webapi \Exception object with code 500 matches Receiver originator.*/
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_RECEIVER,
             $apiException->getOriginator(),
             'Wrong Receiver originator detecting.'

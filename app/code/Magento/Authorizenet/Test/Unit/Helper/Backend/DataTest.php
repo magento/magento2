@@ -62,7 +62,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('adminhtml/authorizenet_directpost_payment/place')
             ->willReturn('some value');
 
-        $this->assertEquals('some value', $this->dataHelper->getPlaceOrderAdminUrl());
+        $this->assertSame('some value', $this->dataHelper->getPlaceOrderAdminUrl());
     }
 
     public function testGetSuccessOrderUrl()
@@ -89,7 +89,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('sales/order/view', ['order_id' => 'order id'])
             ->willReturn('some value');
 
-        $this->assertEquals(
+        $this->assertSame(
             'some value',
             $this->dataHelper->getSuccessOrderUrl(['x_invoice_num' => 'invoice number', 'some param'])
         );
@@ -103,7 +103,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('adminhtml/authorizenet_directpost_payment/redirect', $params)
             ->willReturn('some value');
 
-        $this->assertEquals('some value', $this->dataHelper->getRedirectIframeUrl($params));
+        $this->assertSame('some value', $this->dataHelper->getRedirectIframeUrl($params));
     }
 
     public function testGetRelayUrl()

@@ -57,11 +57,11 @@ class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getTasks');
 
         $this->commandTester->execute([]);
-        $this->assertEquals(
+        $this->assertSame(
             'Crontab has already been generated and saved' . PHP_EOL,
             $this->commandTester->getDisplay()
         );
-        $this->assertEquals(Cli::RETURN_FAILURE, $this->commandTester->getStatusCode());
+        $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
@@ -80,11 +80,11 @@ class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new LocalizedException(new Phrase('Some error')));
 
         $this->commandTester->execute([]);
-        $this->assertEquals(
+        $this->assertSame(
             'Some error' . PHP_EOL,
             $this->commandTester->getDisplay()
         );
-        $this->assertEquals(Cli::RETURN_FAILURE, $this->commandTester->getStatusCode());
+        $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
@@ -106,11 +106,11 @@ class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
             ->with([]);
 
         $this->commandTester->execute($options);
-        $this->assertEquals(
+        $this->assertSame(
             'Crontab has been generated and saved' . PHP_EOL,
             $this->commandTester->getDisplay()
         );
-        $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
+        $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
     }
 
     /**

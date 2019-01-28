@@ -50,7 +50,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
         $triggerName = 'TEST_TRIGGER_NAME' . mt_rand(100, 999);
 
         $this->_object->setName($triggerName);
-        $this->assertEquals(strtolower($triggerName), $this->_object->getName());
+        $this->assertSame(strtolower($triggerName), $this->_object->getName());
     }
 
     /**
@@ -89,7 +89,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
         $names = ['PREFIX_table', 'prefix_table'];
         foreach ($names as $name) {
             $this->_object->setTable($name);
-            $this->assertEquals($name, $this->_object->getTable());
+            $this->assertSame($name, $this->_object->getTable());
         }
     }
 
@@ -203,7 +203,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     public function testAddStatement($param, $expected)
     {
         $this->_object->addStatement($param);
-        $this->assertEquals($expected, $this->_object->getStatements());
+        $this->assertSame($expected, $this->_object->getStatements());
     }
 
     /**
@@ -211,6 +211,6 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStatements()
     {
-        $this->assertEquals([], $this->_object->getStatements());
+        $this->assertSame([], $this->_object->getStatements());
     }
 }

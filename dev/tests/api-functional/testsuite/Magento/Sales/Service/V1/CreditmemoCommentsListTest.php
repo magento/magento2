@@ -68,6 +68,6 @@ class CreditmemoCommentsListTest extends WebapiAbstract
         self::assertNotEmpty($result['items']);
         $item = $result['items'][0];
         self::assertNotEmpty($item[CreditmemoCommentInterface::ENTITY_ID]);
-        self::assertEquals($comment, $item[CreditmemoCommentInterface::COMMENT]);
+        self::assertSame($comment, $item[CreditmemoCommentInterface::COMMENT]);
     }
 }

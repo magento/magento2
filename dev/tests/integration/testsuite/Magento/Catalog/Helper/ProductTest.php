@@ -38,10 +38,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $expectedUrl = 'http://localhost/index.php/simple-product.html';
         $product = $this->productRepository->get('simple');
-        $this->assertEquals($expectedUrl, $this->helper->getProductUrl($product));
+        $this->assertSame($expectedUrl, $this->helper->getProductUrl($product));
 
         // product as ID
-        $this->assertEquals($expectedUrl, $this->helper->getProductUrl($product->getId()));
+        $this->assertSame($expectedUrl, $this->helper->getProductUrl($product->getId()));
     }
 
     public function testGetPrice()
@@ -51,7 +51,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class
         );
         $product->setPrice(49.95);
-        $this->assertEquals(49.95, $this->helper->getPrice($product));
+        $this->assertSame(49.95, $this->helper->getPrice($product));
     }
 
     public function testGetFinalPrice()
@@ -62,7 +62,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $product->setPrice(49.95);
         $product->setFinalPrice(49.95);
-        $this->assertEquals(49.95, $this->helper->getFinalPrice($product));
+        $this->assertSame(49.95, $this->helper->getFinalPrice($product));
     }
 
     public function testGetImageUrl()
@@ -128,7 +128,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStatuses()
     {
-        $this->assertEquals([], $this->helper->getStatuses());
+        $this->assertSame([], $this->helper->getStatuses());
     }
 
     /**
@@ -155,7 +155,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testCanUseCanonicalTagDefault()
     {
-        $this->assertEquals('0', $this->helper->canUseCanonicalTag());
+        $this->assertSame('0', $this->helper->canUseCanonicalTag());
     }
 
     /**
@@ -163,7 +163,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanUseCanonicalTag()
     {
-        $this->assertEquals(1, $this->helper->canUseCanonicalTag());
+        $this->assertSame(1, $this->helper->canUseCanonicalTag());
     }
 
     public function testGetAttributeInputTypes()
@@ -226,7 +226,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->helper->prepareProductOptions($product, $buyRequest);
         $result = $product->getPreconfiguredValues();
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $result);
-        $this->assertEquals(100, $result->getQty());
-        $this->assertEquals(['option' => 'value'], $result->getOptions());
+        $this->assertSame(100, $result->getQty());
+        $this->assertSame(['option' => 'value'], $result->getOptions());
     }
 }

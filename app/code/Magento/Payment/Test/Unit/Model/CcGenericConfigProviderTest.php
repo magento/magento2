@@ -33,6 +33,6 @@ class CcGenericConfigProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConfig()
     {
-        $this->assertEquals([], $this->model->getConfig());
+        $this->assertSame([], $this->model->getConfig());
     }
 }

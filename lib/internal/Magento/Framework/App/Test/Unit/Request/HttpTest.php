@@ -112,7 +112,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $uri = 'http://test.com/value?key=value';
         $this->model = $this->getModel($uri);
-        $this->assertEquals('/value', $this->model->getOriginalPathInfo());
+        $this->assertSame('/value', $this->model->getOriginalPathInfo());
     }
 
     public function testGetOriginalPathInfoWithEmptyUri()
@@ -125,14 +125,14 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $this->model->setBasePath('http:\/test.com\one/two');
-        $this->assertEquals('http://test.com/one/two', $this->model->getBasePath());
+        $this->assertSame('http://test.com/one/two', $this->model->getBasePath());
     }
 
     public function testGetBasePathWithoutPath()
     {
         $this->model = $this->getModel();
         $this->model->setBasePath(null);
-        $this->assertEquals('/', $this->model->getBasePath());
+        $this->assertSame('/', $this->model->getBasePath());
     }
 
     public function testSetRouteNameWithRouter()
@@ -141,7 +141,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
         $this->model = $this->getModel();
         $this->model->setRouteName('RouterName');
-        $this->assertEquals('RouterName', $this->model->getRouteName());
+        $this->assertSame('RouterName', $this->model->getRouteName());
     }
 
     public function testSetRouteNameWithNullRouterValue()
@@ -155,14 +155,14 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $uri = 'http://test.com/one/two';
         $this->model = $this->getModel($uri);
-        $this->assertEquals('one', $this->model->getFrontName());
+        $this->assertSame('one', $this->model->getFrontName());
     }
 
     public function testGetRouteNameWithNullValueRouteName()
     {
         $this->model = $this->getModel();
         $this->model->setRouteName('RouteName');
-        $this->assertEquals('RouteName', $this->model->getRouteName());
+        $this->assertSame('RouteName', $this->model->getRouteName());
     }
 
     public function testGetRouteName()
@@ -170,22 +170,22 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->getModel();
         $expected = 'RouteName';
         $this->model->setRouteName($expected);
-        $this->assertEquals($expected, $this->model->getRouteName());
+        $this->assertSame($expected, $this->model->getRouteName());
     }
 
     public function testGetFullActionName()
     {
         $this->model = $this->getModel();
         /* empty request */
-        $this->assertEquals('__', $this->model->getFullActionName());
+        $this->assertSame('__', $this->model->getFullActionName());
         $this->model->setRouteName('test')->setControllerName('controller')->setActionName('action');
-        $this->assertEquals('test/controller/action', $this->model->getFullActionName('/'));
+        $this->assertSame('test/controller/action', $this->model->getFullActionName('/'));
     }
 
     public function testInitForward()
     {
         $expected = $this->initForward();
-        $this->assertEquals($expected, $this->model->getBeforeForwardInfo());
+        $this->assertSame($expected, $this->model->getBeforeForwardInfo());
     }
 
     public function testGetBeforeForwardInfo()
@@ -193,9 +193,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $beforeForwardInfo = $this->initForward();
         $this->assertNull($this->model->getBeforeForwardInfo('not_existing_forward_info_key'));
         foreach (array_keys($beforeForwardInfo) as $key) {
-            $this->assertEquals($beforeForwardInfo[$key], $this->model->getBeforeForwardInfo($key));
+            $this->assertSame($beforeForwardInfo[$key], $this->model->getBeforeForwardInfo($key));
         }
-        $this->assertEquals($beforeForwardInfo, $this->model->getBeforeForwardInfo());
+        $this->assertSame($beforeForwardInfo, $this->model->getBeforeForwardInfo());
     }
 
     /**
@@ -255,7 +255,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $originalServerValue = $_SERVER;
         $_SERVER = $serverVariables;
         $this->model = $this->getModel();
-        $this->assertEquals($expectedResult, $this->model->getDistroBaseUrl());
+        $this->assertSame($expectedResult, $this->model->getDistroBaseUrl());
 
         $_SERVER = $originalServerValue;
     }
@@ -267,7 +267,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDistroBaseUrlPath($scriptName, $expected)
     {
-        $this->assertEquals($expected, Http::getDistroBaseUrlPath(['SCRIPT_NAME' => $scriptName]));
+        $this->assertSame($expected, Http::getDistroBaseUrlPath(['SCRIPT_NAME' => $scriptName]));
     }
 
     /**
@@ -380,7 +380,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(true, $this->model->isSafeMethod());
+        $this->assertSame(true, $this->model->isSafeMethod());
     }
 
     /**
@@ -392,7 +392,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(false, $this->model->isSafeMethod());
+        $this->assertSame(false, $this->model->isSafeMethod());
     }
 
     /**
@@ -464,8 +464,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel($requestUri);
         $this->model->setBaseUrl($basePath);
-        $this->assertEquals($expected, $this->model->getPathInfo());
-        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+        $this->assertSame($expected, $this->model->getPathInfo());
+        $this->assertSame($expected, $this->model->getOriginalPathInfo());
     }
 
     public function testSetPathInfo()
@@ -475,10 +475,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->getModel($requestUri);
         $this->model->setBaseUrl($basePath);
         $expected = '/mypage/myproduct';
-        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+        $this->assertSame($expected, $this->model->getOriginalPathInfo());
         $this->model->setPathInfo('http://svr.com/something/route?param1=1');
-        $this->assertEquals('http://svr.com/something/route?param1=1', $this->model->getPathInfo());
-        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+        $this->assertSame('http://svr.com/something/route?param1=1', $this->model->getPathInfo());
+        $this->assertSame($expected, $this->model->getOriginalPathInfo());
     }
 
     /**

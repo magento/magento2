@@ -125,8 +125,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey($templateOptions['value'], $expected);
             $expectedOptions = $expected[$templateOptions['value']];
 
-            $this->assertEquals($expectedOptions['label'], (string) $templateOptions['label']);
-            $this->assertEquals($expectedOptions['module'], (string) $templateOptions['group']);
+            $this->assertSame($expectedOptions['label'], (string) $templateOptions['label']);
+            $this->assertSame($expectedOptions['module'], (string) $templateOptions['group']);
         }
     }
 
@@ -166,7 +166,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $actualTemplates = $this->model->getThemeTemplates($templateId);
         $this->assertNotEmpty($actualTemplates);
         foreach ($actualTemplates as $templateOptions) {
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     '%s (%s)',
                     $template['label'],
@@ -174,8 +174,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ),
                 $templateOptions['label']
             );
-            $this->assertEquals(sprintf('%s/%s', $templateId, $foundThemePath), $templateOptions['value']);
-            $this->assertEquals($template['module'], $templateOptions['group']);
+            $this->assertSame(sprintf('%s/%s', $templateId, $foundThemePath), $templateOptions['value']);
+            $this->assertSame($template['module'], $templateOptions['group']);
         }
     }
 
@@ -187,7 +187,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testParseTemplateIdParts($input, $expectedOutput)
     {
-        $this->assertEquals($this->model->parseTemplateIdParts($input), $expectedOutput);
+        $this->assertSame($this->model->parseTemplateIdParts($input), $expectedOutput);
     }
 
     /**
@@ -215,22 +215,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTemplateLabel()
     {
-        $this->assertEquals('Template One', $this->model->getTemplateLabel('template_one'));
+        $this->assertSame('Template One', $this->model->getTemplateLabel('template_one'));
     }
 
     public function testGetTemplateType()
     {
-        $this->assertEquals('html', $this->model->getTemplateType('template_one'));
+        $this->assertSame('html', $this->model->getTemplateType('template_one'));
     }
 
     public function testGetTemplateModule()
     {
-        $this->assertEquals('Fixture_ModuleOne', $this->model->getTemplateModule('template_one'));
+        $this->assertSame('Fixture_ModuleOne', $this->model->getTemplateModule('template_one'));
     }
 
     public function testGetTemplateArea()
     {
-        $this->assertEquals('frontend', $this->model->getTemplateArea('template_one'));
+        $this->assertSame('frontend', $this->model->getTemplateArea('template_one'));
     }
 
     public function testGetTemplateFilenameWithParams()
@@ -248,7 +248,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one', $this->designParams);
-        $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
+        $this->assertSame('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
     }
 
     /**
@@ -272,7 +272,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one');
-        $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
+        $this->assertSame('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
     }
 
     /**

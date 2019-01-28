@@ -31,6 +31,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testSelectCountSql()
     {
         $this->collection->addFieldToFilter('customer_name', ['like' => '%John%'])->getItems();
-        $this->assertEquals(1, $this->collection->getSize());
+        $this->assertSame(1, $this->collection->getSize());
     }
 }

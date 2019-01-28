@@ -40,6 +40,6 @@ class RequestFactoryTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\App\RequestInterface::class, $arguments)
             ->will($this->returnValue($appRequest));
 
-        $this->assertEquals($appRequest, $this->model->create($arguments));
+        $this->assertSame($appRequest, $this->model->create($arguments));
     }
 }

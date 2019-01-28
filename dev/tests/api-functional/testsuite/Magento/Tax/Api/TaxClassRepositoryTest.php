@@ -105,8 +105,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
 
         //Verify by getting the Data\TaxClassInterface
         $taxClassData = $this->taxClassRepository->get($taxClassId);
-        $this->assertEquals($taxClassData->getClassName(), $taxClassName);
-        $this->assertEquals($taxClassData->getClassType(), TaxClassManagementInterface::TYPE_CUSTOMER);
+        $this->assertSame($taxClassData->getClassName(), $taxClassName);
+        $this->assertSame($taxClassData->getClassType(), TaxClassManagementInterface::TYPE_CUSTOMER);
     }
 
     /**
@@ -146,12 +146,12 @@ class TaxClassRepositoryTest extends WebapiAbstract
 
         $requestData = ['taxClass' => $taxClass, 'ClassId' => $taxClassId];
 
-        $this->assertEquals($taxClassId, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertSame($taxClassId, $this->_webApiCall($serviceInfo, $requestData));
 
         //Verify by getting the Data\TaxClassInterface
         $this->taxClassRegistry->remove($taxClassId);
         $taxClassData = $this->taxClassRepository->get($taxClassId);
-        $this->assertEquals($taxClassData->getClassName(), $updatedTaxClassName);
+        $this->assertSame($taxClassData->getClassName(), $updatedTaxClassName);
     }
 
     public function testGetTaxClass()
@@ -178,8 +178,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         ];
         $requestData = ['taxClassId' => $taxClassId];
         $taxClassData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($taxClassData[ClassModel::KEY_NAME], $taxClassName);
-        $this->assertEquals(
+        $this->assertSame($taxClassData[ClassModel::KEY_NAME], $taxClassName);
+        $this->assertSame(
             $taxClassData[ClassModel::KEY_TYPE],
             TaxClassManagementInterface::TYPE_CUSTOMER
         );
@@ -217,7 +217,7 @@ class TaxClassRepositoryTest extends WebapiAbstract
             $this->taxClassRepository->get($taxClassId);
             $this->fail("Tax class was not expected to be returned after being deleted.");
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals('No such entity with class_id = ' . $taxClassId, $e->getMessage());
+            $this->assertSame('No such entity with class_id = ' . $taxClassId, $e->getMessage());
         }
     }
 
@@ -246,8 +246,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($taxClassName, $searchResults['items'][0][$taxClassNameField]);
+        $this->assertSame(1, $searchResults['total_count']);
+        $this->assertSame($taxClassName, $searchResults['items'][0][$taxClassNameField]);
     }
 
     /**
@@ -299,13 +299,13 @@ class TaxClassRepositoryTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(2, $searchResults['total_count']);
+        $this->assertSame(2, $searchResults['total_count']);
 
-        $this->assertEquals(
+        $this->assertSame(
             $customerTaxClass[ClassModel::KEY_NAME],
             $searchResults['items'][0][ClassModel::KEY_NAME]
         );
-        $this->assertEquals(
+        $this->assertSame(
             $productTaxClass[ClassModel::KEY_NAME],
             $searchResults['items'][1][ClassModel::KEY_NAME]
         );
@@ -317,8 +317,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo['rest']['resourcePath'] = self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData);
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals(
+        $this->assertSame(1, $searchResults['total_count']);
+        $this->assertSame(
             $customerTaxClass[ClassModel::KEY_NAME],
             $searchResults['items'][0][ClassModel::KEY_NAME]
         );

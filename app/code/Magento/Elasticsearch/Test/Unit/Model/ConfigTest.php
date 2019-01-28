@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'password' => 'pass',
             'timeout' => 1,
         ];
-        $this->assertEquals($options, $this->model->prepareClientOptions($options));
+        $this->assertSame($options, $this->model->prepareClientOptions($options));
     }
 
     /**
@@ -72,7 +72,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturn('indexPrefix');
-        $this->assertEquals('indexPrefix', $this->model->getIndexPrefix());
+        $this->assertSame('indexPrefix', $this->model->getIndexPrefix());
     }
 
     /**

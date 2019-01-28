@@ -44,7 +44,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->_translator->expects($this->once())
             ->method('getData')
             ->willReturn([]);
-        $this->assertEquals($text, $this->_renderer->render([$text], []));
+        $this->assertSame($text, $this->_renderer->render([$text], []));
     }
 
     public function testRenderTextWithSingleQuotes()
@@ -57,7 +57,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue([$translatedTextInDictionary => $translate]));
 
-        $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
+        $this->assertSame($translate, $this->_renderer->render([$translatedTextInput], []));
     }
 
     public function testRenderWithoutTranslation()
@@ -66,7 +66,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->_translator->expects($this->once())
             ->method('getData')
             ->will($this->returnValue([]));
-        $this->assertEquals($translate, $this->_renderer->render([$translate], []));
+        $this->assertSame($translate, $this->_renderer->render([$translate], []));
     }
 
     public function testRenderTextWithDoubleQuotes()
@@ -79,7 +79,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue([$translatedTextInDictionary => $translate]));
 
-        $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
+        $this->assertSame($translate, $this->_renderer->render([$translatedTextInput], []));
     }
 
     public function testRenderException()

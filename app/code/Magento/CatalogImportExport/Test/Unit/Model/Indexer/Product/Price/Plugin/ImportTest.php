@@ -61,6 +61,6 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(false));
 
         $importMock = $this->createMock(\Magento\ImportExport\Model\Import::class);
-        $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));
+        $this->assertSame('return_value', $this->_model->afterImportSource($importMock, 'return_value'));
     }
 }

@@ -100,10 +100,10 @@ class GuestShipmentEstimationTest extends WebapiAbstract
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotEmpty($result);
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         foreach ($result as $rate) {
-            $this->assertEquals("flatrate", $rate['carrier_code']);
-            $this->assertEquals(0, $rate['amount']);
+            $this->assertSame("flatrate", $rate['carrier_code']);
+            $this->assertSame(0, $rate['amount']);
         }
     }
 }

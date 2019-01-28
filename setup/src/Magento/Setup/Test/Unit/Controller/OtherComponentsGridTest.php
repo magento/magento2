@@ -72,7 +72,7 @@ class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('components', $variables);
         $expected = [
             '0' => [
@@ -98,9 +98,9 @@ class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
                 'checkboxId' => 'cb_magento/sample-module1'
             ]
         ];
-        $this->assertEquals($expected, $variables['components']);
+        $this->assertSame($expected, $variables['components']);
         $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals(1, $variables['total']);
+        $this->assertSame(1, $variables['total']);
     }
 
     public function testComponentsActionWithError()
@@ -112,7 +112,7 @@ class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
     }
 
     public function testIndexAction()

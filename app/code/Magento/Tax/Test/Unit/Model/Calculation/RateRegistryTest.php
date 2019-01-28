@@ -54,7 +54,7 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->will($this->returnValue(self::TAX_RATE_ID));
         $this->rateRegistry->registerTaxRate($this->rateModelMock);
-        $this->assertEquals($this->rateModelMock, $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID));
+        $this->assertSame($this->rateModelMock, $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID));
     }
 
     public function testRetrieveTaxRate()
@@ -71,7 +71,7 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->rateModelMock));
 
         $actual = $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID);
-        $this->assertEquals($this->rateModelMock, $actual);
+        $this->assertSame($this->rateModelMock, $actual);
 
         $actualCached = $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID);
         $this->assertSame($actual, $actualCached);
@@ -112,7 +112,7 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->rateModelMock));
 
         $actual = $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID);
-        $this->assertEquals($this->rateModelMock, $actual);
+        $this->assertSame($this->rateModelMock, $actual);
 
         // Remove the rate
         $this->rateRegistry->removeTaxRate(self::TAX_RATE_ID);
@@ -126,7 +126,7 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
                 'fieldName' => 'taxRateId',
                 'fieldValue' => self::TAX_RATE_ID,
             ];
-            $this->assertEquals($expectedParams, $e->getParameters());
+            $this->assertSame($expectedParams, $e->getParameters());
         }
     }
 }

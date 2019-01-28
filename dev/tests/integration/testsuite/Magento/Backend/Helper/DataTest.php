@@ -91,11 +91,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $expected = 'http://www.magentocommerce.com/gethelp/en_US/dummy/index/test/';
-        $this->assertEquals($expected, $this->_helper->getPageHelpUrl(), 'Incorrect help Url');
+        $this->assertSame($expected, $this->_helper->getPageHelpUrl(), 'Incorrect help Url');
 
         $this->_helper->addPageHelpUrl('dummy');
         $expected .= 'dummy';
-        $this->assertEquals($expected, $this->_helper->getPageHelpUrl(), 'Incorrect help Url suffix');
+        $this->assertSame($expected, $this->_helper->getPageHelpUrl(), 'Incorrect help Url suffix');
     }
 
     /**
@@ -114,7 +114,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Auth::class);
         $auth->login(\Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
-        $this->assertEquals(1, $this->_helper->getCurrentUserId());
+        $this->assertSame(1, $this->_helper->getCurrentUserId());
 
         /**
          * perform logout
@@ -136,7 +136,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $filterString = base64_encode('key1=' . rawurlencode('val1') . '&key2=' . rawurlencode('val2') . '&key3=val3');
         $actual = $this->_helper->prepareFilterString($filterString);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetHomePageUrl()

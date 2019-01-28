@@ -88,12 +88,12 @@ class RowTest extends \PHPUnit\Framework\TestCase
             'left'
         );
 
-        $this->assertEquals(1, $productCollection->count());
+        $this->assertSame(1, $productCollection->count());
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals('Simple Product', $product->getName());
-            $this->assertEquals('Short description', $product->getShortDescription());
-            $this->assertEquals(111, $product->getQty());
+            $this->assertSame('Simple Product', $product->getName());
+            $this->assertSame('Short description', $product->getShortDescription());
+            $this->assertSame(111, $product->getQty());
         }
     }
 }

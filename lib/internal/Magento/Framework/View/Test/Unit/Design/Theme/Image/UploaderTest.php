@@ -161,6 +161,6 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('test_filename')
         );
 
-        $this->assertEquals($result, $this->_model->uploadPreviewImage($testScope, '/tmp'));
+        $this->assertSame($result, $this->_model->uploadPreviewImage($testScope, '/tmp'));
     }
 }

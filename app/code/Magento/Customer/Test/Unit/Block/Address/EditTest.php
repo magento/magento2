@@ -165,8 +165,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 \Magento\Customer\Api\Data\AddressInterface::class
             )->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 
     /**
@@ -272,8 +272,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with($title)
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 
     public function testSetLayoutWithoutAddressId()
@@ -356,8 +356,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with($title)
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 
     public function testSetLayoutWithoutAddress()
@@ -448,7 +448,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with($title)
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 }

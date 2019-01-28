@@ -40,7 +40,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             '_fixture/Magento_ImportExport_Import_Data'
         );
 
-        $this->assertEquals($expectedBunches[0]['entity'], $this->_model->getUniqueColumnData('entity'));
+        $this->assertSame($expectedBunches[0]['entity'], $this->_model->getUniqueColumnData('entity'));
     }
 
     /**
@@ -67,7 +67,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             '_fixture/Magento_ImportExport_Import_Data'
         );
 
-        $this->assertEquals($expectedBunches[0]['behavior'], $this->_model->getBehavior());
+        $this->assertSame($expectedBunches[0]['behavior'], $this->_model->getBehavior());
     }
 
     /**
@@ -84,6 +84,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             '_fixture/Magento_ImportExport_Import_Data'
         );
 
-        $this->assertEquals($expectedBunches[0]['entity'], $this->_model->getEntityTypeCode());
+        $this->assertSame($expectedBunches[0]['entity'], $this->_model->getEntityTypeCode());
     }
 }

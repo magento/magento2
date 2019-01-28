@@ -70,7 +70,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue([])
         );
-        $this->assertEquals([], $this->model->getFiles());
+        $this->assertSame([], $this->model->getFiles());
     }
 
     /**
@@ -89,7 +89,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue([])
         );
-        $this->assertEquals([], $this->model->getFilesByType($type));
+        $this->assertSame([], $this->model->getFilesByType($type));
     }
 
     /**
@@ -99,7 +99,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'getFileInfo']);
         $file->expects($this->once())->method('getFileInfo')->will($this->returnValue(['sample-generation']));
-        $this->assertEquals([['sample-generation']], $this->model->generateFileInfo([$file]));
+        $this->assertSame([['sample-generation']], $this->model->generateFileInfo([$file]));
     }
 
     /**
@@ -116,7 +116,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('path')
         );
-        $this->assertEquals('path', $this->model->getCustomizationPath());
+        $this->assertSame('path', $this->model->getCustomizationPath());
     }
 
     /**
@@ -137,7 +137,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('path')
         );
-        $this->assertEquals('path', $this->model->getThemeFilesPath());
+        $this->assertSame('path', $this->model->getThemeFilesPath());
     }
 
     /**
@@ -166,7 +166,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('path')
         );
-        $this->assertEquals('path', $this->model->getCustomViewConfigPath());
+        $this->assertSame('path', $this->model->getCustomViewConfigPath());
     }
 
     /**

@@ -102,7 +102,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
         $actualCustomerGroups = $this->model->toOptionArray();
 
-        $this->assertEquals($customerGroups, $actualCustomerGroups);
+        $this->assertSame($customerGroups, $actualCustomerGroups);
 
         foreach ($actualCustomerGroups as $actualCustomerGroup) {
             $this->assertInternalType('string', $actualCustomerGroup['value']);

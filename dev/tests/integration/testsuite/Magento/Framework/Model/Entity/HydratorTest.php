@@ -59,6 +59,6 @@ class HydratorTest extends \PHPUnit\Framework\TestCase
         $newProduct = $hydrator->hydrate($newProduct, $productData);
         $newProductData = $hydrator->extract($newProduct);
 
-        $this->assertEquals($productData, $newProductData);
+        $this->assertSame($productData, $newProductData);
     }
 }

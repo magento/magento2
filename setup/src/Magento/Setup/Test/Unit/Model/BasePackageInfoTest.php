@@ -85,7 +85,7 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())->method('readFile')->willReturn($jsonData);
         $expectedList = [];
         $actualList = $this->basePackageInfo->getPaths();
-        $this->assertEquals($expectedList, $actualList);
+        $this->assertSame($expectedList, $actualList);
     }
 
     // Success scenario
@@ -114,6 +114,6 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())->method('readFile')->willReturn($jsonData);
         $expectedList = [__FILE__, __DIR__];
         $actualList = $this->basePackageInfo->getPaths();
-        $this->assertEquals($expectedList, $actualList);
+        $this->assertSame($expectedList, $actualList);
     }
 }

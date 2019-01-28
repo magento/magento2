@@ -70,7 +70,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('expected')
         );
 
-        $this->assertEquals('expected', $this->groupedView->getAssociatedProducts());
+        $this->assertSame('expected', $this->groupedView->getAssociatedProducts());
     }
 
     /**

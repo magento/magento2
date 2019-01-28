@@ -94,7 +94,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ]);
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->_model->getOptions($data['current_product_mock'], $data['allowed_products'])
         );

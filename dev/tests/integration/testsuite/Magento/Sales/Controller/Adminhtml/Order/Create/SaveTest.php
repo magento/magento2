@@ -61,7 +61,7 @@ class SaveTest extends AbstractBackendController
         $customer = $customerRepository->get($email);
 
         self::assertNotEmpty($session->getCustomerId());
-        self::assertEquals($customer->getId(), $session->getCustomerId());
+        self::assertSame($customer->getId(), $session->getCustomerId());
 
         $this->_objectManager->removeSharedInstance(OrderService::class);
     }

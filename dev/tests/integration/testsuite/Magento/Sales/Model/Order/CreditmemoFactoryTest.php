@@ -54,7 +54,7 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
         $order = $this->getOrder('100000001');
         $creditmemoData = $this->prepareCreditMemoData($order, $creditmemoData);
         $creditmemo = $this->creditmemoFactory->createByOrder($order, $creditmemoData);
-        self::assertEquals($expectedQty, $creditmemo->getTotalQty(), 'Creditmemo has wrong total qty.');
+        self::assertSame($expectedQty, $creditmemo->getTotalQty(), 'Creditmemo has wrong total qty.');
     }
 
     /**
@@ -96,7 +96,7 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $invoice = $this->getInvoice('100000001');
         $creditmemo = $this->creditmemoFactory->createByInvoice($invoice);
-        self::assertEquals(14, $creditmemo->getTotalQty(), 'Creditmemo has wrong total qty.');
+        self::assertSame(14, $creditmemo->getTotalQty(), 'Creditmemo has wrong total qty.');
     }
 
     /**

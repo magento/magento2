@@ -40,7 +40,7 @@ class ClassReaderDecoratorTest extends \PHPUnit\Framework\TestCase
             ->method('getConstructor')
             ->with($className)
             ->willReturn($willReturn);
-        $this->assertEquals(
+        $this->assertSame(
             $expectation,
             $this->model->getConstructor($className)
         );
@@ -68,6 +68,6 @@ class ClassReaderDecoratorTest extends \PHPUnit\Framework\TestCase
             ->method('getParents')
             ->with('Child_Class_Name')
             ->willReturn($stringArray);
-        $this->assertEquals($stringArray, $this->model->getParents('Child_Class_Name'));
+        $this->assertSame($stringArray, $this->model->getParents('Child_Class_Name'));
     }
 }

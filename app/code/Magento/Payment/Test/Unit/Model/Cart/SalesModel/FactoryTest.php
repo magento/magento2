@@ -37,7 +37,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('some value')
         );
-        $this->assertEquals('some value', $this->_model->create($salesModel));
+        $this->assertSame('some value', $this->_model->create($salesModel));
     }
 
     /**

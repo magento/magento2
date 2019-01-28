@@ -38,10 +38,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
         $this->link->setLink($liParams, $aParams, $innerText, $afterText);
 
-        $this->assertEquals($liParams, $this->link->getLiParams());
-        $this->assertEquals($aParams, $this->link->getAParams());
-        $this->assertEquals($innerText, $this->link->getInnerText());
-        $this->assertEquals($afterText, $this->link->getAfterText());
+        $this->assertSame($liParams, $this->link->getLiParams());
+        $this->assertSame($aParams, $this->link->getAParams());
+        $this->assertSame($innerText, $this->link->getInnerText());
+        $this->assertSame($afterText, $this->link->getAfterText());
     }
 
     /**
@@ -51,7 +51,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->link->setLink($liParams, $aParams, $innerText, $afterText);
 
-        $this->assertEquals($expectedHtml, $this->link->toHtml());
+        $this->assertSame($expectedHtml, $this->link->toHtml());
     }
 
     /**

@@ -50,7 +50,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $product = $productRepository->get('simple-3');
-        $this->assertEquals('simple-3', $product->getSku());
+        $this->assertSame('simple-3', $product->getSku());
         $this->getRequest()
             ->setPostValue('searchKey', 'simple-3')
             ->setPostValue('page', 1)

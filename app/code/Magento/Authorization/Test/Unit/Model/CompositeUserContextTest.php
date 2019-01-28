@@ -80,7 +80,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $actualUserId = $this->userContext->getUserId();
-        $this->assertEquals($expectedUserId, $actualUserId, 'User ID is defined incorrectly.');
+        $this->assertSame($expectedUserId, $actualUserId, 'User ID is defined incorrectly.');
     }
 
     public function testGetUserType()
@@ -102,7 +102,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $actualUserType = $this->userContext->getUserType();
-        $this->assertEquals($expectedUserType, $actualUserType, 'User Type is defined incorrectly.');
+        $this->assertSame($expectedUserType, $actualUserType, 'User Type is defined incorrectly.');
     }
 
     public function testUserContextCaching()
@@ -149,7 +149,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $actualUserId = $this->userContext->getUserId();
-        $this->assertEquals($expectedUserId, $actualUserId, 'User ID is defined incorrectly.');
+        $this->assertSame($expectedUserId, $actualUserId, 'User ID is defined incorrectly.');
     }
 
     /**
@@ -181,6 +181,6 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
         $userContext->setAccessible(true);
         $values = $userContext->getValue($model);
         $this->assertCount(1, $values, 'User context is not registered.');
-        $this->assertEquals($userContextMock, $values[0], 'User context is registered incorrectly.');
+        $this->assertSame($userContextMock, $values[0], 'User context is registered incorrectly.');
     }
 }

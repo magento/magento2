@@ -108,7 +108,7 @@ class VaultConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->willReturn($vaultEnabled);
 
-        static::assertEquals($expectedConfiguration, $this->vaultConfigProvider->getConfig());
+        static::assertSame($expectedConfiguration, $this->vaultConfigProvider->getConfig());
     }
 
     /**

@@ -25,8 +25,8 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     public function testResult($isValid, $failsDescription, $expectedIsValid, $expectedFailsDescription)
     {
         $this->model = new Result($isValid, $failsDescription);
-        $this->assertEquals($expectedIsValid, $this->model->isValid());
-        $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
+        $this->assertSame($expectedIsValid, $this->model->isValid());
+        $this->assertSame($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
     /**

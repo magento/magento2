@@ -67,7 +67,7 @@ class PaymentAdapterTest extends \PHPUnit\Framework\TestCase
             ->with($this->orderMock, $this->invoiceMock, $isOnline)
             ->willReturn($this->orderMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->pay(
                 $this->orderMock,

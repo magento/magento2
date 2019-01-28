@@ -73,22 +73,22 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $options = $this->mockOptions();
 
-        $this->assertEquals($options, $this->model->getAllOptions());
+        $this->assertSame($options, $this->model->getAllOptions());
         // Check the options are cached
-        $this->assertEquals($options, $this->model->getAllOptions());
+        $this->assertSame($options, $this->model->getAllOptions());
     }
 
     public function testGetOptionText()
     {
         $this->mockOptions();
 
-        $this->assertEquals('label1', $this->model->getOptionText('value1'));
+        $this->assertSame('label1', $this->model->getOptionText('value1'));
     }
 
     public function testGetOptionTextWithoutOption()
     {
         $this->mockOptions();
 
-        $this->assertEquals(false, $this->model->getOptionText('value'));
+        $this->assertSame(false, $this->model->getOptionText('value'));
     }
 }

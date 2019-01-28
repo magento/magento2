@@ -49,10 +49,10 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $meta = $this->dataProvider->getMeta();
         $this->assertArrayHasKey('url_key', $meta['search_engine_optimization']['children']);
         $urlKeyData = $meta['search_engine_optimization']['children']['url_key']['arguments']['data']['config'];
-        $this->assertEquals('text', $urlKeyData['dataType']);
-        $this->assertEquals('input', $urlKeyData['formElement']);
-        $this->assertEquals('1', $urlKeyData['visible']);
-        $this->assertEquals('0', $urlKeyData['required']);
-        $this->assertEquals('[STORE VIEW]', $urlKeyData['scopeLabel']);
+        $this->assertSame('text', $urlKeyData['dataType']);
+        $this->assertSame('input', $urlKeyData['formElement']);
+        $this->assertSame('1', $urlKeyData['visible']);
+        $this->assertSame('0', $urlKeyData['required']);
+        $this->assertSame('[STORE VIEW]', $urlKeyData['scopeLabel']);
     }
 }

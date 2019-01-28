@@ -36,14 +36,14 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn([file_get_contents(__DIR__ . '/_files/orders_and_returns.xml')]);
         $expected = include __DIR__ . '/_files/expectedGlobalArray.php';
-        $this->assertEquals($expected, $this->model->read('global'));
+        $this->assertSame($expected, $this->model->read('global'));
     }
 
     public function testReadFile()
     {
         $file = file_get_contents(__DIR__ . '/_files/orders_and_returns.xml');
         $expected = include __DIR__ . '/_files/expectedGlobalArray.php';
-        $this->assertEquals($expected, $this->model->readFile($file));
+        $this->assertSame($expected, $this->model->readFile($file));
     }
 
     public function testMergeCompleteAndPartial()
@@ -57,6 +57,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->with('widget.xml', 'global')
             ->willReturn($fileList);
         $expected = include __DIR__ . '/_files/expectedMergedArray.php';
-        $this->assertEquals($expected, $this->model->read('global'));
+        $this->assertSame($expected, $this->model->read('global'));
     }
 }

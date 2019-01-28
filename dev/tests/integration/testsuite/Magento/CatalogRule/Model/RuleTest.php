@@ -46,9 +46,9 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
         );
-        $this->assertEquals($this->_object->calcProductPriceRule($product, 100), 45);
+        $this->assertSame($this->_object->calcProductPriceRule($product, 100), 45);
         $product->setParentId(true);
-        $this->assertEquals($this->_object->calcProductPriceRule($product, 50), 50);
+        $this->assertSame($this->_object->calcProductPriceRule($product, 50), 50);
     }
 
     /**

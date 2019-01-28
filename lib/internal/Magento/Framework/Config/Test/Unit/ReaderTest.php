@@ -41,6 +41,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(null)
             ->willReturn($config);
-        $this->assertEquals($config, $this->reader->read());
+        $this->assertSame($config, $this->reader->read());
     }
 }

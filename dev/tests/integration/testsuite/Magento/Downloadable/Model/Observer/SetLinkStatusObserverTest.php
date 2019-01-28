@@ -60,7 +60,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Downloadable\Model\Link\Purchased\Item $linkItem */
         foreach ($linkCollection->getItems() as $linkItem) {
-            $this->assertEquals(
+            $this->assertSame(
                 \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_EXPIRED,
                 $linkItem->getStatus()
             );

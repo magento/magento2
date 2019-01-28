@@ -109,7 +109,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
-        $this->assertEquals($rule, $this->model->get(10));
+        $this->assertSame($rule, $this->model->get(10));
     }
 
     public function testDelete()
@@ -140,7 +140,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
         $this->resource->expects($this->once())->method('save')->with($rule);
         $this->taxRuleRegistry->expects($this->once())->method('registerTaxRule')->with($rule);
-        $this->assertEquals($rule, $this->model->save($rule));
+        $this->assertSame($rule, $this->model->save($rule));
     }
 
     /**
@@ -205,6 +205,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
-        $this->assertEquals($this->searchResultsMock, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($this->searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 }

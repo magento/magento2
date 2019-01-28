@@ -122,7 +122,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($title);
 
-        $this->assertEquals($title, $this->links->getLinksTitle());
+        $this->assertSame($title, $this->links->getLinksTitle());
     }
 
     /**

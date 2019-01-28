@@ -71,12 +71,12 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetModuleName()
     {
-        $this->assertEquals('A', $this->packageInfo->getModuleName('a'));
-        $this->assertEquals('B', $this->packageInfo->getModuleName('b'));
-        $this->assertEquals('C', $this->packageInfo->getModuleName('c'));
-        $this->assertEquals('D', $this->packageInfo->getModuleName('d'));
-        $this->assertEquals('E', $this->packageInfo->getModuleName('e'));
-        $this->assertEquals(
+        $this->assertSame('A', $this->packageInfo->getModuleName('a'));
+        $this->assertSame('B', $this->packageInfo->getModuleName('b'));
+        $this->assertSame('C', $this->packageInfo->getModuleName('c'));
+        $this->assertSame('D', $this->packageInfo->getModuleName('d'));
+        $this->assertSame('E', $this->packageInfo->getModuleName('e'));
+        $this->assertSame(
             'Magento_TestModuleName',
             $this->packageInfo->getModuleName('magento/module-test-module-name')
         );
@@ -85,43 +85,43 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPackageName()
     {
-        $this->assertEquals('a', $this->packageInfo->getPackageName('A'));
-        $this->assertEquals('b', $this->packageInfo->getPackageName('B'));
-        $this->assertEquals('c', $this->packageInfo->getPackageName('C'));
-        $this->assertEquals('d', $this->packageInfo->getPackageName('D'));
-        $this->assertEquals('e', $this->packageInfo->getPackageName('E'));
+        $this->assertSame('a', $this->packageInfo->getPackageName('A'));
+        $this->assertSame('b', $this->packageInfo->getPackageName('B'));
+        $this->assertSame('c', $this->packageInfo->getPackageName('C'));
+        $this->assertSame('d', $this->packageInfo->getPackageName('D'));
+        $this->assertSame('e', $this->packageInfo->getPackageName('E'));
     }
 
     public function testGetRequireReturnModuleName()
     {
-        $this->assertEquals(['B'], $this->packageInfo->getRequire('A'));
-        $this->assertEquals(['D'], $this->packageInfo->getRequire('B'));
-        $this->assertEquals(['E'], $this->packageInfo->getRequire('C'));
-        $this->assertEquals([], $this->packageInfo->getRequire('D'));
-        $this->assertEquals([], $this->packageInfo->getRequire('E'));
+        $this->assertSame(['B'], $this->packageInfo->getRequire('A'));
+        $this->assertSame(['D'], $this->packageInfo->getRequire('B'));
+        $this->assertSame(['E'], $this->packageInfo->getRequire('C'));
+        $this->assertSame([], $this->packageInfo->getRequire('D'));
+        $this->assertSame([], $this->packageInfo->getRequire('E'));
     }
 
     public function testGetConflictReturnModuleName()
     {
-        $this->assertEquals(['C' => '0.1'], $this->packageInfo->getConflict('A'));
-        $this->assertEquals([], $this->packageInfo->getConflict('B'));
-        $this->assertEquals([], $this->packageInfo->getConflict('C'));
-        $this->assertEquals(['C' => '0.1'], $this->packageInfo->getConflict('D'));
-        $this->assertEquals([], $this->packageInfo->getConflict('E'));
+        $this->assertSame(['C' => '0.1'], $this->packageInfo->getConflict('A'));
+        $this->assertSame([], $this->packageInfo->getConflict('B'));
+        $this->assertSame([], $this->packageInfo->getConflict('C'));
+        $this->assertSame(['C' => '0.1'], $this->packageInfo->getConflict('D'));
+        $this->assertSame([], $this->packageInfo->getConflict('E'));
     }
 
     public function testGetVersion()
     {
-        $this->assertEquals('0.1', $this->packageInfo->getVersion('A'));
-        $this->assertEquals('0.2', $this->packageInfo->getVersion('B'));
-        $this->assertEquals('0.1', $this->packageInfo->getVersion('C'));
-        $this->assertEquals('0.3', $this->packageInfo->getVersion('D'));
-        $this->assertEquals('0.4', $this->packageInfo->getVersion('E'));
-        $this->assertEquals('', $this->packageInfo->getVersion('F'));
+        $this->assertSame('0.1', $this->packageInfo->getVersion('A'));
+        $this->assertSame('0.2', $this->packageInfo->getVersion('B'));
+        $this->assertSame('0.1', $this->packageInfo->getVersion('C'));
+        $this->assertSame('0.3', $this->packageInfo->getVersion('D'));
+        $this->assertSame('0.4', $this->packageInfo->getVersion('E'));
+        $this->assertSame('', $this->packageInfo->getVersion('F'));
     }
 
     public function testGetRequiredBy()
     {
-        $this->assertEquals(['A'], $this->packageInfo->getRequiredBy('b'));
+        $this->assertSame(['A'], $this->packageInfo->getRequiredBy('b'));
     }
 }

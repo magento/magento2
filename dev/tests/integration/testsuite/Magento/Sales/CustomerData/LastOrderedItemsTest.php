@@ -39,7 +39,7 @@ class LastOrderedItemsTest extends TestCase
         /** @var LastOrderedItems $customerDataSectionSource */
         $customerDataSectionSource = $this->objectManager->get(LastOrderedItems::class);
         $data = $customerDataSectionSource->getSectionData();
-        $this->assertEquals(
+        $this->assertSame(
             LastOrderedItems::SIDEBAR_ORDER_LIMIT,
             count($data['items']),
             'Section items count should not be greater then ' . LastOrderedItems::SIDEBAR_ORDER_LIMIT

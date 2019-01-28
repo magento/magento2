@@ -69,7 +69,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             ],
             \Magento\Tax\Api\Data\TaxClassKeyInterface::class
         );
-        $this->assertEquals(
+        $this->assertSame(
             $taxClassId,
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeId, TaxClassManagementInterface::TYPE_CUSTOMER)
         );
@@ -82,12 +82,12 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             ],
             \Magento\Tax\Api\Data\TaxClassKeyInterface::class
         );
-        $this->assertEquals(
+        $this->assertSame(
             $taxClassId,
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeId, TaxClassManagementInterface::TYPE_CUSTOMER)
         );
         $this->assertNull($this->taxClassManagement->getTaxClassId(null));
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeName, TaxClassManagementInterface::TYPE_PRODUCT)
         );

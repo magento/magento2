@@ -42,7 +42,7 @@ class StockStatusTest extends WebapiAbstract
         $requestData = ['productSku' => $productSku];
         $actualData = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('stock_item', $actualData);
-        $this->assertEquals($expectedData['is_in_stock'], $actualData['stock_item']['is_in_stock']);
-        $this->assertEquals($expectedData['qty'], $actualData['stock_item']['qty']);
+        $this->assertSame($expectedData['is_in_stock'], $actualData['stock_item']['is_in_stock']);
+        $this->assertSame($expectedData['qty'], $actualData['stock_item']['qty']);
     }
 }

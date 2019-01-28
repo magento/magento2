@@ -50,7 +50,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($commentData));
         $actualWarnings = $this->validator->validate($this->commentModelMock);
-        $this->assertEquals($expectedWarnings, $actualWarnings);
+        $this->assertSame($expectedWarnings, $actualWarnings);
     }
 
     /**

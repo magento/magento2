@@ -92,9 +92,9 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('size', $variables);
-        $this->assertEquals(true, $variables['size']);
+        $this->assertSame(true, $variables['size']);
     }
 
     public function testCheckActionWithError()
@@ -107,9 +107,9 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
         $this->assertArrayHasKey('error', $variables);
-        $this->assertEquals("Test error message", $variables['error']);
+        $this->assertSame("Test error message", $variables['error']);
     }
 
     public function testCreateAction()
@@ -119,9 +119,9 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('files', $variables);
-        $this->assertEquals(['backup/path/'], $variables['files']);
+        $this->assertSame(['backup/path/'], $variables['files']);
     }
 
     public function testIndexAction()

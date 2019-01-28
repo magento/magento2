@@ -60,7 +60,7 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($attributeSetMock)
             ->willReturn($attributeSetMock);
-        $this->assertEquals($attributeSetMock, $this->model->save($attributeSetMock));
+        $this->assertSame($attributeSetMock, $this->model->save($attributeSetMock));
     }
 
     /**
@@ -85,7 +85,7 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($attributeSetId)
             ->willReturn($attributeSetMock);
-        $this->assertEquals($attributeSetMock, $this->model->get($attributeSetId));
+        $this->assertSame($attributeSetMock, $this->model->get($attributeSetId));
     }
 
     /**
@@ -102,7 +102,7 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($attributeSetId)
             ->willReturn($attributeSetMock);
-        $this->assertEquals($attributeSetMock, $this->model->get($attributeSetId));
+        $this->assertSame($attributeSetMock, $this->model->get($attributeSetId));
     }
 
     public function testDelete()
@@ -191,7 +191,7 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn($searchResultMock);
-        $this->assertEquals($searchResultMock, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($searchResultMock, $this->model->getList($searchCriteriaMock));
     }
 
     /**

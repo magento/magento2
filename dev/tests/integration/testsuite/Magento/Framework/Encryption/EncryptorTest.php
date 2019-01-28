@@ -21,7 +21,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     public function testEncryptDecrypt()
     {
-        $this->assertEquals('', $this->_model->decrypt($this->_model->encrypt('')));
-        $this->assertEquals('test', $this->_model->decrypt($this->_model->encrypt('test')));
+        $this->assertSame('', $this->_model->decrypt($this->_model->encrypt('')));
+        $this->assertSame('test', $this->_model->decrypt($this->_model->encrypt('test')));
     }
 }

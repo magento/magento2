@@ -150,22 +150,22 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($collection);
         $result = $this->object->generate();
 
-        $this->assertEquals(
+        $this->assertSame(
             $countResult['quick_search_container']['queries'],
             $this->countVal($result['quick_search_container']['queries']),
             'Queries count for "quick_search_container" doesn\'t match'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $countResult['advanced_search_container']['queries'],
             $this->countVal($result['advanced_search_container']['queries']),
             'Queries count for "advanced_search_container" doesn\'t match'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $countResult['advanced_search_container']['filters'],
             $this->countVal($result['advanced_search_container']['filters']),
             'Filters count for "advanced_search_container" doesn\'t match'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $countResult['catalog_view_container']['queries'],
             $this->countVal($result['catalog_view_container']['queries']),
             'Queries count for "catalog_view_container" doesn\'t match'
@@ -173,7 +173,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
         foreach ($result as $key => $value) {
             if (isset($value['queries'][$key]['queryReference'])) {
                 foreach ($value['queries'][$key]['queryReference'] as $reference) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         'must',
                         $reference['clause']
                     );

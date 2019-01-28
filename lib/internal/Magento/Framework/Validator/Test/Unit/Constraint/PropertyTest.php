@@ -47,7 +47,7 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
             self::PROPERTY_NAME,
             $alias
         );
-        $this->assertEquals($alias, $constraint->getAlias());
+        $this->assertSame($alias, $constraint->getAlias());
     }
 
     /**
@@ -90,8 +90,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
             );
         }
 
-        $this->assertEquals($expectedResult, $this->_constraint->isValid($value));
-        $this->assertEquals($expectedMessages, $this->_constraint->getMessages());
+        $this->assertSame($expectedResult, $this->_constraint->isValid($value));
+        $this->assertSame($expectedMessages, $this->_constraint->getMessages());
     }
 
     /**

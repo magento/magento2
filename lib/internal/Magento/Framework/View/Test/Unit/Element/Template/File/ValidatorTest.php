@@ -118,7 +118,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValid($file, $expectedResult)
     {
         $this->rootDirectoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
-        $this->assertEquals($expectedResult, $this->validator->isValid($file));
+        $this->assertSame($expectedResult, $this->validator->isValid($file));
     }
 
     /**

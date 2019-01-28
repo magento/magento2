@@ -63,7 +63,7 @@ T: 760-663-5876
 
 EXPECTED_RESULT;
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->templateFilter->filter($template),
             'Template was processed incorrectly'
@@ -94,7 +94,7 @@ EXPECTED_RESULT;
         $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
         $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
 
-        $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
+        $this->assertSame($expectedResult, $this->templateFilter->filter($value));
     }
 
     /**
@@ -120,10 +120,10 @@ EXPECTED_RESULT;
         $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
 
         // Callback should run and filter content
-        $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
+        $this->assertSame($expectedResult, $this->templateFilter->filter($value));
 
         // Callback should *not* run as callbacks should be reset
-        $this->assertEquals($value, $this->templateFilter->filter($value));
+        $this->assertSame($value, $this->templateFilter->filter($value));
     }
 
     /**
@@ -135,7 +135,7 @@ EXPECTED_RESULT;
     public function testVarDirective($construction, $variables, $expectedResult)
     {
         $this->templateFilter->setVariables($variables);
-        $this->assertEquals($expectedResult, $this->templateFilter->filter($construction));
+        $this->assertSame($expectedResult, $this->templateFilter->filter($construction));
     }
 
     /**
@@ -213,7 +213,7 @@ EXPECTED_RESULT;
     public function testLoopPattern($construction, $variables, $expectedResult)
     {
         $this->templateFilter->setVariables($variables);
-        $this->assertEquals($expectedResult, $this->invokeMethod($this->templateFilter, 'filterFor', [$construction]));
+        $this->assertSame($expectedResult, $this->invokeMethod($this->templateFilter, 'filterFor', [$construction]));
     }
 
     /**

@@ -113,7 +113,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($convertedPrice);
 
         $this->priceObj->setShippingRate($shippingRateMock);
-        $this->assertEquals($convertedPrice, $this->priceObj->getShippingPriceExclTax());
+        $this->assertSame($convertedPrice, $this->priceObj->getShippingPriceExclTax());
     }
 
     public function testGetShippingPriceInclTax()
@@ -134,7 +134,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($convertedPrice));
 
         $this->priceObj->setShippingRate($shippingRateMock);
-        $this->assertEquals($convertedPrice, $this->priceObj->getShippingPriceExclTax());
+        $this->assertSame($convertedPrice, $this->priceObj->getShippingPriceExclTax());
     }
 
     public function testDisplayShippingPriceInclTax()

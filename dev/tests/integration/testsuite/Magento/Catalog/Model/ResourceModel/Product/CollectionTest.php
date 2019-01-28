@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get('simple');
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
         $product->setPrice(15);
         $productRepository->save($product);
         $this->collection->addPriceData(0, 1);
@@ -65,7 +65,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = reset($items);
         $this->assertCount(2, $items);
-        $this->assertEquals(10, $product->getPrice());
+        $this->assertSame(10, $product->getPrice());
 
         //reindexing
         $this->processor->getIndexer()->reindexList([1]);
@@ -81,7 +81,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = reset($items);
         $this->assertCount(2, $items);
-        $this->assertEquals(15, $product->getPrice());
+        $this->assertSame(15, $product->getPrice());
 
         $this->processor->getIndexer()->setScheduled(false);
     }
@@ -99,7 +99,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get('simple');
-        $this->assertNotEquals(15, $product->getPrice());
+        $this->assertNotSame(15, $product->getPrice());
         $product->setPrice(15);
         $productRepository->save($product);
         $this->collection->addPriceData(0, 1);
@@ -109,7 +109,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = reset($items);
         $this->assertCount(2, $items);
-        $this->assertEquals(15, $product->getPrice());
+        $this->assertSame(15, $product->getPrice());
     }
 
     /**
@@ -123,8 +123,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->load()->addTierPriceData();
         $tierPrices = $items->getFirstItem()->getTierPrices();
         $this->assertCount(3, $tierPrices);
-        $this->assertEquals(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
-        $this->assertEquals(5, $tierPrices[2]->getValue());
+        $this->assertSame(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
+        $this->assertSame(5, $tierPrices[2]->getValue());
     }
 
     /**
@@ -140,7 +140,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Collection $productCollection */
         $this->collection->addAttributeToSort('is_saleable', $order);
-        self::assertEquals(2, $this->collection->count());
+        self::assertSame(2, $this->collection->count());
         self::assertSame($productSku, $this->collection->getFirstItem()->getSku());
     }
 
@@ -194,8 +194,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeToFilterAffectsGetSize(): void
     {
-        $this->assertEquals(10, $this->collection->getSize());
+        $this->assertSame(10, $this->collection->getSize());
         $this->collection->addAttributeToFilter('sku', 'Product1');
-        $this->assertEquals(1, $this->collection->getSize());
+        $this->assertSame(1, $this->collection->getSize());
     }
 }

@@ -94,7 +94,7 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
             ->with('path/path/js-translation.json')
             ->willReturn(true);
         $this->driverFileMock->expects($this->once())->method('stat')->willReturn(['mtime' => 1445736974]);
-        $this->assertEquals(1445736974, $this->model->getTranslationFileTimestamp());
+        $this->assertSame(1445736974, $this->model->getTranslationFileTimestamp());
     }
 
     public function testGetTranslationFilePath()
@@ -113,6 +113,6 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getStaticViewFileContext')
             ->willReturn($contextMock);
         $contextMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
-        $this->assertEquals($path, $this->model->getTranslationFilePath());
+        $this->assertSame($path, $this->model->getTranslationFilePath());
     }
 }

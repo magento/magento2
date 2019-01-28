@@ -175,6 +175,6 @@ class ReportProviderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with($this->statementMock, null)
             ->willReturn($this->iteratorMock);
-        $this->assertEquals($this->iteratorMock, $this->subject->getReport($reportName));
+        $this->assertSame($this->iteratorMock, $this->subject->getReport($reportName));
     }
 }

@@ -43,6 +43,6 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
     public function testDefaultStoreIdIsSetCorrectly()
     {
         $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-        $this->assertEquals(Store::DEFAULT_STORE_ID, $this->storeManager->getStore()->getId());
+        $this->assertSame(Store::DEFAULT_STORE_ID, $this->storeManager->getStore()->getId());
     }
 }

@@ -61,13 +61,13 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     public function testGetSearchQueryText()
     {
         $this->dataMock->expects($this->once())->method('getEscapedQueryText')->will($this->returnValue('query_text'));
-        $this->assertEquals('Search results for: \'query_text\'', $this->model->getSearchQueryText());
+        $this->assertSame('Search results for: \'query_text\'', $this->model->getSearchQueryText());
     }
 
     public function testGetNoteMessages()
     {
         $this->dataMock->expects($this->once())->method('getNoteMessages')->will($this->returnValue('SOME-MESSAGE'));
-        $this->assertEquals('SOME-MESSAGE', $this->model->getNoteMessages());
+        $this->assertSame('SOME-MESSAGE', $this->model->getNoteMessages());
     }
 
     /**
@@ -90,7 +90,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
 
             $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));
         }
-        $this->assertEquals($expectedResult, $this->model->getNoResultText());
+        $this->assertSame($expectedResult, $this->model->getNoResultText());
     }
 
     /**

@@ -40,7 +40,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     public function testReadEmpty()
     {
         $this->directoryRead->expects($this->once())->method('isExist')->willReturn(false);
-        $this->assertEquals('', $this->reader->read());
+        $this->assertSame('', $this->reader->read());
     }
 
     /**
@@ -60,6 +60,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->directoryRead->expects($this->once())
             ->method('readFile')
             ->willReturn('{"jobs":[{"name": "job A", "params": []}]}');
-        $this->assertEquals('{"jobs":[{"name": "job A", "params": []}]}', $this->reader->read());
+        $this->assertSame('{"jobs":[{"name": "job A", "params": []}]}', $this->reader->read());
     }
 }

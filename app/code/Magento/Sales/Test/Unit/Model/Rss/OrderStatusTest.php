@@ -158,7 +158,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
             ->with('sales/order/view', ['order_id' => 1])
             ->will($this->returnValue('http://magento.com/sales/order/view/order_id/1'));
 
-        $this->assertEquals($this->feedData, $this->model->getRssData());
+        $this->assertSame($this->feedData, $this->model->getRssData());
     }
 
     /**
@@ -177,7 +177,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
 
         $this->urlInterface->expects($this->never())->method('getUrl');
 
-        $this->assertEquals($this->feedData, $this->model->getRssData());
+        $this->assertSame($this->feedData, $this->model->getRssData());
     }
 
     public function testIsAllowed()
@@ -199,7 +199,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
             ->with('data')
             ->will($this->returnValue($requestData));
         $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($this->order));
-        $this->assertEquals('rss_order_status_data_' . $result, $this->model->getCacheKey());
+        $this->assertSame('rss_order_status_data_' . $result, $this->model->getCacheKey());
     }
 
     /**
@@ -215,6 +215,6 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(600, $this->model->getCacheLifetime());
+        $this->assertSame(600, $this->model->getCacheLifetime());
     }
 }

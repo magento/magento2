@@ -30,7 +30,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $requestData = ['id' => $itemId];
         $item = $this->_webApiCall($serviceInfo, $requestData);
         // Asserting for additional attribute returned by the V2 api
-        $this->assertEquals(1, $item['price'], 'Item was retrieved unsuccessfully from V2');
+        $this->assertSame(1, $item['price'], 'Item was retrieved unsuccessfully from V2');
     }
 
     /**
@@ -50,7 +50,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Items'],
         ];
         $item = $this->_webApiCall($serviceInfo);
-        $this->assertEquals($itemArr, $item, 'Items were not retrieved');
+        $this->assertSame($itemArr, $item, 'Items were not retrieved');
     }
 
     /**
@@ -84,7 +84,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
             $requestData['filters'] = $filters;
         }
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($expectedResult, $item, 'Filtration does not seem to work correctly.');
+        $this->assertSame($expectedResult, $item, 'Filtration does not seem to work correctly.');
     }
 
     public function itemsWithFiltersDataProvider()
@@ -120,7 +120,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         ];
         $requestData = ['entityItem' => ['id' => $itemId, 'name' => 'testName', 'price' => '4']];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals('Updated' . $requestData['entityItem']['name'], $item['name'], 'Item update failed');
+        $this->assertSame('Updated' . $requestData['entityItem']['name'], $item['name'], 'Item update failed');
     }
 
     /**
@@ -138,6 +138,6 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         ];
         $requestData = ['id' => $itemId, 'name' => 'testName'];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($itemId, $item['id'], "Item delete failed");
+        $this->assertSame($itemId, $item['id'], "Item delete failed");
     }
 }

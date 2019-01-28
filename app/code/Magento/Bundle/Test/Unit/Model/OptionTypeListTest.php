@@ -46,6 +46,6 @@ class OptionTypeListTest extends \PHPUnit\Framework\TestCase
         $typeMock->expects($this->once())->method('setCode')->with('value')->willReturnSelf();
         $typeMock->expects($this->once())->method('setLabel')->with('label')->willReturnSelf();
         $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($typeMock);
-        $this->assertEquals([$typeMock], $this->model->getItems());
+        $this->assertSame([$typeMock], $this->model->getItems());
     }
 }

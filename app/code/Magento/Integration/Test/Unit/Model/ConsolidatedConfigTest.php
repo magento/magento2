@@ -71,7 +71,7 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
             ->with($serializedIntegrations)
             ->willReturn($integrations);
 
-        $this->assertEquals($integrations, $this->configModel->getIntegrations());
+        $this->assertSame($integrations, $this->configModel->getIntegrations());
     }
 
     public function testGetIntegrationsFromConfigReader()
@@ -93,6 +93,6 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($serializedIntegrations, Config::CACHE_ID, [Type::CACHE_TAG]);
 
-        $this->assertEquals($integrations, $this->configModel->getIntegrations());
+        $this->assertSame($integrations, $this->configModel->getIntegrations());
     }
 }

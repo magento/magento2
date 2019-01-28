@@ -54,7 +54,7 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals('Successfully saved de_DE language package.' . PHP_EOL, $this->tester->getDisplay());
+        $this->assertSame('Successfully saved de_DE language package.' . PHP_EOL, $this->tester->getDisplay());
         $basePath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code';
         $this->assertFileExists($basePath . '/Magento/A/i18n/de_DE.csv');
         $this->assertFileExists($basePath . '/Magento/B/i18n/de_DE.csv');

@@ -227,7 +227,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->with(array_merge($variables, ['this' => $model]))
             ->will($this->returnValue($filterTemplate));
 
-        $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));
+        $this->assertSame($expectedResult, $model->getProcessedTemplateSubject($variables));
     }
 
     /**
@@ -332,7 +332,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->with($preparedTemplateText)
             ->will($this->returnValue($expectedResult));
 
-        $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
+        $this->assertSame($expectedResult, $model->getProcessedTemplate($variables));
     }
 
     /**
@@ -398,7 +398,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $model->expects($this->any())
             ->method('getTemplateSubject')
             ->will($this->returnValue($templateSubject));
-        $this->assertEquals($expectedValue, $model->isValidForSend());
+        $this->assertSame($expectedValue, $model->isValidForSend());
     }
 
     /**

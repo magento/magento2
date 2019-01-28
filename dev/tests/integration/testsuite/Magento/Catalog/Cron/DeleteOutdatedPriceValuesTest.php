@@ -95,7 +95,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
                 'catalog_product',
                 'price'
             );
-        $this->assertEquals(
+        $this->assertSame(
             $secondStorePrice,
             $productResource->getAttributeRawValue($productId, $attribute->getId(), $secondStoreId)
         );
@@ -110,7 +110,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $this->cron->execute();
-        $this->assertEquals(
+        $this->assertSame(
             $secondStorePrice,
             $productResource->getAttributeRawValue($productId, $attribute->getId(), $secondStoreId)
         );
@@ -122,7 +122,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
         $this->cron->execute();
-        $this->assertEquals(
+        $this->assertSame(
             $defaultStorePrice,
             $productResource->getAttributeRawValue($productId, $attribute->getId(), $secondStoreId)
         );

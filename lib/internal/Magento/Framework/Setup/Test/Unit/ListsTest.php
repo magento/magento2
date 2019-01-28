@@ -68,13 +68,13 @@ class ListsTest extends \PHPUnit\Framework\TestCase
     public function testGetTimezoneList()
     {
         $timezones = array_intersect($this->expectedTimezones, array_keys($this->lists->getTimezoneList()));
-        $this->assertEquals($this->expectedTimezones, $timezones);
+        $this->assertSame($this->expectedTimezones, $timezones);
     }
 
     public function testGetLocaleList()
     {
         $locales = array_intersect($this->expectedLocales, array_keys($this->lists->getLocaleList()));
-        $this->assertEquals($this->expectedLocales, $locales);
+        $this->assertSame($this->expectedLocales, $locales);
     }
 
     /**
@@ -83,6 +83,6 @@ class ListsTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrencyList()
     {
         $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));
-        $this->assertEquals($this->expectedCurrencies, $currencies);
+        $this->assertSame($this->expectedCurrencies, $currencies);
     }
 }

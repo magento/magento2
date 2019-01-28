@@ -25,6 +25,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Translate\Inline\Config::class,
             ['config' => $backendConfig]
         );
-        $this->assertEquals($result, $config->isActive('any'));
+        $this->assertSame($result, $config->isActive('any'));
     }
 }

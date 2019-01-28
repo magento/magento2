@@ -38,10 +38,10 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     public function testConfigBasedIntegrationCreation()
     {
-        $this->assertEquals('test-integration@magento.com', $this->integration->getEmail());
-        $this->assertEquals('http://example.com/endpoint1', $this->integration->getEndpoint());
-        $this->assertEquals('Test Integration1', $this->integration->getName());
-        $this->assertEquals(Integration::TYPE_CONFIG, $this->integration->getSetupType());
+        $this->assertSame('test-integration@magento.com', $this->integration->getEmail());
+        $this->assertSame('http://example.com/endpoint1', $this->integration->getEndpoint());
+        $this->assertSame('Test Integration1', $this->integration->getName());
+        $this->assertSame(Integration::TYPE_CONFIG, $this->integration->getSetupType());
     }
 
     /**
@@ -61,7 +61,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             ],
         ];
         $item = $this->_webApiCall($serviceInfo, [], null, null, $this->integration);
-        $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
-        $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+        $this->assertSame($itemId, $item['entity_id'], 'id field returned incorrectly');
+        $this->assertSame($name, $item['name'], 'name field returned incorrectly');
     }
 }

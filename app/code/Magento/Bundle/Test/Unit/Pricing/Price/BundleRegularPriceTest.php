@@ -92,11 +92,11 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(0));
 
         $result = $this->regularPrice->getAmount();
-        $this->assertEquals($expectedResult, $result, 'Incorrect amount');
+        $this->assertSame($expectedResult, $result, 'Incorrect amount');
 
         //Calling a second time, should use cached value
         $result = $this->regularPrice->getAmount();
-        $this->assertEquals($expectedResult, $result, 'Incorrect amount');
+        $this->assertSame($expectedResult, $result, 'Incorrect amount');
     }
 
     public function testGetMaximalPrice()
@@ -117,11 +117,11 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(0));
 
         $result = $this->regularPrice->getMaximalPrice();
-        $this->assertEquals($expectedResult, $result, 'Incorrect amount');
+        $this->assertSame($expectedResult, $result, 'Incorrect amount');
 
         //Calling a second time, should use cached value
         $result = $this->regularPrice->getMaximalPrice();
-        $this->assertEquals($expectedResult, $result, 'Incorrect amount the second time');
+        $this->assertSame($expectedResult, $result, 'Incorrect amount the second time');
     }
 
     public function testGetMaximalPriceForFixedPriceBundleWithOption()
@@ -159,11 +159,11 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(0));
 
         $result = $this->regularPrice->getMaximalPrice();
-        $this->assertEquals($expectedPrice, $result, 'Incorrect amount');
+        $this->assertSame($expectedPrice, $result, 'Incorrect amount');
 
         //Calling a second time, should use cached value
         $result = $this->regularPrice->getMaximalPrice();
-        $this->assertEquals($expectedPrice, $result, 'Incorrect amount the second time');
+        $this->assertSame($expectedPrice, $result, 'Incorrect amount the second time');
     }
 
     public function testGetMinimalPrice()
@@ -184,11 +184,11 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedResult));
 
         $result = $this->regularPrice->getMinimalPrice();
-        $this->assertEquals($expectedResult, $result, 'Incorrect amount');
+        $this->assertSame($expectedResult, $result, 'Incorrect amount');
 
         //Calling a second time, should use cached value
         $result = $this->regularPrice->getMinimalPrice();
-        $this->assertEquals($expectedResult, $result, 'Incorrect amount the second time');
+        $this->assertSame($expectedResult, $result, 'Incorrect amount the second time');
     }
 
     public function testGetMinimalPriceForFixedPricedBundleWithOptions()
@@ -225,10 +225,10 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedValue));
 
         $result = $this->regularPrice->getMinimalPrice();
-        $this->assertEquals($expectedValue, $result, 'Incorrect amount');
+        $this->assertSame($expectedValue, $result, 'Incorrect amount');
 
         //Calling a second time, should use cached value
         $result = $this->regularPrice->getMinimalPrice();
-        $this->assertEquals($expectedValue, $result, 'Incorrect amount the second time');
+        $this->assertSame($expectedValue, $result, 'Incorrect amount the second time');
     }
 }

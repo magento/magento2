@@ -53,6 +53,6 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         );
         $titles = $block->getTitles();
         $this->assertArrayHasKey($store->getId(), $titles, 'Store was not created');
-        $this->assertEquals($title, $titles[$store->getId()], 'Invalid Tax Title');
+        $this->assertSame($title, $titles[$store->getId()], 'Invalid Tax Title');
     }
 }

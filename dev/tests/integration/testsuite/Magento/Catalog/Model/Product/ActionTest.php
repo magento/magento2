@@ -64,7 +64,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
                 'test_data_category_id_' . $categoryId,
                 [\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $categoryId]
             );
-            $this->assertEquals('test_data', $pageCache->load('test_data_category_id_' . $categoryId));
+            $this->assertSame('test_data', $pageCache->load('test_data_category_id_' . $categoryId));
         }
 
         $websites = $websiteRepository->getList();
@@ -130,7 +130,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             'left'
         );
 
-        $this->assertEquals($productsCount, $productCollection->count());
+        $this->assertSame($productsCount, $productCollection->count());
     }
 
     /**

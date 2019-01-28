@@ -35,7 +35,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES => $requestParamServices,
         ];
         $this->request->setParams($requestParams);
-        $this->assertEquals($expectedResult, $this->request->getRequestedServices());
+        $this->assertSame($expectedResult, $this->request->getRequestedServices());
     }
 
     /**

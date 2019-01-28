@@ -29,7 +29,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->registry('rating_data');
 
         $result = $this->collection->addEntitySummaryToItem($ratingData->getEntityId(), $ratingData->getStoreId());
-        $this->assertEquals($this->collection, $result);
+        $this->assertSame($this->collection, $result);
     }
 
     /**
@@ -42,7 +42,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }
         $this->collection->clear();
         $result = $this->collection->addEntitySummaryToItem(1, 1);
-        $this->assertEquals($this->collection, $result);
+        $this->assertSame($this->collection, $result);
     }
 
     public function testAddStoreData()

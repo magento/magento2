@@ -94,7 +94,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getFieldType')
             ->willReturn($fieldType);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->resolver->getFieldName($attributeMock, $context)
         );

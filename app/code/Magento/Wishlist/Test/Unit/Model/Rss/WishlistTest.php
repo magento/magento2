@@ -193,7 +193,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedResult, $this->model->getRssData());
+        $this->assertSame($expectedResult, $this->model->getRssData());
     }
 
     /**
@@ -286,12 +286,12 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheKey()
     {
-        $this->assertEquals('rss_wishlist_data', $this->model->getCacheKey());
+        $this->assertSame('rss_wishlist_data', $this->model->getCacheKey());
     }
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(60, $this->model->getCacheLifetime());
+        $this->assertSame(60, $this->model->getCacheLifetime());
     }
 
     public function testIsAuthRequired()
@@ -303,7 +303,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('somesharingcode'));
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
             ->will($this->returnValue($wishlist));
-        $this->assertEquals(false, $this->model->isAuthRequired());
+        $this->assertSame(false, $this->model->isAuthRequired());
     }
 
     public function testGetProductPriceHtmlBlockDoesntExists()
@@ -339,7 +339,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($renderBlockMock);
 
-        $this->assertEquals($price, $this->model->getProductPriceHtml($productMock));
+        $this->assertSame($price, $this->model->getProductPriceHtml($productMock));
     }
 
     public function testGetProductPriceHtmlBlockExists()
@@ -367,6 +367,6 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->with('product.price.render.default')
             ->willReturn($renderBlockMock);
 
-        $this->assertEquals($price, $this->model->getProductPriceHtml($productMock));
+        $this->assertSame($price, $this->model->getProductPriceHtml($productMock));
     }
 }

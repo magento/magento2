@@ -142,7 +142,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             );
             $this->assertNotNull($orderId);
         } catch (\Magento\Framework\Exception\CouldNotSaveException $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 __(
                     "The order wasn't placed. "
                     . "First, agree to the terms and conditions, then try placing your order again."

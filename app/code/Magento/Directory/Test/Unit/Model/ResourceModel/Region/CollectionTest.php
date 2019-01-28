@@ -118,7 +118,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedResult, $this->collection->toOptionArray());
+        $this->assertSame($expectedResult, $this->collection->toOptionArray());
     }
 
     public function testAddAllowedCountriesFilter()
@@ -128,6 +128,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             null
         )->willReturn($allowedCountries);
-        $this->assertEquals($this->collection->addAllowedCountriesFilter(), $this->collection);
+        $this->assertSame($this->collection->addAllowedCountriesFilter(), $this->collection);
     }
 }

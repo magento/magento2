@@ -343,7 +343,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('test_id'));
         $this->product->expects($this->once())->method('load')->with('test_id');
         $this->product->expects($this->once())->method('getSku')->willReturn($sku);
-        $this->assertEquals($this->product, $this->model->get($sku));
+        $this->assertSame($this->product, $this->model->get($sku));
     }
 
     public function testGetProductInEditMode()
@@ -356,7 +356,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->product->expects($this->once())->method('load')->with('test_id');
         $this->product->expects($this->once())->method('getSku')->willReturn($sku);
-        $this->assertEquals($this->product, $this->model->get($sku, true));
+        $this->assertSame($this->product, $this->model->get($sku, true));
     }
 
     public function testGetBySkuWithSpace()
@@ -369,7 +369,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('test_id'));
         $this->product->expects($this->once())->method('load')->with('test_id');
         $this->product->expects($this->once())->method('getSku')->willReturn($trimmedSku);
-        $this->assertEquals($this->product, $this->model->get($sku));
+        $this->assertSame($this->product, $this->model->get($sku));
     }
 
     public function testGetWithSetStoreId()
@@ -407,7 +407,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->method('load')->with($productId);
         $this->product->expects($this->atLeastOnce())->method('getId')->willReturn($productId);
         $this->product->method('getSku')->willReturn('simple');
-        $this->assertEquals($this->product, $this->model->getById($productId, true));
+        $this->assertSame($this->product, $this->model->getById($productId, true));
     }
 
     /**
@@ -433,9 +433,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('load')->with($identifier);
         $this->product->expects($this->atLeastOnce())->method('getId')->willReturn($identifier);
         $this->product->method('getSku')->willReturn('simple');
-        $this->assertEquals($this->product, $this->model->getById($identifier, $editMode, $storeId));
+        $this->assertSame($this->product, $this->model->getById($identifier, $editMode, $storeId));
         //Second invocation should just return from cache
-        $this->assertEquals($this->product, $this->model->getById($identifier, $editMode, $storeId));
+        $this->assertSame($this->product, $this->model->getById($identifier, $editMode, $storeId));
     }
 
     /**
@@ -456,11 +456,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->product->expects($this->exactly(4))->method('getId')->willReturn($identifier);
         $this->product->method('getSku')->willReturn('simple');
-        $this->assertEquals($this->product, $this->model->getById($identifier, $editMode, $storeId));
+        $this->assertSame($this->product, $this->model->getById($identifier, $editMode, $storeId));
         //second invocation should just return from cache
-        $this->assertEquals($this->product, $this->model->getById($identifier, $editMode, $storeId));
+        $this->assertSame($this->product, $this->model->getById($identifier, $editMode, $storeId));
         //force reload
-        $this->assertEquals($this->product, $this->model->getById($identifier, $editMode, $storeId, true));
+        $this->assertSame($this->product, $this->model->getById($identifier, $editMode, $storeId, true));
     }
 
     /**
@@ -486,7 +486,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $expectedResult[] = $i;
         }
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -539,11 +539,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->exactly(2))->method('getSku')->willReturn($sku);
         $this->serializerMock->expects($this->exactly(3))->method('serialize');
 
-        $this->assertEquals($this->product, $this->model->get($sku, $editMode, $storeId));
+        $this->assertSame($this->product, $this->model->get($sku, $editMode, $storeId));
         //second invocation should just return from cache
-        $this->assertEquals($this->product, $this->model->get($sku, $editMode, $storeId));
+        $this->assertSame($this->product, $this->model->get($sku, $editMode, $storeId));
         //force reload
-        $this->assertEquals($this->product, $this->model->get($sku, $editMode, $storeId, true));
+        $this->assertSame($this->product, $this->model->get($sku, $editMode, $storeId, true));
     }
 
     public function testGetByIdWithSetStoreId()
@@ -556,7 +556,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('load')->with($productId);
         $this->product->expects($this->atLeastOnce())->method('getId')->willReturn($productId);
         $this->product->method('getSku')->willReturn('simple');
-        $this->assertEquals($this->product, $this->model->getById($productId, false, $storeId));
+        $this->assertSame($this->product, $this->model->getById($productId, false, $storeId));
     }
 
     public function testGetBySkuFromCacheInitializedInGetById()
@@ -568,8 +568,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('load')->with($productId);
         $this->product->expects($this->atLeastOnce())->method('getId')->willReturn($productId);
         $this->product->expects($this->once())->method('getSku')->willReturn($productSku);
-        $this->assertEquals($this->product, $this->model->getById($productId));
-        $this->assertEquals($this->product, $this->model->get($productSku));
+        $this->assertSame($this->product, $this->model->getById($productId));
+        $this->assertSame($this->product, $this->model->get($productSku));
     }
 
     public function testSaveExisting()
@@ -588,7 +588,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->productData));
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
 
-        $this->assertEquals($this->product, $this->model->save($this->product));
+        $this->assertSame($this->product, $this->model->save($this->product));
     }
 
     public function testSaveNew()
@@ -609,7 +609,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->productData));
         $this->product->method('getSku')->willReturn('simple');
 
-        $this->assertEquals($this->product, $this->model->save($this->product));
+        $this->assertSame($this->product, $this->model->save($this->product));
     }
 
     /**
@@ -773,7 +773,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $searchResultsMock->expects($this->once())->method('setItems')->with([$this->product]);
         $this->searchResultsFactory->expects($this->once())->method('create')->willReturn($searchResultsMock);
-        $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 
     /**
@@ -863,7 +863,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getSku')->willReturn($this->productData['sku']);
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
 
-        $this->assertEquals($this->initializedProduct, $this->model->save($this->product));
+        $this->assertSame($this->initializedProduct, $this->model->save($this->product));
     }
 
     /**
@@ -1107,7 +1107,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getSku')->willReturn($this->productData['sku']);
 
         $results = $this->model->save($this->initializedProduct);
-        $this->assertEquals($this->initializedProduct, $results);
+        $this->assertSame($this->initializedProduct, $results);
     }
 
     /**
@@ -1323,7 +1323,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('setWebsiteIds')->willReturn([2,3]);
         $this->product->method('getSku')->willReturn('simple');
 
-        $this->assertEquals($this->product, $this->model->save($this->product));
+        $this->assertSame($this->product, $this->model->save($this->product));
     }
 
     public function testSaveExistingWithMediaGalleryEntries()
@@ -1396,6 +1396,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
         $this->product->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->product);
-        $this->assertEquals($expectedResult, $this->initializedProduct->getMediaGallery('images'));
+        $this->assertSame($expectedResult, $this->initializedProduct->getMediaGallery('images'));
     }
 }

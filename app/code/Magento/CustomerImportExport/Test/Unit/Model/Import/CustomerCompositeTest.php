@@ -423,7 +423,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             CustomerComposite::COLUMN_DEFAULT_SHIPPING,
             $rowData
         );
-        $this->assertEquals(1, $rowNumber);
+        $this->assertSame(1, $rowNumber);
     }
 
     /**
@@ -521,7 +521,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     public function callbackCheckParameters(array $params)
     {
         $this->assertArrayHasKey('behavior', $params);
-        $this->assertEquals(Import::BEHAVIOR_ADD_UPDATE, $params['behavior']);
+        $this->assertSame(Import::BEHAVIOR_ADD_UPDATE, $params['behavior']);
     }
 
     public function testSetSource()
@@ -578,7 +578,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $customerData = $bunchRows[0];
         foreach ($this->_preparedData as $expectedKey => $expectedValue) {
             $this->assertArrayHasKey($expectedKey, $customerData);
-            $this->assertEquals($expectedValue, $customerData[$expectedKey]);
+            $this->assertSame($expectedValue, $customerData[$expectedKey]);
         }
     }
 
@@ -656,7 +656,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $addressReturnData = 4;
         $model = $this->_getModelForGetterTest('getProcessedEntitiesCount', $customerReturnData, $addressReturnData);
 
-        $this->assertEquals($customerReturnData + $addressReturnData, $model->getProcessedEntitiesCount());
+        $this->assertSame($customerReturnData + $addressReturnData, $model->getProcessedEntitiesCount());
     }
 
     /**

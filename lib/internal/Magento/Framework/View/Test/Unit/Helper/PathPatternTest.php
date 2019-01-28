@@ -35,7 +35,7 @@ class PathPatternTest extends \PHPUnit\Framework\TestCase
      */
     public function testTranslatePatternFromGlob($path, $expectedPattern)
     {
-        $this->assertEquals($expectedPattern, $this->pathPatternHelper->translatePatternFromGlob($path));
+        $this->assertSame($expectedPattern, $this->pathPatternHelper->translatePatternFromGlob($path));
     }
 
     /**

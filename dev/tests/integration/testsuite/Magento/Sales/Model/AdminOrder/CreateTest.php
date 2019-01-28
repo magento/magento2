@@ -88,12 +88,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $quoteItems = $orderCreate->getQuote()->getItemsCollection();
 
-        self::assertEquals(1, $quoteItems->count());
+        self::assertSame(1, $quoteItems->count());
 
         $quoteItem = $quoteItems->getFirstItem();
         $quoteItemOptions = $quoteItem->getOptionsByCode();
 
-        self::assertEquals(
+        self::assertSame(
             $serializer->serialize(['additional_option_key' => 'additional_option_value']),
             $quoteItemOptions['additional_options']->getValue()
         );
@@ -115,15 +115,15 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $newOrder = $this->model->createOrder();
         $newOrderItems = $newOrder->getItemsCollection();
 
-        self::assertEquals(1, $newOrderItems->count());
+        self::assertSame(1, $newOrderItems->count());
 
         $order->loadByIncrementId('100000001');
-        $this->assertEquals($newOrder->getRealOrderId(), $order->getRelationChildRealId());
-        $this->assertEquals($newOrder->getId(), $order->getRelationChildId());
+        $this->assertSame($newOrder->getRealOrderId(), $order->getRelationChildRealId());
+        $this->assertSame($newOrder->getId(), $order->getRelationChildId());
 
         $newOrderItem = $newOrderItems->getFirstItem();
 
-        self::assertEquals(
+        self::assertSame(
             ['additional_option_key' => 'additional_option_value'],
             $newOrderItem->getProductOptionByCode('additional_options')
         );
@@ -192,10 +192,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         $payment = $order->getPayment();
-        self::assertEquals('5', $payment->getCcExpMonth());
-        self::assertEquals('2016', $payment->getCcExpYear());
-        self::assertEquals('AE', $payment->getCcType());
-        self::assertEquals('0005', $payment->getCcLast4());
+        self::assertSame('5', $payment->getCcExpMonth());
+        self::assertSame('2016', $payment->getCcExpYear());
+        self::assertSame('AE', $payment->getCcType());
+        self::assertSame('0005', $payment->getCcLast4());
 
         $this->objectManager->get(Registry::class)->unregister('rule_data');
         $payment = $this->model->initFromOrder($order)->getQuote()->getPayment();
@@ -222,7 +222,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $initOrder = $this->model->initFromOrder($order);
         $payment = $initOrder->getQuote()->getPayment();
 
-        self::assertEquals($initOrder->getQuote()->getId(), $payment->getData('quote_id'));
+        self::assertSame($initOrder->getQuote()->getId(), $payment->getData('quote_id'));
         $payment->unsetData('quote_id');
 
         self::assertEmpty($payment->getMethod());
@@ -266,12 +266,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $wishlist,
             'New Wish List is expected to be created if existing Customer does not have one yet.'
         );
-        self::assertEquals(0, $wishlist->getItemsCount(), 'New Wish List must be empty just after creation.');
+        self::assertSame(0, $wishlist->getItemsCount(), 'New Wish List must be empty just after creation.');
 
         /** Add new item to wishlist and try to get it using getCustomerWishlist once again */
         $wishlist->addNewItem($productIdFromFixture)->save();
         $updatedWishlist = $this->model->getCustomerWishlist(true);
-        self::assertEquals(
+        self::assertSame(
             1,
             $updatedWishlist->getItemsCount(),
             'Wish List must contain a Product which was added to it earlier.'
@@ -320,7 +320,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getBillingAddress()->getData();
         foreach ($expectedAddressData as $key => $value) {
             self::assertArrayHasKey($key, $result);
-            self::assertEquals($value, $result[$key]);
+            self::assertSame($value, $result[$key]);
         }
     }
 
@@ -402,7 +402,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** @var Customer $customer */
         $customer = $this->objectManager->create(Customer::class);
         $customer->load($order->getCustomerId());
-        self::assertEquals(
+        self::assertSame(
             $firstNameForShippingAddress,
             $customer->getPrimaryShippingAddress()->getFirstname(),
             'Shipping address is saved incorrectly.'
@@ -576,7 +576,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->getById($order->getCustomerId());
         $address = $this->objectManager->get(AddressRepositoryInterface::class)
             ->getById($customer->getDefaultShipping());
-        self::assertEquals(
+        self::assertSame(
             $firstNameForShippingAddress,
             $address->getFirstname(),
             'Shipping address is saved incorrectly.'
@@ -641,7 +641,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
-        self::assertEquals($quoteFixture->getId(), $customerQuote->getId(), 'Quote ID is invalid.');
+        self::assertSame($quoteFixture->getId(), $customerQuote->getId(), 'Quote ID is invalid.');
 
         /** Try to load quote once again to ensure that caching works correctly */
         $customerQuoteFromCache = $this->model->getCustomerCart();
@@ -671,8 +671,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $item = $customerQuote->getAllVisibleItems()[0];
 
         $this->model->moveQuoteItem($item, 'cart', 3);
-        self::assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
-        self::assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
+        self::assertSame(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
+        self::assertSame(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
     }
 
     /**
@@ -693,7 +693,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
         self::assertNotEmpty($customerQuote->getId(), 'Quote ID is invalid.');
-        self::assertEquals(
+        self::assertSame(
             $customerEmailFromFixture,
             $customerQuote->getCustomerEmail(),
             'Customer data is preserved incorrectly in a newly quote.'
@@ -758,34 +758,34 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         /** Check preconditions */
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $this->messageManager->getMessages()->getCount(),
             "Precondition failed: Errors occurred before SUT execution."
         );
         /** Selectively check quote data */
         $createOrderData = $this->model->getData();
-        self::assertEquals(
+        self::assertSame(
             $shippingMethod,
             $createOrderData['shipping_method'],
             'Precondition failed: Shipping method specified in create order model is invalid'
         );
-        self::assertEquals(
+        self::assertSame(
             'FirstName',
             $createOrderData['billing_address']['firstname'],
             'Precondition failed: Address data is invalid in create order model'
         );
-        self::assertEquals(
+        self::assertSame(
             'Simple Product',
             $this->model->getQuote()->getItemByProduct($product)->getData('name'),
             'Precondition failed: Quote items data is invalid in create order model'
         );
-        self::assertEquals(
+        self::assertSame(
             $customerEmail,
             $this->model->getQuote()->getCustomer()->getEmail(),
             'Precondition failed: Customer data is invalid in create order model'
         );
-        self::assertEquals(
+        self::assertSame(
             $paymentMethod,
             $this->model->getQuote()->getPayment()->getData('method'),
             'Precondition failed: Payment method data is invalid in create order model'
@@ -803,18 +803,18 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** Selectively check order data */
         $orderData = $order->getData();
         self::assertNotEmpty($orderData['increment_id'], 'Order increment ID is empty.');
-        self::assertEquals($this->model->getQuote()->getId(), $orderData['quote_id'], 'Quote ID is invalid.');
-        self::assertEquals(
+        self::assertSame($this->model->getQuote()->getId(), $orderData['quote_id'], 'Quote ID is invalid.');
+        self::assertSame(
             $this->model->getQuote()->getCustomer()->getEmail(),
             $orderData['customer_email'],
             'Customer email is invalid.'
         );
-        self::assertEquals(
+        self::assertSame(
             $this->model->getQuote()->getCustomer()->getFirstname(),
             $orderData['customer_firstname'],
             'Customer first name is invalid.'
         );
-        self::assertEquals($shippingMethod, $orderData['shipping_method'], 'Shipping method is invalid.');
+        self::assertSame($shippingMethod, $orderData['shipping_method'], 'Shipping method is invalid.');
     }
 
     /**

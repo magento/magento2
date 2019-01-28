@@ -168,6 +168,6 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             $expectedEventParameters
         );
 
-        $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
+        $this->assertSame($this->_responseMock, $this->action->dispatch($this->_requestMock));
     }
 }

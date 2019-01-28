@@ -77,7 +77,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->multiline->getData();
 
-        $this->assertEquals($data, $result);
+        $this->assertSame($data, $result);
     }
 
     /**

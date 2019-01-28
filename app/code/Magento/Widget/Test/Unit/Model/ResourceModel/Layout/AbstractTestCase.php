@@ -122,7 +122,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
         $data = $this->_expectedConditions['data'][$counter];
         $this->_expectedConditions['counter']++;
 
-        $this->assertEquals($data[0], $fieldName);
+        $this->assertSame($data[0], $fieldName);
 
         $this->assertCount(1, $data[1]);
         $key = array_keys($data[1]);

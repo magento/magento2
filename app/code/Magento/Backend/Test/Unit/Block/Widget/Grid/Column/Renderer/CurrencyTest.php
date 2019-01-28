@@ -135,6 +135,6 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($currLocaleMock)
         );
 
-        $this->assertEquals('15USD', $this->_blockCurrency->render($this->_row));
+        $this->assertSame('15USD', $this->_blockCurrency->render($this->_row));
     }
 }

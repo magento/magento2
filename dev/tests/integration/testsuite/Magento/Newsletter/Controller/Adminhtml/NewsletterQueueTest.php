@@ -63,7 +63,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
 
         // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template
         // instead of existing one.
-        $this->assertEquals('some_unique_code', $this->_model->getTemplateCode());
+        $this->assertSame('some_unique_code', $this->_model->getTemplateCode());
 
         $this->getRequest()->setParam('template_id', $this->_model->getId());
         $this->dispatch('backend/newsletter/queue/save');

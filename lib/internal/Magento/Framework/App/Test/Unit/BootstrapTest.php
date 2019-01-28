@@ -124,7 +124,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Framework\App\Filesystem\DirectoryList $result */
         $this->assertInstanceOf(\Magento\Framework\App\Filesystem\DirectoryList::class, $result);
-        $this->assertEquals('/custom/path', $result->getPath(DirectoryList::APP));
+        $this->assertSame('/custom/path', $result->getPath(DirectoryList::APP));
     }
 
     public function testCreateFilesystemDriverPool()
@@ -186,7 +186,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             $this->deploymentConfig->method('get')->willReturn($modeFromDeployment);
         }
         $bootstrap = self::createBootstrap($testParams);
-        $this->assertEquals($isDeveloper, $bootstrap->isDeveloperMode());
+        $this->assertSame($isDeveloper, $bootstrap->isDeveloperMode());
     }
 
     /**
@@ -258,7 +258,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->application->expects($this->never())->method('launch');
         $this->application->expects($this->once())->method('catchException')->willReturn(true);
         $bootstrap->run($this->application);
-        $this->assertEquals(Bootstrap::ERR_MAINTENANCE, $bootstrap->getErrorCode());
+        $this->assertSame(Bootstrap::ERR_MAINTENANCE, $bootstrap->getErrorCode());
     }
 
     /**
@@ -285,7 +285,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->application->expects($this->never())->method('launch');
         $this->application->expects($this->once())->method('catchException')->willReturn(true);
         $bootstrap->run($this->application);
-        $this->assertEquals(Bootstrap::ERR_IS_INSTALLED, $bootstrap->getErrorCode());
+        $this->assertSame(Bootstrap::ERR_IS_INSTALLED, $bootstrap->getErrorCode());
     }
 
     /**

@@ -51,7 +51,7 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
         )->will($this->returnValue($expectation));
         $this->countryProvider->expects($this->once())->method('getCountry')->willReturn(self::EXPECTED_COUNTRY_ID);
 
-        $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));
+        $this->assertSame($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));
     }
 
     /**

@@ -179,7 +179,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentType($path, $expected)
     {
-        $this->assertEquals($expected, $this->object->getContentType($path));
+        $this->assertSame($expected, $this->object->getContentType($path));
     }
 
     /**

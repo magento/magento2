@@ -26,7 +26,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
         /** @var \Magento\Tax\Model\TaxClass\Source\Product $source */
         $source = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Product::class);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $source->getAllOptions(false),
             'Tax Class options are invalid.'
@@ -50,7 +50,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $expectedResult = array_merge([['value' => '0', 'label' => __('None')]], $expectedResult);
         /** @var \Magento\Tax\Model\TaxClass\Source\Product $source */
         $source = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Product::class);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $source->getAllOptions(true),
             'Tax Class options are invalid.'

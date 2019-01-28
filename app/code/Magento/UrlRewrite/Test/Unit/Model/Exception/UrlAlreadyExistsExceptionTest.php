@@ -54,14 +54,14 @@ class UrlAlreadyExistsExceptionTest extends \PHPUnit\Framework\TestCase
             $urls
         );
 
-        $this->assertEquals($urls, $localizedException->getUrls());
+        $this->assertSame($urls, $localizedException->getUrls());
     }
 
     public function testDefaultPhrase()
     {
         $localizedException = new UrlAlreadyExistsException();
 
-        $this->assertEquals(
+        $this->assertSame(
             'rendered message',
             $localizedException->getMessage()
         );

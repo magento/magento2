@@ -44,7 +44,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn('numeric');
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectsRules,
             $this->validationRules->getValidationRules(
                 true,
@@ -61,7 +61,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
         $expectsRules = [
             'required-entry' => true,
         ];
-        $this->assertEquals(
+        $this->assertSame(
             $expectsRules,
             $this->validationRules->getValidationRules(true, [])
         );

@@ -85,7 +85,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
         $adapter = $this->objectManager->get('cssMinificationAdapter');
-        $this->assertEquals(
+        $this->assertSame(
             file_get_contents(dirname(__DIR__) . '/_files/static/expected/styles.magento.min.css'),
             $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/theme/web/css/styles.css')),
             'Minified CSS differs from initial minified CSS snapshot. '
@@ -103,7 +103,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
         $adapter = $this->objectManager->get('jsMinificationAdapter');
-        $this->assertEquals(
+        $this->assertSame(
             file_get_contents(dirname(__DIR__) . '/_files/static/expected/test.min.js'),
             $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/theme/web/js/test.js')),
             'Minified JS differs from initial minified JS snapshot. '
@@ -154,7 +154,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
                 $content = file_get_contents($path);
                 $this->assertNotEmpty($content);
                 $this->assertContains('FrameworkViewMinifier/frontend', $content);
-                $this->assertNotEquals(
+                $this->assertNotSame(
                     file_get_contents(
                         dirname(__DIR__)
                         . '/_files/static/expected/styles.magento.min.css'
@@ -174,7 +174,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         $this->_testCssMinification(
             '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css',
             function ($path) {
-                $this->assertEquals(
+                $this->assertSame(
                     file_get_contents(
                         dirname(__DIR__)
                         . '/_files/static/expected/styles.magento.min.css'
@@ -284,7 +284,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertFileExists($fileToBePublished);
-        $this->assertEquals(
+        $this->assertSame(
             file_get_contents(dirname(__DIR__) . '/_files/static/expected/styles.magento.min.css'),
             file_get_contents($fileToBePublished),
             'Minified file is not equal or minification did not work for deployed CSS'

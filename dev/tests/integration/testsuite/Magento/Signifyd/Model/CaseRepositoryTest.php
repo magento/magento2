@@ -88,8 +88,8 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $found = $this->repository->getById($case->getEntityId());
 
         self::assertNotEmpty($found->getEntityId());
-        self::assertEquals($case->getEntityId(), $found->getEntityId());
-        self::assertEquals($case->getOrderId(), $found->getOrderId());
+        self::assertSame($case->getEntityId(), $found->getEntityId());
+        self::assertSame($case->getOrderId(), $found->getOrderId());
     }
 
     /**
@@ -120,7 +120,7 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
 
         for ($i = 1; $i < 4; $i ++) {
             $current = array_shift($items);
-            self::assertEquals($i, $current->getCaseId());
+            self::assertSame($i, $current->getCaseId());
         }
     }
 
@@ -143,6 +143,6 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
         self::assertCount(1, $items);
 
         $case = array_pop($items);
-        self::assertEquals(123, $case->getCaseId());
+        self::assertSame(123, $case->getCaseId());
     }
 }

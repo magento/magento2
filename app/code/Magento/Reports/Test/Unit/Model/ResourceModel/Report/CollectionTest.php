@@ -63,7 +63,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetPeriods()
     {
         $expectedArray = ['day' => 'Day', 'month' => 'Month', 'year' => 'Year'];
-        $this->assertEquals($expectedArray, $this->collection->getPeriods());
+        $this->assertSame($expectedArray, $this->collection->getPeriods());
     }
 
     /**
@@ -72,9 +72,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetStoreIds()
     {
         $storeIds = [1];
-        $this->assertEquals(null, $this->collection->getStoreIds());
+        $this->assertSame(null, $this->collection->getStoreIds());
         $this->collection->setStoreIds($storeIds);
-        $this->assertEquals($storeIds, $this->collection->getStoreIds());
+        $this->assertSame($storeIds, $this->collection->getStoreIds());
     }
 
     /**
@@ -89,7 +89,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->collection->setPeriod($period);
         $this->collection->setInterval($fromDate, $toDate);
-        $this->assertEquals($size, $this->collection->getSize());
+        $this->assertSame($size, $this->collection->getSize());
     }
 
     /**
@@ -98,9 +98,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetPageSize()
     {
         $pageSize = 1;
-        $this->assertEquals(null, $this->collection->getPageSize());
+        $this->assertSame(null, $this->collection->getPageSize());
         $this->collection->setPageSize($pageSize);
-        $this->assertEquals($pageSize, $this->collection->getPageSize());
+        $this->assertSame($pageSize, $this->collection->getPageSize());
     }
 
     /**
@@ -122,7 +122,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->assertTrue(empty($reportData['children']));
             $this->assertTrue($reportData['is_empty']);
         }
-        $this->assertEquals($size, count($reports));
+        $this->assertSame($size, count($reports));
     }
 
     /**

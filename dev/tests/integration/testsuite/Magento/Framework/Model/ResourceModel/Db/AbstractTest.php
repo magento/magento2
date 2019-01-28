@@ -47,11 +47,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $idFieldName = 'website_id';
 
         $setMainTableMethod->invoke($this->_model, $tableName);
-        $this->assertEquals($tableName, $this->_model->getMainTable());
+        $this->assertSame($tableName, $this->_model->getMainTable());
 
         $setMainTableMethod->invoke($this->_model, $tableName, $idFieldName);
-        $this->assertEquals($tableName, $this->_model->getMainTable());
-        $this->assertEquals($idFieldName, $this->_model->getIdFieldName());
+        $this->assertSame($tableName, $this->_model->getMainTable());
+        $this->assertSame($idFieldName, $this->_model->getIdFieldName());
     }
 
     public function testGetTableName()
@@ -73,6 +73,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
 
         $tableName = $model->getTable([$tableNameOrig, $tableSuffix]);
-        $this->assertEquals('prefix_store_website_suffix', $tableName);
+        $this->assertSame('prefix_store_website_suffix', $tableName);
     }
 }

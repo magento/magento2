@@ -69,7 +69,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
                 'data' => $rowData
             ]
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $renderer->setColumn($column)->render($row)
         );

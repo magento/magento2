@@ -89,7 +89,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIdentities()
     {
-        static::assertEquals([Review::CACHE_TAG], $this->block->getIdentities());
+        static::assertSame([Review::CACHE_TAG], $this->block->getIdentities());
     }
 
     /**
@@ -201,7 +201,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('isSecure')
             ->willReturn($isSecure);
 
-        $this->assertEquals($actionUrl . '/id/' . $productId, $this->block->getProductReviewUrl());
+        $this->assertSame($actionUrl . '/id/' . $productId, $this->block->getProductReviewUrl());
     }
 
     /**

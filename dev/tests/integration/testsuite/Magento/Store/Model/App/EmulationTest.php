@@ -27,6 +27,6 @@ class EmulationTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->startEnvironmentEmulation(1);
         $this->_model->stopEnvironmentEmulation();
-        $this->assertEquals(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, $design->getArea());
+        $this->assertSame(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, $design->getArea());
     }
 }

@@ -42,7 +42,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('file', $this->_model->getType());
-        $this->assertEquals('file', $this->_model->getExtType());
+        $this->assertSame('file', $this->_model->getType());
+        $this->assertSame('file', $this->_model->getExtType());
     }
 }

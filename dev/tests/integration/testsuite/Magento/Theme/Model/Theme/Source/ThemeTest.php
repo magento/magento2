@@ -26,9 +26,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $expectedItemsCount = count($expectedCollection);
 
         $labelsCollection = $model->getAllOptions(false);
-        $this->assertEquals($expectedItemsCount, count($labelsCollection));
+        $this->assertSame($expectedItemsCount, count($labelsCollection));
 
         $labelsCollection = $model->getAllOptions(true);
-        $this->assertEquals(++$expectedItemsCount, count($labelsCollection));
+        $this->assertSame(++$expectedItemsCount, count($labelsCollection));
     }
 }

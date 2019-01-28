@@ -61,12 +61,12 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $currentProduct \Magento\Catalog\Model\Product */
         $currentProduct = $objectManager->get(\Magento\Framework\Registry::class)->registry('current_product');
         $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $currentProduct);
-        $this->assertEquals($product->getEntityId(), $currentProduct->getEntityId());
+        $this->assertSame($product->getEntityId(), $currentProduct->getEntityId());
 
         $lastViewedProductId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Session::class
         )->getLastViewedProductId();
-        $this->assertEquals($product->getEntityId(), $lastViewedProductId);
+        $this->assertSame($product->getEntityId(), $lastViewedProductId);
 
         $responseBody = $this->getResponse()->getBody();
         /* Product info */
@@ -79,14 +79,14 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('Add to Cart', $responseBody);
         /* Meta info */
         $this->assertContains('<title>Simple Product 1 Meta Title</title>', $responseBody);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//meta[@name="keywords" and @content="Simple Product 1 Meta Keyword"]',
                 $responseBody
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//meta[@name="description" and @content="Simple Product 1 Meta Description"]',
@@ -109,7 +109,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $repository->get('simple');
         $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
         $html = $this->getResponse()->getBody();
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="product-options-wrapper"]',

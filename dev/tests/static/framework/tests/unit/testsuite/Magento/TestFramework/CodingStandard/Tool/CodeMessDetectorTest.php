@@ -14,7 +14,7 @@ class CodeMessDetectorTest extends \PHPUnit\Framework\TestCase
             'some/report/file.xml'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             class_exists(\PHPMD\TextUI\Command::class),
             $messDetector->canRun()
         );

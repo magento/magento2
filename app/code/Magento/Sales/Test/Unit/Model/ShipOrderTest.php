@@ -288,7 +288,7 @@ class ShipOrderTest extends \PHPUnit\Framework\TestCase
         $this->shipmentMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn(2);
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $this->model->execute(
                 $orderId,

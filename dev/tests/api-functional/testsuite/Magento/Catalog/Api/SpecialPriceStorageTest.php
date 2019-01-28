@@ -57,7 +57,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
         $this->assertNotEmpty($response);
-        $this->assertEquals($product->getSpecialPrice(), $response[0]['price']);
+        $this->assertSame($product->getSpecialPrice(), $response[0]['price']);
     }
 
     /**

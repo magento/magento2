@@ -48,7 +48,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $key = 'sessionKey';
         $this->session->setKey($key);
         $this->session->setPersistentCookie(1000, '/');
-        $this->assertEquals($key, $_COOKIE[Session::COOKIE_NAME]);
+        $this->assertSame($key, $_COOKIE[Session::COOKIE_NAME]);
     }
 
     public function testRemovePersistendCookie()
@@ -67,7 +67,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     {
         $_COOKIE[Session::COOKIE_NAME] = $cookieValue;
         $this->session->renewPersistentCookie($duration, '/');
-        $this->assertEquals($cookieValue, $_COOKIE[Session::COOKIE_NAME]);
+        $this->assertSame($cookieValue, $_COOKIE[Session::COOKIE_NAME]);
     }
 
     public function renewPersistentCookieDataProvider()
@@ -97,6 +97,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $postSession = $this->objectManager->get(\Magento\Persistent\Model\SessionFactory::class)
             ->create()
             ->loadByCookieKey();
-        $this->assertEquals(1, $postSession->getCustomerId());
+        $this->assertSame(1, $postSession->getCustomerId());
     }
 }

@@ -42,7 +42,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/exports')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($classes));
+        $this->assertSame($expectedResult, $this->converter->convert($classes));
     }
 
     public function testImportsConvert()
@@ -67,7 +67,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/imports')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($classes));
+        $this->assertSame($expectedResult, $this->converter->convert($classes));
     }
 
     public function testListensConvert()
@@ -92,7 +92,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/listens')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($classes));
+        $this->assertSame($expectedResult, $this->converter->convert($classes));
     }
 
     public function testLinksConvert()
@@ -117,6 +117,6 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/links')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($classes));
+        $this->assertSame($expectedResult, $this->converter->convert($classes));
     }
 }

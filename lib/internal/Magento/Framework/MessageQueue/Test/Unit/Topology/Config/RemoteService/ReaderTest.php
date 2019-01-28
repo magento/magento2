@@ -113,7 +113,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertEquals($expectedResult, $this->reader->read());
+        $this->assertSame($expectedResult, $this->reader->read());
     }
 
     /**

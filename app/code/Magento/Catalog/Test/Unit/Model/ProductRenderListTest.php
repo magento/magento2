@@ -178,6 +178,6 @@ class ProductRenderListTest extends \PHPUnit\Framework\TestCase
             ->method('setSearchCriteria')
             ->with($searchCriteria);
 
-        $this->assertEquals($searchResult, $this->model->getList($searchCriteria, $storeId, $currencyCode));
+        $this->assertSame($searchResult, $this->model->getList($searchCriteria, $storeId, $currencyCode));
     }
 }

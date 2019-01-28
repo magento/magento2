@@ -39,7 +39,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
             ->method('getBackendType')
             ->willReturn($backendType);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->model->prepareCondition($attributeMock, $value)
         );

@@ -29,7 +29,7 @@ class SerializeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize($value, $serializedValue)
     {
-        $this->assertEquals($serializedValue, $this->serialize->serialize($value));
+        $this->assertSame($serializedValue, $this->serialize->serialize($value));
     }
 
     /**
@@ -55,7 +55,7 @@ class SerializeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnserialize($serializedValue, $value)
     {
-        $this->assertEquals($value, $this->serialize->unserialize($serializedValue));
+        $this->assertSame($value, $this->serialize->unserialize($serializedValue));
     }
 
     /**

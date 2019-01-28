@@ -74,6 +74,6 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
         ];
         ksort($expectedItems);
         ksort($actual);
-        $this->assertEquals($expectedItems, $actual);
+        $this->assertSame($expectedItems, $actual);
     }
 }

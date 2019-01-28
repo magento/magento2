@@ -29,7 +29,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $document->loadXML($sourceString);
         $actual = $this->converter->convert($document);
 
-        self::assertEquals(
+        self::assertSame(
             $expected,
             $actual
         );

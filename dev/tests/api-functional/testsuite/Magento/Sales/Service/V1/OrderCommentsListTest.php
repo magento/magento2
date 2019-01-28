@@ -42,8 +42,8 @@ class OrderCommentsListTest extends WebapiAbstract
         foreach ($result['items'] as $history) {
             $orderHistoryStatus = $objectManager->get(\Magento\Sales\Model\Order\Status\History::class)
                 ->load($history['entity_id']);
-            $this->assertEquals($orderHistoryStatus->getComment(), $history['comment']);
-            $this->assertEquals($orderHistoryStatus->getStatus(), $history['status']);
+            $this->assertSame($orderHistoryStatus->getComment(), $history['comment']);
+            $this->assertSame($orderHistoryStatus->getStatus(), $history['status']);
         }
     }
 }

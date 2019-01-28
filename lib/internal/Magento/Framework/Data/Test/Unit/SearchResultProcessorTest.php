@@ -49,7 +49,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $this->searchCriteriaMock->expects($this->once())
             ->method('getLimit')
             ->willReturn([$page]);
-        $this->assertEquals($page, $this->searchResultProcessor->getCurrentPage());
+        $this->assertSame($page, $this->searchResultProcessor->getCurrentPage());
     }
 
     public function testGetPageSize()
@@ -58,7 +58,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $this->searchCriteriaMock->expects($this->once())
             ->method('getLimit')
             ->willReturn([null, $size]);
-        $this->assertEquals($size, $this->searchResultProcessor->getPageSize());
+        $this->assertSame($size, $this->searchResultProcessor->getPageSize());
     }
 
     public function testGetFirstItem()
@@ -73,7 +73,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$testItem, $testItem2]);
 
-        $this->assertEquals($testItem, $this->searchResultProcessor->getFirstItem());
+        $this->assertSame($testItem, $this->searchResultProcessor->getFirstItem());
     }
 
     public function testGetLastItem()
@@ -88,7 +88,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$testItem, $testItem2]);
 
-        $this->assertEquals($testItem2, $this->searchResultProcessor->getLastItem());
+        $this->assertSame($testItem2, $this->searchResultProcessor->getLastItem());
     }
 
     public function testGetAllIds()
@@ -106,7 +106,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($testItem)
             ->willReturn(1);
 
-        $this->assertEquals($ids, $this->searchResultProcessor->getAllIds());
+        $this->assertSame($ids, $this->searchResultProcessor->getAllIds());
     }
 
     public function testGetItemById()
@@ -121,7 +121,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([1 => $testItem, $testItem2]);
 
-        $this->assertEquals($testItem2, $this->searchResultProcessor->getItemById(2));
+        $this->assertSame($testItem2, $this->searchResultProcessor->getItemById(2));
     }
 
     public function testGetColumnValues()
@@ -135,7 +135,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$testItem]);
-        $this->assertEquals([$columnValue], $this->searchResultProcessor->getColumnValues($columnKey));
+        $this->assertSame([$columnValue], $this->searchResultProcessor->getColumnValues($columnKey));
     }
 
     public function testGetItemsByColumnValue()
@@ -152,7 +152,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$testItem, $testItem2]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$testItem, $testItem2],
             $this->searchResultProcessor->getItemsByColumnValue($columnKey, $columnValue)
         );
@@ -173,6 +173,6 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn([$testItem, $testItem2]);
 
-        $this->assertEquals($testItem2, $this->searchResultProcessor->getItemByColumnValue($columnKey, $columnValue2));
+        $this->assertSame($testItem2, $this->searchResultProcessor->getItemByColumnValue($columnKey, $columnValue2));
     }
 }

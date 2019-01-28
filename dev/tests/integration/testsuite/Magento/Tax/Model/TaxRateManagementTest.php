@@ -82,7 +82,7 @@ class TaxRateManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertCount(2, $rates);
-        $this->assertEquals($expectedRates, $rates);
+        $this->assertSame($expectedRates, $rates);
     }
 
     private function setUpDefaultRules()

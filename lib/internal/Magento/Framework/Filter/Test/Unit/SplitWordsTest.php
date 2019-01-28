@@ -14,8 +14,8 @@ class SplitWordsTest extends \PHPUnit\Framework\TestCase
     {
         $words = '123  123  45 789';
         $filter = new \Magento\Framework\Filter\SplitWords(false, 3);
-        $this->assertEquals(['123', '123', '45'], $filter->filter($words));
+        $this->assertSame(['123', '123', '45'], $filter->filter($words));
         $filter = new \Magento\Framework\Filter\SplitWords(true, 2);
-        $this->assertEquals(['123', '45'], $filter->filter($words));
+        $this->assertSame(['123', '45'], $filter->filter($words));
     }
 }

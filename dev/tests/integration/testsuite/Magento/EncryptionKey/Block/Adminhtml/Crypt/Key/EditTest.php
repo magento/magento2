@@ -21,6 +21,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
             \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Edit::class
         );
 
-        $this->assertEquals('Encryption Key', $block->getHeaderText());
+        $this->assertSame('Encryption Key', $block->getHeaderText());
     }
 }

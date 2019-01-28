@@ -137,6 +137,6 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             $this->vaultPaymentList
         );
 
-        static::assertEquals($expectedConfig, $configProvider->getConfig());
+        static::assertSame($expectedConfig, $configProvider->getConfig());
     }
 }

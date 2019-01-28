@@ -141,7 +141,7 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedResult, $this->block->getAssociatedProducts());
+        $this->assertSame($expectedResult, $this->block->getAssociatedProducts());
     }
 
     /**

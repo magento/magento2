@@ -57,9 +57,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $info = $this->model->getRelationInfo();
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $info);
-        $this->assertEquals('catalog_product_super_link', $info->getTable());
-        $this->assertEquals('parent_id', $info->getParentFieldName());
-        $this->assertEquals('product_id', $info->getChildFieldName());
+        $this->assertSame('catalog_product_super_link', $info->getTable());
+        $this->assertSame('parent_id', $info->getParentFieldName());
+        $this->assertSame('product_id', $info->getChildFieldName());
     }
 
     /**
@@ -97,7 +97,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
         $actual = $this->model->getUsedProductAttributeIds($this->product);
         $expected = [$testConfigurable->getId()];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -127,7 +127,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $attributeId = (int)$testConfigurable->getId();
         $attributes = $this->model->getUsedProductAttributes($this->product);
         $this->assertArrayHasKey($attributeId, $attributes);
-        $this->assertEquals($testConfigurable->getData(), $attributes[$attributeId]->getData());
+        $this->assertSame($testConfigurable->getData(), $attributes[$attributeId]->getData());
     }
 
     /**
@@ -147,12 +147,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class,
                 $attribute
             );
-            $this->assertEquals($testConfigurable->getId(), $attribute->getAttributeId());
+            $this->assertSame($testConfigurable->getId(), $attribute->getAttributeId());
             $options = $attribute->getOptions();
             $this->assertCount(2, $options);
             // fixture
-            $this->assertEquals('Option 1', $options[0]['label']);
-            $this->assertEquals('Option 2', $options[1]['label']);
+            $this->assertSame('Option 1', $options[0]['label']);
+            $this->assertSame('Option 2', $options[1]['label']);
             break;
         }
     }
@@ -201,7 +201,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('store_label', $attribute);
 
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
-        $this->assertEquals($testConfigurable->getId(), $attribute['attribute_id']);
+        $this->assertSame($testConfigurable->getId(), $attribute['attribute_id']);
     }
 
     /**
@@ -213,7 +213,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->model->getParentIdsByChild(10);
         // fixture
-        $this->assertEquals([$this->product->getId()], $result);
+        $this->assertSame([$this->product->getId()], $result);
     }
 
     /**
@@ -268,7 +268,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $products = $this->getUsedProducts();
         $productsCached = $this->getUsedProducts();
-        self::assertEquals(
+        self::assertSame(
             array_keys($products),
             array_keys($productsCached)
         );
@@ -320,7 +320,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->product
         );
         $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
-        $this->assertEquals("simple_10", $product->getSku());
+        $this->assertSame("simple_10", $product->getSku());
     }
 
     /**
@@ -343,8 +343,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         );
 
         $info = $this->model->getSelectedAttributesInfo($product);
-        $this->assertEquals('Test Configurable', $info[0]['label']);
-        $this->assertEquals('Option 1', $info[0]['value']);
+        $this->assertSame('Test Configurable', $info[0]['label']);
+        $this->assertSame('Option 1', $info[0]['value']);
     }
 
     /**
@@ -372,8 +372,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $attribute->getProductAttribute()->setStoreLabel('store label');
         $info = $this->model->getSelectedAttributesInfo($this->product);
-        $this->assertEquals('store label', $info[0]['label']);
-        $this->assertEquals('Option 1', $info[0]['value']);
+        $this->assertSame('store label', $info[0]['label']);
+        $this->assertSame('Option 1', $info[0]['value']);
     }
 
     /**
@@ -401,7 +401,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSpecifyOptionMessage()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'You need to choose options for your item.',
             (string)$this->model->getSpecifyOptionMessage()
         );
@@ -420,15 +420,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getOrderOptions($product);
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
-        $this->assertEquals('Test Configurable', $result['attributes_info'][0]['label']);
-        $this->assertEquals('Option 1', $result['attributes_info'][0]['value']);
+        $this->assertSame('Test Configurable', $result['attributes_info'][0]['label']);
+        $this->assertSame('Option 1', $result['attributes_info'][0]['value']);
         $this->assertArrayHasKey('product_calculations', $result);
         $this->assertArrayHasKey('shipment_type', $result);
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT,
             $result['product_calculations']
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER,
             $result['shipment_type']
         );
@@ -468,14 +468,14 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 ),
             ]
         );
-        $this->assertEquals(2, $this->model->getWeight($this->product));
+        $this->assertSame(2, $this->model->getWeight($this->product));
     }
 
     public function testAssignProductToOption()
     {
         $option = new \Magento\Framework\DataObject();
         $this->model->assignProductToOption('test', $option, $this->product);
-        $this->assertEquals('test', $option->getProduct());
+        $this->assertSame('test', $option->getProduct());
         // other branch of logic depends on \Magento\Sales module
     }
 
@@ -501,7 +501,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSku()
     {
-        $this->assertEquals('configurable', $this->model->getSku($this->product));
+        $this->assertSame('configurable', $this->model->getSku($this->product));
         $product = $this->_prepareForCart();
         $this->assertStringStartsWith('simple_', $this->model->getSku($product));
     }
@@ -510,7 +510,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $buyRequest = new \Magento\Framework\DataObject(['super_attribute' => ['10', 'string']]);
         $result = $this->model->processBuyRequest($this->product, $buyRequest);
-        $this->assertEquals(['super_attribute' => [10]], $result);
+        $this->assertSame(['super_attribute' => [10]], $result);
     }
 
     /**
@@ -536,7 +536,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository->save($product);
 
-        self::assertEquals(
+        self::assertSame(
             [
                 [
                     $oneChildId => $oneChildId
@@ -565,7 +565,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository->save($product);
 
-        self::assertEquals(
+        self::assertSame(
             [
                 []
             ],

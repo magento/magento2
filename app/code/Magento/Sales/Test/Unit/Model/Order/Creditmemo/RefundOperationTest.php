@@ -93,7 +93,7 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($state);
         $this->orderMock->expects($this->never())
             ->method('getEntityId');
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->execute(
                 $this->creditmemoMock,
@@ -129,7 +129,7 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($orderId);
         $this->orderMock->expects($this->never())
             ->method('setTotalRefunded');
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->execute($this->creditmemoMock, $this->orderMock)
         );
@@ -194,7 +194,7 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
                 ['creditmemo' => $this->creditmemoMock]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->execute($this->creditmemoMock, $this->orderMock, $online)
         );
@@ -251,7 +251,7 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
             ->method('refund')
             ->with($this->creditmemoMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->execute($this->creditmemoMock, $this->orderMock, $online)
         );

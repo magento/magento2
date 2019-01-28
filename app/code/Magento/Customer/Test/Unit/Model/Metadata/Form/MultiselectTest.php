@@ -52,7 +52,7 @@ class MultiselectTest extends AbstractFormTestCase
 
         $request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
         $actual = $multiselect->extractValue($request);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -83,7 +83,7 @@ class MultiselectTest extends AbstractFormTestCase
     {
         $multiselect = $this->getClass($value);
         $actual = $multiselect->compactValue($value);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -222,6 +222,6 @@ class MultiselectTest extends AbstractFormTestCase
         );
         $multiselect = $this->getClass($value);
         $actual = $multiselect->outputValue($format);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

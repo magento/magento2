@@ -112,7 +112,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $statusSelect = clone $select;
         $statusSelect->reset(\Magento\Framework\DB\Select::COLUMNS)
             ->columns(new \Magento\Framework\DB\Sql\Expression('COUNT(*)'));
-        $this->assertEquals(1, $connection->fetchOne($statusSelect));
+        $this->assertSame(1, $connection->fetchOne($statusSelect));
     }
 
     /**

@@ -31,6 +31,6 @@ class DecoderTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains('%', $result);
         $this->assertNotContains('+', $result);
         $this->assertNotContains('=', $result);
-        $this->assertEquals($result, $decoder->decode($result));
+        $this->assertSame($result, $decoder->decode($result));
     }
 }

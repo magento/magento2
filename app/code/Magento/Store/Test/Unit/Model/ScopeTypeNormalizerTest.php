@@ -31,7 +31,7 @@ class ScopeTypeNormalizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testNormalize($scopeType, $plural, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->scopeTypeNormalizer->normalize($scopeType, $plural));
+        $this->assertSame($expectedResult, $this->scopeTypeNormalizer->normalize($scopeType, $plural));
     }
 
     /**
@@ -64,7 +64,7 @@ class ScopeTypeNormalizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testNormalizeDefault($scopeType, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->scopeTypeNormalizer->normalize($scopeType));
+        $this->assertSame($expectedResult, $this->scopeTypeNormalizer->normalize($scopeType));
     }
 
     /**

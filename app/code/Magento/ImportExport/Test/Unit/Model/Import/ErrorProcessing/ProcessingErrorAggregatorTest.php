@@ -86,7 +86,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
             'Message',
             'Description'
         );
-        $this->assertEquals($result, $this->model);
+        $this->assertSame($result, $this->model);
     }
 
     /**
@@ -110,7 +110,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->model->addError('columnEmptyHeader', 'not-critical', 4, 'Some column name', 'No header', 'Description');
         $result = $this->model->getRowsGroupedByErrorCode(['systemException'], [], false);
         $expectedResult = ['systemException' => [0 => 1]];
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -121,7 +121,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->addError('systemException', $errorLevel, $rowNumber, 'Column name', 'Message', 'Description');
         $result = $this->model->isRowInvalid($rowNumber);
-        $this->assertEquals($isValid, $result);
+        $this->assertSame($isValid, $result);
     }
 
     /**
@@ -143,7 +143,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     public function testGetInvalidRowsCountZero()
     {
         $rowsNumber = $this->model->getInvalidRowsCount();
-        $this->assertEquals($rowsNumber, 0);
+        $this->assertSame($rowsNumber, 0);
     }
 
     /**
@@ -153,7 +153,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
         $rowsNumber = $this->model->getInvalidRowsCount();
-        $this->assertEquals($rowsNumber, 1);
+        $this->assertSame($rowsNumber, 1);
     }
 
     /**
@@ -165,7 +165,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->model->addError('systemException', 'critical', 8, 'Some column name', 'Message', 'Description');
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
         $rowsNumber = $this->model->getInvalidRowsCount();
-        $this->assertEquals($rowsNumber, 2);
+        $this->assertSame($rowsNumber, 2);
     }
 
     /**
@@ -174,7 +174,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     public function testInitValidationStrategy()
     {
         $this->model->initValidationStrategy('validation-stop-on-errors', 5);
-        $this->assertEquals(5, $this->model->getAllowedErrorsCount());
+        $this->assertSame(5, $this->model->getAllowedErrorsCount());
     }
 
     /**
@@ -293,8 +293,8 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $result);
         $this->assertInstanceOf(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class, $result[0]);
         $this->assertInstanceOf(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class, $result[1]);
-        $this->assertEquals('systemException1', $result[0]->getErrorCode());
-        $this->assertEquals('systemException2', $result[1]->getErrorCode());
+        $this->assertSame('systemException1', $result[0]->getErrorCode());
+        $this->assertSame('systemException2', $result[1]->getErrorCode());
     }
 
     /**
@@ -312,7 +312,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->getErrorByRowNumber(1);
 
         $this->assertCount(1, $result);
-        $this->assertEquals(1, $this->model->getErrorsCount());
+        $this->assertSame(1, $this->model->getErrorsCount());
     }
 
     /**
@@ -355,7 +355,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
 
         $result = call_user_func_array([$this->model, 'getRowsGroupedByErrorCode'], $params);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -423,7 +423,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllowedErrorsCount()
     {
-        $this->assertEquals($this->model->getAllowedErrorsCount(), 0);
+        $this->assertSame($this->model->getAllowedErrorsCount(), 0);
     }
 
     /**
@@ -435,7 +435,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
         $this->model->clear();
         $result = $this->model->getAllErrors();
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     /**
@@ -447,6 +447,6 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
         $this->model->addError('systemException', 'not-critical', 9, 'Some column name', 'Message', 'Description');
         $result = $this->model->getErrorsCount(['critical']);
-        $this->assertEquals($result, 1);
+        $this->assertSame($result, 1);
     }
 }

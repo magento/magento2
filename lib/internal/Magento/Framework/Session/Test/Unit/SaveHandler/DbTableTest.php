@@ -141,7 +141,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     {
         $this->_prepareMockForRead($isDataEncoded);
         $result = $this->_model->read(self::SESSION_ID);
-        $this->assertEquals(self::SESSION_DATA, $result);
+        $this->assertSame(self::SESSION_DATA, $result);
     }
 
     /**
@@ -300,11 +300,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function verifyInsert($table, array $bind)
     {
-        $this->assertEquals(self::SESSION_TABLE, $table);
+        $this->assertSame(self::SESSION_TABLE, $table);
 
         $this->assertInternalType('int', $bind[self::COLUMN_SESSION_EXPIRES]);
-        $this->assertEquals(base64_encode(self::SESSION_DATA), $bind[self::COLUMN_SESSION_DATA]);
-        $this->assertEquals(self::SESSION_ID, $bind[self::COLUMN_SESSION_ID]);
+        $this->assertSame(base64_encode(self::SESSION_DATA), $bind[self::COLUMN_SESSION_DATA]);
+        $this->assertSame(self::SESSION_ID, $bind[self::COLUMN_SESSION_ID]);
     }
 
     /**
@@ -316,11 +316,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function verifyUpdate($table, array $bind, array $where)
     {
-        $this->assertEquals(self::SESSION_TABLE, $table);
+        $this->assertSame(self::SESSION_TABLE, $table);
 
         $this->assertInternalType('int', $bind[self::COLUMN_SESSION_EXPIRES]);
-        $this->assertEquals(base64_encode(self::SESSION_DATA), $bind[self::COLUMN_SESSION_DATA]);
+        $this->assertSame(base64_encode(self::SESSION_DATA), $bind[self::COLUMN_SESSION_DATA]);
 
-        $this->assertEquals([self::COLUMN_SESSION_ID . '=?' => self::SESSION_ID], $where);
+        $this->assertSame([self::COLUMN_SESSION_ID . '=?' => self::SESSION_ID], $where);
     }
 }

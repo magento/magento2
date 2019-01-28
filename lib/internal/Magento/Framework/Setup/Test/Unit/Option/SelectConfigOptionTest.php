@@ -36,7 +36,7 @@ class SelectConfigOptionTest extends \PHPUnit\Framework\TestCase
             ['a', 'b'],
             'path/to/value'
         );
-        $this->assertEquals(SelectConfigOption::FRONTEND_WIZARD_SELECT, $option->getFrontendType());
+        $this->assertSame(SelectConfigOption::FRONTEND_WIZARD_SELECT, $option->getFrontendType());
     }
 
     public function testGetSelectOptions()
@@ -47,7 +47,7 @@ class SelectConfigOptionTest extends \PHPUnit\Framework\TestCase
             ['a', 'b'],
             'path/to/value'
         );
-        $this->assertEquals(['a', 'b'], $option->getSelectOptions());
+        $this->assertSame(['a', 'b'], $option->getSelectOptions());
     }
 
     /**

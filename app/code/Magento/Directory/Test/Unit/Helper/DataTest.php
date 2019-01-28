@@ -155,7 +155,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         // Test
         $result = $this->_object->getRegionJson();
-        $this->assertEquals('encoded_json', $result);
+        $this->assertSame('encoded_json', $result);
     }
 
     /**
@@ -176,7 +176,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $result = $this->_object->getCountriesWithStatesRequired();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -197,7 +197,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $result = $this->_object->getCountriesWithOptionalZip();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -224,7 +224,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 $storeId
             )->will($this->returnValue($country));
 
-        $this->assertEquals($country, $this->_object->getDefaultCountry($storeId));
+        $this->assertSame($country, $this->_object->getDefaultCountry($storeId));
     }
 
     public function testGetCountryCollection()
@@ -260,7 +260,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')->with(\Magento\Directory\Helper\Data::XML_PATH_TOP_COUNTRIES)
             ->willReturn($topCountriesValue);
 
-        $this->assertEquals($expectedResult, $this->_object->getTopCountryCodes());
+        $this->assertSame($expectedResult, $this->_object->getTopCountryCodes());
     }
 
     /**

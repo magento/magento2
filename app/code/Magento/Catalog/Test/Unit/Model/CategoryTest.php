@@ -171,7 +171,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->filterManager->expects($this->once())->method('translitUrl')->with($strIn)
             ->will($this->returnValue($resultString));
 
-        $this->assertEquals($resultString, $this->category->formatUrlKey($strIn));
+        $this->assertSame($resultString, $this->category->formatUrlKey($strIn));
     }
 
     /**
@@ -271,7 +271,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUseFlatResourceFalse()
     {
-        $this->assertEquals(false, $this->category->getUseFlatResource());
+        $this->assertSame(false, $this->category->getUseFlatResource());
     }
 
     public function testGetUseFlatResourceTrue()
@@ -281,7 +281,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         $category = $this->getCategoryModel();
-        $this->assertEquals(true, $category->getUseFlatResource());
+        $this->assertSame(true, $category->getUseFlatResource());
     }
 
     /**
@@ -460,7 +460,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->setData($interfaceAttributeCode, 10);
 
         //The description attribute is not set, expect empty custom attribute array
-        $this->assertEquals([], $this->category->getCustomAttributes());
+        $this->assertSame([], $this->category->getCustomAttributes());
 
         //Set the description attribute;
         $this->category->setData($customAttributeCode, $initialCustomAttributeValue);
@@ -468,18 +468,18 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
-        $this->assertEquals(1, count($this->category->getCustomAttributes()));
+        $this->assertSame(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
-        $this->assertEquals(
+        $this->assertSame(
             $initialCustomAttributeValue,
             $this->category->getCustomAttribute($customAttributeCode)->getValue()
         );
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->category->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
-        $this->assertEquals(1, count($this->category->getCustomAttributes()));
+        $this->assertSame(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
-        $this->assertEquals(
+        $this->assertSame(
             $newCustomAttributeValue,
             $this->category->getCustomAttribute($customAttributeCode)->getValue()
         );
@@ -528,7 +528,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $result = $model->getImageUrl('attribute1');
 
-        $this->assertEquals($url, $result);
+        $this->assertSame($url, $result);
     }
 
     public function testGetImageWithoutAttributeCode()
@@ -554,6 +554,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $result = $model->getImageUrl();
 
-        $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
+        $this->assertSame('http://www.example.com/catalog/category/myimage', $result);
     }
 }

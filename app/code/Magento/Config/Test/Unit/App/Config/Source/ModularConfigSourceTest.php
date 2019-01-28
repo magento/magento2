@@ -38,6 +38,6 @@ class ModularConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn(['data' => ['path' => 'value']]);
-        $this->assertEquals('value', $this->source->get('path'));
+        $this->assertSame('value', $this->source->get('path'));
     }
 }

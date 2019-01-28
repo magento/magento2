@@ -13,6 +13,6 @@ class UtilTest extends \PHPUnit\Framework\TestCase
     {
         $util = new \Magento\Framework\Util();
         $version = implode('.', [PHP_MAJOR_VERSION, PHP_MINOR_VERSION, PHP_RELEASE_VERSION]);
-        $this->assertEquals($version, $util->getTrimmedPhpVersion());
+        $this->assertSame($version, $util->getTrimmedPhpVersion());
     }
 }

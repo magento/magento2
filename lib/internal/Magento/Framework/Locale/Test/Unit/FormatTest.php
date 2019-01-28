@@ -104,7 +104,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNumber($value, $expected): void
     {
-        $this->assertEquals($expected, $this->formatModel->getNumber($value));
+        $this->assertSame($expected, $this->formatModel->getNumber($value));
     }
 
     /**

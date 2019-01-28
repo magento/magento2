@@ -144,7 +144,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$anchorCategories]));
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'category-1_1' => $canonical,
                 'category-2_2' => $categories,
@@ -180,7 +180,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
 
-        $this->assertEquals(
+        $this->assertSame(
             ['category-1_1' => $canonical],
             $this->productScopeGenerator->generateForSpecificStoreView(1, [$this->categoryMock], $product, 1)
         );
@@ -196,7 +196,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(true));
 
-        $this->assertEquals([], $this->productScopeGenerator->generateForGlobalScope([], $product, 1));
+        $this->assertSame([], $this->productScopeGenerator->generateForGlobalScope([], $product, 1));
     }
 
     /**
@@ -226,7 +226,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             $this->categoryMock,
             $storeId
         );
-        self::assertEquals(
+        self::assertSame(
             $expectedResult,
             $result
         );

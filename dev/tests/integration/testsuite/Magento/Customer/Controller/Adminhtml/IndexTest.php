@@ -134,7 +134,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEmpty($subscriber->getId());
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
-        $this->assertEquals(1, $subscriber->getStatus());
+        $this->assertSame(1, $subscriber->getStatus());
 
         $post = [
             'customer' => [
@@ -155,7 +155,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEmpty($subscriber->getId());
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
-        $this->assertEquals(3, $subscriber->getStatus());
+        $this->assertSame(3, $subscriber->getStatus());
 
         /**
          * Check that success message is set
@@ -456,7 +456,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertEquals('{"error":0}', $body);
+        $this->assertSame('{"error":0}', $body);
     }
 
     /**

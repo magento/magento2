@@ -111,7 +111,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->assertEquals($expected, $this->block->getConfiguredOptions());
+        $this->assertSame($expected, $this->block->getConfiguredOptions());
     }
 
     /**

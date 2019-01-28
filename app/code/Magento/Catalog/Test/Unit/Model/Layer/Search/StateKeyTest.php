@@ -58,6 +58,6 @@ class StateKeyTest extends \PHPUnit\Framework\TestCase
         $queryMock->expects($this->once())->method('getId')->will($this->returnValue('4'));
         $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));
 
-        $this->assertEquals('Q_4_STORE_2_CAT_1_CUSTGROUP_3', $this->model->toString($categoryMock));
+        $this->assertSame('Q_4_STORE_2_CAT_1_CUSTGROUP_3', $this->model->toString($categoryMock));
     }
 }

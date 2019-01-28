@@ -54,8 +54,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             ['value' => 'service_one', 'label' => 'Service One'],
             ['value' => 'service_two', 'label' => 'Service Two'],
         ];
-        $this->assertEquals($expectedResult, $this->_model->toOptionArray());
+        $this->assertSame($expectedResult, $this->_model->toOptionArray());
         // Makes sure the value is calculated only once
-        $this->assertEquals($expectedResult, $this->_model->toOptionArray());
+        $this->assertSame($expectedResult, $this->_model->toOptionArray());
     }
 }

@@ -88,7 +88,7 @@ class FilterAssemblerTest extends \PHPUnit\Framework\TestCase
         $this->selectBuilderMock->expects($this->never())
             ->method('setFilters');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->selectBuilderMock,
             $this->subject->assemble($this->selectBuilderMock, $queryConfigMock)
         );
@@ -135,7 +135,7 @@ class FilterAssemblerTest extends \PHPUnit\Framework\TestCase
             ->method('setFilters')
             ->with(['(sales.entity_id IS NULL)']);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->selectBuilderMock,
             $this->subject->assemble($this->selectBuilderMock, $queryConfigMock)
         );

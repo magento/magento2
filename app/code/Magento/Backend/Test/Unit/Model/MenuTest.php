@@ -58,7 +58,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $item = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->_model->add($item);
         $this->assertCount(1, $this->_model);
-        $this->assertEquals($item, $this->_model[0]);
+        $this->assertSame($item, $this->_model[0]);
     }
 
     public function testAddDoLogAddAction()
@@ -86,7 +86,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->add($this->_items['item1'], null, 2);
         $this->assertCount(4, $this->_model);
-        $this->assertEquals($this->_items['item1'], $this->_model[3]);
+        $this->assertSame($this->_items['item1'], $this->_model[3]);
     }
 
     public function testAddSortsItemsByTheirSortIndex()
@@ -101,7 +101,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             /** @var $item \Magento\Backend\Model\Menu\Item */
             $itemsOrdered[] = $item->getId();
         }
-        $this->assertEquals(['item1', 'item3', 'item2'], $itemsOrdered);
+        $this->assertSame(['item1', 'item3', 'item2'], $itemsOrdered);
     }
 
     public function testGet()
@@ -109,10 +109,10 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
 
-        $this->assertEquals($this->_items['item1'], $this->_model[0]);
-        $this->assertEquals($this->_items['item2'], $this->_model[1]);
-        $this->assertEquals($this->_items['item1'], $this->_model->get(\item1::class));
-        $this->assertEquals($this->_items['item2'], $this->_model->get(\item2::class));
+        $this->assertSame($this->_items['item1'], $this->_model[0]);
+        $this->assertSame($this->_items['item2'], $this->_model[1]);
+        $this->assertSame($this->_items['item1'], $this->_model->get(\item1::class));
+        $this->assertSame($this->_items['item2'], $this->_model->get(\item2::class));
     }
 
     public function testGetRecursive()
@@ -141,9 +141,9 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_items['item3']->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
         $menuTwo->add($this->_items['item3']);
 
-        $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
-        $this->assertEquals($this->_items['item2'], $this->_model->get('item2'));
-        $this->assertEquals($this->_items['item3'], $this->_model->get('item3'));
+        $this->assertSame($this->_items['item1'], $this->_model->get('item1'));
+        $this->assertSame($this->_items['item2'], $this->_model->get('item2'));
+        $this->assertSame($this->_items['item3'], $this->_model->get('item3'));
     }
 
     public function testMove()
@@ -192,7 +192,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_model->add($this->_items['item1']);
 
         $this->assertCount(1, $this->_model);
-        $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
+        $this->assertSame($this->_items['item1'], $this->_model->get('item1'));
 
         $this->_model->remove('item1');
         $this->assertCount(0, $this->_model);
@@ -224,9 +224,9 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_model->add($this->_items['item1'], null, 10);
         $this->_model->add($this->_items['item2'], null, 20);
 
-        $this->assertEquals($this->_items['item2'], $this->_model[20]);
+        $this->assertSame($this->_items['item2'], $this->_model[20]);
         $this->_model->reorder('item2', 5);
-        $this->assertEquals($this->_items['item2'], $this->_model[5]);
+        $this->assertSame($this->_items['item2'], $this->_model[5]);
         $this->assertFalse(isset($this->_model[20]));
     }
 
@@ -252,8 +252,8 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_model->reorder('item2', 25);
         $subMenu->reorder('item3', 30);
 
-        $this->assertEquals($this->_items['item2'], $subMenu[25]);
-        $this->assertEquals($this->_items['item3'], $subMenu[30]);
+        $this->assertSame($this->_items['item2'], $subMenu[25]);
+        $this->assertSame($this->_items['item3'], $subMenu[30]);
     }
 
     public function testIsLast()
@@ -277,7 +277,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_items['item1']->expects($this->once())->method('hasChildren');
         $this->_model->add($this->_items['item1']);
 
-        $this->assertEquals($this->_items['item1'], $this->_model->getFirstAvailable());
+        $this->assertSame($this->_items['item1'], $this->_model->getFirstAvailable());
     }
 
     public function testGetFirstAvailableReturnsOnlyAllowedAndNotDisabledItem()
@@ -293,7 +293,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_items['item3']->expects($this->exactly(1))->method('isDisabled')->will($this->returnValue(false));
         $this->_model->add($this->_items['item3']);
 
-        $this->assertEquals($this->_items['item3'], $this->_model->getFirstAvailable());
+        $this->assertSame($this->_items['item3'], $this->_model->getFirstAvailable());
     }
 
     public function testMultipleIterationsWorkProperly()
@@ -314,7 +314,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         foreach ($this->_model as $item) {
             $itemsTwo[] = $item->getId();
         }
-        $this->assertEquals($items, $itemsTwo);
+        $this->assertSame($items, $itemsTwo);
     }
 
     /**
@@ -338,7 +338,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
                 $actual[$keyLevelOne][] = $valLoopTwo->getId();
             }
         }
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testSerialize()
@@ -361,7 +361,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ->method('toArray')
             ->willReturn(['arrayData']);
         $menu->add($itemMock);
-        $this->assertEquals('serializedString', $menu->serialize());
+        $this->assertSame('serializedString', $menu->serialize());
     }
 
     public function testUnserialize()

@@ -31,7 +31,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->block->getAllowedContainers());
         $containers = ['some_container', 'another_container'];
         $this->block->setAllowedContainers($containers);
-        $this->assertEquals($containers, $this->block->getAllowedContainers());
+        $this->assertSame($containers, $this->block->getAllowedContainers());
     }
 
     /**

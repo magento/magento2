@@ -77,6 +77,6 @@ class ProductViewTest extends \PHPUnit\Framework\TestCase
         $this->stockItem->expects($this->any())->method('getMaxSaleQty')->willReturn(5);
         $this->stockItem->expects($this->any())->method('getQtyIncrements')->willReturn(3);
 
-        $this->assertEquals($result, $this->block->afterGetQuantityValidators($productViewBlock, $validators));
+        $this->assertSame($result, $this->block->afterGetQuantityValidators($productViewBlock, $validators));
     }
 }

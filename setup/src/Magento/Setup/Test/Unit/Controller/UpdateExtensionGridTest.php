@@ -69,8 +69,8 @@ class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $this->assertEquals($extensionData, $variables['extensions']);
+        $this->assertSame($extensionData, $variables['extensions']);
         $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals(1, $variables['total']);
+        $this->assertSame(1, $variables['total']);
     }
 }

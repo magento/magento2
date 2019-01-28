@@ -60,7 +60,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
     {
         $row = new DataObject();
         $row->setTaxRatesCodes($ratesCodes);
-        $this->assertEquals($expected, $this->codes->render($row));
+        $this->assertSame($expected, $this->codes->render($row));
     }
 
     /**

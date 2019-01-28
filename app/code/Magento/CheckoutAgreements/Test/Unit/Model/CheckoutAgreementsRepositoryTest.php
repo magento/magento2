@@ -145,7 +145,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn([$this->agreementMock]);
-        $this->assertEquals([$this->agreementMock], $this->model->getList());
+        $this->assertSame([$this->agreementMock], $this->model->getList());
     }
 
     public function testSave()
@@ -177,7 +177,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('addData')->with(['data'])
             ->willReturn($this->agreementMock);
         $this->resourceMock->expects($this->once())->method('save')->with($this->agreementMock);
-        $this->assertEquals($this->agreementMock, $this->model->save($this->agreementMock, 1));
+        $this->assertSame($this->agreementMock, $this->model->save($this->agreementMock, 1));
     }
 
     /**

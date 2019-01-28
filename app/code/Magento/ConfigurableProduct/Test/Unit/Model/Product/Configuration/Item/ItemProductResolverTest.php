@@ -90,7 +90,7 @@ class ItemProductResolverTest extends TestCase
             ->willReturn(null);
 
         $finalProduct = $this->model->getFinalProduct($this->item);
-        $this->assertEquals(
+        $this->assertSame(
             $this->parentProduct->getSku(),
             $finalProduct->getSku()
         );
@@ -120,7 +120,7 @@ class ItemProductResolverTest extends TestCase
             ->willReturn($scopeValue);
 
         $finalProduct = $this->model->getFinalProduct($this->item);
-        $this->assertEquals($expectedSku, $finalProduct->getSku());
+        $this->assertSame($expectedSku, $finalProduct->getSku());
     }
 
     /**

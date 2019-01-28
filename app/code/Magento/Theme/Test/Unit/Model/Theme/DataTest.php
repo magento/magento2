@@ -67,6 +67,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $area = Area::AREA_FRONTEND;
         $this->model->setArea($area);
-        $this->assertEquals($area, $this->model->getArea());
+        $this->assertSame($area, $this->model->getArea());
     }
 }

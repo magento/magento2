@@ -139,6 +139,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->with($expectedResult)
             ->willReturnArgument(0);
 
-        $this->assertEquals($expectedResult, $this->storeSource->get($scopeCode));
+        $this->assertSame($expectedResult, $this->storeSource->get($scopeCode));
     }
 }

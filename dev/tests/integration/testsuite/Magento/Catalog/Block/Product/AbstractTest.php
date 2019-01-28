@@ -97,7 +97,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $json = $this->block->getAddToWishlistParams($this->product);
         $params = (array)json_decode($json);
         $data = (array)$params['data'];
-        $this->assertEquals($this->product->getId(), $data['product']);
+        $this->assertSame($this->product->getId(), $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith(
             'wishlist/index/add/',
@@ -152,11 +152,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get(\Magento\Framework\View\LayoutInterface::class)
         );
-        $this->assertEquals(3, $this->block->getColumnCount());
+        $this->assertSame(3, $this->block->getColumnCount());
         /* default column count */
 
         $this->block->addColumnCountLayoutDepend('test', 10);
-        $this->assertEquals(10, $this->block->getColumnCountLayoutDepend('test'));
+        $this->assertSame(10, $this->block->getColumnCountLayoutDepend('test'));
         $this->block->removeColumnCountLayoutDepend('test');
         $this->assertFalse($this->block->getColumnCountLayoutDepend('test'));
     }

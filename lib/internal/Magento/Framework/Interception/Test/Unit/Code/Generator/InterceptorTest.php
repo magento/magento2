@@ -68,7 +68,7 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $generated = $interceptor->generate();
-        $this->assertEquals($fileName . '.php', $generated, 'Generated interceptor is invalid.');
+        $this->assertSame($fileName . '.php', $generated, 'Generated interceptor is invalid.');
     }
 
     /**

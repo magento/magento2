@@ -42,7 +42,7 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
         $this->composerInformationMock->expects($this->any())->method('getSystemPackages')->willReturn($packageList);
         $productVersion = $this->productMetadata->getVersion();
         $this->assertNotEmpty($productVersion, 'Empty product version');
-        $this->assertEquals($expectedVersion, $productVersion);
+        $this->assertSame($expectedVersion, $productVersion);
     }
 
     /**

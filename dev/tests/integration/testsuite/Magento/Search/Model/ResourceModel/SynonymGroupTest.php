@@ -37,11 +37,11 @@ class SynonymGroupTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Search\Model\ResourceModel\SynonymGroup $resourceModel */
         $resourceModel = $objectManager->create(\Magento\Search\Model\ResourceModel\SynonymGroup::class);
-        $this->assertEquals(
+        $this->assertSame(
             [['group_id' => 1, 'synonyms' => 'a,b,c'], ['group_id' => 4, 'synonyms' => 'd,e,f']],
             $resourceModel->getByScope(0, 0)
         );
-        $this->assertEquals([['group_id' => 2, 'synonyms' => 'd,e,f']], $resourceModel->getByScope(0, 1));
-        $this->assertEquals([['group_id' => 3, 'synonyms' => 'g,h,i']], $resourceModel->getByScope(1, 0));
+        $this->assertSame([['group_id' => 2, 'synonyms' => 'd,e,f']], $resourceModel->getByScope(0, 1));
+        $this->assertSame([['group_id' => 3, 'synonyms' => 'g,h,i']], $resourceModel->getByScope(1, 0));
     }
 }

@@ -52,7 +52,7 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
             ->with($entityType, $attributeCode)
             ->willReturn($modelMock);
 
-        $this->assertEquals($modelMock, $this->model->getModelByAttribute($entityType, $attributeMock));
+        $this->assertSame($modelMock, $this->model->getModelByAttribute($entityType, $attributeMock));
     }
 
     /**

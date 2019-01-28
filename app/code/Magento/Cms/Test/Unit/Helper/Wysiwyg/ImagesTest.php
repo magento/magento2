@@ -174,12 +174,12 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
     public function testSetStoreId()
     {
-        $this->assertEquals($this->imagesHelper, $this->imagesHelper->setStoreId(1));
+        $this->assertSame($this->imagesHelper, $this->imagesHelper->setStoreId(1));
     }
 
     public function testGetStorageRoot()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->getAbsolutePath(''),
             $this->imagesHelper->getStorageRoot()
         );
@@ -198,14 +198,14 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTreeNodeName()
     {
-        $this->assertEquals('node', $this->imagesHelper->getTreeNodeName());
+        $this->assertSame('node', $this->imagesHelper->getTreeNodeName());
     }
 
     public function testConvertPathToId()
     {
         $pathOne = '/test_path';
         $pathTwo = $this->getAbsolutePath('') . '/test_path';
-        $this->assertEquals(
+        $this->assertSame(
             $this->imagesHelper->convertPathToId($pathOne),
             $this->imagesHelper->convertPathToId($pathTwo)
         );
@@ -220,7 +220,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         $pathOne = $this->imagesHelper->getStorageRoot() . $path;
         $pathTwo = $this->imagesHelper->convertIdToPath($pathId);
-        $this->assertEquals($pathOne, $pathTwo);
+        $this->assertSame($pathOne, $pathTwo);
     }
 
     /**
@@ -237,7 +237,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function testConvertIdToPathNodeRoot()
     {
         $pathId = \Magento\Theme\Helper\Storage::NODE_ROOT;
-        $this->assertEquals($this->imagesHelper->getStorageRoot(), $this->imagesHelper->convertIdToPath($pathId));
+        $this->assertSame($this->imagesHelper->getStorageRoot(), $this->imagesHelper->convertIdToPath($pathId));
     }
 
     /**
@@ -257,7 +257,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShortFilename($fileName, $maxLength, $expectedFilename)
     {
-        $this->assertEquals($expectedFilename, $this->imagesHelper->getShortFilename($fileName, $maxLength));
+        $this->assertSame($expectedFilename, $this->imagesHelper->getShortFilename($fileName, $maxLength));
     }
 
     /**
@@ -279,7 +279,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShortFilenameDefaultMaxLength($fileName, $expectedFilename)
     {
-        $this->assertEquals($expectedFilename, $this->imagesHelper->getShortFilename($fileName));
+        $this->assertSame($expectedFilename, $this->imagesHelper->getShortFilename($fileName));
     }
 
     /**
@@ -301,7 +301,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function testIsUsingStaticUrlsAllowed($allowedValue)
     {
         $this->generalSettingsIsUsingStaticUrlsAllowed($allowedValue);
-        $this->assertEquals($allowedValue, $this->imagesHelper->isUsingStaticUrlsAllowed());
+        $this->assertSame($allowedValue, $this->imagesHelper->isUsingStaticUrlsAllowed());
     }
 
     /**
@@ -374,7 +374,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with($this->directoryWriteMock->getRelativePath($expectedPath));
 
-        $this->assertEquals($expectedPath, $this->imagesHelper->getCurrentPath());
+        $this->assertSame($expectedPath, $this->imagesHelper->getCurrentPath());
     }
 
     public function testGetCurrentPathThrowException()
@@ -430,7 +430,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             ->method('getRelativePath')
             ->willReturn($relativePath);
 
-        $this->assertEquals($baseUrl . $relativePath . '/', $this->imagesHelper->getCurrentUrl());
+        $this->assertSame($baseUrl . $relativePath . '/', $this->imagesHelper->getCurrentUrl());
     }
 
     /**
@@ -449,7 +449,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $expectedHtml
     ) {
         $this->generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls, $escapedValue);
-        $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
+        $this->assertSame($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
     }
 
     /**
@@ -498,7 +498,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             ->with('cms/wysiwyg/directive', ['___directive' => $directive, '_escape_params' => false])
             ->willReturn($directive);
 
-        $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName));
+        $this->assertSame($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName));
     }
 
     /**

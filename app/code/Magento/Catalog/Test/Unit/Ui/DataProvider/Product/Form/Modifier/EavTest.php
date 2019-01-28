@@ -449,7 +449,7 @@ class EavTest extends AbstractModifierTest
         $this->currencyLocaleMock->expects($this->once())->method('getCurrency')
             ->willReturn($this->currencyMock);
 
-        $this->assertEquals($sourceData, $this->eav->modifyData([]));
+        $this->assertSame($sourceData, $this->eav->modifyData([]));
     }
 
     /**
@@ -533,7 +533,7 @@ class EavTest extends AbstractModifierTest
         $this->arrayManagerMock->method('get')->willReturn([]);
         $this->arrayManagerMock->method('exists')->willReturn(true);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->eav->setupAttributeMeta($this->productAttributeMock, $groupCode, $sortOrder)
         );

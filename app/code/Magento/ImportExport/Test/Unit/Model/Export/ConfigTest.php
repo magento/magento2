@@ -62,7 +62,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->cacheId,
             $this->serializerMock
         );
-        $this->assertEquals($expected, $this->model->getEntities('entities'));
+        $this->assertSame($expected, $this->model->getEntities('entities'));
     }
 
     /**
@@ -100,7 +100,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->cacheId,
             $this->serializerMock
         );
-        $this->assertEquals($expectedResult, $this->model->getEntityTypes($entity));
+        $this->assertSame($expectedResult, $this->model->getEntityTypes($entity));
     }
 
     /**
@@ -157,7 +157,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->cacheId,
             $this->serializerMock
         );
-        $this->assertEquals($expected, $this->model->getFileFormats('fileFormats'));
+        $this->assertSame($expected, $this->model->getFileFormats('fileFormats'));
     }
 
     /**

@@ -29,7 +29,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         $dependency = $this->createDependency($lib, 0);
 
-        $this->assertEquals($lib, $dependency->getLib());
+        $this->assertSame($lib, $dependency->getLib());
     }
 
     public function testGetCount()
@@ -38,6 +38,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         $dependency = $this->createDependency('lib', $count);
 
-        $this->assertEquals($count, $dependency->getCount());
+        $this->assertSame($count, $dependency->getCount());
     }
 }

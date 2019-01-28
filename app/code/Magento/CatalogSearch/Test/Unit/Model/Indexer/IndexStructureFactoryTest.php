@@ -56,7 +56,7 @@ class IndexStructureFactoryTest extends \PHPUnit\Framework\TestCase
             $structures
         );
 
-        $this->assertEquals($indexerStructureMock, $this->model->create($data));
+        $this->assertSame($indexerStructureMock, $this->model->create($data));
     }
 
     /**

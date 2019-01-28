@@ -67,7 +67,7 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(Area::AREA_ADMINHTML, $callback)
             ->willReturn('result');
 
-        $this->assertEquals('result', $this->emulatedAdminhtmlProcessorArea->process($callback));
+        $this->assertSame('result', $this->emulatedAdminhtmlProcessorArea->process($callback));
     }
 
     /**

@@ -142,7 +142,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
                 'name' => 'file.jpg',
                 'path' => 'abs/path',
             ]);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'file' => 'file.jpg',
                 'name' => 'file.jpg',

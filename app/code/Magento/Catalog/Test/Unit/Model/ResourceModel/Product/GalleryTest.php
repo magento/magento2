@@ -178,7 +178,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             $leftJoinTables,
             $whereCondition
         );
-        $this->assertEquals($resultRow, $methodResult);
+        $this->assertSame($resultRow, $methodResult);
     }
 
     public function testLoadDataFromTableByValueIdNoColsWithWhere()
@@ -271,7 +271,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             $whereCondition
         );
 
-        $this->assertEquals($resultRow, $methodResult);
+        $this->assertSame($resultRow, $methodResult);
     }
 
     public function testBindValueToEntityRecordExists()
@@ -395,7 +395,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                          ->with($this->select)
                          ->willReturn($resultRow);
 
-        $this->assertEquals($resultRow, $this->resource->loadProductGalleryByAttributeId($this->product, $attributeId));
+        $this->assertSame($resultRow, $this->resource->loadProductGalleryByAttributeId($this->product, $attributeId));
     }
 
     public function testInsertGalleryValueInStore()
@@ -474,6 +474,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())->method('fetchAll')
             ->with($this->select)
             ->willReturn($results);
-        $this->assertEquals($this->resource->countImageUses(1), count($results));
+        $this->assertSame($this->resource->countImageUses(1), count($results));
     }
 }

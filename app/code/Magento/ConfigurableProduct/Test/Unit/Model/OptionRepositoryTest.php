@@ -106,7 +106,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->productMock)
             ->willReturn([$optionMock]);
 
-        self::assertEquals(
+        self::assertSame(
             $optionMock,
             $this->model->get($productSku, $optionId)
         );
@@ -325,7 +325,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->productMock)
             ->willReturn([$optionMock]);
 
-        $this->assertEquals([$optionMock], $this->model->getList($productSku));
+        $this->assertSame([$optionMock], $this->model->getList($productSku));
     }
 
     /**

@@ -228,7 +228,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         }
 
         $object->initForm();
-        $this->assertEquals($this->_formMock, $object->getForm());
+        $this->assertSame($this->_formMock, $object->getForm());
     }
 
     /**

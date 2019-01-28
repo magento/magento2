@@ -55,6 +55,6 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
             ->method('asHtmlRecursive')
             ->will($this->returnValue('action html'));
 
-        $this->assertEquals('action html', $this->actions->render($this->_element));
+        $this->assertSame('action html', $this->actions->render($this->_element));
     }
 }

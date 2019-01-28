@@ -18,8 +18,8 @@ class ConfigDomMock extends \PHPUnit\Framework\TestCase
      */
     public function __construct($initialContents, $validationState, $idAttributes, $typeAttribute, $perFileSchema)
     {
-        $this->assertEquals('first content item', $initialContents);
-        $this->assertEquals('xsi:type', $typeAttribute);
+        $this->assertSame('first content item', $initialContents);
+        $this->assertSame('xsi:type', $typeAttribute);
     }
 
     /**

@@ -140,7 +140,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             ->with($url)
             ->will($this->returnValue($url));
 
-        $this->assertEquals($url, $this->compareHelper->getClearListUrl());
+        $this->assertSame($url, $this->compareHelper->getClearListUrl());
     }
 
     public function testGetPostDataClearList()

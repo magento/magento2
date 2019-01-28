@@ -59,6 +59,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPatterns()
     {
-        $this->assertEquals($this->patterns, $this->model->getPatterns());
+        $this->assertSame($this->patterns, $this->model->getPatterns());
     }
 }

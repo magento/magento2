@@ -91,7 +91,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUserType()
     {
-        $this->assertEquals(UserContextInterface::USER_TYPE_INTEGRATION, $this->oauthUserContext->getUserType());
+        $this->assertSame(UserContextInterface::USER_TYPE_INTEGRATION, $this->oauthUserContext->getUserType());
     }
 
     public function testGetUserIdExist()
@@ -100,7 +100,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($integrationId, ['oauth_token' => 'asdcfsdvanskdcalkdsjcfljldk']);
 
-        $this->assertEquals($integrationId, $this->oauthUserContext->getUserId());
+        $this->assertSame($integrationId, $this->oauthUserContext->getUserId());
     }
 
     public function testGetUserIdDoesNotExist()
@@ -109,7 +109,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($integrationId, ['oauth_token' => 'asdcfsdvanskdcalkdsjcfljldk']);
 
-        $this->assertEquals($integrationId, $this->oauthUserContext->getUserId());
+        $this->assertSame($integrationId, $this->oauthUserContext->getUserId());
     }
 
     public function testGetUserIdNoOauthInformation()
@@ -118,7 +118,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($integrationId, []);
 
-        $this->assertEquals(null, $this->oauthUserContext->getUserId());
+        $this->assertSame(null, $this->oauthUserContext->getUserId());
     }
 
     /**

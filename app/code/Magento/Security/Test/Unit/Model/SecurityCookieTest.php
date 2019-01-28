@@ -87,7 +87,7 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($cookie);
 
-        $this->assertEquals((int)$cookie, $this->model->getLogoutReasonCookie());
+        $this->assertSame((int)$cookie, $this->model->getLogoutReasonCookie());
     }
 
     /**
@@ -119,7 +119,7 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->setLogoutReasonCookie($status));
+        $this->assertSame($this->model, $this->model->setLogoutReasonCookie($status));
     }
 
     /**
@@ -155,7 +155,7 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->deleteLogoutReasonCookie());
+        $this->assertSame($this->model, $this->model->deleteLogoutReasonCookie());
     }
 
     /**

@@ -48,7 +48,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->website->init(null);
 
-        $this->assertEquals($this->website, $result);
+        $this->assertSame($this->website, $result);
     }
 
     /**
@@ -72,7 +72,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $result = $this->website->isValid($value);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testIsValidReturnAddMessagesCall()
@@ -111,7 +111,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $result = $websiteString->getAllWebsitesValue();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

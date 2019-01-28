@@ -33,7 +33,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ->with(['options'])
             ->willReturn('expected value');
 
-        $this->assertEquals('expected value', $model->getOptions());
+        $this->assertSame('expected value', $model->getOptions());
     }
 
     public function testGetOptionWhenOptionsAreEmptyWithoutSource()
@@ -61,7 +61,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ->with([])
             ->willReturn('expected value');
 
-        $this->assertEquals('expected value', $model->getOptions());
+        $this->assertSame('expected value', $model->getOptions());
     }
 
     public function testGetOptionWhenOptionsAreEmptyWithSource()
@@ -90,7 +90,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ->with(['source value'])
             ->willReturn('expected value');
 
-        $this->assertEquals('expected value', $model->getOptions());
+        $this->assertSame('expected value', $model->getOptions());
     }
 
     public function testConvertToObjects()
@@ -120,7 +120,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 
-        $this->assertEquals([$attributeOptionMock], $model->getOptions());
+        $this->assertSame([$attributeOptionMock], $model->getOptions());
     }
 
     public function testGetValidationRulesWhenRuleIsArray()
@@ -136,7 +136,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(['some value'], $model->getValidationRules());
+        $this->assertSame(['some value'], $model->getValidationRules());
     }
 
     public function testGetValidationRulesWhenRuleIsSerialized()
@@ -160,14 +160,14 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ->with($rule)
             ->willReturn($expected);
 
-        $this->assertEquals($expected, $model->getValidationRules());
+        $this->assertSame($expected, $model->getValidationRules());
 
         $data = ['test array'];
         $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, $data);
-        $this->assertEquals($data, $model->getValidationRules());
+        $this->assertSame($data, $model->getValidationRules());
 
         $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, null);
-        $this->assertEquals([], $model->getValidationRules());
+        $this->assertSame([], $model->getValidationRules());
     }
 
     public function testGetValidationRulesWhenRuleIsEmpty()
@@ -183,7 +183,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals([], $model->getValidationRules());
+        $this->assertSame([], $model->getValidationRules());
     }
 
     /**
@@ -219,7 +219,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
         );
         $backendModelMock->expects($this->any())->method('getType')->willReturn($attributeType);
         $model->expects($this->any())->method('getBackend')->willReturn($backendModelMock);
-        $this->assertEquals($isEmpty, $model->isValueEmpty($value));
+        $this->assertSame($isEmpty, $model->isValueEmpty($value));
     }
 
     /**

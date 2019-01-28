@@ -98,7 +98,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->groupMock->expects($this->any())->method('getName')->willReturn($groupName);
         $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $this->storeMock->expects($this->any())->method('getName')->willReturn($storeName);
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getStoresStructure($isAll, $storeIds, $groupIds, $websiteIds),
             $expectedResult
         );
@@ -204,7 +204,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->any())->method('getGroupId')->willReturn($storeGroupId);
 
         $this->model->setIsAdminScopeAllowed(true);
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getStoreValuesForForm($empty, $all),
             $expectedResult
         );

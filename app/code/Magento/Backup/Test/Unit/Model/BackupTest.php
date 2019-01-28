@@ -100,7 +100,7 @@ class BackupTest extends \PHPUnit\Framework\TestCase
         $this->backupModel->setPath($path);
         $this->backupModel->setName($name);
         $this->backupModel->setTime($time);
-        $this->assertEquals($result, $this->backupModel->output());
+        $this->assertSame($result, $this->backupModel->output());
     }
 
     /**

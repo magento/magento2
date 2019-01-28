@@ -155,15 +155,15 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->asArray());
         $this->assertEmpty($this->_model->asString());
         $this->_model->addUpdate('test');
-        $this->assertEquals(['test'], $this->_model->asArray());
-        $this->assertEquals('test', $this->_model->asString());
+        $this->assertSame(['test'], $this->_model->asArray());
+        $this->assertSame('test', $this->_model->asString());
     }
 
     public function testAddHandle()
     {
         $this->assertEmpty($this->_model->getHandles());
         $this->_model->addHandle('test');
-        $this->assertEquals(['test'], $this->_model->getHandles());
+        $this->assertSame(['test'], $this->_model->getHandles());
     }
 
     public function testRemoveHandle()
@@ -181,7 +181,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->_model->addPageHandles(['non_existing_handle']));
         $this->assertEmpty($this->_model->getPageHandles());
-        $this->assertEquals($nonPageHandles, $this->_model->getHandles());
+        $this->assertSame($nonPageHandles, $this->_model->getHandles());
 
         /* test that only the first existing handle is taken into account */
         $handlesToTry = [
@@ -197,8 +197,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             'catalog_product_view_type_simple',
         ];
         $this->assertTrue($this->_model->addPageHandles($handlesToTry));
-        $this->assertEquals($expectedPageHandles, $this->_model->getPageHandles());
-        $this->assertEquals(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
+        $this->assertSame($expectedPageHandles, $this->_model->getPageHandles());
+        $this->assertSame(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
 
         /* test that new handles override the previous ones */
         $expectedPageHandles = ['default', 'checkout_index_index'];
@@ -206,8 +206,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->_model->removeHandle('catalog_product_view');
         $this->_model->removeHandle('catalog_product_view_type_simple');
         $this->assertTrue($this->_model->addPageHandles(['default', 'checkout_index_index']));
-        $this->assertEquals($expectedPageHandles, $this->_model->getPageHandles());
-        $this->assertEquals(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
+        $this->assertSame($expectedPageHandles, $this->_model->getPageHandles());
+        $this->assertSame(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
     }
 
     /**
@@ -232,7 +232,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
         $this->_model->load($handles);
-        $this->assertEquals($handles, $this->_model->getHandles());
+        $this->assertSame($handles, $this->_model->getHandles());
         $expectedResult = '
             <root>
                 <body>
@@ -268,10 +268,10 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->asString());
         $this->_model->load($handles);
 
-        $this->assertEquals($expectedHandles, $this->_model->getHandles());
+        $this->assertSame($expectedHandles, $this->_model->getHandles());
         $actualResult = '<root>' . $this->_model->asString() . '</root>';
         $this->assertXmlStringEqualsXmlString($expectedResult, $actualResult);
-        $this->assertEquals('fixture_handle_page_layout', $this->_model->getPageLayout());
+        $this->assertSame('fixture_handle_page_layout', $this->_model->getPageLayout());
     }
 
     public function testLoadCache()
@@ -284,8 +284,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->asString());
         $handles = ['fixture_handle_one', 'fixture_handle_two'];
         $this->_model->load($handles);
-        $this->assertEquals($handles, $this->_model->getHandles());
-        $this->assertEquals(self::FIXTURE_LAYOUT_XML, $this->_model->asString());
+        $this->assertSame($handles, $this->_model->getHandles());
+        $this->assertSame(self::FIXTURE_LAYOUT_XML, $this->_model->asString());
     }
 
     public function testLoadDbApp()
@@ -305,7 +305,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->asString());
         $handles = ['fixture_handle_one'];
         $this->_model->load($handles);
-        $this->assertEquals($handles, $this->_model->getHandles());
+        $this->assertSame($handles, $this->_model->getHandles());
         $this->assertXmlStringEqualsXmlString(
             '<body>' . self::FIXTURE_LAYOUT_XML . '</body>',
             $this->_model->asString()
@@ -333,7 +333,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             'product.info.extrahint' => 'Product View Extra Hint',
             'product.info.configurable.extra' => 'Configurable Product Extra Info',
         ];
-        $this->assertEquals($expected, $this->_model->getContainers());
+        $this->assertSame($expected, $this->_model->getContainers());
     }
 
     public function testGetAllDesignAbstractions()
@@ -351,7 +351,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $this->_model->getAllDesignAbstractions());
+        $this->assertSame($expected, $this->_model->getAllDesignAbstractions());
     }
 
     public function testIsPageLayoutDesignAbstractions()

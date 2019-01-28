@@ -57,8 +57,8 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals('Simple Product', $product->getName());
-            $this->assertEquals('Short description', $product->getShortDescription());
+            $this->assertSame('Simple Product', $product->getName());
+            $this->assertSame('Short description', $product->getShortDescription());
         }
     }
 }

@@ -53,7 +53,7 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
 
         $itemOptionMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
 
-        $this->assertEquals($expectedResult, $this->model->getRelatedProductIds([$quoteItemMock]));
+        $this->assertSame($expectedResult, $this->model->getRelatedProductIds([$quoteItemMock]));
     }
 
     /*
@@ -91,6 +91,6 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(new \stdClass())
         );
 
-        $this->assertEquals([], $this->model->getRelatedProductIds([$quoteItemMock]));
+        $this->assertSame([], $this->model->getRelatedProductIds([$quoteItemMock]));
     }
 }

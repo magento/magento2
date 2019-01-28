@@ -62,8 +62,8 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         // Before load all attributes
         $attributesByCode = $this->resource->getAttributesByCode();
         $attributesByTable = $this->resource->getAttributesByTable();
-        $this->assertEquals(0, count($attributesByCode));
-        $this->assertEquals(0, count($attributesByTable));
+        $this->assertSame(0, count($attributesByCode));
+        $this->assertSame(0, count($attributesByTable));
 
         // Load all attributes
         $resource2 = $this->attributeLoader->loadAllAttributes(
@@ -72,8 +72,8 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         );
         $attributesByCode2 = $resource2->getAttributesByCode();
         $attributesByTable2 = $resource2->getAttributesByTable();
-        $this->assertEquals($expectedNumOfAttributesByCode, count($attributesByCode2));
-        $this->assertEquals($expectedNumOfAttributesByTable, count($attributesByTable2));
+        $this->assertSame($expectedNumOfAttributesByCode, count($attributesByCode2));
+        $this->assertSame($expectedNumOfAttributesByTable, count($attributesByTable2));
     }
 
     public function loadAllAttributesDataProvider()

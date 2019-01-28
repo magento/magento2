@@ -53,6 +53,6 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($mockPageLayoutConfig));
 
         $layoutOptions = $this->layoutModel->getAllOptions();
-        $this->assertEquals($expectedOptions, $layoutOptions);
+        $this->assertSame($expectedOptions, $layoutOptions);
     }
 }

@@ -49,7 +49,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->setData('image', $this->fileName);
         $this->createHandler->execute($product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
-        $this->assertEquals($this->fileLabel, $product->getData('image_label'));
+        $this->assertSame($this->fileLabel, $product->getData('image_label'));
 
         $product->setIsDuplicate(true);
         $product->setData(
@@ -58,7 +58,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         );
         $this->createHandler->execute($product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/duplicate/100'));
-        $this->assertEquals($this->fileLabel, $product->getData('image_label'));
+        $this->assertSame($this->fileLabel, $product->getData('image_label'));
     }
 
     /**
@@ -131,19 +131,19 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $storeId = $product->getStoreId();
 
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
-        $this->assertEquals(
+        $this->assertSame(
             $image,
             $resource->getAttributeRawValue($id, $resource->getAttribute('image'), $storeId)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $smallImage,
             $resource->getAttributeRawValue($id, $resource->getAttribute('small_image'), $storeId)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $swatchImage,
             $resource->getAttributeRawValue($id, $resource->getAttribute('swatch_image'), $storeId)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $thumbnail,
             $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'), $storeId)
         );
@@ -184,19 +184,19 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $storeId = $product->getStoreId();
 
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
-        $this->assertEquals(
+        $this->assertSame(
             $image,
             $resource->getAttributeRawValue($id, $resource->getAttribute('image'), $storeId)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $smallImage,
             $resource->getAttributeRawValue($id, $resource->getAttribute('small_image'), $storeId)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $swatchImage,
             $resource->getAttributeRawValue($id, $resource->getAttribute('swatch_image'), $storeId)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $thumbnail,
             $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'), $storeId)
         );

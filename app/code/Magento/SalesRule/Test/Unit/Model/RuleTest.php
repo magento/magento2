@@ -91,7 +91,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->model->setUseAutoGeneration(false);
 
         $this->model->loadCouponCode();
-        $this->assertEquals(1, $this->model->getUsesPerCoupon());
+        $this->assertSame(1, $this->model->getUsesPerCoupon());
     }
 
     public function testBeforeSaveResetConditionToNull()
@@ -163,7 +163,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $formName = 'form_name';
         $this->model->setId(100);
         $expectedResult = 'form_namerule_conditions_fieldset_100';
-        $this->assertEquals($expectedResult, $this->model->getConditionsFieldSetId($formName));
+        $this->assertSame($expectedResult, $this->model->getConditionsFieldSetId($formName));
     }
 
     public function testGetActionsFieldSetId()
@@ -171,6 +171,6 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $formName = 'form_name';
         $this->model->setId(100);
         $expectedResult = 'form_namerule_actions_fieldset_100';
-        $this->assertEquals($expectedResult, $this->model->getActionsFieldSetId($formName));
+        $this->assertSame($expectedResult, $this->model->getActionsFieldSetId($formName));
     }
 }

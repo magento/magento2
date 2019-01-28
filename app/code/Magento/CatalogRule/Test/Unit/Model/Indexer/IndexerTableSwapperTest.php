@@ -71,7 +71,7 @@ class IndexerTableSwapperTest extends \PHPUnit\Framework\TestCase
             ->with($originalTableName)
             ->willReturn($originalTableName);
 
-        $this->assertEquals(
+        $this->assertSame(
             $temporaryTableNames[$originalTableName],
             $model->getWorkingTableName($originalTableName)
         );
@@ -96,7 +96,7 @@ class IndexerTableSwapperTest extends \PHPUnit\Framework\TestCase
             ->with($this->stringStartsWith($originalTableName . '__temp'))
             ->willReturn($temporaryTableName);
 
-        $this->assertEquals(
+        $this->assertSame(
             $temporaryTableName,
             $model->getWorkingTableName($originalTableName)
         );

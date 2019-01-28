@@ -32,7 +32,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     {
         $productSku = 'product-sku';
         $this->productMock->expects($this->once())->method('getSku')->willReturn($productSku);
-        $this->assertEquals($productSku, $this->model->getProductSku());
+        $this->assertSame($productSku, $this->model->getProductSku());
     }
 
     public function testHasValues()
@@ -64,9 +64,9 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $amountMock->expects($this->once())->method('getValue')->willReturn(50);
         $this->model->setPrice(50);
         $this->model->setPriceType(\Magento\Catalog\Model\Product\Option\Value::TYPE_PERCENT);
-        $this->assertEquals(25, $this->model->getRegularPrice());
+        $this->assertSame(25, $this->model->getRegularPrice());
         $this->model->setPriceType(null);
-        $this->assertEquals(50, $this->model->getRegularPrice());
+        $this->assertSame(50, $this->model->getRegularPrice());
     }
 
     /**
@@ -82,7 +82,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->model->setFileExtension($rawExtensions);
         $this->model->beforeSave();
         $actualExtensions = $this->model->getFileExtension();
-        $this->assertEquals($expectedExtensions, $actualExtensions);
+        $this->assertSame($expectedExtensions, $actualExtensions);
     }
 
     /**

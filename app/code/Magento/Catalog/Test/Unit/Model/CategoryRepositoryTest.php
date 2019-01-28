@@ -112,7 +112,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
             $categoryId
         );
 
-        $this->assertEquals($categoryMock, $this->model->get($categoryId));
+        $this->assertSame($categoryMock, $this->model->get($categoryId));
     }
 
     /**
@@ -137,7 +137,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
             $categoryId
         );
 
-        $this->assertEquals($categoryMock, $this->model->get($categoryId));
+        $this->assertSame($categoryMock, $this->model->get($categoryId));
     }
 
     /**
@@ -194,7 +194,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->categoryResourceMock->expects($this->once())
             ->method('save')
             ->willReturn(\Magento\Framework\DataObject::class);
-        $this->assertEquals($categoryMock, $this->model->save($categoryMock));
+        $this->assertSame($categoryMock, $this->model->save($categoryMock));
     }
 
     public function testCreateNewCategory()
@@ -223,7 +223,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->categoryResourceMock->expects($this->once())
             ->method('save')
             ->willReturn(\Magento\Framework\DataObject::class);
-        $this->assertEquals($categoryMock, $this->model->save($categoryMock));
+        $this->assertSame($categoryMock, $this->model->save($categoryMock));
     }
 
     /**

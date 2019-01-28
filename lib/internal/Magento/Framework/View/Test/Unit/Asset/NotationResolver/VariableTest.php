@@ -60,7 +60,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertVariableNotation($path, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->object->convertVariableNotation($path));
+        $this->assertSame($expectedResult, $this->object->convertVariableNotation($path));
     }
 
     /**

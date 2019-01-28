@@ -27,15 +27,15 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
     public function testGetHttpHeaderMethods()
     {
         $host = 'localhost';
-        $this->assertEquals($host, $this->_header->getHttpHost());
-        $this->assertEquals(false, $this->_header->getHttpUserAgent());
-        $this->assertEquals(false, $this->_header->getHttpAcceptLanguage());
-        $this->assertEquals(false, $this->_header->getHttpAcceptCharset());
-        $this->assertEquals(false, $this->_header->getHttpReferer());
+        $this->assertSame($host, $this->_header->getHttpHost());
+        $this->assertSame(false, $this->_header->getHttpUserAgent());
+        $this->assertSame(false, $this->_header->getHttpAcceptLanguage());
+        $this->assertSame(false, $this->_header->getHttpAcceptCharset());
+        $this->assertSame(false, $this->_header->getHttpReferer());
     }
 
     public function testGetRequestUri()
     {
-        $this->assertEquals('/', $this->_header->getRequestUri());
+        $this->assertSame('/', $this->_header->getRequestUri());
     }
 }

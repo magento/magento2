@@ -36,7 +36,7 @@ class BoldMixinTest extends \PHPUnit\Framework\TestCase
 
     public function testEmptyApply()
     {
-        $this->assertEquals('', $this->mixin->apply(''));
+        $this->assertSame('', $this->mixin->apply(''));
     }
 
     public function testApply()
@@ -57,6 +57,6 @@ class BoldMixinTest extends \PHPUnit\Framework\TestCase
             ->with($fixtureString, $randWordsFixture, '<b>%s</b>')
             ->willReturn($fixtureStringResult);
 
-        $this->assertEquals($fixtureStringResult, $this->mixin->apply($fixtureString));
+        $this->assertSame($fixtureStringResult, $this->mixin->apply($fixtureString));
     }
 }

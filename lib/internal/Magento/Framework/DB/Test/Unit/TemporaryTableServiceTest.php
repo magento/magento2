@@ -68,7 +68,7 @@ class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
             . '(select * from sometable)'
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $random,
             $this->temporaryTableService->createFromSelect(
                 $this->selectMock,
@@ -118,7 +118,7 @@ class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
             ->method('__toString')
             ->willReturn($selectString);
 
-        $this->assertEquals(
+        $this->assertSame(
             $random,
             $this->temporaryTableService->createFromSelect(
                 $this->selectMock,
@@ -158,7 +158,7 @@ class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
             ->method('dropTemporaryTable')
             ->willReturn(true);
 
-        $this->assertEquals($this->temporaryTableService->dropTable($tableName), $assertion);
+        $this->assertSame($this->temporaryTableService->dropTable($tableName), $assertion);
     }
 
     /**

@@ -63,6 +63,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with($className, ['text' => 'text'])
             ->will($this->returnValue($messageMock));
-        $this->assertEquals($messageMock, $this->factory->create($type, 'text'));
+        $this->assertSame($messageMock, $this->factory->create($type, 'text'));
     }
 }

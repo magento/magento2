@@ -31,7 +31,7 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCode()
     {
-        $this->assertEquals('async', $this->async->getCode());
+        $this->assertSame('async', $this->async->getCode());
     }
 
     /**
@@ -44,7 +44,7 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSchemaUrlPath($expected, $store = null)
     {
-        $this->assertEquals($expected, $this->async->getSchemaUrlPath($store));
+        $this->assertSame($expected, $this->async->getSchemaUrlPath($store));
     }
 
     /**

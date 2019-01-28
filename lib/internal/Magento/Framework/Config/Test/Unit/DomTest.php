@@ -117,8 +117,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
         }
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
-        $this->assertEquals(empty($expectedErrors), $actualResult);
-        $this->assertEquals($expectedErrors, $actualErrors);
+        $this->assertSame(empty($expectedErrors), $actualResult);
+        $this->assertSame($expectedErrors, $actualErrors);
     }
 
     /**
@@ -145,7 +145,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertFalse($actualResult);
-        $this->assertEquals($expectedErrors, $actualErrors);
+        $this->assertSame($expectedErrors, $actualErrors);
     }
 
     /**
@@ -173,7 +173,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ->method('schemaValidate')
             ->with($schemaFile)
             ->willReturn(false);
-        $this->assertEquals(
+        $this->assertSame(
             ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
             $dom->validateDomDocument($domMock, $schemaFile)
         );

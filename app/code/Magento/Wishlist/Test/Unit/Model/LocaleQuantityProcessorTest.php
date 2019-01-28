@@ -57,7 +57,7 @@ class LocaleQuantityProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($qty)
             ->willReturn($qtyResult);
 
-        $this->assertEquals($expectedResult, $this->processor->process($qty));
+        $this->assertSame($expectedResult, $this->processor->process($qty));
     }
 
     /**

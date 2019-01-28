@@ -23,7 +23,7 @@ class StringLengthTest extends \PHPUnit\Framework\TestCase
 
     public function testDefaultEncoding()
     {
-        $this->assertEquals('UTF-8', $this->_validator->getEncoding());
+        $this->assertSame('UTF-8', $this->_validator->getEncoding());
     }
 
     /**
@@ -35,7 +35,7 @@ class StringLengthTest extends \PHPUnit\Framework\TestCase
     public function testIsValid($value, $maxLength, $isValid)
     {
         $this->_validator->setMax($maxLength);
-        $this->assertEquals($isValid, $this->_validator->isValid($value));
+        $this->assertSame($isValid, $this->_validator->isValid($value));
     }
 
     /**

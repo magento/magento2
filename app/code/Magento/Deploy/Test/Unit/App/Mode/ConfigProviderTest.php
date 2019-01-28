@@ -21,7 +21,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $this->assertEquals($expectedValue, $configProvider->getConfigs('developer', 'production'));
-        $this->assertEquals([], $configProvider->getConfigs('undefined', 'production'));
+        $this->assertSame($expectedValue, $configProvider->getConfigs('developer', 'production'));
+        $this->assertSame([], $configProvider->getConfigs('undefined', 'production'));
     }
 }

@@ -179,7 +179,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultPageMock, $this->controller->execute());
+        $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
     /**
@@ -201,7 +201,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultForwardMock, $this->controller->execute());
+        $this->assertSame($this->resultForwardMock, $this->controller->execute());
     }
 
     /**

@@ -59,7 +59,7 @@ class ScopesTest extends \PHPUnit\Framework\TestCase
         ];
         $this->sourceMock->expects($this->once())->method('get')->with('')->willReturn($configData);
 
-        $this->assertEquals($expectedResult, $this->unit->get($path));
+        $this->assertSame($expectedResult, $this->unit->get($path));
     }
 
     public function testGetConfigWhenDataIsNotPresentInInternalCacheAndNotFound()

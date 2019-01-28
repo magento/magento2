@@ -109,7 +109,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->method('isAllowed')
             ->with($this->resourceName)
             ->willReturn(false);
-        $this->assertEquals($result, $this->plugin->afterToArray($this->collectionMock, $result));
+        $this->assertSame($result, $this->plugin->afterToArray($this->collectionMock, $result));
     }
 
     /**
@@ -150,7 +150,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->statusMapper->expects($this->once())->method('operationStatusToBulkSummaryStatus');
         $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
-        $this->assertEquals(2, $result2['totalRecords']);
+        $this->assertSame(2, $result2['totalRecords']);
     }
 
     /**

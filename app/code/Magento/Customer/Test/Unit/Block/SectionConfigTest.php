@@ -44,6 +44,6 @@ class SectionConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->sectionConfig->expects($this->once())->method('get')->with('sections')->willReturn(['data']);
 
-        $this->assertEquals(['data'], $this->block->getSections());
+        $this->assertSame(['data'], $this->block->getSections());
     }
 }

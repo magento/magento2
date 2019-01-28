@@ -40,16 +40,16 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $expectedCustomer = $this->_customerSession->getCustomerDataObject();
         $actualCustomer = $this->_block->getWishlistCustomer();
         $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $actualCustomer);
-        $this->assertEquals((int)$expectedCustomer->getId(), (int)$actualCustomer->getId());
-        $this->assertEquals((int)$expectedCustomer->getWebsiteId(), (int)$actualCustomer->getWebsiteId());
-        $this->assertEquals((int)$expectedCustomer->getStoreId(), (int)$actualCustomer->getStoreId());
-        $this->assertEquals((int)$expectedCustomer->getGroupId(), (int)$actualCustomer->getGroupId());
-        $this->assertEquals($expectedCustomer->getCustomAttributes(), $actualCustomer->getCustomAttributes());
-        $this->assertEquals($expectedCustomer->getFirstname(), $actualCustomer->getFirstname());
-        $this->assertEquals($expectedCustomer->getLastname(), $actualCustomer->getLastname());
-        $this->assertEquals($expectedCustomer->getEmail(), $actualCustomer->getEmail());
-        $this->assertEquals($expectedCustomer->getEmail(), $actualCustomer->getEmail());
-        $this->assertEquals((int)$expectedCustomer->getDefaultBilling(), (int)$actualCustomer->getDefaultBilling());
-        $this->assertEquals((int)$expectedCustomer->getDefaultShipping(), (int)$actualCustomer->getDefaultShipping());
+        $this->assertSame((int)$expectedCustomer->getId(), (int)$actualCustomer->getId());
+        $this->assertSame((int)$expectedCustomer->getWebsiteId(), (int)$actualCustomer->getWebsiteId());
+        $this->assertSame((int)$expectedCustomer->getStoreId(), (int)$actualCustomer->getStoreId());
+        $this->assertSame((int)$expectedCustomer->getGroupId(), (int)$actualCustomer->getGroupId());
+        $this->assertSame($expectedCustomer->getCustomAttributes(), $actualCustomer->getCustomAttributes());
+        $this->assertSame($expectedCustomer->getFirstname(), $actualCustomer->getFirstname());
+        $this->assertSame($expectedCustomer->getLastname(), $actualCustomer->getLastname());
+        $this->assertSame($expectedCustomer->getEmail(), $actualCustomer->getEmail());
+        $this->assertSame($expectedCustomer->getEmail(), $actualCustomer->getEmail());
+        $this->assertSame((int)$expectedCustomer->getDefaultBilling(), (int)$actualCustomer->getDefaultBilling());
+        $this->assertSame((int)$expectedCustomer->getDefaultShipping(), (int)$actualCustomer->getDefaultShipping());
     }
 }

@@ -91,6 +91,6 @@ class NotificationDismissActionsTest extends \PHPUnit\Framework\TestCase
                 'status' => BulkSummaryInterface::IN_PROGRESS,
             ],
         ];
-        $this->assertEquals($expectedResult, $this->actionColumn->prepareDataSource($testData));
+        $this->assertSame($expectedResult, $this->actionColumn->prepareDataSource($testData));
     }
 }

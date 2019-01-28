@@ -68,6 +68,6 @@ class AccountTokensTest extends \PHPUnit\Framework\TestCase
 
         /** @var PaymentTokenInterface $actualToken */
         $actualToken = array_pop($actual);
-        static::assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $actualToken->getType());
+        static::assertSame(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $actualToken->getType());
     }
 }

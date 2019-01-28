@@ -130,7 +130,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setQuery($queryContainer);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'price_bucket' => [],
             ],

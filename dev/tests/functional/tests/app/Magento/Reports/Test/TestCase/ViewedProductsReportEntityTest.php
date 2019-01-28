@@ -151,7 +151,7 @@ class ViewedProductsReportEntityTest extends Injectable
         foreach ($products as $key => $product) {
             for ($i = 0; $i < $total[$key]; $i++) {
                 $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-                $this->assertEquals(
+                $this->assertSame(
                     $product->getName(),
                     $this->cmsIndex->getTitleBlock()->getTitle(),
                     'Could not open product page.'

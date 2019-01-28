@@ -124,6 +124,6 @@ class OrderItemRepositoryTest extends WebapiAbstract
                 'option_value' => $optionValue,
             ];
         }
-        $this->assertEquals($expectedOptions, $actualOptions);
+        $this->assertSame($expectedOptions, $actualOptions);
     }
 }

@@ -49,10 +49,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $cacheId,
             $this->serializerMock
         );
-        $this->assertEquals($data, $config->get());
-        $this->assertEquals('b', $config->get('a'));
-        $this->assertEquals(null, $config->get('a/b'));
-        $this->assertEquals(33, $config->get('a/b', 33));
+        $this->assertSame($data, $config->get());
+        $this->assertSame('b', $config->get('a'));
+        $this->assertSame(null, $config->get('a/b'));
+        $this->assertSame(33, $config->get('a/b', 33));
     }
 
     public function testGetConfigCached()
@@ -75,8 +75,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $cacheId,
             $this->serializerMock
         );
-        $this->assertEquals($data, $config->get());
-        $this->assertEquals('b', $config->get('a'));
+        $this->assertSame($data, $config->get());
+        $this->assertSame('b', $config->get('a'));
     }
 
     public function testReset()

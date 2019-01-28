@@ -64,7 +64,7 @@ class DefaultStockTest extends \PHPUnit\Framework\TestCase
         $criteria->setProductsFilter([$product->getId()]);
         $criteria->addFilter('website', 'website_id', $this->stockConfiguration->getDefaultScopeId());
         $items = $stockStatusRepository->getList($criteria)->getItems();
-        $this->assertEquals($product->getId(), $items[$product->getId()]->getProductId());
+        $this->assertSame($product->getId(), $items[$product->getId()]->getProductId());
     }
 
     private function getObject($class)

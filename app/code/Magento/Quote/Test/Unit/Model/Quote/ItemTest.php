@@ -152,11 +152,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $quote->setItemsQty(2);
         $quote->setVirtualItemsQty(1);
-        $this->assertEquals('shipping', $this->model->getAddress(), 'Wrong shipping address');
+        $this->assertSame('shipping', $this->model->getAddress(), 'Wrong shipping address');
 
         $quote->setItemsQty(2);
         $quote->setVirtualItemsQty(2);
-        $this->assertEquals('billing', $this->model->getAddress(), 'Wrong billing address');
+        $this->assertSame('billing', $this->model->getAddress(), 'Wrong billing address');
     }
 
     public function testSetAndQuote()
@@ -177,7 +177,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->model->setQuote($quote);
 
         $this->assertSame($quote, $this->model->getQuote());
-        $this->assertEquals($idValue, $this->model->getQuoteId());
+        $this->assertSame($idValue, $this->model->getQuoteId());
     }
 
     /**
@@ -202,8 +202,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($preparedQuantityToAdd + $existingQuantity));
 
         $this->model->addQty($quantityToAdd);
-        $this->assertEquals($preparedQuantityToAdd, $this->model->getQtyToAdd());
-        $this->assertEquals($preparedQuantityToAdd + $existingQuantity, $this->model->getQty());
+        $this->assertSame($preparedQuantityToAdd, $this->model->getQtyToAdd());
+        $this->assertSame($preparedQuantityToAdd + $existingQuantity, $this->model->getQty());
     }
 
     /**
@@ -224,7 +224,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('qty', $existingQuantity);
 
         $this->model->addQty($quantityToAdd);
-        $this->assertEquals($existingQuantity, $this->model->getQty());
+        $this->assertSame($existingQuantity, $this->model->getQty());
         $this->assertNull($this->model->getQtyToAdd());
     }
 
@@ -246,7 +246,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->with('sales_quote_item_qty_set_after', ['item' => $this->model]);
 
         $this->model->setQty($quantityToAdd);
-        $this->assertEquals($preparedQuantityToAdd, $this->model->getQty());
+        $this->assertSame($preparedQuantityToAdd, $this->model->getQty());
     }
 
     public function testSetQtyQuoteIgnoreOldQuantity()
@@ -280,7 +280,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->with('sales_quote_item_qty_set_after', ['item' => $this->model]);
 
         $this->model->setQty($quantityToAdd);
-        $this->assertEquals($preparedQuantityToAdd, $this->model->getQty());
+        $this->assertSame($preparedQuantityToAdd, $this->model->getQty());
     }
 
     public function testSetQtyUseOldQuantity()
@@ -302,14 +302,14 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->with('sales_quote_item_qty_set_after', ['item' => $this->model]);
 
         $this->model->setQty($quantityToAdd);
-        $this->assertEquals($existingQuantity, $this->model->getQty());
+        $this->assertSame($existingQuantity, $this->model->getQty());
     }
 
     public function testSetQtyOptions()
     {
         $value = ['a' => 'b'];
         $this->model->setQtyOptions($value);
-        $this->assertEquals($value, $this->model->getQtyOptions());
+        $this->assertSame($value, $this->model->getQtyOptions());
     }
 
     public function testSetProduct()
@@ -330,14 +330,14 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setProduct($productMock);
 
-        $this->assertEquals($productMock, $this->model->getProduct());
-        $this->assertEquals(self::PRODUCT_ID, $this->model->getProductId());
-        $this->assertEquals(self::PRODUCT_TYPE, $this->model->getData('product_type'));
-        $this->assertEquals(self::PRODUCT_SKU, $this->model->getSku());
-        $this->assertEquals(self::PRODUCT_NAME, $this->model->getName());
-        $this->assertEquals(self::PRODUCT_WEIGHT, $this->model->getWeight());
-        $this->assertEquals(self::PRODUCT_TAX_CLASS_ID, $this->model->getTaxClassId());
-        $this->assertEquals(self::PRODUCT_COST, $this->model->getBaseCost());
+        $this->assertSame($productMock, $this->model->getProduct());
+        $this->assertSame(self::PRODUCT_ID, $this->model->getProductId());
+        $this->assertSame(self::PRODUCT_TYPE, $this->model->getData('product_type'));
+        $this->assertSame(self::PRODUCT_SKU, $this->model->getSku());
+        $this->assertSame(self::PRODUCT_NAME, $this->model->getName());
+        $this->assertSame(self::PRODUCT_WEIGHT, $this->model->getWeight());
+        $this->assertSame(self::PRODUCT_TAX_CLASS_ID, $this->model->getTaxClassId());
+        $this->assertSame(self::PRODUCT_COST, $this->model->getBaseCost());
         $this->assertNull($this->model->getIsQtyDecimal());
     }
 
@@ -385,15 +385,15 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setProduct($productMock);
 
-        $this->assertEquals($productMock, $this->model->getProduct());
-        $this->assertEquals(self::PRODUCT_ID, $this->model->getProductId());
-        $this->assertEquals(self::PRODUCT_TYPE, $this->model->getRealProductType());
-        $this->assertEquals(self::PRODUCT_SKU, $this->model->getSku());
-        $this->assertEquals(self::PRODUCT_NAME, $this->model->getName());
-        $this->assertEquals(self::PRODUCT_WEIGHT, $this->model->getWeight());
-        $this->assertEquals(self::PRODUCT_TAX_CLASS_ID, $this->model->getTaxClassId());
-        $this->assertEquals(self::PRODUCT_COST, $this->model->getBaseCost());
-        $this->assertEquals($isQtyDecimal, $this->model->getIsQtyDecimal());
+        $this->assertSame($productMock, $this->model->getProduct());
+        $this->assertSame(self::PRODUCT_ID, $this->model->getProductId());
+        $this->assertSame(self::PRODUCT_TYPE, $this->model->getRealProductType());
+        $this->assertSame(self::PRODUCT_SKU, $this->model->getSku());
+        $this->assertSame(self::PRODUCT_NAME, $this->model->getName());
+        $this->assertSame(self::PRODUCT_WEIGHT, $this->model->getWeight());
+        $this->assertSame(self::PRODUCT_TAX_CLASS_ID, $this->model->getTaxClassId());
+        $this->assertSame(self::PRODUCT_COST, $this->model->getBaseCost());
+        $this->assertSame($isQtyDecimal, $this->model->getIsQtyDecimal());
     }
 
     /**
@@ -774,7 +774,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->model->setProduct($productMock2);
         $this->model->setOptions([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]);
 
-        $this->assertEquals([self::PRODUCT_ID => $optionMock2], $this->model->getQtyOptions());
+        $this->assertSame([self::PRODUCT_ID => $optionMock2], $this->model->getQtyOptions());
     }
 
     public function testToArray()
@@ -797,7 +797,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($toArrayValue));
 
         $data = $this->model->toArray();
-        $this->assertEquals($toArrayValue, $data['product']);
+        $this->assertSame($toArrayValue, $data['product']);
     }
 
     public function testGetProductTypeOption()
@@ -810,7 +810,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($optionProductTypeValue));
         $this->model->addOption($optionMock);
 
-        $this->assertEquals($optionProductTypeValue, $this->model->getProductType());
+        $this->assertSame($optionProductTypeValue, $this->model->getProductType());
     }
 
     public function testGetProductTypeWithProduct()
@@ -825,7 +825,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             self::PRODUCT_COST
         );
         $this->model->setProduct($productMock);
-        $this->assertEquals(self::PRODUCT_TYPE, $this->model->getProductType());
+        $this->assertSame(self::PRODUCT_TYPE, $this->model->getProductType());
     }
 
     public function testSetOptions()
@@ -837,14 +837,14 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock2 = $this->createOptionMock($optionCode2);
 
         $this->assertSame($this->model, $this->model->setOptions([$optionMock1, $optionMock2]));
-        $this->assertEquals([$optionMock1, $optionMock2], $this->model->getOptions());
-        $this->assertEquals($optionMock1, $this->model->getOptionByCode($optionCode1));
-        $this->assertEquals($optionMock2, $this->model->getOptionByCode($optionCode2));
+        $this->assertSame([$optionMock1, $optionMock2], $this->model->getOptions());
+        $this->assertSame($optionMock1, $this->model->getOptionByCode($optionCode1));
+        $this->assertSame($optionMock2, $this->model->getOptionByCode($optionCode2));
     }
 
     public function testSetOptionsWithNull()
     {
-        $this->assertEquals($this->model, $this->model->setOptions(null));
+        $this->assertSame($this->model, $this->model->setOptions(null));
     }
 
     /**
@@ -910,9 +910,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($optionMock));
 
         $this->model->addOption($optionData);
-        $this->assertEquals([$optionMock], $this->model->getOptions());
-        $this->assertEquals([$optionCode => $optionMock], $this->model->getOptionsByCode());
-        $this->assertEquals($optionMock, $this->model->getOptionByCode($optionCode));
+        $this->assertSame([$optionMock], $this->model->getOptions());
+        $this->assertSame([$optionCode => $optionMock], $this->model->getOptionsByCode());
+        $this->assertSame($optionMock, $this->model->getOptionByCode($optionCode));
     }
 
     public function testUpdateQtyOption()
@@ -954,7 +954,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $typeInstanceMock->expects($this->once())
             ->method('updateQtyOption')
             ->with($this->model->getOptions(), $optionMock, $quantityValue, $productMock);
-        $this->assertEquals($this->model, $this->model->updateQtyOption($optionMock, $quantityValue));
+        $this->assertSame($this->model, $this->model->updateQtyOption($optionMock, $quantityValue));
     }
 
     public function testRemoveOption()
@@ -981,12 +981,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->model->addOption($optionMock);
 
-        $this->assertEquals($this->model, $this->model->removeOption($optionCode));
+        $this->assertSame($this->model, $this->model->removeOption($optionCode));
     }
 
     public function testRemoveOptionNoOptionCodeExists()
     {
-        $this->assertEquals($this->model, $this->model->removeOption('random'));
+        $this->assertSame($this->model, $this->model->removeOption('random'));
     }
 
     public function testGetOptionByCodeNonExistent()
@@ -1050,10 +1050,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->with($quantity)
             ->will($this->returnValue($quantity));
         $this->model->setQty($quantity);
-        $this->assertEquals($quantity, $this->model->getQty());
+        $this->assertSame($quantity, $this->model->getQty());
         $buyRequest = $this->model->getBuyRequest();
-        $this->assertEquals(0, $buyRequest->getOriginalQty());
-        $this->assertEquals($quantity, $buyRequest->getQty());
+        $this->assertSame(0, $buyRequest->getOriginalQty());
+        $this->assertSame($quantity, $buyRequest->getQty());
     }
 
     public function testGetBuyRequestOptionByCode()
@@ -1083,13 +1083,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->with($quantity)
             ->will($this->returnValue($quantity));
         $this->model->setQty($quantity);
-        $this->assertEquals($quantity, $this->model->getQty());
+        $this->assertSame($quantity, $this->model->getQty());
         $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturn(json_decode($optionMock->getValue(), true));
         $buyRequest = $this->model->getBuyRequest();
-        $this->assertEquals($buyRequestQuantity, $buyRequest->getOriginalQty());
-        $this->assertEquals($quantity, $buyRequest->getQty());
+        $this->assertSame($buyRequestQuantity, $buyRequest->getOriginalQty());
+        $this->assertSame($quantity, $buyRequest->getQty());
     }
 
     public function testSetHasErrorFalse()
@@ -1097,7 +1097,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->errorInfos->expects($this->once())
             ->method('clear');
 
-        $this->assertEquals($this->model, $this->model->setHasError(false));
+        $this->assertSame($this->model, $this->model->setHasError(false));
 
         $this->assertFalse($this->model->getHasError());
     }
@@ -1108,10 +1108,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('addItem')
             ->with(null, null, null, null);
 
-        $this->assertEquals($this->model, $this->model->setHasError(true));
+        $this->assertSame($this->model, $this->model->setHasError(true));
 
         $this->assertTrue($this->model->getHasError());
-        $this->assertEquals('', $this->model->getMessage());
+        $this->assertSame('', $this->model->getMessage());
     }
 
     public function testAddErrorInfo()
@@ -1126,10 +1126,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('addItem')
             ->with($origin, $code, $message, $additionalData);
 
-        $this->assertEquals($this->model, $this->model->addErrorInfo($origin, $code, $message, $additionalData));
+        $this->assertSame($this->model, $this->model->addErrorInfo($origin, $code, $message, $additionalData));
 
         $this->assertTrue($this->model->getHasError());
-        $this->assertEquals($message, $this->model->getMessage());
+        $this->assertSame($message, $this->model->getMessage());
     }
 
     public function testGetErrorInfos()
@@ -1140,7 +1140,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->will($this->returnValue($retValue));
 
-        $this->assertEquals($retValue, $this->model->getErrorInfos());
+        $this->assertSame($retValue, $this->model->getErrorInfos());
     }
 
     public function testRemoveErrorInfosByParams()
@@ -1154,9 +1154,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->errorInfos->expects($this->at(1))
             ->method('addItem')
             ->with(null, null, $message2);
-        $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message));
-        $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message2));
-        $this->assertEquals($message . "\n" . $message2, $this->model->getMessage());
+        $this->assertSame($this->model, $this->model->addErrorInfo(null, null, $message));
+        $this->assertSame($this->model, $this->model->addErrorInfo(null, null, $message2));
+        $this->assertSame($message . "\n" . $message2, $this->model->getMessage());
 
         $params = [];
         $removedItems = [['message' => $message]];
@@ -1170,8 +1170,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->will($this->returnValue(true));
 
-        $this->assertEquals($this->model, $this->model->removeErrorInfosByParams($params));
-        $this->assertEquals($message2, $this->model->getMessage());
+        $this->assertSame($this->model, $this->model->removeErrorInfosByParams($params));
+        $this->assertSame($message2, $this->model->getMessage());
     }
 
     public function testRemoveErrorInfosByParamsAllErrorsRemoved()
@@ -1185,9 +1185,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->errorInfos->expects($this->at(1))
             ->method('addItem')
             ->with(null, null, $message2);
-        $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message));
-        $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message2));
-        $this->assertEquals($message . "\n" . $message2, $this->model->getMessage());
+        $this->assertSame($this->model, $this->model->addErrorInfo(null, null, $message));
+        $this->assertSame($this->model, $this->model->addErrorInfo(null, null, $message2));
+        $this->assertSame($message . "\n" . $message2, $this->model->getMessage());
 
         $params = [];
         $removedItems = [['message' => $message], ['message' => $message2]];
@@ -1201,9 +1201,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->will($this->returnValue([]));
 
-        $this->assertEquals($this->model, $this->model->removeErrorInfosByParams($params));
+        $this->assertSame($this->model, $this->model->removeErrorInfosByParams($params));
         $this->assertFalse($this->model->getHasError());
-        $this->assertEquals('', $this->model->getMessage());
+        $this->assertSame('', $this->model->getMessage());
     }
 
     /**

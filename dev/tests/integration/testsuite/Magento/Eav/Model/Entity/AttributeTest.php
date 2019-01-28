@@ -63,7 +63,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->_localeResolver->setLocale($locale);
         $this->attribute->beforeSave();
 
-        $this->assertEquals($expected, $this->attribute->getDefaultValue());
+        $this->assertSame($expected, $this->attribute->getDefaultValue());
     }
 
     /**

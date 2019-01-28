@@ -19,7 +19,7 @@ class ShareTest extends \PHPUnit\Framework\TestCase
 
         $websiteIds = $share->getSharedWebsiteIds(42);
 
-        $this->assertEquals([42], $websiteIds);
+        $this->assertSame([42], $websiteIds);
     }
 
     /**
@@ -40,6 +40,6 @@ class ShareTest extends \PHPUnit\Framework\TestCase
 
         $websiteIds = $share->getSharedWebsiteIds(42);
 
-        $this->assertEquals($expectedIds, $websiteIds);
+        $this->assertSame($expectedIds, $websiteIds);
     }
 }

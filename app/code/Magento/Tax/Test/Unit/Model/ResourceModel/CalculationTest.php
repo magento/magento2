@@ -65,7 +65,7 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
             $expectedSize = strlen($code2) + 2; // array will include both 'code1' and 'code2'
         }
         $actualSize = count($resultsArr);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSize,
             $actualSize,
             'Expected size of the result array was ' . $expectedSize . ' but actual was ' . $actualSize

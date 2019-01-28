@@ -96,14 +96,14 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->prepareGetGalleryImagesJsonMocks();
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
-        $this->assertEquals('product_page_image_small_url', $decodedJson[0]['thumb']);
-        $this->assertEquals('product_page_image_medium_url', $decodedJson[0]['img']);
-        $this->assertEquals('product_page_image_large_url', $decodedJson[0]['full']);
-        $this->assertEquals('test_label', $decodedJson[0]['caption']);
-        $this->assertEquals('2', $decodedJson[0]['position']);
-        $this->assertEquals(false, $decodedJson[0]['isMain']);
-        $this->assertEquals('test_media_type', $decodedJson[0]['type']);
-        $this->assertEquals('test_video_url', $decodedJson[0]['videoUrl']);
+        $this->assertSame('product_page_image_small_url', $decodedJson[0]['thumb']);
+        $this->assertSame('product_page_image_medium_url', $decodedJson[0]['img']);
+        $this->assertSame('product_page_image_large_url', $decodedJson[0]['full']);
+        $this->assertSame('test_label', $decodedJson[0]['caption']);
+        $this->assertSame('2', $decodedJson[0]['position']);
+        $this->assertSame(false, $decodedJson[0]['isMain']);
+        $this->assertSame('test_media_type', $decodedJson[0]['type']);
+        $this->assertSame('test_video_url', $decodedJson[0]['videoUrl']);
     }
 
     public function testGetGalleryImagesJsonWithoutLabel()
@@ -111,7 +111,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->prepareGetGalleryImagesJsonMocks(false);
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
-        $this->assertEquals('test_product_name', $decodedJson[0]['caption']);
+        $this->assertSame('test_product_name', $decodedJson[0]['caption']);
     }
 
     private function prepareGetGalleryImagesJsonMocks($hasLabel = true)

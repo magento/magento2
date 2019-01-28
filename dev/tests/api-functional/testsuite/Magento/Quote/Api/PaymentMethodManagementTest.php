@@ -217,7 +217,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             $this->assertNotNull($requestResponse[$field]);
         }
 
-        $this->assertEquals('checkmo', $requestResponse['method']);
+        $this->assertSame('checkmo', $requestResponse['method']);
     }
 
     /**
@@ -275,7 +275,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             $this->assertArrayHasKey($field, $requestResponse);
             $this->assertNotNull($requestResponse[$field]);
         }
-        $this->assertEquals('checkmo', $requestResponse['method']);
+        $this->assertSame('checkmo', $requestResponse['method']);
     }
 
     /**

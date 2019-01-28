@@ -59,6 +59,6 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('id="layout_handle"', $actualHtml);
         $optionCount = substr_count($actualHtml, '<option ');
         $this->assertGreaterThan(1, $optionCount, 'HTML select tag must provide options to choose from.');
-        $this->assertEquals($optionCount, substr_count($actualHtml, '</option>'));
+        $this->assertSame($optionCount, substr_count($actualHtml, '</option>'));
     }
 }

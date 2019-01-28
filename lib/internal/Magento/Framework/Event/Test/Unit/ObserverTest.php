@@ -40,7 +40,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     {
         $name = 'some_name';
         $this->observer->setData('name', $name);
-        $this->assertEquals($name, $this->observer->getName());
+        $this->assertSame($name, $this->observer->getName());
     }
 
     public function testSetName()
@@ -48,14 +48,14 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $name = 'some_name';
         $this->observer->setName($name);
         $result = $this->observer->getData('name');
-        $this->assertEquals($result, $this->observer->getName($name));
+        $this->assertSame($result, $this->observer->getName($name));
     }
 
     public function testGetEventName()
     {
         $name = 'eventName';
         $this->observer->setData('event_name', $name);
-        $this->assertEquals($name, $this->observer->getEventName());
+        $this->assertSame($name, $this->observer->getEventName());
     }
 
     public function testSetEventName()
@@ -63,14 +63,14 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $name = 'eventName';
         $this->observer->setEventName($name);
         $result = $this->observer->getData('event_name');
-        $this->assertEquals($result, $this->observer->getEventName($name));
+        $this->assertSame($result, $this->observer->getEventName($name));
     }
 
     public function testGetCallback()
     {
         $callback = 'callbackName';
         $this->observer->setData('callback', $callback);
-        $this->assertEquals($callback, $this->observer->getCallback());
+        $this->assertSame($callback, $this->observer->getCallback());
     }
 
     public function testSetCallback()
@@ -78,14 +78,14 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $callback = 'callbackName';
         $this->observer->setCallback($callback);
         $result = $this->observer->getData('callback');
-        $this->assertEquals($result, $this->observer->getCallback($callback));
+        $this->assertSame($result, $this->observer->getCallback($callback));
     }
 
     public function testGetEvent()
     {
         $event = 'someEvent';
         $this->observer->setData('event', $event);
-        $this->assertEquals($event, $this->observer->getEvent());
+        $this->assertSame($event, $this->observer->getEvent());
     }
 
     public function testSetEvent()
@@ -93,7 +93,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $event = 'someEvent';
         $this->observer->setEvent($event);
         $result = $this->observer->getData('event');
-        $this->assertEquals($result, $this->observer->getEvent($event));
+        $this->assertSame($result, $this->observer->getEvent($event));
     }
 
     public function testDispatch()

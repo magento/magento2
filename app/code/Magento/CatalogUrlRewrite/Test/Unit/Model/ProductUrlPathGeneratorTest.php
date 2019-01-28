@@ -99,7 +99,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->any())->method('getName')->will($this->returnValue($productName));
         $this->product->expects($this->once())->method('formatUrlKey')->will($this->returnArgument(0));
 
-        $this->assertEquals($result, $this->productUrlPathGenerator->getUrlPath($this->product, null));
+        $this->assertSame($result, $this->productUrlPathGenerator->getUrlPath($this->product, null));
     }
 
     /**
@@ -140,7 +140,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->any())->method('getUrlKey')->willReturnOnConsecutiveCalls(false, $storedUrlKey);
         $this->product->expects($this->any())->method('getName')->will($this->returnValue($productName));
         $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnArgument(0));
-        $this->assertEquals($expectedUrlKey, $this->productUrlPathGenerator->getUrlPath($this->product, null));
+        $this->assertSame($expectedUrlKey, $this->productUrlPathGenerator->getUrlPath($this->product, null));
     }
 
     /**
@@ -164,7 +164,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')
             ->will($this->returnValue('category-url-path'));
 
-        $this->assertEquals(
+        $this->assertSame(
             'category-url-path/product-path',
             $this->productUrlPathGenerator->getUrlPath($this->product, $this->category)
         );
@@ -185,7 +185,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue('.html'));
 
-        $this->assertEquals(
+        $this->assertSame(
             'product-path.html',
             $this->productUrlPathGenerator->getUrlPathWithSuffix($this->product, null)
         );
@@ -206,7 +206,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue('.html'));
 
-        $this->assertEquals(
+        $this->assertSame(
             'category-url-path/product-path.html',
             $this->productUrlPathGenerator->getUrlPathWithSuffix($this->product, $storeId, $this->category)
         );
@@ -219,7 +219,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->product->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->assertEquals(
+        $this->assertSame(
             'catalog/product/view/id/1',
             $this->productUrlPathGenerator->getCanonicalUrlPath($this->product)
         );
@@ -233,7 +233,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->category->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->assertEquals(
+        $this->assertSame(
             'catalog/product/view/id/1/category/1',
             $this->productUrlPathGenerator->getCanonicalUrlPath($this->product, $this->category)
         );

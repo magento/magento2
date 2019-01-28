@@ -45,7 +45,7 @@ class DefaultColumnTest extends \PHPUnit\Framework\TestCase
         $this->itemMock->expects($this->once())
             ->method('getDiscountAmount')
             ->will($this->returnValue($discountAmount));
-        $this->assertEquals($expectedResult, $this->defaultColumn->getTotalAmount($this->itemMock));
+        $this->assertSame($expectedResult, $this->defaultColumn->getTotalAmount($this->itemMock));
     }
 
     public function testGetBaseTotalAmount()
@@ -59,6 +59,6 @@ class DefaultColumnTest extends \PHPUnit\Framework\TestCase
         $this->itemMock->expects($this->once())
             ->method('getBaseDiscountAmount')
             ->will($this->returnValue($baseDiscountAmount));
-        $this->assertEquals($expectedResult, $this->defaultColumn->getBaseTotalAmount($this->itemMock));
+        $this->assertSame($expectedResult, $this->defaultColumn->getBaseTotalAmount($this->itemMock));
     }
 }

@@ -27,7 +27,7 @@ class ReadinessCheckInstallerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($viewModel->terminate());
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('actionFrom', $variables);
-        $this->assertEquals('installer', $variables['actionFrom']);
+        $this->assertSame('installer', $variables['actionFrom']);
     }
 
     public function testProgressAction()

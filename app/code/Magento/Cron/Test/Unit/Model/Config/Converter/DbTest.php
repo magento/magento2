@@ -60,20 +60,20 @@ class DbTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $this->_converter->convert($source);
-        $this->assertEquals(
+        $this->assertSame(
             $expected['default']['job_name_1']['config_path'],
             $result['default']['job_name_1']['config_path']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expected['default']['job_name_1']['schedule'],
             $result['default']['job_name_1']['schedule']
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected['default']['job_name_2']['config_path'],
             $result['default']['job_name_2']['config_path']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expected['default']['job_name_2']['schedule'],
             $result['default']['job_name_2']['schedule']
         );
@@ -115,11 +115,11 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $result = $this->_converter->convert($source);
-        $this->assertEquals(
+        $this->assertSame(
             $expected['default']['job_name_1']['instance'],
             $result['default']['job_name_1']['instance']
         );
-        $this->assertEquals($expected['default']['job_name_1']['method'], $result['default']['job_name_1']['method']);
+        $this->assertSame($expected['default']['job_name_1']['method'], $result['default']['job_name_1']['method']);
 
         $this->assertEmpty($result['default']['job_name_2']);
         $this->assertEmpty($result['default']['job_name_3']);

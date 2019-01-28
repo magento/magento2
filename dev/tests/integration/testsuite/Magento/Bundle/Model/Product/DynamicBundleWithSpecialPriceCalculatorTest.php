@@ -28,12 +28,12 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
@@ -41,7 +41,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         if (isset($expectedResults['regularMinimalPrice'])) {
             $priceCode = \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE;
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedResults['regularMinimalPrice'],
                 $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
                 'Failed to check minimal regular price on product'
@@ -50,7 +50,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         if (isset($expectedResults['regularMaximalPrice'])) {
             $priceCode = \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE;
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedResults['regularMaximalPrice'],
                 $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
                 'Failed to check maximal regular price on product'
@@ -63,8 +63,8 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ->load()
             ->getFirstItem();
 
-        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
-        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
+        $this->assertSame($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $this->assertSame($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**

@@ -171,7 +171,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with('serializedConfig')
             ->willReturn([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]);
         $test = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
-        $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
+        $this->assertSame(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 
     public function testGetTll()

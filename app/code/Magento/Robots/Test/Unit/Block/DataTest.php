@@ -96,7 +96,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($data);
 
-        $this->assertEquals($data . PHP_EOL, $this->block->toHtml());
+        $this->assertSame($data . PHP_EOL, $this->block->toHtml());
     }
 
     /**
@@ -119,7 +119,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $expected = [
             \Magento\Robots\Model\Config\Value::CACHE_TAG . '_' . $storeId,
         ];
-        $this->assertEquals($expected, $this->block->getIdentities());
+        $this->assertSame($expected, $this->block->getIdentities());
     }
 
     /**

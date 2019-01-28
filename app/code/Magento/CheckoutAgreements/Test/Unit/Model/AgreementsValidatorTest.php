@@ -43,7 +43,7 @@ class AgreementsValidatorTest extends \PHPUnit\Framework\TestCase
             \Magento\CheckoutAgreements\Model\AgreementsValidator::class,
             []
         );
-        $this->assertEquals($result, $this->object->isValid($data));
+        $this->assertSame($result, $this->object->isValid($data));
     }
 
     /**
@@ -79,6 +79,6 @@ class AgreementsValidatorTest extends \PHPUnit\Framework\TestCase
             \Magento\CheckoutAgreements\Model\AgreementsValidator::class,
             ['list' => [$provider]]
         );
-        $this->assertEquals($result, $this->object->isValid($data));
+        $this->assertSame($result, $this->object->isValid($data));
     }
 }

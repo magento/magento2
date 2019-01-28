@@ -52,6 +52,6 @@ class MethodCollectorTest extends \PHPUnit\Framework\TestCase
                 'line' => 5
             ]
         ];
-        $this->assertEquals($expectation, $this->methodCollector->getPhrases());
+        $this->assertSame($expectation, $this->methodCollector->getPhrases());
     }
 }

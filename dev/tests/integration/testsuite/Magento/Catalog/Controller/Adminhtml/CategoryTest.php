@@ -120,10 +120,10 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             $this->assertArrayHasKey('messages', $result);
             $this->assertFalse($result['error']);
             $category = $result['category'];
-            $this->assertEquals('Category Created From Product Creation Page', $category['name']);
-            $this->assertEquals(1, $category['is_active']);
-            $this->assertEquals(0, $category['include_in_menu']);
-            $this->assertEquals(2, $category['parent_id']);
+            $this->assertSame('Category Created From Product Creation Page', $category['name']);
+            $this->assertSame(1, $category['is_active']);
+            $this->assertSame(0, $category['include_in_menu']);
+            $this->assertSame(2, $category['parent_id']);
             $this->assertNull($category['available_sort_by']);
             $this->assertNull($category['default_sort_by']);
         }
@@ -157,7 +157,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         $this->getRequest()->setParam('label_part', 'Default');
         $this->dispatch('backend/catalog/category/suggestCategories');
-        $this->assertEquals(
+        $this->assertSame(
             '[{"id":"2","children":[],"is_active":"1","label":"Default Category"}]',
             $this->getResponse()->getBody()
         );
@@ -170,7 +170,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         $this->getRequest()->setParam('label_part', strrev('Default'));
         $this->dispatch('backend/catalog/category/suggestCategories');
-        $this->assertEquals('[]', $this->getResponse()->getBody());
+        $this->assertSame('[]', $this->getResponse()->getBody());
     }
 
     /**
@@ -416,7 +416,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->dispatch('backend/catalog/category/move');
         $jsonResponse = json_decode($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
-        $this->assertEquals($error, $jsonResponse->error);
+        $this->assertSame($error, $jsonResponse->error);
     }
 
     /**
@@ -452,7 +452,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
         $newCategoryProductsCount = $this->getCategoryProductsCount();
-        $this->assertEquals(
+        $this->assertSame(
             $oldCategoryProductsCount,
             $newCategoryProductsCount,
             'After changing product position number of records from catalog_category_product has changed'

@@ -27,7 +27,7 @@ class RemoveActionTest extends \PHPUnit\Framework\TestCase
             $registryMock,
             ['class' => $protectedModel]
         );
-        $this->assertEquals($expectedResult, $model->isAllowed($modelToCheck));
+        $this->assertSame($expectedResult, $model->isAllowed($modelToCheck));
     }
 
     /**

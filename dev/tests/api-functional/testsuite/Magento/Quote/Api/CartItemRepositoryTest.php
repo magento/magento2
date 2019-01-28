@@ -74,7 +74,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($output, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertSame($output, $this->_webApiCall($serviceInfo, $requestData));
     }
 
     /**
@@ -111,7 +111,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($quote->hasProductId(2));
-        $this->assertEquals(7, $quote->getItemByProduct($product)->getQty());
+        $this->assertSame(7, $quote->getItemByProduct($product)->getQty());
     }
 
     /**
@@ -195,7 +195,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertTrue($quote->hasProductId(1));
         $item = $quote->getItemByProduct($product);
-        $this->assertEquals(5, $item->getQty());
-        $this->assertEquals($itemId, $item->getItemId());
+        $this->assertSame(5, $item->getQty());
+        $this->assertSame($itemId, $item->getItemId());
     }
 }

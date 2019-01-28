@@ -93,7 +93,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('setTypesData')
             ->with($typeData);
         $this->serviceMetadata->getServicesConfig();
-        $this->assertEquals($servicesConfig, $this->serviceMetadata->getServicesConfig());
+        $this->assertSame($servicesConfig, $this->serviceMetadata->getServicesConfig());
     }
 
     /**
@@ -223,7 +223,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
                 ServiceMetadata::REFLECTED_TYPES_CACHE_ID
             );
         $this->serviceMetadata->getServicesConfig();
-        $this->assertEquals($servicesMetadata, $this->serviceMetadata->getServicesConfig());
+        $this->assertSame($servicesMetadata, $this->serviceMetadata->getServicesConfig());
     }
 
     public function testGetRoutesConfig()
@@ -252,7 +252,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('setTypesData')
             ->with($typeData);
         $this->serviceMetadata->getRoutesConfig();
-        $this->assertEquals($routesConfig, $this->serviceMetadata->getRoutesConfig());
+        $this->assertSame($routesConfig, $this->serviceMetadata->getRoutesConfig());
     }
 
     /**
@@ -407,7 +407,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
                 ServiceMetadata::REFLECTED_TYPES_CACHE_ID
             );
         $this->serviceMetadata->getRoutesConfig();
-        $this->assertEquals($routesMetadata, $this->serviceMetadata->getRoutesConfig());
+        $this->assertSame($routesMetadata, $this->serviceMetadata->getRoutesConfig());
     }
 
     /**
@@ -415,7 +415,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetServiceName($className, $version, $preserveVersion, $expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->serviceMetadata->getServiceName($className, $version, $preserveVersion)
         );

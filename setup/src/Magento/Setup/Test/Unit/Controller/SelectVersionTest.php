@@ -53,7 +53,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
     }
 
     public function testSystemPackageActionActionWithError()
@@ -65,7 +65,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
     }
 
     public function testInstalledSystemPackageAction()
@@ -83,7 +83,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
     }
 
     public function testInstalledSystemPackageActionWithError()
@@ -94,6 +94,6 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
         $jsonModel = $this->controller->installedSystemPackageAction();
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
     }
 }

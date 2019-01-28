@@ -49,7 +49,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_model->setAttributeGroupFilter($includeGroupId);
         $groups = $this->_getGroups($this->_model);
 
-        $this->assertEquals([$includeGroupId], $groups);
+        $this->assertSame([$includeGroupId], $groups);
     }
 
     /**
@@ -91,6 +91,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $select = $this->_model->getSelect();
         $this->assertEmpty($select->getPart(\Magento\Framework\DB\Select::GROUP));
         $this->_model->addAttributeGrouping();
-        $this->assertEquals(['main_table.attribute_id'], $select->getPart(\Magento\Framework\DB\Select::GROUP));
+        $this->assertSame(['main_table.attribute_id'], $select->getPart(\Magento\Framework\DB\Select::GROUP));
     }
 }

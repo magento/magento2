@@ -28,7 +28,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $name = 'name';
         $module = $this->createModule($name, []);
 
-        $this->assertEquals($name, $module->getName());
+        $this->assertSame($name, $module->getName());
     }
 
     public function testGetDependencies()
@@ -36,13 +36,13 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $dependencies = ['foo', 'baz', 'bar'];
         $module = $this->createModule('name', $dependencies);
 
-        $this->assertEquals($dependencies, $module->getDependencies());
+        $this->assertSame($dependencies, $module->getDependencies());
     }
 
     public function testGetDependenciesCount()
     {
         $module = $this->createModule('name', ['foo', 'baz', 'bar']);
 
-        $this->assertEquals(3, $module->getDependenciesCount());
+        $this->assertSame(3, $module->getDependenciesCount());
     }
 }

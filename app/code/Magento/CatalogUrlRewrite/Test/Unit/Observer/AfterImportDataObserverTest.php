@@ -461,7 +461,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->urlRewrite);
 
         $actualResult = $this->invokeMethod($this->import, 'canonicalUrlRewriteGenerate');
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $this->urlRewrite,
             ],
@@ -496,7 +496,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
             ->method('create');
 
         $actualResult = $this->invokeMethod($this->import, 'canonicalUrlRewriteGenerate');
-        $this->assertEquals([], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
     /**
@@ -603,7 +603,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->urlRewrite);
 
         $actualResult = $this->invokeMethod($this->import, 'categoriesUrlRewriteGenerate');
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $this->urlRewrite,
             ],

@@ -141,7 +141,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock->expects($this->any())
             ->method('count')
             ->willReturn($sessionsNumber);
-        $this->assertEquals($expectedResult, $this->block->areMultipleSessionsActive());
+        $this->assertSame($expectedResult, $this->block->areMultipleSessionsActive());
     }
 
     /**
@@ -178,7 +178,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
             ->method('formatDateTime')
             ->with($time, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM)
             ->willReturn($time);
-        $this->assertEquals($time, $this->block->formatDateTime($timeString));
+        $this->assertSame($time, $this->block->formatDateTime($timeString));
     }
 
     /**

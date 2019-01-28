@@ -196,7 +196,7 @@ class ExpressTest extends TestCase
         $this->payment->method('getAmountAuthorized')
             ->willReturn($authorizedAmount);
 
-        static::assertEquals($isAuthAllowed, $this->express->isOrderAuthorizationAllowed($this->payment));
+        static::assertSame($isAuthAllowed, $this->express->isOrderAuthorizationAllowed($this->payment));
     }
 
     /**

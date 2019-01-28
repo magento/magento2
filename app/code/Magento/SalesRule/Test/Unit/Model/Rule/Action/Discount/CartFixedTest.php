@@ -148,9 +148,9 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $this->address->expects($this->once())->method('setCartFixedRules')->with([1 => 0.0]);
         $this->model->calculate($this->rule, $this->item, 1);
 
-        $this->assertEquals($this->data->getAmount(), 10);
-        $this->assertEquals($this->data->getBaseAmount(), 10);
-        $this->assertEquals($this->data->getOriginalAmount(), 10);
-        $this->assertEquals($this->data->getBaseOriginalAmount(), 100);
+        $this->assertSame($this->data->getAmount(), 10);
+        $this->assertSame($this->data->getBaseAmount(), 10);
+        $this->assertSame($this->data->getOriginalAmount(), 10);
+        $this->assertSame($this->data->getBaseOriginalAmount(), 100);
     }
 }

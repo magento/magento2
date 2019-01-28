@@ -179,7 +179,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 ['title' => 'Field_1_Label', 'scope' => __('Default Config')]
             ],
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetDefaultTemplatesAsOptionsArray()
@@ -226,7 +226,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 ['value' => 'template_b2', 'label' => 'Template B2', 'group' => 'Fixture_ModuleB'],
             ],
         ];
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->_block->getData('template_options'),
             'Options are expected to be sorted by modules and by labels of email templates within modules'

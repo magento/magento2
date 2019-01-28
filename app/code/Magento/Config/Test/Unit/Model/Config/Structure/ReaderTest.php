@@ -98,7 +98,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->with($this->isInstanceOf('\DOMDocument'))
             ->willReturn($expectedResult);
 
-        $this->assertEquals($expectedResult, $this->reader->read());
+        $this->assertSame($expectedResult, $this->reader->read());
     }
 
     /**
@@ -118,6 +118,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->with('system.xml', 'global')
             ->willReturn($fileList);
         
-        $this->assertEquals($expectedResult, $this->reader->read());
+        $this->assertSame($expectedResult, $this->reader->read());
     }
 }

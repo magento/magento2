@@ -48,7 +48,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                 unset($actualResult[Converter::DATA_ATTRIBUTES_KEY]);
             }
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedResult,
                 $actualResult,
                 "Wrong '{$this->getTypeByPath($filePath)}' configuration for '{$componentName}' Ui Component" . PHP_EOL

@@ -88,7 +88,7 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
 
-        $this->assertEquals($addressMock, $this->model->get('cartId'));
+        $this->assertSame($addressMock, $this->model->get('cartId'));
     }
 
     /**
@@ -122,7 +122,7 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
             ->with($quoteMock, $address, $useForShipping);
 
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
-        $this->assertEquals($addressId, $this->model->assign($cartId, $address, $useForShipping));
+        $this->assertSame($addressId, $this->model->assign($cartId, $address, $useForShipping));
     }
 
     /**

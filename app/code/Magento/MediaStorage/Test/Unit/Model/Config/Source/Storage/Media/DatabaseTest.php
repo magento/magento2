@@ -48,7 +48,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testToOptionArray()
     {
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $this->mediaDatabase->toOptionArray(),
             [
                 ['value' => 'default_setup', 'label' => 'default_setup'],
@@ -56,14 +56,14 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->mediaDatabase->toOptionArray(),
             [
                 ['value' => 'custom_resource', 'label' => 'custom_resource'],
                 ['value' => 'default_setup', 'label' => 'default_setup']
             ]
         );
-        $this->assertEquals(
+        $this->assertSame(
             current($this->mediaDatabase->toOptionArray()),
             ['value' => 'custom_resource', 'label' => 'custom_resource']
         );

@@ -57,14 +57,14 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         $this->context->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
         $this->context->expects($this->once())->method('getPath')->will($this->returnValue('static'));
-        $this->assertEquals('http://example.com/static/Magento_Module/dir/file.css', $this->object->getUrl());
+        $this->assertSame('http://example.com/static/Magento_Module/dir/file.css', $this->object->getUrl());
     }
 
     public function testGetContentType()
     {
-        $this->assertEquals('css', $this->object->getContentType());
+        $this->assertSame('css', $this->object->getContentType());
         $object = new File($this->source, $this->context, '', '', 'type', $this->minificationMock);
-        $this->assertEquals('type', $object->getContentType());
+        $this->assertSame('type', $object->getContentType());
     }
 
     /**
@@ -78,7 +78,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         $this->context->expects($this->once())->method('getPath')->will($this->returnValue($contextPath));
         $object = new File($this->source, $this->context, $filePath, $module, '', $this->minificationMock);
-        $this->assertEquals($expected, $object->getPath());
+        $this->assertSame($expected, $object->getPath());
     }
 
     /**
@@ -104,8 +104,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('getFile')
             ->with($this->object)
             ->will($this->returnValue('result'));
-        $this->assertEquals('result', $this->object->getSourceFile());
-        $this->assertEquals('result', $this->object->getSourceFile()); // second time to assert in-memory caching
+        $this->assertSame('result', $this->object->getSourceFile());
+        $this->assertSame('result', $this->object->getSourceFile()); // second time to assert in-memory caching
     }
 
     /**
@@ -130,8 +130,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('getContent')
             ->with($this->object)
             ->will($this->returnValue($content));
-        $this->assertEquals($content, $this->object->getContent());
-        $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
+        $this->assertSame($content, $this->object->getContent());
+        $this->assertSame($content, $this->object->getContent()); // no in-memory caching for content
     }
 
     /**
@@ -160,8 +160,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     public function testSimpleGetters()
     {
-        $this->assertEquals('dir/file.css', $this->object->getFilePath());
+        $this->assertSame('dir/file.css', $this->object->getFilePath());
         $this->assertSame($this->context, $this->object->getContext());
-        $this->assertEquals('Magento_Module', $this->object->getModule());
+        $this->assertSame('Magento_Module', $this->object->getModule());
     }
 }

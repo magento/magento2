@@ -39,6 +39,6 @@ class StateTest extends \PHPUnit\Framework\TestCase
         $this->mShippingStateMock->expects($this->once())
             ->method('getSteps')->will($this->returnValue(['expected array']));
 
-        $this->assertEquals(['expected array'], $this->model->getSteps());
+        $this->assertSame(['expected array'], $this->model->getSteps());
     }
 }

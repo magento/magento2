@@ -81,7 +81,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->get(\Magento\Framework\View\LayoutInterface::class)
             ->createBlock(\Magento\Backend\Block\Widget\Grid\Massaction::class);
         $this->assertEmpty($blockEmpty->getItems());
-        $this->assertEquals(0, $blockEmpty->getCount());
+        $this->assertSame(0, $blockEmpty->getCount());
         $this->assertSame('[]', $blockEmpty->getItemsJson());
 
         $this->assertFalse($blockEmpty->isAvailable());
@@ -130,7 +130,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     public function testGetCount($mageMode, $expectedCount)
     {
         $this->loadLayout($mageMode);
-        $this->assertEquals($expectedCount, $this->_block->getCount());
+        $this->assertSame($expectedCount, $this->_block->getCount());
     }
 
     /**
@@ -168,11 +168,11 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey($itemId, $items);
 
         $actualItem = $items[$itemId];
-        $this->assertEquals($expectedItem['id'], $actualItem->getId());
-        $this->assertEquals($expectedItem['label'], $actualItem->getLabel());
+        $this->assertSame($expectedItem['id'], $actualItem->getId());
+        $this->assertSame($expectedItem['label'], $actualItem->getLabel());
         $this->assertRegExp($expectedItem['url'], $actualItem->getUrl());
-        $this->assertEquals($expectedItem['selected'], $actualItem->getSelected());
-        $this->assertEquals($expectedItem['blockname'], $actualItem->getBlockName());
+        $this->assertSame($expectedItem['selected'], $actualItem->getSelected());
+        $this->assertSame($expectedItem['blockname'], $actualItem->getBlockName());
     }
 
     /**

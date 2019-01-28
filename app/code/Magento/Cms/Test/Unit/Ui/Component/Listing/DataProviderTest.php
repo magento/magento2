@@ -125,7 +125,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $metadata,
             $this->dataProvider->prepareMetadata()
         );

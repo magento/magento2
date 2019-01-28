@@ -67,6 +67,6 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
             ->with($normalizedValue)
             ->willReturn($serializedValue);
         $encoded = $this->conditions->encode($value);
-        $this->assertEquals($value, $this->conditions->decode($encoded));
+        $this->assertSame($value, $this->conditions->decode($encoded));
     }
 }

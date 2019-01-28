@@ -112,7 +112,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attributeSetMock);
 
         $this->groupResourceMock->expects($this->once())->method('save')->with($groupMock);
-        $this->assertEquals($groupMock, $this->model->save($groupMock));
+        $this->assertSame($groupMock, $this->model->save($groupMock));
     }
 
     /**
@@ -145,7 +145,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $existingGroupMock->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId);
 
         $this->groupResourceMock->expects($this->once())->method('save')->with($groupMock);
-        $this->assertEquals($groupMock, $this->model->save($groupMock));
+        $this->assertSame($groupMock, $this->model->save($groupMock));
     }
 
     /**
@@ -314,7 +314,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteriaMock, $groupCollectionMock)
             ->willReturnSelf();
 
-        $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 
     /**
@@ -330,7 +330,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
         $this->groupResourceMock->expects($this->once())->method('load')->with($groupMock, $groupId);
         $groupMock->expects($this->once())->method('getId')->willReturn($groupId);
-        $this->assertEquals($groupMock, $this->model->get($groupId));
+        $this->assertSame($groupMock, $this->model->get($groupId));
     }
 
     /**
@@ -348,7 +348,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
         $this->groupResourceMock->expects($this->once())->method('load')->with($groupMock, $groupId);
         $groupMock->expects($this->once())->method('getId')->willReturn(false);
-        $this->assertEquals($groupMock, $this->model->get($groupId));
+        $this->assertSame($groupMock, $this->model->get($groupId));
     }
 
     /**

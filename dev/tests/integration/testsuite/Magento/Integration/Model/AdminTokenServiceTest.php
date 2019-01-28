@@ -56,7 +56,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $token = $this->tokenModel
             ->loadByAdminId($adminUserId)
             ->getToken();
-        $this->assertEquals($accessToken, $token);
+        $this->assertSame($accessToken, $token);
     }
 
     /**
@@ -106,10 +106,10 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
      */
     private function assertInputExceptionMessages($e)
     {
-        $this->assertEquals('One or more input exceptions have occurred.', $e->getMessage());
+        $this->assertSame('One or more input exceptions have occurred.', $e->getMessage());
         $errors = $e->getErrors();
         $this->assertCount(2, $errors);
-        $this->assertEquals('"username" is required. Enter and try again.', $errors[0]->getLogMessage());
-        $this->assertEquals('"password" is required. Enter and try again.', $errors[1]->getLogMessage());
+        $this->assertSame('"username" is required. Enter and try again.', $errors[0]->getLogMessage());
+        $this->assertSame('"password" is required. Enter and try again.', $errors[1]->getLogMessage());
     }
 }

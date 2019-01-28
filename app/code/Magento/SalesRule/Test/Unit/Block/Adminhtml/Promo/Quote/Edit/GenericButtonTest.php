@@ -45,7 +45,7 @@ class GenericButtonTest extends \PHPUnit\Framework\TestCase
     public function testCanRender()
     {
         $name = "Catalog Rule";
-        $this->assertEquals($name, $this->model->canRender($name));
+        $this->assertSame($name, $this->model->canRender($name));
     }
 
     public function testGetUrl()
@@ -59,7 +59,7 @@ class GenericButtonTest extends \PHPUnit\Framework\TestCase
             ->with($route, $params)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getUrl($route, $params));
+        $this->assertSame($url, $this->model->getUrl($route, $params));
     }
 
     public function testGetRuleId()
@@ -71,7 +71,7 @@ class GenericButtonTest extends \PHPUnit\Framework\TestCase
             ->with(RegistryConstants::CURRENT_SALES_RULE)
             ->willReturn($ruleMock);
 
-        $this->assertEquals($ruleId, $this->model->getRuleId());
+        $this->assertSame($ruleId, $this->model->getRuleId());
     }
 
     public function testGetRuleIdWithoutRule()

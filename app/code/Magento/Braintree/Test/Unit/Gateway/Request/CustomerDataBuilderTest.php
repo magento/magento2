@@ -91,7 +91,7 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        self::assertEquals($expectedResult, $this->builder->build($buildSubject));
+        self::assertSame($expectedResult, $this->builder->build($buildSubject));
     }
 
     /**

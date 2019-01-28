@@ -22,7 +22,7 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
     public function testGetDependencyInfo($contents, array $expected)
     {
         $model = new LayoutRule([], [], []);
-        $this->assertEquals($expected, $model->getDependencyInfo('Magento\SomeModule', 'layout', 'any', $contents));
+        $this->assertSame($expected, $model->getDependencyInfo('Magento\SomeModule', 'layout', 'any', $contents));
     }
 
     public function getDependencyInfoDataProvider()
@@ -118,8 +118,8 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
     public function testUpdatesRouterGetDependencyInfo($contents, $type)
     {
         $model = new LayoutRule(['router_name' => ['Magento\RouterModule']], [], []);
-        $this->assertEquals([], $model->getDependencyInfo('Magento\RouterModule', 'layout', 'any', $contents));
-        $this->assertEquals(
+        $this->assertSame([], $model->getDependencyInfo('Magento\RouterModule', 'layout', 'any', $contents));
+        $this->assertSame(
             [['module' => 'Magento\RouterModule', 'type' => $type, 'source' => 'router_name_action']],
             $model->getDependencyInfo('Magento\AnotherModule', 'layout', 'any', $contents)
         );
@@ -139,19 +139,19 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
             'default' => ['singlechunk' => ['Magento\DefaultHandleModule' => 'Magento\DefaultHandleModule']],
         ];
         $model = $isHandle ? new LayoutRule([], [], $data) : new LayoutRule([], $data, []);
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $model->getDependencyInfo('Magento\AnyHandleModule', 'layout', 'path/frontend/file.txt', $contents)
         );
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $model->getDependencyInfo('Magento\DefaultHandleModule', 'layout', 'any', $contents)
         );
-        $this->assertEquals(
+        $this->assertSame(
             [['module' => 'Magento\DefaultHandleModule', 'type' => $type, 'source' => 'singlechunk']],
             $model->getDependencyInfo('any', 'layout', 'any', $contents)
         );
-        $this->assertEquals(
+        $this->assertSame(
             [['module' => 'Magento\AnyHandleModule', 'type' => $type, 'source' => 'any_handle_name']],
             $model->getDependencyInfo('any', 'layout', 'path/frontend/file.txt', $contents)
         );
@@ -165,11 +165,11 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $model = $isHandle ? new LayoutRule([], [], $data) : new LayoutRule([], $data, []);
-        $this->assertEquals(
+        $this->assertSame(
             [['module' => 'Magento\Theme', 'type' => $type, 'source' => 'any_handle_name']],
             $model->getDependencyInfo('any', 'layout', 'path/frontend/file.txt', $contents)
         );
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $model->getDependencyInfo('Magento\HandleModule', 'layout', 'path/frontend/file.txt', $contents)
         );

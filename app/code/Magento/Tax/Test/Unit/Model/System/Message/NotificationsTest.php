@@ -70,7 +70,7 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
         $expectedResult
     ) {
         $this->notificationMock->expects($this->once())->method('isDisplayed')->willReturn($isNotificationDisplayed);
-        $this->assertEquals($expectedResult, $this->notifications->isDisplayed());
+        $this->assertSame($expectedResult, $this->notifications->isDisplayed());
     }
 
     /**
@@ -91,7 +91,7 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())->method('getUrl')
             ->with('adminhtml/system_config/edit/section/tax')->willReturn('http://tax-config-url');
 
-        $this->assertEquals(
+        $this->assertSame(
             'Notification Text.<p>Please see <a href="http://info-url">documentation</a> for more details. '
             . 'Click here to go to <a href="http://tax-config-url">Tax Configuration</a> and change your settings.</p>',
             $this->notifications->getText()

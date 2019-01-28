@@ -71,7 +71,7 @@ class CombineTest extends \PHPUnit\Framework\TestCase
 
         $this->conditionFactory->expects($this->atLeastOnce())->method('create')->willReturn($productCondition);
 
-        $this->assertEquals($expectedOptions, $this->condition->getNewChildSelectOptions());
+        $this->assertSame($expectedOptions, $this->condition->getNewChildSelectOptions());
     }
 
     public function testCollectValidatedAttributes()

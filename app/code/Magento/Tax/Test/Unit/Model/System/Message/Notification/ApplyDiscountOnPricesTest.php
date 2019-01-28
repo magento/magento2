@@ -90,7 +90,7 @@ class ApplyDiscountOnPricesTest extends \PHPUnit\Framework\TestCase
             ->willReturn($applyTaxAfterDiscount);
         $this->taxConfigMock->expects($this->any())->method('discountTax')->willReturn($discountTax);
 
-        $this->assertEquals($expectedResult, $this->applyDiscountOnPricesNotification->isDisplayed());
+        $this->assertSame($expectedResult, $this->applyDiscountOnPricesNotification->isDisplayed());
     }
 
     /**
@@ -150,7 +150,7 @@ class ApplyDiscountOnPricesTest extends \PHPUnit\Framework\TestCase
             ->with('tax/tax/ignoreTaxNotification', ['section' => 'apply_discount'])
             ->willReturn('http://example.com');
         $this->applyDiscountOnPricesNotification->isDisplayed();
-        $this->assertEquals(
+        $this->assertSame(
             '<strong>To apply the discount on prices including tax and apply the tax after discount, '
             . 'set Catalog Prices to “Including Tax”. </strong><p>Store(s) affected: testWebsiteName '
             . '(testStoreName)</p><p>Click on the link to '

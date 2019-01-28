@@ -54,7 +54,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
             ->with('test')
             ->will($this->returnValue('test_idx'));
         $this->model->reindexAll();
-        $this->assertEquals('test_idx', $this->model->getIdxTable('test'));
+        $this->assertSame('test_idx', $this->model->getIdxTable('test'));
     }
 
     public function testClearTemporaryIndexTable()

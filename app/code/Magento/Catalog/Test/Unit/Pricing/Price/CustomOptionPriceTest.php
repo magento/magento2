@@ -228,7 +228,7 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $result = $this->object->getValue();
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testGetCustomOptionRange()
@@ -275,8 +275,8 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('convertAndRound')
             ->with($option2MaxPrice + $option1MaxPrice)
             ->willReturn($convertedMaxValue);
-        $this->assertEquals($option1MinPrice / 2, $this->object->getCustomOptionRange(true));
-        $this->assertEquals($convertedMaxValue, $this->object->getCustomOptionRange(false));
+        $this->assertSame($option1MinPrice / 2, $this->object->getCustomOptionRange(true));
+        $this->assertSame($convertedMaxValue, $this->object->getCustomOptionRange(false));
     }
 
     /**
@@ -421,8 +421,8 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getOptions')
             ->will($this->returnValue($options));
         $result = $this->object->getOptions();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
         $result = $this->object->getOptions();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

@@ -53,7 +53,7 @@ class ResetMethodTest extends \PHPUnit\Framework\TestCase
                 'label' => __('None')
             ],
         ];
-        $this->assertEquals($expected, $this->model->toOptionArray());
+        $this->assertSame($expected, $this->model->toOptionArray());
     }
 
     public function testToArray()
@@ -64,6 +64,6 @@ class ResetMethodTest extends \PHPUnit\Framework\TestCase
             \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_EMAIL => __('By Email'),
             \Magento\Security\Model\Config\Source\ResetMethod::OPTION_NONE => __('None'),
         ];
-        $this->assertEquals($expected, $this->model->toArray());
+        $this->assertSame($expected, $this->model->toArray());
     }
 }

@@ -94,13 +94,13 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
         //Assertions
         $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxRateInterface::class, $taxRateServiceData);
-        $this->assertEquals($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
-        $this->assertEquals($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
-        $this->assertEquals($taxData['rate'], $taxRateServiceData->getRate());
-        $this->assertEquals($taxData['code'], $taxRateServiceData->getCode());
-        $this->assertEquals($taxData['zip_from'], $taxRateServiceData->getZipFrom());
-        $this->assertEquals($taxData['zip_to'], $taxRateServiceData->getZipTo());
-        $this->assertEquals('78765-78780', $taxRateServiceData->getTaxPostcode());
+        $this->assertSame($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
+        $this->assertSame($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
+        $this->assertSame($taxData['rate'], $taxRateServiceData->getRate());
+        $this->assertSame($taxData['code'], $taxRateServiceData->getCode());
+        $this->assertSame($taxData['zip_from'], $taxRateServiceData->getZipFrom());
+        $this->assertSame($taxData['zip_to'], $taxRateServiceData->getZipTo());
+        $this->assertSame('78765-78780', $taxRateServiceData->getTaxPostcode());
         $this->assertNotNull($taxRateServiceData->getId());
     }
 
@@ -126,13 +126,13 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
         //Assertions
         $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxRateInterface::class, $taxRateServiceData);
-        $this->assertEquals($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
-        $this->assertEquals($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
-        $this->assertEquals($taxData['rate'], $taxRateServiceData->getRate());
-        $this->assertEquals($taxData['code'], $taxRateServiceData->getCode());
-        $this->assertEquals($taxData['zip_from'], $taxRateServiceData->getZipFrom());
-        $this->assertEquals($taxData['zip_to'], $taxRateServiceData->getZipTo());
-        $this->assertEquals('78765-78780', $taxRateServiceData->getTaxPostcode());
+        $this->assertSame($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
+        $this->assertSame($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
+        $this->assertSame($taxData['rate'], $taxRateServiceData->getRate());
+        $this->assertSame($taxData['code'], $taxRateServiceData->getCode());
+        $this->assertSame($taxData['zip_from'], $taxRateServiceData->getZipFrom());
+        $this->assertSame($taxData['zip_to'], $taxRateServiceData->getZipTo());
+        $this->assertSame('78765-78780', $taxRateServiceData->getTaxPostcode());
         $this->assertNotNull($taxRateServiceData->getId());
     }
 
@@ -168,26 +168,26 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
         //Assertions
         $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxRateInterface::class, $taxRateServiceData);
-        $this->assertEquals($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
-        $this->assertEquals($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
-        $this->assertEquals($taxData['rate'], $taxRateServiceData->getRate());
-        $this->assertEquals($taxData['code'], $taxRateServiceData->getCode());
-        $this->assertEquals($taxData['zip_from'], $taxRateServiceData->getZipFrom());
-        $this->assertEquals($taxData['zip_to'], $taxRateServiceData->getZipTo());
-        $this->assertEquals('78765-78780', $taxRateServiceData->getTaxPostcode());
+        $this->assertSame($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
+        $this->assertSame($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
+        $this->assertSame($taxData['rate'], $taxRateServiceData->getRate());
+        $this->assertSame($taxData['code'], $taxRateServiceData->getCode());
+        $this->assertSame($taxData['zip_from'], $taxRateServiceData->getZipFrom());
+        $this->assertSame($taxData['zip_to'], $taxRateServiceData->getZipTo());
+        $this->assertSame('78765-78780', $taxRateServiceData->getTaxPostcode());
         $this->assertNotNull($taxRateServiceData->getId());
 
         $titles = $taxRateServiceData->getTitles();
-        $this->assertEquals(1, count($titles));
-        $this->assertEquals($store->getId(), $titles[0]->getStoreId());
-        $this->assertEquals($taxData['titles'][0]['value'], $titles[0]->getValue());
+        $this->assertSame(1, count($titles));
+        $this->assertSame($store->getId(), $titles[0]->getStoreId());
+        $this->assertSame($taxData['titles'][0]['value'], $titles[0]->getValue());
 
         $taxRateServiceData = $this->rateRepository->get($taxRateServiceData->getId());
 
         $titles = $taxRateServiceData->getTitles();
-        $this->assertEquals(1, count($titles));
-        $this->assertEquals($store->getId(), $titles[0]->getStoreId());
-        $this->assertEquals($taxData['titles'][0]['value'], $titles[0]->getValue());
+        $this->assertSame(1, count($titles));
+        $this->assertSame($store->getId(), $titles[0]->getStoreId());
+        $this->assertSame($taxData['titles'][0]['value'], $titles[0]->getValue());
     }
 
     /**
@@ -270,7 +270,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         } catch (InputException $exception) {
             $errors = $exception->getErrors();
             foreach ($errors as $key => $error) {
-                $this->assertEquals($errorMessages[$key], $error->getMessage());
+                $this->assertSame($errorMessages[$key], $error->getMessage());
             }
             throw $exception;
         }
@@ -418,11 +418,11 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $taxRate = $this->rateRepository->get($rate->getId());
 
-        $this->assertEquals('US', $taxRate->getTaxCountryId());
-        $this->assertEquals(12, $taxRate->getTaxRegionId());
-        $this->assertEquals('*', $taxRate->getTaxPostcode());
-        $this->assertEquals('US_12_Code', $taxRate->getCode());
-        $this->assertEquals(7.5, $taxRate->getRate());
+        $this->assertSame('US', $taxRate->getTaxCountryId());
+        $this->assertSame(12, $taxRate->getTaxRegionId());
+        $this->assertSame('*', $taxRate->getTaxPostcode());
+        $this->assertSame('US_12_Code', $taxRate->getCode());
+        $this->assertSame(7.5, $taxRate->getRate());
         $this->assertNull($taxRate->getZipIsRange());
         $this->assertNull($taxRate->getZipTo());
         $this->assertNull($taxRate->getZipFrom());
@@ -463,8 +463,8 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $retrievedRate = $this->rateRepository->get($taxRate->getId());
         // Expect the service to have filled in the new postcode for us
-        $this->assertEquals($updatedTaxRate->getTaxPostcode(), $retrievedRate->getTaxPostcode());
-        $this->assertNotEquals($taxRate->getTaxPostcode(), $retrievedRate->getTaxPostcode());
+        $this->assertSame($updatedTaxRate->getTaxPostcode(), $retrievedRate->getTaxPostcode());
+        $this->assertNotSame($taxRate->getTaxPostcode(), $retrievedRate->getTaxPostcode());
     }
 
     /**
@@ -518,7 +518,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 'fieldName' => 'taxRateId',
                 'fieldValue' => $taxRateId,
             ];
-            $this->assertEquals($expectedParams, $e->getParameters());
+            $this->assertSame($expectedParams, $e->getParameters());
         } catch (\Exception $e) {
             $this->fail('Caught unexpected exception');
         }
@@ -550,7 +550,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 'fieldName' => 'taxRateId',
                 'fieldValue' => $taxRateId,
             ];
-            $this->assertEquals($expectedParams, $e->getParameters());
+            $this->assertSame($expectedParams, $e->getParameters());
         } catch (\Exception $e) {
             $this->fail('Caught unexpected exception');
         }
@@ -589,8 +589,8 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $searchResults = $this->rateRepository->getList($searchCriteria);
 
-        $this->assertEquals($searchCriteria, $searchResults->getSearchCriteria());
-        $this->assertEquals(count($expectedRateCodes), $searchResults->getTotalCount());
+        $this->assertSame($searchCriteria, $searchResults->getSearchCriteria());
+        $this->assertSame(count($expectedRateCodes), $searchResults->getTotalCount());
         foreach ($searchResults->getItems() as $rate) {
             $this->assertContains($rate->getCode(), $expectedRateCodes);
         }

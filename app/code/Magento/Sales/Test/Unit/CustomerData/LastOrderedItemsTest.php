@@ -174,7 +174,7 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
                 [$productIdNotVisible, $websiteId, $stockItemMock],
             ]);
         $stockItemMock->expects($this->exactly(2))->method('getIsInStock')->willReturn($expectedItem1['is_saleable']);
-        $this->assertEquals(['items' => [$expectedItem1, $expectedItem2]], $this->section->getSectionData());
+        $this->assertSame(['items' => [$expectedItem1, $expectedItem2]], $this->section->getSectionData());
     }
 
     /**
@@ -236,6 +236,6 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $this->assertEquals(['items' => []], $this->section->getSectionData());
+        $this->assertSame(['items' => []], $this->section->getSectionData());
     }
 }

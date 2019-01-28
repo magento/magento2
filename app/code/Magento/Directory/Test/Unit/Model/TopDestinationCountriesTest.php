@@ -36,7 +36,7 @@ class TopDestinationCountriesTest extends \PHPUnit\Framework\TestCase
     public function testGetTopDestinations($options, $expectedResults)
     {
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn($options);
-        $this->assertEquals($expectedResults, $this->model->getTopDestinations());
+        $this->assertSame($expectedResults, $this->model->getTopDestinations());
     }
 
     /**

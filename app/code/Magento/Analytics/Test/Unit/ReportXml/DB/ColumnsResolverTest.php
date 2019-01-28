@@ -64,7 +64,7 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetColumnsWithoutAttributes()
     {
-        $this->assertEquals($this->columnsResolver->getColumns($this->selectBuilderMock, []), []);
+        $this->assertSame($this->columnsResolver->getColumns($this->selectBuilderMock, []), []);
     }
 
     /**
@@ -88,7 +88,7 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
         $this->selectBuilderMock->expects($this->once())
             ->method('setGroup')
             ->with($expectedGroup);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedColumns,
             $this->columnsResolver->getColumns(
                 $this->selectBuilderMock,

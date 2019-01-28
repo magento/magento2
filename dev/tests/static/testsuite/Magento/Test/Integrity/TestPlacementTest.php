@@ -51,7 +51,7 @@ class TestPlacementTest extends \PHPUnit\Framework\TestCase
                 $fileList[] = $file['filename'];
             }
 
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 $files['totalRecords'],
                 "The following files have been found in obsolete test directories: \n"

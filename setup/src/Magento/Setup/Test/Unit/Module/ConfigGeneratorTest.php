@@ -56,31 +56,31 @@ class ConfigGeneratorTest extends TestCase
     {
         $testData = [ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];
         $returnValue = $this->configGeneratorObject->createCryptConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(['crypt' => ['key' => 'some-test_key']], $returnValue->getData());
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame(['crypt' => ['key' => 'some-test_key']], $returnValue->getData());
     }
 
     public function testCreateCryptConfigWithoutInput()
     {
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithInput()
     {
         $testData = [ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => 'files'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame(
             ['session' => ['save' => ConfigOptionsListConstants::SESSION_SAVE_FILES]],
             $returnValue->getData()
         );
 
         $testData = [ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => 'db'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame(
             ['session' => ['save' => ConfigOptionsListConstants::SESSION_SAVE_DB]],
             $returnValue->getData()
         );
@@ -89,8 +89,8 @@ class ConfigGeneratorTest extends TestCase
     public function testCreateSessionConfigWithoutInput()
     {
         $returnValue = $this->configGeneratorObject->createSessionConfig([]);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals([], $returnValue->getData());
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame([], $returnValue->getData());
     }
 
     public function testCreateDbConfig()
@@ -102,7 +102,7 @@ class ConfigGeneratorTest extends TestCase
             ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX => 'testSomePrefix',
         ];
         $returnValue = $this->configGeneratorObject->createDbConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $dbData = $returnValue->getData();
         $dbData = $dbData['db'];
         $this->assertArrayHasKey('table_prefix', $dbData);
@@ -122,7 +122,7 @@ class ConfigGeneratorTest extends TestCase
     public function testCreateResourceConfig()
     {
         $returnValue = $this->configGeneratorObject->createResourceConfig();
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());
+        $this->assertSame(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertSame(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());
     }
 }

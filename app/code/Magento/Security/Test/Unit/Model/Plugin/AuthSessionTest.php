@@ -171,6 +171,6 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         $this->adminSessionsManagerMock->expects($this->any())
             ->method('processProlong');
 
-        $this->assertEquals($result, $this->model->aroundProlong($this->authSessionMock, $proceed));
+        $this->assertSame($result, $this->model->aroundProlong($this->authSessionMock, $proceed));
     }
 }

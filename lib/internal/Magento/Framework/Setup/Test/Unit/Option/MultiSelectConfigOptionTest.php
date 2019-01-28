@@ -36,7 +36,7 @@ class MultiSelectConfigOptionTest extends \PHPUnit\Framework\TestCase
             ['a', 'b'],
             'path/to/value'
         );
-        $this->assertEquals(MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, $option->getFrontendType());
+        $this->assertSame(MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, $option->getFrontendType());
     }
 
     public function testGetSelectOptions()
@@ -47,7 +47,7 @@ class MultiSelectConfigOptionTest extends \PHPUnit\Framework\TestCase
             ['a', 'b'],
             'path/to/value'
         );
-        $this->assertEquals(['a', 'b'], $option->getSelectOptions());
+        $this->assertSame(['a', 'b'], $option->getSelectOptions());
     }
 
     /**

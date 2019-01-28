@@ -67,7 +67,7 @@ abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHtmlId()
     {
-        $this->assertEquals('', $this->getModel()->getHtmlId());
+        $this->assertSame('', $this->getModel()->getHtmlId());
     }
 
     public function testGetValue()

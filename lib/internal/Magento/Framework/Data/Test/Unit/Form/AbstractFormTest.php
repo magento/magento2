@@ -74,7 +74,7 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->allElementsMock));
         $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock, false);
-        $this->assertEquals($this->elementMock, $this->abstractForm->addField('store_type', 'hidden', $config));
+        $this->assertSame($this->elementMock, $this->abstractForm->addField('store_type', 'hidden', $config));
         $this->abstractForm->removeField('hidden');
     }
 
@@ -117,13 +117,13 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
 
     public function testAddCustomAttribute()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->abstractForm,
             $this->abstractForm->addCustomAttribute('attribute_key1', 'attribute_value1')
         );
 
         $form = clone $this->abstractForm;
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $form,
             $this->abstractForm->addCustomAttribute('attribute_key2', 'attribute_value2')
         );
@@ -150,7 +150,7 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
             $this->abstractForm->addCustomAttribute($key, $value);
         }
 
-        $this->assertEquals($result, $this->abstractForm->serialize($keys));
+        $this->assertSame($result, $this->abstractForm->serialize($keys));
     }
 
     /**

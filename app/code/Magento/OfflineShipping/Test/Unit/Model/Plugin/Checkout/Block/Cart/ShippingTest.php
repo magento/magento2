@@ -49,7 +49,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($scopeConfigMockReturnValue);
 
-        $this->assertEquals($assertResult, $this->model->afterIsStateActive($subjectMock, $result));
+        $this->assertSame($assertResult, $this->model->afterIsStateActive($subjectMock, $result));
     }
 
     /**

@@ -326,7 +326,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayHasKey('image', $result[$categoryId]);
 
-        $this->assertEquals($expects, $result[$categoryId]['image']);
+        $this->assertSame($expects, $result[$categoryId]['image']);
     }
 
     public function testGetMetaWithoutParentInheritanceResolving()

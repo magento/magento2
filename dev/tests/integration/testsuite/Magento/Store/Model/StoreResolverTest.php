@@ -31,7 +31,7 @@ class StoreResolverTest extends \PHPUnit\Framework\TestCase
         CacheCleaner::cleanAll();
         $storesData = $methodGetStoresData->invoke($storeResolver);
         $storesDataCached = $methodGetStoresData->invoke($storeResolver);
-        $this->assertEquals($storesDataRead, $storesData);
-        $this->assertEquals($storesDataRead, $storesDataCached);
+        $this->assertSame($storesDataRead, $storesData);
+        $this->assertSame($storesDataRead, $storesDataCached);
     }
 }

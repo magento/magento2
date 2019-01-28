@@ -163,7 +163,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\View\Result\Redirect::class,
             $this->creditmemoEmail->execute()
         );
-        $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
+        $this->assertSame($this->response, $this->creditmemoEmail->getResponse());
     }
 
     /**

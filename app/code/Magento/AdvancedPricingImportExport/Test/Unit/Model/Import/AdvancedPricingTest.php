@@ -202,7 +202,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $result = $this->advancedPricing->getEntityTypeCode();
         $expectedResult = 'advanced_pricing';
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -231,7 +231,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
 
         $result = $advancedPricingMock->validateRow($rowData, $rowNum);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -324,7 +324,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $result = $this->advancedPricing->saveAdvancedPricing();
 
-        $this->assertEquals($this->advancedPricing, $result);
+        $this->assertSame($this->advancedPricing, $result);
     }
 
     /**
@@ -395,7 +395,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $result = $this->invokeMethod($advancedPricing, 'saveAndReplaceAdvancedPrices');
 
-        $this->assertEquals($advancedPricing, $result);
+        $this->assertSame($advancedPricing, $result);
     }
 
     /**
@@ -464,7 +464,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $result = $this->invokeMethod($advancedPricing, 'saveAndReplaceAdvancedPrices');
 
-        $this->assertEquals($advancedPricing, $result);
+        $this->assertSame($advancedPricing, $result);
     }
 
     /**
@@ -574,7 +574,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $result = $this->advancedPricing->saveAdvancedPricing();
 
-        $this->assertEquals($this->advancedPricing, $result);
+        $this->assertSame($this->advancedPricing, $result);
     }
 
     /**
@@ -851,7 +851,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 ->method('delete')
                 ->willReturn(1);
         }
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->invokeMethod($this->advancedPricing, 'deleteProductTierPrices', [$listSku, 'table'])
         );

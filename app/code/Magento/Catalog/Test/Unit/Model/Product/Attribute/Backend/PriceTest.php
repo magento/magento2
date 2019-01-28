@@ -146,7 +146,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($allStoreIds[2])
             ]
         );
-        $this->assertEquals($this->model, $this->model->afterSave($object));
+        $this->assertSame($this->model, $this->model->afterSave($object));
     }
 
     public function testAfterSaveWithOldPrice()
@@ -161,7 +161,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE);
 
         $object->expects($this->never())->method('addAttributeUpdate');
-        $this->assertEquals($this->model, $this->model->afterSave($object));
+        $this->assertSame($this->model, $this->model->afterSave($object));
     }
 
     public function testAfterSaveWithGlobalPrice()
@@ -176,6 +176,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL);
 
         $object->expects($this->never())->method('addAttributeUpdate');
-        $this->assertEquals($this->model, $this->model->afterSave($object));
+        $this->assertSame($this->model, $this->model->afterSave($object));
     }
 }

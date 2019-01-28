@@ -68,7 +68,7 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->once())->method('setCustomizationService')->with($model);
         $this->_fileFactory->expects($this->once())->method('create')->will($this->returnValue($file));
         /** @var $model \Magento\Framework\View\Design\Theme\Customization\AbstractFile */
-        $this->assertEquals($file, $model->create());
+        $this->assertSame($file, $model->create());
     }
 
     /**
@@ -93,7 +93,7 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
 
         /** @var $model \Magento\Framework\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Theme\Model\Theme\File */
-        $this->assertEquals('/path' . '/' . 'file.path', $model->getFullPath($file));
+        $this->assertSame('/path' . '/' . 'file.path', $model->getFullPath($file));
     }
 
     /**
@@ -136,7 +136,7 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
         /** @var $model \Magento\Framework\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Theme\Model\Theme\File */
         $model->prepareFile($file);
-        $this->assertEquals($expectedContent, $file->getData());
+        $this->assertSame($expectedContent, $file->getData());
     }
 
     /**

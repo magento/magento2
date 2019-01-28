@@ -54,7 +54,7 @@ class SymlinkTest extends \PHPUnit\Framework\TestCase
         $asset->expects($this->once())
             ->method('getSourceFile')
             ->willReturn($path);
-        $this->assertEquals($expectation, $this->symlinkPublisher->isSupported($asset));
+        $this->assertSame($expectation, $this->symlinkPublisher->isSupported($asset));
     }
 
     /**

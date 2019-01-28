@@ -95,7 +95,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             ->method('fileWrite')
             ->with($this->resource, $data)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->write($data));
+        $this->assertSame($result, $this->file->write($data));
     }
 
     public function testWriteCsv()
@@ -108,7 +108,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             ->method('filePutCsv')
             ->with($this->resource, $data, $delimiter, $enclosure)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->writeCsv($data, $delimiter, $enclosure));
+        $this->assertSame($result, $this->file->writeCsv($data, $delimiter, $enclosure));
     }
 
     public function testFlush()
@@ -118,7 +118,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             ->method('fileFlush')
             ->with($this->resource)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->flush());
+        $this->assertSame($result, $this->file->flush());
     }
 
     /**
@@ -178,7 +178,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             ->method('fileLock')
             ->with($this->resource, $lockMode)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->lock($lockMode));
+        $this->assertSame($result, $this->file->lock($lockMode));
     }
 
     public function testUnlock()
@@ -188,6 +188,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             ->method('fileUnlock')
             ->with($this->resource)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->unlock());
+        $this->assertSame($result, $this->file->unlock());
     }
 }

@@ -49,6 +49,6 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetButtonDataWithoutRule()
     {
-        $this->assertEquals([], $this->model->getButtonData());
+        $this->assertSame([], $this->model->getButtonData());
     }
 }

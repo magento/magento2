@@ -24,7 +24,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $templateId = 'test_template_id';
         $this->template->setTemplateId($templateId);
         $result = $this->template->getTemplateId();
-        $this->assertEquals($templateId, $result);
+        $this->assertSame($templateId, $result);
     }
 
     public function testSetTemplateOptions()
@@ -32,7 +32,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $templateOptions = ['opt1', 'opt2'];
         $this->template->setTemplateOptions($templateOptions);
         $result = $this->template->getTemplateOptions();
-        $this->assertEquals($templateOptions, $result);
+        $this->assertSame($templateOptions, $result);
     }
 
     public function testSetTemplateVars()
@@ -40,6 +40,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $templateVars = ['opt1', 'opt2'];
         $this->template->setTemplateVars($templateVars);
         $result = $this->template->getTemplateVars();
-        $this->assertEquals($templateVars, $result);
+        $this->assertSame($templateVars, $result);
     }
 }

@@ -70,7 +70,7 @@ class GuestCouponManagementTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $this->couponManagementMock->expects($this->once())->method('get')->willReturn($this->couponCode);
-        $this->assertEquals($this->couponCode, $this->model->get($this->maskedCartId));
+        $this->assertSame($this->couponCode, $this->model->get($this->maskedCartId));
     }
 
     public function testSet()

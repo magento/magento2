@@ -61,7 +61,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
         $this->commandTester->execute(
             ['--output' => __DIR__ . '/_files/output/framework.csv']
         );
-        $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
+        $this->assertSame('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $fileContents = file_get_contents(__DIR__ . '/_files/output/framework.csv');
         $this->assertContains(
             '"Dependencies of framework:","Total number"' . PHP_EOL . ',2' . PHP_EOL,

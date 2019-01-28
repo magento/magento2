@@ -128,7 +128,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             ]
         )->validateData();
 
-        $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
+        $this->assertSame(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
         $this->model->importData();
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
@@ -139,12 +139,12 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
-            $this->assertEquals(4, count($tierPriceCollection));
+            $this->assertSame(4, count($tierPriceCollection));
             $index = 0;
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
                 $this->checkPercentageDiscount($tierPrice, $sku, $index);
-                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
+                $this->assertSame(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
@@ -166,7 +166,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $sku,
         $index
     ) {
-            $this->assertEquals(
+            $this->assertSame(
                 $this->expectedTierPrice[$sku][$index]['percentage_value'],
                 $tierPrice->getExtensionAttributes()->getPercentageValue()
             );
@@ -237,7 +237,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
-            $this->assertEquals(0, count($newPricingData));
+            $this->assertSame(0, count($newPricingData));
         }
     }
 
@@ -270,7 +270,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             ]
         )->validateData();
 
-        $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
+        $this->assertSame(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
         $this->model->importData();
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
@@ -281,12 +281,12 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
-            $this->assertEquals(4, count($tierPriceCollection));
+            $this->assertSame(4, count($tierPriceCollection));
             $index = 0;
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
                 $this->checkPercentageDiscount($tierPrice, $sku, $index);
-                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
+                $this->assertSame(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);

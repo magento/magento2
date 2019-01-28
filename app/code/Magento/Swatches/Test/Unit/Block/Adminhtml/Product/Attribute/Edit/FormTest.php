@@ -18,7 +18,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $objectManager->getObject(\Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form::class);
         $result= $block->addValues($values);
-        $this->assertEquals($block, $result);
+        $this->assertSame($block, $result);
     }
 
     /**

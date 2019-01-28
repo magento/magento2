@@ -89,7 +89,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         $this->indexerMock->method('getTitle')->willReturnOnConsecutiveCalls(...$indexerTitles);
         $commandTester->execute($command);
         $actualValue = $commandTester->getDisplay();
-        $this->assertEquals(
+        $this->assertSame(
             $consoleOutput,
             $actualValue
         );

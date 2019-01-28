@@ -26,7 +26,7 @@ class ExtendsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMap($sourceData, $resultData)
     {
-        $this->assertEquals($resultData, $this->_sut->map($sourceData));
+        $this->assertSame($resultData, $this->_sut->map($sourceData));
     }
 
     public function testMapWithBadPath()

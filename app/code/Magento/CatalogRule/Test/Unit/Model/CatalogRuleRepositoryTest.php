@@ -44,7 +44,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->ruleMock->expects($this->once())->method('getRuleId')->willReturn(null);
         $this->ruleMock->expects($this->once())->method('getId')->willReturn(1);
         $this->ruleResourceMock->expects($this->once())->method('save')->with($this->ruleMock);
-        $this->assertEquals($this->ruleMock, $this->repository->save($this->ruleMock));
+        $this->assertSame($this->ruleMock, $this->repository->save($this->ruleMock));
     }
 
     public function testEditRule()
@@ -60,7 +60,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn($ruleId);
         $this->ruleResourceMock->expects($this->once())->method('save')->with($ruleMock)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getId')->willReturn($ruleId);
-        $this->assertEquals($ruleMock, $this->repository->save($this->ruleMock));
+        $this->assertSame($ruleMock, $this->repository->save($this->ruleMock));
     }
 
     /**
@@ -86,7 +86,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($this->ruleMock);
-        $this->assertEquals(true, $this->repository->delete($this->ruleMock));
+        $this->assertSame(true, $this->repository->delete($this->ruleMock));
     }
 
     public function testDeleteRuleById()
@@ -101,7 +101,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($ruleMock);
-        $this->assertEquals(true, $this->repository->deleteById($ruleId));
+        $this->assertSame(true, $this->repository->deleteById($ruleId));
     }
 
     /**
@@ -125,9 +125,9 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn($ruleId);
-        $this->assertEquals($ruleMock, $this->repository->get($ruleId));
+        $this->assertSame($ruleMock, $this->repository->get($ruleId));
         /** verify that rule was cached */
-        $this->assertEquals($ruleMock, $this->repository->get($ruleId));
+        $this->assertSame($ruleMock, $this->repository->get($ruleId));
     }
 
     /**
@@ -141,6 +141,6 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn(null);
-        $this->assertEquals($ruleMock, $this->repository->get($ruleId));
+        $this->assertSame($ruleMock, $this->repository->get($ruleId));
     }
 }

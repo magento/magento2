@@ -207,7 +207,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     {
         $returnValue = 'ababagalamaga';
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($returnValue));
-        $this->assertEquals($returnValue, $this->onepage->getQuote());
+        $this->assertSame($returnValue, $this->onepage->getQuote());
     }
 
     public function testSetQuote()
@@ -215,7 +215,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Quote\Model\Quote $quoteMock */
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->onepage->setQuote($quoteMock);
-        $this->assertEquals($quoteMock, $this->onepage->getQuote());
+        $this->assertSame($quoteMock, $this->onepage->getQuote());
     }
 
     /**
@@ -303,7 +303,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($isAllowedGuestCheckout));
 
         $this->onepage->setQuote($quoteMock);
-        $this->assertEquals($expected, $this->onepage->getCheckoutMethod());
+        $this->assertSame($expected, $this->onepage->getCheckoutMethod());
     }
 
     /**
@@ -322,14 +322,14 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveCheckoutMethod()
     {
-        $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
+        $this->assertSame(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
         /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
         $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['setCheckoutMethod', '__wakeup']);
         $quoteMock->expects($this->once())->method('setCheckoutMethod')->with('someMethod')->will($this->returnSelf());
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $this->checkoutSessionMock->expects($this->once())->method('setStepData')->with('billing', 'allow', true);
         $this->onepage->setQuote($quoteMock);
-        $this->assertEquals([], $this->onepage->saveCheckoutMethod('someMethod'));
+        $this->assertSame([], $this->onepage->saveCheckoutMethod('someMethod'));
     }
 
     public function testGetLastOrderId()
@@ -345,6 +345,6 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $orderMock->expects($this->once())->method('load')->with($orderId)->will($this->returnSelf());
         $orderMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($orderIncrementId));
         $this->orderFactoryMock->expects($this->once())->method('create')->will($this->returnValue($orderMock));
-        $this->assertEquals($orderIncrementId, $this->onepage->getLastOrderId());
+        $this->assertSame($orderIncrementId, $this->onepage->getLastOrderId());
     }
 }

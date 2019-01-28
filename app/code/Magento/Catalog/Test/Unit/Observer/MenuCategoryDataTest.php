@@ -61,7 +61,7 @@ class MenuCategoryDataTest extends \PHPUnit\Framework\TestCase
         $category->expects($this->once())->method('getName')->willReturn('name');
         $this->_catalogCategory->expects($this->once())->method('getCategoryUrl')->willReturn('url');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'name' => 'name',
                 'id' => 'category-node-id',

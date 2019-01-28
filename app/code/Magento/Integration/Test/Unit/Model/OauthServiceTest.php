@@ -136,7 +136,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
         $this->_consumerMock->expects($this->once())->method('delete')->will($this->returnValue($this->_consumerMock));
         $this->_consumerMock->expects($this->any())->method('getData')->will($this->returnValue($this->_consumerData));
         $consumerData = $this->_service->deleteConsumer(self::VALUE_CONSUMER_ID);
-        $this->assertEquals($this->_consumerData['entity_id'], $consumerData['entity_id']);
+        $this->assertSame($this->_consumerData['entity_id'], $consumerData['entity_id']);
     }
 
     /**
@@ -283,7 +283,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
         $this->_consumerMock->expects($this->any())->method('getData')->will($this->returnValue($this->_consumerData));
         $consumer = $this->_service->loadConsumer(self::VALUE_CONSUMER_ID);
         $consumerData = $consumer->getData();
-        $this->assertEquals($this->_consumerData['entity_id'], $consumerData['entity_id']);
+        $this->assertSame($this->_consumerData['entity_id'], $consumerData['entity_id']);
     }
 
     /**
@@ -331,7 +331,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
         $this->_consumerMock->expects($this->any())->method('getData')->will($this->returnValue($this->_consumerData));
         $consumer = $this->_service->loadConsumerByKey(self::VALUE_CONSUMER_KEY);
         $consumerData = $consumer->getData();
-        $this->assertEquals($this->_consumerData['key'], $consumerData['key']);
+        $this->assertSame($this->_consumerData['key'], $consumerData['key']);
     }
 
     /**
@@ -468,6 +468,6 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_tokenMock)
         );
 
-        $this->assertEquals($this->_service->getAccessToken(self::VALUE_CONSUMER_ID), $this->_tokenMock);
+        $this->assertSame($this->_service->getAccessToken(self::VALUE_CONSUMER_ID), $this->_tokenMock);
     }
 }

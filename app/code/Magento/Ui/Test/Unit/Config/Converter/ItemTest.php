@@ -70,7 +70,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         }
-        $this->assertEquals($expectedResult, $this->converter->convert($node));
+        $this->assertSame($expectedResult, $this->converter->convert($node));
     }
 
     /**

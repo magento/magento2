@@ -48,6 +48,6 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $form->expects($this->once())->method('getParent')->will($this->returnValue($parentObjectMock));
 
         $this->_object->setForm($form);
-        $this->assertEquals($expected, $this->_object->getElementHtml());
+        $this->assertSame($expected, $this->_object->getElementHtml());
     }
 }

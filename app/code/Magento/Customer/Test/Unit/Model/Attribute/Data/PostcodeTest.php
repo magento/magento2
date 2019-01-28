@@ -84,7 +84,7 @@ class PostcodeTest extends \PHPUnit\Framework\TestCase
         $object->setExtractedData(['country_id' => $countryId]);
 
         $actual = $object->validateValue($value);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

@@ -67,7 +67,7 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
         $this->couponMock->expects($this->never())
             ->method('loadByCode');
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 
     public function testAddSalesRuleNameToOrderWithoutRule()
@@ -89,7 +89,7 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
         $this->ruleFactory->expects($this->never())
             ->method('create');
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 
     public function testAddSalesRuleNameToOrder()
@@ -123,6 +123,6 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
         $order->expects($this->once())
             ->method('setCouponRuleName');
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 }

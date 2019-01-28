@@ -53,7 +53,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
             ->with($this->request, $documentIds)
             ->willReturn($resolvedAggregations);
 
-        $this->assertEquals($resolvedAggregations, $this->aggregationResolver->resolve($this->request, $documentIds));
+        $this->assertSame($resolvedAggregations, $this->aggregationResolver->resolve($this->request, $documentIds));
     }
 
     public function testResolveWithoutSpecificResolver()
@@ -63,6 +63,6 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->atLeastOnce())->method('getIndex')->willReturn('index_1');
         $this->request->expects($this->once())->method('getAggregation')->willReturn($aggregations);
 
-        $this->assertEquals($aggregations, $this->aggregationResolver->resolve($this->request, []));
+        $this->assertSame($aggregations, $this->aggregationResolver->resolve($this->request, []));
     }
 }

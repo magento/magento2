@@ -105,8 +105,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->dataSize,
             $this->_uploaderFactory
         );
-        $this->assertEquals(600 * self::MB_MULTIPLIER, $this->_service->getJsUploadMaxSize());
-        $this->assertEquals(600 * self::MB_MULTIPLIER, $this->_service->getCssUploadMaxSize());
+        $this->assertSame(600 * self::MB_MULTIPLIER, $this->_service->getJsUploadMaxSize());
+        $this->assertSame(600 * self::MB_MULTIPLIER, $this->_service->getCssUploadMaxSize());
     }
 
     public function testGetCssUploadMaxSize()
@@ -118,7 +118,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->_uploaderFactory,
             ['css' => '5M']
         );
-        $this->assertEquals(5 * self::MB_MULTIPLIER, $this->_service->getCssUploadMaxSize());
+        $this->assertSame(5 * self::MB_MULTIPLIER, $this->_service->getCssUploadMaxSize());
     }
 
     public function testGetJsUploadMaxSize()
@@ -130,7 +130,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->_uploaderFactory,
             ['js' => '3M']
         );
-        $this->assertEquals(3 * self::MB_MULTIPLIER, $this->_service->getJsUploadMaxSize());
+        $this->assertSame(3 * self::MB_MULTIPLIER, $this->_service->getJsUploadMaxSize());
     }
 
     public function testGetFileContent()
@@ -165,7 +165,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             ['js' => '3M']
         );
 
-        $this->assertEquals('content from my file', $this->_service->getFileContent($fileName));
+        $this->assertSame('content from my file', $this->_service->getFileContent($fileName));
     }
 
     public function testUploadCssFile()
@@ -206,7 +206,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(['name' => $fileName, 'tmp_name' => $fileName])
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['content' => 'content', 'filename' => $fileName],
             $this->_service->uploadCssFile($fileName)
         );
@@ -287,7 +287,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->_uploader->expects($this->once())->method('getFileSize')->will($this->returnValue('499'));
 
-        $this->assertEquals(
+        $this->assertSame(
             ['content' => 'content', 'filename' => $fileName],
             $this->_service->uploadJsFile($fileName)
         );

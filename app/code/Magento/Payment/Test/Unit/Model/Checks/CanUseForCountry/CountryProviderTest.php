@@ -69,7 +69,7 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
         $this->directory->expects(static::never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('UK', $this->countryProvider->getCountry($this->quote));
+        static::assertSame('UK', $this->countryProvider->getCountry($this->quote));
     }
 
     /**
@@ -94,7 +94,7 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
         $this->directory->expects(static::once())
             ->method('getDefaultCountry')
             ->willReturn('US');
-        static::assertEquals('US', $this->countryProvider->getCountry($this->quote));
+        static::assertSame('US', $this->countryProvider->getCountry($this->quote));
     }
 
     /**
@@ -122,6 +122,6 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
         $this->directory->expects(static::never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('CA', $this->countryProvider->getCountry($this->quote));
+        static::assertSame('CA', $this->countryProvider->getCountry($this->quote));
     }
 }

@@ -105,7 +105,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $addedCustomers = count($customers) - $existCustomersCount;
 
-        $this->assertEquals($expectAddedCustomers, $addedCustomers, 'Added unexpected amount of customers');
+        $this->assertSame($expectAddedCustomers, $addedCustomers, 'Added unexpected amount of customers');
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -116,19 +116,19 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $updatedCustomer = $customers[$existingCustomer->getId()];
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingCustomer->getFirstname(),
             $updatedCustomer->getFirstname(),
             'Firstname must be changed'
         );
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingCustomer->getLastname(),
             $updatedCustomer->getLastname(),
             'Lastname must be changed'
         );
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingCustomer->getCreatedAt(),
             $updatedCustomer->getCreatedAt(),
             'Creation date must be changed'
@@ -174,37 +174,37 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $updatedCustomer = $customers[$existingCustomer->getId()];
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingCustomer->getFirstname(),
             $updatedCustomer->getFirstname(),
             'Firstname must be changed'
         );
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingCustomer->getUpdatedAt(),
             $updatedCustomer->getUpdatedAt(),
             'Updated at date must be changed'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $existingCustomer->getLastname(),
             $updatedCustomer->getLastname(),
             'Lastname must not be changed'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $existingCustomer->getStoreId(),
             $updatedCustomer->getStoreId(),
             'Store Id must not be changed'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $existingCustomer->getCreatedAt(),
             $updatedCustomer->getCreatedAt(),
             'Creation date must not be changed'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $existingCustomer->getCustomerGroupId(),
             $updatedCustomer->getCustomerGroupId(),
             'Customer group must not be changed'
@@ -229,7 +229,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
-        $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
+        $this->assertSame(3, $customerCollection->count(), 'Count of existing customers are invalid');
 
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE])
             ->setSource($source)
@@ -244,20 +244,20 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEntityTypeCode()
     {
-        $this->assertEquals('customer', $this->_model->getEntityTypeCode());
+        $this->assertSame('customer', $this->_model->getEntityTypeCode());
     }
 
     public function testValidateRowDuplicateEmail()
     {
         $this->_model->getErrorAggregator()->clear();
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
         $this->_customerData[Customer::COLUMN_EMAIL] = strtoupper(
             $this->_customerData[Customer::COLUMN_EMAIL]
         );
         $this->_model->validateRow($this->_customerData, 1);
-        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
             $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_DUPLICATE_EMAIL_SITE])
         );
@@ -268,7 +268,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_EMAIL] = 'wrong_email@format';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
             $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_EMAIL])
         );
@@ -279,7 +279,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_WEBSITE] = 'not_existing_web_site';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
             $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_WEBSITE])
         );
@@ -290,7 +290,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_STORE] = 'not_existing_web_store';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
             $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_STORE])
         );
@@ -301,7 +301,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->getErrorAggregator()->clear();
         $this->_customerData['password'] = '12345';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
             $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_PASSWORD_LENGTH])
         );
@@ -312,7 +312,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->getErrorAggregator()->clear();
         $this->_customerData['password'] = '1234567890';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(0, $this->_model->getErrorAggregator()->getErrorsCount());
     }
 
     /**
@@ -326,7 +326,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         unset($this->_customerData['group_id']);
 
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertSame(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
         $this->_customerData[Customer::COLUMN_EMAIL] = 'new.customer@example.com';
         $this->_model->validateRow($this->_customerData, 1);

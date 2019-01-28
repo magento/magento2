@@ -109,9 +109,9 @@ class DwstreeTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($store['actual']['name']);
 
-        $this->assertEquals($this->object, $this->object->initTabs());
+        $this->assertSame($this->object, $this->object->initTabs());
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'default',
                 'website_' . $website['actual']['code'],

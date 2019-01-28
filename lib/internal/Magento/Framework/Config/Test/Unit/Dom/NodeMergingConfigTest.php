@@ -51,7 +51,7 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $this->assertEquals('id', $this->object->getIdAttribute($xpath));
+        $this->assertSame('id', $this->object->getIdAttribute($xpath));
     }
 
     public function testGetIdAttributeNotMatched()

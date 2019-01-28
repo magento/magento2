@@ -112,7 +112,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('element_html_code')
         );
 
-        $this->assertEquals($expected, $this->_object->getSaveButtonHtml());
+        $this->assertSame($expected, $this->_object->getSaveButtonHtml());
     }
 
     public function testGetSaveUrl()
@@ -131,7 +131,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             $this->returnArgument(0)
         );
 
-        $this->assertEquals($expectedUrl, $this->_object->getSaveUrl());
+        $this->assertSame($expectedUrl, $this->_object->getSaveUrl());
     }
 
     public function testPrepareLayout()

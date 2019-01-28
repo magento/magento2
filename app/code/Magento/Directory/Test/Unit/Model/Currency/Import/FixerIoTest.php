@@ -115,11 +115,11 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
         $httpResponse->method('getBody')
             ->willReturn($responseBody);
 
-        self::assertEquals($expectedCurrencyRateList, $this->model->fetchRates());
+        self::assertSame($expectedCurrencyRateList, $this->model->fetchRates());
 
         $messages = $this->model->getMessages();
         self::assertNotEmpty($messages);
         self::assertTrue(is_array($messages));
-        self::assertEquals($message, (string)$messages[0]);
+        self::assertSame($message, (string)$messages[0]);
     }
 }

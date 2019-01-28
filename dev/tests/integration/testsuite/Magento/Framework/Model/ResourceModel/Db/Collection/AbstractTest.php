@@ -63,14 +63,14 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     {
         $allIds = $this->_model->getAllIds();
         sort($allIds);
-        $this->assertEquals(['0', '1'], $allIds);
+        $this->assertSame(['0', '1'], $allIds);
     }
 
     public function testGetAllIdsWithBind()
     {
         $this->_model->getSelect()->where('code = :code');
         $this->_model->addBindParam('code', 'admin');
-        $this->assertEquals(['0'], $this->_model->getAllIds());
+        $this->assertSame(['0'], $this->_model->getAllIds());
     }
 
     /**
@@ -91,7 +91,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             $actualColumns[] = $columnEntry[2];
         }
 
-        $this->assertEquals($expectedColumns, $actualColumns);
+        $this->assertSame($expectedColumns, $actualColumns);
     }
 
     /**
@@ -108,6 +108,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $columns = $this->_model->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
         $actualColumns = [$columns[0][1], $columns[1][2]];
 
-        $this->assertEquals($expectedColumns, $actualColumns);
+        $this->assertSame($expectedColumns, $actualColumns);
     }
 }

@@ -59,8 +59,8 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
     {
         $this->loader->expects($this->exactly(2))->method('load')->willReturn([]);
         $this->setLoadConfigExpectation(false);
-        $this->assertEquals([], $this->model->getAll());
-        $this->assertEquals([], $this->model->getAll());
+        $this->assertSame([], $this->model->getAll());
+        $this->assertSame([], $this->model->getAll());
     }
 
     public function testGetOne()

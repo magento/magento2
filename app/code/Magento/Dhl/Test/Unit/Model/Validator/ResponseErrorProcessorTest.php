@@ -41,7 +41,7 @@ class ResponseErrorProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->responseErrorProcessor->process($xml, $data['isShippingLabel']);
 
-        $this->assertEquals($data['errorMessage'], $result->render());
+        $this->assertSame($data['errorMessage'], $result->render());
         $this->assertNotNull($result->getArguments()[0]);
     }
 

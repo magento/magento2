@@ -33,7 +33,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
     public function testGetSelectedResourcesJsonEmpty()
     {
         $expectedResult = '[]';
-        $this->assertEquals($expectedResult, $this->createApiTabBlock()->getSelectedResourcesJson());
+        $this->assertSame($expectedResult, $this->createApiTabBlock()->getSelectedResourcesJson());
     }
 
     public function testGetSelectedResourcesJson()

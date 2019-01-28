@@ -59,7 +59,7 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->with($data)
             ->willReturn($jsonEncodedData);
-        $this->assertEquals(
+        $this->assertSame(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)
         );
@@ -102,7 +102,7 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->with($dataWithJsonEncodedBundleAttributes)
             ->willReturn($jsonEncodedData);
-        $this->assertEquals(
+        $this->assertSame(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)
         );
@@ -163,7 +163,7 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->with($dataWithJsonEncodedOptionValue)
             ->willReturn($jsonEncodedData);
-        $this->assertEquals(
+        $this->assertSame(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)
         );

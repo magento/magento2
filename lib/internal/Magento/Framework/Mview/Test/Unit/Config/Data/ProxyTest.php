@@ -86,7 +86,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             true
         );
 
-        $this->assertEquals('some_value', $this->model->get('some_path', 'default'));
+        $this->assertSame('some_value', $this->model->get('some_path', 'default'));
     }
 
     public function testGetNonShared()
@@ -106,6 +106,6 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->assertEquals('some_value', $this->model->get('some_path', 'default'));
+        $this->assertSame('some_value', $this->model->get('some_path', 'default'));
     }
 }

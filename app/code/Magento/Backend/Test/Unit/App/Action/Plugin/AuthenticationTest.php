@@ -79,7 +79,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             return $expectedResult;
         };
 
-        $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
+        $this->assertSame($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
     }
 
     /**
@@ -143,7 +143,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
-        $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
+        $this->assertSame($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
     }
 
     /**

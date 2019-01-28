@@ -42,10 +42,10 @@ class TextareaTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('textarea', $this->_model->getType());
-        $this->assertEquals('textarea', $this->_model->getExtType());
-        $this->assertEquals(2, $this->_model->getRows());
-        $this->assertEquals(15, $this->_model->getCols());
+        $this->assertSame('textarea', $this->_model->getType());
+        $this->assertSame('textarea', $this->_model->getExtType());
+        $this->assertSame(2, $this->_model->getRows());
+        $this->assertSame(15, $this->_model->getCols());
     }
 
     /**

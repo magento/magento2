@@ -20,7 +20,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $consumers = $this->getConfigData()->getConsumers();
         $expectedParsedConfig = include __DIR__ . '/_files/valid_expected_queue.php';
-        $this->assertEquals($expectedParsedConfig['consumers'], $consumers);
+        $this->assertSame($expectedParsedConfig['consumers'], $consumers);
     }
 
     /**
@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $publishers = $this->getConfigData()->getPublishers();
         $expectedParsedConfig = include __DIR__ . '/_files/valid_expected_queue.php';
-        $this->assertEquals($expectedParsedConfig['publishers'], $publishers);
+        $this->assertSame($expectedParsedConfig['publishers'], $publishers);
     }
 
     /**
@@ -40,7 +40,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $binds = $this->getConfigData()->getBinds();
         $expectedParsedConfig = include __DIR__ . '/_files/valid_expected_queue.php';
-        $this->assertEquals($expectedParsedConfig['binds'], $binds);
+        $this->assertSame($expectedParsedConfig['binds'], $binds);
     }
 
     /**
@@ -51,7 +51,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $topicName = 'topic.broker.test';
         $queue = $this->getConfigData()->getQueuesByTopic($topicName);
         $expectedParsedConfig = include __DIR__ . '/_files/valid_expected_queue.php';
-        $this->assertEquals(
+        $this->assertSame(
             $expectedParsedConfig['exchange_topic_to_queues_map']['magento--topic.broker.test'],
             $queue
         );
@@ -65,7 +65,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $topicName = 'topic.broker.test';
         $topic = $this->getConfigData()->getTopic($topicName);
         $expectedParsedConfig = include __DIR__ . '/_files/valid_expected_queue.php';
-        $this->assertEquals($expectedParsedConfig['topics'][$topicName], $topic);
+        $this->assertSame($expectedParsedConfig['topics'][$topicName], $topic);
     }
 
     /**

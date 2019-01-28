@@ -76,8 +76,8 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testRenderElement()
     {
         $layout = $this->_getLayoutModel('render.xml');
-        $this->assertEquals('124', $layout->renderElement('container_one'));
-        $this->assertEquals('12', $layout->renderElement('block_one'));
+        $this->assertSame('124', $layout->renderElement('container_one'));
+        $this->assertSame('12', $layout->renderElement('block_one'));
     }
 
     /**
@@ -110,20 +110,20 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testLayoutArgumentsDirective()
     {
         $layout = $this->_getLayoutModel('arguments.xml');
-        $this->assertEquals('1', $layout->getBlock('block_with_args')->getOne());
-        $this->assertEquals('two', $layout->getBlock('block_with_args')->getTwo());
-        $this->assertEquals('3', $layout->getBlock('block_with_args')->getThree());
+        $this->assertSame('1', $layout->getBlock('block_with_args')->getOne());
+        $this->assertSame('two', $layout->getBlock('block_with_args')->getTwo());
+        $this->assertSame('3', $layout->getBlock('block_with_args')->getThree());
     }
 
     public function testLayoutArgumentsDirectiveIfComplexValues()
     {
         $layout = $this->_getLayoutModel('arguments_complex_values.xml');
-        $this->assertEquals(
+        $this->assertSame(
             ['parameters' => ['first' => '1', 'second' => '2']],
             $layout->getBlock('block_with_args_complex_values')->getOne()
         );
-        $this->assertEquals('two', $layout->getBlock('block_with_args_complex_values')->getTwo());
-        $this->assertEquals(
+        $this->assertSame('two', $layout->getBlock('block_with_args_complex_values')->getTwo());
+        $this->assertSame(
             ['extra' => ['key1' => 'value1', 'key2' => 'value2']],
             $layout->getBlock('block_with_args_complex_values')->getThree()
         );
@@ -140,7 +140,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Data\Collection::class,
             $layout->getBlock('block_with_object_args')->getTwo()
         );
-        $this->assertEquals(3, $layout->getBlock('block_with_object_args')->getThree());
+        $this->assertSame(3, $layout->getBlock('block_with_object_args')->getThree());
     }
 
     public function testLayoutUrlArgumentsDirective()
@@ -162,8 +162,8 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 
         $dataSource = $layout->getBlock('block_with_object_updater_args')->getOne();
         $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $dataSource);
-        $this->assertEquals($expectedObjectData, $dataSource->getUpdaterCall());
-        $this->assertEquals($expectedSimpleData, $layout->getBlock('block_with_object_updater_args')->getTwo());
+        $this->assertSame($expectedObjectData, $dataSource->getUpdaterCall());
+        $this->assertSame($expectedSimpleData, $layout->getBlock('block_with_object_updater_args')->getTwo());
     }
 
     /**
@@ -172,7 +172,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testMoveSameAlias()
     {
         $layout = $this->_getLayoutModel('move_the_same_alias.xml');
-        $this->assertEquals('container1', $layout->getParentName('no_name3'));
+        $this->assertSame('container1', $layout->getParentName('no_name3'));
     }
 
     /**
@@ -181,14 +181,14 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testMoveNewAlias()
     {
         $layout = $this->_getLayoutModel('move_new_alias.xml');
-        $this->assertEquals('new_alias', $layout->getElementAlias('no_name3'));
+        $this->assertSame('new_alias', $layout->getElementAlias('no_name3'));
     }
 
     public function testActionAnonymousParentBlock()
     {
         $layout = $this->_getLayoutModel('action_for_anonymous_parent_block.xml');
-        $this->assertEquals('schedule_block0', $layout->getParentName('test.block.insert'));
-        $this->assertEquals('schedule_block1', $layout->getParentName('test.block.append'));
+        $this->assertSame('schedule_block0', $layout->getParentName('test.block.insert'));
+        $this->assertSame('schedule_block1', $layout->getParentName('test.block.append'));
     }
 
     /**
@@ -220,23 +220,23 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testMove()
     {
         $layout = $this->_getLayoutModel('move.xml');
-        $this->assertEquals('container2', $layout->getParentName('container1'));
-        $this->assertEquals('container1', $layout->getParentName('no.name2'));
-        $this->assertEquals('block_container', $layout->getParentName('no_name3'));
+        $this->assertSame('container2', $layout->getParentName('container1'));
+        $this->assertSame('container1', $layout->getParentName('no.name2'));
+        $this->assertSame('block_container', $layout->getParentName('no_name3'));
 
         // verify `after` attribute
-        $this->assertEquals('block_container', $layout->getParentName('no_name'));
+        $this->assertSame('block_container', $layout->getParentName('no_name'));
         $childrenOrderArray = array_keys($layout->getChildBlocks($layout->getParentName('no_name')));
         $positionAfter = array_search('child_block1', $childrenOrderArray);
         $positionToVerify = array_search('no_name', $childrenOrderArray);
-        $this->assertEquals($positionAfter, --$positionToVerify);
+        $this->assertSame($positionAfter, --$positionToVerify);
 
         // verify `before` attribute
-        $this->assertEquals('block_container', $layout->getParentName('no_name4'));
+        $this->assertSame('block_container', $layout->getParentName('no_name4'));
         $childrenOrderArray = array_keys($layout->getChildBlocks($layout->getParentName('no_name4')));
         $positionBefore = array_search('child_block2', $childrenOrderArray);
         $positionToVerify = array_search('no_name4', $childrenOrderArray);
-        $this->assertEquals($positionBefore, ++$positionToVerify);
+        $this->assertSame($positionBefore, ++$positionToVerify);
     }
 
     /**
@@ -272,7 +272,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testSortSpecialCases($case, $expectedResult)
     {
         $layout = $this->_getLayoutModel($case);
-        $this->assertEquals($expectedResult, $layout->renderElement('root'));
+        $this->assertSame($expectedResult, $layout->renderElement('root'));
     }
 
     /**
@@ -309,6 +309,6 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     {
         $layout = $this->_getLayoutModel('group.xml');
         $childNames = $layout->getBlock('block1')->getGroupChildNames('group1');
-        $this->assertEquals(['block2', 'block3'], $childNames);
+        $this->assertSame(['block2', 'block3'], $childNames);
     }
 }

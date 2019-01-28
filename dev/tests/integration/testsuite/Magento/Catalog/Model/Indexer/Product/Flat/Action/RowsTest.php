@@ -58,8 +58,8 @@ class RowsTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals($this->_product->getName(), $product->getName());
-            $this->assertEquals($this->_product->getShortDescription(), $product->getShortDescription());
+            $this->assertSame($this->_product->getName(), $product->getName());
+            $this->assertSame($this->_product->getShortDescription(), $product->getShortDescription());
         }
     }
 }

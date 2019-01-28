@@ -162,7 +162,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
      */
     private function assertInputExceptionMessages($e)
     {
-        $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+        $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         $exceptionData = $this->processRestExceptionResult($e);
         $expectedExceptionData = [
             'message' => 'One or more input exceptions have occurred.',
@@ -181,7 +181,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
                 ],
             ],
         ];
-        $this->assertEquals($expectedExceptionData, $exceptionData);
+        $this->assertSame($expectedExceptionData, $exceptionData);
     }
 
     /**
@@ -283,13 +283,13 @@ class CustomerTokenServiceTest extends WebapiAbstract
      */
     private function assertInvalidCredentialsException($e)
     {
-        $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode(), "Response HTTP code is invalid.");
+        $this->assertSame(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode(), "Response HTTP code is invalid.");
         $exceptionData = $this->processRestExceptionResult($e);
         $expectedExceptionData = [
             'message' => 'The account sign-in was incorrect or your account is disabled temporarily. '
                 . 'Please wait and try again later.'
         ];
-        $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
+        $this->assertSame($expectedExceptionData, $exceptionData, "Exception message is invalid.");
     }
 
     /**

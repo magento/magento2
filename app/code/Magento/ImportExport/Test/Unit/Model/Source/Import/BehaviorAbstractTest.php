@@ -63,10 +63,10 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
 
         // first element must has empty value
         $firstElement = $actualOptions[0];
-        $this->assertEquals('', $firstElement['value']);
+        $this->assertSame('', $firstElement['value']);
 
         // other elements must be equal to expected data
         $actualOptions = array_slice($actualOptions, 1);
-        $this->assertEquals($this->_expectedOptions, $actualOptions);
+        $this->assertSame($this->_expectedOptions, $actualOptions);
     }
 }

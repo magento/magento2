@@ -41,6 +41,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->moduleFirst->expects($this->once())->method('getDependenciesCount')->will($this->returnValue(0));
         $this->moduleSecond->expects($this->once())->method('getDependenciesCount')->will($this->returnValue(2));
 
-        $this->assertEquals(2, $this->config->getDependenciesCount());
+        $this->assertSame(2, $this->config->getDependenciesCount());
     }
 }

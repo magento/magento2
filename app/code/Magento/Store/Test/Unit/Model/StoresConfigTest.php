@@ -90,6 +90,6 @@ class StoresConfigTest extends \PHPUnit\Framework\TestCase
             ->with($path, 'store', 'code_1')
             ->will($this->returnValue(1));
 
-        $this->assertEquals([0 => 0, 1 => 1], $this->_model->getStoresConfigByPath($path));
+        $this->assertSame([0 => 0, 1 => 1], $this->_model->getStoresConfigByPath($path));
     }
 }

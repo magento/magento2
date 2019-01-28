@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Framework\Url\Helper\Data $helper */
         $helper = new \Magento\Framework\Url\Helper\Data($context);
-        $this->assertEquals($encodedUrl, $helper->getCurrentBase64Url());
+        $this->assertSame($encodedUrl, $helper->getCurrentBase64Url());
     }
 
     /**
@@ -76,7 +76,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\Url\Helper\Data $helper */
         $helper = new \Magento\Framework\Url\Helper\Data($context);
-        $this->assertEquals($encodedUrl, $helper->getEncodedUrl($url));
+        $this->assertSame($encodedUrl, $helper->getEncodedUrl($url));
     }
 
     /**
@@ -98,7 +98,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testAddRequestParam($param, $expected)
     {
         $helper = $this->getHelper([]);
-        $this->assertEquals($expected, $helper->addRequestParam('http://example.com', $param));
+        $this->assertSame($expected, $helper->addRequestParam('http://example.com', $param));
     }
 
     /**
@@ -148,7 +148,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $url = 'http://example.com?null&string=value&array[]=arrayVal1&array[]=arrayVal2&array[]=arrayVal3';
 
         $helper = $this->getHelper([]);
-        $this->assertEquals($expected, $helper->removeRequestParam($url, $paramKey));
+        $this->assertSame($expected, $helper->removeRequestParam($url, $paramKey));
     }
 
     /**

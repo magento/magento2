@@ -34,13 +34,13 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $configData['consumers'] = ['consumerConfig'];
         $this->envConfig->expects($this->once())->method('read')->willReturn($configData);
         $actual = $this->reader->read();
-        $this->assertEquals(['consumerConfig'], $actual);
+        $this->assertSame(['consumerConfig'], $actual);
     }
 
     public function testReadIfConsumerConfigNotExist()
     {
         $this->envConfig->expects($this->once())->method('read')->willReturn([]);
         $actual = $this->reader->read();
-        $this->assertEquals([], $actual);
+        $this->assertSame([], $actual);
     }
 }

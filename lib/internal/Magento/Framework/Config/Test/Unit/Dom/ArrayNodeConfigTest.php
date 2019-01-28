@@ -114,7 +114,7 @@ class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $this->assertEquals('id', $this->object->getAssocArrayKeyAttribute($xpath));
+        $this->assertSame('id', $this->object->getAssocArrayKeyAttribute($xpath));
     }
 
     public function testGetAssocArrayKeyAttributeNotMatched()

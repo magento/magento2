@@ -61,12 +61,12 @@ class JsTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [
             'js_files' => \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class,
         ];
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testGetTabLabel()
     {
-        $this->assertEquals('JS Editor', $this->_model->getTabLabel());
+        $this->assertSame('JS Editor', $this->_model->getTabLabel());
     }
 
     public function testGetJsUploadUrl()
@@ -89,13 +89,13 @@ class JsTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($uploadUrl)
         );
 
-        $this->assertEquals($uploadUrl, $this->_model->getJsUploadUrl());
+        $this->assertSame($uploadUrl, $this->_model->getJsUploadUrl());
     }
 
     public function testGetUploadJsFileNote()
     {
         $method = $this->_getMethod('_getUploadJsFileNote');
         $result = $method->invokeArgs($this->_model, []);
-        $this->assertEquals('Allowed file types *.js.', $result);
+        $this->assertSame('Allowed file types *.js.', $result);
     }
 }

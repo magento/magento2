@@ -63,9 +63,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
 
         foreach ($this->getCacheStates() as $cacheType => $cacheState) {
             if (in_array($cacheType, $typesToEnable)) {
-                $this->assertEquals(1, $cacheState, "Type '{$cacheType}' has not been enabled");
+                $this->assertSame(1, $cacheState, "Type '{$cacheType}' has not been enabled");
             } else {
-                $this->assertEquals(0, $cacheState, "Type '{$cacheType}' must remain disabled");
+                $this->assertSame(0, $cacheState, "Type '{$cacheType}' must remain disabled");
             }
         }
     }
@@ -83,7 +83,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/cache/massEnable');
 
         foreach ($this->getCacheStates() as $cacheType => $cacheState) {
-            $this->assertEquals(0, $cacheState, "Type '{$cacheType}' must remain disabled");
+            $this->assertSame(0, $cacheState, "Type '{$cacheType}' must remain disabled");
         }
     }
 
@@ -100,9 +100,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
 
         foreach ($this->getCacheStates() as $cacheType => $cacheState) {
             if (in_array($cacheType, $typesToDisable)) {
-                $this->assertEquals(0, $cacheState, "Type '{$cacheType}' has not been disabled");
+                $this->assertSame(0, $cacheState, "Type '{$cacheType}' has not been disabled");
             } else {
-                $this->assertEquals(1, $cacheState, "Type '{$cacheType}' must remain enabled");
+                $this->assertSame(1, $cacheState, "Type '{$cacheType}' must remain enabled");
             }
         }
     }
@@ -120,7 +120,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/cache/massDisable');
 
         foreach ($this->getCacheStates() as $cacheType => $cacheState) {
-            $this->assertEquals(1, $cacheState, "Type '{$cacheType}' must remain enabled");
+            $this->assertSame(1, $cacheState, "Type '{$cacheType}' must remain enabled");
         }
     }
 

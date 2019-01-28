@@ -31,7 +31,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHeaderTextNewIntegration()
     {
-        $this->assertEquals('New Integration', $this->editBlock->getHeaderText()->getText());
+        $this->assertSame('New Integration', $this->editBlock->getHeaderText()->getText());
         $buttonList = Bootstrap::getObjectManager()
             ->get(\Magento\Backend\Block\Widget\Context::class)
             ->getButtonList()
@@ -44,7 +44,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 if ($key === 'save') {
                     $haveSaveButton = true;
                     $this->assertNotNull($value->getDataByKey('options'));
-                    $this->assertEquals(
+                    $this->assertSame(
                         'activate',
                         $value->getDataByKey('options')['save_activate']['id'],
                         "'Activate' button is expected when creating a new integration."
@@ -70,8 +70,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $registry->register(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
 
         $headerText = $this->editBlock->getHeaderText();
-        $this->assertEquals("Edit Integration '%1'", $headerText->getText());
-        $this->assertEquals($integrationName, $headerText->getArguments()[0]);
+        $this->assertSame("Edit Integration '%1'", $headerText->getText());
+        $this->assertSame($integrationName, $headerText->getArguments()[0]);
 
         // Tear down
         $registry->unregister(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
@@ -97,8 +97,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Integration\Block\Adminhtml\Integration\Edit::class);
 
         $headerText = $editBlock->getHeaderText();
-        $this->assertEquals("Edit Integration '%1'", $headerText->getText());
-        $this->assertEquals($integrationName, $headerText->getArguments()[0]);
+        $this->assertSame("Edit Integration '%1'", $headerText->getText());
+        $this->assertSame($integrationName, $headerText->getArguments()[0]);
 
         $buttonList = Bootstrap::getObjectManager()
             ->get(\Magento\Backend\Block\Widget\Context::class)

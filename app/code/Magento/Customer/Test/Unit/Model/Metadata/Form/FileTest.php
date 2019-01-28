@@ -112,7 +112,7 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals($expected, $model->extractValue($this->requestMock));
+        $this->assertSame($expected, $model->extractValue($this->requestMock));
         if (!empty($attributeCode)) {
             unset($_FILES[$attributeCode]);
         }
@@ -175,7 +175,7 @@ class FileTest extends AbstractFormTestCase
         if ($mainScope) {
             $_FILES['mainScope'] = $mainScope;
         }
-        $this->assertEquals($expected, $model->extractValue($this->requestMock));
+        $this->assertSame($expected, $model->extractValue($this->requestMock));
         if ($mainScope) {
             unset($_FILES['mainScope']);
         }
@@ -231,7 +231,7 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals($expected, $model->validateValue($value));
+        $this->assertSame($expected, $model->validateValue($value));
     }
 
     /**
@@ -291,7 +291,7 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals($expected, $model->validateValue($value));
+        $this->assertSame($expected, $model->validateValue($value));
     }
 
     /**
@@ -423,7 +423,7 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals($value, $model->restoreValue('aValue'));
+        $this->assertSame($value, $model->restoreValue('aValue'));
     }
 
     /**
@@ -533,7 +533,7 @@ class FileTest extends AbstractFormTestCase
         $model->setRequestScope($requestScope);
         $result = $model->extractValue($this->requestMock);
 
-        $this->assertEquals(['file' => $fileName], $result);
+        $this->assertSame(['file' => $fileName], $result);
     }
 
     public function testCompactValueRemoveUiComponentValue()
@@ -551,7 +551,7 @@ class FileTest extends AbstractFormTestCase
             ->with($value)
             ->willReturnSelf();
 
-        $this->assertEquals([], $model->compactValue([]));
+        $this->assertSame([], $model->compactValue([]));
     }
 
     public function testCompactValueNoAction()
@@ -564,7 +564,7 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals($value, $model->compactValue($value));
+        $this->assertSame($value, $model->compactValue($value));
     }
 
     public function testCompactValueUiComponent()
@@ -645,7 +645,7 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals($uploadedFilename, $model->compactValue($value));
+        $this->assertSame($uploadedFilename, $model->compactValue($value));
     }
 
     public function testCompactValueInputFieldWithException()
@@ -687,6 +687,6 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertEquals('', $model->compactValue($value));
+        $this->assertSame('', $model->compactValue($value));
     }
 }

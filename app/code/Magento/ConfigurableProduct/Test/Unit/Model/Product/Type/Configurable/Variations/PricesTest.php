@@ -57,6 +57,6 @@ class PricesTest extends TestCase
             ->withConsecutive([500], [1000], [500])
             ->will($this->onConsecutiveCalls(500, 1000, 500));
 
-        $this->assertEquals($expected, $this->model->getFormattedPrices($priceInfoMock));
+        $this->assertSame($expected, $this->model->getFormattedPrices($priceInfoMock));
     }
 }

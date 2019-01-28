@@ -55,7 +55,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $actualValidator = $builder->createValidator();
-        $this->assertEquals($expectedValidator, $actualValidator);
+        $this->assertSame($expectedValidator, $actualValidator);
     }
 
     /**
@@ -172,7 +172,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ['constraints' => $constraints]
         );
         $builder->addConfiguration($alias, $configuration);
-        $this->assertAttributeEquals($expected, '_constraints', $builder);
+        $this->assertAttributeSame($expected, '_constraints', $builder);
     }
 
     /**
@@ -194,7 +194,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         );
         $configurations = [$alias => [$configuration]];
         $builder->addConfigurations($configurations);
-        $this->assertAttributeEquals($expected, '_constraints', $builder);
+        $this->assertAttributeSame($expected, '_constraints', $builder);
     }
 
     /**

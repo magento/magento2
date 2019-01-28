@@ -67,7 +67,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->itemMock->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
         $this->assertFalse($this->model->isValid($this->itemMock));
         $messages = ['invalid_email_format' => 'Invalid email format'];
-        $this->assertEquals($messages, $this->model->getMessages());
+        $this->assertSame($messages, $this->model->getMessages());
     }
 
     public function testValidateWithInvalidCountryId()
@@ -80,7 +80,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->model->isValid($this->itemMock));
         $messages = ['invalid_country_code' => 'Invalid country code'];
-        $this->assertEquals($messages, $this->model->getMessages());
+        $this->assertSame($messages, $this->model->getMessages());
     }
 
     public function testValidateWithInvalidData()
@@ -96,7 +96,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             'invalid_email_format' => 'Invalid email format',
             'invalid_country_code' => 'Invalid country code',
         ];
-        $this->assertEquals($messages, $this->model->getMessages());
+        $this->assertSame($messages, $this->model->getMessages());
     }
 
     public function testValidateWithValidData()

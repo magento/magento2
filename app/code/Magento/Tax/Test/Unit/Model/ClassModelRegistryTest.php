@@ -83,6 +83,6 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
             ->with($taxClassId)
             ->will($this->returnValue($this->classModelMock));
 
-        $this->assertEquals($this->classModelMock, $this->taxRuleRegistry->retrieve($taxClassId));
+        $this->assertSame($this->classModelMock, $this->taxRuleRegistry->retrieve($taxClassId));
     }
 }

@@ -215,9 +215,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     public function validateSaveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
         $this->assertCount(1, $entitiesToCreate);
-        $this->assertEquals($this->_customerIds['create'], $entitiesToCreate[0]['entity_id']);
+        $this->assertSame($this->_customerIds['create'], $entitiesToCreate[0]['entity_id']);
         $this->assertCount(1, $entitiesToUpdate);
-        $this->assertEquals($this->_customerIds['update'], $entitiesToUpdate[0]['entity_id']);
+        $this->assertSame($this->_customerIds['update'], $entitiesToUpdate[0]['entity_id']);
         return $this->_model;
     }
 
@@ -230,7 +230,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     public function validateDeleteCustomerEntities(array $customerIdsToDelete)
     {
         $this->assertCount(1, $customerIdsToDelete);
-        $this->assertEquals($this->_customerIds['delete'], $customerIdsToDelete[0]);
+        $this->assertSame($this->_customerIds['delete'], $customerIdsToDelete[0]);
         return $this->_model;
     }
 }

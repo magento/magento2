@@ -31,7 +31,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $params = ['optional_parameter' => $optionalParameter, 'required_parameter' => 'required_parameter'];
         $model = new Simple($pattern, ['optional_parameter']);
 
-        $this->assertEquals($expectedResult, $model->getPatternDirs($params));
+        $this->assertSame($expectedResult, $model->getPatternDirs($params));
     }
 
     /**

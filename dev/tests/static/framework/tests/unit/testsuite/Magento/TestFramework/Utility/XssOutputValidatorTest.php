@@ -16,7 +16,7 @@ class XssOutputValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $xssOutputValidator = new XssOutputValidator();
         $lines = $xssOutputValidator->getLinesWithXssSensitiveOutput($file);
-        static::assertEquals($expectedResults, $lines);
+        static::assertSame($expectedResults, $lines);
     }
 
     /**

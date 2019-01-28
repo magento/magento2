@@ -35,7 +35,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
     public function testGetScopeFromFile()
     {
         $file = '/path/to/file/scope/filename.ext';
-        static::assertEquals('scope', $this->mapper->getScopeFromFile($file));
+        static::assertSame('scope', $this->mapper->getScopeFromFile($file));
     }
 
     /**
@@ -46,7 +46,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetType($scope, $type, $expected)
     {
-        static::assertEquals($expected, $this->mapper->getType($type, $scope));
+        static::assertSame($expected, $this->mapper->getType($type, $scope));
     }
 
     /**
@@ -112,7 +112,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
 
         foreach ($expectedVirtualTypesDependencies as $scope => $deps) {
             foreach ($deps as $virtualType => $baseType) {
-                self::assertEquals($baseType, $mapper->getType($virtualType, $scope));
+                self::assertSame($baseType, $mapper->getType($virtualType, $scope));
             }
         }
     }
@@ -161,13 +161,13 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
         array $expectation,
         array $input
     ) {
-        static::assertEquals(count($expectation), count($input));
+        static::assertSame(count($expectation), count($input));
         foreach ($expectation as $ek => $ev) {
             self::assertArrayHasKey($ek, $input);
             if (is_array($ev)) {
                 self::assertArrayEqualsRecursive($ev, $input[$ek]);
             } else {
-                self::assertEquals($ev, $input[$ek]);
+                self::assertSame($ev, $input[$ek]);
             }
         }
     }

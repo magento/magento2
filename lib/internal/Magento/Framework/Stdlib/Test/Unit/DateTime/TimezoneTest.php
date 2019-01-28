@@ -81,7 +81,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
 
         /** @var \DateTime $dateTime */
         $dateTime = $timezone->date($date, $locale, true, $includeTime);
-        $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        $this->assertSame($expectedTimestamp, $dateTime->getTimestamp());
     }
 
     /**
@@ -128,7 +128,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigWillReturnConfiguredTimezone($configuredTimezone);
 
-        $this->assertEquals($expectedResult, $this->getTimezone()->convertConfigTimeToUtc($date));
+        $this->assertSame($expectedResult, $this->getTimezone()->convertConfigTimeToUtc($date));
     }
 
     /**

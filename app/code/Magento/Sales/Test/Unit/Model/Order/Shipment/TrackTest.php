@@ -29,7 +29,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $this->_model->addData(['number' => $number, 'test' => true]);
 
         $this->assertTrue($this->_model->getTest());
-        $this->assertEquals($number, $this->_model->getTrackNumber());
+        $this->assertSame($number, $this->_model->getTrackNumber());
     }
 
     public function testGetStoreId()
@@ -41,7 +41,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $shipmentMock->expects($this->once())->method('getStore')->will($this->returnValue($storeObject));
 
         $this->_model->setShipment($shipmentMock);
-        $this->assertEquals($storeId, $this->_model->getStoreId());
+        $this->assertSame($storeId, $this->_model->getStoreId());
     }
 
     public function testSetGetNumber()
@@ -51,8 +51,8 @@ class TrackTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setNumber('test');
 
-        $this->assertEquals('test', $this->_model->getNumber());
-        $this->assertEquals('test', $this->_model->getTrackNumber());
+        $this->assertSame('test', $this->_model->getNumber());
+        $this->assertSame('test', $this->_model->getTrackNumber());
     }
 
     /**
@@ -63,7 +63,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
     public function testIsCustom($expectedResult, $carrierCodeToSet)
     {
         $this->_model->setCarrierCode($carrierCodeToSet);
-        $this->assertEquals($expectedResult, $this->_model->isCustom());
+        $this->assertSame($expectedResult, $this->_model->isCustom());
     }
 
     /**

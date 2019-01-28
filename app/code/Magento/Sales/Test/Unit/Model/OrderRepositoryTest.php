@@ -140,7 +140,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
 
-        $this->assertEquals($collectionMock, $this->orderRepository->getList($searchCriteriaMock));
+        $this->assertSame($collectionMock, $this->orderRepository->getList($searchCriteriaMock));
     }
 
     /**

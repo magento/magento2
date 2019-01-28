@@ -75,6 +75,6 @@ class SynonymsTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($result));
 
         $result = $this->synonymPreprocessor->process($query);
-        $this->assertEquals($result, $newQuery);
+        $this->assertSame($result, $newQuery);
     }
 }

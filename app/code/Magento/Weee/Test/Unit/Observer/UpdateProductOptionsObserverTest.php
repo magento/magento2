@@ -106,7 +106,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
         );
         $weeeObserverObject->execute($observerObject);
 
-        $this->assertEquals($expectedArray, $configObj->getData('additional_options'));
+        $this->assertSame($expectedArray, $configObj->getData('additional_options'));
     }
 
     /**

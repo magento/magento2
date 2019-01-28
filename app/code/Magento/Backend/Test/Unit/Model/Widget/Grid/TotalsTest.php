@@ -72,7 +72,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
         }
 
         $expected = new \Magento\Framework\DataObject(['test1' => 3, 'test2' => 2]);
-        $this->assertEquals($expected, $this->_model->countTotals($collection));
+        $this->assertSame($expected, $this->_model->countTotals($collection));
     }
 
     public function testCountTotalsWithSubItems()
@@ -113,6 +113,6 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
             $collection->addItem($item);
         }
         $expected = new \Magento\Framework\DataObject(['test4' => 9, 'test5' => 2]);
-        $this->assertEquals($expected, $this->_model->countTotals($collection));
+        $this->assertSame($expected, $this->_model->countTotals($collection));
     }
 }

@@ -109,13 +109,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key));
+            $this->assertSame($value, $this->invoice->getData($key));
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
             $invoiceItem = $invoiceItems[$itemKey];
             foreach ($itemData as $key => $value) {
-                $this->assertEquals($value, $invoiceItem->getData($key));
+                $this->assertSame($value, $invoiceItem->getData($key));
             }
         }
     }

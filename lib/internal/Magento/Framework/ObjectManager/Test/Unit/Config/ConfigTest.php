@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expected = ['argName' => 'argValue'];
         $fixture = ['FooType' => ['arguments' => $expected]];
         $config->extend($fixture);
-        $this->assertEquals($expected, $config->getArguments('FooType'));
+        $this->assertSame($expected, $config->getArguments('FooType'));
     }
 
     public function testExtendWithCacheMock()
@@ -67,29 +67,29 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetPreferenceTrimsFirstSlash()
     {
         $config = new Config();
-        $this->assertEquals('Some\Class\Name', $config->getPreference('\Some\Class\Name'));
+        $this->assertSame('Some\Class\Name', $config->getPreference('\Some\Class\Name'));
     }
 
     public function testExtendIgnoresFirstSlashesOnPreferences()
     {
         $config = new Config();
         $config->extend(['preferences' => ['\Some\Interface' => '\Some\Class']]);
-        $this->assertEquals('Some\Class', $config->getPreference('Some\Interface'));
-        $this->assertEquals('Some\Class', $config->getPreference('\Some\Interface'));
+        $this->assertSame('Some\Class', $config->getPreference('Some\Interface'));
+        $this->assertSame('Some\Class', $config->getPreference('\Some\Interface'));
     }
 
     public function testExtendIgnoresFirstShashesOnVirtualTypes()
     {
         $config = new Config();
         $config->extend(['\SomeVirtualType' => ['type' => '\Some\Class']]);
-        $this->assertEquals('Some\Class', $config->getInstanceType('SomeVirtualType'));
+        $this->assertSame('Some\Class', $config->getInstanceType('SomeVirtualType'));
     }
 
     public function testExtendIgnoresFirstShashes()
     {
         $config = new Config();
         $config->extend(['\Some\Class' => ['arguments' => ['someArgument']]]);
-        $this->assertEquals(['someArgument'], $config->getArguments('Some\Class'));
+        $this->assertSame(['someArgument'], $config->getArguments('Some\Class'));
     }
 
     public function testExtendIgnoresFirstShashesForSharing()

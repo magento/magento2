@@ -52,7 +52,7 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
                 'avsStreetAddressResponseCode' => $avsStreet
             ]);
 
-        self::assertEquals($expected, $this->mapper->getCode($orderPayment));
+        self::assertSame($expected, $this->mapper->getCode($orderPayment));
     }
 
     /**

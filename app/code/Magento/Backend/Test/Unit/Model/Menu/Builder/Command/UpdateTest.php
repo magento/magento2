@@ -22,12 +22,12 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     public function testExecuteFillsEmptyItemWithData()
     {
         $params = $this->_model->execute([]);
-        $this->assertEquals($this->_params, $params);
+        $this->assertSame($this->_params, $params);
     }
 
     public function testExecuteRewritesDataInFilledItem()
     {
         $params = $this->_model->execute(['title' => 'newitem']);
-        $this->assertEquals($this->_params, $params);
+        $this->assertSame($this->_params, $params);
     }
 }

@@ -60,6 +60,6 @@ class FormFactoryTest extends \PHPUnit\Framework\TestCase
         $request = Bootstrap::getObjectManager()->get(\Magento\Framework\App\RequestInterface::class);
         $request->setParams($this->_requestData);
 
-        $this->assertEquals($this->_expectedData, $form->restoreData($form->extractData($request)));
+        $this->assertSame($this->_expectedData, $form->restoreData($form->extractData($request)));
     }
 }

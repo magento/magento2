@@ -398,6 +398,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->entityFactory->expects($this->once())->method('create')->willReturn($item);
         $firstItem = $this->collection->getNewEmptyItem();
         $secondItem = $this->collection->getNewEmptyItem();
-        $this->assertEquals($firstItem, $secondItem);
+        $this->assertSame($firstItem, $secondItem);
     }
 }

@@ -118,7 +118,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testPing()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
-        $this->assertEquals(true, $this->model->ping());
+        $this->assertSame(true, $this->model->ping());
     }
 
     /**
@@ -127,7 +127,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testTestConnection()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
-        $this->assertEquals(true, $this->model->testConnection());
+        $this->assertSame(true, $this->model->testConnection());
     }
 
     /**
@@ -136,7 +136,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testTestConnectionFalse()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(false);
-        $this->assertEquals(true, $this->model->testConnection());
+        $this->assertSame(true, $this->model->testConnection());
     }
 
     /**
@@ -153,7 +153,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model->ping();
-        $this->assertEquals(true, $this->model->testConnection());
+        $this->assertSame(true, $this->model->testConnection());
     }
 
     /**
@@ -310,7 +310,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->method('getAlias')
             ->with($params)
             ->willReturn([]);
-        $this->assertEquals([], $this->model->getAlias($alias));
+        $this->assertSame([], $this->model->getAlias($alias));
     }
 
     /**
@@ -510,7 +510,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->method('search')
             ->with($query)
             ->willReturn([]);
-        $this->assertEquals([], $this->model->query($query));
+        $this->assertSame([], $this->model->query($query));
     }
 
     /**
@@ -523,7 +523,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->elasticsearchClientMock->expects($this->once())
             ->method('suggest')
             ->willReturn([]);
-        $this->assertEquals([], $this->model->suggest($query));
+        $this->assertSame([], $this->model->suggest($query));
     }
 
     /**

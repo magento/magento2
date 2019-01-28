@@ -22,7 +22,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     public function testGetSetStoreId()
     {
         $this->_model->setStoreId(1);
-        $this->assertEquals(1, $this->_model->getStoreId());
+        $this->assertSame(1, $this->_model->getStoreId());
     }
 
     public function testLoadByCode()
@@ -34,7 +34,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             \Magento\Variable\Model\Variable::class
         );
         $variable->loadByCode('test_code');
-        $this->assertEquals($this->_model->getName(), $variable->getName());
+        $this->assertSame($this->_model->getName(), $variable->getName());
         $this->_model->delete();
     }
 
@@ -43,9 +43,9 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $html = '<p>test</p>';
         $text = 'test';
         $this->_model->setData(['code' => 'test_code', 'html_value' => $html, 'plain_value' => $text]);
-        $this->assertEquals($html, $this->_model->getValue());
-        $this->assertEquals($html, $this->_model->getValue(\Magento\Variable\Model\Variable::TYPE_HTML));
-        $this->assertEquals($text, $this->_model->getValue(\Magento\Variable\Model\Variable::TYPE_TEXT));
+        $this->assertSame($html, $this->_model->getValue());
+        $this->assertSame($html, $this->_model->getValue(\Magento\Variable\Model\Variable::TYPE_HTML));
+        $this->assertSame($text, $this->_model->getValue(\Magento\Variable\Model\Variable::TYPE_TEXT));
     }
 
     public function testValidate()
@@ -65,14 +65,14 @@ class VariableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetVariablesOptionArray()
     {
-        $this->assertEquals([], $this->_model->getVariablesOptionArray());
+        $this->assertSame([], $this->_model->getVariablesOptionArray());
     }
 
     public function testCollection()
     {
         $collection = $this->_model->getCollection();
         $collection->setStoreId(1);
-        $this->assertEquals(1, $collection->getStoreId(), 'Store id setter and getter');
+        $this->assertSame(1, $collection->getStoreId(), 'Store id setter and getter');
 
         $collection->addValuesToResult();
         $this->assertContains('variable_value', (string)$collection->getSelect());
@@ -91,6 +91,6 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_model->setData($data)->save();
         $actualLabel = current(current($this->_model->getVariablesOptionArray())['label']->getArguments());
-        $this->assertEquals($expectedLabel, $actualLabel);
+        $this->assertSame($expectedLabel, $actualLabel);
     }
 }

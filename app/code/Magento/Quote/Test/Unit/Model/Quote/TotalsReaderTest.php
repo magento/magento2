@@ -79,7 +79,7 @@ class TotalsReaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
         $testedTotalMock->expects($this->once())->method('setData')->with($data)->willReturnSelf();
         $testedTotalMock->expects($this->any())->method('getCode')->willReturn('my_total_type');
-        $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
+        $this->assertSame($expected, $this->model->fetch($this->quoteMock, $total));
     }
 
     public function testFetchWithEmptyData()
@@ -101,7 +101,7 @@ class TotalsReaderTest extends \PHPUnit\Framework\TestCase
             ->method('fetch')
             ->with($this->quoteMock, $this->totalMock)
             ->willReturn([]);
-        $this->assertEquals([], $this->model->fetch($this->quoteMock, $total));
+        $this->assertSame([], $this->model->fetch($this->quoteMock, $total));
     }
 
     public function testFetchSeveralCollectors()
@@ -135,7 +135,7 @@ class TotalsReaderTest extends \PHPUnit\Framework\TestCase
         $secondTotalMock->expects($this->once())->method('setData')->with($data[1])->willReturnSelf();
         $firstTotalMock->expects($this->any())->method('getCode')->willReturn('first_total_type');
         $secondTotalMock->expects($this->any())->method('getCode')->willReturn('second_total_type');
-        $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
+        $this->assertSame($expected, $this->model->fetch($this->quoteMock, $total));
     }
 
     public function testConvert()
@@ -162,6 +162,6 @@ class TotalsReaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($testedTotalMock);
         $testedTotalMock->expects($this->never())->method('setData');
         $testedTotalMock->expects($this->any())->method('getCode')->willReturn('my_total_type');
-        $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
+        $this->assertSame($expected, $this->model->fetch($this->quoteMock, $total));
     }
 }

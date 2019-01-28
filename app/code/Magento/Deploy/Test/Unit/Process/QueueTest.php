@@ -93,9 +93,9 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $package = $this->createMock(Package::class);
         $package->expects($this->once())->method('getPath')->willReturn('path');
 
-        $this->assertEquals(true, $this->queue->add($package));
+        $this->assertSame(true, $this->queue->add($package));
         $packages = $this->queue->getPackages();
-        $this->assertEquals(
+        $this->assertSame(
             $package,
             isset($packages['path']['package']) ? $packages['path']['package'] : null
         );
@@ -119,6 +119,6 @@ class QueueTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceConnection->expects(self::never())->method('closeConnection');
 
-        $this->assertEquals(0, $this->queue->process());
+        $this->assertSame(0, $this->queue->process());
     }
 }

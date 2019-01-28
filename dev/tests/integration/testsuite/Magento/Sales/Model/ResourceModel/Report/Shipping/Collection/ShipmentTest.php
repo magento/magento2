@@ -71,6 +71,6 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         foreach ($this->collection->getItems() as $reportItem) {
             $actualResult[] = array_intersect_key($reportItem->getData(), $expectedResult[0]);
         }
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

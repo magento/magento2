@@ -59,7 +59,7 @@ class AvailabilityFlagTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->any())->method('getFilters')->will($this->returnValue($filters));
         $this->filterMock->expects($this->once())->method('getItemsCount')->will($this->returnValue($itemsCount));
 
-        $this->assertEquals($expectedResult, $this->model->isEnabled($this->layerMock, $this->filters));
+        $this->assertSame($expectedResult, $this->model->isEnabled($this->layerMock, $this->filters));
     }
 
     /**

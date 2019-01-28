@@ -89,7 +89,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
     {
         $this->testInit($data);
         $result = $this->model->getErrorCode();
-        $this->assertEquals($result, $expectedValue);
+        $this->assertSame($result, $expectedValue);
     }
 
     /**
@@ -120,7 +120,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
     {
         $this->testInit($data);
         $result = $this->model->getErrorMessage();
-        $this->assertEquals($result, $expectedValue);
+        $this->assertSame($result, $expectedValue);
     }
 
     /**
@@ -151,7 +151,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
     {
         $this->testInit($data);
         $result = $this->model->getRowNumber();
-        $this->assertEquals($result, $expectedValue);
+        $this->assertSame($result, $expectedValue);
     }
 
     /**
@@ -182,7 +182,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
     {
         $this->testInit($data);
         $result = $this->model->getColumnName();
-        $this->assertEquals($result, $expectedValue);
+        $this->assertSame($result, $expectedValue);
     }
 
     /**
@@ -218,7 +218,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
     {
         $this->testInit($data);
         $result = $this->model->getErrorLevel();
-        $this->assertEquals($result, $expectedValue);
+        $this->assertSame($result, $expectedValue);
     }
 
     /**
@@ -255,7 +255,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
     {
         $this->testInit($data);
         $result = $this->model->getErrorDescription();
-        $this->assertEquals($result, $expectedValue);
+        $this->assertSame($result, $expectedValue);
     }
 
     /**

@@ -33,11 +33,11 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Creditmemo::class
         );
         $this->assertEmpty($childBlock->getCreditmemo());
-        $this->assertNotEquals($expectedHtml, $block->getTotalsHtml($creditmemo));
+        $this->assertNotSame($expectedHtml, $block->getTotalsHtml($creditmemo));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $block->getTotalsHtml($creditmemo);
         $this->assertSame($creditmemo, $childBlock->getCreditmemo());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 }

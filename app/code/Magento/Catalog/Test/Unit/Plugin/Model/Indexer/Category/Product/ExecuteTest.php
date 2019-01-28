@@ -49,7 +49,7 @@ class ExecuteTest extends \PHPUnit\Framework\TestCase
         $this->typeList->expects($this->never())
             ->method('invalidate');
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->execute->afterExecute($subject, $result)
         );
@@ -72,7 +72,7 @@ class ExecuteTest extends \PHPUnit\Framework\TestCase
             ->method('invalidate')
             ->with('full_page');
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->execute->afterExecute($subject, $result)
         );

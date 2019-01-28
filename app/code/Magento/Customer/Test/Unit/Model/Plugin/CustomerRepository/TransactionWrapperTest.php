@@ -65,7 +65,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('commit');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->customerMock,
             $this->model->aroundSave($this->subjectMock, $this->closureMock, $this->customerMock, $this->passwordHash)
         );

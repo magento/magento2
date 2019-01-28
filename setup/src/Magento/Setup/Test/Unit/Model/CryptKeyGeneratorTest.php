@@ -54,6 +54,6 @@ class CryptKeyGeneratorTest extends TestCase
 
         $actual = $this->cryptKeyGenerator->generate();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

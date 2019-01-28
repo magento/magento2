@@ -84,7 +84,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->category->expects($this->any())->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', $dataChangedForUrlKey], ['parent_id', $dataChangedForParentId]]));
 
-        $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
+        $this->assertSame($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
     }
 
     /**
@@ -154,7 +154,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepository->expects($this->any())->method('get')->with(13)
             ->will($this->returnValue($parentCategory));
 
-        $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
+        $this->assertSame($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
     }
 
     /**
@@ -189,7 +189,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $passedStoreId)
             ->will($this->returnValue($suffix));
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->categoryUrlPathGenerator->getUrlPathWithSuffix($this->category, $storeId)
         );
@@ -216,7 +216,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $currentStoreId)
             ->will($this->returnValue($suffix));
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->categoryUrlPathGenerator->getUrlPathWithSuffix($this->category, $storeId)
         );
@@ -225,7 +225,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGetCanonicalUrlPath()
     {
         $this->category->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $this->assertEquals(
+        $this->assertSame(
             'catalog/category/view/id/1',
             $this->categoryUrlPathGenerator->getCanonicalUrlPath($this->category)
         );
@@ -254,6 +254,6 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->category->expects($this->any())->method('getName')->will($this->returnValue($name));
         $this->category->expects($this->once())->method('formatUrlKey')->will($this->returnArgument(0));
 
-        $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlKey($this->category));
+        $this->assertSame($result, $this->categoryUrlPathGenerator->getUrlKey($this->category));
     }
 }

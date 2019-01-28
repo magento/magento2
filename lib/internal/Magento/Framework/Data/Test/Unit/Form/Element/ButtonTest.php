@@ -42,8 +42,8 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('button', $this->_model->getType());
-        $this->assertEquals('textfield', $this->_model->getExtType());
+        $this->assertSame('button', $this->_model->getType());
+        $this->assertSame('textfield', $this->_model->getExtType());
     }
 
     /**

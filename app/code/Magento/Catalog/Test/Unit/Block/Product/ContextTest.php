@@ -61,7 +61,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStockRegistry()
     {
-        $this->assertEquals($this->stockRegistryMock, $this->context->getStockRegistry());
+        $this->assertSame($this->stockRegistryMock, $this->context->getStockRegistry());
     }
 
     public function testGetImageBuilder()

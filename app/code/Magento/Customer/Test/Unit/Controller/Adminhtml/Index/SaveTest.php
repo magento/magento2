@@ -493,7 +493,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/*/edit', ['id' => $customerId, '_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertSame($redirectMock, $this->model->execute());
     }
 
     /**
@@ -679,7 +679,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/index', [])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertSame($redirectMock, $this->model->execute());
     }
 
     /**
@@ -821,7 +821,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertSame($redirectMock, $this->model->execute());
     }
 
     /**
@@ -963,7 +963,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertSame($redirectMock, $this->model->execute());
     }
 
     /**
@@ -1106,6 +1106,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertSame($redirectMock, $this->model->execute());
     }
 }

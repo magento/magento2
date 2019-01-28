@@ -49,7 +49,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->_product->setNewVariationsAttributeSetId(4);
         // Default attribute set id
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
-        $this->assertEquals(3, count($generatedProducts));
+        $this->assertSame(3, count($generatedProducts));
         foreach ($generatedProducts as $productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId);
             /** @var $product \Magento\Catalog\Model\Product */
@@ -61,7 +61,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
             $this->assertNotNull($product->getSku());
             $this->assertNotNull($product->getPrice());
             $this->assertNotNull($product->getWeight());
-            $this->assertEquals('1', $stockItem->getIsInStock());
+            $this->assertSame('1', $stockItem->getIsInStock());
         }
     }
 
@@ -77,8 +77,8 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
         $parentStockItem = $this->stockRegistry->getStockItem($this->_product->getId());
         foreach ($generatedProducts as $productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId);
-            $this->assertEquals($parentStockItem->getManageStock(), $stockItem->getManageStock());
-            $this->assertEquals('1', $stockItem->getIsInStock());
+            $this->assertSame($parentStockItem->getManageStock(), $stockItem->getManageStock());
+            $this->assertSame('1', $stockItem->getIsInStock());
         }
     }
 

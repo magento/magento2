@@ -42,7 +42,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_model->setConfigFilePath(__DIR__ . '/_files/persistent.xml');
         $result = $this->_model->collectInstancesToEmulate();
         $expected = include '_files/expectedArray.php';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testGetBlockConfigInfo()
@@ -50,13 +50,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_model->setConfigFilePath(__DIR__ . '/_files/persistent.xml');
         $blocks = $this->_model->getBlockConfigInfo(\Magento\Sales\Block\Reorder\Sidebar::class);
         $expected = include '_files/expectedBlocksArray.php';
-        $this->assertEquals($expected, $blocks);
+        $this->assertSame($expected, $blocks);
     }
 
     public function testGetBlockConfigInfoNotConfigured()
     {
         $this->_model->setConfigFilePath(__DIR__ . '/_files/persistent.xml');
         $blocks = $this->_model->getBlockConfigInfo(\Magento\Catalog\Block\Product\Compare\ListCompare::class);
-        $this->assertEquals([], $blocks);
+        $this->assertSame([], $blocks);
     }
 }

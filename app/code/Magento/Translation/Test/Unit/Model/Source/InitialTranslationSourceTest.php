@@ -137,7 +137,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
             ->method('getCode')
             ->willReturn('myStore');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'en_US' => [
                     'myStore' => [
@@ -154,6 +154,6 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isDbAvailable')
             ->willReturn(false);
-        $this->assertEquals([], $this->source->get());
+        $this->assertSame([], $this->source->get());
     }
 }

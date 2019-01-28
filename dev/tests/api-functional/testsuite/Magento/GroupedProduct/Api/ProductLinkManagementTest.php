@@ -56,6 +56,6 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             ],
         ];
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

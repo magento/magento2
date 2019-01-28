@@ -110,7 +110,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $expected = $this->validatorResultMock;
         $actual = $this->validator->validate($this->entityMock, $validators, $context);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

@@ -48,7 +48,7 @@ class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod(\Magento\Swatches\Model\Form\Element\AbstractSwatch::class, 'getValues');
         $method->setAccessible(true);
 
-        $this->assertEquals($expected, $method->invoke($this->swatch));
+        $this->assertSame($expected, $method->invoke($this->swatch));
     }
 
     public function testGetValuesEmpty()

@@ -94,9 +94,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
             ['content' => 'content']
         );
         $this->assertInstanceOf(\Magento\Framework\View\Element\Text::class, $child);
-        $this->assertEquals('testAddChild.testAddChildAlias', $child->getNameInLayout());
-        $this->assertEquals($child, $parentBlock->getChildBlock('testAddChildAlias'));
-        $this->assertEquals('content', $child->getContent());
+        $this->assertSame('testAddChild.testAddChildAlias', $child->getNameInLayout());
+        $this->assertSame($child, $parentBlock->getChildBlock('testAddChildAlias'));
+        $this->assertSame('content', $child->getContent());
     }
 
     public function testSetGetNameInLayout()
@@ -105,7 +105,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_block->getNameInLayout());
         $name = uniqid('name');
         $this->_block->setNameInLayout($name);
-        $this->assertEquals($name, $this->_block->getNameInLayout());
+        $this->assertSame($name, $this->_block->getNameInLayout());
 
         // Setting second time, along with the layout
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -116,7 +116,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Framework\View\Element\AbstractBlock::class, $block);
         $block->setNameInLayout($name);
         $this->assertInstanceOf(\Magento\Framework\View\Element\AbstractBlock::class, $layout->getBlock($name));
-        $this->assertEquals($name, $block->getNameInLayout());
+        $this->assertSame($name, $block->getNameInLayout());
         $this->assertTrue($layout->hasElement($name));
         $newName = 'new_name';
         $block->setNameInLayout($newName);
@@ -132,7 +132,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     public function testGetChildNames()
     {
         // Without layout
-        $this->assertEquals([], $this->_block->getChildNames());
+        $this->assertSame([], $this->_block->getChildNames());
 
         // With layout
         $parent = $this->_createBlockWithLayout('parent', 'parent');
@@ -150,14 +150,14 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent->insert($block4, 'block3', true);
         // add fourth block to the 3rd position
 
-        $this->assertEquals(['block2', 'block3', 'block4', 'block1'], $parent->getChildNames());
+        $this->assertSame(['block2', 'block3', 'block4', 'block1'], $parent->getChildNames());
     }
 
     public function testSetAttribute()
     {
         $this->assertEmpty($this->_block->getSomeValue());
         $this->_block->setAttribute('some_value', 'value');
-        $this->assertEquals('value', $this->_block->getSomeValue());
+        $this->assertSame('value', $this->_block->getSomeValue());
     }
 
     /**
@@ -216,7 +216,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     public function testUnsetChildren()
     {
         $parent = $this->_createBlockWithLayout('block', 'block');
-        $this->assertEquals([], $parent->getChildNames());
+        $this->assertSame([], $parent->getChildNames());
         $blockOne = $this->_createBlockWithLayout('block1', 'block1');
         $blockTwo = $this->_createBlockWithLayout('block2', 'block2');
         $parent->setChild('block1', $blockOne);
@@ -224,7 +224,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($blockOne, $parent->getChildBlock('block1'));
         $this->assertSame($blockTwo, $parent->getChildBlock('block2'));
         $parent->unsetChildren();
-        $this->assertEquals([], $parent->getChildNames());
+        $this->assertSame([], $parent->getChildNames());
     }
 
     /**
@@ -251,8 +251,8 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $result = $this->_block->getChildBlock($childAlias);
 
         $this->assertInstanceOf(\Magento\Framework\View\Element\Text::class, $result);
-        $this->assertEquals($childName, $result->getNameInLayout());
-        $this->assertEquals($child, $result);
+        $this->assertSame($childName, $result->getNameInLayout());
+        $this->assertSame($child, $result);
     }
 
     /**
@@ -277,14 +277,14 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent->insert($blockOne, '-', false, 'block1');
         // make block1 1st
 
-        $this->assertEquals('one', $parent->getChildHtml('block1'));
-        $this->assertEquals('two', $parent->getChildHtml('block2'));
+        $this->assertSame('one', $parent->getChildHtml('block1'));
+        $this->assertSame('two', $parent->getChildHtml('block2'));
 
         // GetChildChildHtml
         $blockTwo->setChild('block11', $blockOne);
-        $this->assertEquals('one', $parent->getChildChildHtml('block2'));
-        $this->assertEquals('', $parent->getChildChildHtml(''));
-        $this->assertEquals('', $parent->getChildChildHtml('block3'));
+        $this->assertSame('one', $parent->getChildChildHtml('block2'));
+        $this->assertSame('', $parent->getChildChildHtml(''));
+        $this->assertSame('', $parent->getChildChildHtml('block3'));
     }
 
     /**
@@ -314,7 +314,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent2->insert($block2, '-', false, 'block2');
         $parent2->insert($block3, '-', true, 'block3');
         $parent1->insert($block4);
-        $this->assertEquals('twoonethree', $parent1->getChildChildHtml('parent2'));
+        $this->assertSame('twoonethree', $parent1->getChildChildHtml('parent2'));
     }
 
     public function testGetBlockHtml()
@@ -338,7 +338,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $block2->setText($expected);
         $html = $block3->getBlockHtml('block2');
         $this->assertInternalType('string', $html);
-        $this->assertEquals($expected, $html);
+        $this->assertSame($expected, $html);
     }
 
     /**
@@ -411,7 +411,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($layout->getChildNames($parentName));
         $layout->addContainer($name, 'Container');
         $parent->insert($name);
-        $this->assertEquals([$name], $layout->getChildNames($parentName));
+        $this->assertSame([$name], $layout->getChildNames($parentName));
     }
 
     /**
@@ -424,7 +424,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent->append($child1, 'child1');
         $child2 = $this->_createBlockWithLayout('child2');
         $parent->append($child2);
-        $this->assertEquals(['child1', 'child2'], $parent->getChildNames());
+        $this->assertSame(['child1', 'child2'], $parent->getChildNames());
     }
 
     /**
@@ -457,10 +457,10 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         // all child data
         $actualChildData = $parent->getChildData('block1');
         $this->assertArrayHasKey('some_property', $actualChildData);
-        $this->assertEquals('some_value', $actualChildData['some_property']);
+        $this->assertSame('some_value', $actualChildData['some_property']);
 
         // specific child data key
-        $this->assertEquals('some_value', $parent->getChildData('block1', 'some_property'));
+        $this->assertSame('some_value', $parent->getChildData('block1', 'some_property'));
 
         // non-existing child block
         $this->assertNull($parent->getChildData('unknown_block'));
@@ -470,8 +470,8 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     {
         $base = 'http://localhost/index.php/';
         $withRoute = "{$base}catalog/product/view/id/10/";
-        $this->assertEquals($base, $this->_block->getUrl());
-        $this->assertEquals($withRoute, $this->_block->getUrl('catalog/product/view', ['id' => 10]));
+        $this->assertSame($base, $this->_block->getUrl());
+        $this->assertSame($withRoute, $this->_block->getUrl('catalog/product/view', ['id' => 10]));
     }
 
     public function testGetViewFileUrl()
@@ -485,8 +485,8 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 
     public function testGetModuleName()
     {
-        $this->assertEquals('Magento_Theme', $this->_block->getModuleName());
-        $this->assertEquals('Magento_Theme', $this->_block->getData('module_name'));
+        $this->assertSame('Magento_Theme', $this->_block->getModuleName());
+        $this->assertSame('Magento_Theme', $this->_block->getData('module_name'));
     }
 
     /**
@@ -495,7 +495,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     public function testEscapeHtml($data, $expected)
     {
         $actual = $this->_block->escapeHtml($data);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -519,19 +519,19 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     public function testStripTags()
     {
         $str = '<p>text</p>';
-        $this->assertEquals('text', $this->_block->stripTags($str));
+        $this->assertSame('text', $this->_block->stripTags($str));
     }
 
     public function testEscapeUrl()
     {
         $url = 'http://example.com/?wsdl=1';
-        $this->assertEquals($url, $this->_block->escapeUrl($url));
+        $this->assertSame($url, $this->_block->escapeUrl($url));
     }
 
     public function testEscapeJsQuote()
     {
         $script = "var s = 'text';";
-        $this->assertEquals('var s = \\\'text\\\';', $this->_block->escapeJsQuote($script));
+        $this->assertSame('var s = \\\'text\\\';', $this->_block->escapeJsQuote($script));
     }
 
     public function testGetCacheKeyInfo()
@@ -543,7 +543,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\Text::class
         );
         $block->setNameInLayout($name);
-        $this->assertEquals([$name], $block->getCacheKeyInfo());
+        $this->assertSame([$name], $block->getCacheKeyInfo());
     }
 
     public function testGetCacheKey()
@@ -557,11 +557,11 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $block->setNameInLayout($name);
         $key = $block->getCacheKey();
         $this->assertNotEmpty($key);
-        $this->assertNotEquals('key', $key);
-        $this->assertNotEquals($name, $key);
+        $this->assertNotSame('key', $key);
+        $this->assertNotSame($name, $key);
 
         $block->setCacheKey('key');
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
+        $this->assertSame(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
     }
 
     /**

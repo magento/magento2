@@ -49,14 +49,14 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
         )->getMockForAbstractClass();
         $currencyMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn($expected);
         $this->quoteMock->expects($this->once())->method('getCurrency')->willReturn($currencyMock);
-        $this->assertEquals($expected, $this->model->getCurrencyCode());
+        $this->assertSame($expected, $this->model->getCurrencyCode());
     }
 
     public function testGetOrderIncrementId()
     {
         $expected = '1';
         $this->quoteMock->expects($this->once())->method('getReservedOrderId')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getOrderIncrementId());
+        $this->assertSame($expected, $this->model->getOrderIncrementId());
     }
 
     public function testGetCustomerId()
@@ -68,7 +68,7 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
         )->getMockForAbstractClass();
         $customerMock->expects($this->once())->method('getId')->willReturn($expected);
         $this->quoteMock->expects($this->once())->method('getCustomer')->willReturn($customerMock);
-        $this->assertEquals($expected, $this->model->getCustomerId());
+        $this->assertSame($expected, $this->model->getCustomerId());
     }
 
     public function testGetBillingAddressIsNull()

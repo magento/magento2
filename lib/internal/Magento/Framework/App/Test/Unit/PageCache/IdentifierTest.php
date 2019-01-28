@@ -97,7 +97,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
         $valueWithSecureRequest = $this->model->getValue();
         $valueWithInsecureRequest = $this->model->getValue();
-        $this->assertNotEquals($valueWithSecureRequest, $valueWithInsecureRequest);
+        $this->assertNotSame($valueWithSecureRequest, $valueWithInsecureRequest);
     }
 
     public function testDomainDifferentiator()
@@ -113,7 +113,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
         $valueDomain1 = $this->model->getValue();
         $valueDomain2 = $this->model->getValue();
-        $this->assertNotEquals($valueDomain1, $valueDomain2);
+        $this->assertNotSame($valueDomain1, $valueDomain2);
     }
 
     public function testPathDifferentiator()
@@ -129,7 +129,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
         $valuePath1 = $this->model->getValue();
         $valuePath2 = $this->model->getValue();
-        $this->assertNotEquals($valuePath1, $valuePath2);
+        $this->assertNotSame($valuePath1, $valuePath2);
     }
 
     /**
@@ -169,7 +169,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
             ->method('getVaryString')
             ->will($this->returnValue(self::VARY));
 
-        $this->assertEquals(
+        $this->assertSame(
             sha1(
                 json_encode(
                     [

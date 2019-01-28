@@ -202,7 +202,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($this->category))
             ->will($this->returnValue($stateKey));
 
-        $this->assertEquals($stateKey, $this->model->getStateKey());
+        $this->assertSame($stateKey, $this->model->getStateKey());
     }
 
     public function testGetProductCollection()
@@ -277,7 +277,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->currentCategory);
 
         $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $this->model->setCurrentCategory($categoryId));
-        $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));
+        $this->assertSame($this->currentCategory, $this->model->getData('current_category'));
     }
 
     public function testSetNewCurrentCategoryIfCurrentCategoryIsSame()
@@ -292,7 +292,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->category);
 
         $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $this->model->setCurrentCategory($categoryId));
-        $this->assertEquals($this->category, $this->model->getData('current_category'));
+        $this->assertSame($this->category, $this->model->getData('current_category'));
     }
 
     /**
@@ -334,8 +334,8 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->once())->method('registry')->with('current_category')
             ->willReturn($this->currentCategory);
 
-        $this->assertEquals($this->currentCategory, $this->model->getCurrentCategory());
-        $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));
+        $this->assertSame($this->currentCategory, $this->model->getCurrentCategory());
+        $this->assertSame($this->currentCategory, $this->model->getData('current_category'));
     }
 
     public function testGetCurrentCategoryIfCurrentCategoryIsNotSet()
@@ -350,7 +350,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->any())->method('getRootCategoryId')
             ->will($this->returnValue($rootCategoryId));
 
-        $this->assertEquals($this->currentCategory, $this->model->getCurrentCategory());
-        $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));
+        $this->assertSame($this->currentCategory, $this->model->getCurrentCategory());
+        $this->assertSame($this->currentCategory, $this->model->getData('current_category'));
     }
 }

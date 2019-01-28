@@ -46,7 +46,7 @@ QUERY;
 
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertArrayHasKey('stock_status', $response['products']['items'][0]);
-        $this->assertEquals('IN_STOCK', $response['products']['items'][0]['stock_status']);
+        $this->assertSame('IN_STOCK', $response['products']['items'][0]['stock_status']);
     }
 
     /**
@@ -77,6 +77,6 @@ QUERY;
 
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertArrayHasKey('stock_status', $response['products']['items'][0]);
-        $this->assertEquals('OUT_OF_STOCK', $response['products']['items'][0]['stock_status']);
+        $this->assertSame('OUT_OF_STOCK', $response['products']['items'][0]['stock_status']);
     }
 }

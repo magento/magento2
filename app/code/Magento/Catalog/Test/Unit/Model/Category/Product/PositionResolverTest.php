@@ -117,6 +117,6 @@ class PositionResolverTest extends \PHPUnit\Framework\TestCase
             ->method('fetchCol')
             ->willReturn($this->positions);
 
-        $this->assertEquals($this->flippedPositions, $this->model->getPositions($this->categoryId));
+        $this->assertSame($this->flippedPositions, $this->model->getPositions($this->categoryId));
     }
 }

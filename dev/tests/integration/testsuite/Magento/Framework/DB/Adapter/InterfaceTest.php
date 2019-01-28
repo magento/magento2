@@ -86,12 +86,12 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             $this->_connection->tableColumnExists($this->_tableName, 'column2'),
             'Table column "column2" must be provided by the fixture.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['column1'],
             $this->_getIndexColumns($this->_tableName, $this->_oneColumnIdxName),
             'Single-column index must be provided by the fixture.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['column1', 'column2'],
             $this->_getIndexColumns($this->_tableName, $this->_twoColumnIdxName),
             'Multiple-column index must be provided by the fixture.'
@@ -135,7 +135,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             $this->_getIndexColumns($this->_tableName, $this->_oneColumnIdxName),
             'Column index must be dropped along with the column.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['column2'],
             $this->_getIndexColumns($this->_tableName, $this->_twoColumnIdxName),
             'References to the dropped column must be removed from the multiple-column indexes.'
@@ -148,7 +148,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     public function testDropColumnRemoveIndexDuplicate()
     {
         $this->_connection->dropColumn($this->_tableName, 'column2');
-        $this->assertEquals(
+        $this->assertSame(
             ['column1'],
             $this->_getIndexColumns($this->_tableName, $this->_oneColumnIdxName),
             'Column index must be preserved.'
@@ -170,7 +170,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->_connection->insertArray($this->_tableName, $columns, $data);
         $select = $this->_connection->select()->from($this->_tableName, array_keys($expected[0]))->order('column1');
         $result = $this->_connection->fetchAll($select);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -226,7 +226,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $select = $this->_connection->select()->from($this->_tableName);
         $result = $this->_connection->fetchRow($select);
 
-        $this->assertEquals($data, $result);
+        $this->assertSame($data, $result);
     }
 
     /**
@@ -239,7 +239,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $select = $this->_connection->select()->from($this->_tableName);
         $result = $this->_connection->fetchRow($select);
 
-        $this->assertEquals($data, $result);
+        $this->assertSame($data, $result);
     }
 
     /**
@@ -247,12 +247,12 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     public function testInsertForce($data)
     {
-        $this->assertEquals(1, $this->_connection->insertForce($this->_tableName, $data));
+        $this->assertSame(1, $this->_connection->insertForce($this->_tableName, $data));
 
         $select = $this->_connection->select()->from($this->_tableName);
         $result = $this->_connection->fetchRow($select);
 
-        $this->assertEquals($data, $result);
+        $this->assertSame($data, $result);
     }
 
     /**

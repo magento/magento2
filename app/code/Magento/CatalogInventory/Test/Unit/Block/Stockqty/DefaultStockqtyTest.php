@@ -64,7 +64,7 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertSame($productTags, $this->block->getIdentities());
     }
 
     /**
@@ -145,7 +145,7 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
             ->with($productId)
             ->willReturn($stockItemMock);
 
-        $this->assertEquals($stockQty, $this->block->getStockQtyLeft());
+        $this->assertSame($stockQty, $this->block->getStockQtyLeft());
     }
 
     /**
@@ -194,6 +194,6 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
     public function testGetThresholdQty()
     {
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(5);
-        $this->assertEquals(5, $this->block->getThresholdQty());
+        $this->assertSame(5, $this->block->getThresholdQty());
     }
 }

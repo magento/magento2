@@ -84,19 +84,19 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     public function testGetLabelTranslatesLabelAndPrefix()
     {
         $this->_model->setData(['label' => 'element label'], 'scope');
-        $this->assertEquals(__('some prefix') . ' ' . __('element label'), $this->_model->getLabel('some prefix'));
+        $this->assertSame(__('some prefix') . ' ' . __('element label'), $this->_model->getLabel('some prefix'));
     }
 
     public function testGetHintTranslatesElementHint()
     {
         $this->_model->setData(['hint' => 'element hint'], 'scope');
-        $this->assertEquals(__('element hint'), $this->_model->getHint());
+        $this->assertSame(__('element hint'), $this->_model->getHint());
     }
 
     public function testGetCommentTranslatesCommentTextIfNoCommentModelIsProvided()
     {
         $this->_model->setData(['comment' => 'element comment'], 'scope');
-        $this->assertEquals(__('element comment'), $this->_model->getComment());
+        $this->assertSame(__('element comment'), $this->_model->getComment());
     }
 
     public function testGetCommentRetrievesCommentFromCommentModelIfItsProvided()
@@ -122,13 +122,13 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($commentModelMock)
         );
-        $this->assertEquals('translatedValue', $this->_model->getComment('currentValue'));
+        $this->assertSame('translatedValue', $this->_model->getComment('currentValue'));
     }
 
     public function testGetTooltipRetunrsTranslatedAttributeIfNoBlockIsProvided()
     {
         $this->_model->setData(['tooltip' => 'element tooltip'], 'scope');
-        $this->assertEquals(__('element tooltip'), $this->_model->getTooltip());
+        $this->assertSame(__('element tooltip'), $this->_model->getTooltip());
     }
 
     public function testGetTooltipCreatesTooltipBlock()
@@ -145,25 +145,25 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($tooltipBlock)
         );
-        $this->assertEquals('tooltip block', $this->_model->getTooltip());
+        $this->assertSame('tooltip block', $this->_model->getTooltip());
     }
 
     public function testGetTypeReturnsTextByDefault()
     {
-        $this->assertEquals('text', $this->_model->getType());
+        $this->assertSame('text', $this->_model->getType());
     }
 
     public function testGetTypeReturnsProvidedType()
     {
         $this->_model->setData(['type' => 'some_type'], 'scope');
-        $this->assertEquals('some_type', $this->_model->getType());
+        $this->assertSame('some_type', $this->_model->getType());
     }
 
     public function testGetFrontendClass()
     {
-        $this->assertEquals('', $this->_model->getFrontendClass());
+        $this->assertSame('', $this->_model->getFrontendClass());
         $this->_model->setData(['frontend_class' => 'some class'], 'scope');
-        $this->assertEquals('some class', $this->_model->getFrontendClass());
+        $this->assertSame('some class', $this->_model->getFrontendClass());
     }
 
     public function testHasBackendModel()
@@ -185,25 +185,25 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('backend_model_object')
         );
         $this->_model->setData(['backend_model' => \Magento\Framework\Model\Name::class], 'scope');
-        $this->assertEquals('backend_model_object', $this->_model->getBackendModel());
+        $this->assertSame('backend_model_object', $this->_model->getBackendModel());
     }
 
     public function testGetSectionId()
     {
         $this->_model->setData(['id' => 'fieldId', 'path' => 'sectionId/groupId/subgroupId'], 'scope');
-        $this->assertEquals('sectionId', $this->_model->getSectionId());
+        $this->assertSame('sectionId', $this->_model->getSectionId());
     }
 
     public function testGetGroupPath()
     {
         $this->_model->setData(['id' => 'fieldId', 'path' => 'sectionId/groupId/subgroupId'], 'scope');
-        $this->assertEquals('sectionId/groupId/subgroupId', $this->_model->getGroupPath());
+        $this->assertSame('sectionId/groupId/subgroupId', $this->_model->getGroupPath());
     }
 
     public function testGetConfigPath()
     {
         $this->_model->setData(['config_path' => 'custom_config_path'], 'scope');
-        $this->assertEquals('custom_config_path', $this->_model->getConfigPath());
+        $this->assertSame('custom_config_path', $this->_model->getConfigPath());
     }
 
     public function testShowInDefault()
@@ -282,7 +282,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $option = [['label' => 'test', 'value' => 0], ['label' => 'test2', 'value' => 1]];
         $expected = [['label' => __('test'), 'value' => 0], ['label' => __('test2'), 'value' => 1]];
         $this->_model->setData(['options' => ['option' => $option]], 'scope');
-        $this->assertEquals($expected, $this->_model->getOptions());
+        $this->assertSame($expected, $this->_model->getOptions());
     }
 
     public function testGetOptionsWithConstantValOptions()
@@ -302,7 +302,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->_model->setData(['options' => ['option' => $option]], 'scope');
-        $this->assertEquals($expected, $this->_model->getOptions());
+        $this->assertSame($expected, $this->_model->getOptions());
     }
 
     public function testGetOptionsUsesOptionsInterfaceIfNoMethodIsProvided()
@@ -328,7 +328,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($expected)
         );
-        $this->assertEquals($expected, $this->_model->getOptions());
+        $this->assertSame($expected, $this->_model->getOptions());
     }
 
     public function testGetOptionsUsesProvidedMethodOfSourceModel()
@@ -353,7 +353,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $expected = ['testVar1' => 'testVal1', 'testVar2' => ['subvar1' => 'subval1']];
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
         $sourceModelMock->expects($this->once())->method('retrieveElements')->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->_model->getOptions());
+        $this->assertSame($expected, $this->_model->getOptions());
     }
 
     public function testGetOptionsParsesResultOfProvidedMethodOfSourceModelIfTypeIsNotMultiselect()
@@ -384,7 +384,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(['var1' => 'val1', 'var2' => ['subvar1' => 'subval1']])
         );
         $expected = [['label' => 'val1', 'value' => 'var1'], ['subvar1' => 'subval1']];
-        $this->assertEquals($expected, $this->_model->getOptions());
+        $this->assertSame($expected, $this->_model->getOptions());
     }
 
     public function testGetDependenciesWithoutDependencies()
@@ -419,7 +419,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $this->returnArgument(0)
         );
 
-        $this->assertEquals($fields, $this->_model->getDependencies('test_prefix', 'test_scope'));
+        $this->assertSame($fields, $this->_model->getDependencies('test_prefix', 'test_scope'));
     }
 
     public function testIsAdvanced()
@@ -440,6 +440,6 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->_model->getValidation());
 
         $this->_model->setData(['validate' => 'validate'], 'scope');
-        $this->assertEquals('validate', $this->_model->getValidation());
+        $this->assertSame('validate', $this->_model->getValidation());
     }
 }

@@ -289,12 +289,12 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 break;
         }
 
-        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
-        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
+        $this->assertSame($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertSame($expectedUserId, $this->tokenUserContext->getUserId());
 
         /* check again to make sure that the above methods were only called once */
-        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
-        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
+        $this->assertSame($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertSame($expectedUserId, $this->tokenUserContext->getUserId());
     }
 
     /**
@@ -426,12 +426,12 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 break;
         }
 
-        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
-        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
+        $this->assertSame($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertSame($expectedUserId, $this->tokenUserContext->getUserId());
 
         /* check again to make sure that the above method loadByToken in only called once */
-        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
-        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
+        $this->assertSame($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertSame($expectedUserId, $this->tokenUserContext->getUserId());
     }
 
     /**

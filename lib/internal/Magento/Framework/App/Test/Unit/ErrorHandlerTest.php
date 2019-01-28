@@ -29,7 +29,7 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testHandler($errorNo, $errorStr, $errorFile, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
+        $this->assertSame($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
     }
 
     /**

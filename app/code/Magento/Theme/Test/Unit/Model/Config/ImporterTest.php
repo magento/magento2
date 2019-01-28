@@ -180,7 +180,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             ->method('getAllIds')
             ->willReturn($inFs);
 
-        $this->assertEquals($expectedResult, $this->importer->getWarningMessages($inFile));
+        $this->assertSame($expectedResult, $this->importer->getWarningMessages($inFile));
     }
 
     /**

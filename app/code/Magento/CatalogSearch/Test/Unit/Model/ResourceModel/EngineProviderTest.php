@@ -60,8 +60,8 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
             $this->engineResolverMock
         );
 
-        $this->assertEquals($engineMock, $this->model->get());
-        $this->assertEquals($engineMock, $this->model->get());
+        $this->assertSame($engineMock, $this->model->get());
+        $this->assertSame($engineMock, $this->model->get());
     }
 
     /**

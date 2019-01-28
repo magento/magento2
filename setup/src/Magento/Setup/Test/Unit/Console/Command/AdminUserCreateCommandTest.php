@@ -66,7 +66,7 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
         $installerMock->expects($this->once())->method('installAdminUser')->with($data);
         $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
         $commandTester->execute($options, ['interactive' => false]);
-        $this->assertEquals('Created Magento administrator user named user' . PHP_EOL, $commandTester->getDisplay());
+        $this->assertSame('Created Magento administrator user named user' . PHP_EOL, $commandTester->getDisplay());
     }
 
     public function testInteraction()
@@ -123,7 +123,7 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
             'command' => $this->command->getName(),
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             'Created Magento administrator user named admin' . PHP_EOL,
             $commandTester->getDisplay()
         );
@@ -138,8 +138,8 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
     {
         /* @var $argsList \Symfony\Component\Console\Input\InputArgument[] */
         $argsList = $this->command->getOptionsList($mode);
-        $this->assertEquals(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
-        $this->assertEquals($description, $argsList[2]->getDescription());
+        $this->assertSame(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
+        $this->assertSame($description, $argsList[2]->getDescription());
     }
 
     /**
@@ -176,7 +176,7 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
         foreach ($options as $option) {
             $inputMock->expects($this->at($index++))->method('getOption')->willReturn($option);
         }
-        $this->assertEquals($errors, $this->command->validate($inputMock));
+        $this->assertSame($errors, $this->command->validate($inputMock));
     }
 
     /**

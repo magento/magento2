@@ -32,9 +32,9 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($synonymGroup->getGroupId());
-        $this->assertEquals('a,b,c', $synonymGroupModel->getSynonymGroup());
-        $this->assertEquals(0, $synonymGroupModel->getStoreId());
-        $this->assertEquals(0, $synonymGroupModel->getWebsiteId());
+        $this->assertSame('a,b,c', $synonymGroupModel->getSynonymGroup());
+        $this->assertSame(0, $synonymGroupModel->getStoreId());
+        $this->assertSame(0, $synonymGroupModel->getWebsiteId());
         $synonymGroupModel->delete();
     }
 
@@ -85,9 +85,9 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id);
-        $this->assertEquals('d,e,f', $synonymGroupModel->getSynonymGroup());
-        $this->assertEquals(0, $synonymGroupModel->getStoreId());
-        $this->assertEquals(0, $synonymGroupModel->getWebsiteId());
+        $this->assertSame('d,e,f', $synonymGroupModel->getSynonymGroup());
+        $this->assertSame(0, $synonymGroupModel->getStoreId());
+        $this->assertSame(0, $synonymGroupModel->getWebsiteId());
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id);
@@ -157,24 +157,24 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id4);
-        $this->assertEquals('a,b,c,d,e,f,z', $synonymGroupModel->getSynonyms());
-        $this->assertEquals(0, $synonymGroupModel->getStoreId());
-        $this->assertEquals(0, $synonymGroupModel->getWebsiteId());
+        $this->assertSame('a,b,c,d,e,f,z', $synonymGroupModel->getSynonyms());
+        $this->assertSame(0, $synonymGroupModel->getStoreId());
+        $this->assertSame(0, $synonymGroupModel->getWebsiteId());
         $synonymGroupModel->delete();
 
         // g,h,i should not be merged
         $synonymGroupModel->load($id3);
-        $this->assertEquals('g,h,i', $synonymGroupModel->getSynonyms());
+        $this->assertSame('g,h,i', $synonymGroupModel->getSynonyms());
         $synonymGroupModel->delete();
 
         // merged rows should be deleted
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id1);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertSame(null, $synonymGroupModel->getSynonyms());
 
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id2);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertSame(null, $synonymGroupModel->getSynonyms());
     }
 
     public function testSaveUpdateMerge()
@@ -213,14 +213,14 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id1);
-        $this->assertEquals('d,e,f,g,h,i,a,z', $synonymGroupModel->getSynonymGroup());
-        $this->assertEquals(0, $synonymGroupModel->getStoreId());
-        $this->assertEquals(0, $synonymGroupModel->getWebsiteId());
+        $this->assertSame('d,e,f,g,h,i,a,z', $synonymGroupModel->getSynonymGroup());
+        $this->assertSame(0, $synonymGroupModel->getStoreId());
+        $this->assertSame(0, $synonymGroupModel->getWebsiteId());
         $synonymGroupModel->delete();
 
         // j,k,l is not merged
         $synonymGroupModel->load($id4);
-        $this->assertEquals('j,k,l', $synonymGroupModel->getSynonymGroup());
+        $this->assertSame('j,k,l', $synonymGroupModel->getSynonymGroup());
         $synonymGroupModel->delete();
 
         // no new group is inserted
@@ -231,11 +231,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         // merged rows are deleted
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id2);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertSame(null, $synonymGroupModel->getSynonyms());
 
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id3);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertSame(null, $synonymGroupModel->getSynonyms());
     }
 
     public function testDelete()

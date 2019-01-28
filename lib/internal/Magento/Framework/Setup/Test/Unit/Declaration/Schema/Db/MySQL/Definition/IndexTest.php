@@ -76,7 +76,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedExpression,
             $this->index->toDefinition($index)
         );
@@ -125,7 +125,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->index->fromDefinition($definition);
-        $this->assertEquals($expectedDefinition, $result);
+        $this->assertSame($expectedDefinition, $result);
     }
 
     /**

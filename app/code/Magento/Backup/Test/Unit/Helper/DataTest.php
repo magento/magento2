@@ -48,7 +48,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBackupIgnorePaths()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 '.git',
                 '.svn',
@@ -66,7 +66,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRollbackIgnorePaths()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 '.svn',
                 '.git',

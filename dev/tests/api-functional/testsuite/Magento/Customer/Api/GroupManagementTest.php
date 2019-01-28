@@ -65,7 +65,7 @@ class GroupManagementTest extends WebapiAbstract
         $requestData = ['storeId' => $storeId];
         $groupData = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals($defaultGroupData, $groupData, "The default group does not match.");
+        $this->assertSame($defaultGroupData, $groupData, "The default group does not match.");
     }
 
     /**
@@ -166,7 +166,7 @@ class GroupManagementTest extends WebapiAbstract
 
         $failureMessage = $isDeleteable
             ? 'The group should be deleteable.' : 'The group should not be deleteable.';
-        $this->assertEquals($isDeleteable, !$isReadonly, $failureMessage);
+        $this->assertSame($isDeleteable, !$isReadonly, $failureMessage);
     }
 
     /**

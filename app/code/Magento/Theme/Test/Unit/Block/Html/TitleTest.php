@@ -60,7 +60,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock->expects($this->never())
             ->method('getTitle');
 
-        $this->assertEquals($title, $this->htmlTitle->getPageTitle());
+        $this->assertSame($title, $this->htmlTitle->getPageTitle());
     }
 
     /**
@@ -77,7 +77,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
-        $this->assertEquals($title, $this->htmlTitle->getPageTitle());
+        $this->assertSame($title, $this->htmlTitle->getPageTitle());
     }
 
     /**
@@ -91,7 +91,7 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock->expects($this->never())
             ->method('getTitle');
 
-        $this->assertEquals($title, $this->htmlTitle->getPageHeading());
+        $this->assertSame($title, $this->htmlTitle->getPageHeading());
     }
 
     /**
@@ -108,6 +108,6 @@ class TitleTest extends \PHPUnit\Framework\TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
-        $this->assertEquals($title, $this->htmlTitle->getPageHeading());
+        $this->assertSame($title, $this->htmlTitle->getPageHeading());
     }
 }

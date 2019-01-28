@@ -132,7 +132,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         );
         $this->categoryRepository->expects($this->once())->method('get')->willReturn($categoryForSpecificStore);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'category-1_1' => $canonical,
                 'category-2_2' => $children1,
@@ -160,7 +160,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
 
-        $this->assertEquals(
+        $this->assertSame(
             ['category-1_1' => $canonical],
             $this->categoryUrlRewriteGenerator->generate($this->category, 1)
         );
@@ -175,7 +175,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(true));
 
-        $this->assertEquals([], $this->categoryUrlRewriteGenerator->generate($this->category));
+        $this->assertSame([], $this->categoryUrlRewriteGenerator->generate($this->category));
     }
 
     /**
@@ -189,6 +189,6 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(true));
 
-        $this->assertEquals([], $this->categoryUrlRewriteGenerator->generate($this->category, false, 1));
+        $this->assertSame([], $this->categoryUrlRewriteGenerator->generate($this->category, false, 1));
     }
 }

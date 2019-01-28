@@ -26,7 +26,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
 
         $result = $sorter->sort($arrayData);
 
-        static::assertEquals($expected, array_keys($result), $message);
+        static::assertSame($expected, array_keys($result), $message);
     }
 
     /**

@@ -64,7 +64,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->willReturn('something');
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->resolver->getFieldType($attributeMock)
         );

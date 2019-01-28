@@ -63,6 +63,6 @@ class ScopeCodeResolverTest extends \PHPUnit\Framework\TestCase
         $this->scope->expects($this->once())
             ->method('getCode')
             ->willReturn($scopeCode);
-        $this->assertEquals($scopeCode, $this->scopeCodeResolver->resolve($scopeType, $scopeId));
+        $this->assertSame($scopeCode, $this->scopeCodeResolver->resolve($scopeType, $scopeId));
     }
 }

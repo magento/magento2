@@ -62,6 +62,6 @@ class CustomerGroupsOptionsProviderTest extends \PHPUnit\Framework\TestCase
             ->with($customerGroups, 'id', 'code')
             ->willReturn($options);
 
-        $this->assertEquals($options, $this->model->toOptionArray());
+        $this->assertSame($options, $this->model->toOptionArray());
     }
 }

@@ -47,7 +47,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($passedSender['sender']);
         $row->expects($this->atLeastOnce())->method('getTemplateSenderEmail')
             ->willReturn($passedSender['sender_email']);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSender['sender'] . ' [' . $expectedSender['sender_email'] . ']',
             $this->sender->render($row)
         );

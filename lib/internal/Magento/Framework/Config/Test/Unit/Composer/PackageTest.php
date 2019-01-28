@@ -33,9 +33,9 @@ class PackageTest extends \PHPUnit\Framework\TestCase
     public function testGetJson()
     {
         $this->assertInstanceOf('\StdClass', $this->object->getJson(false));
-        $this->assertEquals($this->sampleJson, $this->object->getJson(false));
         $this->assertSame($this->sampleJson, $this->object->getJson(false));
-        $this->assertEquals(
+        $this->assertSame($this->sampleJson, $this->object->getJson(false));
+        $this->assertSame(
             json_encode($this->sampleJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n",
             $this->object->getJson(true, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
@@ -48,12 +48,12 @@ class PackageTest extends \PHPUnit\Framework\TestCase
         $nested = $this->object->get('nested');
         $this->assertInstanceOf('\StdClass', $nested);
         $this->assertObjectHasAttribute('one', $nested);
-        $this->assertEquals('5', $nested->one);
-        $this->assertEquals('5', $this->object->get('nested->one'));
+        $this->assertSame('5', $nested->one);
+        $this->assertSame('5', $this->object->get('nested->one'));
         $this->assertObjectHasAttribute('two', $nested);
-        $this->assertEquals('6', $nested->two);
-        $this->assertEquals('6', $this->object->get('nested->two'));
-        $this->assertEquals(
+        $this->assertSame('6', $nested->two);
+        $this->assertSame('6', $this->object->get('nested->two'));
+        $this->assertSame(
             ['magento/theme-adminhtml-backend' => 7, 'magento/theme-frontend-luma' => 8],
             (array)$this->object->get('nested', '/^magento\/theme/')
         );

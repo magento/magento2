@@ -71,7 +71,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getTemplateFileName')
             ->with($template)
             ->will($this->returnValue('path_to' . $template));
-        $this->assertEquals('path_to' . $template, $this->_resolver->getTemplateFileName($template));
-        $this->assertEquals('path_to' . $template, $this->_resolver->getTemplateFileName($template));
+        $this->assertSame('path_to' . $template, $this->_resolver->getTemplateFileName($template));
+        $this->assertSame('path_to' . $template, $this->_resolver->getTemplateFileName($template));
     }
 }

@@ -40,7 +40,7 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     {
         $target = $this->createTarget($this->createRequestMock(false));
         $event = $this->createEventMock();
-        $this->assertEquals(null, $target->execute($event));
+        $this->assertSame(null, $target->execute($event));
     }
 
     /**
@@ -109,7 +109,7 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     {
         $target = $this->createTarget($this->createRequestMock(true), $supportedTypes);
         $event = $this->createEventMock($this->createForm($originalValues, $expectedValues));
-        $this->assertEquals(null, $target->execute($event));
+        $this->assertSame(null, $target->execute($event));
     }
 
     /**

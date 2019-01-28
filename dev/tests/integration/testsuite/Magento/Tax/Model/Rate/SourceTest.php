@@ -49,7 +49,7 @@ class SourceTest extends \Magento\TestFramework\Indexer\TestCase
             $this->fail('Preconditions failed: At least one tax rate should be available.');
         }
         $source = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\Rate\Source::class);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $source->toOptionArray(),
             'Tax rate options are invalid.'

@@ -64,7 +64,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->with('.update_status.txt')
             ->willReturn('DIR/var/.update_status.txt');
-        $this->assertEquals('DIR/var/.update_status.txt', $this->status->getStatusFilePath());
+        $this->assertSame('DIR/var/.update_status.txt', $this->status->getStatusFilePath());
     }
 
     public function testGetLogFilePath()
@@ -73,7 +73,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->with('log/update.log')
             ->willReturn('DIR/var/log/update.log');
-        $this->assertEquals('DIR/var/log/update.log', $this->status->getLogFilePath());
+        $this->assertSame('DIR/var/log/update.log', $this->status->getLogFilePath());
     }
 
     public function testAdd()

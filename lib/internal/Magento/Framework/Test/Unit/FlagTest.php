@@ -12,7 +12,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
         $flagCode = 'synchronize';
         $flag = $this->createFlagInstance();
         $flag->setFlagCode($flagCode);
-        $this->assertEquals($flagCode, $flag->getFlagCode());
+        $this->assertSame($flagCode, $flag->getFlagCode());
     }
 
     public function testGetFlagDataJson()
@@ -22,7 +22,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
         $flag = $this->createFlagInstance(['flag_code' => 'synchronize']);
         $this->assertNull($flag->getFlagData());
         $flag->setData('flag_data', $serializedData);
-        $this->assertEquals($data, $flag->getFlagData());
+        $this->assertSame($data, $flag->getFlagData());
     }
 
     public function testGetFlagDataSerialized()
@@ -32,7 +32,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
         $flag = $this->createFlagInstance(['flag_code' => 'synchronize']);
         $this->assertNull($flag->getFlagData());
         $flag->setData('flag_data', $serializedData);
-        $this->assertEquals($data, $flag->getFlagData());
+        $this->assertSame($data, $flag->getFlagData());
     }
 
     public function testSetFlagData()
@@ -41,7 +41,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
         $serializedData = '{"foo":"bar"}';
         $flag = $this->createFlagInstance(['flag_code' => 'synchronize']);
         $flag->setFlagData($data);
-        $this->assertEquals($serializedData, $flag->getData('flag_data'));
+        $this->assertSame($serializedData, $flag->getData('flag_data'));
     }
 
     public function testLoadSelf()
@@ -66,7 +66,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
         $flag = $this->createFlagInstance(['flag_code' => $flagCode]);
         $flag->setData('block', 'blockNmae');
         $this->assertSame($flag, $flag->save());
-        $this->assertEquals($flagCode, $flag->getFlagCode());
+        $this->assertSame($flagCode, $flag->getFlagCode());
     }
 
     /**

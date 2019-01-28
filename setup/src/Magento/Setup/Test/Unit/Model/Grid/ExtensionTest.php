@@ -107,6 +107,6 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $this->model->getList());
+        $this->assertSame($expected, $this->model->getList());
     }
 }

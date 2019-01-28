@@ -65,7 +65,7 @@ class PlaceOrderDefaultTest extends \PHPUnit\Framework\TestCase
         $this->orderManagement->method('place')->willThrowException($exception);
         $errors = $this->placeOrderDefault->place($orderList);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$incrementId => $exception],
             $errors
         );

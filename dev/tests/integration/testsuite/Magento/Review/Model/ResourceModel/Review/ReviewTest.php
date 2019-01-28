@@ -62,7 +62,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $select = $this->connection->select()->from($this->resource->getTableName('review_entity_summary'));
         $result = $this->connection->fetchRow($select);
 
-        $this->assertEquals(1, $result['reviews_count']);
-        $this->assertEquals(40, $result['rating_summary']);
+        $this->assertSame(1, $result['reviews_count']);
+        $this->assertSame(40, $result['rating_summary']);
     }
 }

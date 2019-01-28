@@ -120,7 +120,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         ];
         $ignored = array_intersect($expected, $ignorePaths);
         sort($ignored);
-        $this->assertEquals($expected, $ignored);
+        $this->assertSame($expected, $ignored);
     }
 
     /**

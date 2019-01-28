@@ -62,6 +62,6 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         array_walk($actual, function (&$item) {
             $item = $item->__toArray();
         });
-        $this->assertEquals($productData, $actual[2]);
+        $this->assertSame($productData, $actual[2]);
     }
 }

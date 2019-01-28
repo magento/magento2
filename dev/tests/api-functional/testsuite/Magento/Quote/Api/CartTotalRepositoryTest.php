@@ -93,7 +93,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
         if (array_key_exists('extension_attributes', $actual)) {
             unset($actual['extension_attributes']);
         }
-        $this->assertEquals($data, $actual);
+        $this->assertSame($data, $actual);
     }
 
     /**
@@ -250,6 +250,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
         if (array_key_exists('extension_attributes', $actual)) {
             unset($actual['extension_attributes']);
         }
-        $this->assertEquals($data, $actual);
+        $this->assertSame($data, $actual);
     }
 }

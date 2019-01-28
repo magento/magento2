@@ -147,7 +147,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             }
         }
         $actual = $this->_model->getDependencies($this->_testData, self::STORE_CODE, self::FIELD_PREFIX);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -197,7 +197,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             $expected[$data['id']] = $dependencyField;
         }
         $actual = $this->_model->getDependencies($this->_testData, self::STORE_CODE, self::FIELD_PREFIX);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

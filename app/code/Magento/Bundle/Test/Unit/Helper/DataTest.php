@@ -33,7 +33,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $configData = ['allowed_selection_types' => ['foo', 'bar', 'baz']];
         $this->config->expects($this->once())->method('getType')->with('bundle')->will($this->returnValue($configData));
 
-        $this->assertEquals($configData['allowed_selection_types'], $this->helper->getAllowedSelectionTypes());
+        $this->assertSame($configData['allowed_selection_types'], $this->helper->getAllowedSelectionTypes());
     }
 
     public function testGetAllowedSelectionTypesIfTypesIsNotSet()
@@ -43,6 +43,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
             ->will($this->returnValue($configData));
 
-        $this->assertEquals([], $this->helper->getAllowedSelectionTypes());
+        $this->assertSame([], $this->helper->getAllowedSelectionTypes());
     }
 }

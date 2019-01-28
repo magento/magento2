@@ -169,7 +169,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertAttributeEquals($expectedRulesList, '_replaceRules', $setupModel);
+        $this->assertAttributeSame($expectedRulesList, '_replaceRules', $setupModel);
 
         // Check that replace for the same field is not set twice
         $setupModel->appendClassAliasReplace(
@@ -180,7 +180,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
             ['new_pk_field1', 'new_pk_field2'],
             'newAdditionalWhere'
         );
-        $this->assertAttributeEquals($expectedRulesList, '_replaceRules', $setupModel);
+        $this->assertAttributeSame($expectedRulesList, '_replaceRules', $setupModel);
     }
 
     /**
@@ -212,14 +212,14 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
 
         $setupModel->doUpdateClassAliases();
 
-        $this->assertEquals($expected['updates'], $this->_actualUpdateResult);
+        $this->assertSame($expected['updates'], $this->_actualUpdateResult);
 
         if (isset($expected['where'])) {
-            $this->assertEquals($expected['where'], $this->_actualWhere);
+            $this->assertSame($expected['where'], $this->_actualWhere);
         }
 
         if (isset($expected['aliases_map'])) {
-            $this->assertAttributeEquals($expected['aliases_map'], '_aliasesMap', $setupModel);
+            $this->assertAttributeSame($expected['aliases_map'], '_aliasesMap', $setupModel);
         }
     }
 

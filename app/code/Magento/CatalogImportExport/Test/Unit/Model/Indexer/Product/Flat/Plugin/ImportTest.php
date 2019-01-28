@@ -60,7 +60,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(false);
         $this->processorMock->expects($this->once())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
-        $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
+        $this->assertSame($someData, $this->model->afterImportSource($this->subjectMock, $someData));
     }
 
     public function testAfterImportSourceWithFlatDisabledAndIndexerScheduledDisabled()
@@ -69,7 +69,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->processorMock->expects($this->never())->method('isIndexerScheduled')->willReturn(false);
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
-        $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
+        $this->assertSame($someData, $this->model->afterImportSource($this->subjectMock, $someData));
     }
 
     public function testAfterImportSourceWithFlatEnabledAndIndexerScheduledEnabled()
@@ -78,6 +78,6 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(true);
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
-        $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
+        $this->assertSame($someData, $this->model->afterImportSource($this->subjectMock, $someData));
     }
 }

@@ -59,7 +59,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod(\Magento\Framework\HTTP\Header::class, $method);
         $result = $method->invokeArgs($headerObject, ['clean' => $clean]);
 
-        $this->assertEquals($expectedValue, $result);
+        $this->assertSame($expectedValue, $result);
     }
 
     /**
@@ -140,7 +140,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
 
         $result = $headerObject->getRequestUri($clean);
 
-        $this->assertEquals($expectedValue, $result);
+        $this->assertSame($expectedValue, $result);
     }
 
     /**

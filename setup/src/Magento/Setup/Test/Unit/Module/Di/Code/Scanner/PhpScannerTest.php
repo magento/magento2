@@ -68,7 +68,7 @@ class PhpScannerTest extends \PHPUnit\Framework\TestCase
             'Invalid Factory declaration for class Magento\SomeModule\Element in file ' . $this->_testFiles[0]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['\\' . \Magento\Eav\Api\Data\AttributeExtensionInterface::class],
             $this->_model->collectEntities($this->_testFiles)
         );

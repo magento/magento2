@@ -296,7 +296,7 @@ class AdminTokenServiceTest extends WebapiAbstract
      */
     private function assertInputExceptionMessages($exception)
     {
-        $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $exception->getCode());
+        $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $exception->getCode());
         $exceptionData = $this->processRestExceptionResult($exception);
         $expectedExceptionData = [
             'message' => 'One or more input exceptions have occurred.',
@@ -315,7 +315,7 @@ class AdminTokenServiceTest extends WebapiAbstract
                 ],
             ],
         ];
-        $this->assertEquals($expectedExceptionData, $exceptionData);
+        $this->assertSame($expectedExceptionData, $exceptionData);
     }
 
     /**
@@ -325,7 +325,7 @@ class AdminTokenServiceTest extends WebapiAbstract
      */
     private function assertInvalidCredentialsException($exception)
     {
-        $this->assertEquals(
+        $this->assertSame(
             HTTPExceptionCodes::HTTP_UNAUTHORIZED,
             $exception->getCode(),
             "Response HTTP code is invalid."
@@ -335,7 +335,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             'message' => 'The account sign-in was incorrect or your account is disabled temporarily. '
                 . 'Please wait and try again later.'
         ];
-        $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
+        $this->assertSame($expectedExceptionData, $exceptionData, "Exception message is invalid.");
     }
 
     /**
@@ -345,7 +345,7 @@ class AdminTokenServiceTest extends WebapiAbstract
      */
     private function assertUnauthorizedAccessException($exception)
     {
-        $this->assertEquals(
+        $this->assertSame(
             HTTPExceptionCodes::HTTP_UNAUTHORIZED,
             $exception->getCode(),
             "Response HTTP code is invalid."
@@ -357,7 +357,7 @@ class AdminTokenServiceTest extends WebapiAbstract
                 'resources' => 'Magento_Backend::store'
             ]
         ];
-        $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
+        $this->assertSame($expectedExceptionData, $exceptionData, "Exception message is invalid.");
     }
 
     /**
@@ -373,6 +373,6 @@ class AdminTokenServiceTest extends WebapiAbstract
         $token = $this->tokenModel
             ->loadByAdminId($adminUserId)
             ->getToken();
-        $this->assertEquals($accessToken, $token);
+        $this->assertSame($accessToken, $token);
     }
 }

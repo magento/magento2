@@ -93,14 +93,14 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
         //Assertions
         $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxRuleInterface::class, $taxRule);
-        $this->assertEquals($taxRuleDataObject->getCode(), $taxRule->getCode());
-        $this->assertEquals(
+        $this->assertSame($taxRuleDataObject->getCode(), $taxRule->getCode());
+        $this->assertSame(
             $taxRuleDataObject->getCustomerTaxClassIds(),
             $taxRule->getCustomerTaxClassIds()
         );
-        $this->assertEquals($taxRuleDataObject->getProductTaxClassIds(), $taxRule->getProductTaxClassIds());
-        $this->assertEquals($taxRuleDataObject->getPriority(), $taxRule->getPriority());
-        $this->assertEquals($taxRuleDataObject->getPosition(), $taxRule->getPosition());
+        $this->assertSame($taxRuleDataObject->getProductTaxClassIds(), $taxRule->getProductTaxClassIds());
+        $this->assertSame($taxRuleDataObject->getPriority(), $taxRule->getPriority());
+        $this->assertSame($taxRuleDataObject->getPosition(), $taxRule->getPosition());
         $this->assertNotNull($taxRule->getId());
     }
 
@@ -190,12 +190,12 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
         // Call getTaxRule and verify
         $taxRule = $this->taxRuleRepository->get($ruleId);
-        $this->assertEquals('code', $taxRule->getCode());
-        $this->assertEquals([3], $taxRule->getCustomerTaxClassIds());
-        $this->assertEquals([2], $taxRule->getProductTaxClassIds());
-        $this->assertEquals([2], $taxRule->getTaxRateIds());
-        $this->assertEquals(0, $taxRule->getPriority());
-        $this->assertEquals(1, $taxRule->getPosition());
+        $this->assertSame('code', $taxRule->getCode());
+        $this->assertSame([3], $taxRule->getCustomerTaxClassIds());
+        $this->assertSame([2], $taxRule->getProductTaxClassIds());
+        $this->assertSame([2], $taxRule->getTaxRateIds());
+        $this->assertSame(0, $taxRule->getPriority());
+        $this->assertSame(1, $taxRule->getPosition());
     }
 
     /**
@@ -215,8 +215,8 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
         // Call getTaxRule and verify
         $taxRule = $this->taxRuleRepository->get($ruleId);
-        $this->assertEquals($customerTaxClassIds, $taxRule->getCustomerTaxClassIds());
-        $this->assertEquals([$taxRateId], $taxRule->getTaxRateIds());
+        $this->assertSame($customerTaxClassIds, $taxRule->getCustomerTaxClassIds());
+        $this->assertSame([$taxRateId], $taxRule->getTaxRateIds());
     }
 
     /**
@@ -272,7 +272,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->taxRuleRepository->save($taxRule);
         $retrievedRule = $this->taxRuleRepository->get($taxRule->getId());
 
-        $this->assertEquals('updated code', $retrievedRule->getCode());
+        $this->assertSame('updated code', $retrievedRule->getCode());
     }
 
     /**
@@ -319,8 +319,8 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
             $items[] = $this->taxRuleRepository->get($ruleId);
         }
 
-        $this->assertEquals($searchCriteria, $searchResults->getSearchCriteria());
-        $this->assertEquals(count($expectedRuleCodes), $searchResults->getTotalCount());
+        $this->assertSame($searchCriteria, $searchResults->getSearchCriteria());
+        $this->assertSame(count($expectedRuleCodes), $searchResults->getTotalCount());
         foreach ($searchResults->getItems() as $rule) {
             $this->assertContains($rule->getCode(), $expectedRuleCodes);
         }

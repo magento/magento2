@@ -35,7 +35,7 @@ class StateResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testStateComplete()
     {
-        $this->assertEquals(Order::STATE_COMPLETE, $this->orderStateResolver->getStateForOrder($this->orderMock));
+        $this->assertSame(Order::STATE_COMPLETE, $this->orderStateResolver->getStateForOrder($this->orderMock));
     }
 
     public function testStateClosed()
@@ -52,7 +52,7 @@ class StateResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getTotalRefunded')
             ->willReturn(10.99);
 
-        $this->assertEquals(Order::STATE_CLOSED, $this->orderStateResolver->getStateForOrder($this->orderMock));
+        $this->assertSame(Order::STATE_CLOSED, $this->orderStateResolver->getStateForOrder($this->orderMock));
     }
 
     public function testStateNew()
@@ -60,7 +60,7 @@ class StateResolverTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('isCanceled')
             ->willReturn(true);
-        $this->assertEquals(Order::STATE_NEW, $this->orderStateResolver->getStateForOrder($this->orderMock));
+        $this->assertSame(Order::STATE_NEW, $this->orderStateResolver->getStateForOrder($this->orderMock));
     }
 
     public function testStateProcessing()
@@ -74,7 +74,7 @@ class StateResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getState')
             ->willReturn(Order::STATE_NEW);
 
-        $this->assertEquals(
+        $this->assertSame(
             Order::STATE_PROCESSING,
             $this->orderStateResolver->getStateForOrder($this->orderMock, $arguments)
         );

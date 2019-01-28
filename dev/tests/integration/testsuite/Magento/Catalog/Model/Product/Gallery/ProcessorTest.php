@@ -112,7 +112,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $product->setData('media_gallery', ['images' => ['image' => ['file' => 'magento_image.jpg']]]);
         $this->_model->updateImage($product, 'magento_image.jpg', ['label' => 'test label']);
-        $this->assertEquals('test label', $product->getData('media_gallery/images/image/label'));
+        $this->assertSame('test label', $product->getData('media_gallery/images/image/label'));
     }
 
     public function testRemoveImage()
@@ -122,7 +122,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $product->setData('media_gallery', ['images' => ['image' => ['file' => 'magento_image.jpg']]]);
         $this->_model->removeImage($product, 'magento_image.jpg');
-        $this->assertEquals('1', $product->getData('media_gallery/images/image/removed'));
+        $this->assertSame('1', $product->getData('media_gallery/images/image/removed'));
     }
 
     public function testGetImage()
@@ -132,7 +132,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $product->setData('media_gallery', ['images' => ['image' => ['file' => 'magento_image.jpg']]]);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['file' => 'magento_image.jpg'],
             $this->_model->getImage($product, 'magento_image.jpg')
         );
@@ -146,15 +146,15 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $product->setData(['image' => 'test1', 'small_image' => 'test2', 'thumbnail' => 'test3']);
 
-        $this->assertNotEquals('no_selection', $product->getData('image'));
+        $this->assertNotSame('no_selection', $product->getData('image'));
         $this->_model->clearMediaAttribute($product, 'image');
-        $this->assertEquals('no_selection', $product->getData('image'));
+        $this->assertSame('no_selection', $product->getData('image'));
 
-        $this->assertNotEquals('no_selection', $product->getData('small_image'));
-        $this->assertNotEquals('no_selection', $product->getData('thumbnail'));
+        $this->assertNotSame('no_selection', $product->getData('small_image'));
+        $this->assertNotSame('no_selection', $product->getData('thumbnail'));
         $this->_model->clearMediaAttribute($product, ['small_image', 'thumbnail']);
-        $this->assertEquals('no_selection', $product->getData('small_image'));
-        $this->assertEquals('no_selection', $product->getData('thumbnail'));
+        $this->assertSame('no_selection', $product->getData('small_image'));
+        $this->assertSame('no_selection', $product->getData('thumbnail'));
     }
 
     public function testSetMediaAttribute()
@@ -164,10 +164,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class
         );
         $this->_model->setMediaAttribute($product, 'image', 'test1');
-        $this->assertEquals('test1', $product->getData('image'));
+        $this->assertSame('test1', $product->getData('image'));
 
         $this->_model->setMediaAttribute($product, ['non-exist-image-attribute', 'small_image'], 'test');
         $this->assertNull($product->getData('non-exist-image-attribute'));
-        $this->assertEquals('test', $product->getData('small_image'));
+        $this->assertSame('test', $product->getData('small_image'));
     }
 }

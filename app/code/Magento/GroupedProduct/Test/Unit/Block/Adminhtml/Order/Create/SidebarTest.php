@@ -55,7 +55,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
         );
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -70,7 +70,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundIsConfigurationRequiredWhenProductGrouped()
     {
-        $this->assertEquals(
+        $this->assertSame(
             true,
             $this->sidebarMock->aroundIsConfigurationRequired(
                 $this->subjectMock,
@@ -82,7 +82,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundIsConfigurationRequiredWhenProductNotGrouped()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->sidebarMock->aroundIsConfigurationRequired($this->subjectMock, $this->closureMock, 'someValue')
         );

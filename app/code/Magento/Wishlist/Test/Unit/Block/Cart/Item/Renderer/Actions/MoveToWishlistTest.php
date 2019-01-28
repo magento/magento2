@@ -66,6 +66,6 @@ class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
             ->willReturn($json);
 
         $this->model->setItem($itemMock);
-        $this->assertEquals($json, $this->model->getMoveFromCartParams());
+        $this->assertSame($json, $this->model->getMoveFromCartParams());
     }
 }

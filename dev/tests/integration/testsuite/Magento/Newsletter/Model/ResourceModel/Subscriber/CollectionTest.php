@@ -33,8 +33,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         while ($subscribers) {
             $subscriber = array_shift($subscribers);
             if ($subscriber->getCustomerId()) {
-                $this->assertEquals('John', $subscriber->getFirstname(), $subscriber->getSubscriberEmail());
-                $this->assertEquals('Smith', $subscriber->getLastname(), $subscriber->getSubscriberEmail());
+                $this->assertSame('John', $subscriber->getFirstname(), $subscriber->getSubscriberEmail());
+                $this->assertSame('Smith', $subscriber->getLastname(), $subscriber->getSubscriberEmail());
             } else {
                 $this->assertNull($subscriber->getFirstname(), $subscriber->getSubscriberEmail());
                 $this->assertNull($subscriber->getLastname(), $subscriber->getSubscriberEmail());

@@ -57,7 +57,7 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\Test
         $this->commandTester->execute(
             ['--output' => __DIR__ . '/_files/output/circular.csv']
         );
-        $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
+        $this->assertSame('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $fileContents = file_get_contents(__DIR__ . '/_files/output/circular.csv');
         $this->assertContains(
             '"Circular dependencies:","Total number of chains"' . PHP_EOL . ',2' . PHP_EOL,

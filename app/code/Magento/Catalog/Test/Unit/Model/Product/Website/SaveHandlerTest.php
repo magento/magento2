@@ -60,7 +60,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('saveWebsiteIds')
             ->with($this->product, $websiteIds);
 
-        $this->assertEquals($this->product, $this->saveHandler->execute($this->product, []));
+        $this->assertSame($this->product, $this->saveHandler->execute($this->product, []));
     }
 
     public function testWithEmptyWebsiteIds()
@@ -77,7 +77,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('saveWebsiteIds')
             ->with($this->product, null);
 
-        $this->assertEquals($this->product, $this->saveHandler->execute($this->product, []));
+        $this->assertSame($this->product, $this->saveHandler->execute($this->product, []));
     }
 
     public function testWithSingleStoreMode()
@@ -98,6 +98,6 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('saveWebsiteIds')
             ->with($this->product, [$defaultWebsiteId]);
 
-        $this->assertEquals($this->product, $this->saveHandler->execute($this->product, []));
+        $this->assertSame($this->product, $this->saveHandler->execute($this->product, []));
     }
 }

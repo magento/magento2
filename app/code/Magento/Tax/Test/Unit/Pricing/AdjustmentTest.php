@@ -41,7 +41,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(Adjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
+        $this->assertSame(Adjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
     }
 
     /**
@@ -53,7 +53,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->taxHelper->expects($this->once())
             ->method('priceIncludesTax')
             ->will($this->returnValue($expectedResult));
-        $this->assertEquals($expectedResult, $this->adjustment->isIncludedInBasePrice());
+        $this->assertSame($expectedResult, $this->adjustment->isIncludedInBasePrice());
     }
 
     /**
@@ -78,7 +78,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue($displayBothPrices));
         }
 
-        $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
+        $this->assertSame($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
     }
 
     /**
@@ -113,7 +113,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->with($object, $amount)
             ->will($this->returnValue($price));
 
-        $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $object));
+        $this->assertSame($expectedResult, $this->adjustment->extractAdjustment($amount, $object));
     }
 
     /**
@@ -145,7 +145,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->with($object, $amount, true)
             ->will($this->returnValue($price));
 
-        $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
+        $this->assertSame($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }
 
     /**
@@ -167,7 +167,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsExcludedWith($adjustmentCode, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
+        $this->assertSame($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
     }
 
     /**
@@ -183,6 +183,6 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSortOrder()
     {
-        $this->assertEquals($this->sortOrder, $this->adjustment->getSortOrder());
+        $this->assertSame($this->sortOrder, $this->adjustment->getSortOrder());
     }
 }

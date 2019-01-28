@@ -136,7 +136,7 @@ class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
             ->with([])
             ->willReturnSelf();
 
-        $this->assertEquals($this->noCookiesObserver, $this->noCookiesObserver->execute($this->observerMock));
+        $this->assertSame($this->noCookiesObserver, $this->noCookiesObserver->execute($this->observerMock));
     }
 
     /**

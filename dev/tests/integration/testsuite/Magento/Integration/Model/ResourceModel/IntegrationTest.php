@@ -42,6 +42,6 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
     public function testLoadActiveIntegrationByConsumerId()
     {
         $integration = $this->integration->getResource()->selectActiveIntegrationByConsumerId($this->consumer->getId());
-        $this->assertEquals($this->integration->getId(), $integration['integration_id']);
+        $this->assertSame($this->integration->getId(), $integration['integration_id']);
     }
 }

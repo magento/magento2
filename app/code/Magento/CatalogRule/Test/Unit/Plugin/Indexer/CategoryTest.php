@@ -52,7 +52,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->productRuleProcessor->expects($this->never())
             ->method('reindexList');
 
-        $this->assertEquals($this->subject, $this->plugin->afterSave($this->subject, $this->subject));
+        $this->assertSame($this->subject, $this->plugin->afterSave($this->subject, $this->subject));
     }
 
     public function testAfterSave()
@@ -67,7 +67,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('reindexList')
             ->with($productIds);
 
-        $this->assertEquals($this->subject, $this->plugin->afterSave($this->subject, $this->subject));
+        $this->assertSame($this->subject, $this->plugin->afterSave($this->subject, $this->subject));
     }
 
     public function testAfterDelete()
@@ -75,6 +75,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->productRuleProcessor->expects($this->once())
             ->method('markIndexerAsInvalid');
 
-        $this->assertEquals($this->subject, $this->plugin->afterDelete($this->subject, $this->subject));
+        $this->assertSame($this->subject, $this->plugin->afterDelete($this->subject, $this->subject));
     }
 }

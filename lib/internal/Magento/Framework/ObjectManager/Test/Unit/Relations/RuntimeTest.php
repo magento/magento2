@@ -27,7 +27,7 @@ class RuntimeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetParents($type, $parents)
     {
-        $this->assertEquals($parents, $this->model->getParents($type));
+        $this->assertSame($parents, $this->model->getParents($type));
     }
 
     /**

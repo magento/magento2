@@ -47,29 +47,29 @@ class SearchResultFactoryTest extends TestCase
 
         $document = $items[0];
         self::assertInstanceOf(DocumentInterface::class, $document);
-        self::assertEquals($idValue, $document->getId());
+        self::assertSame($idValue, $document->getId());
 
         $attributeId = $document->getCustomAttribute($idFieldName);
         self::assertInstanceOf(AttributeInterface::class, $attributeId);
-        self::assertEquals($idFieldName, $attributeId->getAttributeCode());
-        self::assertEquals($idValue, $attributeId->getValue());
+        self::assertSame($idFieldName, $attributeId->getAttributeCode());
+        self::assertSame($idValue, $attributeId->getValue());
 
         $attributeIdFieldName = $document->getCustomAttribute('id_field_name');
         self::assertInstanceOf(AttributeInterface::class, $attributeIdFieldName);
-        self::assertEquals('id_field_name', $attributeIdFieldName->getAttributeCode());
-        self::assertEquals($idFieldName, $attributeIdFieldName->getValue());
+        self::assertSame('id_field_name', $attributeIdFieldName->getAttributeCode());
+        self::assertSame($idFieldName, $attributeIdFieldName->getValue());
 
         $attributeFoo = $document->getCustomAttribute('attribute_foo');
         self::assertInstanceOf(AttributeInterface::class, $attributeFoo);
-        self::assertEquals('attribute_foo', $attributeFoo->getAttributeCode());
-        self::assertEquals('attribute_foo_value', $attributeFoo->getValue());
+        self::assertSame('attribute_foo', $attributeFoo->getAttributeCode());
+        self::assertSame('attribute_foo_value', $attributeFoo->getValue());
 
         $attributeBar = $document->getCustomAttribute('attribute_bar');
         self::assertInstanceOf(AttributeInterface::class, $attributeBar);
-        self::assertEquals('attribute_bar', $attributeBar->getAttributeCode());
-        self::assertEquals('attribute_bar_value', $attributeBar->getValue());
+        self::assertSame('attribute_bar', $attributeBar->getAttributeCode());
+        self::assertSame('attribute_bar_value', $attributeBar->getValue());
 
-        self::assertEquals($totalCount, $searchResult->getTotalCount());
-        self::assertEquals($searchCriteria, $searchResult->getSearchCriteria());
+        self::assertSame($totalCount, $searchResult->getTotalCount());
+        self::assertSame($searchCriteria, $searchResult->getSearchCriteria());
     }
 }

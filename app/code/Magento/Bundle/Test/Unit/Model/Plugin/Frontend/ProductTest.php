@@ -68,6 +68,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->with($id)
             ->will($this->returnValue($childIds));
         $identities = $this->plugin->afterGetIdentities($this->product, $baseIdentities);
-        $this->assertEquals($expectedIdentities, $identities);
+        $this->assertSame($expectedIdentities, $identities);
     }
 }

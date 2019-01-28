@@ -77,8 +77,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form = $this->_getFormInstance($args);
         $this->assertContains($action, $form->getAction());
 
-        $this->assertEquals($requestPath, $form->getElement('request_path')->getValue());
-        $this->assertEquals($targetPath, $form->getElement('target_path')->getValue());
+        $this->assertSame($requestPath, $form->getElement('request_path')->getValue());
+        $this->assertSame($targetPath, $form->getElement('target_path')->getValue());
 
         $this->assertTrue($form->getElement('target_path')->getData('disabled'));
     }
@@ -110,7 +110,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             );
         }
         $form = $this->_getFormInstance($args);
-        $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());
+        $this->assertSame($expectedStores, $form->getElement('store_id')->getValues());
     }
 
     /**
@@ -128,8 +128,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ),
         ];
         $form = $this->_getFormInstance($args);
-        $this->assertEquals([], $form->getElement('store_id')->getValues());
-        $this->assertEquals(
+        $this->assertSame([], $form->getElement('store_id')->getValues());
+        $this->assertSame(
             'We can\'t set up a URL rewrite because the product you chose is not associated with a website.',
             $form->getElement('store_id')->getAfterElementHtml()
         );
@@ -155,8 +155,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ),
         ];
         $form = $this->_getFormInstance($args);
-        $this->assertEquals([], $form->getElement('store_id')->getValues());
-        $this->assertEquals(
+        $this->assertSame([], $form->getElement('store_id')->getValues());
+        $this->assertSame(
             'We can\'t set up a URL rewrite because the product you chose is not associated with a website.',
             $form->getElement('store_id')->getAfterElementHtml()
         );
@@ -175,8 +175,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product', 'initial_setup_flag' => true]]
         )];
         $form = $this->_getFormInstance($args);
-        $this->assertEquals([], $form->getElement('store_id')->getValues());
-        $this->assertEquals(
+        $this->assertSame([], $form->getElement('store_id')->getValues());
+        $this->assertSame(
             'Please assign a website to the selected category.',
             $form->getElement('store_id')->getAfterElementHtml()
         );

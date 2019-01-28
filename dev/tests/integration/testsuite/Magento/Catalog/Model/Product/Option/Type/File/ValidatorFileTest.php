@@ -228,7 +228,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
             $this->getProductOption()
         );
         unset($result['fullpath'], $result['secret_key']);
-        $this->assertEquals($this->expectedValidate(), $result);
+        $this->assertSame($this->expectedValidate(), $result);
     }
 
     public function testEmptyFile()

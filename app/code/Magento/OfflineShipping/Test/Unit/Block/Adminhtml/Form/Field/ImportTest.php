@@ -43,7 +43,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(false));
         $this->_formMock->expects($this->never())->method('addSuffixToName');
         $actual = $this->_object->getName();
-        $this->assertEquals('test_name', $actual);
+        $this->assertSame('test_name', $actual);
     }
 
     public function testGetNameWhenFormFiledNameSuffixIsNotEmpty()
@@ -51,7 +51,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(true));
         $this->_formMock->expects($this->once())->method('addSuffixToName')->will($this->returnValue('test_suffix'));
         $actual = $this->_object->getName();
-        $this->assertEquals('test_suffix', $actual);
+        $this->assertSame('test_suffix', $actual);
     }
 
     public function testGetElementHtml()

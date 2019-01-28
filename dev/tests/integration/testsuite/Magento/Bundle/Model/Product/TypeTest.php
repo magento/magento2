@@ -97,6 +97,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $bundleType = $bundleProduct->getTypeInstance();
         $parentIds = $bundleType->getParentIdsByChild($simpleProduct->getId());
         $this->assertNotEmpty($parentIds);
-        $this->assertEquals($bundleProduct->getId(), $parentIds[0]);
+        $this->assertSame($bundleProduct->getId(), $parentIds[0]);
     }
 }

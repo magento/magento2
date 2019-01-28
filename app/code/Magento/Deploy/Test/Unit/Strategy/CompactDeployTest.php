@@ -105,7 +105,7 @@ class CompactDeployTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeploy()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->packages,
             $this->strategy->deploy($this->options)
         );

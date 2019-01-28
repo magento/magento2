@@ -62,7 +62,7 @@ class InitialTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetData($scope, $expected)
     {
-        $this->assertEquals($expected, $this->config->getData($scope));
+        $this->assertSame($expected, $this->config->getData($scope));
     }
 
     /**
@@ -79,6 +79,6 @@ class InitialTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMetadata()
     {
-        $this->assertEquals(['metadata'], $this->config->getMetadata());
+        $this->assertSame(['metadata'], $this->config->getMetadata());
     }
 }

@@ -79,7 +79,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('app/code/Test/Module/etc')
         );
-        $this->assertEquals(
+        $this->assertSame(
             'app/code/Test/Module/etc',
             $this->_model->getModuleDir(Dir::MODULE_ETC_DIR, 'Test_Module')
         );
@@ -90,7 +90,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $moduleDir = 'app/code/Test/Module/etc/custom';
         $this->_dirsMock->expects($this->never())->method('getDir');
         $this->_model->setModuleDir('Test_Module', 'etc', $moduleDir);
-        $this->assertEquals($moduleDir, $this->_model->getModuleDir(Dir::MODULE_ETC_DIR, 'Test_Module'));
+        $this->assertSame($moduleDir, $this->_model->getModuleDir(Dir::MODULE_ETC_DIR, 'Test_Module'));
     }
 
     public function testGetConfigurationFiles()
@@ -116,7 +116,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         );
         $model->setModuleDir('Test_Module', 'etc', 'app/code/Test/Module/etc');
 
-        $this->assertEquals($configPath, $model->getConfigurationFiles('config.xml')->key());
+        $this->assertSame($configPath, $model->getConfigurationFiles('config.xml')->key());
     }
 
     public function testGetComposerJsonFiles()
@@ -142,6 +142,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         );
         $model->setModuleDir('Test_Module', '', 'app/code/Test/Module');
 
-        $this->assertEquals($configPath, $model->getComposerJsonFiles()->key());
+        $this->assertSame($configPath, $model->getComposerJsonFiles()->key());
     }
 }

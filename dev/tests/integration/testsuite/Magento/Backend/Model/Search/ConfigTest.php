@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             unset($searchResults[$itemIndex]['url']);
 
             /** Validate other item data */
-            $this->assertEquals($expectedItem, $searchResults[$itemIndex], "Data of item #$itemIndex is invalid.");
+            $this->assertSame($expectedItem, $searchResults[$itemIndex], "Data of item #$itemIndex is invalid.");
         }
     }
 

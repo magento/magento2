@@ -90,7 +90,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
             ->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $customerAddressData = $addressRepository->getById($this->_customer->getDefaultBilling());
         $address->setSameAsBilling(0)->setCustomerAddressData($customerAddressData)->save();
-        $this->assertEquals(0, $this->_quote->getBillingAddress()->getSameAsBilling());
+        $this->assertSame(0, $this->_quote->getBillingAddress()->getSameAsBilling());
     }
 
     /**
@@ -107,7 +107,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $shippingAddress->setSameAsBilling(0);
         $shippingAddress->save();
-        $this->assertEquals((int)$unsetId, $shippingAddress->getSameAsBilling());
+        $this->assertSame((int)$unsetId, $shippingAddress->getSameAsBilling());
     }
 
     /**
@@ -126,7 +126,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $shippingAddress->setSameAsBilling(0)
             ->setCustomerAddressData(null)
             ->save();
-        $this->assertEquals((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertSame((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**
@@ -153,7 +153,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_quote->setCustomer($this->_customer);
         $this->_setCustomerAddressAndSave($unsetId);
         $sameAsBilling = $this->_quote->getShippingAddress()->getSameAsBilling();
-        $this->assertEquals((int)$unsetId, $sameAsBilling);
+        $this->assertSame((int)$unsetId, $sameAsBilling);
     }
 
     /**
@@ -167,7 +167,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $this->_quote->setCustomer($this->_customer);
         $this->_setCustomerAddressAndSave($unsetId);
-        $this->assertEquals((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertSame((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**
@@ -187,7 +187,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_quote->setCustomer($this->_customer);
 
         $sameAsBilling = $this->_quote->getShippingAddress()->getSameAsBilling();
-        $this->assertEquals(1, $sameAsBilling);
+        $this->assertSame(1, $sameAsBilling);
     }
 
     /**
@@ -245,9 +245,9 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_address->setQuote($this->_quote);
         $this->_address->importCustomerAddressData($addressData);
 
-        $this->assertEquals($customerEmailFromFixture, $this->_address->getEmail(), 'Email was imported incorrectly.');
-        $this->assertEquals($city, $this->_address->getCity(), 'City was imported incorrectly.');
-        $this->assertEquals($street, $this->_address->getStreetFull(), 'Imported street is invalid.');
+        $this->assertSame($customerEmailFromFixture, $this->_address->getEmail(), 'Email was imported incorrectly.');
+        $this->assertSame($city, $this->_address->getCity(), 'City was imported incorrectly.');
+        $this->assertSame($street, $this->_address->getStreetFull(), 'Imported street is invalid.');
     }
 
     /**
@@ -263,8 +263,8 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
 
         $customerAddress = $this->_address->exportCustomerAddress();
 
-        $this->assertEquals($street, $customerAddress->getStreet(), 'Street was exported incorrectly.');
-        $this->assertEquals($company, $customerAddress->getCompany(), 'Company was exported incorrectly.');
+        $this->assertSame($street, $customerAddress->getStreet(), 'Street was exported incorrectly.');
+        $this->assertSame($company, $customerAddress->getCompany(), 'Company was exported incorrectly.');
     }
 
     public function testPopulateBeforeSaveData()
@@ -274,13 +274,13 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $customerAddressId = 1;
 
         $this->_address->setQuote($this->_quote);
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $customerId,
             $this->_address->getCustomerId(),
             "Precondition failed: Customer ID was not set."
         );
-        $this->assertNotEquals(1, $this->_address->getQuoteId(), "Precondition failed: Quote ID was not set.");
-        $this->assertNotEquals(
+        $this->assertNotSame(1, $this->_address->getQuoteId(), "Precondition failed: Quote ID was not set.");
+        $this->assertNotSame(
             $customerAddressId,
             $this->_address->getCustomerAddressId(),
             "Precondition failed: Customer address ID was not set."
@@ -294,9 +294,9 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_address->setCustomerAddressData($customerAddressData);
         $this->_address->save();
 
-        $this->assertEquals($customerId, $this->_address->getCustomerId());
-        $this->assertEquals($this->_quote->getId(), $this->_address->getQuoteId());
-        $this->assertEquals($customerAddressId, $this->_address->getCustomerAddressId());
+        $this->assertSame($customerId, $this->_address->getCustomerId());
+        $this->assertSame($this->_quote->getId(), $this->_address->getQuoteId());
+        $this->assertSame($customerAddressId, $this->_address->getCustomerAddressId());
     }
 
     /**

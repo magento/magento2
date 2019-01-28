@@ -199,7 +199,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
                 ->with(true);
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->shipmentDocumentFactory->create(
                 $this->orderMock,
                 [$this->itemMock],

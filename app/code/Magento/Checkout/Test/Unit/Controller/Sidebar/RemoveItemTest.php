@@ -134,7 +134,7 @@ class RemoveItemTest extends \PHPUnit\Framework\TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->removeItem->execute());
+        $this->assertSame('json represented', $this->removeItem->execute());
     }
 
     public function testExecuteWithLocalizedException()
@@ -179,7 +179,7 @@ class RemoveItemTest extends \PHPUnit\Framework\TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->removeItem->execute());
+        $this->assertSame('json represented', $this->removeItem->execute());
     }
 
     public function testExecuteWithException()
@@ -231,7 +231,7 @@ class RemoveItemTest extends \PHPUnit\Framework\TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->removeItem->execute());
+        $this->assertSame('json represented', $this->removeItem->execute());
     }
 
     public function testExecuteWhenFormKeyValidationFailed()
@@ -244,7 +244,7 @@ class RemoveItemTest extends \PHPUnit\Framework\TestCase
             ->method('validate')
             ->with($this->requestMock)
             ->willReturn(false);
-        $this->assertEquals($resultRedirect, $this->removeItem->execute());
+        $this->assertSame($resultRedirect, $this->removeItem->execute());
     }
 
     /**

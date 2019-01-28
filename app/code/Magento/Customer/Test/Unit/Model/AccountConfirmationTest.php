@@ -71,7 +71,7 @@ class AccountConfirmationTest extends \PHPUnit\Framework\TestCase
             ->with('skip_confirmation_if_email')
             ->willReturn($skipConfirmationIfEmail);
 
-        self::assertEquals(
+        self::assertSame(
             $expected,
             $this->accountConfirmation->isConfirmationRequired($websiteId, $customerId, $customerEmail)
         );

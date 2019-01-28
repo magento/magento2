@@ -63,7 +63,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/product')
             ->willReturn($path);
 
-        $this->assertEquals($path, $this->model->getPath());
+        $this->assertSame($path, $this->model->getPath());
     }
 
     public function testGetUrl()
@@ -71,6 +71,6 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $baseUrl = 'http://localhost/pub/media/catalog/product';
         $this->mediaConfig->expects($this->once())->method('getBaseMediaUrl')->willReturn($baseUrl);
 
-        $this->assertEquals($baseUrl, $this->model->getBaseUrl());
+        $this->assertSame($baseUrl, $this->model->getBaseUrl());
     }
 }

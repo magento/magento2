@@ -98,7 +98,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturnMap($paymentMethodsMap);
 
-        $this->assertEquals($expectedResult, $this->_helper->getBillingAgreementMethods($store, $quote));
+        $this->assertSame($expectedResult, $this->_helper->getBillingAgreementMethods($store, $quote));
     }
 
     /**
@@ -173,7 +173,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('sandboxFlag')
             ->willReturn(true);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedLink,
             $this->_helper->getHtmlTransactionId($methodCode, self::$txnId)
         );
@@ -195,7 +195,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('sandboxFlag')
             ->willReturn(false);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedLink,
             $this->_helper->getHtmlTransactionId($methodCode, self::$txnId)
         );
@@ -220,6 +220,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $methodCode = 'payflow_express';
 
-        $this->assertEquals(self::$txnId, $this->_helper->getHtmlTransactionId($methodCode, self::$txnId));
+        $this->assertSame(self::$txnId, $this->_helper->getHtmlTransactionId($methodCode, self::$txnId));
     }
 }

@@ -81,13 +81,13 @@ class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
             ->method('findAllByData')
             ->willReturn($expected);
 
-        $this->assertEquals($expected, $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_CATEGORY));
-        $this->assertEquals($expected, $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT));
-        $this->assertEquals($expected, $this->model->findAllByData('a', 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
-        $this->assertEquals($expected, $this->model->findAllByData('a', 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
-        $this->assertEquals($expected, $this->model->findAllByData(1, 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
-        $this->assertEquals($expected, $this->model->findAllByData(1, 1, 'cms', 1));
-        $this->assertEquals($expected, $this->model->findAllByData(1, 1, 'cms'));
+        $this->assertSame($expected, $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_CATEGORY));
+        $this->assertSame($expected, $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT));
+        $this->assertSame($expected, $this->model->findAllByData('a', 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
+        $this->assertSame($expected, $this->model->findAllByData('a', 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
+        $this->assertSame($expected, $this->model->findAllByData(1, 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
+        $this->assertSame($expected, $this->model->findAllByData(1, 1, 'cms', 1));
+        $this->assertSame($expected, $this->model->findAllByData(1, 1, 'cms'));
     }
 
     /**
@@ -125,7 +125,7 @@ class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
 
         $urlRewriteResultArray = $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT, 1);
-        $this->assertEquals($data[0], $urlRewriteResultArray[0]->toArray());
+        $this->assertSame($data[0], $urlRewriteResultArray[0]->toArray());
     }
 
     /**
@@ -163,6 +163,6 @@ class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
 
         $urlRewriteResultArray = $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_CATEGORY, 1);
-        $this->assertEquals($data[0], $urlRewriteResultArray[0]->toArray());
+        $this->assertSame($data[0], $urlRewriteResultArray[0]->toArray());
     }
 }

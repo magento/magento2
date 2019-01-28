@@ -77,9 +77,9 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             $salesRuleCouponMock->expects($this->once())
                 ->method('getCodeSeparator')
                 ->will($this->returnValue('test-separator'));
-            $this->assertEquals('test-separator', $massgenerator->getDelimiter());
+            $this->assertSame('test-separator', $massgenerator->getDelimiter());
         } else {
-            $this->assertEquals($data['delimiter'], $massgenerator->getDelimiter());
+            $this->assertSame($data['delimiter'], $massgenerator->getDelimiter());
         }
     }
 
@@ -145,8 +145,8 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($massgenerator, $massgenerator->generatePool());
-        $this->assertEquals($qty, $massgenerator->getGeneratedCount());
+        $this->assertSame($massgenerator, $massgenerator->generatePool());
+        $this->assertSame($qty, $massgenerator->getGeneratedCount());
         $codes = $massgenerator->getGeneratedCodes();
         ($qty > 0) ? $this->assertNotEmpty($codes) : $this->assertEmpty($codes);
     }
@@ -199,7 +199,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($massgenerator, $massgenerator->generatePool());
+        $this->assertSame($massgenerator, $massgenerator->generatePool());
     }
 
     /**
@@ -215,7 +215,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(\Magento\SalesRule\Model\Coupon\Massgenerator::class);
 
-        $this->assertEquals($result, $massgenerator->validateData($data));
+        $this->assertSame($result, $massgenerator->validateData($data));
     }
 
     /**
@@ -226,7 +226,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(\Magento\SalesRule\Model\Coupon\Massgenerator::class);
 
-        $this->assertEquals(0, $massgenerator->getGeneratedCount());
+        $this->assertSame(0, $massgenerator->getGeneratedCount());
     }
 
     /**

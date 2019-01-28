@@ -68,7 +68,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
             'description' => 'Interface for managing customers accounts.',
         ];
         $actual = $this->serviceMetadata->getServiceMetadata('customerAccountManagementV1');
-        $this->assertEquals(array_replace_recursive($actual, $expected), $actual);
+        $this->assertSame(array_replace_recursive($actual, $expected), $actual);
     }
 
     public function testGetRouteMetadata()
@@ -130,6 +130,6 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $actual = $this->serviceMetadata->getRouteMetadata('customerAccountManagementV1');
-        $this->assertEquals(array_replace_recursive($actual, $expected), $actual);
+        $this->assertSame(array_replace_recursive($actual, $expected), $actual);
     }
 }

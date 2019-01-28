@@ -99,7 +99,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive([$startDate], [])
             ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
 
-        $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
+        $this->assertSame($executionTime, $this->report->getExecutionTime($startDate));
     }
 
     /**
@@ -169,7 +169,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     public function testImportFileExists()
     {
-        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+        $this->assertSame($this->report->importFileExists('..file..name'), true);
     }
 
     /**
@@ -194,7 +194,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetReportOutput()
     {
-        $this->assertEquals($this->report->getReportOutput('report'), 'contents');
+        $this->assertSame($this->report->getReportOutput('report'), 'contents');
     }
 
     /**
@@ -216,7 +216,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with($this->identicalTo(\Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR))
             ->willReturn($testDelimiter);
-        $this->assertEquals(
+        $this->assertSame(
             $testDelimiter,
             $this->report->getDelimiter()
         );

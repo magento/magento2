@@ -41,6 +41,6 @@ class DefaultScopeTest extends \PHPUnit\Framework\TestCase
             $collectionFactory,
             $converter
         );
-        $this->assertEquals($expectedResult, $source->get());
+        $this->assertSame($expectedResult, $source->get());
     }
 }

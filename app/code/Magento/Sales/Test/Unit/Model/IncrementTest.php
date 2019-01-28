@@ -47,7 +47,7 @@ class IncrementTest extends \PHPUnit\Framework\TestCase
             ->with('order')
             ->willReturn($this->type);
         $this->model->getNextValue(1);
-        $this->assertEquals(2, $this->model->getCurrentValue());
+        $this->assertSame(2, $this->model->getCurrentValue());
     }
 
     public function testNextValue()
@@ -60,6 +60,6 @@ class IncrementTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityType')
             ->with('order')
             ->willReturn($this->type);
-        $this->assertEquals(2, $this->model->getNextValue(1));
+        $this->assertSame(2, $this->model->getNextValue(1));
     }
 }

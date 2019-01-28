@@ -219,7 +219,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
             ->method('buildClassName')
             ->with([$module, $prefix, $actionPath])
             ->willReturn($className);
-        $this->assertEquals($className, $this->model->getActionClassName($module, $actionPath));
+        $this->assertSame($className, $this->model->getActionClassName($module, $actionPath));
     }
 
     /**

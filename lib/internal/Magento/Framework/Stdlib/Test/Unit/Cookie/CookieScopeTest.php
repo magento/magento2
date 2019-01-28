@@ -59,7 +59,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
     {
         $cookieScope = $this->createCookieScope();
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
@@ -108,7 +108,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($cookieScope->getPublicCookieMetadata()->__toArray());
         $this->assertEmpty($cookieScope->getCookieMetadata()->__toArray());
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_PATH => 'default path',
                 SensitiveCookieMetadata::KEY_DOMAIN => 'default domain',
@@ -140,7 +140,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
@@ -148,7 +148,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             $cookieScope->getSensitiveCookieMetadata()->__toArray()
         );
         $this->assertEmpty($cookieScope->getCookieMetadata()->__toArray());
-        $this->assertEquals($defaultValues, $cookieScope->getPublicCookieMetadata()->__toArray());
+        $this->assertSame($defaultValues, $cookieScope->getPublicCookieMetadata()->__toArray());
     }
 
     /**
@@ -169,7 +169,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($defaultValues, $cookieScope->getCookieMetadata()->__toArray());
+        $this->assertSame($defaultValues, $cookieScope->getCookieMetadata()->__toArray());
     }
 
     /**
@@ -197,7 +197,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($cookieScope->getPublicCookieMetadata($this->createPublicMetadata())->__toArray());
         $this->assertEmpty($cookieScope->getCookieMetadata($this->createCookieMetadata())->__toArray());
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_PATH => 'override path',
                 SensitiveCookieMetadata::KEY_DOMAIN => 'override domain',
@@ -236,7 +236,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $override = $this->createPublicMetadata($overrideValues);
-        $this->assertEquals($overrideValues, $cookieScope->getPublicCookieMetadata($override)->__toArray());
+        $this->assertSame($overrideValues, $cookieScope->getPublicCookieMetadata($override)->__toArray());
     }
 
     /**
@@ -262,18 +262,18 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
         );
         $override = $this->createCookieMetadata($overrideValues);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
             ],
             $cookieScope->getSensitiveCookieMetadata($this->createSensitiveMetadata())->__toArray()
         );
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cookieScope->getPublicCookieMetadata($this->createPublicMetadata())->__toArray()
         );
-        $this->assertEquals($overrideValues, $cookieScope->getCookieMetadata($override)->__toArray());
+        $this->assertSame($overrideValues, $cookieScope->getCookieMetadata($override)->__toArray());
     }
 
     /**

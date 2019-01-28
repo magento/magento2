@@ -130,6 +130,6 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->controller->execute());
+        $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 }

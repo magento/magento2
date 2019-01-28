@@ -21,7 +21,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
         $resultFile = include __DIR__ . "/../_files/converter/dom/{$resultFile}";
 
         $converterDom = new Dom();
-        $this->assertEquals($resultFile, $converterDom->convert($dom));
+        $this->assertSame($resultFile, $converterDom->convert($dom));
     }
 
     /**

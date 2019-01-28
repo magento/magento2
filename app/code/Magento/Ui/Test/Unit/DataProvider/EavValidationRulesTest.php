@@ -57,7 +57,7 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())->method('getFrontendInput')->willReturn($attributeInputType);
         $this->attributeMock->expects($this->any())->method('getValidateRules')->willReturn($validateRules);
         $validationRules = $this->subject->build($this->attributeMock, $data);
-        $this->assertEquals($expected, $validationRules);
+        $this->assertSame($expected, $validationRules);
     }
 
     /**

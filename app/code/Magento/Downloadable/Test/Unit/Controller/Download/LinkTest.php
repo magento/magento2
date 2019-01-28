@@ -179,7 +179,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with("We can't find the link you requested.");
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
-        $this->assertEquals($this->response, $this->link->execute());
+        $this->assertSame($this->response, $this->link->execute());
     }
 
     public function testGetLinkForGuestCustomer()
@@ -270,7 +270,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with("We can't find the link you requested.");
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
-        $this->assertEquals($this->response, $this->link->execute());
+        $this->assertSame($this->response, $this->link->execute());
     }
 
     /**
@@ -320,7 +320,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
-        $this->assertEquals($this->response, $this->link->execute());
+        $this->assertSame($this->response, $this->link->execute());
     }
 
     /**
@@ -400,7 +400,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getStatus')->willReturn($status);
         $this->messageManager->expects($this->once())->method($messageType)->with($notice)->willReturnSelf();
 
-        $this->assertEquals($this->response, $this->link->execute());
+        $this->assertSame($this->response, $this->link->execute());
     }
 
     /**
@@ -470,7 +470,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->response, $this->link->execute());
+        $this->assertSame($this->response, $this->link->execute());
     }
 
     /**

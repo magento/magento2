@@ -303,7 +303,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsiteId')
             ->willReturn(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 1 => [
                     1 => 1,
@@ -342,7 +342,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsiteId')
             ->willReturn(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->model->getPriceIndexData([1 ], 1)
         );
@@ -380,7 +380,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 'position' => 1,
             ]]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 1 => [
                     1 => 1,
@@ -430,7 +430,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->with($select)
             ->willReturn([1, ]);
 
-        $this->assertEquals([1, ], $this->model->getMovedCategoryProductIds(1));
+        $this->assertSame([1, ], $this->model->getMovedCategoryProductIds(1));
     }
 
     /**

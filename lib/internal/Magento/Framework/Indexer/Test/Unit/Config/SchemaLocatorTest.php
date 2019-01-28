@@ -34,7 +34,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd'),
             $this->model->getSchema()
         );
@@ -48,7 +48,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd'),
             $this->model->getPerFileSchema()
         );

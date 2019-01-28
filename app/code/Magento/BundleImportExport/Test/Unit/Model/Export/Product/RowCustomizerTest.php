@@ -177,7 +177,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             'bundle_values',
             'bundle_shipment_type'
         ];
-        $this->assertEquals($expectedData, $this->rowCustomizerMock->addHeaderColumns($productData));
+        $this->assertSame($expectedData, $this->rowCustomizerMock->addHeaderColumns($productData));
     }
 
     /**
@@ -218,7 +218,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             'bundle_weight_type' => 'fixed',
             'bundle_values' => implode(',', $bundleValues)
         ];
-        $this->assertEquals($expected, $preparedRow);
+        $this->assertSame($expected, $preparedRow);
     }
 
     /**
@@ -227,6 +227,6 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     public function testGetAdditionalRowsCount()
     {
         $count = [5];
-        $this->assertEquals($count, $this->rowCustomizerMock->getAdditionalRowsCount($count, 0));
+        $this->assertSame($count, $this->rowCustomizerMock->getAdditionalRowsCount($count, 0));
     }
 }

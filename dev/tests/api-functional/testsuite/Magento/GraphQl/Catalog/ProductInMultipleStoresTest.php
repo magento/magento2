@@ -65,7 +65,7 @@ QUERY;
         $product->setName($productNameInFixtureStore)->setStoreId($storeId)->save();
         $headerMap = ['Store' => $storeCodeFromFixture];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertEquals(
+        $this->assertSame(
             $productNameInFixtureStore,
             $response['products']['items'][0]['name'],
             'Product name in fixture store is invalid.'
@@ -75,7 +75,7 @@ QUERY;
         $nameInDefaultStore = 'Simple Product';
         $headerMapDefault = ['Store' => 'default'];
         $response = $this->graphQlQuery($query, [], '', $headerMapDefault);
-        $this->assertEquals(
+        $this->assertSame(
             $nameInDefaultStore,
             $response['products']['items'][0]['name'],
             'Product name in default store is invalid.'
@@ -84,7 +84,7 @@ QUERY;
         //use case for empty storeCode
         $headerMapEmpty = ['Store' => ''];
         $response = $this->graphQlQuery($query, [], '', $headerMapEmpty);
-        $this->assertEquals(
+        $this->assertSame(
             $nameInDefaultStore,
             $response['products']['items'][0]['name'],
             'Product in the default store should be returned'

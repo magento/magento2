@@ -139,7 +139,7 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`int_column` int(10) UNSIGNED NOT NULL DEFAULT 0 AUTO_INCREMENT COMMENT "Comment"',
             $this->integer->toDefinition($column)
         );
@@ -165,7 +165,7 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
         $this->nullableMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
         $this->booleanMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
         $result = $this->integer->fromDefinition(['definition' => $definition]);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     /**

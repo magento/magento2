@@ -31,6 +31,6 @@ class UnionRendererTest extends \PHPUnit\Framework\TestCase
             ->with(Select::UNION)
             ->willReturn($parts);
 
-        $this->assertEquals('UNION (some select) as type1 UNION (some select) as', $model->render($select));
+        $this->assertSame('UNION (some select) as type1 UNION (some select) as', $model->render($select));
     }
 }

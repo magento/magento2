@@ -93,7 +93,7 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
             ->method('getQty')
             ->will($this->returnValue($qty));
 
-        $this->assertEquals($qty, $this->_block->getProductStockQty($productMock));
+        $this->assertSame($qty, $this->_block->getProductStockQty($productMock));
     }
 
     /**
@@ -122,7 +122,7 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
         $this->_block->setLayout($layout);
         $this->_block->setData($blockConfig);
 
-        $this->assertEquals($wizardHtml, $this->_block->getVariationWizard($initData));
+        $this->assertSame($wizardHtml, $this->_block->getVariationWizard($initData));
     }
 
     /**

@@ -155,7 +155,7 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         $rssData = $this->block->getRssData();
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
-        $this->assertEquals($data, $rssData);
+        $this->assertSame($data, $rssData);
         $this->assertContains('<a href="http://magento.com/product-name.html"><', $description);
         $this->assertContains(
             sprintf('<p>Price:  Special Price: 10<br />Special Expires On: %s</p>', date('Y-m-d')),
@@ -206,12 +206,12 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/special', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertSame(true, $this->block->isAllowed());
     }
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(600, $this->block->getCacheLifetime());
+        $this->assertSame(600, $this->block->getCacheLifetime());
     }
 
     public function testGetFeeds()
@@ -226,6 +226,6 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
             'label' => 'Special Products',
             'link' => 'http://magento.com/rss/feed/index/type/special_products/store_id/1',
         ];
-        $this->assertEquals($expected, $this->block->getFeeds());
+        $this->assertSame($expected, $this->block->getFeeds());
     }
 }

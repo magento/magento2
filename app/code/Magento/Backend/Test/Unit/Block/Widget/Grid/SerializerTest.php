@@ -40,9 +40,9 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
         $block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Serializer::class, $arguments);
         $block->setLayout($this->_layoutMock);
 
-        $this->assertEquals($grid, $block->getGridBlock());
-        $this->assertEquals(['product1'], $block->getSerializeData());
-        $this->assertEquals('selected_products_input', $block->getInputElementName());
-        $this->assertEquals('selected_products_param', $block->getReloadParamName());
+        $this->assertSame($grid, $block->getGridBlock());
+        $this->assertSame(['product1'], $block->getSerializeData());
+        $this->assertSame('selected_products_input', $block->getInputElementName());
+        $this->assertSame('selected_products_param', $block->getReloadParamName());
     }
 }

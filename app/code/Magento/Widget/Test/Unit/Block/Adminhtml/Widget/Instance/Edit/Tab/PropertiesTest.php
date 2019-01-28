@@ -51,7 +51,7 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
             ->with('current_widget_instance')
             ->willReturn($this->widget);
 
-        $this->assertEquals($isHidden, $this->propertiesBlock->isHidden());
+        $this->assertSame($isHidden, $this->propertiesBlock->isHidden());
     }
 
     /**

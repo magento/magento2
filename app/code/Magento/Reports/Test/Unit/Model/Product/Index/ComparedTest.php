@@ -148,6 +148,6 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
 
         $this->registryMock->expects($this->any())->method('registry')->willReturn($product);
 
-        $this->assertEquals([1, 2], $this->compared->getExcludeProductIds());
+        $this->assertSame([1, 2], $this->compared->getExcludeProductIds());
     }
 }

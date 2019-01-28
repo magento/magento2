@@ -72,7 +72,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         // Load products collection filtered using specified conditions and perform assertions
         $productCollection = $this->block->createCollection();
         $productCollection->load();
-        $this->assertEquals(
+        $this->assertSame(
             1,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
@@ -125,7 +125,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         // Load products collection filtered using specified conditions and perform assertions.
         $productCollection = $this->block->createCollection();
         $productCollection->load();
-        $this->assertEquals(
+        $this->assertSame(
             $count,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
@@ -148,12 +148,12 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         $this->block->setData('conditions_encoded', $encodedConditions);
         $productCollection = $this->block->createCollection();
         $productCollection->load();
-        $this->assertEquals(
+        $this->assertSame(
             1,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
         );
-        $this->assertEquals($sku, $productCollection->getFirstItem()->getSku());
+        $this->assertSame($sku, $productCollection->getFirstItem()->getSku());
     }
 
     /**

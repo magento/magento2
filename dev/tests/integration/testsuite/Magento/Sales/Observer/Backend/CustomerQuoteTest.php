@@ -39,7 +39,7 @@ class CustomerQuoteTest extends \PHPUnit\Framework\TestCase
             ->save();
 
         $this->assertNotNull($customer->getGroupId(), "Precondition failed: Customer group is not set.");
-        $this->assertEquals(
+        $this->assertSame(
             $customer->getGroupId(),
             $quote->getCustomerGroupId(),
             "Precondition failed: Customer group in quote is invalid."
@@ -54,7 +54,7 @@ class CustomerQuoteTest extends \PHPUnit\Framework\TestCase
         $repository->save($customer);
 
         $quote->load('test01', 'reserved_order_id');
-        $this->assertEquals(
+        $this->assertSame(
             $newCustomerGroupId,
             $quote->getCustomerGroupId(),
             'Customer group in quote was not updated on "customer_save_after_data_object" event ' .

@@ -90,7 +90,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
         $ids = [100, 102, 103];
         $this->sessionMock->method('getOrderIds')->willReturn($ids);
 
-        $this->assertEquals($ids, $this->model->getOrderIds());
+        $this->assertSame($ids, $this->model->getOrderIds());
     }
 
     public function testGetContinueUrl()
@@ -99,6 +99,6 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
 
-        $this->assertEquals('Expected Result', $this->model->getContinueUrl());
+        $this->assertSame('Expected Result', $this->model->getContinueUrl());
     }
 }

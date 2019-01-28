@@ -39,7 +39,7 @@ class ShellTest extends \PHPUnit\Framework\TestCase
         $this->expectOutputString('');
         // nothing is expected to be ever printed to the standard output
         $actualResult = $shell->execute($command, $commandArgs);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -138,8 +138,8 @@ class ShellTest extends \PHPUnit\Framework\TestCase
             $this->testExecute($command, $commandArgs, ''); // no result is expected in a case of a command failure
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->assertInstanceOf('Exception', $e->getPrevious());
-            $this->assertEquals($expectedError, $e->getPrevious()->getMessage());
-            $this->assertEquals(42, $e->getPrevious()->getCode());
+            $this->assertSame($expectedError, $e->getPrevious()->getMessage());
+            $this->assertSame(42, $e->getPrevious()->getCode());
         }
     }
 }

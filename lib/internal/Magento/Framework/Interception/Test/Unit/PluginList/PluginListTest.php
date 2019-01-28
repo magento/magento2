@@ -122,28 +122,28 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash::class,
             'getName'
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
             $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'simple_plugin'
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
             $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'advanced_plugin'
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainerPlugin\Simple::class,
             $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
                 'simple_plugin'
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash\Plugin::class,
             $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash::class,
@@ -169,7 +169,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($scopeCode)
         );
-        $this->assertEquals($expectedResult, $this->object->getNext($type, $method, $code));
+        $this->assertSame($expectedResult, $this->object->getNext($type, $method, $code));
     }
 
     /**
@@ -256,7 +256,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects($this->once())
             ->method('save');
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertSame(null, $this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -298,7 +298,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             ->with('global|scope|interception')
             ->willReturn($serializedData);
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertSame(null, $this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -314,14 +314,14 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrentScope')
             ->will($this->returnValue('emptyscope'));
 
-        $this->assertEquals(
+        $this->assertSame(
             [4 => ['simple_plugin']],
             $this->object->getNext(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'getName'
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
             $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,

@@ -87,14 +87,14 @@ QUERY;
             $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
         if ((bool)$bundleProduct->getShipmentType()) {
-            $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
+            $this->assertSame('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
-            $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
+            $this->assertSame('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
         }
         if ((bool)$bundleProduct->getPriceView()) {
-            $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
+            $this->assertSame('AS_LOW_AS', $response['products']['items'][0]['price_view']);
         } else {
-            $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
+            $this->assertSame('PRICE_RANGE', $response['products']['items'][0]['price_view']);
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
@@ -186,14 +186,14 @@ QUERY;
             $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
         if ((bool)$bundleProduct->getShipmentType()) {
-            $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
+            $this->assertSame('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
-            $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
+            $this->assertSame('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
         }
         if ((bool)$bundleProduct->getPriceView()) {
-            $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
+            $this->assertSame('AS_LOW_AS', $response['products']['items'][0]['price_view']);
         } else {
-            $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
+            $this->assertSame('PRICE_RANGE', $response['products']['items'][0]['price_view']);
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
@@ -250,7 +250,7 @@ QUERY;
         $childProduct->setId(
             $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
-        $this->assertEquals(1, count($options));
+        $this->assertSame(1, count($options));
         $this->assertResponseFields(
             $actualResponse['items'][0],
             [
@@ -377,11 +377,11 @@ QUERY;
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
         $minimalPrice = $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue();
         $maximalPrice = $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue();
-        $this->assertEquals(
+        $this->assertSame(
             $minimalPrice,
             $response['products']['items'][0]['price']['minimalPrice']['amount']['value']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $maximalPrice,
             $response['products']['items'][0]['price']['maximalPrice']['amount']['value']
         );

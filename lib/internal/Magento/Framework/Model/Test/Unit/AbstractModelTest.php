@@ -92,10 +92,10 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEmpty($this->model->getStoredData());
         $this->model->afterLoad();
-        $this->assertEquals($this->model->getData(), $this->model->getStoredData());
+        $this->assertSame($this->model->getData(), $this->model->getStoredData());
         $this->model->setData('value', 'Test Value');
         $this->model->afterSave();
-        $this->assertEquals($this->model->getData(), $this->model->getStoredData());
+        $this->assertSame($this->model->getData(), $this->model->getStoredData());
         $this->model->afterDelete();
         $this->assertEmpty($this->model->getStoredData());
     }
@@ -138,14 +138,14 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     public function testSetGetId()
     {
         $this->model->setId('test');
-        $this->assertEquals('test', $this->model->getId());
+        $this->assertSame('test', $this->model->getId());
     }
 
     public function testSetGetIdFieldName()
     {
         $name = 'entity_id_custom';
         $this->model->setIdFieldName($name);
-        $this->assertEquals($name, $this->model->getIdFieldName());
+        $this->assertSame($name, $this->model->getIdFieldName());
     }
 
     /**
@@ -158,10 +158,10 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
         $this->model->setOrigData();
         $this->model->setData('key1', 'test');
         $this->assertTrue($this->model->dataHasChangedFor('key1'));
-        $this->assertEquals($data, $this->model->getOrigData());
+        $this->assertSame($data, $this->model->getOrigData());
 
         $this->model->setOrigData('key1', 'test');
-        $this->assertEquals('test', $this->model->getOrigData('key1'));
+        $this->assertSame('test', $this->model->getOrigData('key1'));
     }
 
     /**

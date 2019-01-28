@@ -34,7 +34,7 @@ class FieldNamerTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldNameForMethodName($methodName, $expectedName)
     {
         $value = $this->model->getFieldNameForMethodName($methodName);
-        $this->assertEquals($value, $expectedName);
+        $this->assertSame($value, $expectedName);
     }
 
     /**

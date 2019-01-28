@@ -54,8 +54,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             $this->_validator->addValidator($validator, $breakChainOnFailure);
         }
 
-        $this->assertEquals($expectedResult, $this->_validator->isValid($value));
-        $this->assertEquals($expectedMessages, $this->_validator->getMessages($value));
+        $this->assertSame($expectedResult, $this->_validator->isValid($value));
+        $this->assertSame($expectedMessages, $this->_validator->getMessages($value));
     }
 
     /**
@@ -147,8 +147,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['instance' => $classConstraint, 'breakChainOnFailure' => false],
             ['instance' => $propertyValidator, 'breakChainOnFailure' => false],
         ];
-        $this->assertAttributeEquals($expected, '_validators', $this->_validator);
-        $this->assertEquals($translator, $fooValidator->getTranslator(), 'Translator was not set');
+        $this->assertAttributeSame($expected, '_validators', $this->_validator);
+        $this->assertSame($translator, $fooValidator->getTranslator(), 'Translator was not set');
     }
 
     /**
@@ -163,7 +163,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Translate\AbstractAdapter::class
         )->getMockForAbstractClass();
         $this->_validator->setTranslator($translator);
-        $this->assertEquals($translator, $fooValidator->getTranslator());
-        $this->assertEquals($translator, $this->_validator->getTranslator());
+        $this->assertSame($translator, $fooValidator->getTranslator());
+        $this->assertSame($translator, $this->_validator->getTranslator());
     }
 }

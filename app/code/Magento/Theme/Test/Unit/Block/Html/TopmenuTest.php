@@ -147,7 +147,7 @@ HTML;
                 ],
             ]);
 
-        $this->assertEquals($this->htmlWithoutCategory, $topmenuBlock->getHtml());
+        $this->assertSame($this->htmlWithoutCategory, $topmenuBlock->getHtml());
     }
 
     public function testGetHtmlWithSelectedCategory()
@@ -180,7 +180,7 @@ HTML;
                 ],
             ]);
 
-        $this->assertEquals($this->htmlWithCategory, $topmenuBlock->getHtml());
+        $this->assertSame($this->htmlWithCategory, $topmenuBlock->getHtml());
     }
 
     public function testGetCacheKeyInfo()
@@ -197,7 +197,7 @@ HTML;
         $store->expects($this->once())->method('getCode')->willReturn('321');
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['BLOCK_TPL', '321', null, 'base_url' => 'baseUrl', 'template' => null],
             $topmenu->getCacheKeyInfo()
         );
@@ -307,6 +307,6 @@ HTML;
             ->willReturn($treeMock);
 
         $topmenuBlock = $this->getTopmenu();
-        $this->assertEquals($nodeMock, $topmenuBlock->getMenu());
+        $this->assertSame($nodeMock, $topmenuBlock->getMenu());
     }
 }

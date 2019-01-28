@@ -32,7 +32,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     {
         /** @var $date \Magento\Framework\Data\Form\Element\Date */
         $date = $this->_elementFactory->create(\Magento\Framework\Data\Form\Element\Date::class, $data);
-        $this->assertEquals($expect, $date->getValue());
+        $this->assertSame($expect, $date->getValue());
     }
 
     /**

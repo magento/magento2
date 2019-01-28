@@ -44,7 +44,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
     public function testIsValid($expectedResult, $value)
     {
         $result = $this->weight->isValid($value);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

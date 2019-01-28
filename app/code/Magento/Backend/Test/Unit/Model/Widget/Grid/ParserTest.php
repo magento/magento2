@@ -24,7 +24,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testParseExpression($expression, $expected)
     {
-        $this->assertEquals($expected, $this->_model->parseExpression($expression));
+        $this->assertSame($expected, $this->_model->parseExpression($expression));
     }
 
     /**
@@ -55,7 +55,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOperation($operation, $expected)
     {
-        $this->assertEquals($expected, $this->_model->isOperation($operation));
+        $this->assertSame($expected, $this->_model->isOperation($operation));
     }
 
     /**

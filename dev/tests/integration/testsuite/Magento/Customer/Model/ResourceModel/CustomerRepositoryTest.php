@@ -128,8 +128,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRepository->save($updatedCustomer);
         /** Check if update was successful */
         $customer = $this->customerRepository->get($customer->getEmail());
-        $this->assertEquals($newCustomerFirstname, $customer->getFirstname());
-        $this->assertEquals($lastname, $customer->getLastname());
+        $this->assertSame($newCustomerFirstname, $customer->getFirstname());
+        $this->assertSame($lastname, $customer->getLastname());
     }
 
     /**
@@ -153,11 +153,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setGroupId($groupId);
         $savedCustomer = $this->customerRepository->save($newCustomerEntity);
         $this->assertNotNull($savedCustomer->getId());
-        $this->assertEquals($email, $savedCustomer->getEmail());
-        $this->assertEquals($storeId, $savedCustomer->getStoreId());
-        $this->assertEquals($firstname, $savedCustomer->getFirstname());
-        $this->assertEquals($lastname, $savedCustomer->getLastname());
-        $this->assertEquals($groupId, $savedCustomer->getGroupId());
+        $this->assertSame($email, $savedCustomer->getEmail());
+        $this->assertSame($storeId, $savedCustomer->getStoreId());
+        $this->assertSame($firstname, $savedCustomer->getFirstname());
+        $this->assertSame($lastname, $savedCustomer->getLastname());
+        $this->assertSame($groupId, $savedCustomer->getGroupId());
         $this->assertTrue(!$savedCustomer->getSuffix());
     }
 
@@ -197,17 +197,17 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->customerRepository->save($customerDetails, $newPasswordHash);
         $customerAfter = $this->customerRepository->getById($existingCustomerId);
-        $this->assertEquals($email, $customerAfter->getEmail());
-        $this->assertEquals($firstName, $customerAfter->getFirstname());
-        $this->assertEquals($lastName, $customerAfter->getLastname());
-        $this->assertEquals($defaultBilling, $customerAfter->getDefaultBilling());
-        $this->assertEquals($defaultShipping, $customerAfter->getDefaultShipping());
+        $this->assertSame($email, $customerAfter->getEmail());
+        $this->assertSame($firstName, $customerAfter->getFirstname());
+        $this->assertSame($lastName, $customerAfter->getLastname());
+        $this->assertSame($defaultBilling, $customerAfter->getDefaultBilling());
+        $this->assertSame($defaultShipping, $customerAfter->getDefaultShipping());
         $this->expectedDefaultShippingsInCustomerModelAttributes(
             $existingCustomerId,
             $defaultBilling,
             $defaultShipping
         );
-        $this->assertEquals('Admin', $customerAfter->getCreatedIn());
+        $this->assertSame('Admin', $customerAfter->getCreatedIn());
         $this->accountManagement->authenticate($customerAfter->getEmail(), $newPassword);
         $attributesBefore = $this->converter->toFlatArray(
             $customerBefore,
@@ -273,11 +273,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setAddresses([$newAddressDataObject, $addresses[1]]);
         $this->customerRepository->save($newCustomerEntity);
         $newCustomer = $this->customerRepository->get($email);
-        $this->assertEquals(2, count($newCustomer->getAddresses()));
+        $this->assertSame(2, count($newCustomer->getAddresses()));
 
         foreach ($newCustomer->getAddresses() as $newAddress) {
             if ($newAddress->getId() == $addressId) {
-                $this->assertEquals($city, $newAddress->getCity());
+                $this->assertSame($city, $newAddress->getCity());
             }
         }
     }
@@ -306,7 +306,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
         //Verify that old addresses are still present
-        $this->assertEquals(2, count($newCustomerDetails->getAddresses()));
+        $this->assertSame(2, count($newCustomerDetails->getAddresses()));
     }
 
     /**
@@ -333,7 +333,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
         //Verify that old addresses are removed
-        $this->assertEquals(0, count($newCustomerDetails->getAddresses()));
+        $this->assertSame(0, count($newCustomerDetails->getAddresses()));
     }
 
     /**
@@ -375,8 +375,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $newCustomerAddresses = $newCustomer->getAddresses();
         $addressId = $newCustomerAddresses[0]->getId();
 
-        $this->assertEquals($newCustomer->getDefaultBilling(), $addressId, "Default billing invalid value");
-        $this->assertEquals($newCustomer->getDefaultShipping(), $addressId, "Default shipping invalid value");
+        $this->assertSame($newCustomer->getDefaultBilling(), $addressId, "Default billing invalid value");
+        $this->assertSame($newCustomer->getDefaultShipping(), $addressId, "Default shipping invalid value");
     }
 
     /**
@@ -404,11 +404,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
 
-        $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
+        $this->assertSame(count($expectedResult), $searchResults->getTotalCount());
 
         foreach ($searchResults->getItems() as $item) {
-            $this->assertEquals($expectedResult[$item->getId()]['email'], $item->getEmail());
-            $this->assertEquals($expectedResult[$item->getId()]['firstname'], $item->getFirstname());
+            $this->assertSame($expectedResult[$item->getId()]['email'], $item->getEmail());
+            $this->assertSame($expectedResult[$item->getId()]['firstname'], $item->getFirstname());
             unset($expectedResult[$item->getId()]);
         }
     }
@@ -440,10 +440,10 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->create();
         $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
-        $this->assertEquals(3, $searchResults->getTotalCount());
-        $this->assertEquals('Lastname', $searchResults->getItems()[0]->getLastname());
-        $this->assertEquals('Lastname2', $searchResults->getItems()[1]->getLastname());
-        $this->assertEquals('Lastname3', $searchResults->getItems()[2]->getLastname());
+        $this->assertSame(3, $searchResults->getTotalCount());
+        $this->assertSame('Lastname', $searchResults->getItems()[0]->getLastname());
+        $this->assertSame('Lastname2', $searchResults->getItems()[1]->getLastname());
+        $this->assertSame('Lastname3', $searchResults->getItems()[2]->getLastname());
 
         // Search descending order
         $sortOrder = $sortOrderBuilder
@@ -452,9 +452,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->create();
         $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
-        $this->assertEquals('Lastname3', $searchResults->getItems()[0]->getLastname());
-        $this->assertEquals('Lastname2', $searchResults->getItems()[1]->getLastname());
-        $this->assertEquals('Lastname', $searchResults->getItems()[2]->getLastname());
+        $this->assertSame('Lastname3', $searchResults->getItems()[0]->getLastname());
+        $this->assertSame('Lastname2', $searchResults->getItems()[1]->getLastname());
+        $this->assertSame('Lastname', $searchResults->getItems()[2]->getLastname());
     }
 
     /**
@@ -574,12 +574,12 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customer = $this->objectManager->create(Customer::class);
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer->load($customerId);
-        $this->assertEquals(
+        $this->assertSame(
             $defaultBilling,
             $customer->getDefaultBilling(),
             'default_billing customer attribute did not updated'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $defaultShipping,
             $customer->getDefaultShipping(),
             'default_shipping customer attribute did not updated'
@@ -613,13 +613,13 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $savedCustomer = $this->customerRepository->save($customerEntity);
 
-        $this->assertEquals(
+        $this->assertSame(
             $savedCustomer->getDefaultBilling(),
             $oldDefaultBilling,
             'Default billing should not be overridden'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $savedCustomer->getDefaultShipping(),
             $oldDefaultShipping,
             'Default shipping should not be overridden'

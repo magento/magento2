@@ -112,9 +112,9 @@ class ProductGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->productRepository->get($sku);
 
-        $this->assertEquals($price, $product->getPrice());
-        $this->assertEquals($name, $product->getName());
-        $this->assertEquals($url, $product->getUrlKey());
+        $this->assertSame($price, $product->getPrice());
+        $this->assertSame($name, $product->getName());
+        $this->assertSame($url, $product->getUrlKey());
         $this->assertTrue(in_array($categoryId, $product->getCategoryIds()));
 
         $this->productRepository->delete($product);

@@ -124,7 +124,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
 
         $this->assertCount(2, $response['request_items']);
         foreach ($products as $key => $product) {
-            $this->assertEquals('accepted', $response['request_items'][$key]['status']);
+            $this->assertSame('accepted', $response['request_items'][$key]['status']);
         }
         $this->assertFalse($response['errors']);
 
@@ -154,7 +154,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
 
         $this->assertCount(1, $response['request_items']);
-        $this->assertEquals('accepted', $response['request_items'][0]['status']);
+        $this->assertSame('accepted', $response['request_items'][0]['status']);
         $this->assertFalse($response['errors']);
 
         //assert one products is created
@@ -184,10 +184,10 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $response = $this->saveProductAsync($products);
         } catch (\Exception $e) {
-            $this->assertEquals(500, $e->getCode());
+            $this->assertSame(500, $e->getCode());
         }
         $this->assertNull($response);
-        $this->assertEquals(0, $this->checkProductsCreation());
+        $this->assertSame(0, $this->checkProductsCreation());
     }
 
     /**
@@ -211,7 +211,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $response = $this->_webApiCall($serviceInfo, [ProductInterface::SKU => $sku], null, $storeCode);
         } catch (NotFoundException $e) {
-            $this->assertEquals(400, $e->getCode());
+            $this->assertSame(400, $e->getCode());
         }
         $this->assertNull($response);
     }

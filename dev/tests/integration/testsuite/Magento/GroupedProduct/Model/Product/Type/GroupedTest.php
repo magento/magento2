@@ -90,11 +90,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $productId = $product->getId();
-        $this->assertEquals($data[$productId]['sku'], $product->getSku());
-        $this->assertEquals($data[$productId]['name'], $product->getName());
-        $this->assertEquals($data[$productId]['price'], $product->getPrice());
-        $this->assertEquals($data[$productId]['qty'], $product->getQty());
-        $this->assertEquals($data[$productId]['position'], $product->getPosition());
+        $this->assertSame($data[$productId]['sku'], $product->getSku());
+        $this->assertSame($data[$productId]['name'], $product->getName());
+        $this->assertSame($data[$productId]['price'], $product->getPrice());
+        $this->assertSame($data[$productId]['qty'], $product->getQty());
+        $this->assertSame($data[$productId]['position'], $product->getPosition());
     }
 
     /**
@@ -135,7 +135,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $products = $type->processConfiguration($buyRequest, $product, $processMode);
             foreach ($products as $item) {
                 $productId = $item->getId();
-                $this->assertEquals(
+                $this->assertSame(
                     $expectedData[$processMode][$productId],
                     $item->getCustomOptions()['info_buyRequest']->getValue(),
                     "Wrong info_buyRequest data for product with id: $productId"
@@ -166,14 +166,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         /** @var Grouped $groupedProduct */
         $groupedProduct = $this->objectManager->get(Grouped::class);
         $actual = $groupedProduct->prepareForCartAdvanced($buyRequest, $product, Grouped::PROCESS_MODE_FULL);
-        self::assertEquals(
+        self::assertSame(
             count($expected),
             count($actual)
         );
         /** @var Product $product */
         foreach ($actual as $product) {
             $sku = $product->getSku();
-            self::assertEquals(
+            self::assertSame(
                 $expected[$sku],
                 $product->getCartQty(),
                 "Failed asserting that Product Cart Quantity matches expected"

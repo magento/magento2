@@ -100,7 +100,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetCustomerGroupId()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->groupManagement->getNotLoggedInGroup()->getId(),
             $this->_model->getCustomerGroupId()
         );
@@ -108,16 +108,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $customerGroupId = 123;
         $this->_model->setCustomerGroupId($customerGroupId);
 
-        $this->assertEquals($customerGroupId, $this->_model->getCustomerGroupId());
+        $this->assertSame($customerGroupId, $this->_model->getCustomerGroupId());
     }
 
     public function testGetSetCurrencyRate()
     {
-        $this->assertEquals(1, $this->_model->getCurrencyRate());
+        $this->assertSame(1, $this->_model->getCurrencyRate());
 
         $currencyRate = 42;
         $this->_model->setCurrencyRate($currencyRate);
 
-        $this->assertEquals($currencyRate, $this->_model->getData('currency_rate'));
+        $this->assertSame($currencyRate, $this->_model->getData('currency_rate'));
     }
 }

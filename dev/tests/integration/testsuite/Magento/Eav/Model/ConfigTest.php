@@ -32,7 +32,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $entityType = 'test';
         CacheCleaner::cleanAll();
         $entityAttributeCodes1 = $this->config->getEntityAttributeCodes($entityType);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'attribute_for_search_1',
                 'attribute_for_search_2',
@@ -44,7 +44,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
 
         $entityAttributeCodes2 = $this->config->getEntityAttributeCodes($entityType);
-        $this->assertEquals($entityAttributeCodes1, $entityAttributeCodes2);
+        $this->assertSame($entityAttributeCodes1, $entityAttributeCodes2);
     }
 
     public function testGetEntityAttributeCodesWithObject()
@@ -62,7 +62,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $entityAttributeCodes1 = $this->config->getEntityAttributeCodes($entityType, $object);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'attribute_for_search_1',
                 'attribute_for_search_2',
@@ -71,7 +71,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
 
         $entityAttributeCodes2 = $this->config->getEntityAttributeCodes($entityType, $object);
-        $this->assertEquals($entityAttributeCodes1, $entityAttributeCodes2);
+        $this->assertSame($entityAttributeCodes1, $entityAttributeCodes2);
     }
 
     public function testGetAttributes()
@@ -86,14 +86,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'attribute_for_search_4',
             'attribute_for_search_5',
         ];
-        $this->assertEquals(count($expectedAttributeCodes), count($attributes1));
+        $this->assertSame(count($expectedAttributeCodes), count($attributes1));
         $attributeCodes = [];
         foreach ($attributes1 as $attribute) {
             $attributeCodes[] = $attribute->getAttributeCode();
         }
-        $this->assertEquals($expectedAttributeCodes, $attributeCodes);
+        $this->assertSame($expectedAttributeCodes, $attributeCodes);
         $attributes2 = $this->config->getAttributes($entityType);
-        $this->assertEquals($attributes1, $attributes2);
+        $this->assertSame($attributes1, $attributes2);
     }
 
     public function testGetAttribute()
@@ -101,12 +101,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $entityType = 'test';
         CacheCleaner::cleanAll();
         $attribute1 = $this->config->getAttribute($entityType, 'attribute_for_search_1');
-        $this->assertEquals('attribute_for_search_1', $attribute1->getAttributeCode());
-        $this->assertEquals('varchar', $attribute1->getBackendType());
-        $this->assertEquals(1, $attribute1->getIsRequired());
-        $this->assertEquals(1, $attribute1->getIsUserDefined());
-        $this->assertEquals(0, $attribute1->getIsUnique());
+        $this->assertSame('attribute_for_search_1', $attribute1->getAttributeCode());
+        $this->assertSame('varchar', $attribute1->getBackendType());
+        $this->assertSame(1, $attribute1->getIsRequired());
+        $this->assertSame(1, $attribute1->getIsUserDefined());
+        $this->assertSame(0, $attribute1->getIsUnique());
         $attribute2 = $this->config->getAttribute($entityType, 'attribute_for_search_1');
-        $this->assertEquals($attribute1, $attribute2);
+        $this->assertSame($attribute1, $attribute2);
     }
 }

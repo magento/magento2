@@ -65,7 +65,7 @@ class TransportInterfacePluginTest extends \PHPUnit\Framework\TestCase
             ->with('system/smtp/disable', ScopeInterface::SCOPE_STORE)
             ->willReturn($isDisabled);
         $this->model->aroundSendMessage($this->transportMock, $this->proceedMock);
-        $this->assertEquals($shouldProceedRun, $this->isProceedMockCalled);
+        $this->assertSame($shouldProceedRun, $this->isProceedMockCalled);
     }
 
     /**

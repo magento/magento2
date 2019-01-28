@@ -63,6 +63,6 @@ class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
             'Magento_Backend' => $backendOptions,
         ];
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

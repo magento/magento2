@@ -42,7 +42,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $response = $this->getResponse()->getBody();
 
         $this->assertContains('Integrations', $response);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="integrationGrid"]',
@@ -59,10 +59,10 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->dispatch('backend/admin/integration/new');
         $response = $this->getResponse()->getBody();
 
-        $this->assertEquals('new', $this->getRequest()->getActionName());
+        $this->assertSame('new', $this->getRequest()->getActionName());
         $this->assertContains('entry-edit form-inline', $response);
         $this->assertContains('New Integration', $response);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="integration_properties_base_fieldset"]',
@@ -85,14 +85,14 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->assertContains('entry-edit form-inline', $response);
         $this->assertContains('Edit &quot;' . $this->_integration->getName() . '&quot; Integration', $response);
         $this->assertContains($saveLink, $response);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="integration_properties_base_fieldset"]',
                 $response
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="integration_edit_tabs_info_section_content"]',

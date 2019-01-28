@@ -117,7 +117,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -186,7 +186,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -247,7 +247,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -385,7 +385,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -508,7 +508,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -585,7 +585,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($inputCondition, $result);
+        $this->assertSame($inputCondition, $result);
     }
 
     /**
@@ -788,7 +788,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -887,7 +887,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**
@@ -992,7 +992,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
 
-        $this->assertEquals($validResult, $result);
+        $this->assertSame($validResult, $result);
     }
 
     /**

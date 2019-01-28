@@ -58,7 +58,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $json = $this->_helper->getAddToWishlistParams($product);
         $params = (array)json_decode($json);
         $data = (array)$params['data'];
-        $this->assertEquals('10', $data['product']);
+        $this->assertSame('10', $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith(
             'wishlist/index/add/',
@@ -107,11 +107,11 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         try {
             $session->unsCatalogCompareItemsCount();
             $this->assertFalse($this->_helper->hasItems());
-            $this->assertEquals(0, $session->getCatalogCompareItemsCount());
+            $this->assertSame(0, $session->getCatalogCompareItemsCount());
 
             $this->_populateCompareList();
             $this->_helper->calculate();
-            $this->assertEquals(2, $session->getCatalogCompareItemsCount());
+            $this->assertSame(2, $session->getCatalogCompareItemsCount());
             $this->assertTrue($this->_helper->hasItems());
 
             $session->unsCatalogCompareItemsCount();

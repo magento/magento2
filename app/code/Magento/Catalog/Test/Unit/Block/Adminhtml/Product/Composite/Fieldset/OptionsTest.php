@@ -98,6 +98,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optionFactoryMock]
         );
         $option->setType('date');
-        $this->assertEquals('html', $this->_optionsBlock->getOptionHtml($option));
+        $this->assertSame('html', $this->_optionsBlock->getOptionHtml($option));
     }
 }

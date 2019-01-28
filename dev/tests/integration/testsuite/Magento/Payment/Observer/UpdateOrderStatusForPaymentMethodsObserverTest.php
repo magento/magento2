@@ -91,9 +91,9 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        $this->assertEquals('pending', $defaultStatus);
-        $this->assertEquals($statusCode, $newStatus);
-        $this->assertEquals('pending', $unassignedStatus);
+        $this->assertSame('pending', $defaultStatus);
+        $this->assertSame($statusCode, $newStatus);
+        $this->assertSame('pending', $unassignedStatus);
     }
 
     /**
@@ -123,7 +123,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
             'payment/checkmo/order_status',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $this->assertEquals('pending', $unassignedStatus);
+        $this->assertSame('pending', $unassignedStatus);
     }
 
     /**

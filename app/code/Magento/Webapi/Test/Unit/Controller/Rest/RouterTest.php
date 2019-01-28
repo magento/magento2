@@ -84,7 +84,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         );
 
         $matchedRoute = $this->_router->match($this->_request);
-        $this->assertEquals($this->_routeMock, $matchedRoute);
+        $this->assertSame($this->_routeMock, $matchedRoute);
     }
 
     /**

@@ -1076,7 +1076,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $transport->expects($this->once())
             ->method('sendMessage');
 
-        $this->assertEquals($this->accountManagement, $this->accountManagement->sendPasswordReminderEmail($customer));
+        $this->assertSame($this->accountManagement, $this->accountManagement->sendPasswordReminderEmail($customer));
     }
 
     /**
@@ -1712,7 +1712,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($customerData, $this->accountManagement->authenticate($username, $password));
+        $this->assertSame($customerData, $this->accountManagement->authenticate($username, $password));
     }
 
     /**
@@ -1756,7 +1756,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->willReturn($customerMock);
 
-        $this->assertEquals($expected, $this->accountManagement->getConfirmationStatus($customerId));
+        $this->assertSame($expected, $this->accountManagement->getConfirmationStatus($customerId));
     }
 
     /**

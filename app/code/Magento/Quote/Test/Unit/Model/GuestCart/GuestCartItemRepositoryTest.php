@@ -99,7 +99,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->cartItemRepositoryMock->expects($this->once())
             ->method('save')
             ->willReturn($expectedValue);
-        $this->assertEquals($expectedValue, $this->guestCartItemRepository->save($this->quoteItemMock));
+        $this->assertSame($expectedValue, $this->guestCartItemRepository->save($this->quoteItemMock));
     }
 
     /**
@@ -115,7 +115,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->with($this->cartId)
             ->will($this->returnValue([$itemMock]));
-        $this->assertEquals([$itemMock], $this->guestCartItemRepository->getList($this->maskedCartId));
+        $this->assertSame([$itemMock], $this->guestCartItemRepository->getList($this->maskedCartId));
     }
 
     /**

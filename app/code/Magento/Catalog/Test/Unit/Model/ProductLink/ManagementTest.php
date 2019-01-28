@@ -74,7 +74,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($linkTypes);
 
         $this->productMock->expects($this->once())->method('getProductLinks')->willReturn($links);
-        $this->assertEquals($links, $this->model->getLinkedItemsByType($productSku, $linkType));
+        $this->assertSame($links, $this->model->getLinkedItemsByType($productSku, $linkType));
     }
 
     /**

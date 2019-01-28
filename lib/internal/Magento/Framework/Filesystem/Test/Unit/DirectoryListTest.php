@@ -44,9 +44,9 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
     {
         $customDirs = [DirectoryList::SYS_TMP => [DirectoryList::PATH => '/bar/dir', DirectoryList::URL_PATH => 'bar']];
         $object = new DirectoryList('/root/dir', $customDirs);
-        $this->assertEquals('/bar/dir', $object->getPath(DirectoryList::SYS_TMP));
-        $this->assertEquals('bar', $object->getUrlPath(DirectoryList::SYS_TMP));
-        $this->assertEquals('/root/dir', $object->getRoot());
+        $this->assertSame('/bar/dir', $object->getPath(DirectoryList::SYS_TMP));
+        $this->assertSame('bar', $object->getUrlPath(DirectoryList::SYS_TMP));
+        $this->assertSame('/root/dir', $object->getRoot());
     }
 
     /**
@@ -86,7 +86,7 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlPath($config, $expected)
     {
         $object = new DirectoryList('/root/dir', $config);
-        $this->assertEquals($expected, $object->getUrlPath(DirectoryList::SYS_TMP));
+        $this->assertSame($expected, $object->getUrlPath(DirectoryList::SYS_TMP));
     }
 
     /**
@@ -103,13 +103,13 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
     public function testFilterPath()
     {
         $object = new DirectoryList('/root/dir', [DirectoryList::SYS_TMP => [DirectoryList::PATH => 'C:\Windows\Tmp']]);
-        $this->assertEquals('C:/Windows/Tmp', $object->getPath(DirectoryList::SYS_TMP));
+        $this->assertSame('C:/Windows/Tmp', $object->getPath(DirectoryList::SYS_TMP));
     }
 
     public function testPrependRoot()
     {
         $object = new DirectoryList('/root/dir', [DirectoryList::SYS_TMP => [DirectoryList::PATH => 'tmp']]);
-        $this->assertEquals('/root/dir/tmp', $object->getPath(DirectoryList::SYS_TMP));
+        $this->assertSame('/root/dir/tmp', $object->getPath(DirectoryList::SYS_TMP));
     }
 
     /**

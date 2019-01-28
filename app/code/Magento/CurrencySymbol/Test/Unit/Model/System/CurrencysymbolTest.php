@@ -154,7 +154,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $currencies = 'USD,EUR';
 
         $this->prepareMocksForGetCurrencySymbolsData($websiteId, $groupId, $currencies);
-        $this->assertEquals($expectedSymbolsData, $this->model->getCurrencySymbolsData());
+        $this->assertSame($expectedSymbolsData, $this->model->getCurrencySymbolsData());
     }
 
     public function testSetCurrencySymbolData()
@@ -233,7 +233,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
             ->with($serializedCustomSymbols)
             ->willReturn($unserializedCustomSymbols);
         $currencySymbol = $this->model->getCurrencySymbol($code);
-        $this->assertEquals($expectedSymbol, $currencySymbol);
+        $this->assertSame($expectedSymbol, $currencySymbol);
     }
 
     /**
@@ -270,7 +270,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
         $currencySymbol = $this->model->getCurrencySymbol('USD');
-        $this->assertEquals(false, $currencySymbol);
+        $this->assertSame(false, $currencySymbol);
     }
 
     /**

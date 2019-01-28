@@ -42,7 +42,7 @@ class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
     public function testIsValid(array $value, $expectedResult)
     {
         $result = $this->tierPriceType->isValid($value);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

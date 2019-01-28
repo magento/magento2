@@ -57,7 +57,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     {
         $this->initConfigurableData();
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'column_1',
                 'column_2',
@@ -79,7 +79,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     {
         $this->initConfigurableData();
 
-        $this->assertEquals($expected, $this->exportRowCustomizer->addData($data['data_row'], $data['product_id']));
+        $this->assertSame($expected, $this->exportRowCustomizer->addData($data['data_row'], $data['product_id']));
     }
 
     /**
@@ -136,7 +136,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     {
         $this->initConfigurableData();
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->exportRowCustomizer->getAdditionalRowsCount($data['row_count'], $data['product_id'])
         );
@@ -228,7 +228,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls($productMock, false);
 
         $this->exportRowCustomizer->prepareData($this->productCollectionMock, $productIds);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedConfigurableData,
             $this->getPropertyValue($this->exportRowCustomizer, 'configurableData')
         );

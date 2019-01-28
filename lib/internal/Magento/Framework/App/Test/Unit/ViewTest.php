@@ -117,7 +117,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLayout()
     {
-        $this->assertEquals($this->_layoutMock, $this->_view->getLayout());
+        $this->assertSame($this->_layoutMock, $this->_view->getLayout());
     }
 
     /**
@@ -159,7 +159,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('getFullActionName')
             ->will($this->returnValue('ExpectedValue'));
 
-        $this->assertEquals('expectedvalue', $this->_view->getDefaultLayoutHandle());
+        $this->assertSame('expectedvalue', $this->_view->getDefaultLayoutHandle());
     }
 
     public function testAddActionLayoutHandlesWhenPageLayoutHandlesExist()

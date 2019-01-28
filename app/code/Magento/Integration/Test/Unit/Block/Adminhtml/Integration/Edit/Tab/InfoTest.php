@@ -33,8 +33,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     public function testGetTabLabelAndTitle()
     {
         $tabString = 'Integration Info';
-        $this->assertEquals($tabString, $this->infoBlock->getTabLabel());
-        $this->assertEquals($tabString, $this->infoBlock->getTabTitle());
+        $this->assertSame($tabString, $this->infoBlock->getTabLabel());
+        $this->assertSame($tabString, $this->infoBlock->getTabTitle());
     }
 
     public function testCanShowTab()

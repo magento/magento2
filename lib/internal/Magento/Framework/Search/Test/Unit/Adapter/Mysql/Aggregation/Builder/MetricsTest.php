@@ -49,6 +49,6 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->metric->expects($this->once())->method('getType')->willReturn('count');
         $metrics = $this->metrics->build($this->requestBucket);
 
-        $this->assertEquals($expectedResult, $metrics);
+        $this->assertSame($expectedResult, $metrics);
     }
 }

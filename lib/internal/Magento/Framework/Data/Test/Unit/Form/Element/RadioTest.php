@@ -42,7 +42,7 @@ class RadioTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('radio', $this->_model->getType());
-        $this->assertEquals('radio', $this->_model->getExtType());
+        $this->assertSame('radio', $this->_model->getType());
+        $this->assertSame('radio', $this->_model->getExtType());
     }
 }

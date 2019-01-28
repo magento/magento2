@@ -144,7 +144,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('frontend'));
 
         $this->translate->loadData($area, $forceReload);
-        $this->assertEquals($cachedData, $this->translate->getData());
+        $this->assertSame($cachedData, $this->translate->getData());
     }
 
     /**
@@ -255,7 +255,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             'pack original' => 'pack translated',
             'db original' => 'db translated',
         ];
-        $this->assertEquals($expected, $this->translate->getData());
+        $this->assertSame($expected, $this->translate->getData());
     }
 
     /**
@@ -285,7 +285,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(json_encode($data)));
         $this->expectsSetConfig('themeId');
         $this->translate->loadData('frontend');
-        $this->assertEquals($result, $this->translate->getData());
+        $this->assertSame($result, $this->translate->getData());
     }
 
     /**
@@ -303,21 +303,21 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     public function testGetLocale(): void
     {
         $this->locale->expects($this->once())->method('getLocale')->will($this->returnValue('en_US'));
-        $this->assertEquals('en_US', $this->translate->getLocale());
+        $this->assertSame('en_US', $this->translate->getLocale());
 
         $this->locale->expects($this->never())->method('getLocale');
-        $this->assertEquals('en_US', $this->translate->getLocale());
+        $this->assertSame('en_US', $this->translate->getLocale());
 
         $this->locale->expects($this->never())->method('getLocale');
         $this->translate->setLocale('en_GB');
-        $this->assertEquals('en_GB', $this->translate->getLocale());
+        $this->assertSame('en_GB', $this->translate->getLocale());
     }
 
     public function testSetLocale(): void
     {
         $this->translate->setLocale('en_GB');
         $this->locale->expects($this->never())->method('getLocale');
-        $this->assertEquals('en_GB', $this->translate->getLocale());
+        $this->assertSame('en_GB', $this->translate->getLocale());
     }
 
     public function testGetTheme(): void
@@ -328,8 +328,8 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(1))->method('getParam')->with('theme')
             ->will($this->returnValue($requestTheme));
 
-        $this->assertEquals('theme', $this->translate->getTheme());
-        $this->assertEquals('themeTheme Title', $this->translate->getTheme());
+        $this->assertSame('theme', $this->translate->getTheme());
+        $this->assertSame('themeTheme Title', $this->translate->getTheme());
     }
 
     public function testLoadDataNoTheme(): void
@@ -340,7 +340,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('frontend'));
         $this->packDictionary->expects($this->once())->method('getDictionary')->will($this->returnValue([]));
         $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue([]));
-        $this->assertEquals($this->translate, $this->translate->loadData(null, $forceReload));
+        $this->assertSame($this->translate, $this->translate->loadData(null, $forceReload));
     }
 
     /**

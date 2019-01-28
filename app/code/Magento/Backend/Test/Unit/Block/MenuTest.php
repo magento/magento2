@@ -127,7 +127,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn($this->activeItemMock);
 
-        $this->assertEquals($this->activeItemMock, $this->menu->getActiveItemModel());
+        $this->assertSame($this->activeItemMock, $this->menu->getActiveItemModel());
     }
 
     public function testGetActiveItemModelMenuIsNull()

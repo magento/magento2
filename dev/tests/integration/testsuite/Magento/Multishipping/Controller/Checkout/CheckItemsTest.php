@@ -99,7 +99,7 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('multishipping/checkout/checkItems');
         $response = $this->getResponse()->getBody();
 
-        $this->assertEquals($expectedResponse, $this->json->unserialize($response));
+        $this->assertSame($expectedResponse, $this->json->unserialize($response));
     }
 
     /**

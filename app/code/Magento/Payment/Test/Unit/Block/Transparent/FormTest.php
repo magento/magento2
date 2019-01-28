@@ -106,7 +106,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->form->setMethod($this->methodMock);
 
-        $this->assertEquals($expected, $this->form->getMethodConfigData($fieldName));
+        $this->assertSame($expected, $this->form->getMethodConfigData($fieldName));
     }
 
     /**
@@ -166,7 +166,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->form->setMethod($this->methodMock);
 
-        $this->assertEquals($expectedUrl, $this->form->getCgiUrl());
+        $this->assertSame($expectedUrl, $this->form->getCgiUrl());
     }
 
     /**
@@ -210,7 +210,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->form->setMethod($this->methodMock);
 
-        $this->assertEquals($builtOrderUrl, $this->form->getOrderUrl());
+        $this->assertSame($builtOrderUrl, $this->form->getOrderUrl());
     }
 
     public function testGetDateDelim()
@@ -220,7 +220,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->form->setMethod($this->methodMock);
 
-        $this->assertEquals($dateDelimiter, $this->form->getDateDelim());
+        $this->assertSame($dateDelimiter, $this->form->getDateDelim());
     }
 
     public function testGetCardFieldsMap()
@@ -232,7 +232,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $expected = json_encode(['cccvv' => 'x_card_code', 'ccexpdate' => 'x_exp_date', 'ccnum' => 'x_card_num']);
 
-        $this->assertEquals($expected, $this->form->getCardFieldsMap());
+        $this->assertSame($expected, $this->form->getCardFieldsMap());
     }
 
     public function testToHtmlShouldRender()

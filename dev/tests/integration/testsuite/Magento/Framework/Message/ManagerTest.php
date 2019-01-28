@@ -41,12 +41,12 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
         $this->model->addMessage($errorMessageCustom, $customGroup);
 
-        $this->assertEquals($errorMessage, $this->model->getMessages()->getLastAddedMessage());
-        $this->assertEquals(
+        $this->assertSame($errorMessage, $this->model->getMessages()->getLastAddedMessage());
+        $this->assertSame(
             $errorMessageCustom,
             $this->model->getMessages(false, $customGroup)->getLastAddedMessage()
         );
-        $this->assertEquals($errorMessageCustom, $this->model->getMessages(true, $customGroup)->getLastAddedMessage());
+        $this->assertSame($errorMessageCustom, $this->model->getMessages(true, $customGroup)->getLastAddedMessage());
 
         $this->assertEmpty($this->model->getMessages(false, $customGroup)->getItems());
         $this->assertEmpty($this->model->getMessages(false, $customGroup)->getLastAddedMessage());
@@ -68,8 +68,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->model->addMessages($messages);
         array_shift($messages);
         $this->model->addMessages($messages, $customGroup);
-        $this->assertEquals(4, $this->model->getMessages()->getCount());
-        $this->assertEquals(3, $this->model->getMessages(false, $customGroup)->getCount());
+        $this->assertSame(4, $this->model->getMessages()->getCount());
+        $this->assertSame(3, $this->model->getMessages(false, $customGroup)->getCount());
     }
 
     /**
@@ -84,8 +84,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->model->addUniqueMessages([$errorMessageFirst]);
         $this->model->addUniqueMessages([$errorMessageSecond]);
 
-        $this->assertEquals(1, $this->model->getMessages()->getCount());
-        $this->assertEquals(
+        $this->assertSame(1, $this->model->getMessages()->getCount());
+        $this->assertSame(
             $errorMessageFirst->getText(),
             $this->model->getMessages()->getLastAddedMessage()->getText()
         );
@@ -99,15 +99,15 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $customGroup = 'custom-group';
         $this->model->addError('some text');
         $this->model->addError('some text 2', $customGroup);
-        $this->assertEquals(1, $this->model->getMessages()->getCount());
-        $this->assertEquals(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
-        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
-        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
-        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
-        $this->assertEquals('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
+        $this->assertSame(1, $this->model->getMessages()->getCount());
+        $this->assertSame(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
+        $this->assertSame(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
+        $this->assertSame(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
+        $this->assertSame(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
+        $this->assertSame('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
 
-        $this->assertEquals(1, $this->model->getMessages(false, $customGroup)->getCount());
-        $this->assertEquals(
+        $this->assertSame(1, $this->model->getMessages(false, $customGroup)->getCount());
+        $this->assertSame(
             'some text 2',
             $this->model->getMessages(false, $customGroup)->getLastAddedMessage()->getText()
         );

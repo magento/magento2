@@ -58,7 +58,7 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $groupId = $this->_findGroupIdWithCode(self::GROUP_CODE);
         $group = $this->_model->retrieve($groupId);
         $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $group);
-        $this->assertEquals($groupId, $group->getId());
+        $this->assertSame($groupId, $group->getId());
     }
 
     /**
@@ -69,7 +69,7 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $groupId = 0;
         $group = $this->_model->retrieve($groupId);
         $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $group);
-        $this->assertEquals($groupId, $group->getId());
+        $this->assertSame($groupId, $group->getId());
     }
 
     /**
@@ -84,9 +84,9 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group2->load($groupId)
             ->delete();
         $groupAfterDeletion = $this->_model->retrieve($groupId);
-        $this->assertEquals($groupBeforeDeletion, $groupAfterDeletion);
+        $this->assertSame($groupBeforeDeletion, $groupAfterDeletion);
         $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $groupAfterDeletion);
-        $this->assertEquals($groupId, $groupAfterDeletion->getId());
+        $this->assertSame($groupId, $groupAfterDeletion->getId());
     }
 
     /**

@@ -95,7 +95,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
             ->method('isApplicable')
             ->with($this->request)
             ->willReturn(false);
-        $this->assertEquals([], $this->aggregationResolver->resolve($this->request, $documentIds));
+        $this->assertSame([], $this->aggregationResolver->resolve($this->request, $documentIds));
     }
 
     public function testResolve()
@@ -172,7 +172,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
                 'aggregations' => ['custom_not_attribute_field' => []],
             ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$bucketFirst, $bucketThird],
             $this->aggregationResolver->resolve($this->request, $documentIds)
         );

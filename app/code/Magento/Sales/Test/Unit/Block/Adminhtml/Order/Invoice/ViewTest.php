@@ -51,7 +51,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
         $testMethod->setAccessible(true);
 
-        $this->assertEquals($expectedResult, $testMethod->invoke($block));
+        $this->assertSame($expectedResult, $testMethod->invoke($block));
     }
 
     /**

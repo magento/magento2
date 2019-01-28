@@ -26,8 +26,8 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEnableSubmissionRobots()
     {
-        $this->assertEquals(0, $this->model->getEnableSubmissionRobots(Store::DEFAULT_STORE_ID));
-        $this->assertEquals(1, $this->model->getEnableSubmissionRobots(Store::DISTRO_STORE_ID));
+        $this->assertSame(0, $this->model->getEnableSubmissionRobots(Store::DEFAULT_STORE_ID));
+        $this->assertSame(1, $this->model->getEnableSubmissionRobots(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -35,8 +35,8 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMaximumLinesNumber()
     {
-        $this->assertEquals(50000, $this->model->getMaximumLinesNumber(Store::DEFAULT_STORE_ID));
-        $this->assertEquals(10, $this->model->getMaximumLinesNumber(Store::DISTRO_STORE_ID));
+        $this->assertSame(50000, $this->model->getMaximumLinesNumber(Store::DEFAULT_STORE_ID));
+        $this->assertSame(10, $this->model->getMaximumLinesNumber(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -44,8 +44,8 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMaximumFileSize()
     {
-        $this->assertEquals(10485760, $this->model->getMaximumFileSize(Store::DEFAULT_STORE_ID));
-        $this->assertEquals(1024, $this->model->getMaximumFileSize(Store::DISTRO_STORE_ID));
+        $this->assertSame(10485760, $this->model->getMaximumFileSize(Store::DEFAULT_STORE_ID));
+        $this->assertSame(1024, $this->model->getMaximumFileSize(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -53,7 +53,7 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductImageIncludePolicy()
     {
-        $this->assertEquals('all', $this->model->getProductImageIncludePolicy(Store::DEFAULT_STORE_ID));
-        $this->assertEquals('base', $this->model->getProductImageIncludePolicy(Store::DISTRO_STORE_ID));
+        $this->assertSame('all', $this->model->getProductImageIncludePolicy(Store::DEFAULT_STORE_ID));
+        $this->assertSame('base', $this->model->getProductImageIncludePolicy(Store::DISTRO_STORE_ID));
     }
 }

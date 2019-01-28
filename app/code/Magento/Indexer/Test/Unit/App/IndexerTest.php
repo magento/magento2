@@ -59,7 +59,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $dir->expects($this->exactly($callCount))->method('delete')->will($this->returnValue(true));
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($dir));
         $this->processor->expects($this->once())->method('reindexAll');
-        $this->assertEquals(0, $this->entryPoint->launch()->getCode());
+        $this->assertSame(0, $this->entryPoint->launch()->getCode());
     }
 
     /**

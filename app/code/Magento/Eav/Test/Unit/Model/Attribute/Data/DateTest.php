@@ -49,7 +49,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->outputValue($format));
+        $this->assertSame($expectedResult, $this->model->outputValue($format));
     }
 
     /**
@@ -95,7 +95,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->validateValue($value));
+        $this->assertSame($expectedResult, $this->model->validateValue($value));
     }
 
     /**

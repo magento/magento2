@@ -67,7 +67,7 @@ class SectionPoolTest extends \PHPUnit\Framework\TestCase
             ->with($allSectionsData, $sectionNames, false)
             ->willReturn($identifierResult);
         $modelResult = $this->model->getSectionsData($sectionNames);
-        $this->assertEquals($identifierResult, $modelResult);
+        $this->assertSame($identifierResult, $modelResult);
     }
 
     /**
@@ -83,6 +83,6 @@ class SectionPoolTest extends \PHPUnit\Framework\TestCase
             ->with('b')
             ->willReturn($this->model);
         $modelResult = $this->model->getSectionsData($sectionNames);
-        $this->assertEquals($identifierResult, $modelResult);
+        $this->assertSame($identifierResult, $modelResult);
     }
 }

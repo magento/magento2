@@ -26,7 +26,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
-        $this->assertEquals($expectedResult, $this->_converter->convert($dom));
+        $this->assertSame($expectedResult, $this->_converter->convert($dom));
     }
 
     /**

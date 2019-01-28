@@ -51,6 +51,6 @@ class JsonTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

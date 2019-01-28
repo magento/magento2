@@ -53,7 +53,7 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcess($actualResult, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->designTheme->process($actualResult));
+        $this->assertSame($expectedResult, $this->designTheme->process($actualResult));
     }
 
     /**

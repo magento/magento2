@@ -81,7 +81,7 @@ class TaxRateManagementTest extends \PHPUnit\Framework\TestCase
         $taxRuleMock->expects($this->once())->method('getTaxRateIds')->willReturn($rateIds);
         $this->taxRateRepositoryMock->expects($this->once())->method('get')->with($rateIds[0])
             ->willReturn($taxRateMock);
-        $this->assertEquals(
+        $this->assertSame(
             [$taxRateMock],
             $this->model->getRatesByCustomerAndProductTaxClassId($customerTaxClassId, $productTaxClassId)
         );

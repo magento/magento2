@@ -40,9 +40,9 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeArray()
     {
         $tree = $this->_treeBlock->getTreeArray();
-        $this->assertEquals(false, $tree['is_active']);
-        $this->assertEquals('Root', (string)$tree['name']);
-        $this->assertEquals(true, $tree['expanded']);
+        $this->assertSame(false, $tree['is_active']);
+        $this->assertSame('Root', (string)$tree['name']);
+        $this->assertSame(true, $tree['expanded']);
         $this->assertCount(1, $tree['children']);
     }
 
@@ -57,7 +57,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $tree = $this->_treeBlock->getTreeArray();
 
         $this->assertNotContains('\'', $tree['children'][0]['children'][0]['children'][0]['name']);
-        $this->assertEquals(
+        $this->assertSame(
             '&#039;Category 6&#039;',
             $tree['children'][0]['children'][0]['children'][0]['name']
         );
@@ -74,7 +74,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $tree = $this->_treeBlock->getTreeArray();
 
         $this->assertNotContains('\"', $tree['children'][0]['children'][0]['children'][0]['name']);
-        $this->assertEquals(
+        $this->assertSame(
             '&quot;Category 6&quot;',
             $tree['children'][0]['children'][0]['children'][0]['name']
         );

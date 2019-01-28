@@ -76,7 +76,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getSchemaUrlPath')
             ->willReturn('/test');
 
-        $this->assertEquals('/test', $this->index->getSchemaUrl());
+        $this->assertSame('/test', $this->index->getSchemaUrl());
     }
 
     /**

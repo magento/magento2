@@ -66,7 +66,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
 
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testAfterGenerateXmlNoDepersonalize()
@@ -78,6 +78,6 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 
         $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

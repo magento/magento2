@@ -39,7 +39,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'success' => false,
             'error' => 'Cron job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
         ];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckSetupNoCronConfigured()
@@ -49,7 +49,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'success' => false,
             'error' => 'Cron job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
         ];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckSetupCronError()
@@ -62,7 +62,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => false, 'error' => 'error'];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckSetupBadTime()
@@ -77,7 +77,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'success' => true,
             'notice' => 'We recommend you schedule cron to run every 1 minute'
         ];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckSetupUnknownTime()
@@ -92,7 +92,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'notice' => 'Unable to determine cron time interval. ' .
                 'We recommend you schedule cron to run every 1 minute'
         ];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckSetup()
@@ -104,7 +104,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => true];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckUpdaterNoStatusFile()
@@ -113,14 +113,14 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ->method('readFile')
             ->willThrowException(new FileSystemException(new Phrase('message')));
         $expected = ['success' => false, 'error' => 'Cron job has not been configured yet'];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
     public function testCheckUpdaterNoCronConfigured()
     {
         $this->read->expects($this->once())->method('readFile')->willReturn('');
         $expected = ['success' => false, 'error' => 'Cron job has not been configured yet'];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
     public function testCheckUpdaterCronError()
@@ -133,7 +133,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => false, 'error' => 'error'];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
     public function testCheckUpdaterBadTime()
@@ -150,7 +150,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'success' => true,
             'notice' => 'We recommend you schedule cron to run every 1 minute'
         ];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
     public function testCheckUpdaterUnknownTime()
@@ -167,7 +167,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'notice' => 'Unable to determine cron time interval. ' .
                 'We recommend you schedule cron to run every 1 minute'
         ];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
     public function testCheckUpdater()
@@ -181,6 +181,6 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => true];
-        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+        $this->assertSame($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 }

@@ -54,7 +54,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $this->assertEquals($subjectMock, $this->model->aroundSave($subjectMock, $closureMock));
+        $this->assertSame($subjectMock, $this->model->aroundSave($subjectMock, $closureMock));
     }
 
     public function testAroundSaveWithExistentSubject()
@@ -76,7 +76,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->never())
             ->method('get');
 
-        $this->assertEquals($subjectMock, $this->model->aroundSave($subjectMock, $closureMock));
+        $this->assertSame($subjectMock, $this->model->aroundSave($subjectMock, $closureMock));
     }
 
     public function testAfterDelete()
@@ -97,6 +97,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $this->assertEquals($subjectMock, $this->model->afterDelete($subjectMock, $subjectMock));
+        $this->assertSame($subjectMock, $this->model->afterDelete($subjectMock, $subjectMock));
     }
 }

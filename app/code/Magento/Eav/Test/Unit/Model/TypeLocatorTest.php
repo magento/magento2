@@ -70,7 +70,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
             $serviceEntityTypeMapData[$serviceClass]
         );
 
-        $this->assertEquals($expected, $type, 'Expected: ' . $expected . 'but got: ' . $type);
+        $this->assertSame($expected, $type, 'Expected: ' . $expected . 'but got: ' . $type);
     }
 
     /**

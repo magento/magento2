@@ -112,7 +112,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->once())->method('load')->with('view_test')->will($this->returnSelf());
         $this->loadIndexer($indexId);
 
-        $this->assertEquals($this->viewMock, $this->model->getView());
+        $this->assertSame($this->viewMock, $this->model->getView());
     }
 
     public function testGetState()
@@ -155,16 +155,16 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
 
         if ($getViewIsEnabled && $getViewGetUpdated) {
             if (!$getStateGetUpdated) {
-                $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
+                $this->assertSame($getViewGetUpdated, $this->model->getLatestUpdated());
             } else {
                 if ($getViewGetUpdated == $getStateGetUpdated) {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
+                    $this->assertSame($getViewGetUpdated, $this->model->getLatestUpdated());
                 } else {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
+                    $this->assertSame($getViewGetUpdated, $this->model->getLatestUpdated());
                 }
             }
         } else {
-            $this->assertEquals($getStateGetUpdated, $this->model->getLatestUpdated());
+            $this->assertSame($getStateGetUpdated, $this->model->getLatestUpdated());
         }
     }
 
@@ -358,14 +358,14 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     {
         $result = 'Test Result';
         $this->model->setTitle($result);
-        $this->assertEquals($result, $this->model->getTitle());
+        $this->assertSame($result, $this->model->getTitle());
     }
 
     public function testGetDescription()
     {
         $result = 'Test Result';
         $this->model->setDescription($result);
-        $this->assertEquals($result, $this->model->getDescription());
+        $this->assertSame($result, $this->model->getDescription());
     }
 
     public function testSetState()
@@ -384,7 +384,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $result = true;
         $this->viewMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue($result));
-        $this->assertEquals($result, $this->model->isScheduled());
+        $this->assertSame($result, $this->model->isScheduled());
     }
 
     /**
@@ -421,7 +421,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
 
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
         $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
-        $this->assertEquals($status, $this->model->getStatus());
+        $this->assertSame($status, $this->model->getStatus());
     }
 
     /**
@@ -435,7 +435,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
 
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
         $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
-        $this->assertEquals(true, $this->model->$method());
+        $this->assertSame(true, $this->model->$method());
     }
 
     /**

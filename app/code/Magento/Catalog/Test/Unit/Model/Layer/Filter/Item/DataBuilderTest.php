@@ -44,6 +44,6 @@ class DataBuilderTest extends \PHPUnit\Framework\TestCase
         }
 
         $actualData = $this->dataBuilder->build();
-        $this->assertEquals($data, $actualData);
+        $this->assertSame($data, $actualData);
     }
 }

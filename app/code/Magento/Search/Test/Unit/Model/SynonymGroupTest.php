@@ -20,27 +20,27 @@ class SynonymGroupTest extends \PHPUnit\Framework\TestCase
 
     public function testSetGetStoreId()
     {
-        $this->assertEquals(0, $this->model->getStoreId());
-        $this->assertEquals($this->model, $this->model->setStoreId(1));
-        $this->assertEquals(1, $this->model->getStoreId());
+        $this->assertSame(0, $this->model->getStoreId());
+        $this->assertSame($this->model, $this->model->setStoreId(1));
+        $this->assertSame(1, $this->model->getStoreId());
     }
 
     public function testSetGetWebsiteId()
     {
-        $this->assertEquals(0, $this->model->getWebsiteId());
-        $this->assertEquals($this->model, $this->model->setWebsiteId(1));
-        $this->assertEquals(1, $this->model->getWebsiteId());
+        $this->assertSame(0, $this->model->getWebsiteId());
+        $this->assertSame($this->model, $this->model->setWebsiteId(1));
+        $this->assertSame(1, $this->model->getWebsiteId());
     }
 
     public function testSetGetSynonymGroup()
     {
-        $this->assertEquals($this->model, $this->model->setSynonymGroup('a,b,c'));
-        $this->assertEquals('a,b,c', $this->model->getSynonymGroup());
+        $this->assertSame($this->model, $this->model->setSynonymGroup('a,b,c'));
+        $this->assertSame('a,b,c', $this->model->getSynonymGroup());
     }
 
     public function testSetGetGroupId()
     {
-        $this->assertEquals($this->model, $this->model->setGroupId(1));
-        $this->assertEquals(1, $this->model->getGroupId());
+        $this->assertSame($this->model, $this->model->setGroupId(1));
+        $this->assertSame(1, $this->model->getGroupId());
     }
 }

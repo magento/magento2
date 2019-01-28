@@ -43,7 +43,7 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
     {
         $progress = new Progress(10);
         $progress->setNext();
-        $this->assertEquals(1, $progress->getCurrent());
+        $this->assertSame(1, $progress->getCurrent());
     }
 
     /**
@@ -60,19 +60,19 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
     {
         $progress = new Progress(10);
         $progress->finish();
-        $this->assertEquals(10, $progress->getCurrent());
+        $this->assertSame(10, $progress->getCurrent());
     }
 
     public function testGetCurrent()
     {
         $progress = new Progress(10, 5);
-        $this->assertEquals(5, $progress->getCurrent());
+        $this->assertSame(5, $progress->getCurrent());
     }
 
     public function testGetTotal()
     {
         $progress = new Progress(10);
-        $this->assertEquals(10, $progress->getTotal());
+        $this->assertSame(10, $progress->getTotal());
     }
 
     /**
@@ -83,7 +83,7 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
     public function testRatio($total, $current)
     {
         $progress = new Progress($total, $current);
-        $this->assertEquals($current / $total, $progress->getRatio());
+        $this->assertSame($current / $total, $progress->getRatio());
     }
 
     /**

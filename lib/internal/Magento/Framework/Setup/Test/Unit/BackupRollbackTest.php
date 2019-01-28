@@ -246,13 +246,13 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     public function testGetFSDiskSpaceback()
     {
         $size = $this->model->getFSDiskSpace();
-        $this->assertEquals(100, $size);
+        $this->assertSame(100, $size);
     }
 
     public function testGetDBDiskSpace()
     {
         $this->database->expects($this->once())->method('getDBSize')->willReturn(100);
         $size = $this->model->getDBDiskSpace();
-        $this->assertEquals(100, $size);
+        $this->assertSame(100, $size);
     }
 }

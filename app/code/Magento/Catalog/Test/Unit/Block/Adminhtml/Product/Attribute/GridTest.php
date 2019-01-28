@@ -36,6 +36,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid $block */
         $block = $helper->getObject(\Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid::class, $data);
 
-        $this->assertEquals('catalog/product_attribute/edit/id/2', $block->getRowUrl($attribute));
+        $this->assertSame('catalog/product_attribute/edit/id/2', $block->getRowUrl($attribute));
     }
 }

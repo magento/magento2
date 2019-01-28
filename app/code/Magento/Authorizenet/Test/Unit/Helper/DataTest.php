@@ -73,7 +73,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $additionalMessage
         );
 
-        $this->assertEquals($expected, $message);
+        $this->assertSame($expected, $message);
     }
 
     /**

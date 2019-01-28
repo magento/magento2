@@ -56,6 +56,6 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $result = $this->model->getDetails($uuid);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 }

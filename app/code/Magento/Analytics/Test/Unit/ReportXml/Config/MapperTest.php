@@ -33,12 +33,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
               'name' => 'Product',
           ]
         ];
-        $this->assertEquals($this->mapper->execute($configData), $expectedResult);
+        $this->assertSame($this->mapper->execute($configData), $expectedResult);
     }
 
     public function testExecuteWithoutReports()
     {
         $configData = [];
-        $this->assertEquals($this->mapper->execute($configData), []);
+        $this->assertSame($this->mapper->execute($configData), []);
     }
 }

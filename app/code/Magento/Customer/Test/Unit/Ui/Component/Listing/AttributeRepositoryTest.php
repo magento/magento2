@@ -134,7 +134,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->willReturnArgument(0);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $billingPrefix . $attributeCode => [
                     'attribute_code' => 'billing_attribute_code',

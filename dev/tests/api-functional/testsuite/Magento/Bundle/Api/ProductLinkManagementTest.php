@@ -43,7 +43,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
 
         ksort($result[0]);
         ksort($expected[0]);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -101,7 +101,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
 
         $this->assertTrue($this->saveChild($productSku, $linkedProduct));
         $children = $this->getChildren($productSku);
-        $this->assertEquals($linkedProduct, $children[0]);
+        $this->assertSame($linkedProduct, $children[0]);
     }
 
     /**

@@ -56,16 +56,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with('wishlist_item')
             ->willReturn(['attribute_three']);
 
-        $this->assertEquals($expectedResult, $this->model->getProductAttributes());
+        $this->assertSame($expectedResult, $this->model->getProductAttributes());
     }
 
     public function testGetSharingEmailLimit()
     {
-        $this->assertEquals(Config::SHARING_EMAIL_LIMIT, $this->model->getSharingEmailLimit());
+        $this->assertSame(Config::SHARING_EMAIL_LIMIT, $this->model->getSharingEmailLimit());
     }
 
     public function testGetSharingTextLimit()
     {
-        $this->assertEquals(Config::SHARING_TEXT_LIMIT, $this->model->getSharingTextLimit());
+        $this->assertSame(Config::SHARING_TEXT_LIMIT, $this->model->getSharingTextLimit());
     }
 }

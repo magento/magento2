@@ -64,11 +64,11 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
 
     public function testGetScopeType()
     {
-        $this->assertEquals(ScopeInterface::SCOPE_WEBSITE, $this->model->getScopeType());
+        $this->assertSame(ScopeInterface::SCOPE_WEBSITE, $this->model->getScopeType());
     }
 
     public function testGetScopeTypeName()
     {
-        $this->assertEquals('Website', $this->model->getScopeTypeName());
+        $this->assertSame('Website', $this->model->getScopeTypeName());
     }
 }

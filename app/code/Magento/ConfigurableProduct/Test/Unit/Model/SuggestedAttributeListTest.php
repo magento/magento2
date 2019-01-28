@@ -103,7 +103,7 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(true);
 
-        $this->assertEquals($result, $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
+        $this->assertSame($result, $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
     }
 
     public function testGetSuggestedAttributesIfTheyNotApplicable()
@@ -115,6 +115,6 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(false);
 
-        $this->assertEquals([], $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
+        $this->assertSame([], $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
     }
 }

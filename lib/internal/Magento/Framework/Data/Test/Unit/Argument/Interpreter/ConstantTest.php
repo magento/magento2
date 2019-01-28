@@ -22,7 +22,7 @@ class ConstantTest extends \PHPUnit\Framework\TestCase
     public function testEvaluate()
     {
         // it is defined in framework/bootstrap.php
-        $this->assertEquals(TESTS_TEMP_DIR, $this->object->evaluate(['value' => 'TESTS_TEMP_DIR']));
+        $this->assertSame(TESTS_TEMP_DIR, $this->object->evaluate(['value' => 'TESTS_TEMP_DIR']));
     }
 
     /**

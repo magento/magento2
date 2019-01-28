@@ -53,7 +53,7 @@ class DoneButtonTest extends \PHPUnit\Framework\TestCase
             ->with($uuid, OperationInterface::STATUS_TYPE_RETRIABLY_FAILED)
             ->willReturn($failedCount);
 
-        $this->assertEquals($expectedResult, $this->block->getButtonData());
+        $this->assertSame($expectedResult, $this->block->getButtonData());
     }
 
     /**

@@ -96,7 +96,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit\Framework\TestCase
         $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->initOrderFromEvent($observer);
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 
     public function testSalesOrderAfterPlaceWithoutRuleId()
@@ -110,7 +110,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->ruleFactory->expects($this->never())
             ->method('create');
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 
     /**
@@ -167,7 +167,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit\Framework\TestCase
             ->method('updateCustomerCouponTimesUsed')
             ->with($customerId, $couponId);
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 
     /**

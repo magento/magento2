@@ -75,7 +75,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
      */
     public function testFormatCurrency()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '<span class="price">$10.00</span>',
             $this->block->formatCurrency(10.00, self::MAIN_WEBSITE)
         );
@@ -94,7 +94,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTotals()
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['lifetime' => 0, 'base_lifetime' => 0, 'base_avgsale' => 0, 'num_orders' => 0],
             $this->block->getTotals()->getData()
         );
@@ -113,7 +113,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWebsiteCount()
     {
-        $this->assertEquals(0, $this->block->getWebsiteCount(self::MAIN_WEBSITE));
+        $this->assertSame(0, $this->block->getWebsiteCount(self::MAIN_WEBSITE));
     }
 
     /**

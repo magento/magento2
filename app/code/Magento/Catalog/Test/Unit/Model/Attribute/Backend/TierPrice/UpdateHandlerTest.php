@@ -163,7 +163,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->tierPriceResource->expects($this->once())->method('deletePriceData')
             ->with($productId, null, $priceIdToDelete);
 
-        $this->assertEquals($product, $this->updateHandler->execute($product));
+        $this->assertSame($product, $this->updateHandler->execute($product));
     }
 
     /**

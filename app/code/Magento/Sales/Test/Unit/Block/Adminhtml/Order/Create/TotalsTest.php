@@ -63,7 +63,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerNoteNotify')
             ->willReturn($customerNoteNotify);
 
-        $this->assertEquals($expectedResult, $this->totals->getNoteNotify());
+        $this->assertSame($expectedResult, $this->totals->getNoteNotify());
     }
 
     /**

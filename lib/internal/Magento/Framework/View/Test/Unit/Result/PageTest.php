@@ -161,7 +161,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->method('isLayoutDefined')
             ->willReturn(false);
 
-        $this->assertEquals($this->page, $this->page->initLayout());
+        $this->assertSame($this->page, $this->page->initLayout());
     }
 
     public function testInitLayoutLayoutDefined()
@@ -188,12 +188,12 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->with($handleDefault)
             ->willReturnSelf();
 
-        $this->assertEquals($this->page, $this->page->initLayout());
+        $this->assertSame($this->page, $this->page->initLayout());
     }
 
     public function testGetConfig()
     {
-        $this->assertEquals($this->pageConfig, $this->page->getConfig());
+        $this->assertSame($this->pageConfig, $this->page->getConfig());
     }
 
     public function testGetDefaultLayoutHandle()
@@ -205,7 +205,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->method('getFullActionName')
             ->will($this->returnValue($fullActionName));
 
-        $this->assertEquals($expectedFullActionName, $this->page->getDefaultLayoutHandle());
+        $this->assertSame($expectedFullActionName, $this->page->getDefaultLayoutHandle());
     }
 
     public function testAddPageLayoutHandles()

@@ -39,7 +39,7 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
 
         //Verify original value is not changed for obscured value
         $value = $model->load($model->getId())->getValue();
-        $this->assertEquals($originalValue, $value, 'Original value is not expected to change.');
+        $this->assertSame($originalValue, $value, 'Original value is not expected to change.');
 
         // Verify if actual value is changed
         $changedValue = 'newPassword';
@@ -53,6 +53,6 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
 
         //Verify original value is changed
         $value = $model->load($model->getId())->getValue();
-        $this->assertEquals($changedValue, $value, 'Original value is expected to change.');
+        $this->assertSame($changedValue, $value, 'Original value is expected to change.');
     }
 }

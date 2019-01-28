@@ -113,7 +113,7 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(''));
 
         $this->model->setAddresses('');
-        $this->assertEquals([''], $this->model->getAddressInfo());
+        $this->assertSame([''], $this->model->getAddressInfo());
     }
 
     public function testSetSingleAddresses()
@@ -133,7 +133,7 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('address1'));
 
         $this->model->setAddresses('address1');
-        $this->assertEquals(['address1'], $this->model->getAddressInfo());
+        $this->assertSame(['address1'], $this->model->getAddressInfo());
     }
 
     public function testOnSetMultipleAddresses()
@@ -154,7 +154,7 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
         $expectedArray = ['address1', '10.50.60.123'];
         $this->model->setAddresses('address1,10.50.60.123');
-        $this->assertEquals($expectedArray, $this->model->getAddressInfo());
+        $this->assertSame($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('address1'));
         $this->assertTrue($this->model->isOn('address3'));
     }
@@ -174,7 +174,7 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
         $expectedArray = ['address1', '10.50.60.123'];
         $this->model->setAddresses('address1,10.50.60.123');
-        $this->assertEquals($expectedArray, $this->model->getAddressInfo());
+        $this->assertSame($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('address1'));
         $this->assertFalse($this->model->isOn('address3'));
     }

@@ -142,7 +142,7 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($result);
 
         $updatedCase = $caseRepository->getByCaseId(self::$caseId);
-        self::assertEquals(CaseInterface::GUARANTEE_CANCELED, $updatedCase->getGuaranteeDisposition());
+        self::assertSame(CaseInterface::GUARANTEE_CANCELED, $updatedCase->getGuaranteeDisposition());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
@@ -153,6 +153,6 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
         self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        self::assertEquals('Case Update: Case guarantee has been cancelled.', $caseCreationComment->getComment());
+        self::assertSame('Case Update: Case guarantee has been cancelled.', $caseCreationComment->getComment());
     }
 }

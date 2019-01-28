@@ -20,6 +20,6 @@ class TabsTest extends \PHPUnit\Framework\TestCase
         $block->addTab('alias', 'title', 'block', 'template', 'header');
 
         $expectedTabs = [['alias' => 'alias', 'title' => 'title', 'header' => 'header']];
-        $this->assertEquals($expectedTabs, $block->getTabs());
+        $this->assertSame($expectedTabs, $block->getTabs());
     }
 }

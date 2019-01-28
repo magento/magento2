@@ -60,7 +60,7 @@ class CheckmoConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getPayableTo')
             ->willReturn($payableTo);
 
-        $this->assertEquals($result, $this->model->getConfig());
+        $this->assertSame($result, $this->model->getConfig());
     }
 
     /**

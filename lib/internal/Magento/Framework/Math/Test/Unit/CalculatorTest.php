@@ -41,7 +41,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeltaRound($price, $negative, $expected)
     {
-        $this->assertEquals($expected, $this->_model->deltaRound($price, $negative));
+        $this->assertSame($expected, $this->_model->deltaRound($price, $negative));
     }
 
     /**

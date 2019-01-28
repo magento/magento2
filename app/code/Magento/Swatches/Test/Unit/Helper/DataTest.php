@@ -615,7 +615,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->method('getSource')->willReturn($sourceMock);
 
         $result = $this->swatchHelperObject->getSwatchAttributesAsArray($this->productMock);
-        $this->assertEquals($result, $expected);
+        $this->assertSame($result, $expected);
     }
 
     /**
@@ -806,6 +806,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->getSwatchAttributes();
         $result = $this->swatchHelperObject->isProductHasSwatch($this->productMock);
-        $this->assertEquals(true, $result);
+        $this->assertSame(true, $result);
     }
 }

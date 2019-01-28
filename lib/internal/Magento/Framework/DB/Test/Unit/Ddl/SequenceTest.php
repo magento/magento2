@@ -24,7 +24,7 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
             return trim(preg_replace('/\s+/', ' ', $string));
         };
 
-        $this->assertEquals(
+        $this->assertSame(
             $cleanString($expectedQuery),
             $cleanString($actualQuery)
         );
@@ -32,7 +32,7 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
 
     public function testDropSequence()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'DROP TABLE someTable',
             (new Sequence())->dropSequence('someTable')
         );

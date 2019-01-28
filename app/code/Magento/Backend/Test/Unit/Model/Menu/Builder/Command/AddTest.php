@@ -28,14 +28,14 @@ class AddTest extends \PHPUnit\Framework\TestCase
     public function testExecuteFillsEmptyItemWithData()
     {
         $params = $this->_model->execute([]);
-        $this->assertEquals($this->_params, $params);
+        $this->assertSame($this->_params, $params);
     }
 
     public function testExecuteDoesntRewriteDataInFilledItem()
     {
         $params = $this->_model->execute(['title' => 'newitem']);
         $this->_params['title'] = 'newitem';
-        $this->assertEquals($this->_params, $params);
+        $this->assertSame($this->_params, $params);
     }
 
     /**

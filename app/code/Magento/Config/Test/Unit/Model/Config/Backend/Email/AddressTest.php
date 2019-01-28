@@ -37,7 +37,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->model->beforeSave();
-        $this->assertEquals($expectedValue, $this->model->getValue());
+        $this->assertSame($expectedValue, $this->model->getValue());
     }
 
     /**

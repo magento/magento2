@@ -24,6 +24,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $block->setItem($item);
         $this->assertNotEmpty($block->getTemplate());
         $block->setTemplate('template');
-        $this->assertEquals('template', $block->getTemplate());
+        $this->assertSame('template', $block->getTemplate());
     }
 }

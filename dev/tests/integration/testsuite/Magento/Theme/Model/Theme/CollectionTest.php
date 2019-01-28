@@ -63,7 +63,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_VENDOR, $vendor);
         $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_THEME_NAME, $themeName);
         $theme = $this->_model->getFirstItem();
-        $this->assertEquals($expectedData, $theme->getData());
+        $this->assertSame($expectedData, $theme->getData());
     }
 
     /**

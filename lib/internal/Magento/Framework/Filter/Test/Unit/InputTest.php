@@ -30,7 +30,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT and ensure that array items were filtered correctly */
         $inputArray = ['field1' => 'value1', 'field2' => 'value2'];
         $expectedOutput = ['field1' => '(value1)', 'field2' => 'value2'];
-        $this->assertEquals($expectedOutput, $inputFilter->filter($inputArray), 'Array was filtered incorrectly.');
+        $this->assertSame($expectedOutput, $inputFilter->filter($inputArray), 'Array was filtered incorrectly.');
     }
 
     public function testFilterZendFilterAsArray()
@@ -53,6 +53,6 @@ class InputTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT and ensure that array items were filtered correctly */
         $inputArray = ['field1' => 'value1', 'field2' => 'value2'];
         $expectedOutput = ['field1' => 'VALUE1', 'field2' => 'value2'];
-        $this->assertEquals($expectedOutput, $inputFilter->filter($inputArray), 'Array was filtered incorrectly.');
+        $this->assertSame($expectedOutput, $inputFilter->filter($inputArray), 'Array was filtered incorrectly.');
     }
 }

@@ -86,6 +86,6 @@ QUERY;
         $guestCart = $this->guestCartRepository->get($maskedCartId);
 
         self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
+        self::assertSame(1, $guestCart->getCustomer()->getId());
     }
 }

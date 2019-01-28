@@ -43,7 +43,7 @@ QUERY;
 
         self::assertContains('magento_image.jpg', $response['products']['items'][0]['image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['image']['url']));
-        self::assertEquals('Image Alt Text', $response['products']['items'][0]['image']['label']);
+        self::assertSame('Image Alt Text', $response['products']['items'][0]['image']['label']);
     }
 
     /**
@@ -66,7 +66,7 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        self::assertEquals('Simple Product', $response['products']['items'][0]['image']['label']);
+        self::assertSame('Simple Product', $response['products']['items'][0]['image']['label']);
     }
 
     /**
@@ -91,7 +91,7 @@ QUERY;
 
         self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
-        self::assertEquals('Image Alt Text', $response['products']['items'][0]['small_image']['label']);
+        self::assertSame('Image Alt Text', $response['products']['items'][0]['small_image']['label']);
     }
 
     /**
@@ -116,7 +116,7 @@ QUERY;
 
         self::assertContains('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['thumbnail']['url']));
-        self::assertEquals('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
+        self::assertSame('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
     }
 
     /**

@@ -161,6 +161,6 @@ class RetryTest extends \PHPUnit\Framework\TestCase
             ->method('setHttpResponseCode')
             ->with(200);
 
-        $this->assertEquals($this->jsonResultMock, $this->model->execute());
+        $this->assertSame($this->jsonResultMock, $this->model->execute());
     }
 }

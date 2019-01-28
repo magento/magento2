@@ -72,7 +72,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getCode')
             ->will($this->returnValue('method_code'));
         $this->_object->setData('method', $method);
-        $this->assertEquals('method_code', $this->_object->getMethodCode());
+        $this->assertSame('method_code', $this->_object->getMethodCode());
     }
 
     /**
@@ -95,7 +95,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getInfoInstance')
             ->will($this->returnValue($methodInstance));
         $this->_object->setData('method', $method);
-        $this->assertEquals($expected, $this->_object->getInfoData($field));
+        $this->assertSame($expected, $this->_object->getInfoData($field));
     }
 
     /**

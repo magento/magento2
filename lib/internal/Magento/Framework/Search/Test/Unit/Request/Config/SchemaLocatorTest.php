@@ -32,7 +32,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request_merged.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request_merged.xsd'),
             $this->schemaLocator->getSchema()
         );
@@ -46,7 +46,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request.xsd'),
             $this->schemaLocator->getPerFileSchema()
         );

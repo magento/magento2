@@ -67,6 +67,6 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('process')
             ->with($selectMock);
 
-        $this->assertEquals($expectedResult, $this->subject->build($productId));
+        $this->assertSame($expectedResult, $this->subject->build($productId));
     }
 }

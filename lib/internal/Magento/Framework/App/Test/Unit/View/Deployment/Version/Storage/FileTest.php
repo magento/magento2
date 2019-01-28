@@ -42,7 +42,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('readFile')
             ->with('fixture_file.txt')
             ->willReturn('123');
-        $this->assertEquals('123', $this->object->load());
+        $this->assertSame('123', $this->object->load());
     }
 
     public function testSave()

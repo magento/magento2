@@ -66,7 +66,7 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($imageMock);
         $this->emulationMock->expects($this->once())->method('stopEnvironmentEmulation');
 
-        $this->assertEquals($imageMock, $this->model->getImage($productMock, $imageId, $attributes));
+        $this->assertSame($imageMock, $this->model->getImage($productMock, $imageId, $attributes));
     }
 
     /**

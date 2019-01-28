@@ -81,7 +81,7 @@ class DescriptionGeneratorTest extends \PHPUnit\Framework\TestCase
             $this->descriptionConfigWithMixin
         );
 
-        $this->assertEquals($descriptionWithMixin, $generator->generate());
+        $this->assertSame($descriptionWithMixin, $generator->generate());
     }
 
     public function testGeneratorWithoutMixin()
@@ -92,6 +92,6 @@ class DescriptionGeneratorTest extends \PHPUnit\Framework\TestCase
             $this->descriptionConfigWithoutMixin
         );
 
-        $this->assertEquals(implode(PHP_EOL, $this->paragraphs), $generator->generate());
+        $this->assertSame(implode(PHP_EOL, $this->paragraphs), $generator->generate());
     }
 }

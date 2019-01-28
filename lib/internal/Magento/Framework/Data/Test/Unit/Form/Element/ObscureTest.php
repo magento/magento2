@@ -42,8 +42,8 @@ class ObscureTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('password', $this->_model->getType());
-        $this->assertEquals('textfield', $this->_model->getExtType());
+        $this->assertSame('password', $this->_model->getType());
+        $this->assertSame('textfield', $this->_model->getExtType());
     }
 
     /**

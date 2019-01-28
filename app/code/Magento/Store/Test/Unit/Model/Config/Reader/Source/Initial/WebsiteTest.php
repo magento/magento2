@@ -48,7 +48,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
 
         $websiteSource = new Website($initialConfig, $defaultScopeReader, $converter);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'general' => [
                     'locale' => [

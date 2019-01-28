@@ -111,6 +111,6 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
             ->with($this->createMock(\Magento\Quote\Model\Quote\Payment::class))
             ->will($this->returnSelf());
 
-        $this->assertEquals([$methodInstanceMock], $this->methodList->getAvailableMethods($quoteMock));
+        $this->assertSame([$methodInstanceMock], $this->methodList->getAvailableMethods($quoteMock));
     }
 }

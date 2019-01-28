@@ -137,7 +137,7 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
         $this->themeMock->expects($this->any())->method('getInheritedThemes')
             ->will($this->returnValue([$inheritedThemeMock]));
 
-        $this->assertEquals(['returnedFile'], $aggregated->getFiles($this->themeMock, $subPath));
+        $this->assertSame(['returnedFile'], $aggregated->getFiles($this->themeMock, $subPath));
     }
 
     /**

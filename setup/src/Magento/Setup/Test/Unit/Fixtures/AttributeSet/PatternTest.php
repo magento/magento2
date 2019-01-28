@@ -46,7 +46,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $pattern = new \Magento\Setup\Fixtures\AttributeSet\Pattern();
-        $this->assertEquals(
+        $this->assertSame(
             $attributeSets,
             $pattern->generateAttributeSet(
                 'attribute set name',

@@ -56,8 +56,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         ];
         foreach ($categories as $category) {
             $this->assertInstanceOf(\Magento\Framework\Data\Tree\Node::class, $category);
-            $this->assertEquals($expectedPaths[$index][0], $category->getId());
-            $this->assertEquals($expectedPaths[$index][1], $category->getData('path'));
+            $this->assertSame($expectedPaths[$index][0], $category->getId());
+            $this->assertSame($expectedPaths[$index][1], $category->getData('path'));
             $index++;
         }
     }
@@ -69,10 +69,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Category::class,
             ['data' => ['url' => $url]]
         );
-        $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
+        $this->assertSame($url, $this->_helper->getCategoryUrl($category));
 
         $category = new \Magento\Framework\DataObject(['url' => $url]);
-        $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
+        $this->assertSame($url, $this->_helper->getCategoryUrl($category));
     }
 
     /**
@@ -99,7 +99,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCanUseCanonicalTagDefault()
     {
-        $this->assertEquals(0, $this->_helper->canUseCanonicalTag());
+        $this->assertSame(0, $this->_helper->canUseCanonicalTag());
     }
 
     /**
@@ -107,6 +107,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanUseCanonicalTag()
     {
-        $this->assertEquals(1, $this->_helper->canUseCanonicalTag());
+        $this->assertSame(1, $this->_helper->canUseCanonicalTag());
     }
 }

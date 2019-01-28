@@ -31,6 +31,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $path = 'path';
         $config = new Config(true, $path);
         $this->assertTrue($config->dictionaryEnabled());
-        $this->assertEquals($path, $config->getDictionaryFileName());
+        $this->assertSame($path, $config->getDictionaryFileName());
     }
 }

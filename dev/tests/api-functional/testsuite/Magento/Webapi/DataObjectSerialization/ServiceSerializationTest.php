@@ -38,8 +38,8 @@ class ServiceSerializationTest extends \Magento\TestFramework\TestCase\WebapiAbs
             ],
         ];
         $item = $this->_webApiCall($serviceInfo, []);
-        $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
-        $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+        $this->assertSame($itemId, $item['entity_id'], 'id field returned incorrectly');
+        $this->assertSame($name, $item['name'], 'name field returned incorrectly');
     }
 
     /**
@@ -56,8 +56,8 @@ class ServiceSerializationTest extends \Magento\TestFramework\TestCase\WebapiAbs
             ],
         ];
         $item = $this->_webApiCall($serviceInfo, ['request' => ['name' => $name]]);
-        $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
-        $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+        $this->assertSame($itemId, $item['entity_id'], 'id field returned incorrectly');
+        $this->assertSame($name, $item['name'], 'name field returned incorrectly');
     }
 
     /**
@@ -74,8 +74,8 @@ class ServiceSerializationTest extends \Magento\TestFramework\TestCase\WebapiAbs
             ],
         ];
         $item = $this->_webApiCall($serviceInfo, ['request' => ['details' => ['name' => $name]]]);
-        $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
-        $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+        $this->assertSame($itemId, $item['entity_id'], 'id field returned incorrectly');
+        $this->assertSame($name, $item['name'], 'name field returned incorrectly');
     }
 
     public function testScalarResponse()
@@ -87,7 +87,7 @@ class ServiceSerializationTest extends \Magento\TestFramework\TestCase\WebapiAbs
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
-        $this->assertEquals($id, $this->_webApiCall($serviceInfo), 'Scalar service output is serialized incorrectly.');
+        $this->assertSame($id, $this->_webApiCall($serviceInfo), 'Scalar service output is serialized incorrectly.');
     }
 
     public function testExtensibleCall()
@@ -105,7 +105,7 @@ class ServiceSerializationTest extends \Magento\TestFramework\TestCase\WebapiAbs
           'name' => $name,
         ];
         $item = $this->_webApiCall($serviceInfo, ['request' => $requestData]);
-        $this->assertEquals($id, $item['entity_id'], 'id field returned incorrectly');
-        $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+        $this->assertSame($id, $item['entity_id'], 'id field returned incorrectly');
+        $this->assertSame($name, $item['name'], 'name field returned incorrectly');
     }
 }

@@ -158,7 +158,7 @@ expected;
             ->willReturnArgument(0);
 
         $actual = $this->object->getConfig();
-        $this->assertEquals($actual, $expected);
+        $this->assertSame($actual, $expected);
     }
 
     public function testGetMinResolverCode()
@@ -191,7 +191,7 @@ expected;
     };
 
 code;
-        $this->assertEquals($expected, $this->object->getMinResolverCode());
+        $this->assertSame($expected, $this->object->getMinResolverCode());
     }
 
     public function testGetConfigFileRelativePath()

@@ -121,6 +121,6 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchResultMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
         $expected = [$itemMock];
 
-        $this->assertEquals($expected, $this->model->getCustomAttributesMetadata(null));
+        $this->assertSame($expected, $this->model->getCustomAttributesMetadata(null));
     }
 }

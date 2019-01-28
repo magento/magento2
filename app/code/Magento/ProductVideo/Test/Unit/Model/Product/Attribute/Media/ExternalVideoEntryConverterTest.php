@@ -123,7 +123,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMediaEntryType()
     {
-        $this->assertEquals($this->modelObject->getMediaEntryType(), 'external-video');
+        $this->assertSame($this->modelObject->getMediaEntryType(), 'external-video');
     }
 
     public function testConvertTo()
@@ -211,6 +211,6 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $this->modelObject->convertFrom($this->mediaGalleryEntryMock);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 }

@@ -117,14 +117,14 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[contains(@class,"normal-price")]',
                 $html
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             $count,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[contains(@class,"old-price")]',

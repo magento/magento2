@@ -33,7 +33,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
         $childBlock->setText($expectedHtml);
 
-        $this->assertEquals($expectedHtml, $block->getItemExtraInfoHtml($item));
+        $this->assertSame($expectedHtml, $block->getItemExtraInfoHtml($item));
         $this->assertSame($item, $childBlock->getItem());
     }
 }

@@ -77,7 +77,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetCalculatedTaxesEmptySource()
     {
         $source = null;
-        $this->assertEquals([], $this->helper->getCalculatedTaxes($source));
+        $this->assertSame([], $this->helper->getCalculatedTaxes($source));
     }
 
     public function testGetCalculatedTaxesForOrder()
@@ -141,10 +141,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->helper->getCalculatedTaxes($orderMock);
         $this->assertCount(1, $result);
-        $this->assertEquals($expectedAmount, $result[0]['tax_amount']);
-        $this->assertEquals($expectedBaseAmount, $result[0]['base_tax_amount']);
-        $this->assertEquals($itemTitle, $result[0]['title']);
-        $this->assertEquals($itemPercent, $result[0]['percent']);
+        $this->assertSame($expectedAmount, $result[0]['tax_amount']);
+        $this->assertSame($expectedBaseAmount, $result[0]['base_tax_amount']);
+        $this->assertSame($itemTitle, $result[0]['title']);
+        $this->assertSame($itemPercent, $result[0]['percent']);
     }
 
     /**
@@ -269,7 +269,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         foreach ($result as $index => $appliedTax) {
             $expectedTax = $expectedResults[$index];
             foreach ($appliedTax as $attr => $value) {
-                $this->assertEquals($expectedTax[$attr], $value, "The ".$attr." of tax does not match");
+                $this->assertSame($expectedTax[$attr], $value, "The ".$attr." of tax does not match");
             }
         }
     }

@@ -244,8 +244,8 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->with(['theme' => $themeMock])
             ->will($this->returnValue($this->processorMock));
 
-        $this->assertEquals($this->processorMock, $this->model->getUpdate());
-        $this->assertEquals($this->processorMock, $this->model->getUpdate());
+        $this->assertSame($this->processorMock, $this->model->getUpdate());
+        $this->assertSame($this->processorMock, $this->model->getUpdate());
     }
 
     public function testGenerateXml()
@@ -969,7 +969,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->model->setBlock($child, $block);
-        $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
+        $this->assertSame($blockHtml, $this->model->renderElement($name, false));
     }
 
     /**
@@ -986,7 +986,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->method('getAttribute')
             ->willReturnMap([[$name, 'display', $displayValue]]);
 
-        $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
+        $this->assertSame($blockHtml, $this->model->renderElement($name, false));
     }
 
     /**

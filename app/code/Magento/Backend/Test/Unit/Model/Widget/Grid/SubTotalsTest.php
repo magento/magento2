@@ -61,7 +61,7 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
     public function testCountTotals()
     {
         $expected = new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2]);
-        $this->assertEquals($expected, $this->_model->countTotals($this->_getTestCollection()));
+        $this->assertSame($expected, $this->_model->countTotals($this->_getTestCollection()));
     }
 
     /**

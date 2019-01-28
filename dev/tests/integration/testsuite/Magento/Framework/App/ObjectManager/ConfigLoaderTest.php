@@ -28,6 +28,6 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
         $data = $this->object->load('global');
         $this->assertNotEmpty($data);
         $cachedData = $this->object->load('global');
-        $this->assertEquals($data, $cachedData);
+        $this->assertSame($data, $cachedData);
     }
 }

@@ -63,7 +63,7 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             $url,
             'No GET params, including "SID", were expected, but somewhat exists'
         );
-        $this->assertEquals($newHost, $url['host'], 'A new host in the url expected, but there is old one');
+        $this->assertSame($newHost, $url['host'], 'A new host in the url expected, but there is old one');
         $this->resetBaseUrl($defaultHost);
     }
 

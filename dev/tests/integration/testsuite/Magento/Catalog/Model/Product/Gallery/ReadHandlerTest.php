@@ -64,11 +64,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount(1, $data['media_gallery']['images']);
         foreach ($data['media_gallery']['images'] as $valueId => $imageData) {
-            $this->assertEquals(
+            $this->assertSame(
                 'Image Alt Text',
                 $imageData['label']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $imageData['value_id'],
                 $valueId
             );

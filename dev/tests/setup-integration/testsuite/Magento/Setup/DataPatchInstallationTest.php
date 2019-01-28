@@ -66,7 +66,7 @@ class DataPatchInstallationTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule3']
         );
 
-        self::assertEquals(
+        self::assertSame(
             '0.0.1',
             $this->moduleResource->getDataVersion('Magento_TestSetupDeclarationModule3')
         );
@@ -80,7 +80,7 @@ class DataPatchInstallationTest extends SetupTestCase
         $this->movePatches();
         ModuleResource::flush();
         $this->cliCommad->upgrade();
-        self::assertEquals(
+        self::assertSame(
             '0.0.3',
             $this->moduleResource->getDataVersion('Magento_TestSetupDeclarationModule3')
         );
@@ -88,7 +88,7 @@ class DataPatchInstallationTest extends SetupTestCase
         self::assertTrue($this->patchList->isApplied(ReferenceIncrementalSomeIntegerPatch::class));
         self::assertTrue($this->patchList->isApplied(ZFirstPatch::class));
         $tableData = $this->tableData->describeTableData('test_table');
-        self::assertEquals($this->getTestTableData(), $tableData);
+        self::assertSame($this->getTestTableData(), $tableData);
     }
 
     /**
@@ -112,7 +112,7 @@ class DataPatchInstallationTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule3']
         );
         $tableData = $this->tableData->describeTableData('test_table');
-        self::assertEquals($this->getTestTableData(), $tableData);
+        self::assertSame($this->getTestTableData(), $tableData);
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule3',
             'cyclomatic_and_bic_revision',
@@ -170,7 +170,7 @@ class DataPatchInstallationTest extends SetupTestCase
         self::assertEmpty($patchListTableData);
         self::assertEmpty($testTableData);
         $refTableData = $this->tableData->describeTableData('reference_table');
-        self::assertEquals($this->getRefTableData(), $refTableData);
+        self::assertSame($this->getRefTableData(), $refTableData);
     }
 
     /**

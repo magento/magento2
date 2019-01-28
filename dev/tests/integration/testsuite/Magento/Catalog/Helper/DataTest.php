@@ -99,7 +99,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         try {
             $path = $this->helper->getBreadcrumbPath();
             $this->assertInternalType('array', $path);
-            $this->assertEquals(['category3', 'category4', 'category5'], array_keys($path));
+            $this->assertSame(['category3', 'category4', 'category5'], array_keys($path));
             $this->assertArrayHasKey('label', $path['category3']);
             $this->assertArrayHasKey('link', $path['category3']);
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
@@ -146,17 +146,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testSplitSku()
     {
         $sku = 'one-two-three';
-        $this->assertEquals(['on', 'e-', 'tw', 'o-', 'th', 're', 'e'], $this->helper->splitSku($sku, 2));
+        $this->assertSame(['on', 'e-', 'tw', 'o-', 'th', 're', 'e'], $this->helper->splitSku($sku, 2));
     }
 
     public function testGetAttributeHiddenFields()
     {
-        $this->assertEquals([], $this->helper->getAttributeHiddenFields());
+        $this->assertSame([], $this->helper->getAttributeHiddenFields());
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\Registry::class)->register('attribute_type_hidden_fields', 'test');
         try {
-            $this->assertEquals('test', $this->helper->getAttributeHiddenFields());
+            $this->assertSame('test', $this->helper->getAttributeHiddenFields());
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('attribute_type_hidden_fields');
         } catch (\Exception $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('attribute_type_hidden_fields');
@@ -175,7 +175,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPriceScope()
     {
-        $this->assertEquals(\Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE, $this->helper->getPriceScope());
+        $this->assertSame(\Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE, $this->helper->getPriceScope());
     }
 
     public function testIsPriceGlobalDefault()
@@ -281,9 +281,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $input->getRoundPrice()
         );
         if ($input->getNotEqual()) {
-            $this->assertNotEquals($expectOutputPrice, $price);
+            $this->assertNotSame($expectOutputPrice, $price);
         } else {
-            $this->assertEquals($expectOutputPrice, $price);
+            $this->assertSame($expectOutputPrice, $price);
         }
     }
 

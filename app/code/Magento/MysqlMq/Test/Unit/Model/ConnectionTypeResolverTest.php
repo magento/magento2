@@ -15,14 +15,14 @@ class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
     public function testGetConnectionTypeWithDefaultValues()
     {
         $model = new ConnectionTypeResolver();
-        $this->assertEquals('db', $model->getConnectionType('db'));
-        $this->assertEquals(null, $model->getConnectionType('non-db'));
+        $this->assertSame('db', $model->getConnectionType('db'));
+        $this->assertSame(null, $model->getConnectionType('non-db'));
     }
 
     public function testGetConnectionTypeWithCustomValues()
     {
         $model = new ConnectionTypeResolver(['test-connection']);
-        $this->assertEquals('db', $model->getConnectionType('db'));
-        $this->assertEquals('db', $model->getConnectionType('test-connection'));
+        $this->assertSame('db', $model->getConnectionType('db'));
+        $this->assertSame('db', $model->getConnectionType('test-connection'));
     }
 }

@@ -163,7 +163,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/createPassword');
 
         $response = $this->getResponse();
-        $this->assertEquals(302, $response->getHttpResponseCode());
+        $this->assertSame(302, $response->getHttpResponseCode());
         $text = $response->getBody();
         $this->assertFalse((bool)preg_match('/' . $token . '/m', $text));
         $this->assertRedirect(
@@ -172,7 +172,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         /** @var Session $customer */
         $session = Bootstrap::getObjectManager()->get(Session::class);
-        $this->assertEquals($token, $session->getRpToken());
+        $this->assertSame($token, $session->getRpToken());
         $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
     }
 
@@ -223,7 +223,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
-        $this->assertEquals(302, $response->getHttpResponseCode());
+        $this->assertSame(302, $response->getHttpResponseCode());
         $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
     }
 
@@ -495,7 +495,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/edit');
 
         $body = $this->getResponse()->getBody();
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
@@ -512,7 +512,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/edit/changepass/1');
 
         $body = $this->getResponse()->getBody();
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
         $this->assertContains(
@@ -536,9 +536,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerRepository = Bootstrap::getObjectManager()
             ->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
-        $this->assertEquals('John', $customer->getFirstname());
-        $this->assertEquals('Smith', $customer->getLastname());
-        $this->assertEquals('customer@example.com', $customer->getEmail());
+        $this->assertSame('John', $customer->getFirstname());
+        $this->assertSame('Smith', $customer->getLastname());
+        $this->assertSame('customer@example.com', $customer->getEmail());
 
         $this->login(1);
         $this->getRequest()
@@ -561,9 +561,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $customer = $customerRepository->getById(1);
-        $this->assertEquals('John', $customer->getFirstname());
-        $this->assertEquals('Doe', $customer->getLastname());
-        $this->assertEquals('johndoe@email.com', $customer->getEmail());
+        $this->assertSame('John', $customer->getFirstname());
+        $this->assertSame('Doe', $customer->getLastname());
+        $this->assertSame('johndoe@email.com', $customer->getEmail());
     }
 
     /**
@@ -579,9 +579,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerRepository = Bootstrap::getObjectManager()
             ->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
-        $this->assertEquals('John', $customer->getFirstname());
-        $this->assertEquals('Smith', $customer->getLastname());
-        $this->assertEquals('customer@example.com', $customer->getEmail());
+        $this->assertSame('John', $customer->getFirstname());
+        $this->assertSame('Smith', $customer->getLastname());
+        $this->assertSame('customer@example.com', $customer->getEmail());
 
         $this->login(1);
         $this->getRequest()
@@ -609,9 +609,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $customer = $customerRepository->getById(1);
-        $this->assertEquals('John', $customer->getFirstname());
-        $this->assertEquals('Doe', $customer->getLastname());
-        $this->assertEquals('johndoe@email.com', $customer->getEmail());
+        $this->assertSame('John', $customer->getFirstname());
+        $this->assertSame('Doe', $customer->getLastname());
+        $this->assertSame('johndoe@email.com', $customer->getEmail());
     }
 
     /**

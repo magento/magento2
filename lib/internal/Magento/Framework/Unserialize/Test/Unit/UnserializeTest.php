@@ -38,7 +38,7 @@ class UnserializeTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with($serializedData)
             ->willReturn($data);
-        $this->assertEquals(
+        $this->assertSame(
             $data,
             $this->unserialize->unserialize($serializedData)
         );

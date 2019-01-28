@@ -41,7 +41,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals('Dictionary successfully processed.' . PHP_EOL, $this->tester->getDisplay());
+        $this->assertSame('Dictionary successfully processed.' . PHP_EOL, $this->tester->getDisplay());
     }
 
     public function testExecuteCsvOutput()
@@ -59,7 +59,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
         $expected = file_get_contents(
             BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/expectedPhrases.csv'
         );
-        $this->assertEquals($expected, $output);
+        $this->assertSame($expected, $output);
         unlink($outputPath);
     }
 

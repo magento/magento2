@@ -144,7 +144,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
             ->with($defaultStoreId)
             ->willReturn(false);
 
-        $this->assertEquals($expected, $this->block->toHtml());
+        $this->assertSame($expected, $this->block->toHtml());
     }
 
     /**
@@ -219,7 +219,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($sitemapCollectionMock);
 
-        $this->assertEquals($expected, $this->block->toHtml());
+        $this->assertSame($expected, $this->block->toHtml());
     }
 
     /**
@@ -242,7 +242,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
         $expected = [
             \Magento\Robots\Model\Config\Value::CACHE_TAG . '_' . $storeId,
         ];
-        $this->assertEquals($expected, $this->block->getIdentities());
+        $this->assertSame($expected, $this->block->getIdentities());
     }
 
     /**

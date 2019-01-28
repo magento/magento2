@@ -39,7 +39,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue('ModelInstance'));
 
-        $this->assertEquals('ModelInstance', $this->_model->create($type));
+        $this->assertSame('ModelInstance', $this->_model->create($type));
     }
 
     /**

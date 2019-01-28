@@ -39,7 +39,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsSwatchAttribute(string $dataValue, bool $expected) : void
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->swatchType->isSwatchAttribute(
                 $this->createAttributeMock($dataValue)
@@ -69,7 +69,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsTextSwatch(string $dataValue, bool $expected) : void
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->swatchType->isTextSwatch(
                 $this->createAttributeMock($dataValue)
@@ -99,7 +99,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsVisualSwatch(string $dataValue, bool $expected) : void
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->swatchType->isVisualSwatch(
                 $this->createAttributeMock($dataValue)
@@ -147,8 +147,8 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(true, $this->swatchType->isTextSwatch($attributeMock));
-        $this->assertEquals(false, $this->swatchType->isVisualSwatch($attributeMock));
+        $this->assertSame(true, $this->swatchType->isTextSwatch($attributeMock));
+        $this->assertSame(false, $this->swatchType->isVisualSwatch($attributeMock));
     }
 
     /**

@@ -100,7 +100,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
             ->with($relativeGeneratedPath)
             ->willReturn($absolutePath);
 
-        $this->assertEquals($absolutePath, $this->object->getPathToMinified($file));
+        $this->assertSame($absolutePath, $this->object->getPathToMinified($file));
     }
 
     // @codingStandardsIgnoreStart

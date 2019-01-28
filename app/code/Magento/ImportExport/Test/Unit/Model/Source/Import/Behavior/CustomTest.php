@@ -44,7 +44,7 @@ class CustomTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\Abs
     {
         $behaviorData = $this->_model->toArray();
         $this->assertInternalType('array', $behaviorData);
-        $this->assertEquals($this->_expectedBehaviors, array_keys($behaviorData));
+        $this->assertSame($this->_expectedBehaviors, array_keys($behaviorData));
     }
 
     /**
@@ -54,6 +54,6 @@ class CustomTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\Abs
      */
     public function testGetCode()
     {
-        $this->assertEquals($this->_expectedCode, $this->_model->getCode());
+        $this->assertSame($this->_expectedCode, $this->_model->getCode());
     }
 }

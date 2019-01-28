@@ -25,7 +25,7 @@ class ProgressFactoryTest extends \PHPUnit\Framework\TestCase
 
         $progressFactory = new ProgressFactory();
         $progress = $progressFactory->createFromLog($logger);
-        $this->assertEquals(3, $progress->getCurrent());
-        $this->assertEquals(5, $progress->getTotal());
+        $this->assertSame(3, $progress->getCurrent());
+        $this->assertSame(5, $progress->getTotal());
     }
 }

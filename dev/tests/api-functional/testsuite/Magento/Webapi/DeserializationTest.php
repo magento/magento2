@@ -43,7 +43,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
-            $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
@@ -70,7 +70,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
-            $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),

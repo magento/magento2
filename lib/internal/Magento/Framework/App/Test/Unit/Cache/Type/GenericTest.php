@@ -35,7 +35,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
 
         // Test initialization was done right
         /** @noinspection PhpUndefinedFieldInspection */
-        $this->assertEquals($className::CACHE_TAG, $model->getTag(), 'The tag is wrong');
+        $this->assertSame($className::CACHE_TAG, $model->getTag(), 'The tag is wrong');
 
         // Test that frontend is now engaged in operations
         $frontendMock->expects($this->once())->method('load')->with(26);

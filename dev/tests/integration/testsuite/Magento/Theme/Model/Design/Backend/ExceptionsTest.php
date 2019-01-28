@@ -43,7 +43,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->exceptions->save();
 
         $processedValue = $this->serializer->unserialize($this->exceptions->getValue());
-        $this->assertEquals(count($processedValue), 2, 'Number of saved values is wrong');
+        $this->assertSame(count($processedValue), 2, 'Number of saved values is wrong');
 
         $entry = $processedValue['1'];
         $this->assertArrayHasKey('search', $entry);
@@ -82,7 +82,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->exceptions->save();
 
         $processedValue = $this->serializer->unserialize($this->exceptions->getValue());
-        $this->assertEquals($processedValue['1']['regexp'], $regexp);
+        $this->assertSame($processedValue['1']['regexp'], $regexp);
     }
 
     /**

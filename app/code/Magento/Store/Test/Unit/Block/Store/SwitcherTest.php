@@ -69,13 +69,13 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     public function testGetStoreCount()
     {
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn('en_US');
-        $this->assertEquals(1, $this->model->getStoreCount());
+        $this->assertSame(1, $this->model->getStoreCount());
     }
 
     public function testGetStoreCountWithNotEqualLocale()
     {
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn('de_DE');
-        $this->assertEquals(0, $this->model->getStoreCount());
+        $this->assertSame(0, $this->model->getStoreCount());
     }
 
     protected function loadMocks()

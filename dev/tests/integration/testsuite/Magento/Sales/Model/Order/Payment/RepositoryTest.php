@@ -74,7 +74,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $result = $this->repository->getList($searchCriteria);
         $items = $result->getItems();
         $this->assertCount(2, $items);
-        $this->assertEquals('456', array_shift($items)->getCcLast4());
-        $this->assertEquals('123', array_shift($items)->getCcLast4());
+        $this->assertSame('456', array_shift($items)->getCcLast4());
+        $this->assertSame('123', array_shift($items)->getCcLast4());
     }
 }

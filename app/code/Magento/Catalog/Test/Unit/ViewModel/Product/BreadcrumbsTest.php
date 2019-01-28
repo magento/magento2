@@ -75,7 +75,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/seo/category_url_suffix', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn('.html');
 
-        $this->assertEquals('.html', $this->viewModel->getCategoryUrlSuffix());
+        $this->assertSame('.html', $this->viewModel->getCategoryUrlSuffix());
     }
 
     /**
@@ -104,7 +104,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($product);
 
-        $this->assertEquals($expectedName, $this->viewModel->getProductName());
+        $this->assertSame($expectedName, $this->viewModel->getProductName());
     }
 
     /**
@@ -141,7 +141,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/seo/category_url_suffix', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn('."html');
 
-        $this->assertEquals($expectedJson, $this->viewModel->getJsonConfiguration());
+        $this->assertSame($expectedJson, $this->viewModel->getJsonConfiguration());
     }
 
     /**

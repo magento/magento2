@@ -48,7 +48,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->catalogSessionMock->expects($this->once())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);
-        $this->assertEquals($this->resultLayout, $actualResult);
+        $this->assertSame($this->resultLayout, $actualResult);
     }
 
     public function testAfterGenerateXmlNoDepersonalize()
@@ -56,6 +56,6 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->catalogSessionMock->expects($this->never())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);
-        $this->assertEquals($this->resultLayout, $actualResult);
+        $this->assertSame($this->resultLayout, $actualResult);
     }
 }

@@ -407,7 +407,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $paymentDetailsMock->expects($this->once())->method('setTotals')->with()->willReturnSelf($cartTotalsMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $paymentDetailsMock,
             $this->model->saveAddressInformation($cartId, $addressInformationMock)
         );

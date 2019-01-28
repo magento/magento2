@@ -37,7 +37,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $actualResult = $this->converter->convert($source['config']);
-        $this->assertEquals($expectedConfig, $actualResult[ReaderEnv::ENV_PUBLISHERS]);
+        $this->assertSame($expectedConfig, $actualResult[ReaderEnv::ENV_PUBLISHERS]);
     }
 
     public function testConvertIfPublisherConfigNotExist()
@@ -45,7 +45,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
         $source = include __DIR__ . '/../../../../_files/env_2_2.php';
         unset($source['config'][ReaderEnv::ENV_PUBLISHERS]);
         $actualResult = $this->converter->convert($source['config']);
-        $this->assertEquals($source['config'], $actualResult);
+        $this->assertSame($source['config'], $actualResult);
     }
     public function testConvertIfConnectionConfigNotExist()
     {
@@ -55,6 +55,6 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
         $actualResult = $this->converter->convert($source['config']);
         $expectedResult[ReaderEnv::ENV_CONSUMERS] = $source['config'][ReaderEnv::ENV_CONSUMERS];
         $expectedResult[ReaderEnv::ENV_PUBLISHERS] = [];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

@@ -46,7 +46,7 @@ class WordsFinderTest extends \PHPUnit\Framework\TestCase
             new ComponentRegistrar()
         );
         $actual = $wordsFinder->findWords($file);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

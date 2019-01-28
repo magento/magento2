@@ -94,7 +94,7 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->assertEquals(20, $this->calculator->calculateDiscount($this->productMock));
+        $this->assertSame(20, $this->calculator->calculateDiscount($this->productMock));
     }
 
     /**
@@ -116,6 +116,6 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->assertEquals(10, $this->calculator->calculateDiscount($this->productMock, 50));
+        $this->assertSame(10, $this->calculator->calculateDiscount($this->productMock, 50));
     }
 }

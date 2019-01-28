@@ -61,7 +61,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('insert')
             ->with($tableName, ['topic_name' => $messageTopic, 'body' => $message])->willReturn(1);
         $connection->expects($this->once())->method('lastInsertId')->with($tableName)->willReturn($messageId);
-        $this->assertEquals($messageId, $this->queue->saveMessage($messageTopic, $message));
+        $this->assertSame($messageId, $this->queue->saveMessage($messageTopic, $message));
     }
 
     /**
@@ -99,7 +99,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->once())->method('where')->with('qm.id >= ?', $messageIds[0])->willReturnSelf();
         $select->expects($this->once())->method('limit')->with(2)->willReturnSelf();
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($messageIds);
-        $this->assertEquals($messageIds, $this->queue->saveMessages($messageTopic, $messages));
+        $this->assertSame($messageIds, $this->queue->saveMessages($messageTopic, $messages));
     }
 
     /**
@@ -143,7 +143,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
                 ],
             ]
         )->willReturn(4);
-        $this->assertEquals($this->queue, $this->queue->linkQueues($messageId, $queueNames));
+        $this->assertSame($this->queue, $this->queue->linkQueues($messageId, $queueNames));
     }
 
     /**
@@ -209,7 +209,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
             ->method('order')->with('queue_message_status.updated_at ASC')->willReturnSelf();
         $select->expects($this->once())->method('limit')->with($limit)->willReturnSelf();
         $connection->expects($this->once())->method('fetchAll')->with($select)->willReturn($messages);
-        $this->assertEquals($messages, $this->queue->getMessages($queueName, $limit));
+        $this->assertSame($messages, $this->queue->getMessages($queueName, $limit));
     }
 
     /**
@@ -269,7 +269,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
                 ['id = ?' => $relationIds[1]]
             ]
         )->willReturnOnConsecutiveCalls(1, 0);
-        $this->assertEquals([$relationIds[0]], $this->queue->takeMessagesInProgress($relationIds));
+        $this->assertSame([$relationIds[0]], $this->queue->takeMessagesInProgress($relationIds));
     }
 
     /**

@@ -53,6 +53,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
 
         $cacheKeyInfo = $this->block->getCacheKeyInfo();
         $crumbsFromCacheKey = $this->serializer->unserialize(base64_decode($cacheKeyInfo['crumbs']));
-        $this->assertEquals($crumbs, $crumbsFromCacheKey);
+        $this->assertSame($crumbs, $crumbsFromCacheKey);
     }
 }

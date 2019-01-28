@@ -78,7 +78,7 @@ class LogTest extends \PHPUnit\Framework\TestCase
         $this->comparedMock->expects($this->once())->method('clean');
         $this->viewedMock->expects($this->once())->method('clean');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->logResourceMock,
             $this->log->afterClean($this->subjectMock, $this->logResourceMock)
         );

@@ -53,6 +53,6 @@ class ConcatTest extends \PHPUnit\Framework\TestCase
                 ->willReturn(['getTest', 'getBest']);
         }
         $this->renderer->setColumn($column);
-        $this->assertEquals('a-b', $this->renderer->render($object));
+        $this->assertSame('a-b', $this->renderer->render($object));
     }
 }

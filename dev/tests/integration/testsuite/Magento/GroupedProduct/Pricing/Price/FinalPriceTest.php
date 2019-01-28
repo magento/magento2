@@ -22,7 +22,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('grouped-product');
 
-        $this->assertEquals(10, $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
+        $this->assertSame(10, $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
     }
 
     /**
@@ -48,7 +48,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('grouped-product');
-        $this->assertEquals(5, $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
+        $this->assertSame(5, $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
     }
 
     /**
@@ -67,6 +67,6 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('grouped-product');
-        $this->assertEquals(6, $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
+        $this->assertSame(6, $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
     }
 }

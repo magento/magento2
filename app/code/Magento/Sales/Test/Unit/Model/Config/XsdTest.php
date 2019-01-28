@@ -56,7 +56,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $this->_xsdFile);
 
         libxml_use_internal_errors(false);
-        $this->assertEquals($expectedErrors, $result);
+        $this->assertSame($expectedErrors, $result);
     }
 
     /**

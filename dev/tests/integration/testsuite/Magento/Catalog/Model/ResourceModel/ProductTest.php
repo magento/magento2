@@ -47,6 +47,6 @@ class ProductTest extends TestCase
         $product = $productRepository->get($sku);
 
         $actual = $this->model->getAttributeRawValue($product->getId(), $attribute, null);
-        self::assertEquals($product->getName(), $actual);
+        self::assertSame($product->getName(), $actual);
     }
 }

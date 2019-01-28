@@ -113,7 +113,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         ];
         $this->prepareValidationMocks();
 
-        $this->assertEquals([], $this->object->validate($options, $this->deploymentConfig));
+        $this->assertSame([], $this->object->validate($options, $this->deploymentConfig));
     }
 
     public function testValidateInvalidSessionHandler()
@@ -131,7 +131,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         ];
         $this->prepareValidationMocks();
 
-        $this->assertEquals(
+        $this->assertSame(
             ["Invalid session handler '{$invalidSaveHandler}'"],
             $this->object->validate($options, $this->deploymentConfig)
         );
@@ -143,7 +143,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => true,
             ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => ''
         ];
-        $this->assertEquals(
+        $this->assertSame(
             ['Invalid encryption key'],
             $this->object->validate($options, $this->deploymentConfig)
         );
@@ -172,7 +172,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $result = $this->object->validate($options, $this->deploymentConfig);
         if ($expectedError) {
             $this->assertCount(1, $result);
-            $this->assertEquals("Invalid http cache hosts '$hosts'", $result[0]);
+            $this->assertSame("Invalid http cache hosts '$hosts'", $result[0]);
         } else {
             $this->assertCount(0, $result);
         }

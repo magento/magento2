@@ -133,8 +133,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $model = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Category\Tree::class, ['_clean']);
         $model->expects($this->once())->method('_clean')->will($this->returnSelf());
 
-        $this->assertEquals($model, $model->setCollection($this->getCollectionMock()));
-        $this->assertEquals($model, $model->setCollection($this->getCollectionMock()));
+        $this->assertSame($model, $model->setCollection($this->getCollectionMock()));
+        $this->assertSame($model, $model->setCollection($this->getCollectionMock()));
     }
 
     public function testAddCollectionData()

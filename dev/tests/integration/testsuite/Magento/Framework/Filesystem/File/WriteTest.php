@@ -67,7 +67,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $result = $file->write($write);
         $file->close();
         $this->removeCurrentFile();
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -102,8 +102,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $read = $file->read($result);
         $file->close();
         $this->removeCurrentFile();
-        $this->assertEquals($expectedResult, $result);
-        $this->assertEquals($write, $read);
+        $this->assertSame($expectedResult, $result);
+        $this->assertSame($write, $read);
     }
 
     /**
@@ -139,7 +139,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $read = $file->readCsv($result, $delimiter, $enclosure);
         $file->close();
         $this->removeCurrentFile();
-        $this->assertEquals($expectedData, $read);
+        $this->assertSame($expectedData, $read);
     }
 
     /**

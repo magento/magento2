@@ -32,6 +32,6 @@ class PostHelperTest extends \PHPUnit\Framework\TestCase
         $model = new \Magento\Framework\Data\Helper\PostHelper($contextMock, $urlHelper);
 
         $actual = $model->getPostData($url, $product);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

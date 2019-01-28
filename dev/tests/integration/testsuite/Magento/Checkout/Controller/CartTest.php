@@ -77,7 +77,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//button[@type="submit" and @title="Update Cart"]',
@@ -113,7 +113,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//button[@type="submit" and @title="Update Cart"]',
@@ -122,7 +122,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Response for simple product with custom option doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//input[contains(@class,"product-custom-option") and @type="text"]',
@@ -158,7 +158,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//button[@type="submit" and @title="Update Cart"]',
@@ -193,7 +193,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//button[@type="submit" and @title="Update Cart"]',
@@ -202,7 +202,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Response for downloadable product doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="downloadable-links-list"]',
@@ -247,7 +247,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerSession->setCustomerId($customerFromFixture);
 
         $this->assertNotNull($quoteItem, 'Cannot get quote item for simple product');
-        $this->assertEquals(
+        $this->assertSame(
             $originalQuantity,
             $quoteItem->getQty(),
             "Precondition failed: invalid quote item quantity"
@@ -261,7 +261,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load($checkoutSession->getQuote()->getId());
         $quoteItem = $this->_getQuoteItemIdByProductId($quote, $product->getId());
-        $this->assertEquals($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
+        $this->assertSame($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
     }
 
     /**
@@ -337,8 +337,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertTrue(is_array($items), 'Quote doesn\'t have any items');
         $this->assertCount(1, $items, 'Expected quote items not equal to 1');
         $item = reset($items);
-        $this->assertEquals(1, $item->getProductId(), 'Quote has more than one product');
-        $this->assertEquals($expectedPrice, $item->getPrice(), 'Expected product price failed');
+        $this->assertSame(1, $item->getProductId(), 'Quote has more than one product');
+        $this->assertSame($expectedPrice, $item->getPrice(), 'Expected product price failed');
     }
 
     /**
@@ -375,7 +375,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('checkout/cart/add');
 
-        $this->assertEquals(
+        $this->assertSame(
             '{"backUrl":"http:\/\/localhost\/index.php\/checkout\/cart\/"}',
             $this->getResponse()->getBody()
         );
@@ -412,7 +412,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/add');
 
         $this->assertFalse($this->getResponse()->isRedirect());
-        $this->assertEquals('[]', $this->getResponse()->getBody());
+        $this->assertSame('[]', $this->getResponse()->getBody());
 
         $this->assertSessionMessages(
             $this->contains(
@@ -455,7 +455,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->prepareRequest($request);
         $this->dispatch('checkout/cart/addGroup');
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $checkoutSession->getQuote()->getItemsCollection()->getColumnValues('product_id')
         );

@@ -59,7 +59,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
             ->setName('test');
         $requestData = ['entityItem' => $item->__toArray()];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $itemId,
             $item[\Magento\TestModule5\Service\V1\Entity\AllSoapAndRest::ID],
             'Identifier overriding failed.'
@@ -82,7 +82,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
             ->setName('test');
         $requestData = ['entityItem' => $item->__toArray()];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $secondItemId,
             $item[\Magento\TestModule5\Service\V1\Entity\AllSoapAndRest::ID],
             'Identifier overriding failed for nested resource request.'
@@ -102,7 +102,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
             ->setName('test');
         $requestData = ['entityItem' => $item->__toArray()];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $itemId,
             $item[\Magento\TestModule5\Service\V1\Entity\AllSoapAndRest::ID],
             'Identifier replacing failed.'
@@ -126,7 +126,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         ];
         $requestData = ['entityItem' => ['entityId' => $incorrectItemId, 'name' => 'test']];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $itemId,
             $item[\Magento\TestModule5\Service\V1\Entity\AllSoapAndRest::ID],
             'Identifier overriding failed.'
@@ -148,7 +148,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
 
         $requestData = ['entity_id' => $incorrectItemId, 'name' => 'test', 'orders' => true];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $secondItemId,
             $item[\Magento\TestModule5\Service\V1\Entity\AllSoapAndRest::ID],
             'Identifier overriding failed.'

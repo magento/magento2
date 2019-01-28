@@ -22,6 +22,6 @@ class UnionExpressionTest extends \PHPUnit\Framework\TestCase
             '(test_column)'
         ];
         $model = new \Magento\Framework\DB\Sql\UnionExpression($parts);
-        $this->assertEquals('(test_assemble)' . Select::SQL_UNION . '(test_column)', $model->__toString());
+        $this->assertSame('(test_assemble)' . Select::SQL_UNION . '(test_column)', $model->__toString());
     }
 }

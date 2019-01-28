@@ -130,6 +130,6 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->with('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_ENABLED)
             ->willReturnSelf();
 
-        $this->assertEquals($this->select, $this->statusBaseSelectProcessor->process($this->select));
+        $this->assertSame($this->select, $this->statusBaseSelectProcessor->process($this->select));
     }
 }

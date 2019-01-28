@@ -20,6 +20,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             'other' => ['synonyms', 'stopwords'],
             'none' => [],
         ];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

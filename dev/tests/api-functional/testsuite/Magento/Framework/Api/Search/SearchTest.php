@@ -61,12 +61,12 @@ class SearchTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['id']);
-        $this->assertEquals('score', $response['items'][0]['custom_attributes'][0]['attribute_code']);
+        $this->assertSame('score', $response['items'][0]['custom_attributes'][0]['attribute_code']);
         $this->assertTrue($response['items'][0]['custom_attributes'][0]['value'] > 0);
     }
 }

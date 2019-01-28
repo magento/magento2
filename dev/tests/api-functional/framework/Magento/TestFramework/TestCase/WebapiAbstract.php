@@ -593,7 +593,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 
         /** Check SOAP fault code */
         $this->assertNotNull($soapFault->faultcode, "Fault code must not be empty.");
-        $this->assertEquals($expectedFaultCode, $soapFault->faultcode, "Fault code is invalid.");
+        $this->assertSame($expectedFaultCode, $soapFault->faultcode, "Fault code is invalid.");
     }
 
     /**
@@ -620,7 +620,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                     $actualParams[$param->$paramKey] = $param->$paramValue;
                 }
             }
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedErrorParams,
                 $actualParams,
                 "Parameters in fault details are invalid."
@@ -652,7 +652,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                     $actualWrappedErrors[] = $this->getActualWrappedErrors($errorNode);
                 }
             }
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedWrappedErrors,
                 $actualWrappedErrors,
                 "Wrapped errors in fault details are invalid."

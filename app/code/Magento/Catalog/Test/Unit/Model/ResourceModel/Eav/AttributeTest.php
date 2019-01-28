@@ -170,7 +170,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $this->assertEquals('global', $this->_model->getScope());
+        $this->assertSame('global', $this->_model->getScope());
     }
 
     public function testGetScopeWebsite()
@@ -188,7 +188,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $this->assertEquals('website', $this->_model->getScope());
+        $this->assertSame('website', $this->_model->getScope());
     }
 
     public function testGetScopeStore()
@@ -206,6 +206,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $this->assertEquals('store', $this->_model->getScope());
+        $this->assertSame('store', $this->_model->getScope());
     }
 }

@@ -101,7 +101,7 @@ class ContainerTest extends AbstractContainerTest
             ]
         );
 
-        $this->assertEquals($expectedHtml, $this->containerBlock->toHtml());
+        $this->assertSame($expectedHtml, $this->containerBlock->toHtml());
     }
 
     /**
@@ -222,7 +222,7 @@ class ContainerTest extends AbstractContainerTest
             ]
         );
 
-        $this->assertEquals($expectedHtml, $this->containerBlock->toHtml());
+        $this->assertSame($expectedHtml, $this->containerBlock->toHtml());
     }
 
     /**
@@ -363,7 +363,7 @@ class ContainerTest extends AbstractContainerTest
             ]
         );
 
-        $this->assertEquals($expectedHtml, $this->containerBlock->toHtml());
+        $this->assertSame($expectedHtml, $this->containerBlock->toHtml());
     }
 
     /**
@@ -435,6 +435,6 @@ class ContainerTest extends AbstractContainerTest
             ]
         );
 
-        $this->assertEquals($expectedHtml, $this->containerBlock->toHtml());
+        $this->assertSame($expectedHtml, $this->containerBlock->toHtml());
     }
 }

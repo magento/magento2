@@ -26,8 +26,8 @@ class CategoryConfigReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetChangeFrequency()
     {
-        $this->assertEquals('daily', $this->model->getChangeFrequency(Store::DEFAULT_STORE_ID));
-        $this->assertEquals('monthly', $this->model->getChangeFrequency(Store::DISTRO_STORE_ID));
+        $this->assertSame('daily', $this->model->getChangeFrequency(Store::DEFAULT_STORE_ID));
+        $this->assertSame('monthly', $this->model->getChangeFrequency(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -35,7 +35,7 @@ class CategoryConfigReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryPriority()
     {
-        $this->assertEquals(0.5, $this->model->getPriority(Store::DEFAULT_STORE_ID));
-        $this->assertEquals(100, $this->model->getPriority(Store::DISTRO_STORE_ID));
+        $this->assertSame(0.5, $this->model->getPriority(Store::DEFAULT_STORE_ID));
+        $this->assertSame(100, $this->model->getPriority(Store::DISTRO_STORE_ID));
     }
 }

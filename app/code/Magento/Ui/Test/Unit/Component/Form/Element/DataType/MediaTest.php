@@ -62,7 +62,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->willReturn($url);
         $this->media->prepare();
         $configuration = $this->media->getConfiguration();
-        $this->assertEquals($expectedConfig, $configuration);
+        $this->assertSame($expectedConfig, $configuration);
     }
 
     public function testPrepareWithDataScope()
@@ -94,6 +94,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->willReturn($url);
         $this->media->prepare();
         $configuration = $this->media->getConfiguration();
-        $this->assertEquals($expectedConfig, $configuration);
+        $this->assertSame($expectedConfig, $configuration);
     }
 }

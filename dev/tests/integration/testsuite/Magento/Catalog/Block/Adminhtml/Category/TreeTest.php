@@ -31,10 +31,10 @@ class TreeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSuggestedCategoriesJson()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '[{"id":"2","children":[],"is_active":"1","label":"Default Category"}]',
             $this->_block->getSuggestedCategoriesJson('Default')
         );
-        $this->assertEquals('[]', $this->_block->getSuggestedCategoriesJson(strrev('Default')));
+        $this->assertSame('[]', $this->_block->getSuggestedCategoriesJson(strrev('Default')));
     }
 }

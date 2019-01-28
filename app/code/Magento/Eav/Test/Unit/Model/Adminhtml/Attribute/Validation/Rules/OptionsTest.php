@@ -27,7 +27,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['value' => '', 'label' => __('None')],
                 ['value' => 'validate-number', 'label' => __('Decimal Number')],

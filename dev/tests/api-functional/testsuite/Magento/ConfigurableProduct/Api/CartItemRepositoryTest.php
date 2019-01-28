@@ -50,7 +50,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, $this->getRequestData($cartId));
         $this->assertNotNull($response['item_id']);
-        $this->assertEquals(Configurable::TYPE_CODE, $response['product_type']);
+        $this->assertSame(Configurable::TYPE_CODE, $response['product_type']);
 
         $quote->load('test_order_1', 'reserved_order_id');
         $items = $quote->getAllItems();
@@ -163,7 +163,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $this->assertNotNull($item);
         $this->assertNotNull($item->getId());
-        $this->assertEquals(Configurable::TYPE_CODE, $item->getProductType());
+        $this->assertSame(Configurable::TYPE_CODE, $item->getProductType());
 
         $requestData = $this->getRequestData($cartId, 1);
         $requestData['cartItem']['qty'] = $qty;
@@ -183,10 +183,10 @@ class CartItemRepositoryTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertNotNull($response['item_id']);
-        $this->assertEquals(Configurable::TYPE_CODE, $response['product_type']);
-        $this->assertEquals($cartId, $response['quote_id']);
-        $this->assertEquals($qty, $response['qty']);
-        $this->assertEquals(
+        $this->assertSame(Configurable::TYPE_CODE, $response['product_type']);
+        $this->assertSame($cartId, $response['quote_id']);
+        $this->assertSame($qty, $response['qty']);
+        $this->assertSame(
             $response['product_option']['extension_attributes']['configurable_item_options'][0],
             $requestData['cartItem']['product_option']['extension_attributes']['configurable_item_options'][0]
         );
@@ -260,7 +260,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $this->assertNotNull($item);
         $this->assertNotNull($item->getId());
-        $this->assertEquals(Configurable::TYPE_CODE, $item->getProductType());
+        $this->assertSame(Configurable::TYPE_CODE, $item->getProductType());
 
         $requestData = $this->getRequestData($cartId);
         $requestData['cartItem']['qty'] = $qty;
@@ -270,10 +270,10 @@ class CartItemRepositoryTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertNotNull($response['item_id']);
-        $this->assertEquals($item->getId(), $response['item_id']);
-        $this->assertEquals(Configurable::TYPE_CODE, $response['product_type']);
-        $this->assertEquals($cartId, $response['quote_id']);
-        $this->assertEquals($qty, $response['qty']);
+        $this->assertSame($item->getId(), $response['item_id']);
+        $this->assertSame(Configurable::TYPE_CODE, $response['product_type']);
+        $this->assertSame($cartId, $response['quote_id']);
+        $this->assertSame($qty, $response['qty']);
     }
 
     /**
@@ -303,7 +303,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $item = $response[0];
 
         $this->assertNotNull($item['item_id']);
-        $this->assertEquals(Configurable::TYPE_CODE, $item['product_type']);
+        $this->assertSame(Configurable::TYPE_CODE, $item['product_type']);
         $this->assertArrayHasKey('product_option', $item);
         $this->assertArrayHasKey('extension_attributes', $item['product_option']);
         $this->assertArrayHasKey('configurable_item_options', $item['product_option']['extension_attributes']);

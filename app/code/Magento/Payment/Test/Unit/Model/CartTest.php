@@ -70,12 +70,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testGetAmounts($transferFlags, $salesModelItems, $salesModelAmounts, $expected)
     {
         $amounts = $this->_collectItemsAndAmounts($transferFlags, $salesModelItems, $salesModelAmounts);
-        $this->assertEquals($expected, $amounts);
+        $this->assertSame($expected, $amounts);
 
         // check that method just return calculated result for further calls
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $amounts = $this->_model->getAmounts();
-        $this->assertEquals($expected, $amounts);
+        $this->assertSame($expected, $amounts);
     }
 
     /**
@@ -117,27 +117,27 @@ class CartTest extends \PHPUnit\Framework\TestCase
             $addMethod = 'add' . $amountType;
 
             $this->_model->{$setMethod}(10);
-            $this->assertEquals(10, $this->_model->{$getMethod}());
+            $this->assertSame(10, $this->_model->{$getMethod}());
 
             $this->_model->{$addMethod}(5);
-            $this->assertEquals(15, $this->_model->{$getMethod}());
+            $this->assertSame(15, $this->_model->{$getMethod}());
 
             $this->_model->{$addMethod}(-20);
-            $this->assertEquals(-5, $this->_model->{$getMethod}());
+            $this->assertSame(-5, $this->_model->{$getMethod}());
 
             $this->_model->{$setMethod}(10);
-            $this->assertEquals(10, $this->_model->{$getMethod}());
+            $this->assertSame(10, $this->_model->{$getMethod}());
         }
 
         // there is no method setSubtotal(), so test the following separately
         $this->_model->addSubtotal(10);
-        $this->assertEquals(10, $this->_model->getSubtotal());
+        $this->assertSame(10, $this->_model->getSubtotal());
 
         $this->_model->addSubtotal(2);
-        $this->assertEquals(12, $this->_model->getSubtotal());
+        $this->assertSame(12, $this->_model->getSubtotal());
 
         $this->_model->addSubtotal(-20);
-        $this->assertEquals(-8, $this->_model->getSubtotal());
+        $this->assertSame(-8, $this->_model->getSubtotal());
     }
 
     /**

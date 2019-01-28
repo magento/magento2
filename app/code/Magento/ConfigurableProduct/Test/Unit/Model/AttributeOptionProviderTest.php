@@ -134,7 +134,7 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
             ->with($this->select)
             ->willReturn($options);
 
-        $this->assertEquals(
+        $this->assertSame(
             $options,
             $this->model->getAttributeOptions($this->abstractAttribute, 4)
         );
@@ -183,7 +183,7 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
             ->with($this->select)
             ->willReturn($options);
 
-        $this->assertEquals(
+        $this->assertSame(
             $options,
             $this->model->getAttributeOptions($this->abstractAttribute, 1)
         );

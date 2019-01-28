@@ -41,7 +41,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
         $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
-        $this->assertEquals(0, $result['error']);
+        $this->assertSame(0, $result['error']);
     }
 
     /**
@@ -71,8 +71,8 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
 
         self::assertArrayHasKey('errorcode', $result);
-        self::assertEquals(0, $result['errorcode']);
-        self::assertEquals('Disallowed file type.', $result['error']);
+        self::assertSame(0, $result['errorcode']);
+        self::assertSame('Disallowed file type.', $result['error']);
     }
 
     /**

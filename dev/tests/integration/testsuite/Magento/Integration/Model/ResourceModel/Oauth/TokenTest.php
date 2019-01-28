@@ -274,7 +274,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedPreservedTokenNumbers as $tokenNumber) {
             $token = $this->tokenFactory->create();
             $this->tokenResourceModel->load($token, $generatedTokens[$tokenNumber]['tokenId']);
-            $this->assertEquals(
+            $this->assertSame(
                 $generatedTokens[$tokenNumber]['tokenId'],
                 $token->getId(),
                 "Token {$tokenNumber} was NOT expected to be deleted after clean up"

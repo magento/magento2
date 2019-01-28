@@ -30,7 +30,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
     {
         $scopeName = 'test_scope';
         $this->model->setCurrentScope($scopeName);
-        $this->assertEquals($scopeName, $this->model->getCurrentScope());
+        $this->assertSame($scopeName, $this->model->getCurrentScope());
     }
 
     public function testGetAllScopes()
@@ -39,6 +39,6 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $this->areaListMock->expects($this->once())
             ->method('getCodes')
             ->will($this->returnValue(['test_scope']));
-        $this->assertEquals($expectedBalances, $this->model->getAllScopes());
+        $this->assertSame($expectedBalances, $this->model->getAllScopes());
     }
 }

@@ -38,7 +38,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->asset->expects($this->never())->method('getPath');
         $this->assetRepo->expects($this->never())->method('createUsingContext');
         $textNoSeparator = 'name_without_double_colon.ext';
-        $this->assertEquals(
+        $this->assertSame(
             $textNoSeparator,
             $this->object->convertModuleNotationToPath($this->asset, $textNoSeparator)
         );
@@ -68,7 +68,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
             ->method('createSimilar')
             ->with($relatedFieldId, $this->asset)
             ->will($this->returnValue($similarAsset));
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->object->convertModuleNotationToPath($this->asset, $relatedFieldId)
         );

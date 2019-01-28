@@ -19,9 +19,9 @@ class CsvfileTest extends \PHPUnit\Framework\TestCase
     public function testConstructor($config, $expectedFilePath, $expectedDelimiter, $expectedEnclosure)
     {
         $output = new \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile($config);
-        $this->assertAttributeEquals($expectedFilePath, '_filePath', $output);
-        $this->assertAttributeEquals($expectedDelimiter, '_delimiter', $output);
-        $this->assertAttributeEquals($expectedEnclosure, '_enclosure', $output);
+        $this->assertAttributeSame($expectedFilePath, '_filePath', $output);
+        $this->assertAttributeSame($expectedDelimiter, '_delimiter', $output);
+        $this->assertAttributeSame($expectedEnclosure, '_enclosure', $output);
     }
 
     /**

@@ -103,7 +103,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mediaHelperObject->getSwatchAttributeImage($swatchType, '/f/i/file.png');
 
-        $this->assertEquals($result, $expectedResult);
+        $this->assertSame($result, $expectedResult);
     }
 
     /**
@@ -182,7 +182,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->mediaHelperObject->getSwatchMediaUrl();
 
-        $this->assertEquals($result, 'http://url/pub/media/attribute/swatch');
+        $this->assertSame($result, 'http://url/pub/media/attribute/swatch');
     }
 
     /**
@@ -194,7 +194,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             $this->generateImageConfig();
         }
         $result = $this->mediaHelperObject->getFolderNameSize($swatchType, $imageConfig);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -271,12 +271,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributeSwatchPath()
     {
         $result = $this->mediaHelperObject->getAttributeSwatchPath('/m/a/magento.png');
-        $this->assertEquals($result, 'attribute/swatch/m/a/magento.png');
+        $this->assertSame($result, 'attribute/swatch/m/a/magento.png');
     }
 
     public function testGetSwatchMediaPath()
     {
-        $this->assertEquals('attribute/swatch', $this->mediaHelperObject->getSwatchMediaPath());
+        $this->assertSame('attribute/swatch', $this->mediaHelperObject->getSwatchMediaPath());
     }
 
     /**
@@ -284,7 +284,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSwatchCachePath($swatchType, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->mediaHelperObject->getSwatchCachePath($swatchType));
+        $this->assertSame($expectedResult, $this->mediaHelperObject->getSwatchCachePath($swatchType));
     }
 
     /**

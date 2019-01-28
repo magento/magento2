@@ -90,7 +90,7 @@ class DomainTest extends \PHPUnit\Framework\TestCase
                 $this->fail('Failed to throw exception');
             }
         } catch (LocalizedException $e) {
-            $this->assertEquals('Invalid domain name: message', $e->getMessage());
+            $this->assertSame('Invalid domain name: message', $e->getMessage());
         }
     }
 

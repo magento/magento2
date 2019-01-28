@@ -33,7 +33,7 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTest
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
 
-        $this->assertEquals($output, $commandTester->getDisplay());
+        $this->assertSame($output, $commandTester->getDisplay());
     }
 
     /**

@@ -58,7 +58,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $this->assertEquals(false, $this->view->shouldRenderQuantity());
+        $this->assertSame(false, $this->view->shouldRenderQuantity());
     }
 
     public function testGetIdentities()
@@ -83,6 +83,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->assertEquals(['cat_p_1', 'cat_c_1'], $this->view->getIdentities());
+        $this->assertSame(['cat_p_1', 'cat_c_1'], $this->view->getIdentities());
     }
 }

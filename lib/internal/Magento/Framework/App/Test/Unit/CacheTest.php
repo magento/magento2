@@ -121,7 +121,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('test_data')
         );
-        $this->assertEquals('test_data', $this->_model->load('test_id'));
+        $this->assertSame('test_data', $this->_model->load('test_id'));
     }
 
     /**
@@ -190,7 +190,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($result)
         );
-        $this->assertEquals($result, $this->_model->remove('test_id'));
+        $this->assertSame($result, $this->_model->remove('test_id'));
     }
 
     /**

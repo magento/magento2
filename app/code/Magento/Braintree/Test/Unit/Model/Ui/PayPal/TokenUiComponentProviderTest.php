@@ -87,6 +87,6 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl');
 
         $actual = $this->componentProvider->getComponentForToken($this->paymentToken);
-        static::assertEquals($this->tokenComponent, $actual);
+        static::assertSame($this->tokenComponent, $actual);
     }
 }

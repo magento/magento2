@@ -68,7 +68,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
                 ->method('getValue')
                 ->will($this->returnValue($paymentAction));
         }
-        $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
+        $this->assertSame($result, $this->methodFree->getConfigPaymentAction());
     }
 
     /**
@@ -97,7 +97,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->will($this->returnValue($isActive));
 
-        $this->assertEquals($result, $this->methodFree->isAvailable($quote));
+        $this->assertSame($result, $this->methodFree->isAvailable($quote));
     }
 
     /**

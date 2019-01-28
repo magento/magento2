@@ -23,6 +23,6 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     {
         $params = $this->_model->execute([]);
         $this->_params['removed'] = true;
-        $this->assertEquals($this->_params, $params);
+        $this->assertSame($this->_params, $params);
     }
 }

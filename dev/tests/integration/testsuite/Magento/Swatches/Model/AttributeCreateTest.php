@@ -83,6 +83,6 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
 
         $attribute = $om->get(ProductAttributeRepositoryInterface::class)->save($attribute);
         $this->assertNotEmpty($attribute->getId());
-        $this->assertEquals('swatch_visual', $attribute->getFrontendInput());
+        $this->assertSame('swatch_visual', $attribute->getFrontendInput());
     }
 }

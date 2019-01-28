@@ -144,7 +144,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             ->with('status', $failureCodes)
             ->willReturnSelf();
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$this->operationMock]);
-        $this->assertEquals([$this->operationMock], $this->model->getFailedOperationsByBulkId($bulkUuid, $failureType));
+        $this->assertSame([$this->operationMock], $this->model->getFailedOperationsByBulkId($bulkUuid, $failureType));
     }
 
     public function testGetOperationsCountByBulkIdAndStatus()
@@ -171,7 +171,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getSize')
             ->willReturn($size);
-        $this->assertEquals($size, $this->model->getOperationsCountByBulkIdAndStatus($bulkUuid, $status));
+        $this->assertSame($size, $this->model->getOperationsCountByBulkIdAndStatus($bulkUuid, $status));
     }
 
     /**
@@ -202,7 +202,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         $this->bulkCollectionFactory->expects($this->once())->method('create')->willReturn($bulkCollection);
         $bulkCollection->expects($this->once())->method('addFieldToFilter')->with('user_id', $userId)->willReturnSelf();
         $bulkCollection->expects($this->once())->method('getItems')->willReturn([$this->bulkMock]);
-        $this->assertEquals([$this->bulkMock], $this->model->getBulksByUser($userId));
+        $this->assertSame([$this->bulkMock], $this->model->getBulksByUser($userId));
     }
 
     public function testGetBulksStatus()
@@ -265,6 +265,6 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             ->with('status', OperationInterface::STATUS_TYPE_COMPLETE)
             ->willReturnSelf();
         $completeOperationCollection->expects($this->any())->method('getSize')->willReturn(5);
-        $this->assertEquals(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus($bulkUuid));
+        $this->assertSame(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus($bulkUuid));
     }
 }

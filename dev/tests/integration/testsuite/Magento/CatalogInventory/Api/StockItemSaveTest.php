@@ -29,16 +29,16 @@ class StockItemSaveTest extends \PHPUnit\Framework\TestCase
         $productRepository->save($product);
 
         $product = $productRepository->get('simple', false, null, true);
-        $this->assertEquals(555, $product->getExtensionAttributes()->getStockItem()->getQty());
+        $this->assertSame(555, $product->getExtensionAttributes()->getStockItem()->getQty());
 
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $stockItem->setQty(200);
         /** @var StockItemRepositoryInterface $stockItemRepository */
         $stockItemRepository = $objectManager->get(StockItemRepositoryInterface::class);
         $stockItemRepository->save($stockItem);
-        $this->assertEquals(200, $product->getExtensionAttributes()->getStockItem()->getQty());
+        $this->assertSame(200, $product->getExtensionAttributes()->getStockItem()->getQty());
 
         $product = $productRepository->get('simple', false, null, true);
-        $this->assertEquals(200, $product->getExtensionAttributes()->getStockItem()->getQty());
+        $this->assertSame(200, $product->getExtensionAttributes()->getStockItem()->getQty());
     }
 }

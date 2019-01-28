@@ -40,6 +40,6 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($transactionMock));
         $transactionMock->expects($this->once())->method('getId')->will($this->returnValue('transactionId'));
         $collectionMock->expects($this->once())->method('addParentIdFilter')->will($this->returnSelf());
-        $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
+        $this->assertSame($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 }

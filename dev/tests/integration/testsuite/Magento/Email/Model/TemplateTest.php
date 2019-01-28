@@ -90,7 +90,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->mockModel();
         $filter = $this->model->getTemplateFilter();
         $this->assertSame($filter, $this->model->getTemplateFilter());
-        $this->assertEquals(
+        $this->assertSame(
             $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId(),
             $filter->getStoreId()
         );
@@ -644,7 +644,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->mockModel();
         $testId = 9999;
         $this->model->setId($testId);
-        $this->assertEquals($testId, $this->model->getId());
+        $this->assertSame($testId, $this->model->getId());
     }
 
     public function testIsValidForSend()
@@ -668,7 +668,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $this->mockModel();
         $this->model->setId('customer_create_account_email_template');
-        $this->assertEquals(TemplateTypesInterface::TYPE_HTML, $this->model->getType());
+        $this->assertSame(TemplateTypesInterface::TYPE_HTML, $this->model->getType());
     }
 
     public function testGetType()
@@ -676,7 +676,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->mockModel();
         $templateTypeId = 'test_template';
         $this->model->setTemplateType($templateTypeId);
-        $this->assertEquals($templateTypeId, $this->model->getType());
+        $this->assertSame($templateTypeId, $this->model->getType());
     }
 
     public function testGetSendingException()
@@ -691,10 +691,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
         $this->model->setOrigTemplateVariables($testTemplateVariables);
         $variablesOptionArray = $this->model->getVariablesOptionArray();
-        $this->assertEquals('{{var data.name}}', $variablesOptionArray[0]['value']);
-        $this->assertEquals('Sender Name', $variablesOptionArray[0]['label']->getArguments()[0]);
-        $this->assertEquals('{{var data.email}}', $variablesOptionArray[1]['value']);
-        $this->assertEquals('Sender Email', $variablesOptionArray[1]['label']->getArguments()[0]);
+        $this->assertSame('{{var data.name}}', $variablesOptionArray[0]['value']);
+        $this->assertSame('Sender Name', $variablesOptionArray[0]['label']->getArguments()[0]);
+        $this->assertSame('{{var data.email}}', $variablesOptionArray[1]['value']);
+        $this->assertSame('Sender Email', $variablesOptionArray[1]['label']->getArguments()[0]);
     }
 
     public function testGetVariablesOptionArrayInGroup()
@@ -703,8 +703,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
         $this->model->setOrigTemplateVariables($testTemplateVariables);
         $variablesOptionArray = $this->model->getVariablesOptionArray(true);
-        $this->assertEquals('Template Variables', $variablesOptionArray['label']->getText());
-        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray['value']);
+        $this->assertSame('Template Variables', $variablesOptionArray['label']->getText());
+        $this->assertSame($this->model->getVariablesOptionArray(), $variablesOptionArray['value']);
     }
 
     /**
@@ -735,7 +735,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $this->mockModel();
         $this->model->setVars(['foo', 'bar', 'baz']);
-        $this->assertEquals('Subject', $this->model->getSubject());
+        $this->assertSame('Subject', $this->model->getSubject());
     }
 
     public function testSetOptions()
@@ -743,6 +743,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->mockModel();
         $options = ['area' => 'test area', 'store' => 1];
         $this->model->setOptions($options);
-        $this->assertEquals($options, $this->model->getDesignConfig()->getData());
+        $this->assertSame($options, $this->model->getDesignConfig()->getData());
     }
 }

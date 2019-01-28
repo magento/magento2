@@ -20,7 +20,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $assertArray = $this->testArray;
         array_unshift($assertArray, ['value' => '', 'label' => __('No layout updates')]);
-        $this->assertEquals($assertArray, $this->model->getAllOptions());
+        $this->assertSame($assertArray, $this->model->getAllOptions());
     }
 
     protected function setUp()

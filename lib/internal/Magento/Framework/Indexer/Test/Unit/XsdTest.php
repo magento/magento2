@@ -44,7 +44,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
             $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd'),
             $xmlString
         );
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertSame($expectedError, $actualError);
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()

@@ -144,13 +144,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $longFileName = 'veryLongFileNameMoreThanTwenty';
         $expectedFileName = 'veryLongFileNameMore...';
-        $this->assertEquals($expectedFileName, $this->helper->getShortFilename($longFileName, 20));
+        $this->assertSame($expectedFileName, $this->helper->getShortFilename($longFileName, 20));
     }
 
     public function testGetStorageRoot()
     {
         $expectedStorageRoot = '/' . \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
-        $this->assertEquals($expectedStorageRoot, $this->helper->getStorageRoot());
+        $this->assertSame($expectedStorageRoot, $this->helper->getStorageRoot());
     }
 
     public function testGetThumbnailDirectory()
@@ -161,7 +161,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ['root', 'image', \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY]
         );
 
-        $this->assertEquals($thumbnailDir, $this->helper->getThumbnailDirectory($imagePath));
+        $this->assertSame($thumbnailDir, $this->helper->getThumbnailDirectory($imagePath));
     }
 
     public function testGetThumbnailPath()
@@ -186,7 +186,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryWrite->expects($this->any())->method('isExist')->will($this->returnValue(true));
 
-        $this->assertEquals($thumbnailPath, $this->helper->getThumbnailPath($image));
+        $this->assertSame($thumbnailPath, $this->helper->getThumbnailPath($image));
     }
 
     public function testGetRequestParams()
@@ -224,7 +224,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
             \Magento\Theme\Helper\Storage::PARAM_NODE => 'node',
         ];
-        $this->assertEquals($expectedResult, $this->helper->getRequestParams());
+        $this->assertSame($expectedResult, $this->helper->getRequestParams());
     }
 
     public function testGetAllowedExtensionsByType()
@@ -250,10 +250,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         );
 
         $fontTypes = $this->helper->getAllowedExtensionsByType();
-        $this->assertEquals(['ttf', 'otf', 'eot', 'svg', 'woff'], $fontTypes);
+        $this->assertSame(['ttf', 'otf', 'eot', 'svg', 'woff'], $fontTypes);
 
         $imagesTypes = $this->helper->getAllowedExtensionsByType();
-        $this->assertEquals(['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'], $imagesTypes);
+        $this->assertSame(['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'], $imagesTypes);
     }
 
     /**
@@ -331,8 +331,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             });
 
         $value = $this->helper->convertPathToId($path);
-        $this->assertEquals(base64_encode('/path/to'), $value);
-        $this->assertEquals($path, $this->helper->convertIdToPath($value));
+        $this->assertSame(base64_encode('/path/to'), $value);
+        $this->assertSame($path, $this->helper->convertIdToPath($value));
     }
 
     public function testGetSession()
@@ -377,7 +377,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with($filename)
             ->willReturnCallback($decode);
 
-        $this->assertEquals(
+        $this->assertSame(
             '../image/not/a/root/filename.ext',
             $this->helper->getRelativeUrl()
         );
@@ -408,7 +408,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE)
             ->willReturn($type);
 
-        $this->assertEquals($name, $this->helper->getStorageTypeName());
+        $this->assertSame($name, $this->helper->getStorageTypeName());
     }
 
     /**

@@ -59,7 +59,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('value', $attribute);
         $this->assertArrayHasKey('value_id', $attribute);
-        $this->assertEquals($attribute['value'], 'Simple fixture store');
+        $this->assertSame($attribute['value'], 'Simple fixture store');
 
         // Execute command
         $this->tester->execute([]);

@@ -29,12 +29,12 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($this->_service->copyFieldsetToTarget($fieldset, $aspect, 'invalid_source', []));
         $this->assertNull($this->_service->copyFieldsetToTarget($fieldset, $aspect, [], 'invalid_target'));
-        $this->assertEquals(
+        $this->assertSame(
             $target,
             $this->_service->copyFieldsetToTarget('invalid_fieldset', $aspect, $source, $target)
         );
         $this->assertSame($target, $this->_service->copyFieldsetToTarget($fieldset, $aspect, $source, $target));
-        $this->assertEquals($expectedTarget, $target);
+        $this->assertSame($expectedTarget, $target);
     }
 
     public function testCopyFieldsetWithExtensionAttributes()
@@ -92,12 +92,12 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             $target->getEmail(),
             "Email should not be set because it is not defined in the fieldset."
         );
-        $this->assertEquals(
+        $this->assertSame(
             $firstName,
             $target->getFirstname(),
             "First name was not copied."
         );
-        $this->assertEquals(
+        $this->assertSame(
             $groupCode,
             $target->getExtensionAttributes()->getTestGroupCode(),
             "Extension attribute was not copied."
@@ -137,11 +137,11 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $target = $objectManager->get(\Magento\TestModuleExtensionAttributes\Model\Data\FakeAttributeMetadata::class);
         $expectedTarget = $source;
 
-        $this->assertEquals(
+        $this->assertSame(
             $target,
             $service->copyFieldsetToTarget('invalid_fieldset', $aspect, $source, $target)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedTarget,
             $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target)
         );
@@ -156,11 +156,11 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $target = [];
         $expectedTarget = $data;
 
-        $this->assertEquals(
+        $this->assertSame(
             $target,
             $this->_service->copyFieldsetToTarget('invalid_fieldset', $aspect, $source, $target)
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedTarget,
             $this->_service->copyFieldsetToTarget($fieldset, $aspect, $source, $target)
         );

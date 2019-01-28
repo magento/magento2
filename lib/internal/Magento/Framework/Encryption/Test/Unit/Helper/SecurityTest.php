@@ -28,7 +28,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
      */
     public function testCompareStrings($expected, $actual, $result)
     {
-        $this->assertEquals($result, Security::compareStrings($expected, $actual));
+        $this->assertSame($result, Security::compareStrings($expected, $actual));
     }
 
     /**

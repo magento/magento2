@@ -65,6 +65,6 @@ class StoreWebsiteRelationTest extends \PHPUnit\Framework\TestCase
             ->method('fetchCol')
             ->willReturn($data);
 
-        $this->assertEquals($data, $this->model->getStoreByWebsiteId($websiteId));
+        $this->assertSame($data, $this->model->getStoreByWebsiteId($websiteId));
     }
 }

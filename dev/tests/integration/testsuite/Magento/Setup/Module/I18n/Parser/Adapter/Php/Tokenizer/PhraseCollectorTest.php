@@ -53,6 +53,6 @@ class PhraseCollectorTest extends \PHPUnit\Framework\TestCase
                 'line' => 4
             ]
         ];
-        $this->assertEquals($expectation, $this->phraseCollector->getPhrases());
+        $this->assertSame($expectation, $this->phraseCollector->getPhrases());
     }
 }

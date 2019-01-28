@@ -21,7 +21,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
 
     public function testGetXml()
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['data' => [
                 'nodes' => [
                     'text' => ' some text ',

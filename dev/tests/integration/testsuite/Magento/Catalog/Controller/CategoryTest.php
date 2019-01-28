@@ -67,12 +67,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $currentCategory \Magento\Catalog\Model\Category */
         $currentCategory = $objectManager->get(\Magento\Framework\Registry::class)->registry('current_category');
         $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $currentCategory);
-        $this->assertEquals($categoryId, $currentCategory->getId(), 'Category in registry.');
+        $this->assertSame($categoryId, $currentCategory->getId(), 'Category in registry.');
 
         $lastCategoryId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Session::class
         )->getLastVisitedCategoryId();
-        $this->assertEquals($categoryId, $lastCategoryId, 'Last visited category.');
+        $this->assertSame($categoryId, $lastCategoryId, 'Last visited category.');
 
         /* Layout updates */
         $handles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

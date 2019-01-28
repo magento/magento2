@@ -42,6 +42,6 @@ class SpecificationFactoryTest extends \PHPUnit\Framework\TestCase
             ['list' => $specificationMapping]
         )->will($this->returnValue($expectedComposite));
 
-        $this->assertEquals($expectedComposite, $modelFactory->create([self::SPECIFICATION_KEY]));
+        $this->assertSame($expectedComposite, $modelFactory->create([self::SPECIFICATION_KEY]));
     }
 }

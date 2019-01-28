@@ -118,7 +118,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 
             $this->commandTester->execute($arguments);
 
-            $this->assertEquals(
+            $this->assertSame(
                 $resultCode,
                 $this->commandTester->getStatusCode()
             );

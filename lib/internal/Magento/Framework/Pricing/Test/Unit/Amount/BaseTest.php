@@ -24,7 +24,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = $model->getValue($exclude);
-        $this->assertEquals($amount, $result);
+        $this->assertSame($amount, $result);
     }
 
     /**
@@ -40,7 +40,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = $model->getValue($code);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -53,7 +53,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = (string)$model;
-        $this->assertEquals($amount, $result);
+        $this->assertSame($amount, $result);
     }
 
     /**
@@ -66,7 +66,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = $model->getBaseAmount();
-        $this->assertEquals($amount, $result);
+        $this->assertSame($amount, $result);
     }
 
     /**
@@ -94,7 +94,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = $model->getAdjustmentAmount($code);
-        $this->assertEquals($adjust, $result);
+        $this->assertSame($adjust, $result);
     }
 
     /**
@@ -113,7 +113,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = $model->getTotalAdjustmentAmount();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -129,7 +129,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->createEntity($amount, $adjustments);
         $result = $model->getAdjustmentAmounts();
-        $this->assertEquals($adjustments, $result);
+        $this->assertSame($adjustments, $result);
     }
 
     /**

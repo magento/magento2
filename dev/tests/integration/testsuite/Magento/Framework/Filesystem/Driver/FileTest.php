@@ -71,7 +71,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $expected = array_map(['self', 'getTestPath'], $paths);
         $actual = $this->driver->readDirectoryRecursively($this->getTestPath('foo'));
         sort($actual);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

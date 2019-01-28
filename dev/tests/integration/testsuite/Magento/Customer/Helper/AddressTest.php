@@ -23,7 +23,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributeValidationClass($attributeCode, $expectedClass)
     {
-        $this->assertEquals($expectedClass, $this->helper->getAttributeValidationClass($attributeCode));
+        $this->assertSame($expectedClass, $this->helper->getAttributeValidationClass($attributeCode));
     }
 
     public function getAttributeValidationClass()

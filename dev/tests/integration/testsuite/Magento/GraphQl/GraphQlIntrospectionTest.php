@@ -77,8 +77,8 @@ defaultValue
 QUERY;
         $response = \GraphQL\GraphQL::executeQuery($emptySchema, $request);
         $output = $response->toArray()['data']['__schema'];
-        $this->assertEquals('Query', $output['queryType']['name']);
-        $this->assertEquals($output['types'][0]['kind'], 'OBJECT');
+        $this->assertSame('Query', $output['queryType']['name']);
+        $this->assertSame($output['types'][0]['kind'], 'OBJECT');
         $expectedFragment =
             [
                 'name' => 'Query',
@@ -307,6 +307,6 @@ QUERY;
            ]
                 ]
                 ];
-        $this->assertEquals($expectedResult, $output);
+        $this->assertSame($expectedResult, $output);
     }
 }

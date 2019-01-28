@@ -202,8 +202,8 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with($this->quoteMock);
 
-        static::assertEquals($this->quoteMock, $this->model->get($cartId));
-        static::assertEquals($this->quoteMock, $this->model->get($cartId));
+        static::assertSame($this->quoteMock, $this->model->get($cartId));
+        static::assertSame($this->quoteMock, $this->model->get($cartId));
     }
 
     public function testGetForCustomerAfterGet()
@@ -240,8 +240,8 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with($this->quoteMock);
 
-        static::assertEquals($this->quoteMock, $this->model->get($cartId));
-        static::assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
+        static::assertSame($this->quoteMock, $this->model->get($cartId));
+        static::assertSame($this->quoteMock, $this->model->getForCustomer($customerId));
     }
 
     public function testGetWithSharedStoreIds()
@@ -267,7 +267,7 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->quoteMock)
             ->willReturn($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->get($cartId, $sharedStoreIds));
+        $this->assertSame($this->quoteMock, $this->model->get($cartId, $sharedStoreIds));
     }
 
     public function testGetForCustomer()
@@ -298,8 +298,8 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with($this->quoteMock);
 
-        static::assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
-        static::assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
+        static::assertSame($this->quoteMock, $this->model->getForCustomer($customerId));
+        static::assertSame($this->quoteMock, $this->model->getForCustomer($customerId));
     }
 
     /**
@@ -371,7 +371,7 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->quoteMock)
             ->willReturn($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->getActive($cartId));
+        $this->assertSame($this->quoteMock, $this->model->getActive($cartId));
     }
 
     public function testGetActiveWithSharedStoreIds()
@@ -398,7 +398,7 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->quoteMock)
             ->willReturn($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->getActive($cartId, $sharedStoreIds));
+        $this->assertSame($this->quoteMock, $this->model->getActive($cartId, $sharedStoreIds));
     }
 
     public function testGetActiveForCustomer()
@@ -422,8 +422,8 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->quoteMock)
             ->willReturn($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->getActiveForCustomer($customerId));
-        $this->assertEquals($this->quoteMock, $this->model->getActiveForCustomer($customerId));
+        $this->assertSame($this->quoteMock, $this->model->getActiveForCustomer($customerId));
+        $this->assertSame($this->quoteMock, $this->model->getActiveForCustomer($customerId));
     }
 
     public function testSave()
@@ -505,7 +505,7 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
         $searchResult->expects($this->once())
             ->method('setItems')
             ->with([$cartMock]);
-        $this->assertEquals($searchResult, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($searchResult, $this->model->getList($searchCriteriaMock));
     }
 
     /**

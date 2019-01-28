@@ -102,7 +102,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $buttonsHtml = $block->getButtonsHtml();
 
         if ($expected['back_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"back")]',
@@ -111,7 +111,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Back button is not present in block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"back")]',
@@ -122,7 +122,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['save_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"save")]',
@@ -131,7 +131,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Save button is not present in block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"save")]',
@@ -142,7 +142,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['reset_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[@title="Reset"]',
@@ -151,7 +151,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Reset button is not present in block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[@title="Reset"]',
@@ -162,7 +162,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['delete_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"delete")]',
@@ -171,7 +171,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Delete button is not present in block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"delete")]',

@@ -27,17 +27,17 @@ class ObjectRegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertEquals($this->object, $this->objectRegistry->get(1));
+        $this->assertSame($this->object, $this->objectRegistry->get(1));
     }
 
     public function testGetNotExistObject()
     {
-        $this->assertEquals(null, $this->objectRegistry->get('no-id'));
+        $this->assertSame(null, $this->objectRegistry->get('no-id'));
     }
 
     public function testGetList()
     {
-        $this->assertEquals([1 => $this->object], $this->objectRegistry->getList());
+        $this->assertSame([1 => $this->object], $this->objectRegistry->getList());
     }
 
     public function testGetEmptyList()
@@ -46,6 +46,6 @@ class ObjectRegistryTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogUrlRewrite\Model\ObjectRegistry::class,
             ['entities' => []]
         );
-        $this->assertEquals([], $objectRegistry->getList());
+        $this->assertSame([], $objectRegistry->getList());
     }
 }

@@ -34,8 +34,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructor()
     {
-        $this->assertAttributeEquals($this->_defaultDriverPrefix, '_defaultDriverPrefix', $this->_factory);
-        $this->assertAttributeEquals($this->_defaultDriverType, '_defaultDriverType', $this->_factory);
+        $this->assertAttributeSame($this->_defaultDriverPrefix, '_defaultDriverPrefix', $this->_factory);
+        $this->assertAttributeSame($this->_defaultDriverType, '_defaultDriverType', $this->_factory);
     }
 
     public function testDefaultConstructor()

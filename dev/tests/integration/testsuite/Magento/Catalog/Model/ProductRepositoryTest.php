@@ -74,7 +74,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get($sku);
 
         self::assertNotEmpty($product);
-        self::assertEquals($expectedSku, $product->getSku());
+        self::assertSame($expectedSku, $product->getSku());
     }
 
     /**
@@ -134,7 +134,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(isset($images[0]['file']));
         $this->assertStringStartsWith('/m/a/magento_image', $images[0]['file']);
         $this->assertArrayHasKey('media_type', $images[0]);
-        $this->assertEquals('image', $images[0]['media_type']);
+        $this->assertSame('image', $images[0]['media_type']);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
     }

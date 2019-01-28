@@ -52,7 +52,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $hash = 'hashString';
         $this->mathRandomMock->expects($this->once())->method('getUniqueHash')->willReturn($hash);
-        $this->assertEquals($hash, $this->model->generateResetPasswordLinkToken());
+        $this->assertSame($hash, $this->model->generateResetPasswordLinkToken());
     }
 
     public function testGetResetPasswordLinkExpirationPeriod()
@@ -62,6 +62,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(\Magento\User\Helper\Data::XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD)
             ->willReturn($value);
-        $this->assertEquals((int) $value, $this->model->getResetPasswordLinkExpirationPeriod());
+        $this->assertSame((int) $value, $this->model->getResetPasswordLinkExpirationPeriod());
     }
 }

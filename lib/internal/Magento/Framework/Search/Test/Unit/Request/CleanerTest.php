@@ -111,7 +111,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->cleaner->clean($requestData);
 
-        $this->assertEquals($exceptedRequestData, $result);
+        $this->assertSame($exceptedRequestData, $result);
     }
 
     public function testCleanWithoutAggregations()
@@ -193,7 +193,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->cleaner->clean($requestData);
 
-        $this->assertEquals($exceptedRequestData, $result);
+        $this->assertSame($exceptedRequestData, $result);
     }
 
     /**

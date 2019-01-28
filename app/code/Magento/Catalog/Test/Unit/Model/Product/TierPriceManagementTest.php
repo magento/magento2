@@ -147,7 +147,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         $prices = $this->service->getList('product_sku', $customerGroupId);
         $this->assertCount($expected ? 1 : 0, $prices);
         if ($expected) {
-            $this->assertEquals($priceMock, $prices[0]);
+            $this->assertSame($priceMock, $prices[0]);
         }
     }
 
@@ -190,7 +190,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(0));
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 0);
 
-        $this->assertEquals(true, $this->service->remove('product_sku', 4, 5, 0));
+        $this->assertSame(true, $this->service->remove('product_sku', 4, 5, 0));
     }
 
     /**
@@ -222,7 +222,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(1));
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 1);
 
-        $this->assertEquals(true, $this->service->remove('product_sku', 4, 5, 6));
+        $this->assertSame(true, $this->service->remove('product_sku', 4, 5, 6));
     }
 
     public function testSetNewPriceWithGlobalPriceScopeAll()

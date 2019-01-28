@@ -57,7 +57,7 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
             ->with($attributeSetMock)
             ->will($this->returnValue($attributeSetMock));
         $attributeSetMock->expects($this->once())->method('initFromSkeleton')->with($skeletonId);
-        $this->assertEquals($attributeSetMock, $this->model->create($entityTypeCode, $attributeSetMock, $skeletonId));
+        $this->assertSame($attributeSetMock, $this->model->create($entityTypeCode, $attributeSetMock, $skeletonId));
     }
 
     /**

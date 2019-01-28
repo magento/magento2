@@ -128,6 +128,6 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
             );
         $chooser->setData('category_collection', $this->collection);
         $result = $chooser->getTree();
-        $this->assertEquals($level, $result[0]['level']);
+        $this->assertSame($level, $result[0]['level']);
     }
 }

@@ -42,6 +42,6 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('column', $this->_model->getType());
+        $this->assertSame('column', $this->_model->getType());
     }
 }

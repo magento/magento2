@@ -99,7 +99,7 @@ class GoogleOptimizerTest extends \PHPUnit\Framework\TestCase
     public function testGetDataGoogleExperimentDisabled()
     {
         $this->canShowPanel(false);
-        $this->assertEquals([], $this->googleOptimizer->modifyData([]));
+        $this->assertSame([], $this->googleOptimizer->modifyData([]));
     }
 
     /**
@@ -139,7 +139,7 @@ class GoogleOptimizerTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($productId);
 
-        $this->assertEquals($expectedResult, $this->googleOptimizer->modifyData([]));
+        $this->assertSame($expectedResult, $this->googleOptimizer->modifyData([]));
     }
 
     /**
@@ -159,7 +159,7 @@ class GoogleOptimizerTest extends \PHPUnit\Framework\TestCase
     public function testGetMetaGoogleExperimentDisabled()
     {
         $this->canShowPanel(false);
-        $this->assertEquals([], $this->googleOptimizer->modifyMeta([]));
+        $this->assertSame([], $this->googleOptimizer->modifyMeta([]));
     }
 
     /**
@@ -215,6 +215,6 @@ class GoogleOptimizerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->canShowPanel(true);
-        $this->assertEquals($expectedResult, $this->googleOptimizer->modifyMeta([]));
+        $this->assertSame($expectedResult, $this->googleOptimizer->modifyMeta([]));
     }
 }

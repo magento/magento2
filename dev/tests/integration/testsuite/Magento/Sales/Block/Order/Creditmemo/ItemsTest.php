@@ -46,12 +46,12 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
 
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getCreditmemo());
-        $this->assertNotEquals($expectedHtml, $this->_block->getTotalsHtml($this->_creditmemo));
+        $this->assertNotSame($expectedHtml, $this->_block->getTotalsHtml($this->_creditmemo));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $this->_block->getTotalsHtml($this->_creditmemo);
         $this->assertSame($this->_creditmemo, $childBlock->getCreditmemo());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 
     public function testGetCommentsHtml()
@@ -65,12 +65,12 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getEntity());
         $this->assertEmpty($childBlock->getTitle());
-        $this->assertNotEquals($expectedHtml, $this->_block->getCommentsHtml($this->_creditmemo));
+        $this->assertNotSame($expectedHtml, $this->_block->getCommentsHtml($this->_creditmemo));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $this->_block->getCommentsHtml($this->_creditmemo);
         $this->assertSame($this->_creditmemo, $childBlock->getEntity());
         $this->assertNotEmpty($childBlock->getTitle());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 }

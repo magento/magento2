@@ -52,7 +52,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->translateResourceMock->expects($this->atLeastOnce())->method('getTranslationArray')
             ->willReturn($translations);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->jsonSerializer->serialize($translations),
             $this->model->getTranslationFileContent()
         );

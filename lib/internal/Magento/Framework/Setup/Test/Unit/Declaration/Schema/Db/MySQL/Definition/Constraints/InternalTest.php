@@ -83,7 +83,7 @@ class InternalTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedExpression,
             $this->internal->toDefinition($constraint)
         );
@@ -120,7 +120,7 @@ class InternalTest extends \PHPUnit\Framework\TestCase
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->internal->fromDefinition($definition);
-        $this->assertEquals($expectedDefinition, $result);
+        $this->assertSame($expectedDefinition, $result);
     }
 
     /**

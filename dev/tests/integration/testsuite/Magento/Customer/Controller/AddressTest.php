@@ -103,9 +103,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         );
         $address = $this->accountManagement->getDefaultBillingAddress(1);
 
-        $this->assertEquals('UA', $address->getCountryId());
-        $this->assertEquals('Kyiv', $address->getCity());
-        $this->assertEquals('Kiev', $address->getRegion()->getRegion());
+        $this->assertSame('UA', $address->getCountryId());
+        $this->assertSame('Kyiv', $address->getCity());
+        $this->assertSame('Kiev', $address->getRegion()->getRegion());
         $this->assertTrue($address->isDefaultBilling());
         $this->assertTrue($address->isDefaultShipping());
     }

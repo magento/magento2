@@ -42,8 +42,8 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('checkbox', $this->_model->getType());
-        $this->assertEquals('checkbox', $this->_model->getExtType());
+        $this->assertSame('checkbox', $this->_model->getType());
+        $this->assertSame('checkbox', $this->_model->getExtType());
     }
 
     /**

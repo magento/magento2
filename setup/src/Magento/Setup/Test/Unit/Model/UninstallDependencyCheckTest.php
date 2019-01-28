@@ -72,7 +72,7 @@ class UninstallDependencyCheckTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $result = $this->uninstallDependencyCheck->runUninstallReadinessCheck(array_keys($packages));
-        $this->assertEquals(['success' => true], $result);
+        $this->assertSame(['success' => true], $result);
     }
 
     public function testRunUninstallReadinessCheckWithError()
@@ -96,6 +96,6 @@ class UninstallDependencyCheckTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['Error message']);
 
         $result = $this->uninstallDependencyCheck->runUninstallReadinessCheck(array_keys($packages));
-        $this->assertEquals(['success' => false, 'error' => 'Error message'], $result);
+        $this->assertSame(['success' => false, 'error' => 'Error message'], $result);
     }
 }

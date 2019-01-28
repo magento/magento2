@@ -58,6 +58,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($expected, $configData->get());
+        $this->assertSame($expected, $configData->get());
     }
 }

@@ -80,7 +80,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $entityCode
         )->getEntityTypeId();
 
-        $this->assertEquals($entityId, $this->_model->getEntityTypeId());
+        $this->assertSame($entityId, $this->_model->getEntityTypeId());
     }
 
     /**
@@ -118,7 +118,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
         }
 
         $actualOptions = $this->_model->getAttributeOptions($attribute);
-        $this->assertEquals($expectedOptions, $actualOptions);
+        $this->assertSame($expectedOptions, $actualOptions);
     }
 
     /**

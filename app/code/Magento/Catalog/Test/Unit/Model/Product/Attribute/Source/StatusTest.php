@@ -124,17 +124,17 @@ class StatusTest extends \PHPUnit\Framework\TestCase
 
     public function testGetVisibleStatusIds()
     {
-        $this->assertEquals([0 => 1], $this->status->getVisibleStatusIds());
+        $this->assertSame([0 => 1], $this->status->getVisibleStatusIds());
     }
 
     public function testGetSaleableStatusIds()
     {
-        $this->assertEquals([0 => 1], $this->status->getSaleableStatusIds());
+        $this->assertSame([0 => 1], $this->status->getSaleableStatusIds());
     }
 
     public function testGetOptionArray()
     {
-        $this->assertEquals([1 => 'Enabled', 2 => 'Disabled'], $this->status->getOptionArray());
+        $this->assertSame([1 => 'Enabled', 2 => 'Disabled'], $this->status->getOptionArray());
     }
 
     /**
@@ -144,7 +144,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOptionText($text, $id)
     {
-        $this->assertEquals($text, $this->status->getOptionText($id));
+        $this->assertSame($text, $this->status->getOptionText($id));
     }
 
     /**

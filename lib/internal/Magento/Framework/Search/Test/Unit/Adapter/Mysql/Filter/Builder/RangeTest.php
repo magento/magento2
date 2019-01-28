@@ -79,7 +79,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($to));
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

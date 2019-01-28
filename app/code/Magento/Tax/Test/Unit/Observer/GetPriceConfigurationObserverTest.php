@@ -158,7 +158,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->model->execute($observerObject);
 
-        $this->assertEquals($expectedArray, $configObj->getData('config'));
+        $this->assertSame($expectedArray, $configObj->getData('config'));
     }
 
     /**

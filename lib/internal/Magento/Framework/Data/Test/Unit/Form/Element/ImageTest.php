@@ -51,7 +51,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('file', $this->_image->getType());
+        $this->assertSame('file', $this->_image->getType());
     }
 
     /**
@@ -60,7 +60,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testGetName()
     {
         $this->_image->setName('image_name');
-        $this->assertEquals('image_name', $this->_image->getName());
+        $this->assertSame('image_name', $this->_image->getName());
     }
 
     /**

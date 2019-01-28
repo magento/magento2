@@ -67,7 +67,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         if (is_callable($expectedResult)) {
             $expectedResult($actualResult);
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedResult,
                 $actualResult
             );

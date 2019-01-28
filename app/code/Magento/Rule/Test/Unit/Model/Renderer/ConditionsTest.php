@@ -55,6 +55,6 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
             ->method('asHtmlRecursive')
             ->will($this->returnValue('conditions html'));
 
-        $this->assertEquals('conditions html', $this->conditions->render($this->_element));
+        $this->assertSame('conditions html', $this->conditions->render($this->_element));
     }
 }

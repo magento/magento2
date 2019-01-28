@@ -204,7 +204,7 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
 
                 ]
             ]);
-        $this->assertEquals($this->expectedPackages, $this->systemPackage->getPackageVersions());
+        $this->assertSame($this->expectedPackages, $this->systemPackage->getPackageVersions());
     }
 
     /**
@@ -305,7 +305,7 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
         $this->composerInformation->expects($this->any())
             ->method('getPackageRequirements')
             ->willReturn([SystemPackage::EDITION_COMMUNITY => $require]);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->systemPackage->getAllowedEnterpriseVersions($ceCurrentVersion)
         );

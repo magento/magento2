@@ -87,7 +87,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 null
             )
             ->will($this->returnValue($return));
-        $this->assertEquals($return, $this->model->getMinQueryLength());
+        $this->assertSame($return, $this->model->getMinQueryLength());
     }
 
     public function testGetMaxQueryLength()
@@ -101,7 +101,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 null
             )
             ->will($this->returnValue($return));
-        $this->assertEquals($return, $this->model->getMaxQueryLength());
+        $this->assertSame($return, $this->model->getMaxQueryLength());
     }
 
     /**
@@ -124,7 +124,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with($queryText, 0, $maxQueryLength)
             ->willReturn($expected);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->assertEquals($expected, $this->model->getEscapedQueryText());
+        $this->assertSame($expected, $this->model->getEscapedQueryText());
     }
 
     /**

@@ -46,7 +46,7 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->any())->method('getData')->willReturn($tierPriceChanged);
         $this->quoteResource->expects($this->$callMethod())->method('markQuotesRecollect')->with($productId);
         $result = $this->model->afterSave($productResourceMock, $productResourceMock, $productMock);
-        $this->assertEquals($result, $productResourceMock);
+        $this->assertSame($result, $productResourceMock);
     }
 
     /**

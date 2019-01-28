@@ -21,6 +21,6 @@ class LimitRendererTest extends \PHPUnit\Framework\TestCase
         $model = new \Magento\Framework\DB\Select\LimitRenderer();
         $result = $model->render($selectMock);
         $this->assertInstanceOf(\Magento\Framework\DB\Sql\LimitExpression::class, $result);
-        $this->assertEquals('LIMIT 2 OFFSET 10', $result->__toString());
+        $this->assertSame('LIMIT 2 OFFSET 10', $result->__toString());
     }
 }

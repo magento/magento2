@@ -54,7 +54,7 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
         $context = 'Some\Class';
 
         $this->configMock->expects($this->once())->method('get')->willReturn([]);
-        $this->assertEquals('stdClass', $this->model->resolveObjectType($code, $value, $context));
+        $this->assertSame('stdClass', $this->model->resolveObjectType($code, $value, $context));
     }
 
     public function testResolveObjectTypeWithConfiguredAttribute()
@@ -76,7 +76,7 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturn(\Magento\Framework\DataObject::class);
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\DataObject::class,
             $this->model->resolveObjectType($code, $value, $context)
         );

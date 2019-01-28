@@ -39,6 +39,6 @@ class WebsiteRepositoryTest extends WebapiAbstract
         $this->assertNotNull($websites);
         $this->assertGreaterThan(1, count($websites));
         $keys = ['id', 'code', 'name', 'default_group_id'];
-        $this->assertEquals($keys, array_keys($websites[0]));
+        $this->assertSame($keys, array_keys($websites[0]));
     }
 }

@@ -95,12 +95,12 @@ class SwatchesGeneratorTest extends \PHPUnit\Framework\TestCase
             $this->imagePathFixture
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributeColorType,
             $this->swatchesGeneratorMock->generateSwatchData(3, 'test', 'color')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributeImageType,
             $this->swatchesGeneratorMock->generateSwatchData(3, 'test', 'image')
         );

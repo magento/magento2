@@ -105,7 +105,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
             $debugHintsParameter
         );
 
-        $this->assertEquals($debugHintsDecorator, $debugHints->afterCreate($subjectMock, $engine));
+        $this->assertSame($debugHintsDecorator, $debugHints->afterCreate($subjectMock, $engine));
     }
 
     /**

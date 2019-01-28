@@ -51,7 +51,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     {
         $inputValue = '0';
         $expectedResult = true;
-        $this->assertEquals($expectedResult, $this->_model->validateValue($inputValue));
+        $this->assertSame($expectedResult, $this->_model->validateValue($inputValue));
     }
 
     /**
@@ -62,7 +62,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $inputValue = 0;
         $expectedResult = ['"Test" is a required value.'];
         $result = $this->_model->validateValue($inputValue);
-        $this->assertEquals($expectedResult, [(string)$result[0]]);
+        $this->assertSame($expectedResult, [(string)$result[0]]);
     }
 
     /**
@@ -80,11 +80,11 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
         $defaultAttributeData['validate_rules']['min_text_length'] = 2;
         $this->_model->setAttribute($this->createAttribute($defaultAttributeData));
-        $this->assertEquals($expectedResult, $this->_model->validateValue('t'));
+        $this->assertSame($expectedResult, $this->_model->validateValue('t'));
 
         $defaultAttributeData['validate_rules']['max_text_length'] = 3;
         $this->_model->setAttribute($this->createAttribute($defaultAttributeData));
-        $this->assertEquals($expectedResult, $this->_model->validateValue('test'));
+        $this->assertSame($expectedResult, $this->_model->validateValue('test'));
     }
 
     /**

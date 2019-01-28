@@ -48,6 +48,6 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
     private function assertCategoriesInMeta(array $expectedCategories, array $meta)
     {
         $categoriesElement = $meta['product-details']['children']['container_category_ids']['children']['category_ids'];
-        $this->assertEquals($expectedCategories, $categoriesElement['arguments']['data']['config']['options']);
+        $this->assertSame($expectedCategories, $categoriesElement['arguments']['data']['config']['options']);
     }
 }

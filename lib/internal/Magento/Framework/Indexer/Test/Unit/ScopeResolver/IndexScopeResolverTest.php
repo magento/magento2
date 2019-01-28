@@ -77,7 +77,7 @@ class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
         $result = $this->target->resolve($indexName, $dimensions);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

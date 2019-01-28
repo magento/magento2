@@ -44,7 +44,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtmlWithLinks')
             ->will($this->returnValue($expected));
         $actual = $this->viewHistory->escapeHtml($data, $allowedTags);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

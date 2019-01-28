@@ -60,7 +60,7 @@ class RegisterLinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($result, $link->toHtml() === '');
+        $this->assertSame($result, $link->toHtml() === '');
     }
 
     /**
@@ -93,6 +93,6 @@ class RegisterLinkTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Account\RegisterLink::class,
             ['context' => $context, 'customerUrl' => $helper]
         );
-        $this->assertEquals('register url', $block->getHref());
+        $this->assertSame('register url', $block->getHref());
     }
 }

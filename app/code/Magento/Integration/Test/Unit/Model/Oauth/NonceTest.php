@@ -92,7 +92,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
             ->with(30)
             ->will($this->returnValue(1));
 
-        $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
+        $this->assertSame($this->nonceModel, $this->nonceModel->afterSave());
     }
 
     public function testAfterSaveNoCleanupProbability()
@@ -107,7 +107,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->never())
             ->method('deleteOldEntries');
 
-        $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
+        $this->assertSame($this->nonceModel, $this->nonceModel->afterSave());
     }
 
     public function testLoadByCompositeKey()
@@ -122,6 +122,6 @@ class NonceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedData));
         $this->nonceModel->loadByCompositeKey($nonce, $consumerId);
 
-        $this->assertEquals($expectedData, $this->nonceModel->getData());
+        $this->assertSame($expectedData, $this->nonceModel->getData());
     }
 }

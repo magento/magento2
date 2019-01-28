@@ -202,7 +202,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
             return;
         }
         foreach ($itemData as $key => $value) {
-            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+            $this->assertSame($value, $item->getData($key), 'item ' . $key . ' is incorrect');
         }
     }
 
@@ -217,7 +217,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
         foreach ($addressData as $key => $value) {
             if ($key != self::KEY_WEEE_TOTALS && $key != self::KEY_WEEE_BASE_TOTALS) {
                 // just check the output values
-                $this->assertEquals($value, $address->getData($key), 'address ' . $key . ' is incorrect');
+                $this->assertSame($value, $address->getData($key), 'address ' . $key . ' is incorrect');
             }
         }
     }
@@ -243,7 +243,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
             'area' => null,
         ];
 
-        $this->assertEquals($expectedResult, $this->weeeCollector->fetch($this->quoteMock, $totalMock));
+        $this->assertSame($expectedResult, $this->weeeCollector->fetch($this->quoteMock, $totalMock));
     }
 
     public function testFetchWithZeroAmounts()

@@ -151,7 +151,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(self::never())
             ->method('addExceptionMessage');
 
-        self::assertEquals($this->placeOrder->execute(), $resultMock);
+        self::assertSame($this->placeOrder->execute(), $resultMock);
     }
 
     /**
@@ -195,7 +195,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
                 'The order #000000111 cannot be processed.'
             );
 
-        self::assertEquals($this->placeOrder->execute(), $resultMock);
+        self::assertSame($this->placeOrder->execute(), $resultMock);
     }
 
     /**

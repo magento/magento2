@@ -160,7 +160,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('setData')
             ->with('quote', $quoteMock);
 
-        self::assertEquals($this->review->execute(), $resultPageMock);
+        self::assertSame($this->review->execute(), $resultPageMock);
     }
 
     public function testExecuteException()
@@ -202,7 +202,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->with('checkout/cart')
             ->willReturnSelf();
 
-        self::assertEquals($this->review->execute(), $resultRedirectMock);
+        self::assertSame($this->review->execute(), $resultRedirectMock);
     }
 
     public function testExecuteExceptionPaymentWithoutNonce()
@@ -249,7 +249,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->with('checkout/cart')
             ->willReturnSelf();
 
-        self::assertEquals($this->review->execute(), $resultRedirectMock);
+        self::assertSame($this->review->execute(), $resultRedirectMock);
     }
 
     /**

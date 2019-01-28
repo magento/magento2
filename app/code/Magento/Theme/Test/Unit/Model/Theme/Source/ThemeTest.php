@@ -27,6 +27,6 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
 
         /** @var $label \Magento\Framework\View\Design\Theme\Label */
         $object = new Theme($label);
-        $this->assertEquals($expects, $object->getAllOptions());
+        $this->assertSame($expects, $object->getAllOptions());
     }
 }

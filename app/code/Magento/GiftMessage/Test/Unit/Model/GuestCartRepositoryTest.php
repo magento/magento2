@@ -79,7 +79,7 @@ class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($quoteId, $itemId)
             ->willReturn($messageMock);
 
-        $this->assertEquals($messageMock, $this->model->get($cartId, $itemId));
+        $this->assertSame($messageMock, $this->model->get($cartId, $itemId));
     }
 
     public function testSave()

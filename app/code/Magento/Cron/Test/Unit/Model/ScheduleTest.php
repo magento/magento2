@@ -50,7 +50,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
         // 3. Compare actual result with expected result
         $result = $model->getCronExprArr();
-        $this->assertEquals($result, $expected);
+        $this->assertSame($result, $expected);
     }
 
     /**
@@ -174,7 +174,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $result = $model->trySchedule();
 
         // 4. Compare actual result with expected result
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testTryScheduleWithConversionToAdminStoreTime()
@@ -244,7 +244,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $result = $model->matchCronExpression($cronExpressionPart, $dateTimePart);
 
         // 3. Compare actual result with expected result
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -331,7 +331,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $result = $model->getNumeric($param);
 
         // 3. Compare actual result with expected result
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -379,11 +379,11 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $model->setId($scheduleId);
-        $this->assertEquals(0, $model->getStatus());
+        $this->assertSame(0, $model->getStatus());
 
         $model->tryLockJob();
 
-        $this->assertEquals(Schedule::STATUS_RUNNING, $model->getStatus());
+        $this->assertSame(Schedule::STATUS_RUNNING, $model->getStatus());
     }
 
     public function testTryLockJobFailure()
@@ -403,10 +403,10 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $model->setId($scheduleId);
-        $this->assertEquals(0, $model->getStatus());
+        $this->assertSame(0, $model->getStatus());
 
         $model->tryLockJob();
 
-        $this->assertEquals(0, $model->getStatus());
+        $this->assertSame(0, $model->getStatus());
     }
 }

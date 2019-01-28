@@ -24,7 +24,7 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->dispatch('backend/swatches/iframe/show/');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
         $this->assertNotContains('Sorry, you need permissions to view this content.', $this->getResponse()->getBody());
     }
 
@@ -42,7 +42,7 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->dispatch('backend/swatches/iframe/show/');
 
-        $this->assertEquals(403, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(403, $this->getResponse()->getHttpResponseCode());
         $this->assertContains('Sorry, you need permissions to view this content.', $this->getResponse()->getBody());
     }
 }

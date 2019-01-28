@@ -50,7 +50,7 @@ class ShellTest extends \PHPUnit\Framework\TestCase
         );
         $this->driverMock->expects($this->once())->method('execute')->willReturn($successfulResponse);
         $this->loggerMock->expects($this->once())->method('info')->with($logEntry);
-        $this->assertEquals($output, $this->model->execute($command, []));
+        $this->assertSame($output, $this->model->execute($command, []));
     }
 
     public function testExecuteFailure()

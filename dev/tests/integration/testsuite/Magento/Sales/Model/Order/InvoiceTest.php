@@ -30,6 +30,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         foreach ($this->_collection->getItems() as $order) {
             $actualResult[] = ['total_item_count' => $order->getData('total_item_count')];
         }
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

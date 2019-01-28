@@ -136,7 +136,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         );
         /** @var $model \Magento\Theme\Model\Theme\Domain\Virtual */
         $model = $objectManagerHelper->getObject(\Magento\Theme\Model\Theme\Domain\Virtual::class, $constructArguments);
-        $this->assertEquals(true, $model->isAssigned());
+        $this->assertSame(true, $model->isAssigned());
     }
 
     /**
@@ -189,6 +189,6 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
             ['theme' => $themeMock]
         );
         /** @var $object \Magento\Theme\Model\Theme\Domain\Virtual */
-        $this->assertEquals($data, $object->getPhysicalTheme());
+        $this->assertSame($data, $object->getPhysicalTheme());
     }
 }

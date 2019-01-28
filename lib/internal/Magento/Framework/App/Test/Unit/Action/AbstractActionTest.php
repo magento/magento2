@@ -65,11 +65,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRequest()
     {
-        $this->assertEquals($this->request, $this->action->getRequest());
+        $this->assertSame($this->request, $this->action->getRequest());
     }
 
     public function testGetResponse()
     {
-        $this->assertEquals($this->response, $this->action->getResponse());
+        $this->assertSame($this->response, $this->action->getResponse());
     }
 }

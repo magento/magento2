@@ -41,7 +41,7 @@ class AbstractItemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($myDiscountAmount));
 
         $totalDiscountAmount = $abstractItemMock->getTotalDiscountAmount();
-        $this->assertEquals($expectedDiscountAmount, $totalDiscountAmount);
+        $this->assertSame($expectedDiscountAmount, $totalDiscountAmount);
     }
 
     /**

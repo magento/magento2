@@ -305,11 +305,11 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function testGetClassName()
     {
         /** Test the default case when the block has no data set for the class name. */
-        $this->assertEquals(self::DEFAULT_CLASS_NAME, $this->_block->getClassName());
+        $this->assertSame(self::DEFAULT_CLASS_NAME, $this->_block->getClassName());
 
         /** Set custom data for the class name and verify that the Name::getClassName() method returns it. */
         $this->_block->setData(self::KEY_CLASS_NAME, self::CUSTOM_CLASS_NAME);
-        $this->assertEquals(self::CUSTOM_CLASS_NAME, $this->_block->getClassName());
+        $this->assertSame(self::CUSTOM_CLASS_NAME, $this->_block->getClassName());
     }
 
     /**
@@ -344,7 +344,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($isSuffixVisible)
         );
 
-        $this->assertEquals($expectedValue, $this->_block->getContainerClassName());
+        $this->assertSame($expectedValue, $this->_block->getContainerClassName());
     }
 
     /**
@@ -382,7 +382,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function testGetStoreLabel($attributeCode, $storeLabel, $expectedValue)
     {
         $this->attribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn($storeLabel);
-        $this->assertEquals($expectedValue, $this->_block->getStoreLabel($attributeCode));
+        $this->assertSame($expectedValue, $this->_block->getStoreLabel($attributeCode));
     }
 
     /**

@@ -67,7 +67,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->envReaderMock->expects($this->any())->method('read')->willReturn([]);
         $this->remoteServiceReaderMock->expects($this->any())->method('read')->willReturn([]);
-        $this->assertEquals($expected, $this->getModel()->get());
+        $this->assertSame($expected, $this->getModel()->get());
     }
 
     /**

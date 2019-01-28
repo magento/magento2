@@ -57,7 +57,7 @@ class SendFriendTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
-        $this->assertEquals(0, $this->model->getSentCount());
+        $this->assertSame(0, $this->model->getSentCount());
     }
 
     public function testSentCountByCookies()

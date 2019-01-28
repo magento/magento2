@@ -68,7 +68,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(true, $this->model->isLoggedInStatus());
+        $this->assertSame(true, $this->model->isLoggedInStatus());
     }
 
     /**
@@ -82,8 +82,8 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(false, $this->model->isLoggedInStatus());
-        $this->assertEquals(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
+        $this->assertSame(false, $this->model->isLoggedInStatus());
+        $this->assertSame(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
     /**
@@ -107,7 +107,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             date("Y-m-d H:i:s", $timestamp - 1)
         );
 
-        $this->assertEquals($expectedResult, $this->model->isSessionExpired());
+        $this->assertSame($expectedResult, $this->model->isSessionExpired());
     }
 
     /**
@@ -129,7 +129,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     {
         $formattedIp = '127.0.0.1';
         $this->model->setIp($formattedIp);
-        $this->assertEquals($formattedIp, $this->model->getFormattedIp());
+        $this->assertSame($formattedIp, $this->model->getFormattedIp());
     }
 
     /**
@@ -137,7 +137,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOtherSessionsTerminated()
     {
-        $this->assertEquals(false, $this->model->isOtherSessionsTerminated());
+        $this->assertSame(false, $this->model->isOtherSessionsTerminated());
     }
 
     /**

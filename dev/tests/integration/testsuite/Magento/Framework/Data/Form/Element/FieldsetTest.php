@@ -42,7 +42,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     public function testHasAdvanced(array $fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertEquals($expect, $this->_fieldset->hasAdvanced());
+        $this->assertSame($expect, $this->_fieldset->hasAdvanced());
     }
 
     /**
@@ -53,7 +53,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_fieldset->getAdvancedLabel());
         $label = 'Test Label';
         $this->_fieldset->setAdvancedLabel($label);
-        $this->assertEquals($label, $this->_fieldset->getAdvancedLabel());
+        $this->assertSame($label, $this->_fieldset->getAdvancedLabel());
     }
 
     /**
@@ -186,7 +186,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     public function testGetCountBasicChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertEquals($expect, $this->_fieldset->getCountBasicChildren());
+        $this->assertSame($expect, $this->_fieldset->getCountBasicChildren());
     }
 
     /**

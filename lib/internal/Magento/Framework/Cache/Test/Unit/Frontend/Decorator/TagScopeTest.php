@@ -31,7 +31,7 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTag()
     {
-        $this->assertEquals('enforced_tag', $this->_object->getTag());
+        $this->assertSame('enforced_tag', $this->_object->getTag());
     }
 
     public function testSave()
@@ -125,7 +125,7 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             ['test_tag_one', 'test_tag_two']
         );
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

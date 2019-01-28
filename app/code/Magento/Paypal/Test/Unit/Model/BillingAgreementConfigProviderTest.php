@@ -73,7 +73,7 @@ class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->agreementFactoryMock->expects($this->once())->method('create')->willReturn($agreementMock);
 
-        $this->assertEquals($expected, $this->configProvider->getConfig());
+        $this->assertSame($expected, $this->configProvider->getConfig());
     }
 
     public function testGetConfigWithEmptyCustomer()
@@ -89,6 +89,6 @@ class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
         ];
         $this->currentCustomerMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->agreementFactoryMock->expects($this->never())->method('create');
-        $this->assertEquals($expected, $this->configProvider->getConfig());
+        $this->assertSame($expected, $this->configProvider->getConfig());
     }
 }

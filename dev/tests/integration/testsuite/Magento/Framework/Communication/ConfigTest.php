@@ -19,7 +19,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $topics = $this->getConfigInstance(__DIR__ . '/_files/valid_communication.xml')->getTopics();
         $expectedParsedTopics = include __DIR__ . '/_files/valid_communication_expected.php';
-        $this->assertEquals($expectedParsedTopics, $topics);
+        $this->assertSame($expectedParsedTopics, $topics);
     }
 
     /**
@@ -66,7 +66,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $topics = $this->getConfigInstance(__DIR__ . '/_files/valid_communication.xml')->getTopic('customerCreated');
         $expectedParsedTopics = include __DIR__ . '/_files/valid_communication_expected.php';
-        $this->assertEquals($expectedParsedTopics['customerCreated'], $topics);
+        $this->assertSame($expectedParsedTopics['customerCreated'], $topics);
     }
 
     /**

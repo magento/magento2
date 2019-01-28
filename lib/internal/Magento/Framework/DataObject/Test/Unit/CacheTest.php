@@ -20,7 +20,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveWhenArgumentIsNotObject()
     {
-        $this->assertEquals(false, $this->cache->save('string'));
+        $this->assertSame(false, $this->cache->save('string'));
     }
 
     /**
@@ -32,13 +32,13 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $object = new \stdClass();
         $hash = spl_object_hash($object);
         $newIdx = 'idx' . $hash;
-        $this->assertEquals($newIdx, $this->cache->save($object, 'idx{hash}', ['tags_array']));
-        $this->assertEquals([$newIdx => $object], $this->cache->findByClass('stdClass'));
-        $this->assertEquals([$newIdx => $object], $this->cache->getAllObjects());
-        $this->assertEquals($newIdx, $this->cache->find($object));
-        $this->assertEquals([$newIdx => $object], $this->cache->findByIds([$newIdx]));
+        $this->assertSame($newIdx, $this->cache->save($object, 'idx{hash}', ['tags_array']));
+        $this->assertSame([$newIdx => $object], $this->cache->findByClass('stdClass'));
+        $this->assertSame([$newIdx => $object], $this->cache->getAllObjects());
+        $this->assertSame($newIdx, $this->cache->find($object));
+        $this->assertSame([$newIdx => $object], $this->cache->findByIds([$newIdx]));
         $objectTwo = new \stdClass();
-        $this->assertEquals('#1', $this->cache->save($objectTwo, null, 'tags_string'));
+        $this->assertSame('#1', $this->cache->save($objectTwo, null, 'tags_string'));
         $objectThree = new \stdClass();
         $this->cache->save($objectThree, '#1');
     }
@@ -47,8 +47,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     {
         $object = new \stdClass();
         $hash = spl_object_hash($object);
-        $this->assertEquals('idx' . $hash, $this->cache->save($object, 'idx{hash}'));
-        $this->assertEquals('idx' . $hash, $this->cache->save($object));
+        $this->assertSame('idx' . $hash, $this->cache->save($object, 'idx{hash}'));
+        $this->assertSame('idx' . $hash, $this->cache->save($object));
         $this->assertTrue($this->cache->delete('idx' . $hash));
         $this->assertFalse($this->cache->delete('idx' . $hash));
     }
@@ -65,7 +65,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function testReferenceWhenReferenceEmpty()
     {
-        $this->assertEquals(null, $this->cache->reference([], 'idx'));
+        $this->assertSame(null, $this->cache->reference([], 'idx'));
     }
 
     public function testLoadWhenReferenceAndObjectAlreadyExists()
@@ -74,17 +74,17 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->cache->reference('refName', $idx);
         $object = new \stdClass();
         $hash = spl_object_hash($object);
-        $this->assertEquals(null, $this->cache->findByHash($hash));
+        $this->assertSame(null, $this->cache->findByHash($hash));
         $this->cache->save($object, $idx);
-        $this->assertEquals($object, $this->cache->load($idx));
-        $this->assertEquals(true, $this->cache->has($idx));
-        $this->assertEquals($object, $this->cache->findByHash($hash));
-        $this->assertEquals(['refName' => 'idx'], $this->cache->getAllReferences());
+        $this->assertSame($object, $this->cache->load($idx));
+        $this->assertSame(true, $this->cache->has($idx));
+        $this->assertSame($object, $this->cache->findByHash($hash));
+        $this->assertSame(['refName' => 'idx'], $this->cache->getAllReferences());
     }
 
     public function testLoad()
     {
-        $this->assertEquals('default', $this->cache->load('idx', 'default'));
+        $this->assertSame('default', $this->cache->load('idx', 'default'));
     }
 
     public function testDeleteWhenIdxIsObject()
@@ -117,7 +117,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $object = new \stdClass();
         $hash = spl_object_hash($object);
         $newIdx = 'idx' . $hash;
-        $this->assertEquals($newIdx, $this->cache->save($object, 'idx{hash}'));
+        $this->assertSame($newIdx, $this->cache->save($object, 'idx{hash}'));
         $this->cache->debug($newIdx);
         $this->assertTrue(array_key_exists($newIdx, $this->cache->debugByIds($newIdx)));
     }
@@ -129,15 +129,15 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $newIdx = 'idx' . $hash;
         $tags = ['tags_array' => [$newIdx => true]];
         $tagsByObj = [$newIdx => ['tags_array' => true]];
-        $this->assertEquals($newIdx, $this->cache->save($object, 'idx{hash}', ['tags_array']));
-        $this->assertEquals($tags, $this->cache->getAllTags());
-        $this->assertEquals([$newIdx => $object], $this->cache->findByTags('tags_array'));
-        $this->assertEquals($tagsByObj, $this->cache->getAllTagsByObject());
+        $this->assertSame($newIdx, $this->cache->save($object, 'idx{hash}', ['tags_array']));
+        $this->assertSame($tags, $this->cache->getAllTags());
+        $this->assertSame([$newIdx => $object], $this->cache->findByTags('tags_array'));
+        $this->assertSame($tagsByObj, $this->cache->getAllTagsByObject());
         $this->assertTrue($this->cache->deleteByTags('tags_array'));
     }
 
     public function testSinglton()
     {
-        $this->assertEquals($this->cache, $this->cache->singleton());
+        $this->assertSame($this->cache, $this->cache->singleton());
     }
 }

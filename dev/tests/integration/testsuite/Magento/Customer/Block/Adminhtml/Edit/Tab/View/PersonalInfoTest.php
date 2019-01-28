@@ -113,7 +113,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
             $expectedValue = is_numeric($value) ? (int)$value : $value;
             $actualValue = isset($actualCustomerData[$property]) ? $actualCustomerData[$property] : null;
             $actualValue = is_numeric($actualValue) ? (int)$actualValue : $actualValue;
-            $this->assertEquals($expectedValue, $actualValue);
+            $this->assertSame($expectedValue, $actualValue);
         }
     }
 
@@ -121,8 +121,8 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     {
         $expectedCustomer = $this->createCustomerAndAddToBackendSession();
         $actualCustomer = $this->_block->getCustomer();
-        $this->assertEquals($expectedCustomer->getExtensionAttributes(), $actualCustomer->getExtensionAttributes());
-        $this->assertEquals($expectedCustomer, $actualCustomer);
+        $this->assertSame($expectedCustomer->getExtensionAttributes(), $actualCustomer->getExtensionAttributes());
+        $this->assertSame($expectedCustomer, $actualCustomer);
     }
 
     /**
@@ -131,7 +131,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     public function testGetGroupName()
     {
         $groupName = $this->_groupRepository->getById($this->_loadCustomer()->getGroupId())->getCode();
-        $this->assertEquals($groupName, $this->_block->getGroupName());
+        $this->assertSame($groupName, $this->_block->getGroupName());
     }
 
     public function testGetGroupNameNull()
@@ -150,7 +150,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
             \IntlDateFormatter::MEDIUM,
             true
         );
-        $this->assertEquals($createdAt, $this->_block->getCreateDate());
+        $this->assertSame($createdAt, $this->_block->getCreateDate());
     }
 
     /**
@@ -171,7 +171,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
             null,
             $timezone
         );
-        $this->assertEquals($storeCreateDate, $this->_block->getStoreCreateDate());
+        $this->assertSame($storeCreateDate, $this->_block->getStoreCreateDate());
     }
 
     /**
@@ -189,7 +189,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_loadCustomer()->getStoreId()
         );
-        $this->assertEquals($timezone, $this->_block->getStoreCreateDateTimezone());
+        $this->assertSame($timezone, $this->_block->getStoreCreateDateTimezone());
     }
 
     /**
@@ -198,7 +198,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     public function testIsConfirmedStatusConfirmed()
     {
         $this->_loadCustomer();
-        $this->assertEquals(__('Confirmation Not Required'), $this->_block->getIsConfirmedStatus());
+        $this->assertSame(__('Confirmation Not Required'), $this->_block->getIsConfirmedStatus());
     }
 
     /**
@@ -219,7 +219,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         );
         $customer = $this->_customerRepository->save($customer, $password);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customer->getId());
-        $this->assertEquals('Confirmation Not Required', $this->_block->getIsConfirmedStatus());
+        $this->assertSame('Confirmation Not Required', $this->_block->getIsConfirmedStatus());
     }
 
     /**
@@ -228,7 +228,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     public function testGetCreatedInStore()
     {
         $storeName = $this->_storeManager->getStore($this->_loadCustomer()->getStoreId())->getName();
-        $this->assertEquals($storeName, $this->_block->getCreatedInStore());
+        $this->assertSame($storeName, $this->_block->getCreatedInStore());
     }
 
     /**
@@ -247,7 +247,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     public function testGetBillingAddressHtmlNoDefaultAddress()
     {
         $this->createCustomerAndAddToBackendSession();
-        $this->assertEquals(
+        $this->assertSame(
             __('The customer does not have default billing address.'),
             $this->_block->getBillingAddressHtml()
         );

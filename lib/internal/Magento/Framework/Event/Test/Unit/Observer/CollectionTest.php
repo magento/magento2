@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $observer = $this->getObserverMock('test_observer');
         $this->observerCollection->addObserver($observer);
-        $this->assertEquals($observer, $this->observerCollection->getObserverByName($observer->getName()));
+        $this->assertSame($observer, $this->observerCollection->getObserverByName($observer->getName()));
     }
 
     public function testGetAllObservers()
@@ -64,7 +64,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->observerCollection->addObserver($observer1);
         $this->observerCollection->addObserver($observer2);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['test_observer1' => $observer1, 'test_observer2' => $observer2],
             $this->observerCollection->getAllObservers()
         );
@@ -78,7 +78,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $observer = $this->getObserverMock($name);
         $this->observerCollection->addObserver($observer);
-        $this->assertEquals($observer, $this->observerCollection->getObserverByName($name));
+        $this->assertSame($observer, $this->observerCollection->getObserverByName($name));
     }
 
     /**
@@ -102,14 +102,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->observerCollection->addObserver($observer1);
         $this->observerCollection->addObserver($observer2);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['test_observer1' => $observer1, 'test_observer2' => $observer2],
             $this->observerCollection->getAllObservers()
         );
 
         $this->observerCollection->removeObserverByName($observer2->getName());
 
-        $this->assertEquals(['test_observer1' => $observer1], $this->observerCollection->getAllObservers());
+        $this->assertSame(['test_observer1' => $observer1], $this->observerCollection->getAllObservers());
     }
 
     public function testDispatch()

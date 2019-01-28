@@ -93,7 +93,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock->expects($this->once())
             ->method('getSelect')
             ->willReturn($this->selectMock);
-        $this->assertEquals(
+        $this->assertSame(
             $this->agreementResource,
             $this->agreementResource->addOrdersFilter($this->collectionMock, 100)
         );

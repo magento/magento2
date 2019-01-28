@@ -66,7 +66,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\GraphQl\Config\Element\Type $output */
         $output = $this->model->getConfigElement($query);
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
-        $this->assertEquals($output->getName(), $query);
+        $this->assertSame($output->getName(), $query);
         /** @var \Magento\Framework\GraphQl\Config\Element\Field $queryFields */
         $queryFields = $output->getFields();
         foreach (array_keys($queryFields) as $fieldKey) {
@@ -97,7 +97,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                     $expectedOutputArray['Query']['fields'][$fieldKey]['arguments'][$argumentKey],
                     $argumentAssertionMap
                 );
-                $this->assertEquals(
+                $this->assertSame(
                     $expectedOutputArray['Query']['fields'][$fieldKey]['arguments'][$argumentKey]['defaultValue'],
                     $queryFieldArguments[$argumentKey]->getDefaultValue()
                 );
@@ -116,19 +116,19 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         /** @var EnumValue $outputEnumValues */
         $outputEnumValues = $outputEnum->getValues();
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
-        $this->assertEquals($outputEnum->getName(), $queryEnum);
-        $this->assertEquals($outputEnum->getDescription(), 'Description for enumType PriceAdjustmentDescriptionEnum');
+        $this->assertSame($outputEnum->getName(), $queryEnum);
+        $this->assertSame($outputEnum->getDescription(), 'Description for enumType PriceAdjustmentDescriptionEnum');
 
         foreach (array_keys($outputEnumValues) as $outputEnumValue) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['PriceAdjustmentDescriptionEnum']['values'][$outputEnumValue]['name'],
                 $outputEnumValues[$outputEnumValue]->getName()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['PriceAdjustmentDescriptionEnum']['values'][$outputEnumValue]['value'],
                 $outputEnumValues[$outputEnumValue]->getValue()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['PriceAdjustmentDescriptionEnum']['values'][$outputEnumValue]['description'],
                 $outputEnumValues[$outputEnumValue]->getDescription()
             );
@@ -144,34 +144,34 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\GraphQl\Config\Element\Type $outputInterface */
         $outputInterface = $this->model->getConfigElement($typeThatImplements);
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
-        $this->assertEquals($outputInterface->getName(), $typeThatImplements);
+        $this->assertSame($outputInterface->getName(), $typeThatImplements);
         $outputInterfaceValues = $outputInterface->getInterfaces();
         /** @var \Magento\Framework\GraphQl\Config\Element\Field $outputInterfaceFields */
         $outputInterfaceFields =$outputInterface->getFields();
         foreach (array_keys($outputInterfaceValues) as $outputInterfaceValue) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['ProductLinks']['interfaces'][$outputInterfaceValue]['interface'],
                 $outputInterfaceValues[$outputInterfaceValue]['interface']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['ProductLinks']['interfaces'][$outputInterfaceValue]['copyFields'],
                 $outputInterfaceValues[$outputInterfaceValue]['copyFields']
             );
         }
         foreach (array_keys($outputInterfaceFields) as $outputInterfaceField) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['ProductLinks']['fields'][$outputInterfaceField]['name'],
                 $outputInterfaceFields[$outputInterfaceField]->getName()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['ProductLinks']['fields'][$outputInterfaceField]['type'],
                 $outputInterfaceFields[$outputInterfaceField]->getTypeName()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['ProductLinks']['fields'][$outputInterfaceField]['required'],
                 $outputInterfaceFields[$outputInterfaceField]->isRequired()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOutputArray['ProductLinks']['fields'][$outputInterfaceField]['description'],
                 $outputInterfaceFields[$outputInterfaceField]->getDescription()
             );
@@ -185,12 +185,12 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         /** @var InterfaceType $outputConfigElement */
         $outputConfigElement = $this->model->getConfigElement($interfaceType);
         $expectedOutput = require __DIR__ . '/_files/query_array_output.php';
-        $this->assertEquals($outputConfigElement->getName(), $expectedOutput['ProductLinksInterface']['name']);
-        $this->assertEquals(
+        $this->assertSame($outputConfigElement->getName(), $expectedOutput['ProductLinksInterface']['name']);
+        $this->assertSame(
             $outputConfigElement->getTypeResolver(),
             $expectedOutput['ProductLinksInterface']['typeResolver']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $outputConfigElement->getDescription(),
             $expectedOutput['ProductLinksInterface']['description']
         );
@@ -212,7 +212,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedValue,
                 $actualResponse[$responseField],
                 "Value of '{$responseField}' field in response does not match expected value: "

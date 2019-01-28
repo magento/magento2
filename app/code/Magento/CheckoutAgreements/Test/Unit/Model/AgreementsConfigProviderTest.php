@@ -100,7 +100,7 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
         $agreement->expects($this->once())->method('getMode')->willReturn($mode);
         $agreement->expects($this->once())->method('getAgreementId')->willReturn($agreementId);
 
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 
     public function testGetConfigIfContentIsNotHtml()
@@ -147,6 +147,6 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
         $agreement->expects($this->once())->method('getMode')->willReturn($mode);
         $agreement->expects($this->once())->method('getAgreementId')->willReturn($agreementId);
 
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 }

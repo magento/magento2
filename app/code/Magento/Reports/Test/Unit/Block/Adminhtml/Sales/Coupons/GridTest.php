@@ -92,7 +92,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $this->assertEquals($expectedCountTotals, $this->model->getCountTotals());
+        $this->assertSame($expectedCountTotals, $this->model->getCountTotals());
     }
 
     /**

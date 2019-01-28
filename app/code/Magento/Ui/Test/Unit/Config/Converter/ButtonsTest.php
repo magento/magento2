@@ -94,7 +94,7 @@ class ButtonsTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedResult, $this->converter->convert($buttons));
+        $this->assertSame($expectedResult, $this->converter->convert($buttons));
     }
 
     public function testConvertEmptyButtons()
@@ -109,6 +109,6 @@ class ButtonsTest extends \PHPUnit\Framework\TestCase
             'item' => []
         ];
 
-        $this->assertEquals($expectedResult, $this->converter->convert($buttons));
+        $this->assertSame($expectedResult, $this->converter->convert($buttons));
     }
 }

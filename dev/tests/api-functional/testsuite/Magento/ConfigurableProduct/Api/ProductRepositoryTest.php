@@ -75,7 +75,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertNotNull($this->configurableAttribute);
 
         $options = $this->getConfigurableAttributeOptions();
-        $this->assertEquals(2, count($options));
+        $this->assertSame(2, count($options));
 
         $configurableProductOptions = [
             [
@@ -125,29 +125,29 @@ class ProductRepositoryTest extends WebapiAbstract
         $label = "color";
 
         $response = $this->createConfigurableProduct();
-        $this->assertEquals(self::CONFIGURABLE_PRODUCT_SKU, $response[ProductInterface::SKU]);
+        $this->assertSame(self::CONFIGURABLE_PRODUCT_SKU, $response[ProductInterface::SKU]);
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
         );
         $resultConfigurableProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
-        $this->assertEquals(1, count($resultConfigurableProductOptions));
+        $this->assertSame(1, count($resultConfigurableProductOptions));
         $this->assertTrue(isset($resultConfigurableProductOptions[0]['label']));
         $this->assertTrue(isset($resultConfigurableProductOptions[0]['id']));
-        $this->assertEquals($label, $resultConfigurableProductOptions[0]['label']);
+        $this->assertSame($label, $resultConfigurableProductOptions[0]['label']);
         $this->assertTrue(
             isset($resultConfigurableProductOptions[0]['values'])
         );
-        $this->assertEquals(2, count($resultConfigurableProductOptions[0]['values']));
+        $this->assertSame(2, count($resultConfigurableProductOptions[0]['values']));
 
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"])
         );
         $resultConfigurableProductLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
-        $this->assertEquals(2, count($resultConfigurableProductLinks));
+        $this->assertSame(2, count($resultConfigurableProductLinks));
 
-        $this->assertEquals([$productId1, $productId2], $resultConfigurableProductLinks);
+        $this->assertSame([$productId1, $productId2], $resultConfigurableProductLinks);
     }
 
     /**
@@ -167,16 +167,16 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultConfigurableProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
-        $this->assertEquals(0, count($resultConfigurableProductOptions));
+        $this->assertSame(0, count($resultConfigurableProductOptions));
 
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"])
         );
         $resultConfigurableProductLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
-        $this->assertEquals(0, count($resultConfigurableProductLinks));
+        $this->assertSame(0, count($resultConfigurableProductLinks));
 
-        $this->assertEquals([], $resultConfigurableProductLinks);
+        $this->assertSame([], $resultConfigurableProductLinks);
     }
 
     /**
@@ -214,11 +214,11 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultConfigurableProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
-        $this->assertEquals(1, count($resultConfigurableProductOptions));
+        $this->assertSame(1, count($resultConfigurableProductOptions));
 
         unset($updatedOption['id']);
         unset($resultConfigurableProductOptions[0]['id']);
-        $this->assertEquals($updatedOption, $resultConfigurableProductOptions[0]);
+        $this->assertSame($updatedOption, $resultConfigurableProductOptions[0]);
     }
 
     /**
@@ -241,17 +241,17 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultConfigurableProductOptions
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
-        $this->assertEquals(1, count($resultConfigurableProductOptions));
+        $this->assertSame(1, count($resultConfigurableProductOptions));
         //Since one product is removed, the available values for the option is reduced
-        $this->assertEquals(1, count($resultConfigurableProductOptions[0]['values']));
+        $this->assertSame(1, count($resultConfigurableProductOptions[0]['values']));
 
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"])
         );
         $resultConfigurableProductLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
-        $this->assertEquals(1, count($resultConfigurableProductLinks));
-        $this->assertEquals([$productId1], $resultConfigurableProductLinks);
+        $this->assertSame(1, count($resultConfigurableProductLinks));
+        $this->assertSame([$productId1], $resultConfigurableProductLinks);
 
         //adding back the product links, the option value should be restored
         unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
@@ -268,7 +268,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $currentOptions = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
 
-        $this->assertEquals($options, $currentOptions);
+        $this->assertSame($options, $currentOptions);
     }
 
     /**
@@ -298,7 +298,7 @@ class ProductRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
         }
     }
 
@@ -341,8 +341,8 @@ class ProductRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['0' => 20, '1' => 10], $errorObj['parameters']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(['0' => 20, '1' => 10], $errorObj['parameters']);
         }
     }
 
@@ -374,7 +374,7 @@ class ProductRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
         }
     }
 

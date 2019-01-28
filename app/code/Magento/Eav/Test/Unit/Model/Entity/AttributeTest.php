@@ -40,7 +40,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBackendTypeByInput($givenFrontendInput, $expectedBackendType)
     {
-        $this->assertEquals($expectedBackendType, $this->_model->getBackendTypeByInput($givenFrontendInput));
+        $this->assertSame($expectedBackendType, $this->_model->getBackendTypeByInput($givenFrontendInput));
     }
 
     /**
@@ -71,7 +71,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultValueByInput($givenFrontendInput, $expectedDefaultValue)
     {
-        $this->assertEquals($expectedDefaultValue, $this->_model->getDefaultValueByInput($givenFrontendInput));
+        $this->assertSame($expectedDefaultValue, $this->_model->getDefaultValueByInput($givenFrontendInput));
     }
 
     /**
@@ -104,7 +104,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $setId = 123;
         $this->_model->setAttributeSetInfo([$setId => $sortWeights]);
-        $this->assertEquals($expected, $this->_model->getSortWeight($setId));
+        $this->assertSame($expected, $this->_model->getSortWeight($setId));
     }
 
     /**
@@ -159,6 +159,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($frontendLabel);
         $expectedFrontendLabel[] = $frontendLabel;
 
-        $this->assertEquals($expectedFrontendLabel, $this->_model->getFrontendLabels());
+        $this->assertSame($expectedFrontendLabel, $this->_model->getFrontendLabels());
     }
 }

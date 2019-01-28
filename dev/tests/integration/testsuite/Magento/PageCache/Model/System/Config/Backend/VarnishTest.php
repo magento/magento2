@@ -54,7 +54,7 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
         $this->_model->save();
         $value = $this->_model->getValue();
 
-        $this->assertEquals($value, $expected);
+        $this->assertSame($value, $expected);
     }
 
     public function beforeSaveDataProvider()
@@ -89,7 +89,7 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
         $this->_model->save();
         $value = $this->_model->getValue();
 
-        $this->assertEquals($value, $expected);
+        $this->assertSame($value, $expected);
     }
 
     public function afterLoadDataProvider()

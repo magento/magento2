@@ -76,7 +76,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('getRandomString');
         $this->sessionMock->expects($this->never())->method('setData');
-        $this->assertEquals('random_string', $this->formKey->getFormKey());
+        $this->assertSame('random_string', $this->formKey->getFormKey());
     }
 
     public function testIsPresent()

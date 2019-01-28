@@ -69,7 +69,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(TaxAdjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
+        $this->assertSame(TaxAdjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
     }
 
     public function testIsIncludedInBasePrice()
@@ -108,7 +108,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->with($displayTypes)
             ->will($this->returnValue($weeeDisplayConfig));
 
-        $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
+        $this->assertSame($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
     }
 
     /**
@@ -158,7 +158,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getProductWeeeAttributes')
             ->will($this->returnValue($weeeAttributes));
 
-        $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
+        $this->assertSame($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }
 
     /**

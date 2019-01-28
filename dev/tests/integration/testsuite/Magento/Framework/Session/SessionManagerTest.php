@@ -173,20 +173,20 @@ namespace Magento\Framework\Session {
         {
             $this->initializeModel();
             $this->model->setData(['test_key' => 'test_value']);
-            $this->assertEquals('test_value', $this->model->getData('test_key', true));
+            $this->assertSame('test_value', $this->model->getData('test_key', true));
             $this->assertNull($this->model->getData('test_key'));
         }
 
         public function testGetSessionId()
         {
             $this->initializeModel();
-            $this->assertEquals(session_id(), $this->model->getSessionId());
+            $this->assertSame(session_id(), $this->model->getSessionId());
         }
 
         public function testGetName()
         {
             $this->initializeModel();
-            $this->assertEquals(session_name(), $this->model->getName());
+            $this->assertSame(session_name(), $this->model->getName());
         }
 
         public function testSetName()
@@ -195,7 +195,7 @@ namespace Magento\Framework\Session {
             $this->model->destroy();
             $this->model->setName('test');
             $this->model->start();
-            $this->assertEquals('test', $this->model->getName());
+            $this->assertSame('test', $this->model->getName());
         }
 
         public function testDestroy()
@@ -204,10 +204,10 @@ namespace Magento\Framework\Session {
             $data = ['key' => 'value'];
             $this->model->setData($data);
 
-            $this->assertEquals($data, $this->model->getData());
+            $this->assertSame($data, $this->model->getData());
             $this->model->destroy();
 
-            $this->assertEquals([], $this->model->getData());
+            $this->assertSame([], $this->model->getData());
         }
 
         public function testSetSessionId()
@@ -218,10 +218,10 @@ namespace Magento\Framework\Session {
                 ->method('getAreaCode')
                 ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
             $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals($sessionId, $this->model->getSessionId());
+            $this->assertSame($sessionId, $this->model->getSessionId());
 
             $this->model->setSessionId('test');
-            $this->assertEquals('test', $this->model->getSessionId());
+            $this->assertSame('test', $this->model->getSessionId());
         }
 
         /**
@@ -233,14 +233,14 @@ namespace Magento\Framework\Session {
             $this->appState->expects($this->atLeastOnce())
                 ->method('getAreaCode')
                 ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
-            $this->assertNotEquals('test_id', $this->model->getSessionId());
+            $this->assertNotSame('test_id', $this->model->getSessionId());
             $this->request->getQuery()->set($this->sidResolver->getSessionIdQueryParam($this->model), 'test-id');
             $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals('test-id', $this->model->getSessionId());
+            $this->assertSame('test-id', $this->model->getSessionId());
             /* Use not valid identifier */
             $this->request->getQuery()->set($this->sidResolver->getSessionIdQueryParam($this->model), 'test_id');
             $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals('test-id', $this->model->getSessionId());
+            $this->assertSame('test-id', $this->model->getSessionId());
         }
 
         public function testGetSessionIdForHost()
@@ -330,17 +330,17 @@ namespace Magento\Framework\Session {
                     'sessionConfig' => $sessionConfig,
                 ]
             );
-            $this->assertEquals('db', $sessionConfig->getOption('session.save_handler'));
-            $this->assertEquals('private_no_expire', $sessionConfig->getOption('session.cache_limiter'));
-            $this->assertEquals('explicit_save_path', $sessionConfig->getOption('session.save_path'));
+            $this->assertSame('db', $sessionConfig->getOption('session.save_handler'));
+            $this->assertSame('private_no_expire', $sessionConfig->getOption('session.cache_limiter'));
+            $this->assertSame('explicit_save_path', $sessionConfig->getOption('session.save_path'));
             $this->assertArrayHasKey('session.use_only_cookies', self::$isIniSetInvoked);
-            $this->assertEquals('1', self::$isIniSetInvoked['session.use_only_cookies']);
+            $this->assertSame('1', self::$isIniSetInvoked['session.use_only_cookies']);
             foreach ($sessionConfig->getOptions() as $option => $value) {
                 if ($option=='session.save_handler') {
                     $this->assertArrayNotHasKey('session.save_handler', self::$isIniSetInvoked);
                 } else {
                     $this->assertArrayHasKey($option, self::$isIniSetInvoked);
-                    $this->assertEquals($value, self::$isIniSetInvoked[$option]);
+                    $this->assertSame($value, self::$isIniSetInvoked[$option]);
                 }
             }
             $this->assertTrue(self::$isSessionSetSaveHandlerInvoked);

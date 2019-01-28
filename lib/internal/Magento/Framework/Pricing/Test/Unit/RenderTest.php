@@ -103,7 +103,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->with('render.product.prices')
             ->will($this->returnValue(false));
 
-        $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
+        $this->assertSame($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
 
     public function testRender()
@@ -123,7 +123,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->method('getBlock')
             ->with('render.product.prices')
             ->will($this->returnValue($this->renderPool));
-        $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
+        $this->assertSame($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
 
     public function testRenderDefault()
@@ -143,7 +143,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->with('render.product.prices')
             ->will($this->returnValue($this->renderPool));
 
-        $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
+        $this->assertSame($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
 
     public function testRenderDefaultDefault()
@@ -164,7 +164,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->with('render.product.prices')
             ->will($this->returnValue($this->renderPool));
 
-        $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
+        $this->assertSame($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
 
     public function testAmountRender()
@@ -193,7 +193,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->renderPool));
 
         $result = $this->model->renderAmount($this->amount, $this->price, $this->saleableItem, $arguments);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

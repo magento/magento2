@@ -112,7 +112,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('AdditionalInfoHtml')
         );
         $this->block->setLayout($layout);
-        $this->assertEquals('AdditionalInfoHtml', $this->block->getAdditionalInfoHtml());
+        $this->assertSame('AdditionalInfoHtml', $this->block->getAdditionalInfoHtml());
     }
 
     /**
@@ -150,7 +150,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
 
         $this->block->toHtml();
 
-        $this->assertEquals($expectedResult, $this->block->getIsOrderVisible());
+        $this->assertSame($expectedResult, $this->block->getIsOrderVisible());
     }
 
     /**
@@ -170,6 +170,6 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
 
-        $this->assertEquals('Expected Result', $this->block->getContinueUrl());
+        $this->assertSame('Expected Result', $this->block->getContinueUrl());
     }
 }

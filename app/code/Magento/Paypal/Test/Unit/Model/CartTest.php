@@ -79,10 +79,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->_salesModel->expects($this->once())->method('getBaseShippingAmount')->will($this->returnValue(1.1));
         $this->_salesModel->expects($this->once())->method('getBaseDiscountAmount')->will($this->returnValue(0.3));
         $this->assertEmpty($this->_model->getAllItems());
-        $this->assertEquals(2.1, $this->_model->getSubtotal());
-        $this->assertEquals(0.1 + 0.2 + 0.1, $this->_model->getTax());
-        $this->assertEquals(1.1, $this->_model->getShipping());
-        $this->assertEquals(0.3, $this->_model->getDiscount());
+        $this->assertSame(2.1, $this->_model->getSubtotal());
+        $this->assertSame(0.1 + 0.2 + 0.1, $this->_model->getTax());
+        $this->assertSame(1.1, $this->_model->getShipping());
+        $this->assertSame(0.3, $this->_model->getDiscount());
     }
 
     /**
@@ -142,15 +142,15 @@ class CartTest extends \PHPUnit\Framework\TestCase
     {
         $expectedSubtotal = $this->_prepareInvalidModelData($values, $transferDiscount);
         $this->assertEmpty($this->_model->getAllItems());
-        $this->assertEquals($expectedSubtotal, $this->_model->getSubtotal());
-        $this->assertEquals(
+        $this->assertSame($expectedSubtotal, $this->_model->getSubtotal());
+        $this->assertSame(
             $values['base_tax_amount'] +
             $values['base_discount_tax_compensation_amount'] +
             $values['base_shipping_discount_tax_compensation_amount'],
             $this->_model->getTax()
         );
-        $this->assertEquals($values['base_shipping_amount'], $this->_model->getShipping());
-        $this->assertEquals($transferDiscount ? 0.0 : $values['base_discount_amount'], $this->_model->getDiscount());
+        $this->assertSame($values['base_shipping_amount'], $this->_model->getShipping());
+        $this->assertSame($transferDiscount ? 0.0 : $values['base_discount_amount'], $this->_model->getDiscount());
     }
 
     /**
@@ -189,7 +189,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testGetAllItems()
     {
         $totals = $this->_prepareValidModelData();
-        $this->assertEquals(
+        $this->assertSame(
             [
                 new \Magento\Framework\DataObject(
                     [
@@ -201,10 +201,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ],
             $this->_model->getAllItems()
         );
-        $this->assertEquals($totals['subtotal'], $this->_model->getSubtotal());
-        $this->assertEquals($totals['tax'], $this->_model->getTax());
-        $this->assertEquals($totals['shipping'], $this->_model->getShipping());
-        $this->assertEquals($totals['discount'], $this->_model->getDiscount());
+        $this->assertSame($totals['subtotal'], $this->_model->getSubtotal());
+        $this->assertSame($totals['tax'], $this->_model->getTax());
+        $this->assertSame($totals['shipping'], $this->_model->getShipping());
+        $this->assertSame($totals['discount'], $this->_model->getDiscount());
     }
 
     /**
@@ -225,7 +225,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         if (!$transferDiscount) {
             $expectedSubtotal -= $this->_model->getDiscount();
         }
-        $this->assertEquals([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
+        $this->assertSame([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
     }
 
     /**
@@ -315,7 +315,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testGetAmounts()
     {
         $totals = $this->_prepareValidModelData();
-        $this->assertEquals($totals, $this->_model->getAmounts());
+        $this->assertSame($totals, $this->_model->getAmounts());
     }
 
     /**

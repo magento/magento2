@@ -85,6 +85,6 @@ class SafeInstallerTest extends SetupTestCase
             ]
         );
         $testTableSelect = $adapter->select()->from($testTableName);
-        self::assertEquals($testTableData, $adapter->fetchAll($testTableSelect));
+        self::assertSame($testTableData, $adapter->fetchAll($testTableSelect));
     }
 }

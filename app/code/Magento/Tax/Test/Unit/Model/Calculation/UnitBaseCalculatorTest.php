@@ -145,13 +145,13 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
         $this->assertSame(self::TYPE, $this->taxDetailsItem->getType());
         $this->assertSame(self::ROW_TAX_ROUNDED, $this->taxDetailsItem->getRowTax());
-        $this->assertEquals(self::PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertSame(self::PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY, false));
         $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
         $this->assertSame(self::TYPE, $this->taxDetailsItem->getType());
         $this->assertSame(self::ROW_TAX, $this->taxDetailsItem->getRowTax());
-        $this->assertEquals(self::PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertSame(self::PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
     }
 
     public function testCalculateWithTaxNotInPrice()
@@ -175,9 +175,9 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue([['id' => 0, 'percent' => 0, 'rates' => []]]));
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
-        $this->assertEquals(self::CODE, $this->taxDetailsItem->getCode());
-        $this->assertEquals(self::TYPE, $this->taxDetailsItem->getType());
-        $this->assertEquals(0.0, $this->taxDetailsItem->getRowTax());
+        $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
+        $this->assertSame(self::TYPE, $this->taxDetailsItem->getType());
+        $this->assertSame(0.0, $this->taxDetailsItem->getRowTax());
     }
 
     /**

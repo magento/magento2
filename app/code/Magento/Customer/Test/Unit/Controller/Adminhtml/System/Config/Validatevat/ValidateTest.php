@@ -104,7 +104,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ])
             ->willReturn($json);
 
-        $this->assertEquals($json, $this->controller->execute());
+        $this->assertSame($json, $this->controller->execute());
     }
 
     /**

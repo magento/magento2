@@ -41,6 +41,6 @@ class BackButtonTest extends \PHPUnit\Framework\TestCase
             ->with('*/')
             ->willReturn($backUrl);
 
-        $this->assertEquals($expectedResult, $this->block->getButtonData());
+        $this->assertSame($expectedResult, $this->block->getButtonData());
     }
 }

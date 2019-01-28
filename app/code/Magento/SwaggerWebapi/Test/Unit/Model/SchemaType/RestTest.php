@@ -36,7 +36,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSchemaUrlPath($expected, $store = null)
     {
-        $this->assertEquals($expected, $this->rest->getSchemaUrlPath($store));
+        $this->assertSame($expected, $this->rest->getSchemaUrlPath($store));
     }
 
     /**
@@ -44,7 +44,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCode()
     {
-        $this->assertEquals('rest', $this->rest->getCode());
+        $this->assertSame('rest', $this->rest->getCode());
     }
 
     /**

@@ -69,7 +69,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $shipment->setPackages($packages);
         $saved = $this->shipmentRepository->save($shipment);
-        self::assertEquals($packages, $saved->getPackages());
+        self::assertSame($packages, $saved->getPackages());
     }
 
     /**
@@ -120,8 +120,8 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $actual = array_map(function (CommentInterface $comment) {
             return $comment->getComment();
         }, $comments);
-        self::assertEquals(2, count($actual));
-        self::assertEquals([$message1, $message2], $actual);
+        self::assertSame(2, count($actual));
+        self::assertSame([$message1, $message2], $actual);
     }
 
     /**

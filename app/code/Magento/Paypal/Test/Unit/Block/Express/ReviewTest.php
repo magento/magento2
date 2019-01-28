@@ -81,7 +81,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
                 return isset($value['_secure']) && $value['_secure'] === $isSecure;
             }))
             ->will($this->returnValue('result url'));
-        $this->assertEquals('result url', $this->model->getViewFileUrl('some file'));
+        $this->assertSame('result url', $this->model->getViewFileUrl('some file'));
     }
 
     /**
@@ -114,7 +114,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->model->setQuote($quote);
         $this->model->toHtml();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getPaymentMethodTitle(),
             $quote->getPayment()->getMethodInstance()->getTitle()
         );
@@ -122,7 +122,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($shippingRates, $this->model->getShippingRateGroups());
         $this->assertSame($shippingRate, $this->model->getCurrentShippingRate());
         $this->assertNotNull($this->model->getCanEditShippingAddress());
-        $this->assertEquals($quote->getMayEditShippingMethod(), $this->model->getCanEditShippingMethod());
+        $this->assertSame($quote->getMayEditShippingMethod(), $this->model->getCanEditShippingMethod());
         $this->assertContains('paypal/express/saveShippingMethod', $this->model->getShippingMethodSubmitUrl());
         $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
         $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
@@ -134,7 +134,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quote->expects($this->any())->method('getIsVirtual')->will($this->returnValue(true));
         $this->model->setQuote($quote);
         $this->model->toHtml();
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getPaymentMethodTitle(),
             $quote->getPayment()->getMethodInstance()->getTitle()
         );
@@ -174,7 +174,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
         $billingAddressMock->expects($this->once())->method('getEmail')->willReturn('test@example.com');
         $this->model->setQuote($quoteMock);
-        $this->assertEquals('test@example.com', $this->model->getEmail());
+        $this->assertSame('test@example.com', $this->model->getEmail());
     }
 
     public function testGetEmailWhenBillingAddressNotExist()
@@ -182,7 +182,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
         $this->model->setQuote($quoteMock);
-        $this->assertEquals('', $this->model->getEmail());
+        $this->assertSame('', $this->model->getEmail());
     }
 
     public function testCanEditShippingMethod()

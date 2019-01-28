@@ -227,7 +227,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($themeImageMock));
 
         $this->assertTrue($this->_model->createPreviewImageCopy($themeMock));
-        $this->assertEquals($previewImage, $this->_themeMock->getData('preview_image'));
+        $this->assertSame($previewImage, $this->_themeMock->getData('preview_image'));
     }
 
     /**
@@ -294,7 +294,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with($this->_themeMock)
             ->will($this->returnValue('http://localhost/media_path/preview/image.png'));
 
-        $this->assertEquals('http://localhost/media_path/preview/image.png', $this->_model->getPreviewImageUrl());
+        $this->assertSame('http://localhost/media_path/preview/image.png', $this->_model->getPreviewImageUrl());
     }
 
     /**
@@ -304,7 +304,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     {
         $this->_themeMock->setData($this->_getThemeSampleData());
         $this->_themeMock->setData('preview_image', null);
-        $this->assertEquals(
+        $this->assertSame(
             'http://localhost/media_path/test_default_preview.png',
             $this->_model->getPreviewImageUrl()
         );

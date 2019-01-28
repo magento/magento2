@@ -31,6 +31,6 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
             ->method('getPaymentMethodList')
             ->with(true)
             ->will($this->returnValue(['group data']));
-        $this->assertEquals(['group data'], $this->typesArrayModel->toOptionArray());
+        $this->assertSame(['group data'], $this->typesArrayModel->toOptionArray());
     }
 }

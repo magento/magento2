@@ -73,23 +73,23 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'5'"), $renderer);
         $select->from('test')->where('field = ?', 5);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (field = '5')", $select->assemble());
+        $this->assertSame("SELECT `test`.* FROM `test` WHERE (field = '5')", $select->assemble());
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "''"), $renderer);
         $select->from('test')->where('field = ?');
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (field = '')", $select->assemble());
+        $this->assertSame("SELECT `test`.* FROM `test` WHERE (field = '')", $select->assemble());
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'%?%'"), $renderer);
         $select->from('test')->where('field LIKE ?', '%value?%');
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (field LIKE '%?%')", $select->assemble());
+        $this->assertSame("SELECT `test`.* FROM `test` WHERE (field LIKE '%?%')", $select->assemble());
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(0), $renderer);
         $select->from('test')->where("field LIKE '%value?%'", null, Select::TYPE_CONDITION);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (field LIKE '%value?%')", $select->assemble());
+        $this->assertSame("SELECT `test`.* FROM `test` WHERE (field LIKE '%value?%')", $select->assemble());
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
         $select->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
+        $this->assertSame("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
     }
 
     /**

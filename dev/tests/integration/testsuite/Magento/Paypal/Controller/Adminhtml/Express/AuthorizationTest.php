@@ -70,7 +70,7 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $validationMessages = $validationResult->getMessages();
 
         $this->assertCount(1, $validationMessages);
-        $this->assertEquals(
+        $this->assertSame(
             'An invoice cannot be created when none of authorization transactions available.',
             $validationMessages[0]
         );
@@ -94,7 +94,7 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             Transaction::class,
             $payment->getAuthorizationTransaction()
         );
-        $this->assertEquals($order->getBaseGrandTotal(), $payment->getAmountAuthorized());
+        $this->assertSame($order->getBaseGrandTotal(), $payment->getAmountAuthorized());
         $this->assertEmpty($validationResult->getMessages());
         $this->assertRedirect($this->stringContains('backend/sales/order/view/order_id/' . $order->getId()));
     }

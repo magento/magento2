@@ -67,8 +67,8 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         /** @var OperationInterface $updatedOperation */
         $updatedOperation = $this->operationFactory->create();
         $this->entityManager->load($updatedOperation, $operationId);
-        $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation->getStatus());
-        $this->assertEquals(null, $updatedOperation->getResultMessage());
-        $this->assertEquals(null, $updatedOperation->getSerializedData());
+        $this->assertSame(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation->getStatus());
+        $this->assertSame(null, $updatedOperation->getResultMessage());
+        $this->assertSame(null, $updatedOperation->getSerializedData());
     }
 }

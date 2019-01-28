@@ -66,8 +66,8 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotEmpty($response);
-        $this->assertEquals('downloadable-product', $response['sku']);
-        $this->assertEquals(1, $response['qty']);
+        $this->assertSame('downloadable-product', $response['sku']);
+        $this->assertSame(1, $response['qty']);
         $this->assertCount(
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
@@ -168,8 +168,8 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotEmpty($response);
-        $this->assertEquals('downloadable-product', $response['sku']);
-        $this->assertEquals(2, $response['qty']);
+        $this->assertSame('downloadable-product', $response['sku']);
+        $this->assertSame(2, $response['qty']);
         $this->assertCount(
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
@@ -272,7 +272,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($expectedResult, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertSame($expectedResult, $this->_webApiCall($serviceInfo, $requestData));
     }
 
     /**
@@ -313,8 +313,8 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotEmpty($response);
-        $this->assertEquals('downloadable-product', $response['sku']);
-        $this->assertEquals(2, $response['qty']);
+        $this->assertSame('downloadable-product', $response['sku']);
+        $this->assertSame(2, $response['qty']);
         $this->assertCount(
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']

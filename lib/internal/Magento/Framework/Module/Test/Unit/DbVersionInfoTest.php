@@ -71,7 +71,7 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 ['setup_version' => $dbVersion]
             );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->dbVersionInfo->isSchemaUpToDate($moduleName)
         );
@@ -96,7 +96,7 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 ['setup_version' => $dbVersion]
             );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->dbVersionInfo->isDataUpToDate($moduleName)
         );
@@ -150,7 +150,7 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
                 DbVersionInfo::KEY_TYPE => 'data',
             ]
         ];
-        $this->assertEquals($expectedErrors, $this->dbVersionInfo->getDbVersionErrors());
+        $this->assertSame($expectedErrors, $this->dbVersionInfo->getDbVersionErrors());
     }
 
     /**

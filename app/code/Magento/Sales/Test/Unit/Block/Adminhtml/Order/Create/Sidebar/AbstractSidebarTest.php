@@ -36,7 +36,7 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
     public function testGetItemQty($itemQty, $qty, $expectedValue)
     {
         $this->itemMock->expects($this->exactly($itemQty))->method('getQty')->will($this->returnValue($qty));
-        $this->assertEquals($expectedValue, $this->abstractSidebar->getItemQty($this->itemMock));
+        $this->assertSame($expectedValue, $this->abstractSidebar->getItemQty($this->itemMock));
     }
 
     /**
@@ -50,6 +50,6 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
     public function testIsConfigurationRequired()
     {
         $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
-        $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
+        $this->assertSame(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }

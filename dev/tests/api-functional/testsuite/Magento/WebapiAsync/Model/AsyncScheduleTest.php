@@ -118,7 +118,7 @@ class AsyncScheduleTest extends WebapiAbstract
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
 
         $this->assertCount(1, $response['request_items']);
-        $this->assertEquals('accepted', $response['request_items'][0]['status']);
+        $this->assertSame('accepted', $response['request_items'][0]['status']);
         $this->assertFalse($response['errors']);
 
         //assert one products is created
@@ -193,7 +193,7 @@ class AsyncScheduleTest extends WebapiAbstract
         try {
             $response = $this->_webApiCall($serviceInfo, [ProductInterface::SKU => $sku], null, $storeCode);
         } catch (NotFoundException $e) {
-            $this->assertEquals(400, $e->getCode());
+            $this->assertSame(400, $e->getCode());
         }
         $this->assertNull($response);
     }

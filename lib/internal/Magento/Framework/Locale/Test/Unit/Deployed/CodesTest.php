@@ -83,7 +83,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::STATIC_VIEW)
             ->willReturn($reader);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'de_DE',
                 'en_US',

@@ -99,6 +99,6 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
 
         $this->model->requestToken($quote);
 
-        $this->assertEquals($secureTokenID, $request->getSecuretokenid());
+        $this->assertSame($secureTokenID, $request->getSecuretokenid());
     }
 }

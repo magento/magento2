@@ -22,6 +22,6 @@ class HtmlTest extends \PHPUnit\Framework\TestCase
         }
 
         $structure = $readerContext->getPageConfigStructure();
-        $this->assertEquals(['html' => ['test-name' => 'test-value']], $structure->getElementAttributes());
+        $this->assertSame(['html' => ['test-name' => 'test-value']], $structure->getElementAttributes());
     }
 }

@@ -377,7 +377,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -427,7 +427,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -599,7 +599,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -698,7 +698,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -764,6 +764,6 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 }

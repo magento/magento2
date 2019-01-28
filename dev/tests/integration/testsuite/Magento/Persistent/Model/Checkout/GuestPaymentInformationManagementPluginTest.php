@@ -234,6 +234,6 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $order = $orderRepo->get($orderId);
 
         //Assert order tied to guest email
-        $this->assertEquals($guestEmail, $order->getCustomerEmail());
+        $this->assertSame($guestEmail, $order->getCustomerEmail());
     }
 }

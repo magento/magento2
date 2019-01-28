@@ -37,7 +37,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $token = $tokenModel->loadByAdminId($adminUserId);
-        $this->assertEquals(null, $token->getId());
+        $this->assertSame(null, $token->getId());
     }
 
     /**
@@ -73,7 +73,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         foreach ($tokenModelCollectionFactory->create()->addFilterByAdminId($adminUserId) as $token) {
-            $this->assertEquals(1, $token->getRevoked());
+            $this->assertSame(1, $token->getRevoked());
         }
     }
 

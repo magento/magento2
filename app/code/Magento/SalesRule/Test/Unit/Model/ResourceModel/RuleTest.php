@@ -170,7 +170,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->entityManager->expects($this->once())
             ->method('save')
             ->with($this->rule);
-        $this->assertEquals($this->model->save($this->rule), $this->model);
+        $this->assertSame($this->model->save($this->rule), $this->model);
     }
 
     public function testDelete()
@@ -178,7 +178,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->entityManager->expects($this->once())
             ->method('delete')
             ->with($this->rule);
-        $this->assertEquals($this->model->delete($this->rule), $this->model);
+        $this->assertSame($this->model->delete($this->rule), $this->model);
     }
 
     /**
@@ -191,7 +191,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     public function testGetProductAttributes($testString, $expects)
     {
         $result = $this->model->getProductAttributes($testString);
-        $this->assertEquals($expects, $result);
+        $this->assertSame($expects, $result);
     }
 
     /**

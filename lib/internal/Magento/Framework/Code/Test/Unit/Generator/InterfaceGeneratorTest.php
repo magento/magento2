@@ -103,7 +103,7 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         $expectedContent = 'Expected generated content.';
         $this->interfaceGenerator->setSourceDirty(false)->setSourceContent($expectedContent);
         $generatedContent = $this->interfaceGenerator->generate();
-        $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
+        $this->assertSame($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
     public function testGeneratePredefinedContentNotSet()
@@ -111,7 +111,7 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         $expectedContent = '';
         $this->interfaceGenerator->setSourceDirty(false);
         $generatedContent = $this->interfaceGenerator->generate();
-        $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
+        $this->assertSame($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
     /**

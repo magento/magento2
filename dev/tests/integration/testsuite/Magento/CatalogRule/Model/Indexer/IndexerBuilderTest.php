@@ -79,7 +79,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->indexerBuilder->reindexById($product->getId());
 
-        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
+        $this->assertSame(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
     }
 
     /**
@@ -101,8 +101,8 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->product->getId()));
-        $this->assertEquals(
+        $this->assertSame(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->product->getId()));
+        $this->assertSame(
             9.8,
             $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->productSecond->getId())
         );
@@ -123,9 +123,9 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
         $this->indexerBuilder->reindexFull();
 
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->product->getId());
-        $this->assertEquals(9.8, $rulePrice);
+        $this->assertSame(9.8, $rulePrice);
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->productSecond->getId());
-        $this->assertEquals(9.8, $rulePrice);
+        $this->assertSame(9.8, $rulePrice);
         $this->assertFalse($this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->productThird->getId()));
     }
 

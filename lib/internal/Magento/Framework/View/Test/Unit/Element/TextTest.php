@@ -26,7 +26,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     public function testGetText()
     {
         $this->elementText->setText('example');
-        $this->assertEquals('example', $this->elementText->getText('example'));
+        $this->assertSame('example', $this->elementText->getText('example'));
     }
 
     /**
@@ -40,7 +40,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     {
         $this->elementText->setText('example');
         $this->elementText->addText($text, $before);
-        $this->assertEquals($expectedResult, $this->elementText->getText('example'));
+        $this->assertSame($expectedResult, $this->elementText->getText('example'));
     }
 
     /**

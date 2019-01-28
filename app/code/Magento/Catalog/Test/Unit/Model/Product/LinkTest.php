@@ -92,19 +92,19 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testUseRelatedLinks()
     {
         $this->model->useRelatedLinks();
-        $this->assertEquals(Link::LINK_TYPE_RELATED, $this->model->getData('link_type_id'));
+        $this->assertSame(Link::LINK_TYPE_RELATED, $this->model->getData('link_type_id'));
     }
 
     public function testUseUpSellLinks()
     {
         $this->model->useUpSellLinks();
-        $this->assertEquals(Link::LINK_TYPE_UPSELL, $this->model->getData('link_type_id'));
+        $this->assertSame(Link::LINK_TYPE_UPSELL, $this->model->getData('link_type_id'));
     }
 
     public function testUseCrossSellLinks()
     {
         $this->model->useCrossSellLinks();
-        $this->assertEquals(Link::LINK_TYPE_CROSSSELL, $this->model->getData('link_type_id'));
+        $this->assertSame(Link::LINK_TYPE_CROSSSELL, $this->model->getData('link_type_id'));
     }
 
     public function testGetAttributeTypeTable()
@@ -122,7 +122,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeTypeTable')
             ->with($attributeType)
             ->will($this->returnValue($attributeTypeTable));
-        $this->assertEquals($attributeTypeTable, $this->model->getAttributeTypeTable($attributeType));
+        $this->assertSame($attributeTypeTable, $this->model->getAttributeTypeTable($attributeType));
     }
 
     public function testGetProductCollection()
@@ -150,7 +150,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with($typeId)
             ->will($this->returnValue($linkAttributes));
         $this->model->setData('link_type_id', $typeId);
-        $this->assertEquals($linkAttributes, $this->model->getAttributes());
+        $this->assertSame($linkAttributes, $this->model->getAttributes());
     }
 
     public function testSaveProductRelations()

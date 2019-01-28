@@ -35,17 +35,17 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->assertNotEmpty($result);
 
             $this->assertArrayHasKey('id', $result);
-            $this->assertEquals($option['id'], $result['id']);
+            $this->assertSame($option['id'], $result['id']);
 
             $this->assertArrayHasKey('attribute_id', $result);
-            $this->assertEquals($option['attribute_id'], $result['attribute_id']);
+            $this->assertSame($option['attribute_id'], $result['attribute_id']);
 
             $this->assertArrayHasKey('label', $result);
-            $this->assertEquals($option['label'], $result['label']);
+            $this->assertSame($option['label'], $result['label']);
 
             $this->assertArrayHasKey('values', $result);
             $this->assertTrue(is_array($result['values']));
-            $this->assertEquals($option['values'], $result['values']);
+            $this->assertSame($option['values'], $result['values']);
         }
     }
 
@@ -70,7 +70,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
         $this->assertArrayHasKey('id', $option);
         $this->assertArrayHasKey('label', $option);
-        $this->assertEquals($option['label'], 'Test Configurable');
+        $this->assertSame($option['label'], 'Test Configurable');
 
         $this->assertArrayHasKey('values', $option);
         $this->assertTrue(is_array($option));
@@ -114,8 +114,8 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals([$attributeId], $errorObj['parameters']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame([$attributeId], $errorObj['parameters']);
         }
     }
 
@@ -132,7 +132,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $optionListRemoved = $this->getList($productSku);
 
         $this->assertTrue($resultRemove);
-        $this->assertEquals(count($optionList) - 1, count($optionListRemoved));
+        $this->assertSame(count($optionList) - 1, count($optionListRemoved));
     }
 
     /**
@@ -207,7 +207,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $result = $this->_webApiCall($serviceInfo, $requestBody);
         $this->assertGreaterThan(0, $result);
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
-        $this->assertEquals($requestBody['option']['label'], $configurableAttribute[0]['label']);
+        $this->assertSame($requestBody['option']['label'], $configurableAttribute[0]['label']);
     }
 
     /**

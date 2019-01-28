@@ -42,7 +42,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'groups' => ['any_payment' => 'Any Payment'],
             'methods' => ['checkmo' => ['allow_multiple_address' => 1]],
         ];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testMergeCompleteAndPartial()
@@ -62,6 +62,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
                 'deny-method' => ['allow_multiple_address' => 0],
             ],
         ];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

@@ -58,7 +58,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($isExperimentsEnabled)
         );
 
-        $this->assertEquals($isExperimentsEnabled, $this->_helper->isGoogleExperimentEnabled($store));
+        $this->assertSame($isExperimentsEnabled, $this->_helper->isGoogleExperimentEnabled($store));
     }
 
     /**
@@ -100,7 +100,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($isAnalyticsAvailable)
         );
 
-        $this->assertEquals($result, $this->_helper->isGoogleExperimentActive($store));
+        $this->assertSame($result, $this->_helper->isGoogleExperimentActive($store));
     }
 
     /**

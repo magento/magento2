@@ -17,7 +17,7 @@ class RemoveAccentsTest extends \PHPUnit\Framework\TestCase
     public function testRemoveAccents($string, $german, $expected)
     {
         $filter = new \Magento\Framework\Filter\RemoveAccents($german);
-        $this->assertEquals($expected, $filter->filter($string));
+        $this->assertSame($expected, $filter->filter($string));
     }
 
     /**

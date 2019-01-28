@@ -210,7 +210,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->_integrationMock->expects($this->once())->method('save')->will($this->returnSelf());
         $this->_setValidIntegrationData();
         $integrationData = $this->_service->update($this->_integrationData)->getData();
-        $this->assertEquals($this->_integrationData, $integrationData);
+        $this->assertSame($this->_integrationData, $integrationData);
     }
 
     public function testUpdateSuccessNameChanged()
@@ -240,7 +240,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->_integrationMock->expects($this->any())->method('getData')->will($this->returnValue($integrationData));
 
         $updatedData = $this->_service->update($integrationData)->getData();
-        $this->assertEquals($integrationData, $updatedData);
+        $this->assertSame($integrationData, $updatedData);
     }
 
     /**
@@ -293,7 +293,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->_integrationMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->_integrationMock->expects($this->never())->method('save');
         $integrationData = $this->_service->get(self::VALUE_INTEGRATION_ID)->getData();
-        $this->assertEquals($this->_integrationData, $integrationData);
+        $this->assertSame($this->_integrationData, $integrationData);
     }
 
     /**
@@ -328,7 +328,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_integrationData)
         );
         $integration = $this->_service->findByName(self::VALUE_INTEGRATION_NAME);
-        $this->assertEquals($this->_integrationData[Integration::NAME], $integration->getData()[Integration::NAME]);
+        $this->assertSame($this->_integrationData[Integration::NAME], $integration->getData()[Integration::NAME]);
     }
 
     public function testFindByNameNotFound()
@@ -381,7 +381,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_integrationData)
         );
         $integrationData = $this->_service->delete(self::VALUE_INTEGRATION_ID);
-        $this->assertEquals($this->_integrationData[Integration::ID], $integrationData[Integration::ID]);
+        $this->assertSame($this->_integrationData[Integration::ID], $integrationData[Integration::ID]);
     }
 
     /**
@@ -418,7 +418,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         );
 
         $integration = $this->_service->findByConsumerId(self::VALUE_INTEGRATION_CONSUMER_ID);
-        $this->assertEquals($this->_integrationData[Integration::NAME], $integration->getData()[Integration::NAME]);
+        $this->assertSame($this->_integrationData[Integration::NAME], $integration->getData()[Integration::NAME]);
     }
 
     public function testFindByConsumerIdNotFound()

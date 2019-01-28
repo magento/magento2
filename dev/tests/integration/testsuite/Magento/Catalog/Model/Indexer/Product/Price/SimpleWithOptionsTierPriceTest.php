@@ -63,15 +63,15 @@ class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
             ->getPrice(TierPrice::PRICE_CODE)
             ->getValue();
 
-        $this->assertEquals($tierPriceValue, $tierPrice);
+        $this->assertSame($tierPriceValue, $tierPrice);
 
         $tierPrice = $product->getTierPrice(1);
-        $this->assertEquals($tierPriceValue, $tierPrice);
+        $this->assertSame($tierPriceValue, $tierPrice);
 
         $tierPrices = $product->getData('tier_price');
-        $this->assertEquals($tierPriceValue, $tierPrices[0]['price']);
+        $this->assertSame($tierPriceValue, $tierPrices[0]['price']);
 
         $minPrice = $product->getData('min_price');
-        $this->assertEquals($tierPriceValue, $minPrice);
+        $this->assertSame($tierPriceValue, $minPrice);
     }
 }

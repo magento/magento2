@@ -80,7 +80,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $rate = array_pop($rates);
 
         static::assertInstanceOf(Method::class, $rate);
-        static::assertEquals('flatrate', $rate->getData('carrier'));
-        static::assertEquals(5, $rate->getData('price'));
+        static::assertSame('flatrate', $rate->getData('carrier'));
+        static::assertSame(5, $rate->getData('price'));
     }
 }

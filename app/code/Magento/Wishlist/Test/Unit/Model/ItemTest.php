@@ -141,7 +141,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($optionMock);
         $this->model->addOption($option);
-        $this->assertEquals(1, count($this->model->getOptions()));
+        $this->assertSame(1, count($this->model->getOptions()));
     }
 
     /**
@@ -165,7 +165,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($optionMock);
         $this->model->addOption($option);
-        $this->assertEquals(1, count($this->model->getOptions()));
+        $this->assertSame(1, count($this->model->getOptions()));
         $this->model->removeOption($code);
         $actualOptions = $this->model->getOptions();
         $actualOption = array_pop($actualOptions);
@@ -327,6 +327,6 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getById')
             ->with($productId, false, $storeId, true)
             ->willReturn($productMock);
-        $this->assertEquals($productMock, $this->model->getProduct());
+        $this->assertSame($productMock, $this->model->getProduct());
     }
 }

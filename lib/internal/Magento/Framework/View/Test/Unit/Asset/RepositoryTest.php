@@ -161,7 +161,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn('ThemeID');
 
         $this->repository->updateDesignParams($params);
-        $this->assertEquals($result, $params);
+        $this->assertSame($result, $params);
     }
 
     /**
@@ -224,7 +224,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($assetMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $assetMock,
             $this->repository->createAsset('test/file.js', ['module' => 'Test', 'theme' => 'Default'])
         );
@@ -271,7 +271,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($fallbackContextMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $fallbackContextMock,
             $this->repository->getStaticViewFileContext()
         );
@@ -317,7 +317,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($assetMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $assetMock,
             $this->repository->createRelated($filePath, $originalAssetMock)
         );
@@ -373,7 +373,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($assetMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $assetMock,
             $this->repository->createArbitrary('test/file.js', 'dir/path', 'dirType', 'static')
         );
@@ -425,11 +425,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($assetMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             'some url',
             $this->repository->getUrl('test/file.js')
         );
-        $this->assertEquals(
+        $this->assertSame(
             'some url',
             $this->repository->getUrlWithParams('test/file.js', [])
         );

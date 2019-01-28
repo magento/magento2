@@ -36,8 +36,8 @@ class MergedXsdTest extends \PHPUnit\Framework\TestCase
         $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationState, [], null, null, $messageFormat);
         $actualErrors = [];
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
-        $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
-        $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
+        $this->assertSame(empty($expectedErrors), $actualResult, "Validation result is invalid.");
+        $this->assertSame($expectedErrors, $actualErrors, "Validation errors does not match.");
     }
 
     /**

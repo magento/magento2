@@ -48,7 +48,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUserName()
     {
-        $this->assertEquals('John Smith', $this->contactsHelper->getUserName());
+        $this->assertSame('John Smith', $this->contactsHelper->getUserName());
     }
 
     /**
@@ -56,6 +56,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEmail()
     {
-        $this->assertEquals('customer@example.com', $this->contactsHelper->getUserEmail());
+        $this->assertSame('customer@example.com', $this->contactsHelper->getUserEmail());
     }
 }

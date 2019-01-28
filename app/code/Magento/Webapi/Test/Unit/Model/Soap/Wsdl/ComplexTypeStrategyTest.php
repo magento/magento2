@@ -66,7 +66,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
         $includedTypes = [$testType => $testTypeWsdlName];
         $this->_wsdl->expects($this->exactly(2))->method('getTypes')->will($this->returnValue($includedTypes));
 
-        $this->assertEquals($testTypeWsdlName, $this->_strategy->addComplexType($testType));
+        $this->assertSame($testTypeWsdlName, $this->_strategy->addComplexType($testType));
     }
 
     /**
@@ -98,7 +98,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($data)
         );
 
-        $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
+        $this->assertSame(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
     }
 
     /**
@@ -254,7 +254,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($parameterData)
         );
 
-        $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
+        $this->assertSame(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
     }
 
     /**
@@ -268,7 +268,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
         $complexType = $dom->createElement(Wsdl::XSD_NS . ':complexType');
         $complexType->setAttribute('name', 'testRequest');
         $this->_strategy->addAnnotation($complexType, $annotationDoc);
-        $this->assertEquals(
+        $this->assertSame(
             $annotationDoc,
             $complexType->getElementsByTagName("xsd:documentation")->item(0)->nodeValue
         );

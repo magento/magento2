@@ -68,7 +68,7 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
             ->with($this->result)
             ->willReturn([['module' => 'Magento_A'], ['module' => 'Magento_B'], ['module' => 'Magento_C']]);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['Magento_A' => 'Uninstall Class A', 'Magento_B' => 'Uninstall Class B'],
             $this->collector->collectUninstall()
         );
@@ -82,7 +82,7 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
             ->with($this->result)
             ->willReturn([['module' => 'Magento_A']]);
 
-        $this->assertEquals(['Magento_A' => 'Uninstall Class A'], $this->collector->collectUninstall(['Magento_A']));
+        $this->assertSame(['Magento_A' => 'Uninstall Class A'], $this->collector->collectUninstall(['Magento_A']));
     }
 }
 

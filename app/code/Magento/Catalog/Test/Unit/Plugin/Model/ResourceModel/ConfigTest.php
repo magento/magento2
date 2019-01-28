@@ -36,7 +36,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->cache->expects($this->never())->method('load');
 
-        $this->assertEquals(
+        $this->assertSame(
             ['attributes'],
             $this->getConfig(false)->aroundGetAttributesUsedInListing(
                 $this->subject,
@@ -62,7 +62,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($serializedAttributes)
             ->willReturn($attributes);
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedInListing(
                 $this->subject,
@@ -98,7 +98,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedInListing(
                 $this->subject,
@@ -111,7 +111,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->cache->expects($this->never())->method('load');
 
-        $this->assertEquals(
+        $this->assertSame(
             ['attributes'],
             $this->getConfig(false)->aroundGetAttributesUsedForSortBy(
                 $this->subject,
@@ -136,7 +136,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($serializedAttributes)
             ->willReturn($attributes);
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedForSortBy(
                 $this->subject,
@@ -171,7 +171,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedForSortBy(
                 $this->subject,

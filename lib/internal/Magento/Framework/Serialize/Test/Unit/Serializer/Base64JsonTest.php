@@ -27,7 +27,7 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize($value, $expected)
     {
-        $this->assertEquals($expected, $this->base64json->serialize($value));
+        $this->assertSame($expected, $this->base64json->serialize($value));
     }
 
     /**
@@ -55,7 +55,7 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnserialize($value, $expected)
     {
-        $this->assertEquals($expected, $this->base64json->unserialize($value));
+        $this->assertSame($expected, $this->base64json->unserialize($value));
     }
 
     /**

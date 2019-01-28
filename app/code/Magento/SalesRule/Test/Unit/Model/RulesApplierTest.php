@@ -137,7 +137,7 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = $this->rulesApplier->applyRules($item, $rules, $skipValidation, $couponCode);
-        $this->assertEquals($appliedRuleIds, $result);
+        $this->assertSame($appliedRuleIds, $result);
     }
 
     /**

@@ -65,7 +65,7 @@ class CanShipTest extends \PHPUnit\Framework\TestCase
             ->willReturn('status');
         $this->orderMock->expects($this->never())
             ->method('getItems');
-        $this->assertEquals(
+        $this->assertSame(
             [__('A shipment cannot be created when an order has a status of %1', 'status')],
             $this->model->validate($this->orderMock)
         );
@@ -123,7 +123,7 @@ class CanShipTest extends \PHPUnit\Framework\TestCase
             ->method('getLockedDoShip')
             ->willReturn($itemLockedDoShipment);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->orderMock)
         );

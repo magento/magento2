@@ -286,7 +286,7 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityId')
             ->willReturn(2);
 
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $this->invoiceOrder->execute(
                 $orderId,

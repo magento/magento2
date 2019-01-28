@@ -62,7 +62,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
     {
         $this->_filter->expects($this->once())->method('filter')->with($contentToFilter)
             ->will($this->returnValue($contentFiltered));
-        $this->assertEquals($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
+        $this->assertSame($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
     }
 
     /**

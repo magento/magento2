@@ -25,6 +25,6 @@ class CriticalTest extends \PHPUnit\Framework\TestCase
     public function testCollectionContainsLastUnreadCriticalItem()
     {
         $items = array_values($this->_model->getItems());
-        $this->assertEquals('Unread Critical 3', $items[0]->getTitle());
+        $this->assertSame('Unread Critical 3', $items[0]->getTitle());
     }
 }

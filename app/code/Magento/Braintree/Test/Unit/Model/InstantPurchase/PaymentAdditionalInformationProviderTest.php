@@ -78,6 +78,6 @@ class PaymentAdditionalInformationProviderTest extends \PHPUnit\Framework\TestCa
             'payment_method_nonce' => $paymentMethodNonce,
         ];
         $actual = $this->paymentAdditionalInformationProvider->getAdditionalInformation($this->paymentTokenMock);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

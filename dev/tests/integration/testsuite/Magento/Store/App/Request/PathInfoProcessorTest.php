@@ -35,7 +35,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $info = $this->pathProcessor->process($request, $pathInfo);
-        $this->assertEquals($pathInfo, $info);
+        $this->assertSame($pathInfo, $info);
     }
 
     public function notValidStoreCodeDataProvider()
@@ -64,7 +64,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $this->assertSame($pathInfo, $this->pathProcessor->process($request, $pathInfo));
     }
 
     /**
@@ -85,7 +85,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals('/m/c/a', $this->pathProcessor->process($request, $pathInfo));
+        $this->assertSame('/m/c/a', $this->pathProcessor->process($request, $pathInfo));
     }
 
     /**
@@ -109,8 +109,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-        $this->assertEquals(\Magento\Framework\App\Router\Base::NO_ROUTE, $request->getActionName());
+        $this->assertSame($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $this->assertSame(\Magento\Framework\App\Router\Base::NO_ROUTE, $request->getActionName());
     }
 
     /**
@@ -134,7 +134,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $this->assertSame($pathInfo, $this->pathProcessor->process($request, $pathInfo));
     }
 
     /**
@@ -158,7 +158,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', 'admin');
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $this->assertSame($pathInfo, $this->pathProcessor->process($request, $pathInfo));
     }
 
     /**
@@ -176,7 +176,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false);
         $pathInfo = sprintf('/%s/m/c/a', 'whatever');
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-        $this->assertEquals(null, $request->getActionName());
+        $this->assertSame($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $this->assertSame(null, $request->getActionName());
     }
 }

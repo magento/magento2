@@ -110,7 +110,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
         $expected = $this->converter->getArrayData($document);
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

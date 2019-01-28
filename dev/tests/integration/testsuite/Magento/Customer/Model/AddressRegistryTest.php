@@ -30,7 +30,7 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         $address = $this->_model->retrieve($addressId);
         $this->assertInstanceOf(\Magento\Customer\Model\Address::class, $address);
-        $this->assertEquals($addressId, $address->getId());
+        $this->assertSame($addressId, $address->getId());
     }
 
     /**
@@ -46,9 +46,9 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address2->load($addressId)
             ->delete();
         $addressAfterDeletion = $this->_model->retrieve($addressId);
-        $this->assertEquals($addressBeforeDeletion, $addressAfterDeletion);
+        $this->assertSame($addressBeforeDeletion, $addressAfterDeletion);
         $this->assertInstanceOf(\Magento\Customer\Model\Address::class, $addressAfterDeletion);
-        $this->assertEquals($addressId, $addressAfterDeletion->getId());
+        $this->assertSame($addressId, $addressAfterDeletion->getId());
     }
 
     /**

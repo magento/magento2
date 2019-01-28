@@ -44,6 +44,6 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             'use_config_attribute_name' => true,
         ]);
         $this->model->beforeSave($object);
-        $this->assertEquals(BooleanSource::VALUE_USE_CONFIG, $object->getData('attribute_name'));
+        $this->assertSame(BooleanSource::VALUE_USE_CONFIG, $object->getData('attribute_name'));
     }
 }

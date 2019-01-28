@@ -45,7 +45,7 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(200);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedValue,
             $this->model->estimateRowSize()
         );

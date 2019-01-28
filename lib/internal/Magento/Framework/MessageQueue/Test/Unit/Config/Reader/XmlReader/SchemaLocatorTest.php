@@ -26,13 +26,13 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     {
         $expected = $this->urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue_merged.xsd');
         $actual = $this->model->getSchema();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetPerFileSchema()
     {
         $expected = $this->urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue.xsd');
         $actual = $this->model->getPerFileSchema();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

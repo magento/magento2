@@ -43,7 +43,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     public function testGetBillingAgreements()
     {
         $billingAgreements = $this->_block->getBillingAgreements();
-        $this->assertEquals(1, count($billingAgreements));
-        $this->assertEquals('REF-ID-TEST-678', array_shift($billingAgreements));
+        $this->assertSame(1, count($billingAgreements));
+        $this->assertSame('REF-ID-TEST-678', array_shift($billingAgreements));
     }
 }

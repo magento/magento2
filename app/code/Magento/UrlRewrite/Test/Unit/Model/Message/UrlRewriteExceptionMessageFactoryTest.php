@@ -77,7 +77,7 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
             ->with(MessageInterface::TYPE_ERROR)
             ->willReturn($message);
 
-        $this->assertEquals(
+        $this->assertSame(
             $message,
             $this->urlRewriteExceptionMessageFactory->createMessage($urlAlreadyExistsException)
         );

@@ -108,6 +108,6 @@ class CompositeReaderTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedData, $data);
+        $this->assertSame($expectedData, $data);
     }
 }

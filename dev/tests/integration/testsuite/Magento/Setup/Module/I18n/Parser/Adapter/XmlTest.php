@@ -66,6 +66,6 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                 'quote' => ''
             ]
         ];
-        $this->assertEquals($expectation, $this->xmlPhraseCollector->getPhrases());
+        $this->assertSame($expectation, $this->xmlPhraseCollector->getPhrases());
     }
 }

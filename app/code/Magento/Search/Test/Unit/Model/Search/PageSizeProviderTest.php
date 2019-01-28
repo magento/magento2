@@ -47,7 +47,7 @@ class PageSizeProviderTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCurrentSearchEngine')
             ->willReturn($searchEngine);
-        $this->assertEquals($size, $this->model->getMaxPageSize());
+        $this->assertSame($size, $this->model->getMaxPageSize());
     }
 
     public function getPageSizeDataProvider()

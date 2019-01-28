@@ -42,12 +42,12 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
 
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getInvoice());
-        $this->assertNotEquals($expectedHtml, $this->_block->getInvoiceTotalsHtml($this->_invoice));
+        $this->assertNotSame($expectedHtml, $this->_block->getInvoiceTotalsHtml($this->_invoice));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $this->_block->getInvoiceTotalsHtml($this->_invoice);
         $this->assertSame($this->_invoice, $childBlock->getInvoice());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 
     public function testGetInvoiceCommentsHtml()
@@ -61,12 +61,12 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getEntity());
         $this->assertEmpty($childBlock->getTitle());
-        $this->assertNotEquals($expectedHtml, $this->_block->getInvoiceCommentsHtml($this->_invoice));
+        $this->assertNotSame($expectedHtml, $this->_block->getInvoiceCommentsHtml($this->_invoice));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $this->_block->getInvoiceCommentsHtml($this->_invoice);
         $this->assertSame($this->_invoice, $childBlock->getEntity());
         $this->assertNotEmpty($childBlock->getTitle());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 }

@@ -17,10 +17,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $collectionModel = Bootstrap::getObjectManager()->create(
             \Magento\Sales\Model\ResourceModel\Sale\Collection::class
         );
-        $this->assertEquals(1, $collectionModel->setCustomerIdFilter(1)->count());
+        $this->assertSame(1, $collectionModel->setCustomerIdFilter(1)->count());
         $collectionModel = Bootstrap::getObjectManager()->create(
             \Magento\Sales\Model\ResourceModel\Sale\Collection::class
         );
-        $this->assertEquals(0, $collectionModel->setCustomerIdFilter(2)->count());
+        $this->assertSame(0, $collectionModel->setCustomerIdFilter(2)->count());
     }
 }

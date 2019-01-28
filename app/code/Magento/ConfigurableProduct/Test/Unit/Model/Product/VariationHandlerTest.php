@@ -243,7 +243,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
         $newSimpleProductMock->expects($this->once())->method('save')->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
 
-        $this->assertEquals(['product_id'], $this->model->generateSimpleProducts($parentProductMock, $productsData));
+        $this->assertSame(['product_id'], $this->model->generateSimpleProducts($parentProductMock, $productsData));
     }
 
     /**
@@ -277,7 +277,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $result = $this->model->processMediaGallery($this->product, $productData);
-        $this->assertEquals($productData, $result);
+        $this->assertSame($productData, $result);
     }
 
     public function testProcessMediaGalleryIfImageIsEmptyButProductMediaGalleryIsNotEmpty()
@@ -290,7 +290,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $result = $this->model->processMediaGallery($this->product, $productData);
-        $this->assertEquals($productData, $result);
+        $this->assertSame($productData, $result);
     }
 
     public function testProcessMediaGalleryIfProductDataHasNoImagesAndGallery()
@@ -299,7 +299,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
         $productData['image'] = false;
         $productData['media_gallery']['images'] = false;
         $result = $this->model->processMediaGallery($this->product, $productData);
-        $this->assertEquals($productData, $result);
+        $this->assertSame($productData, $result);
     }
 
     /**
@@ -309,7 +309,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessMediaGalleryForFillingGallery($productData, $expected)
     {
-        $this->assertEquals($expected, $this->model->processMediaGallery($this->product, $productData));
+        $this->assertSame($expected, $this->model->processMediaGallery($this->product, $productData));
     }
 
     /**

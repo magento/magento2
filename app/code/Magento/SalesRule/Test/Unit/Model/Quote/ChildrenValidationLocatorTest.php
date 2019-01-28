@@ -87,7 +87,7 @@ class ChildrenValidationLocatorTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeId')
             ->willReturn($type);
 
-        $this->assertEquals($this->model->isChildrenValidationRequired($this->quoteItemMock), $expected);
+        $this->assertSame($this->model->isChildrenValidationRequired($this->quoteItemMock), $expected);
     }
 
     /**

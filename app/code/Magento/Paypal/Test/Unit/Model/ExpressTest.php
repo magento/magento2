@@ -161,7 +161,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
             ->with($transactionData)
             ->willReturnSelf();
 
-        static::assertEquals($this->model, $this->model->order($paymentModel, 12.3));
+        static::assertSame($this->model, $this->model->order($paymentModel, 12.3));
     }
 
     public function testAssignData()

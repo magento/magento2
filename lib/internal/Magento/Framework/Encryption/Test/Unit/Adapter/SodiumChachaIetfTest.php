@@ -35,7 +35,7 @@ class SodiumChachaIetfTest extends \PHPUnit\Framework\TestCase
         $crypt = new \Magento\Framework\Encryption\Adapter\SodiumChachaIetf($key);
         $result = $crypt->encrypt($decrypted);
 
-        $this->assertNotEquals($encrypted, $result);
+        $this->assertNotSame($encrypted, $result);
     }
 
     /**
@@ -46,6 +46,6 @@ class SodiumChachaIetfTest extends \PHPUnit\Framework\TestCase
         $crypt = new \Magento\Framework\Encryption\Adapter\SodiumChachaIetf($key);
         $result = $crypt->decrypt($encrypted);
 
-        $this->assertEquals($decrypted, $result);
+        $this->assertSame($decrypted, $result);
     }
 }

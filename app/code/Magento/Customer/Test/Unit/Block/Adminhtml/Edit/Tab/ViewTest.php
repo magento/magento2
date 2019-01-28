@@ -33,11 +33,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTabLabel()
     {
-        $this->assertEquals('Customer View', $this->view->getTabLabel());
+        $this->assertSame('Customer View', $this->view->getTabLabel());
     }
 
     public function testGetTabTitle()
     {
-        $this->assertEquals('Customer View', $this->view->getTabTitle());
+        $this->assertSame('Customer View', $this->view->getTabTitle());
     }
 }

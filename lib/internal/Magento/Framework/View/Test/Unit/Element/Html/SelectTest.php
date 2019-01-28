@@ -58,14 +58,14 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $options = [['value' => $value, 'label' => $label, 'params' => $params]];
 
-        $this->assertEquals([], $this->select->getOptions());
+        $this->assertSame([], $this->select->getOptions());
 
         $this->select->addOption($value, $label, $params);
-        $this->assertEquals($options, $this->select->getOptions());
+        $this->assertSame($options, $this->select->getOptions());
 
         $options[0]['value'] = 'newValue';
         $this->select->setOptions($options);
-        $this->assertEquals($options, $this->select->getOptions());
+        $this->assertSame($options, $this->select->getOptions());
     }
 
     public function testGetSetId()
@@ -74,7 +74,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($this->select->getId());
         $this->select->setId($selectId);
-        $this->assertEquals($selectId, $this->select->getId());
+        $this->assertSame($selectId, $this->select->getId());
     }
 
     public function testGetSetClass()
@@ -83,7 +83,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($this->select->getClass());
         $this->select->setClass($selectClass);
-        $this->assertEquals($selectClass, $this->select->getClass());
+        $this->assertSame($selectClass, $this->select->getClass());
     }
 
     public function testGetSetTitle()
@@ -92,7 +92,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($this->select->getTitle());
         $this->select->setTitle($selectTitle);
-        $this->assertEquals($selectTitle, $this->select->getTitle());
+        $this->assertSame($selectTitle, $this->select->getTitle());
     }
 
     public function testGetHtmlJs()
@@ -129,7 +129,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             . '</select>';
 
         $this->select->setIsRenderToJsTemplate(true);
-        $this->assertEquals($result, $this->select->getHtml());
+        $this->assertSame($result, $this->select->getHtml());
     }
 
     public function testGetHtml()
@@ -181,7 +181,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             .   '</optgroup>'
             . '</select>';
 
-        $this->assertEquals($result, $this->select->getHtml());
+        $this->assertSame($result, $this->select->getHtml());
     }
 
     public function testGetHtmlEscapes()
@@ -218,7 +218,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             }
             $this->select->setValue($inOptions['values']);
 
-            $this->assertEquals($expectedResult, $this->select->getHtml());
+            $this->assertSame($expectedResult, $this->select->getHtml());
 
             // reset
             $this->select->setOptions([]);

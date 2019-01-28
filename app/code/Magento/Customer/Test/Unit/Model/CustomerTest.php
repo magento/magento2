@@ -163,7 +163,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('hash')
         );
-        $this->assertEquals('hash', $this->_model->hashPassword('password', 'salt'));
+        $this->assertSame('hash', $this->_model->hashPassword('password', 'salt'));
     }
 
     /**
@@ -239,7 +239,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     public function testIsCustomerLocked($lockExpires, $expectedResult)
     {
         $this->_model->setLockExpires($lockExpires);
-        $this->assertEquals($expectedResult, $this->_model->isCustomerLocked());
+        $this->assertSame($expectedResult, $this->_model->isCustomerLocked());
     }
 
     /**
@@ -277,7 +277,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->with($websiteId, $customerId, $customerEmail)
             ->willReturn($isConfirmationRequired);
 
-        $this->assertEquals($expected, $this->_model->isConfirmationRequired());
+        $this->assertSame($expected, $this->_model->isConfirmationRequired());
     }
 
     /**
@@ -342,7 +342,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $expectedResult[$attribute->getAttributeCode()] = $attribute->getValue();
 
-        $this->assertEquals($this->_model->getData(), $expectedResult);
+        $this->assertSame($this->_model->getData(), $expectedResult);
     }
 
     /**
@@ -381,6 +381,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $customerDataObject->expects($this->atLeastOnce())->method('setId')->with($customerId)->willReturnSelf();
         $this->_model->getDataModel();
-        $this->assertEquals($customerDataObject, $this->_model->getDataModel());
+        $this->assertSame($customerDataObject, $this->_model->getDataModel());
     }
 }

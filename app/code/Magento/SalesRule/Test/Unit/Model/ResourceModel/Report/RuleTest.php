@@ -100,7 +100,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         foreach ($this->_rules as $rule) {
             $expectedRuleNames[] = $rule['rule_name'];
         }
-        $this->assertEquals($expectedRuleNames, $model->getUniqRulesNamesList());
+        $this->assertSame($expectedRuleNames, $model->getUniqRulesNamesList());
     }
 
     /**
@@ -119,7 +119,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $orderParts = $select->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertCount(1, $orderParts);
         $expectedOrderParts = ['rule_name', 'ASC'];
-        $this->assertEquals($expectedOrderParts, $orderParts[0]);
+        $this->assertSame($expectedOrderParts, $orderParts[0]);
 
         return $this->_rules;
     }

@@ -62,29 +62,29 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             '',
             ['data' => ['template' => 'value']]
         );
-        $this->assertEquals('value', $block->getTemplate());
+        $this->assertSame('value', $block->getTemplate());
     }
 
     public function testSetGetTemplate()
     {
         $this->assertEmpty($this->_block->getTemplate());
         $this->_block->setTemplate('value');
-        $this->assertEquals('value', $this->_block->getTemplate());
+        $this->assertSame('value', $this->_block->getTemplate());
     }
 
     public function testGetArea()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
-        $this->assertEquals('frontend', $this->_block->getArea());
+        $this->assertSame('frontend', $this->_block->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\State::class
         )->setAreaCode(Area::AREA_ADMINHTML);
-        $this->assertEquals(Area::AREA_ADMINHTML, $this->_block->getArea());
+        $this->assertSame(Area::AREA_ADMINHTML, $this->_block->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\State::class
         )->setAreaCode(Area::AREA_GLOBAL);
-        $this->assertEquals(Area::AREA_GLOBAL, $this->_block->getArea());
+        $this->assertSame(Area::AREA_GLOBAL, $this->_block->getArea());
     }
 
     /**
@@ -105,13 +105,13 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBaseUrl()
     {
-        $this->assertEquals('http://localhost/index.php/', $this->_block->getBaseUrl());
+        $this->assertSame('http://localhost/index.php/', $this->_block->getBaseUrl());
     }
 
     public function testGetObjectData()
     {
         $object = new \Magento\Framework\DataObject(['key' => 'value']);
-        $this->assertEquals('value', $this->_block->getObjectData($object, 'key'));
+        $this->assertSame('value', $this->_block->getObjectData($object, 'key'));
     }
 
     public function testGetCacheKeyInfo()

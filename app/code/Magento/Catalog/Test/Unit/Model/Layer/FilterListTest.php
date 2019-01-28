@@ -85,7 +85,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->will($this->returnValue([$this->attributeMock]));
 
-        $this->assertEquals(['filter', 'filter'], $this->model->getFilters($this->layerMock));
+        $this->assertSame(['filter', 'filter'], $this->model->getFilters($this->layerMock));
     }
 
     /**

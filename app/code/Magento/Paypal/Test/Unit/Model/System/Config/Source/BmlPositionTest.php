@@ -23,7 +23,7 @@ class BmlPositionTest extends \PHPUnit\Framework\TestCase
             '0' => __('Header (center)'),
             '1' => __('Sidebar (right)')
         ];
-        $this->assertEquals($expectedResult, $this->model->getBmlPositionsHP());
+        $this->assertSame($expectedResult, $this->model->getBmlPositionsHP());
     }
 
     public function testGetBmlPositionsCCP()
@@ -32,7 +32,7 @@ class BmlPositionTest extends \PHPUnit\Framework\TestCase
             '0' => __('Header (center)'),
             '1' => __('Sidebar (right)')
         ];
-        $this->assertEquals($expectedResult, $this->model->getBmlPositionsCCP());
+        $this->assertSame($expectedResult, $this->model->getBmlPositionsCCP());
     }
 
     public function testGetBmlPositionsCPP()
@@ -41,7 +41,7 @@ class BmlPositionTest extends \PHPUnit\Framework\TestCase
             '0' => __('Header (center)'),
             '1' => __('Near PayPal Credit checkout button')
         ];
-        $this->assertEquals($expectedResult, $this->model->getBmlPositionsCPP());
+        $this->assertSame($expectedResult, $this->model->getBmlPositionsCPP());
     }
 
     public function testGetBmlPositionsCheckout()
@@ -50,6 +50,6 @@ class BmlPositionTest extends \PHPUnit\Framework\TestCase
             '0' => __('Header (center)'),
             '1' => __('Near PayPal Credit checkout button')
         ];
-        $this->assertEquals($expectedResult, $this->model->getBmlPositionsCheckout());
+        $this->assertSame($expectedResult, $this->model->getBmlPositionsCheckout());
     }
 }

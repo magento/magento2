@@ -51,12 +51,12 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
         }
 
-        $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
+        $this->assertSame($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
 
         $expectedProductExtensionAttributes = $expectedProduct->getExtensionAttributes();
         $actualProductExtensionAttributes = $actualProduct->getExtensionAttributes();
 
-        $this->assertEquals(
+        $this->assertSame(
             count($expectedProductExtensionAttributes->getConfigurableProductLinks()),
             count($actualProductExtensionAttributes->getConfigurableProductLinks())
         );
@@ -64,7 +64,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         $expectedConfigurableProductOptions = $expectedProductExtensionAttributes->getConfigurableProductOptions();
         $actualConfigurableProductOptions = $actualProductExtensionAttributes->getConfigurableProductOptions();
 
-        $this->assertEquals(count($expectedConfigurableProductOptions), count($actualConfigurableProductOptions));
+        $this->assertSame(count($expectedConfigurableProductOptions), count($actualConfigurableProductOptions));
 
         $expectedConfigurableProductOptionsToCompare = [];
         foreach ($expectedConfigurableProductOptions as $expectedConfigurableProductOption) {
@@ -82,7 +82,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             }
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             count($expectedConfigurableProductOptionsToCompare),
             count($actualConfigurableProductOptionsToCompare)
         );
@@ -91,7 +91,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             $actualOptionValues = $actualConfigurableProductOptionsToCompare[$key];
             sort($expectedOptionValues);
             sort($actualOptionValues);
-            $this->assertEquals($expectedOptionValues, $actualOptionValues);
+            $this->assertSame($expectedOptionValues, $actualOptionValues);
         }
     }
 

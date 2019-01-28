@@ -44,7 +44,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     public function testGetMimeType()
     {
         $exceptedMimeType = 'application/xml';
-        $this->assertEquals($exceptedMimeType, $this->_restXmlRenderer->getMimeType(), 'Unexpected mime type.');
+        $this->assertSame($exceptedMimeType, $this->_restXmlRenderer->getMimeType(), 'Unexpected mime type.');
     }
 
     /**

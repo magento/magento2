@@ -141,6 +141,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             ->with($amount, $bundlePrice, $selection, ['include_container' => $includeContainer])
             ->will($this->returnValue($priceHtml));
 
-        $this->assertEquals($priceHtml, $this->block->renderPriceString($selection, $includeContainer));
+        $this->assertSame($priceHtml, $this->block->renderPriceString($selection, $includeContainer));
     }
 }

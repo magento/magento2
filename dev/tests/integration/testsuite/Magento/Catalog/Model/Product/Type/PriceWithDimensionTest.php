@@ -66,10 +66,10 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
         $return = $connection->fetchAll($select);
 
-        $this->assertEquals('10', $return[0]['price']);
-        $this->assertEquals('10', $return[0]['final_price']);
-        $this->assertEquals('19', $return[0]['min_price']);
-        $this->assertEquals('19', $return[0]['max_price']);
+        $this->assertSame('10', $return[0]['price']);
+        $this->assertSame('10', $return[0]['final_price']);
+        $this->assertSame('19', $return[0]['min_price']);
+        $this->assertSame('19', $return[0]['max_price']);
     }
 
     /**
@@ -77,7 +77,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPrice()
     {
-        $this->assertEquals('test', $this->_model->getPrice(new DataObject(['price' => 'test'])));
+        $this->assertSame('test', $this->_model->getPrice(new DataObject(['price' => 'test'])));
     }
 
     /**
@@ -92,19 +92,19 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         // fixture
 
         // regular & tier prices
-        $this->assertEquals(10.0, $this->_model->getFinalPrice(1, $product));
-        $this->assertEquals(8.0, $this->_model->getFinalPrice(2, $product));
-        $this->assertEquals(5.0, $this->_model->getFinalPrice(5, $product));
+        $this->assertSame(10.0, $this->_model->getFinalPrice(1, $product));
+        $this->assertSame(8.0, $this->_model->getFinalPrice(2, $product));
+        $this->assertSame(5.0, $this->_model->getFinalPrice(5, $product));
 
         // with options
         $buyRequest = $this->prepareBuyRequest($product);
         $product->getTypeInstance()->prepareForCart($buyRequest, $product);
 
         //product price + options price(10+1+2+3+3)
-        $this->assertEquals(19.0, $this->_model->getFinalPrice(1, $product));
+        $this->assertSame(19.0, $this->_model->getFinalPrice(1, $product));
 
         //product tier price + options price(5+1+2+3+3)
-        $this->assertEquals(14.0, $this->_model->getFinalPrice(5, $product));
+        $this->assertSame(14.0, $this->_model->getFinalPrice(5, $product));
     }
 
     /**
@@ -117,7 +117,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         );
         $product = $repository->get('simple');
         // fixture
-        $this->assertEquals('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
+        $this->assertSame('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
     }
 
     /**
@@ -125,8 +125,8 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculatePrice()
     {
-        $this->assertEquals(10, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
-        $this->assertEquals(8, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
+        $this->assertSame(10, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
+        $this->assertSame(8, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
     }
 
     /**
@@ -134,11 +134,11 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateSpecialPrice()
     {
-        $this->assertEquals(
+        $this->assertSame(
             10,
             $this->_model->calculateSpecialPrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01')
         );
-        $this->assertEquals(
+        $this->assertSame(
             8,
             $this->_model->calculateSpecialPrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01')
         );

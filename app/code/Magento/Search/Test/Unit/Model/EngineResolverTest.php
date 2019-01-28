@@ -85,7 +85,7 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($engine);
 
-        $this->assertEquals($engine, $this->model->getCurrentSearchEngine());
+        $this->assertSame($engine, $this->model->getCurrentSearchEngine());
     }
 
     /**
@@ -106,6 +106,6 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
                 . EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE
             );
 
-        $this->assertEquals(EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE, $this->model->getCurrentSearchEngine());
+        $this->assertSame(EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE, $this->model->getCurrentSearchEngine());
     }
 }

@@ -145,6 +145,6 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 ['inventory.counter.updated', 'amqp']
             ]);
 
-        $this->assertEquals($expectedResult, $this->plugin->afterRead($this->subjectMock, $result));
+        $this->assertSame($expectedResult, $this->plugin->afterRead($this->subjectMock, $result));
     }
 }

@@ -40,7 +40,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $themeDomainFactory = new \Magento\Framework\View\Design\Theme\Domain\Factory($objectManager);
-        $this->assertEquals($newThemeMock, $themeDomainFactory->create($themeMock));
+        $this->assertSame($newThemeMock, $themeDomainFactory->create($themeMock));
     }
 
     /**

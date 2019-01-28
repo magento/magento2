@@ -35,7 +35,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         )->setDefaultDesignTheme()->getDesignTheme();
         $this->_model->setThemeId($theme->getId());
 
-        $this->assertEquals($theme->getId(), $this->_model->getThemeId());
+        $this->assertSame($theme->getId(), $this->_model->getThemeId());
     }
 
     /**
@@ -64,7 +64,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
             'label' => 'New Products List Template',
         ];
         $this->assertNotNull($element);
-        $this->assertEquals($expected, $element);
+        $this->assertSame($expected, $element);
 
         return $this->_model;
     }
@@ -125,12 +125,12 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $model->setData('widget_parameters', $params);
-        $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
+        $this->assertSame('', $model->generateLayoutUpdateXml('content'));
         $model->setId('test_id')->setPackageTheme('Magento/luma');
         $result = $model->generateLayoutUpdateXml('content');
         $this->assertContains('<body><referenceContainer name="content">', $result);
         $this->assertContains('<block class="' . $model->getType() . '"', $result);
-        $this->assertEquals(count($params), substr_count($result, '<action method="setData">'));
+        $this->assertSame(count($params), substr_count($result, '<action method="setData">'));
         $this->assertContains('<argument name="name" xsi:type="string">display_mode</argument>', $result);
         $this->assertContains('<argument name="value" xsi:type="string">fixed</argument>', $result);
         $this->assertContains('<argument name="name" xsi:type="string">types</argument>', $result);

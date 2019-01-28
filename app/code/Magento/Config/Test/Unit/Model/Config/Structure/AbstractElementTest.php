@@ -60,29 +60,29 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetId()
     {
-        $this->assertEquals('', $this->_model->getId());
+        $this->assertSame('', $this->_model->getId());
         $this->_model->setData(['id' => 'someId'], 'someScope');
-        $this->assertEquals('someId', $this->_model->getId());
+        $this->assertSame('someId', $this->_model->getId());
     }
 
     public function testGetLabelTranslatesLabel()
     {
-        $this->assertEquals('', $this->_model->getLabel());
+        $this->assertSame('', $this->_model->getLabel());
         $this->_model->setData(['label' => 'some_label'], 'someScope');
-        $this->assertEquals(__('some_label'), $this->_model->getLabel());
+        $this->assertSame(__('some_label'), $this->_model->getLabel());
     }
 
     public function testGetCommentTranslatesComment()
     {
-        $this->assertEquals('', $this->_model->getComment());
+        $this->assertSame('', $this->_model->getComment());
         $this->_model->setData(['comment' => 'some_comment'], 'someScope');
-        $this->assertEquals(__('some_comment'), $this->_model->getComment());
+        $this->assertSame(__('some_comment'), $this->_model->getComment());
     }
 
     public function testGetFrontEndModel()
     {
         $this->_model->setData(['frontend_model' => 'frontend_model_name'], 'store');
-        $this->assertEquals('frontend_model_name', $this->_model->getFrontendModel());
+        $this->assertSame('frontend_model_name', $this->_model->getFrontendModel());
     }
 
     public function testGetAttribute()
@@ -91,9 +91,9 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             ['id' => 'elementId', 'label' => 'Element Label', 'someAttribute' => 'Some attribute value'],
             'someScope'
         );
-        $this->assertEquals('elementId', $this->_model->getAttribute('id'));
-        $this->assertEquals('Element Label', $this->_model->getAttribute('label'));
-        $this->assertEquals('Some attribute value', $this->_model->getAttribute('someAttribute'));
+        $this->assertSame('elementId', $this->_model->getAttribute('id'));
+        $this->assertSame('Element Label', $this->_model->getAttribute('label'));
+        $this->assertSame('Some attribute value', $this->_model->getAttribute('someAttribute'));
         $this->assertNull($this->_model->getAttribute('nonexistingAttribute'));
     }
 
@@ -222,14 +222,14 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetClass()
     {
-        $this->assertEquals('', $this->_model->getClass());
+        $this->assertSame('', $this->_model->getClass());
         $this->_model->setData(['class' => 'some_class'], 'store');
-        $this->assertEquals('some_class', $this->_model->getClass());
+        $this->assertSame('some_class', $this->_model->getClass());
     }
 
     public function testGetPathBuildsFullPath()
     {
         $this->_model->setData(['path' => 'section/group', 'id' => 'fieldId'], 'scope');
-        $this->assertEquals('section/group/prefix_fieldId', $this->_model->getPath('prefix_'));
+        $this->assertSame('section/group/prefix_fieldId', $this->_model->getPath('prefix_'));
     }
 }

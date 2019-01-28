@@ -64,20 +64,20 @@ class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
             $this->assertInstanceOf(\Magento\Framework\View\Asset\PropertyGroup::class, $actualGroup);
             $actualGroups[] = ['properties' => $actualGroup->getProperties(), 'assets' => $actualGroup->getAll()];
         }
-        $this->assertEquals($expectedGroups, $actualGroups);
+        $this->assertSame($expectedGroups, $actualGroups);
     }
 
     public function testAdd()
     {
         $assetNew = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/test_new.css');
         $this->_object->add('asset_new', $assetNew, ['test_property' => 'test_value']);
-        $this->assertEquals(['asset' => $this->_asset, 'asset_new' => $assetNew], $this->_object->getAll());
+        $this->assertSame(['asset' => $this->_asset, 'asset_new' => $assetNew], $this->_object->getAll());
     }
 
     public function testRemove()
     {
         $this->_object->remove('asset');
-        $this->assertEquals([], $this->_object->getAll());
+        $this->assertSame([], $this->_object->getAll());
     }
 
     public function testGetGroups()

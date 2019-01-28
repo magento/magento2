@@ -84,7 +84,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testGetConfig($path, $configValue)
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue($configValue));
-        $this->assertEquals($configValue, $this->_block->getConfig($path));
+        $this->assertSame($configValue, $this->_block->getConfig($path));
     }
 
     /**
@@ -107,7 +107,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(self::POST_ACTION_URL)
         );
-        $this->assertEquals(self::POST_ACTION_URL, $this->_block->getPostActionUrl());
+        $this->assertSame(self::POST_ACTION_URL, $this->_block->getPostActionUrl());
     }
 
     /**
@@ -122,7 +122,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(self::LOGIN_URL)
         );
-        $this->assertEquals(self::LOGIN_URL, $this->_block->getBackUrl());
+        $this->assertSame(self::LOGIN_URL, $this->_block->getBackUrl());
     }
 
     /**
@@ -131,7 +131,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testGetBackUrlNotNullData()
     {
         $this->_block->setData('back_url', self::LOGIN_URL);
-        $this->assertEquals(self::LOGIN_URL, $this->_block->getBackUrl());
+        $this->assertSame(self::LOGIN_URL, $this->_block->getBackUrl());
     }
 
     /**
@@ -152,8 +152,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     {
         $data = new \Magento\Framework\DataObject();
         $this->_customerSession->expects($this->once())->method('getCustomerFormData')->will($this->returnValue(null));
-        $this->assertEquals($data, $this->_block->getFormData());
-        $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
+        $this->assertSame($data, $this->_block->getFormData());
+        $this->assertSame($data, $this->_block->getData(self::FORM_DATA));
     }
 
     /**
@@ -173,8 +173,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($customerFormData)
         );
-        $this->assertEquals($data, $this->_block->getFormData());
-        $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
+        $this->assertSame($data, $this->_block->getFormData());
+        $this->assertSame($data, $this->_block->getData(self::FORM_DATA));
     }
 
     /**
@@ -196,7 +196,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($customerFormData)
         );
         $formData = $this->_block->getFormData();
-        $this->assertEquals($data, $formData);
+        $this->assertSame($data, $formData);
         $this->assertTrue(isset($formData[self::REGION_ID_ATTRIBUTE_CODE]));
         $this->assertSame((int)self::REGION_ID_ATTRIBUTE_VALUE, $formData[self::REGION_ID_ATTRIBUTE_CODE]);
     }
@@ -210,7 +210,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $formData = new \Magento\Framework\DataObject();
         $formData->setCountryId(self::COUNTRY_ID);
         $this->_block->setData(self::FORM_DATA, $formData);
-        $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
+        $this->assertSame(self::COUNTRY_ID, $this->_block->getCountryId());
     }
 
     /**
@@ -226,7 +226,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(self::COUNTRY_ID)
         );
-        $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
+        $this->assertSame(self::COUNTRY_ID, $this->_block->getCountryId());
     }
 
     /**
@@ -236,7 +236,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testGetCountryIdParentNotNullData()
     {
         $this->_block->setData('country_id', self::COUNTRY_ID);
-        $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
+        $this->assertSame(self::COUNTRY_ID, $this->_block->getCountryId());
     }
 
     /**
@@ -303,7 +303,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($isNewsletterActive)
         );
 
-        $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
+        $this->assertSame($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
     /**
@@ -358,7 +358,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $form->expects($this->once())->method('restoreData')->will($this->returnValue($customerFormData));
         $block = $this->_block->restoreSessionData($form, null, false);
         $this->assertSame($this->_block, $block);
-        $this->assertEquals($data, $block->getData(self::FORM_DATA));
+        $this->assertSame($data, $block->getData(self::FORM_DATA));
     }
 
     /**
@@ -375,7 +375,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(6)
         );
-        $this->assertEquals(6, $this->_block->getMinimumPasswordLength());
+        $this->assertSame(6, $this->_block->getMinimumPasswordLength());
     }
 
     /**
@@ -392,6 +392,6 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(3)
         );
-        $this->assertEquals(3, $this->_block->getRequiredCharacterClassesNumber());
+        $this->assertSame(3, $this->_block->getRequiredCharacterClassesNumber());
     }
 }

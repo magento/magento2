@@ -29,7 +29,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertAttributeEmpty('_filterPattern', $this->_output);
         $filterPattern = '/test/';
         $this->_output->setFilterPattern($filterPattern);
-        $this->assertEquals($filterPattern, $this->_output->getFilterPattern());
+        $this->assertSame($filterPattern, $this->_output->getFilterPattern());
     }
 
     /**
@@ -43,7 +43,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
             ? \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds')
             : \PHPUnit\Framework\Assert::readAttribute($this->_output, '_thresholds');
         $this->assertArrayHasKey($thresholdKey, $thresholds);
-        $this->assertEquals(100, $thresholds[$thresholdKey]);
+        $this->assertSame(100, $thresholds[$thresholdKey]);
 
         $this->_output->setThreshold($thresholdKey, null);
         $this->assertArrayNotHasKey($thresholdKey, $this->_output->getThresholds());
@@ -60,10 +60,10 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class,
             [$configuration]
         );
-        $this->assertEquals('/filter pattern/', $output->getFilterPattern());
+        $this->assertSame('/filter pattern/', $output->getFilterPattern());
         $thresholds = $output->getThresholds();
         $this->assertArrayHasKey('fetchKey', $thresholds);
-        $this->assertEquals(100, $thresholds['fetchKey']);
+        $this->assertSame(100, $thresholds['fetchKey']);
     }
 
     /**
@@ -78,7 +78,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
     {
         $method = new \ReflectionMethod($this->_output, '_renderColumnValue');
         $method->setAccessible(true);
-        $this->assertEquals($expectedValue, $method->invoke($this->_output, $value, $columnKey));
+        $this->assertSame($expectedValue, $method->invoke($this->_output, $value, $columnKey));
     }
 
     /**
@@ -130,7 +130,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
 
         $method = new \ReflectionMethod($this->_output, '_getTimerIds');
         $method->setAccessible(true);
-        $this->assertEquals($expectedTimerIds, $method->invoke($this->_output, $mockStat));
+        $this->assertSame($expectedTimerIds, $method->invoke($this->_output, $mockStat));
     }
 
     /**
@@ -140,6 +140,6 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
     {
         $method = new \ReflectionMethod($this->_output, '_renderTimerId');
         $method->setAccessible(true);
-        $this->assertEquals('someTimerId', $method->invoke($this->_output, 'someTimerId'));
+        $this->assertSame('someTimerId', $method->invoke($this->_output, 'someTimerId'));
     }
 }

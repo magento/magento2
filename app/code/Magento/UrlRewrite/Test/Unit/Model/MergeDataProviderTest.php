@@ -41,7 +41,7 @@ class MergeDataProviderTest extends \PHPUnit\Framework\TestCase
     public function testMerge($urlRewriteMockArray, $expectedData, $arrayCount)
     {
         $this->urlRewritesSet->merge($urlRewriteMockArray);
-        $this->assertEquals($expectedData, $this->urlRewritesSet->getData());
+        $this->assertSame($expectedData, $this->urlRewritesSet->getData());
         $this->assertCount($arrayCount, $this->urlRewritesSet->getData());
     }
 

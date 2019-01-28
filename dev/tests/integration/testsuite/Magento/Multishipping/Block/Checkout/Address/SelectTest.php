@@ -37,7 +37,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $fixtureAddressId = 1;
         $address = $addressRepository->getById($fixtureAddressId);
         $addressAsHtml = $this->_selectBlock->getAddressAsHtml($address);
-        $this->assertEquals(
+        $this->assertSame(
             "John Smith<br />CompanyName<br />Green str, 67<br />CityM,  Alabama, 75477"
                 . "<br />United States<br />T: <a href=\"tel:3468676\">3468676</a>",
             str_replace("\n", '', $addressAsHtml),

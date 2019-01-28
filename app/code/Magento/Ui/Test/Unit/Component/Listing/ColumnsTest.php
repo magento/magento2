@@ -70,6 +70,6 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($columns->getComponentName(), Columns::NAME);
+        $this->assertSame($columns->getComponentName(), Columns::NAME);
     }
 }

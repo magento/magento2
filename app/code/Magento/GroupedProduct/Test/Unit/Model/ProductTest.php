@@ -395,6 +395,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 }
             }
         }
-        $this->assertEquals($matches, 2);
+        $this->assertSame($matches, 2);
     }
 }

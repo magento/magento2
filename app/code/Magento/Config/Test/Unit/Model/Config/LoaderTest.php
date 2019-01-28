@@ -82,12 +82,12 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     public function testGetConfigByPathInFullMode()
     {
         $expected = ['section' => ['path' => 'section', 'value' => 10, 'config_id' => 20]];
-        $this->assertEquals($expected, $this->_model->getConfigByPath('section', 'scope', 'scopeId', true));
+        $this->assertSame($expected, $this->_model->getConfigByPath('section', 'scope', 'scopeId', true));
     }
 
     public function testGetConfigByPath()
     {
         $expected = ['section' => 10];
-        $this->assertEquals($expected, $this->_model->getConfigByPath('section', 'scope', 'scopeId', false));
+        $this->assertSame($expected, $this->_model->getConfigByPath('section', 'scope', 'scopeId', false));
     }
 }

@@ -47,7 +47,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidation($result, \Magento\Framework\DataObject $response)
     {
-        $this->assertEquals($result, $this->validator->validate($response, $this->payflowFacade));
+        $this->assertSame($result, $this->validator->validate($response, $this->payflowFacade));
     }
 
     /**

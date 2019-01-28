@@ -82,7 +82,7 @@ class CustomerScopeDataTest extends \PHPUnit\Framework\TestCase
             ->with(null)
             ->willReturn($storeMock);
 
-        $this->assertEquals($storeId, $this->model->getWebsiteId());
+        $this->assertSame($storeId, $this->model->getWebsiteId());
     }
 
     public function testEncodeConfiguration()
@@ -108,7 +108,7 @@ class CustomerScopeDataTest extends \PHPUnit\Framework\TestCase
             ->with($rules)
             ->willReturn(json_encode($rules));
 
-        $this->assertEquals(
+        $this->assertSame(
             json_encode($rules),
             $this->model->encodeConfiguration($rules)
         );

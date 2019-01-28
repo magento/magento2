@@ -38,7 +38,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     {
         $node = $this->domXpath->query($xpath)->item(0);
         $res = $this->converter->convert($node);
-        $this->assertEquals($expectedResult, $res);
+        $this->assertSame($expectedResult, $res);
     }
 
     /**

@@ -78,7 +78,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with('Module_One')
             ->will($this->returnValue($configValue));
-        $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_One'));
+        $this->assertSame($expectedResult, $this->_model->isOutputEnabled('Module_One'));
     }
 
     /**
@@ -101,7 +101,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(self::XML_PATH_OUTPUT_ENABLED)
             ->will($this->returnValue($configValue));
-        $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_Two'));
+        $this->assertSame($expectedResult, $this->_model->isOutputEnabled('Module_Two'));
     }
 
     /**

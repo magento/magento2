@@ -24,6 +24,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                 'to' => ['save' => 'saved value', 'overwrite' => 'overwritten', 'added' => 'added value'],
             ],
         ];
-        $this->assertEquals($mergeResult, $this->_model->convert($source, $initial));
+        $this->assertSame($mergeResult, $this->_model->convert($source, $initial));
     }
 }

@@ -95,7 +95,7 @@ class GuestCouponManagementTest extends TestCase
 
         $methods = $this->estimateShipping($cartId);
         $methods = $this->filterFreeShippingMethods($methods);
-        self::assertEquals(['Fixed', 'Priority Mail 1-Day'], $methods);
+        self::assertSame(['Fixed', 'Priority Mail 1-Day'], $methods);
     }
 
     /**

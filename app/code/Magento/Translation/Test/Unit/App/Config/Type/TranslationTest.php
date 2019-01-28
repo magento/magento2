@@ -50,6 +50,6 @@ class TranslationTest extends \PHPUnit\Framework\TestCase
             ->with()
             ->willReturn($data);
 
-        $this->assertEquals(['hello' => 'bonjour'], $this->configType->get($path));
+        $this->assertSame(['hello' => 'bonjour'], $this->configType->get($path));
     }
 }

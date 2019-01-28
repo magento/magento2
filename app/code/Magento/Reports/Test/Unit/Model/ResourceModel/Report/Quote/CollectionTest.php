@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('columns')
             ->with('COUNT(*)')
             ->willReturnSelf();
-        $this->assertEquals($this->selectMock, $collection->getSelectCountSql());
+        $this->assertSame($this->selectMock, $collection->getSelectCountSql());
     }
 
     public function testPrepareActiveCartItems()

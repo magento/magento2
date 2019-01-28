@@ -154,7 +154,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteriaMock)
             ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->invoiceService->getCommentsList($id));
+        $this->assertSame($returnValue, $this->invoiceService->getCommentsList($id));
     }
 
     /**
@@ -181,7 +181,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
             ->with($modelMock)
             ->will($this->returnValue($returnValue));
 
-        $this->assertEquals($returnValue, $this->invoiceService->notify($id));
+        $this->assertSame($returnValue, $this->invoiceService->notify($id));
     }
 
     /**

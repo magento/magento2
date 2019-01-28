@@ -43,7 +43,7 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(\Magento\Framework\Config\View::class, [])
             ->willReturn($this->view);
-        $this->assertEquals($this->view, $this->model->create());
+        $this->assertSame($this->view, $this->model->create());
     }
 
     public function testCreateWithArguments()
@@ -66,7 +66,7 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturnMap($valueMap);
 
-        $this->assertEquals($this->view, $this->model->create($this->getArguments()));
+        $this->assertSame($this->view, $this->model->create($this->getArguments()));
     }
 
     /**

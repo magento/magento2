@@ -64,14 +64,14 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testGetDefaultAttributeSetId()
     {
         /* based on value installed in DB */
-        $this->assertEquals(3, $this->_model->getDefaultAttributeSetId());
+        $this->assertSame(3, $this->_model->getDefaultAttributeSetId());
     }
 
     public function testGetProductCollection()
     {
         $collection = $this->_model->getProductCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
-        $this->assertEquals($this->_model->getStoreId(), $collection->getStoreId());
+        $this->assertSame($this->_model->getStoreId(), $collection->getStoreId());
     }
 
     public function testGetAttributes()
@@ -87,10 +87,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductsPosition()
     {
-        $this->assertEquals([], $this->_model->getProductsPosition());
+        $this->assertSame([], $this->_model->getProductsPosition());
         $this->_model->unsetData();
         $this->_model = $this->getCategoryByName('Category 2');
-        $this->assertEquals([], $this->_model->getProductsPosition());
+        $this->assertSame([], $this->_model->getProductsPosition());
 
         $this->_model->unsetData();
         $this->_model = $this->getCategoryByName('Category 1.1.1');
@@ -111,14 +111,14 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSetGetStoreId()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->getId(),
             $this->_model->getStoreId()
         );
         $this->_model->setStoreId(1000);
-        $this->assertEquals(1000, $this->_model->getStoreId());
+        $this->assertSame(1000, $this->_model->getStoreId());
     }
 
     /**
@@ -132,11 +132,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load('fixturestore');
 
-        $this->assertNotEquals($this->_model->getStoreId(), $store->getId());
+        $this->assertNotSame($this->_model->getStoreId(), $store->getId());
 
         $this->_model->setStoreId('fixturestore');
 
-        $this->assertEquals($this->_model->getStoreId(), $store->getId());
+        $this->assertSame($this->_model->getStoreId(), $store->getId());
     }
 
     public function testGetUrl()
@@ -144,7 +144,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('catalog/category/view/', $this->_model->getUrl());
 
         $this->_model->setUrl('test_url');
-        $this->assertEquals('test_url', $this->_model->getUrl());
+        $this->assertSame('test_url', $this->_model->getUrl());
 
         $this->_model->setUrl(null);
         $this->_model->setRequestPath('test_path');
@@ -165,9 +165,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testFormatUrlKey()
     {
-        $this->assertEquals('test', $this->_model->formatUrlKey('test'));
-        $this->assertEquals('test-some-chars-5', $this->_model->formatUrlKey('test-some#-chars^5'));
-        $this->assertEquals('test', $this->_model->formatUrlKey('test-????????'));
+        $this->assertSame('test', $this->_model->formatUrlKey('test'));
+        $this->assertSame('test-some-chars-5', $this->_model->formatUrlKey('test-some#-chars^5'));
+        $this->assertSame('test', $this->_model->formatUrlKey('test-????????'));
     }
 
     public function testGetImageUrl()
@@ -195,7 +195,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model = $this->getCategoryByName('Category 1.1.1');
         $categoryId = $this->_model->getId();
-        $this->assertEquals($categoryId, $this->_model->checkId($categoryId));
+        $this->assertSame($categoryId, $this->_model->checkId($categoryId));
         $this->assertFalse($this->_model->checkId(111));
     }
 
@@ -217,30 +217,30 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->_model->getRequestPath());
         $this->_model->setData('request_path', 'test');
-        $this->assertEquals('test', $this->_model->getRequestPath());
+        $this->assertSame('test', $this->_model->getRequestPath());
     }
 
     public function testGetName()
     {
         $this->assertNull($this->_model->getName());
         $this->_model->setData('name', 'test');
-        $this->assertEquals('test', $this->_model->getName());
+        $this->assertSame('test', $this->_model->getName());
     }
 
     public function testGetProductCount()
     {
         $this->_model->load(6);
-        $this->assertEquals(0, $this->_model->getProductCount());
+        $this->assertSame(0, $this->_model->getProductCount());
         $this->_model->setData([]);
         $this->_model->load(3);
-        $this->assertEquals(1, $this->_model->getProductCount());
+        $this->assertSame(1, $this->_model->getProductCount());
     }
 
     public function testGetAvailableSortBy()
     {
-        $this->assertEquals([], $this->_model->getAvailableSortBy());
+        $this->assertSame([], $this->_model->getAvailableSortBy());
         $this->_model->setData('available_sort_by', 'test,and,test');
-        $this->assertEquals(['test', 'and', 'test'], $this->_model->getAvailableSortBy());
+        $this->assertSame(['test', 'and', 'test'], $this->_model->getAvailableSortBy());
     }
 
     public function testGetAvailableSortByOptions()
@@ -253,7 +253,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultSortBy()
     {
-        $this->assertEquals('position', $this->_model->getDefaultSortBy());
+        $this->assertSame('position', $this->_model->getDefaultSortBy());
     }
 
     public function testValidate()
@@ -272,7 +272,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testSaveCategoryWithPosition()
     {
         $category = $this->_model->load('444');
-        $this->assertEquals('5', $category->getPosition());
+        $this->assertSame('5', $category->getPosition());
     }
 
     /**
@@ -308,16 +308,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->unsetData();
         $this->_model->load(5);
-        $this->assertEquals($this->_model->getId(), 5);
+        $this->assertSame($this->_model->getId(), 5);
 
         $this->_model->unsetData();
         $this->_model->load(3);
-        $this->assertEquals($this->_model->getId(), 3);
+        $this->assertSame($this->_model->getId(), 3);
         $this->_model->delete();
 
         $this->_model->unsetData();
         $this->_model->load(5);
-        $this->assertEquals($this->_model->getId(), null);
+        $this->assertSame($this->_model->getId(), null);
     }
 
     /**
@@ -354,8 +354,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $repository->save($childCategory);
         $childCategorySecondStore = $repository->get($childCategory->getId(), $storeId);
 
-        $this->assertEquals($parentAllStoresPath . '/test-category-100', $childCategory->getUrlPath());
-        $this->assertEquals($parentSecondStoreKey . '/test-category-100', $childCategorySecondStore->getUrlPath());
+        $this->assertSame($parentAllStoresPath . '/test-category-100', $childCategory->getUrlPath());
+        $this->assertSame($parentSecondStoreKey . '/test-category-100', $childCategorySecondStore->getUrlPath());
     }
 
     protected function getCategoryByName($categoryName)

@@ -52,6 +52,6 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn('Expected result');
 
-        $this->assertEquals('Expected result', $this->connectionFactory->create($config));
+        $this->assertSame('Expected result', $this->connectionFactory->create($config));
     }
 }

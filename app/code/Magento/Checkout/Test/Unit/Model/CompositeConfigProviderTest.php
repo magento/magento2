@@ -32,6 +32,6 @@ class CompositeConfigProviderTest extends \PHPUnit\Framework\TestCase
     {
         $config = ['key' => 'value'];
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($config);
-        $this->assertEquals($config, $this->model->getConfig());
+        $this->assertSame($config, $this->model->getConfig());
     }
 }

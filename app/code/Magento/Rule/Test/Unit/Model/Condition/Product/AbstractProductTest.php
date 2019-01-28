@@ -275,13 +275,13 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     public function testGetjointTables()
     {
         $this->_condition->setAttribute('category_ids');
-        $this->assertEquals([], $this->_condition->getTablesToJoin());
+        $this->assertSame([], $this->_condition->getTablesToJoin());
     }
 
     public function testGetMappedSqlField()
     {
         $this->_condition->setAttribute('category_ids');
-        $this->assertEquals('e.entity_id', $this->_condition->getMappedSqlField());
+        $this->assertSame('e.entity_id', $this->_condition->getMappedSqlField());
     }
 
     /**
@@ -376,8 +376,8 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $testedMethod->setAccessible(true);
         $testedMethod->invoke($this->_condition);
 
-        $this->assertEquals($expectedValueSelectOptions, $this->_condition->getData('value_select_options'));
-        $this->assertEquals($expectedValueOption, $this->_condition->getData('value_option'));
+        $this->assertSame($expectedValueSelectOptions, $this->_condition->getData('value_select_options'));
+        $this->assertSame($expectedValueOption, $this->_condition->getData('value_option'));
     }
 
     /**

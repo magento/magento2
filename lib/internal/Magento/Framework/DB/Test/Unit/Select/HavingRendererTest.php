@@ -45,7 +45,7 @@ class HavingRendererTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->any())
             ->method('getPart')
             ->willReturnMap($mapValues);
-        $this->assertEquals($sql, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($sql, $this->model->render($this->selectMock, $sql));
     }
 
     /**
@@ -72,6 +72,6 @@ class HavingRendererTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->any())
             ->method('getPart')
             ->willReturnMap($mapValues);
-        $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 }

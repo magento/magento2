@@ -45,7 +45,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $attribute = $this->getMockAttribute();
         $this->mockDataModel($isValid, $attribute);
-        $this->assertEquals($isValid, $this->validator->validateData([], [$attribute], 'ENTITY_TYPE'));
+        $this->assertSame($isValid, $this->validator->validateData([], [$attribute], 'ENTITY_TYPE'));
     }
 
     public function testIsValidWithNoModel()
@@ -74,9 +74,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validator->setAttributes([$attribute]);
         $this->validator->setEntityType('ENTITY_TYPE');
         $this->validator->setData($data);
-        $this->assertEquals($isValid, $this->validator->isValid(['ENTITY']));
+        $this->assertSame($isValid, $this->validator->isValid(['ENTITY']));
         $this->validator->setData([]);
-        $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Framework\DataObject($data)));
+        $this->assertSame($isValid, $this->validator->isValid(new \Magento\Framework\DataObject($data)));
     }
 
     /**

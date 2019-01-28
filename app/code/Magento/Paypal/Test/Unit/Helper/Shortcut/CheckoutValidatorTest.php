@@ -96,7 +96,7 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
         $methodInstanceMock->expects($this->once())->method('isAvailable')->with($quote)
             ->will($this->returnValue($availability));
 
-        $this->assertEquals(
+        $this->assertSame(
             $availability,
             $this->checkoutValidator->isMethodQuoteAvailable($paymentCode, $isInCatalog)
         );

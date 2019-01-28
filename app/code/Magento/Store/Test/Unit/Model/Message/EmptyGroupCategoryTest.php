@@ -66,12 +66,12 @@ class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock->expects($this->once())
             ->method('getItems')
             ->willReturn($items);
-        $this->assertEquals($expected, $this->model->isDisplayed());
+        $this->assertSame($expected, $this->model->isDisplayed());
     }
 
     public function testGetIdentity()
     {
-        $this->assertEquals($this->model->getIdentity(), 'empty_assigned_group_category');
+        $this->assertSame($this->model->getIdentity(), 'empty_assigned_group_category');
     }
 
     public function testGetText()
@@ -96,7 +96,7 @@ class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
                 'http://url2.com'
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             'The following stores are not associated with a root category: <a href="http://url1.com">groupName1</a>, '
             . '<a href="http://url2.com">groupName2</a>. For the store to be displayed in the storefront, '
             . 'it must be associated with a root category.',
@@ -128,7 +128,7 @@ class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSeverity()
     {
-        $this->assertEquals($this->model->getSeverity(), 2);
+        $this->assertSame($this->model->getSeverity(), 2);
     }
 
     /**

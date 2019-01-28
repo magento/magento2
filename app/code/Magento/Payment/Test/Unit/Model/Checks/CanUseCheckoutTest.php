@@ -35,7 +35,7 @@ class CanUseCheckoutTest extends \PHPUnit\Framework\TestCase
         $paymentMethod->expects($this->once())->method('canUseCheckout')->will(
             $this->returnValue($expectation)
         );
-        $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quote));
+        $this->assertSame($expectation, $this->_model->isApplicable($paymentMethod, $quote));
     }
 
     /**

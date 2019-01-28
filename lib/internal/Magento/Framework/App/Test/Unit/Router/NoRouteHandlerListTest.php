@@ -56,6 +56,6 @@ class NoRouteHandlerListTest extends \PHPUnit\Framework\TestCase
 
         $expectedResult = ['0' => $backendHandlerMock, '1' => $defaultHandlerMock];
 
-        $this->assertEquals($expectedResult, $this->_model->getHandlers());
+        $this->assertSame($expectedResult, $this->_model->getHandlers());
     }
 }

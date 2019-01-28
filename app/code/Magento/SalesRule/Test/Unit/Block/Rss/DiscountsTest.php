@@ -167,13 +167,13 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
 
         $data = $this->block->getRssData();
 
-        $this->assertEquals($rssData['title'], $data['title']);
-        $this->assertEquals($rssData['description'], $data['description']);
-        $this->assertEquals($rssData['link'], $data['link']);
-        $this->assertEquals($rssData['charset'], $data['charset']);
-        $this->assertEquals($rssData['language'], $data['language']);
-        $this->assertEquals($rssData['entries']['title'], $data['entries'][0]['title']);
-        $this->assertEquals($rssData['entries']['link'], $data['entries'][0]['link']);
+        $this->assertSame($rssData['title'], $data['title']);
+        $this->assertSame($rssData['description'], $data['description']);
+        $this->assertSame($rssData['link'], $data['link']);
+        $this->assertSame($rssData['charset'], $data['charset']);
+        $this->assertSame($rssData['language'], $data['language']);
+        $this->assertSame($rssData['entries']['title'], $data['entries'][0]['title']);
+        $this->assertSame($rssData['entries']['link'], $data['entries'][0]['link']);
         $this->assertContains($rssData['entries']['description']['description'], $data['entries'][0]['description']);
         $this->assertContains($rssData['entries']['description']['start_date'], $data['entries'][0]['description']);
         $this->assertContains($rssData['entries']['description']['end_date'], $data['entries'][0]['description']);
@@ -182,7 +182,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(0, $this->block->getCacheLifetime());
+        $this->assertSame(0, $this->block->getCacheLifetime());
     }
 
     /**
@@ -192,7 +192,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
     public function testIsAllowed($isAllowed)
     {
         $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->will($this->returnValue($isAllowed));
-        $this->assertEquals($isAllowed, $this->block->isAllowed());
+        $this->assertSame($isAllowed, $this->block->isAllowed());
     }
 
     /**
@@ -217,6 +217,6 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($feedData['link']));
 
         $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
-        $this->assertEquals($feedData, $this->block->getFeeds());
+        $this->assertSame($feedData, $this->block->getFeeds());
     }
 }

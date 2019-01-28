@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $this->aclResourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($resources);
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);
 
-        $this->assertEquals($mappedResources, $this->model->getTree());
+        $this->assertSame($mappedResources, $this->model->getTree());
     }
 
     /**
@@ -120,7 +120,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 ->willReturnOnConsecutiveCalls(11, $id);
         }
 
-        $this->assertEquals($isAllowed, $this->model->isEverythingAllowed());
+        $this->assertSame($isAllowed, $this->model->isEverythingAllowed());
     }
 
     /**

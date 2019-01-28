@@ -38,7 +38,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
 
         // TODO: check Http Status = 200, cannot do yet due to missing header info returned
 
-        $this->assertEquals('a good id', $item['value'], 'Success case is correct');
+        $this->assertSame('a good id', $item['value'], 'Success case is correct');
     }
 
     public function testNotFound()
@@ -124,7 +124,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         try {
             $this->_webApiCall($serviceInfo, $data);
         } catch (\Exception $e) {
-            $this->assertEquals($httpStatus, $e->getCode(), 'Checking HTTP status code');
+            $this->assertSame($httpStatus, $e->getCode(), 'Checking HTTP status code');
 
             $body = json_decode($e->getMessage(), true);
 
@@ -150,7 +150,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             );
 
             if ($parameters) {
-                $this->assertEquals($parameters, $body['parameters'], 'Checking body parameters');
+                $this->assertSame($parameters, $body['parameters'], 'Checking body parameters');
             }
 
             if ($this->mode == \Magento\Framework\App\State::MODE_DEVELOPER && $traceString) {

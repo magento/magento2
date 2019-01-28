@@ -84,7 +84,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingOrder->getStatus(),
             $updatedOrder->getStatus(),
             'Failed asserting that Order status was changed'

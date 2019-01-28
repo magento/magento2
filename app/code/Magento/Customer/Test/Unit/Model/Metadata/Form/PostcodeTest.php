@@ -70,7 +70,7 @@ class PostcodeTest extends AbstractFormTestCase
         $object->setExtractedData(['country_id' => $countryId]);
 
         $actual = $object->validateValue($value);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

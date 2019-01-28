@@ -31,6 +31,6 @@ class RatingTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIdentities()
     {
-        static::assertEquals([Review::CACHE_TAG], $this->rating->getIdentities());
+        static::assertSame([Review::CACHE_TAG], $this->rating->getIdentities());
     }
 }

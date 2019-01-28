@@ -99,7 +99,7 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
                 $valueQuestionMock
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['some/config/path1' => 'someValue'],
             $this->model->getValues(
                 $this->inputMock,

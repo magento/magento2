@@ -49,12 +49,12 @@ class AttributeSetManagementTest extends WebapiAbstract
         $this->assertNotNull($result);
         $attributeSet = $this->getAttributeSetByName($attributeSetName);
         $this->assertNotNull($attributeSet);
-        $this->assertEquals($attributeSet->getId(), $result['attribute_set_id']);
-        $this->assertEquals($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
-        $this->assertEquals($attributeSet->getEntityTypeId(), $result['entity_type_id']);
-        $this->assertEquals($attributeSet->getEntityTypeId(), $entityType->getId());
-        $this->assertEquals($attributeSet->getSortOrder(), $result['sort_order']);
-        $this->assertEquals($attributeSet->getSortOrder(), 500);
+        $this->assertSame($attributeSet->getId(), $result['attribute_set_id']);
+        $this->assertSame($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
+        $this->assertSame($attributeSet->getEntityTypeId(), $result['entity_type_id']);
+        $this->assertSame($attributeSet->getEntityTypeId(), $entityType->getId());
+        $this->assertSame($attributeSet->getSortOrder(), $result['sort_order']);
+        $this->assertSame($attributeSet->getSortOrder(), 500);
 
         // Clean up database
         $attributeSet->delete();
@@ -187,11 +187,11 @@ class AttributeSetManagementTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedMessage,
                 $errorObj['message']
             );
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 

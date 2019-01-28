@@ -146,7 +146,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($expectedResult, $model->hasPlugins($type));
+        $this->assertSame($expectedResult, $model->hasPlugins($type));
     }
 
     /**
@@ -188,7 +188,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($expectedResult, $model->hasPlugins($type));
+        $this->assertSame($expectedResult, $model->hasPlugins($type));
     }
 
     /**

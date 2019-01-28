@@ -84,7 +84,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $integrationMock->expects($this->any())->method('getEndpoint')->willReturn($endpoint);
         $integrationMock->expects($this->any())->method('getIdentityLinkUrl')->willReturn($endpoint);
         $actualResult = $this->nameRenderer->render($integrationMock);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

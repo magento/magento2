@@ -46,6 +46,6 @@ class GroupedTest extends AbstractProductExportImportTestCase
             $i++;
         }
 
-        $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
+        $this->assertSame($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
     }
 }

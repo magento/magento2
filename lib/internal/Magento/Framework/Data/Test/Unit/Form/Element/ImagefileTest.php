@@ -38,8 +38,8 @@ class ImagefileTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('file', $this->_imagefile->getType());
-        $this->assertEquals('imagefile', $this->_imagefile->getExtType());
+        $this->assertSame('file', $this->_imagefile->getType());
+        $this->assertSame('imagefile', $this->_imagefile->getExtType());
         $this->assertFalse($this->_imagefile->getAutosubmit());
         $this->assertFalse($this->_imagefile->getData('autoSubmit'));
     }

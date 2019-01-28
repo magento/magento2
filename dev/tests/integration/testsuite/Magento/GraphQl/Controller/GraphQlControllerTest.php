@@ -104,9 +104,9 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
         $this->assertTrue(!empty($output['data']['products']['items']), 'Products array has items');
         $this->assertTrue(!empty($output['data']['products']['items'][0]), 'Products array has items');
-        $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getData($linkField));
-        $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
-        $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
+        $this->assertSame($output['data']['products']['items'][0]['id'], $product->getData($linkField));
+        $this->assertSame($output['data']['products']['items'][0]['sku'], $product->getSku());
+        $this->assertSame($output['data']['products']['items'][0]['name'], $product->getName());
     }
 
     /**
@@ -153,12 +153,12 @@ QUERY;
         if (isset($outputResponse['errors'][0])) {
             if (is_array($outputResponse['errors'][0])) {
                 foreach ($outputResponse['errors'] as $error) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         $error['category'],
                         \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY
                     );
                     if (isset($error['message'])) {
-                        $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
+                        $this->assertSame($error['message'], 'Invalid entity_type specified: invalid');
                     }
                     if (isset($error['trace'])) {
                         if (is_array($error['trace'])) {

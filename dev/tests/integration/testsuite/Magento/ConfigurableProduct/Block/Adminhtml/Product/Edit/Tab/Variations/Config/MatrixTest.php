@@ -59,7 +59,7 @@ class MatrixTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             }
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [$usedAttribute->getId() => $attributeOptions[0]],
                 [$usedAttribute->getId() => $attributeOptions[1]],

@@ -64,7 +64,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'message' => 'Cannot determine required PHP version: '
             ]
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
     public function testCheckPhpVersionPrettyVersion()
@@ -96,7 +96,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'current' => PHP_VERSION,
             ],
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
     public function testCheckPhpVersionPrettyVersionFailed()
@@ -128,7 +128,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'current' => PHP_VERSION,
             ],
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
     private function setUpNoPrettyVersionParser()
@@ -163,7 +163,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'current' => PHP_VERSION,
             ],
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
     public function testCheckPhpVersionFailed()
@@ -192,7 +192,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'current' => PHP_VERSION,
             ],
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
     public function testCheckPhpSettings()
@@ -237,7 +237,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'error' => false
             ];
         }
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
     public function testCheckPhpSettingsFailed()
@@ -282,7 +282,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'error' => false
             ];
         }
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
     public function testCheckPhpSettingsNoXDebug()
@@ -318,7 +318,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'error' => false,
         ];
 
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
     public function testCheckPhpSettingsMemoryLimitError()
@@ -346,7 +346,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
             'warning' => false,
         ];
 
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkMemoryLimit());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkMemoryLimit());
     }
 
     public function testCheckPhpExtensionsNoRequired()
@@ -361,7 +361,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'message' => 'Cannot determine required PHP extensions: '
             ],
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpExtensions());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpExtensions());
     }
 
     public function testCheckPhpExtensions()
@@ -379,7 +379,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'missing' => [],
             ]
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpExtensions());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpExtensions());
     }
 
     public function testCheckPhpExtensionsFailed()
@@ -397,7 +397,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
                 'missing' => ['c'],
             ]
         ];
-        $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpExtensions());
+        $this->assertSame($expected, $this->phpReadinessCheck->checkPhpExtensions());
     }
     
     /**

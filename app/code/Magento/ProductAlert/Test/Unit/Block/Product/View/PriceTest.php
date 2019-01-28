@@ -87,8 +87,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->_block->setLayout($this->_layout);
         $this->_block->setTemplate('path/to/template.phtml');
 
-        $this->assertEquals('path/to/template.phtml', $this->_block->getTemplate());
-        $this->assertEquals('http://url', $this->_block->getSignupUrl());
+        $this->assertSame('path/to/template.phtml', $this->_block->getTemplate());
+        $this->assertSame('http://url', $this->_block->getSignupUrl());
     }
 
     /**
@@ -117,7 +117,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->_block->setLayout($this->_layout);
         $this->_block->setTemplate('path/to/template.phtml');
 
-        $this->assertEquals('', $this->_block->getTemplate());
+        $this->assertSame('', $this->_block->getTemplate());
         $this->assertNull($this->_block->getSignupUrl());
     }
 
@@ -151,7 +151,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->_block->setLayout($this->_layout);
         $this->_block->setTemplate('path/to/template.phtml');
 
-        $this->assertEquals('', $this->_block->getTemplate());
+        $this->assertSame('', $this->_block->getTemplate());
         $this->assertNull($this->_block->getSignupUrl());
     }
 }

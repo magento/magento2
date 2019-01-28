@@ -51,7 +51,7 @@ class TypeCasterTest extends \PHPUnit\Framework\TestCase
             ->method('serialize');
 
         $value = $this->model->castValueToType($origValue, $typeToCast);
-        self::assertEquals($expectedValue, $value);
+        self::assertSame($expectedValue, $value);
     }
 
     /**
@@ -71,7 +71,7 @@ class TypeCasterTest extends \PHPUnit\Framework\TestCase
             ->willReturn(json_encode($origValue));
 
         $actual = $this->model->castValueToType($origValue, $typeToCast);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**

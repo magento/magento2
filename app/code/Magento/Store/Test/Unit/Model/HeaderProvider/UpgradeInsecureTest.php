@@ -45,12 +45,12 @@ class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
 
     public function testGetName()
     {
-        $this->assertEquals($this::HEADER_NAME, $this->object->getName(), 'Wrong header name');
+        $this->assertSame($this::HEADER_NAME, $this->object->getName(), 'Wrong header name');
     }
 
     public function testGetValue()
     {
-        $this->assertEquals($this::HEADER_VALUE, $this->object->getValue(), 'Wrong header value');
+        $this->assertSame($this::HEADER_VALUE, $this->object->getValue(), 'Wrong header value');
     }
 
     /**
@@ -63,7 +63,7 @@ class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->will(
             $this->returnValueMap($configValuesMap)
         );
-        $this->assertEquals($expected, $this->object->canApply(), 'Incorrect canApply result');
+        $this->assertSame($expected, $this->object->canApply(), 'Incorrect canApply result');
     }
 
     /**

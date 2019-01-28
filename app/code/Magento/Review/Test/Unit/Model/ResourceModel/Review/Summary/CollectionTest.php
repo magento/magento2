@@ -124,8 +124,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($objectMock));
         $item = $this->collection->fetchItem();
 
-        $this->assertEquals($objectMock, $item);
-        $this->assertEquals('id', $item->getIdFieldName());
+        $this->assertSame($objectMock, $item);
+        $this->assertSame('id', $item->getIdFieldName());
     }
 
     public function testLoad()

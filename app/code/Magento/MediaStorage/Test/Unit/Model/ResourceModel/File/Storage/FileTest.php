@@ -118,6 +118,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
         ];
         $actual = $this->storageFile->getStorageData();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

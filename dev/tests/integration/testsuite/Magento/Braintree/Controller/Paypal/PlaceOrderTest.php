@@ -105,7 +105,7 @@ class PlaceOrderTest extends AbstractController
         );
 
         $order = $this->getOrder($reservedOrderId);
-        self::assertEquals('canceled', $order->getState());
+        self::assertSame('canceled', $order->getState());
     }
 
     /**

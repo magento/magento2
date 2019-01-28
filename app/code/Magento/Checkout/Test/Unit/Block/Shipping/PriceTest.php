@@ -62,6 +62,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($convertedPrice);
 
         $this->priceObj->setShippingRate($shippingRateMock);
-        $this->assertEquals($convertedPrice, $this->priceObj->getShippingPrice());
+        $this->assertSame($convertedPrice, $this->priceObj->getShippingPrice());
     }
 }

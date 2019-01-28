@@ -83,17 +83,17 @@ QUERY;
         $actualData = $response['customerOrders']['items'];
 
         foreach ($expectedData as $key => $data) {
-            $this->assertEquals(
+            $this->assertSame(
                 $data['increment_id'],
                 $actualData[$key]['increment_id'],
                 "increment_id is different than the expected for order - " . $data['increment_id']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $data['grand_total'],
                 $actualData[$key]['grand_total'],
                 "grand_total is different than the expected for order - " . $data['increment_id']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $data['status'],
                 $actualData[$key]['status'],
                 "status is different than the expected for order - " . $data['increment_id']

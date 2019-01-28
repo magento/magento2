@@ -88,7 +88,7 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
         try {
             $this->responseHandler->handle($this->response);
         } catch (ApiCallException $e) {
-            $this->assertEquals($e->getMessage(), sprintf($message, self::$errorMessage));
+            $this->assertSame($e->getMessage(), sprintf($message, self::$errorMessage));
         }
     }
 
@@ -177,6 +177,6 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
             ->willReturn(json_decode(self::$testJson, 1));
 
         $decodedResponseBody = $this->responseHandler->handle($this->response);
-        $this->assertEquals($decodedResponseBody, ['id' => 1]);
+        $this->assertSame($decodedResponseBody, ['id' => 1]);
     }
 }

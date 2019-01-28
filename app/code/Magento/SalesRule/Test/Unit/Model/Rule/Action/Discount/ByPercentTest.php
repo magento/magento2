@@ -185,7 +185,7 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
             $expectedDiscountData['baseOriginalAmount']
         );
 
-        $this->assertEquals($discountData, $this->model->calculate($rule, $item, $qty));
+        $this->assertSame($discountData, $this->model->calculate($rule, $item, $qty));
     }
 
     /**
@@ -226,7 +226,7 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
         $rule = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['getDiscountStep', '__wakeup']);
         $rule->expects($this->once())->method('getDiscountStep')->will($this->returnValue($step));
 
-        $this->assertEquals($expected, $this->model->fixQuantity($qty, $rule));
+        $this->assertSame($expected, $this->model->fixQuantity($qty, $rule));
     }
 
     /**

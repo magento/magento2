@@ -61,7 +61,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
             ->with('crontab -l', [])
             ->willThrowException($localizedException);
 
-        $this->assertEquals([], $this->crontabManager->getTasks());
+        $this->assertSame([], $this->crontabManager->getTasks());
     }
 
     /**
@@ -77,7 +77,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
             ->with('crontab -l', [])
             ->willReturn($content);
 
-        $this->assertEquals($tasks, $this->crontabManager->getTasks());
+        $this->assertSame($tasks, $this->crontabManager->getTasks());
     }
 
     /**

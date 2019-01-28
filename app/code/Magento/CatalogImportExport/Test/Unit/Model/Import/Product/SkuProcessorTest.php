@@ -42,7 +42,7 @@ class SkuProcessorTest extends \PHPUnit\Framework\TestCase
         $this->skuProcessor->reloadOldSkus();
         $oldSkus = $this->getPropertyValue($this->skuProcessor, 'oldSkus');
 
-        $this->assertEquals($skuValue, $oldSkus);
+        $this->assertSame($skuValue, $oldSkus);
     }
 
     public function testGetOldSkusIfNotSet()
@@ -56,7 +56,7 @@ class SkuProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->skuProcessor->getOldSkus();
 
-        $this->assertEquals($expectedOldSkus, $result);
+        $this->assertSame($expectedOldSkus, $result);
     }
 
     public function testGetOldSkusIfSet()
@@ -69,7 +69,7 @@ class SkuProcessorTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->skuProcessor->getOldSkus();
 
-        $this->assertEquals($expectedOldSkus, $result);
+        $this->assertSame($expectedOldSkus, $result);
     }
 
     /**

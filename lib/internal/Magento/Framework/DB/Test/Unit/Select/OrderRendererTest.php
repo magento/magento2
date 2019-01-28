@@ -29,6 +29,6 @@ class OrderRendererTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\DB\Select::ORDER)
             ->willReturn($parts);
         $model = new \Magento\Framework\DB\Select\OrderRenderer($quoteMock);
-        $this->assertEquals(" ORDER BY 10, ASC, field1 1\n", $model->render($selectMock));
+        $this->assertSame(" ORDER BY 10, ASC, field1 1\n", $model->render($selectMock));
     }
 }

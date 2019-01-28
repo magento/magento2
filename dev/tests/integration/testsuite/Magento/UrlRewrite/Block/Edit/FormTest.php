@@ -40,8 +40,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form = $this->_getFormInstance(['url_rewrite' => new \Magento\Framework\DataObject(['id' => 3])]);
         $this->assertInstanceOf(\Magento\Framework\Data\Form::class, $form);
         $this->assertNotEmpty($form->getAction());
-        $this->assertEquals('edit_form', $form->getId());
-        $this->assertEquals('post', $form->getMethod());
+        $this->assertSame('edit_form', $form->getId());
+        $this->assertSame('post', $form->getMethod());
         $this->assertTrue($form->getUseContainer());
         $this->assertContains('/id/3', $form->getAction());
 
@@ -86,7 +86,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         // Check that all fields values are restored from session
         foreach ($sessionValues as $field => $value) {
-            $this->assertEquals($value, $form->getElement($field)->getValue());
+            $this->assertSame($value, $form->getElement($field)->getValue());
         }
     }
 
@@ -109,7 +109,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         )->getStore(
             true
         )->getId();
-        $this->assertEquals($defaultStore, $storeElement->getValue());
+        $this->assertSame($defaultStore, $storeElement->getValue());
     }
 
     /**
@@ -139,7 +139,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         )->getStoreValuesForForm();
         $this->assertInternalType('array', $storeElement->getValues());
         $this->assertNotEmpty($storeElement->getValues());
-        $this->assertEquals($storesList, $storeElement->getValues());
+        $this->assertSame($storesList, $storeElement->getValues());
     }
 
     /**
@@ -152,7 +152,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $form = $this->_getFormInstance(['url_rewrite' => $urlRewrite]);
         foreach ($fields as $fieldKey => $expected) {
-            $this->assertEquals($expected, $form->getElement($fieldKey)->getReadonly());
+            $this->assertSame($expected, $form->getElement($fieldKey)->getReadonly());
         }
     }
 

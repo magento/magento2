@@ -188,6 +188,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->with($this->request, $table, $selectResult['documents'])
             ->willReturn($selectResult['aggregations']);
         $response = $this->adapter->query($this->request);
-        $this->assertEquals($selectResult, $response);
+        $this->assertSame($selectResult, $response);
     }
 }

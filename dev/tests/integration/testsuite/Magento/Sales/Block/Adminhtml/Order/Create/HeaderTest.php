@@ -36,7 +36,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
         $session = Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session\Quote::class);
         $session->setCustomerId($customerId);
         $session->setStoreId($storeId);
-        $this->assertEquals($expectedResult, $this->_block->toHtml());
+        $this->assertSame($expectedResult, $this->_block->toHtml());
     }
 
     public function toHtmlDataProvider()

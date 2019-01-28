@@ -61,7 +61,7 @@ class MenuItemCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($activeItemId)
             ->willReturn($isItem ? $this->activeMenuItemMock : null);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->menuItemChecker->isItemActive($this->activeMenuItemMock, $this->menuItemMock, 0)
         );

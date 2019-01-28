@@ -41,7 +41,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
         $domXpath = new \DOMXPath($dom);
         $url = $domXpath->query('//listing/settings/buttons/button[@name="button_2"]/url')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($url));
+        $this->assertSame($expectedResult, $this->converter->convert($url));
     }
 
     public function testConvertUrlWithoutParams()
@@ -55,6 +55,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
         $domXpath = new \DOMXPath($dom);
         $url = $domXpath->query('//listing/settings/storageConfig/path')->item(0);
-        $this->assertEquals($expectedResult, $this->converter->convert($url));
+        $this->assertSame($expectedResult, $this->converter->convert($url));
     }
 }

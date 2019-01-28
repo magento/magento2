@@ -71,6 +71,6 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $expectedResult = array_merge_recursive($dataSource, $actionColumn);
-        $this->assertEquals($expectedResult, $this->actionColumn->prepareDataSource($dataSource));
+        $this->assertSame($expectedResult, $this->actionColumn->prepareDataSource($dataSource));
     }
 }

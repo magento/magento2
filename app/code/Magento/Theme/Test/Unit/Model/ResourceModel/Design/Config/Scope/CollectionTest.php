@@ -145,6 +145,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ]),
         ];
 
-        $this->assertEquals($expectedResult, $this->collection->getItems());
+        $this->assertSame($expectedResult, $this->collection->getItems());
     }
 }

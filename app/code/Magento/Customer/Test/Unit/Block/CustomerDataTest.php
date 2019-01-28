@@ -54,6 +54,6 @@ class CustomerDataTest extends \PHPUnit\Framework\TestCase
             $expectedResult
         );
 
-        $this->assertEquals($expectedResult, $block->getExpirableSectionNames());
+        $this->assertSame($expectedResult, $block->getExpirableSectionNames());
     }
 }

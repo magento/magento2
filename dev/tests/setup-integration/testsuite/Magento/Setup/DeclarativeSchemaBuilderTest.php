@@ -65,14 +65,14 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
          */
         $primaryKey = $referenceTable->getPrimaryConstraint();
         $columns = $primaryKey->getColumns();
-        self::assertEquals('tinyint_ref', reset($columns)->getName());
+        self::assertSame('tinyint_ref', reset($columns)->getName());
         //Test column
         $testTable = $schemaTables['test_table'];
         /**
          * @var Timestamp $timestampColumn
          */
         $timestampColumn = $testTable->getColumnByName('timestamp');
-        self::assertEquals('CURRENT_TIMESTAMP', $timestampColumn->getOnUpdate());
+        self::assertSame('CURRENT_TIMESTAMP', $timestampColumn->getOnUpdate());
         //Test disabled
         self::assertArrayNotHasKey('varbinary_rename', $testTable->getColumns());
         //Test foreign key
@@ -80,7 +80,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
          * @var Reference $foreignKey
          */
         $foreignKey = $testTable->getConstraintByName('TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF');
-        self::assertEquals('NO ACTION', $foreignKey->getOnDelete());
-        self::assertEquals('tinyint_ref', $foreignKey->getReferenceColumn()->getName());
+        self::assertSame('NO ACTION', $foreignKey->getOnDelete());
+        self::assertSame('tinyint_ref', $foreignKey->getReferenceColumn()->getName());
     }
 }

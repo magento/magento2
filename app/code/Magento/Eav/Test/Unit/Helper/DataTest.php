@@ -81,7 +81,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         foreach ($result as $key => $value) {
             $this->assertArrayHasKey($key, $expected, 'Attribute metadata with key "' . $key . '" not found.');
-            $this->assertEquals(
+            $this->assertSame(
                 $expected[$key],
                 $value,
                 'Attribute metadata with key "' . $key . '" has invalid value.'
@@ -107,7 +107,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributeLockedFieldsNoEntityCode()
     {
         $this->attributeConfig->expects($this->never())->method('getEntityAttributesLockedFields');
-        $this->assertEquals([], $this->helper->getAttributeLockedFields(''));
+        $this->assertSame([], $this->helper->getAttributeLockedFields(''));
     }
 
     /**
@@ -119,7 +119,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
             ->with('entityTypeCode')->will($this->returnValue($lockedFields));
-        $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
+        $this->assertSame($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
     /**
@@ -133,7 +133,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('entityTypeCode')->will($this->returnValue($lockedFields));
 
         $this->helper->getAttributeLockedFields('entityTypeCode');
-        $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
+        $this->assertSame($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
     /**
@@ -144,7 +144,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
             ->with('entityTypeCode')->will($this->returnValue([]));
 
-        $this->assertEquals([], $this->helper->getAttributeLockedFields('entityTypeCode'));
+        $this->assertSame([], $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
     public function testGetInputTypesValidatorData()
@@ -155,6 +155,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Eav\Helper\Data::XML_PATH_VALIDATOR_DATA_INPUT_TYPES, ScopeInterface::SCOPE_STORE)
             ->willReturn($configValue);
 
-        $this->assertEquals($configValue, $this->helper->getInputTypesValidatorData());
+        $this->assertSame($configValue, $this->helper->getInputTypesValidatorData());
     }
 }

@@ -138,7 +138,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
         $store = $storeRepository->get('fixture_second_store');
 
-        self::assertNotEquals($store->getId(), $bundle->getStoreId());
+        self::assertNotSame($store->getId(), $bundle->getStoreId());
 
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
@@ -148,7 +148,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setCopyFromView(true);
         $updatedBundle = $productRepository->save($bundle);
 
-        self::assertEquals($store->getId(), $updatedBundle->getStoreId());
+        self::assertSame($store->getId(), $updatedBundle->getStoreId());
     }
 
     /**
@@ -193,7 +193,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
         $productRepository->save($bundle);
 
-        $this->assertEquals($isSalable, $bundle->isSalable());
+        $this->assertSame($isSalable, $bundle->isSalable());
     }
 
     /**

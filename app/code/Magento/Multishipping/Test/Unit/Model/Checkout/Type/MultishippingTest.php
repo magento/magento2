@@ -307,7 +307,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
         $this->mockShippingAssignment();
 
-        $this->assertEquals($this->model, $this->model->setShippingItemsInformation($info));
+        $this->assertSame($this->model, $this->model->setShippingItemsInformation($info));
     }
 
     /**
@@ -338,7 +338,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())->method('getMaximumQty')->willReturn(500);
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
 
-        $this->assertEquals($this->model, $this->model->setShippingItemsInformation($info));
+        $this->assertSame($this->model, $this->model->setShippingItemsInformation($info));
     }
 
     public function testUpdateQuoteCustomerShippingAddress()
@@ -353,7 +353,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
         $this->addressRepositoryMock->expects($this->once())->method('getById')->willReturn(null);
 
-        $this->assertEquals($this->model, $this->model->updateQuoteCustomerShippingAddress($addressId));
+        $this->assertSame($this->model, $this->model->updateQuoteCustomerShippingAddress($addressId));
     }
 
     /**
@@ -370,7 +370,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         ];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
 
-        $this->assertEquals($this->model, $this->model->updateQuoteCustomerShippingAddress($addressId));
+        $this->assertSame($this->model, $this->model->updateQuoteCustomerShippingAddress($addressId));
     }
 
     public function testSetQuoteCustomerBillingAddress()
@@ -383,7 +383,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         ];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
 
-        $this->assertEquals($this->model, $this->model->setQuoteCustomerBillingAddress($addressId));
+        $this->assertSame($this->model, $this->model->setQuoteCustomerBillingAddress($addressId));
     }
 
     /**
@@ -400,7 +400,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         ];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
 
-        $this->assertEquals($this->model, $this->model->setQuoteCustomerBillingAddress($addressId));
+        $this->assertSame($this->model, $this->model->setQuoteCustomerBillingAddress($addressId));
     }
 
     public function testGetQuoteShippingAddressesItems()

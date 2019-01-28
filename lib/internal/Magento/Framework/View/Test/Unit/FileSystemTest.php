@@ -99,7 +99,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('some_file.ext'));
 
         $actual = $this->_model->getFilename($file, $params);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetTemplateFileName()
@@ -124,7 +124,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('some_file.ext'));
 
         $actual = $this->_model->getTemplateFileName($file, $params);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetLocaleFileName()
@@ -143,7 +143,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $actual = $this->_model->getLocaleFileName($file, $params);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetViewFile()
@@ -163,7 +163,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $actual = $this->_model->getStaticFileName($file, $params);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -174,7 +174,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     public function testNormalizePath($path, $expectedResult)
     {
         $result = $this->_model->normalizePath($path);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -199,7 +199,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     public function testOffsetPath($relatedPath, $path, $expectedResult)
     {
         $result = $this->_model->offsetPath($relatedPath, $path);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -254,6 +254,6 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $actual = $this->_model->getEmailTemplateFileName($file, $params, 'Some_Module');
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

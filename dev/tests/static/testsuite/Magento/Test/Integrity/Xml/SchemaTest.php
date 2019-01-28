@@ -27,7 +27,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
 
                 $schemaLocations = [];
                 preg_match('/xsi:noNamespaceSchemaLocation=\s*"(urn:[^"]+)"/s', $xmlFile, $schemaLocations);
-                $this->assertEquals(
+                $this->assertSame(
                     2,
                     count($schemaLocations),
                     'The XML file at ' . $filename . ' does not have a schema properly defined.  It should '

@@ -143,7 +143,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
         }
         $basePrice = 10.00;
         $price = 15.00;
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adminHelper->displayPrices($dataObject, $basePrice, $price, $strong, $separator)
         );
@@ -192,7 +192,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue('data'));
             $dataObject = $this->magentoObjectMock;
         }
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adminHelper->displayPriceAttribute($dataObject, 'code', $strong, $separator)
         );
@@ -342,7 +342,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->will($this->returnValue($expected));
         $actual = $this->adminHelper->escapeHtmlWithLinks($data, $allowedTags);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

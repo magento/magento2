@@ -65,6 +65,6 @@ class CatalogAttributeDeleteAfterObserverTest extends \PHPUnit\Framework\TestCas
             ->method('checkSalesRulesAvailability')
             ->willReturn('true');
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 }

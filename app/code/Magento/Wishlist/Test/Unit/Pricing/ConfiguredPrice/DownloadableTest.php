@@ -118,7 +118,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->willReturn($productTypeMock);
 
-        $this->assertEquals(20, $this->model->getValue());
+        $this->assertSame(20, $this->model->getValue());
     }
 
     public function testGetValueNoLinksPurchasedSeparately()
@@ -140,7 +140,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->method('getLinksPurchasedSeparately')
             ->willReturn(false);
 
-        $this->assertEquals($priceValue, $this->model->getValue());
+        $this->assertSame($priceValue, $this->model->getValue());
     }
 
     public function testGetValueNoOptions()
@@ -184,7 +184,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->willReturn($productTypeMock);
 
-        $this->assertEquals($priceValue, $this->model->getValue());
+        $this->assertSame($priceValue, $this->model->getValue());
     }
 
     public function testGetValueWithNoCustomOption()
@@ -208,6 +208,6 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->with('downloadable_link_ids')
             ->willReturn(null);
 
-        $this->assertEquals(0, $this->model->getValue());
+        $this->assertSame(0, $this->model->getValue());
     }
 }

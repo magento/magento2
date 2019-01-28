@@ -94,7 +94,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityTable')
             ->willReturn($productResourceTable);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->nativeAttrConditionBuilderMock,
             $this->conditionBuilderFactory->createByFilter($filterMock)
         );
@@ -133,7 +133,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityTable')
             ->willReturn($productResourceTable);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->eavAttrConditionBuilderMock,
             $this->conditionBuilderFactory->createByFilter($filterMock)
         );

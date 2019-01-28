@@ -74,7 +74,7 @@ class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($resultPageMock);
 
-        $this->assertEquals($resultPageMock, $this->model->build());
+        $this->assertSame($resultPageMock, $this->model->build());
     }
 
     public function testBuildWithDisabledEngine()
@@ -101,6 +101,6 @@ class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($resultPageMock);
 
-        $this->assertEquals($resultPageMock, $this->model->build());
+        $this->assertSame($resultPageMock, $this->model->build());
     }
 }

@@ -29,6 +29,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
         $this->block->setProduct($product);
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertSame($productTags, $this->block->getIdentities());
     }
 }

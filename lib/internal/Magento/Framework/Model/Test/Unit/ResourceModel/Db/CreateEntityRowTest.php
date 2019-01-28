@@ -97,7 +97,7 @@ class CreateEntityRowTest extends \PHPUnit\Framework\TestCase
 
         $actualData = $this->subject->execute('Test\Entity\Type', $inputData);
 
-        $this->assertEquals($finalData, $actualData);
+        $this->assertSame($finalData, $actualData);
     }
 
     /**

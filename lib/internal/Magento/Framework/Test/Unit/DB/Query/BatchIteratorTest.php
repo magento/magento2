@@ -93,9 +93,9 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())->method('where')->with($filed . ' > ?', 0);
         $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize);
         $this->selectMock->expects($this->once())->method('order')->with($filed . ' ASC');
-        $this->assertEquals($this->selectMock, $this->model->current());
-        $this->assertEquals($this->selectMock, $this->model->current());
-        $this->assertEquals(0, $this->model->key());
+        $this->assertSame($this->selectMock, $this->model->current());
+        $this->assertSame($this->selectMock, $this->model->current());
+        $this->assertSame(0, $this->model->key());
     }
 
     /**
@@ -155,7 +155,7 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach ($this->model as $key => $select) {
             $result[] = $select;
-            $this->assertEquals($iteration, $key);
+            $this->assertSame($iteration, $key);
             $iteration++;
         }
         $this->assertCount(3, $result);
@@ -190,11 +190,11 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
             ->with($this->wrapperSelectMock)
             ->willReturn(['max' => 25, 'cnt' => 10]);
 
-        $this->assertEquals($this->selectMock, $this->model->next());
-        $this->assertEquals(1, $this->model->key());
+        $this->assertSame($this->selectMock, $this->model->next());
+        $this->assertSame(1, $this->model->key());
 
-        $this->assertEquals($this->selectMock, $this->model->next());
-        $this->assertEquals($this->selectMock, $this->model->current());
-        $this->assertEquals(2, $this->model->key());
+        $this->assertSame($this->selectMock, $this->model->next());
+        $this->assertSame($this->selectMock, $this->model->current());
+        $this->assertSame(2, $this->model->key());
     }
 }

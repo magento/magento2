@@ -18,7 +18,7 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
 
         $configReader = new SitemapConfigReader($scopeConfigMock);
 
-        $this->assertEquals(['path1', 'path2'], $configReader->getValidPaths());
+        $this->assertSame(['path1', 'path2'], $configReader->getValidPaths());
     }
 
     /**

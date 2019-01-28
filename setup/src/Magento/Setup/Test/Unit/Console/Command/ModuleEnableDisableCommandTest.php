@@ -149,7 +149,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
         $commandTester = $this->getCommandTester(true);
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
-        $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
+        $this->assertSame('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
     }
 
     public function testExecuteDisableInvalidModule()
@@ -161,7 +161,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
         $commandTester = $this->getCommandTester(false);
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
-        $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
+        $this->assertSame('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
     }
 
     /**

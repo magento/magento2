@@ -45,6 +45,6 @@ class JobTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback($exceptionCallback));
         $jobModel = new Job($ruleProcessorMock);
         $jobModel->applyAll();
-        $this->assertEquals($exceptionMessage, $jobModel->getError());
+        $this->assertSame($exceptionMessage, $jobModel->getError());
     }
 }

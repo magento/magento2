@@ -48,15 +48,15 @@ class ProductTextAttributesTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        $this->assertEquals(
+        $this->assertSame(
             $productSku,
             $response['products']['items'][0]['sku']
         );
-        $this->assertEquals(
+        $this->assertSame(
             'Short description',
             $response['products']['items'][0]['short_description']['html']
         );
-        $this->assertEquals(
+        $this->assertSame(
             'Description with <b>html tag</b>',
             $response['products']['items'][0]['description']['html']
         );
@@ -87,15 +87,15 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        $this->assertEquals(
+        $this->assertSame(
             $productSku,
             $response['products']['items'][0]['sku']
         );
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $response['products']['items'][0]['short_description']['html']
         );
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $response['products']['items'][0]['description']['html']
         );

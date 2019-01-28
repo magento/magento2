@@ -251,7 +251,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             $this->assertNotNull($requestResponse[$field]);
         }
 
-        $this->assertEquals('checkmo', $requestResponse['method']);
+        $this->assertSame('checkmo', $requestResponse['method']);
     }
 
     /**

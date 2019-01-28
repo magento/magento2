@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $preVal = $this->config->getOptions();
         $this->config->setOptions('');
-        $this->assertEquals($preVal, $this->config->getOptions());
+        $this->assertSame($preVal, $this->config->getOptions());
     }
 
     /**
@@ -121,32 +121,32 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $original = $appStateProperty->getValue($this->config);
         $valueForTest = ['test' => 'test2'];
         $appStateProperty->setValue($this->config, $valueForTest);
-        $this->assertEquals($valueForTest, $this->config->getOptions());
-        $this->assertEquals($valueForTest, $this->config->toArray());
+        $this->assertSame($valueForTest, $this->config->getOptions());
+        $this->assertSame($valueForTest, $this->config->toArray());
         $appStateProperty->setValue($this->config, $original);
-        $this->assertEquals($original, $this->config->getOptions());
-        $this->assertEquals($original, $this->config->toArray());
+        $this->assertSame($original, $this->config->getOptions());
+        $this->assertSame($original, $this->config->toArray());
     }
 
     public function testNameIsMutable()
     {
         $this->getModel($this->validatorMock);
         $this->config->setName('FOOBAR');
-        $this->assertEquals('FOOBAR', $this->config->getName());
+        $this->assertSame('FOOBAR', $this->config->getName());
     }
 
     public function testCookieLifetimeIsMutable()
     {
         $this->getModel($this->validatorMock);
         $this->config->setCookieLifetime(20);
-        $this->assertEquals(20, $this->config->getCookieLifetime());
+        $this->assertSame(20, $this->config->getCookieLifetime());
     }
 
     public function testCookieLifetimeCanBeZero()
     {
         $this->getModel($this->validatorMock);
         $this->config->setCookieLifetime(0);
-        $this->assertEquals(0, ini_get('session.cookie_lifetime'));
+        $this->assertSame(0, ini_get('session.cookie_lifetime'));
     }
 
     public function testSettingInvalidCookieLifetime()
@@ -160,7 +160,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime('foobar_bogus');
-        $this->assertEquals($preVal, $this->config->getCookieLifetime());
+        $this->assertSame($preVal, $this->config->getCookieLifetime());
     }
 
     public function testSettingInvalidCookieLifetime2()
@@ -174,7 +174,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime(-1);
-        $this->assertEquals($preVal, $this->config->getCookieLifetime());
+        $this->assertSame($preVal, $this->config->getCookieLifetime());
     }
 
     public function testWrongMethodCall()
@@ -196,21 +196,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $value = ini_get('session.cookie_secure') ? false : true;
         $this->config->setCookieSecure($value);
-        $this->assertEquals($value, $this->config->getCookieSecure());
+        $this->assertSame($value, $this->config->getCookieSecure());
     }
 
     public function testCookieDomainIsMutable()
     {
         $this->getModel($this->validatorMock);
         $this->config->setCookieDomain('example.com');
-        $this->assertEquals('example.com', $this->config->getCookieDomain());
+        $this->assertSame('example.com', $this->config->getCookieDomain());
     }
 
     public function testCookieDomainCanBeEmpty()
     {
         $this->getModel($this->validatorMock);
         $this->config->setCookieDomain('');
-        $this->assertEquals('', $this->config->getCookieDomain());
+        $this->assertSame('', $this->config->getCookieDomain());
     }
 
     public function testSettingInvalidCookieDomain()
@@ -224,7 +224,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain(24);
-        $this->assertEquals($preVal, $this->config->getCookieDomain());
+        $this->assertSame($preVal, $this->config->getCookieDomain());
     }
 
     public function testSettingInvalidCookieDomain2()
@@ -238,7 +238,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain('D:\\WINDOWS\\System32\\drivers\\etc\\hosts');
-        $this->assertEquals($preVal, $this->config->getCookieDomain());
+        $this->assertSame($preVal, $this->config->getCookieDomain());
     }
 
     public function testCookieHttpOnlyDefaultsToIniSettings()
@@ -252,7 +252,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $value = ini_get('session.cookie_httponly') ? false : true;
         $this->config->setCookieHttpOnly($value);
-        $this->assertEquals($value, $this->config->getCookieHttpOnly());
+        $this->assertSame($value, $this->config->getCookieHttpOnly());
     }
 
     public function testUseCookiesDefaultsToIniSettings()
@@ -266,7 +266,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $value = ini_get('session.use_cookies') ? false : true;
         $this->config->setUseCookies($value);
-        $this->assertEquals($value, (bool)$this->config->getUseCookies());
+        $this->assertSame($value, (bool)$this->config->getUseCookies());
     }
 
     public function testUseOnlyCookiesDefaultsToIniSettings()
@@ -280,7 +280,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $value = ini_get('session.use_only_cookies') ? false : true;
         $this->config->setOption('use_only_cookies', $value);
-        $this->assertEquals($value, (bool)$this->config->getOption('use_only_cookies'));
+        $this->assertSame($value, (bool)$this->config->getOption('use_only_cookies'));
     }
 
     public function testRefererCheckDefaultsToIniSettings()
@@ -293,21 +293,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->getModel($this->validatorMock);
         $this->config->setOption('referer_check', 'FOOBAR');
-        $this->assertEquals('FOOBAR', $this->config->getOption('referer_check'));
+        $this->assertSame('FOOBAR', $this->config->getOption('referer_check'));
     }
 
     public function testRefererCheckMayBeEmpty()
     {
         $this->getModel($this->validatorMock);
         $this->config->setOption('referer_check', '');
-        $this->assertEquals('', $this->config->getOption('referer_check'));
+        $this->assertSame('', $this->config->getOption('referer_check'));
     }
 
     public function testSetSavePath()
     {
         $this->getModel($this->validatorMock);
         $this->config->setSavePath('some_save_path');
-        $this->assertEquals($this->config->getOption('save_path'), 'some_save_path');
+        $this->assertSame($this->config->getOption('save_path'), 'some_save_path');
     }
 
     /**
@@ -341,7 +341,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->getModel($validatorMock);
 
-        $this->assertEquals($expected, $this->config->getOptions());
+        $this->assertSame($expected, $this->config->getOptions());
     }
 
     /**

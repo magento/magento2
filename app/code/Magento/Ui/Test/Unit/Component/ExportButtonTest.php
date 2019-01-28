@@ -53,7 +53,7 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
     public function testGetComponentName()
     {
         $this->context->expects($this->never())->method('getProcessor');
-        $this->assertEquals(\Magento\Ui\Component\ExportButton::NAME, $this->model->getComponentName());
+        $this->assertSame(\Magento\Ui\Component\ExportButton::NAME, $this->model->getComponentName());
     }
 
     public function testPrepare()
@@ -90,7 +90,7 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(1);
 
         self::assertNull($this->model->prepare());
-        self::assertEquals(
+        self::assertSame(
             $expected,
             $this->model->getData()
         );

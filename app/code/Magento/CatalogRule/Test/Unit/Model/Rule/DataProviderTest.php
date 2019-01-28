@@ -59,9 +59,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $ruleMock->expects($this->once())->method('getData')->willReturn($ruleData);
         $this->dataPersistorMock->expects($this->once())->method('get')->with('catalog_rule')->willReturn(null);
 
-        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        $this->assertSame([$ruleId => $ruleData], $this->model->getData());
         // Load from object-cache the second time
-        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        $this->assertSame([$ruleId => $ruleData], $this->model->getData());
     }
 
     public function testGetDataIfRulePersisted()
@@ -85,8 +85,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $newRuleMock->expects($this->once())->method('getData')->willReturn($ruleData);
         $this->collectionMock->expects($this->once())->method('getNewEmptyItem')->willReturn($newRuleMock);
 
-        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        $this->assertSame([$ruleId => $ruleData], $this->model->getData());
         // Load from object-cache the second time
-        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        $this->assertSame([$ruleId => $ruleData], $this->model->getData());
     }
 }

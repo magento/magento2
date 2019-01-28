@@ -140,6 +140,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             ));
-        $this->assertEquals($this->priceInfoMock, $this->factory->create($this->saleableItemMock, []));
+        $this->assertSame($this->priceInfoMock, $this->factory->create($this->saleableItemMock, []));
     }
 }

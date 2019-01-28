@@ -75,7 +75,7 @@ class OrderIdentityTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('test_value,test_value2'));
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
-        $this->assertEquals(['test_value', 'test_value2'], $result);
+        $this->assertSame(['test_value', 'test_value2'], $result);
     }
 
     public function testGetEmailCopyToEmptyResult()
@@ -106,7 +106,7 @@ class OrderIdentityTest extends \PHPUnit\Framework\TestCase
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getCopyMethod();
-        $this->assertEquals('copy_method', $result);
+        $this->assertSame('copy_method', $result);
     }
 
     public function testGuestTemplateId()
@@ -122,7 +122,7 @@ class OrderIdentityTest extends \PHPUnit\Framework\TestCase
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getGuestTemplateId();
-        $this->assertEquals('template_id', $result);
+        $this->assertSame('template_id', $result);
     }
 
     public function testTemplateId()
@@ -138,14 +138,14 @@ class OrderIdentityTest extends \PHPUnit\Framework\TestCase
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getTemplateId();
-        $this->assertEquals('template_id', $result);
+        $this->assertSame('template_id', $result);
     }
 
     public function testSetStore()
     {
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getStore();
-        $this->assertEquals($this->storeMock, $result);
+        $this->assertSame($this->storeMock, $result);
     }
 
     public function testGetStoreFromStoreManager()
@@ -154,21 +154,21 @@ class OrderIdentityTest extends \PHPUnit\Framework\TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
         $result = $this->identity->getStore();
-        $this->assertEquals($this->storeMock, $result);
+        $this->assertSame($this->storeMock, $result);
     }
 
     public function testSetCustomerEmail()
     {
         $this->identity->setCustomerEmail('email');
         $result = $this->identity->getCustomerEmail();
-        $this->assertEquals('email', $result);
+        $this->assertSame('email', $result);
     }
 
     public function testSetCustomerName()
     {
         $this->identity->setCustomerName('name');
         $result = $this->identity->getCustomerName();
-        $this->assertEquals('name', $result);
+        $this->assertSame('name', $result);
     }
 
     public function testGetEmailIdentity()
@@ -185,6 +185,6 @@ class OrderIdentityTest extends \PHPUnit\Framework\TestCase
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailIdentity();
-        $this->assertEquals($emailIdentity, $result);
+        $this->assertSame($emailIdentity, $result);
     }
 }

@@ -41,7 +41,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testGetComponentName()
     {
-        $this->assertEquals(Form::NAME, $this->model->getComponentName());
+        $this->assertSame(Form::NAME, $this->model->getComponentName());
     }
 
     public function testGetDataSourceData()
@@ -100,7 +100,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($data);
 
-        $this->assertEquals($dataSource, $this->model->getDataSourceData());
+        $this->assertSame($dataSource, $this->model->getDataSourceData());
     }
 
     public function testGetDataSourceDataWithoutData()
@@ -154,7 +154,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($data);
 
-        $this->assertEquals($dataSource, $this->model->getDataSourceData());
+        $this->assertSame($dataSource, $this->model->getDataSourceData());
     }
 
     public function testGetDataSourceDataWithoutId()
@@ -213,6 +213,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($data);
 
-        $this->assertEquals($dataSource, $this->model->getDataSourceData());
+        $this->assertSame($dataSource, $this->model->getDataSourceData());
     }
 }

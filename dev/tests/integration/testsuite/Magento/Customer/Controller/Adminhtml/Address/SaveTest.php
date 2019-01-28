@@ -94,7 +94,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $customer = $this->customerRepository->getById($customerId);
 
-        $this->assertEquals('Firstname', $customer->getFirstname());
+        $this->assertSame('Firstname', $customer->getFirstname());
         $addresses = $customer->getAddresses();
         $this->assertCount(1, $addresses);
         $this->assertNull($this->accountManagement->getDefaultBillingAddress($customerId));
@@ -143,7 +143,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
          */
         $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class)->remove($customerId);
         $customer = $this->customerRepository->get('customer5@example.com');
-        $this->assertEquals('Firstname', $customer->getFirstname());
+        $this->assertSame('Firstname', $customer->getFirstname());
         $addresses = $customer->getAddresses();
         $this->assertCount(1, $addresses);
 
@@ -188,7 +188,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $customer = $this->customerRepository->getById($customerId);
 
-        $this->assertEquals('test firstname', $customer->getFirstname());
+        $this->assertSame('test firstname', $customer->getFirstname());
         $addresses = $customer->getAddresses();
         $this->assertCount(4, $addresses);
     }

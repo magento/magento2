@@ -16,7 +16,7 @@ class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackend
     {
         $this->dispatch('backend/admin/dashboard/productsViewed/');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
         $this->assertContains('Simple Product', $actual);

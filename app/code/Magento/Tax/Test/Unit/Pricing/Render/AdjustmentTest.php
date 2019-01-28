@@ -82,7 +82,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(\Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
+        $this->assertSame(\Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
 
     /**
@@ -104,7 +104,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
             ->will($this->returnValue($shouldDisplayBothPrices));
-        $this->assertEquals($shouldDisplayBothPrices, $this->model->displayBothPrices());
+        $this->assertSame($shouldDisplayBothPrices, $this->model->displayBothPrices());
     }
 
     /**
@@ -142,7 +142,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmountExclTax();
 
-        $this->assertEquals($expectedPrice, $result);
+        $this->assertSame($expectedPrice, $result);
     }
 
     /**
@@ -183,7 +183,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmount($includeContainer);
 
-        $this->assertEquals($expectedPrice, $result);
+        $this->assertSame($expectedPrice, $result);
     }
 
     /**
@@ -230,7 +230,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->buildIdWithPrefix($prefix);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -262,7 +262,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->displayPriceIncludingTax();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -278,7 +278,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->displayPriceExcludingTax();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testGetHtmlExcluding()

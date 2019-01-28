@@ -102,6 +102,6 @@ class TermTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->term->build($this->dataProvider, [], $this->bucket, $table);
 
-        $this->assertEquals($this->select, $result);
+        $this->assertSame($this->select, $result);
     }
 }

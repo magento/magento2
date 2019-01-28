@@ -65,7 +65,7 @@ class FlagManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getFlagData')
             ->willReturn(10);
 
-        $this->assertEquals($this->flagManager->getFlagData($flagCode), 10);
+        $this->assertSame($this->flagManager->getFlagData($flagCode), 10);
     }
 
     public function testSaveFlag()

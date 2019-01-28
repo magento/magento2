@@ -14,7 +14,7 @@ class AddAttributeTest extends GenericTest
 {
     public function testGetButtonData()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'label' => __('Add Attribute'),
                 'class' => 'action-secondary',

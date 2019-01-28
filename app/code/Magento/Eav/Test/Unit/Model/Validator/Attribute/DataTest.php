@@ -50,8 +50,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->with($attribute, $entity)
                 ->will($this->returnValue($dataModel));
         }
-        $this->assertEquals($expected, $validator->isValid($entity));
-        $this->assertEquals($messages, $validator->getMessages());
+        $this->assertSame($expected, $validator->isValid($entity));
+        $this->assertSame($messages, $validator->getMessages());
     }
 
     /**
@@ -272,8 +272,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
         $result = $validator->setAttributesWhiteList($attributes);
-        $this->assertAttributeEquals($attributes, '_attributesWhiteList', $validator);
-        $this->assertEquals($validator, $result);
+        $this->assertAttributeSame($attributes, '_attributesWhiteList', $validator);
+        $this->assertSame($validator, $result);
     }
 
     public function testSetAttributesBlackList()
@@ -289,8 +289,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
         $result = $validator->setAttributesBlackList($attributes);
-        $this->assertAttributeEquals($attributes, '_attributesBlackList', $validator);
-        $this->assertEquals($validator, $result);
+        $this->assertAttributeSame($attributes, '_attributesBlackList', $validator);
+        $this->assertSame($validator, $result);
     }
 
     public function testAddErrorMessages()
@@ -369,9 +369,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertFalse($validator->isValid($entity));
-        $this->assertEquals($expectedMessages, $validator->getMessages());
+        $this->assertSame($expectedMessages, $validator->getMessages());
         $this->assertFalse($validator->isValid($entity));
-        $this->assertEquals($expectedDouble, $validator->getMessages());
+        $this->assertSame($expectedDouble, $validator->getMessages());
     }
 
     /**

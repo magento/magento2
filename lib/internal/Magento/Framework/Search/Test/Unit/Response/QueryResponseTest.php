@@ -54,14 +54,14 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
     {
         $count = 0;
         foreach ($this->queryResponse as $document) {
-            $this->assertEquals($document->getId(), $count);
+            $this->assertSame($document->getId(), $count);
             $count++;
         }
     }
 
     public function testCount()
     {
-        $this->assertEquals(count($this->queryResponse), 5);
+        $this->assertSame(count($this->queryResponse), 5);
     }
 
     public function testGetAggregations()

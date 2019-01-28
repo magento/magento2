@@ -50,6 +50,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $configData->getJobs();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

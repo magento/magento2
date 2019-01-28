@@ -90,7 +90,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
         $this->_createSourceAdapterMock(['']);
         $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(0, $errorAggregator->getErrorsCount());
+        $this->assertSame(0, $errorAggregator->getErrorsCount());
     }
 
     /**
@@ -103,7 +103,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
         $this->_createSourceAdapterMock(['  ']);
         $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(0, $errorAggregator->getErrorsCount());
+        $this->assertSame(0, $errorAggregator->getErrorsCount());
     }
 
     /**
@@ -143,7 +143,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testIsNeedToLogInHistory()
     {
-        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+        $this->assertSame(false, $this->_model->isNeedToLogInHistory());
     }
 
     /**
@@ -161,7 +161,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
     public function testIsAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum, $expectedResult)
     {
         $this->_createSourceAdapterMock(['_test1']);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->_model->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum)
         );

@@ -73,6 +73,6 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
         $pageConfigMock->expects($this->once())->method('getTitle')->willReturn($titleMock);
         $titleMock->expects($this->once())->method('prepend')->with($this->stringContains($id));
         $pageMock->expects($this->once())->method('initLayout');
-        $this->assertEquals($pageMock, $this->model->execute());
+        $this->assertSame($pageMock, $this->model->execute());
     }
 }

@@ -94,7 +94,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
         } else {
             $this->shippingAddressMock->expects($this->once())->method('getTotals')->willReturn($expected);
         }
-        $this->assertEquals($expected, $this->totals->getTotals());
+        $this->assertSame($expected, $this->totals->getTotals());
     }
 
     /**

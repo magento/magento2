@@ -26,7 +26,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $joinedEntity->load($options[0]->getId());
         $joinedExtensionAttributeValue = $joinedEntity->getAttributeCode();
         $result = $options[0]->getExtensionAttributes()->__toArray();
-        $this->assertEquals(
+        $this->assertSame(
             $joinedExtensionAttributeValue,
             $result['test_dummy_attribute'],
             "Extension attributes were not loaded correctly"

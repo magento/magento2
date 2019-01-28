@@ -63,6 +63,6 @@ class TypesListTest extends \PHPUnit\Framework\TestCase
             ->with($attributeTypeMock, ['value'], \Magento\Catalog\Api\Data\ProductAttributeTypeInterface::class)
             ->willReturnSelf();
         $this->attributeTypeFactoryMock->expects($this->once())->method('create')->willReturn($attributeTypeMock);
-        $this->assertEquals([$attributeTypeMock], $this->model->getItems());
+        $this->assertSame([$attributeTypeMock], $this->model->getItems());
     }
 }

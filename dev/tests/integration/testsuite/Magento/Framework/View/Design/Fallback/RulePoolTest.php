@@ -131,7 +131,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
     {
         $actualResult = $this->model->getRule($type)
             ->getPatternDirs($overriddenParams + $this->defaultParams);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->dataMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue(['some_data']));
-        $this->assertEquals(['some_data'], $this->model->getViews());
+        $this->assertSame(['some_data'], $this->model->getViews());
     }
 
     public function testGetView()
@@ -42,6 +42,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('some_view')
             ->will($this->returnValue(['some_data']));
-        $this->assertEquals(['some_data'], $this->model->getView('some_view'));
+        $this->assertSame(['some_data'], $this->model->getView('some_view'));
     }
 }

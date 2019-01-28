@@ -41,8 +41,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
 
         $this->assertCount($count, $tearPriceList);
         if ($count) {
-            $this->assertEquals($value, $tearPriceList[0]['value']);
-            $this->assertEquals($qty, $tearPriceList[0]['qty']);
+            $this->assertSame($value, $tearPriceList[0]['value']);
+            $this->assertSame($qty, $tearPriceList[0]['qty']);
         }
     }
 
@@ -123,8 +123,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
         $prices = $service->getList($productSku, 1);
         $this->assertCount(1, $prices);
-        $this->assertEquals(10, $prices[0]->getValue());
-        $this->assertEquals(50, $prices[0]->getQty());
+        $this->assertSame(10, $prices[0]->getValue());
+        $this->assertSame(50, $prices[0]->getQty());
     }
 
     /**
@@ -161,8 +161,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
         $prices = $service->getList($productSku, 'all');
         $this->assertCount(3, $prices);
-        $this->assertEquals(20, (int)$prices[2]->getValue());
-        $this->assertEquals(50, (int)$prices[2]->getQty());
+        $this->assertSame(20, (int)$prices[2]->getValue());
+        $this->assertSame(50, (int)$prices[2]->getQty());
     }
 
     /**
@@ -199,7 +199,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
         $prices = $service->getList($productSku, 'all');
         $this->assertCount(2, $prices);
-        $this->assertEquals(20, (int)$prices[0]->getValue());
-        $this->assertEquals(2, (int)$prices[0]->getQty());
+        $this->assertSame(20, (int)$prices[0]->getValue());
+        $this->assertSame(2, (int)$prices[0]->getQty());
     }
 }

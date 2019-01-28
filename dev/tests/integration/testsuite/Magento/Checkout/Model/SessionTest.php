@@ -145,7 +145,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $item = $quote->getItems()[0];
         /** @var \Magento\Catalog\Model\Product $quoteProduct */
         $quoteProduct = $item->getProduct();
-        $this->assertEquals(10, $quoteProduct->getTierPrice($tierPriceQty));
+        $this->assertSame(10, $quoteProduct->getTierPrice($tierPriceQty));
 
         $customer = $this->customerRepository->getById(1);
         $this->customerSession->setCustomerDataAsLoggedIn($customer);
@@ -154,7 +154,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $item = $quote->getItems()[0];
         /** @var \Magento\Catalog\Model\Product $quoteProduct */
         $quoteProduct = $item->getProduct();
-        $this->assertEquals($tierPriceValue, $quoteProduct->getTierPrice(1));
+        $this->assertSame($tierPriceValue, $quoteProduct->getTierPrice(1));
     }
 
     /**
@@ -191,17 +191,17 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $customerIdFromFixture = 1;
         $customerEmailFromFixture = 'customer@example.com';
         $customerFirstNameFromFixture = 'John';
-        $this->assertEquals(
+        $this->assertSame(
             $customerEmailFromFixture,
             $quote->getCustomerEmail(),
             'Customer email was not set to Quote correctly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $customerIdFromFixture,
             $quote->getCustomerId(),
             'Customer ID was not set to Quote correctly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $customerFirstNameFromFixture,
             $quote->getCustomerFirstname(),
             'Customer first name was not set to Quote correctly.'

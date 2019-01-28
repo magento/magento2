@@ -45,7 +45,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             ->with(0)
             ->will($this->returnValue($scopeMock));
 
-        $this->assertEquals($scopeMock, $this->model->getScope());
+        $this->assertSame($scopeMock, $this->model->getScope());
     }
 
     /**
@@ -60,6 +60,6 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             ->with(0)
             ->will($this->returnValue($scopeMock));
 
-        $this->assertEquals($scopeMock, $this->model->getScope());
+        $this->assertSame($scopeMock, $this->model->getScope());
     }
 }

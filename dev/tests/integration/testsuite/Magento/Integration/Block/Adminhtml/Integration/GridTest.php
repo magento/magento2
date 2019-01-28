@@ -29,11 +29,11 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRowClickCallback()
     {
-        $this->assertEquals('', $this->gridBlock->getRowClickCallback());
+        $this->assertSame('', $this->gridBlock->getRowClickCallback());
     }
 
     public function testGetRowInitCallback()
     {
-        $this->assertEquals('', $this->gridBlock->getRowInitCallback());
+        $this->assertSame('', $this->gridBlock->getRowInitCallback());
     }
 }

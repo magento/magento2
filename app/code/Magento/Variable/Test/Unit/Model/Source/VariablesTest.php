@@ -68,12 +68,12 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     public function testToOptionArrayWithoutGroup()
     {
         $optionArray = $this->model->toOptionArray();
-        $this->assertEquals(count($this->configVariables['web']), count($optionArray));
+        $this->assertSame(count($this->configVariables['web']), count($optionArray));
         $expectedResults = $this->getExpectedOptionsResults();
         $index = 0;
         foreach ($optionArray as $variable) {
-            $this->assertEquals($expectedResults[$index]['value'], $variable['value']);
-            $this->assertEquals($expectedResults[$index]['label_text'], $variable['label']->getText());
+            $this->assertSame($expectedResults[$index]['value'], $variable['value']);
+            $this->assertSame($expectedResults[$index]['label_text'], $variable['label']->getText());
             $index++;
         }
     }
@@ -81,14 +81,14 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     public function testToOptionArrayWithGroup()
     {
         $optionArray = $this->model->toOptionArray(true);
-        $this->assertEquals('Web', $optionArray[0]['label']);
+        $this->assertSame('Web', $optionArray[0]['label']);
         $optionArrayValues = $optionArray[0]['value'];
-        $this->assertEquals(count($this->configVariables['web']), count($optionArrayValues));
+        $this->assertSame(count($this->configVariables['web']), count($optionArrayValues));
         $expectedResults = $this->getExpectedOptionsResults();
         $index = 0;
         foreach ($optionArray[0]['value'] as $variable) {
-            $this->assertEquals($expectedResults[$index]['value'], $variable['value']);
-            $this->assertEquals($expectedResults[$index]['label_text'], $variable['label']->getText());
+            $this->assertSame($expectedResults[$index]['value'], $variable['value']);
+            $this->assertSame($expectedResults[$index]['label_text'], $variable['label']->getText());
             $index++;
         }
     }

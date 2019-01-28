@@ -62,6 +62,6 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedUrl)
         );
 
-        $this->assertEquals($expectedUrl, $this->_filesTree->getTreeLoaderUrl());
+        $this->assertSame($expectedUrl, $this->_filesTree->getTreeLoaderUrl());
     }
 }

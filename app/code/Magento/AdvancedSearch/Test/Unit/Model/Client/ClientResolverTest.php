@@ -103,6 +103,6 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('engineName'));
 
-        $this->assertEquals('engineName', $this->model->getCurrentEngine());
+        $this->assertSame('engineName', $this->model->getCurrentEngine());
     }
 }

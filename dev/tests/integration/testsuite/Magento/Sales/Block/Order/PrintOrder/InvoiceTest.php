@@ -33,11 +33,11 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Invoice::class
         );
         $this->assertEmpty($childBlock->getInvoice());
-        $this->assertNotEquals($expectedHtml, $block->getInvoiceTotalsHtml($invoice));
+        $this->assertNotSame($expectedHtml, $block->getInvoiceTotalsHtml($invoice));
 
         $childBlock->setText($expectedHtml);
         $actualHtml = $block->getInvoiceTotalsHtml($invoice);
         $this->assertSame($invoice, $childBlock->getInvoice());
-        $this->assertEquals($expectedHtml, $actualHtml);
+        $this->assertSame($expectedHtml, $actualHtml);
     }
 }

@@ -45,7 +45,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->never())->method('hasCustomOptions');
 
-        $this->assertEquals($finalPrice, $this->finalPriceModel->getFinalPrice(null, $this->productMock));
+        $this->assertSame($finalPrice, $this->finalPriceModel->getFinalPrice(null, $this->productMock));
     }
 
     /**
@@ -137,7 +137,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->any())->method('getCustomOption')->will($this->returnValueMap($options));
 
-        $this->assertEquals($rawFinalPrice, $this->finalPriceModel->getFinalPrice(1, $this->productMock));
+        $this->assertSame($rawFinalPrice, $this->finalPriceModel->getFinalPrice(1, $this->productMock));
     }
 
     /**

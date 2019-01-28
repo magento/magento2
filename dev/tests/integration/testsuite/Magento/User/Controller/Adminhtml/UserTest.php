@@ -22,7 +22,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/user/index');
         $response = $this->getResponse()->getBody();
         $this->assertContains('Users', $response);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="permissionsUserGrid_table"]',
@@ -173,10 +173,10 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $user->loadByUsername($postData['username']);
         if ($isPasswordCorrect) {
             $this->assertRedirect($this->stringContains('backend/admin/user/index'));
-            $this->assertEquals($postData['username'], $user->getUsername());
-            $this->assertEquals($postData['email'], $user->getEmail());
-            $this->assertEquals($postData['firstname'], $user->getFirstname());
-            $this->assertEquals($postData['lastname'], $user->getLastname());
+            $this->assertSame($postData['username'], $user->getUsername());
+            $this->assertSame($postData['email'], $user->getEmail());
+            $this->assertSame($postData['firstname'], $user->getFirstname());
+            $this->assertSame($postData['lastname'], $user->getLastname());
             $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($postData['password'], $user->getPassword()));
         } else {
@@ -254,7 +254,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         //check "User Information" header and fieldset
         $this->assertContains('data-ui-id="adminhtml-user-edit-tabs-title"', $response);
         $this->assertContains('User Information', $response);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="user_base_fieldset"]',
@@ -281,7 +281,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/user/validate');
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals('{"error":0}', $body);
+        $this->assertSame('{"error":0}', $body);
     }
 
     /**
@@ -302,7 +302,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/user/validate');
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals('{"error":0}', $body);
+        $this->assertSame('{"error":0}', $body);
     }
 
     /**

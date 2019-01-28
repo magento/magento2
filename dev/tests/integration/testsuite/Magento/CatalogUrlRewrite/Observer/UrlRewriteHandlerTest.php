@@ -72,7 +72,7 @@ class UrlRewriteHandlerTest extends TestCase
             'cat-1-2/p002.html', // the Secondary store with Category URL key
             '/p002.html', // an anchor URL the Secondary store
         ];
-        self::assertEquals($expected, $actual, 'Generated URLs rewrites do not match.');
+        self::assertSame($expected, $actual, 'Generated URLs rewrites do not match.');
     }
 
     /**

@@ -28,6 +28,6 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container::class,
             ['buckets' => [$bucketName => $bucketValue]]
         );
-        $this->assertEquals($bucketValue, $provider->get($bucketName));
+        $this->assertSame($bucketValue, $provider->get($bucketName));
     }
 }

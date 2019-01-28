@@ -28,7 +28,7 @@ class CssResolverTest extends \PHPUnit\Framework\TestCase
         $source = file_get_contents($fixturePath . 'source.css');
         $result = file_get_contents($fixturePath . 'resultNormalized.css');
 
-        $this->assertEquals($result, $this->object->relocateRelativeUrls($source, $relatedPath, $filePath));
+        $this->assertSame($result, $this->object->relocateRelativeUrls($source, $relatedPath, $filePath));
     }
 
     /**
@@ -38,7 +38,7 @@ class CssResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testAggregateImportDirectives($cssContent, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->object->aggregateImportDirectives($cssContent));
+        $this->assertSame($expectedResult, $this->object->aggregateImportDirectives($cssContent));
     }
 
     /**
@@ -67,7 +67,7 @@ class CssResolverTest extends \PHPUnit\Framework\TestCase
     public function testReplaceRelativeUrls($cssContent, $inlineCallback, $expectedResult)
     {
         $actual = $this->object->replaceRelativeUrls($cssContent, $inlineCallback);
-        $this->assertEquals($expectedResult, $actual);
+        $this->assertSame($expectedResult, $actual);
     }
 
     /**

@@ -113,13 +113,13 @@ class TaxManagementTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->will($this->returnValue($orderItemAppliedTaxes));
 
-        $this->assertEquals($this->orderTaxDetailsDataObject, $this->taxManagement->getOrderTaxDetails($orderId));
+        $this->assertSame($this->orderTaxDetailsDataObject, $this->taxManagement->getOrderTaxDetails($orderId));
 
-        $this->assertEquals($expected['code'], $this->appliedTaxDataObject->getCode());
-        $this->assertEquals($expected['title'], $this->appliedTaxDataObject->getTitle());
-        $this->assertEquals($expected['tax_percent'], $this->appliedTaxDataObject->getPercent());
-        $this->assertEquals($expected['real_amount'], $this->appliedTaxDataObject->getAmount());
-        $this->assertEquals($expected['real_base_amount'], $this->appliedTaxDataObject->getBaseAmount());
+        $this->assertSame($expected['code'], $this->appliedTaxDataObject->getCode());
+        $this->assertSame($expected['title'], $this->appliedTaxDataObject->getTitle());
+        $this->assertSame($expected['tax_percent'], $this->appliedTaxDataObject->getPercent());
+        $this->assertSame($expected['real_amount'], $this->appliedTaxDataObject->getAmount());
+        $this->assertSame($expected['real_base_amount'], $this->appliedTaxDataObject->getBaseAmount());
     }
 
     /**

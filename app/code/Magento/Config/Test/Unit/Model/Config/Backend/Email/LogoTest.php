@@ -128,7 +128,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model, $this->model->beforeSave());
     }
 
     public function testBeforeSaveWithTmpInValue()
@@ -159,7 +159,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model, $this->model->beforeSave());
     }
 
     public function testBeforeSaveWithDelete()
@@ -190,7 +190,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model, $this->model->beforeSave());
     }
 
     public function testBeforeSaveWithoutOldValue()
@@ -219,6 +219,6 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $this->writeMock->expects($this->never())
             ->method('delete');
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model, $this->model->beforeSave());
     }
 }

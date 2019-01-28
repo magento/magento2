@@ -135,7 +135,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Integration\Model\Oauth\Consumer $consumer */
         $consumer = $this->_oauthService->createConsumer($consumerData);
 
-        $this->assertEquals($consumer, $this->_consumerMock, 'Consumer object was expected to be returned');
+        $this->assertSame($consumer, $this->_consumerMock, 'Consumer object was expected to be returned');
     }
 
     public function testPostToConsumer()
@@ -194,7 +194,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
 
         $verifier = $this->_oauthService->postToConsumer($consumerId, 'http://www.magento.com');
 
-        $this->assertEquals($oauthVerifier, $verifier, 'Checking Oauth Verifier');
+        $this->assertSame($oauthVerifier, $verifier, 'Checking Oauth Verifier');
     }
 
     /**

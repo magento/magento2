@@ -249,7 +249,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntityTypeCode()
     {
-        $this->assertEquals($this->product->getEntityTypeCode(), 'catalog_product');
+        $this->assertSame($this->product->getEntityTypeCode(), 'catalog_product');
     }
 
     public function testUpdateDataWithCategoryColumnsNoCategoriesAssigned()
@@ -282,7 +282,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $result = $product->_getHeaderColumns();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testExportCountZeroBreakInternalCalls()

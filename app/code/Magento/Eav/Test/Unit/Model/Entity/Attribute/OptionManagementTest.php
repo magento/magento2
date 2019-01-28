@@ -81,7 +81,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->assertEquals('id_new_option', $this->model->add($entityType, $attributeCode, $optionMock));
+        $this->assertSame('id_new_option', $this->model->add($entityType, $attributeCode, $optionMock));
     }
 
     /**
@@ -344,7 +344,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('getOptions')->willReturn($optionsMock);
-        $this->assertEquals($optionsMock, $this->model->getItems($entityType, $attributeCode));
+        $this->assertSame($optionsMock, $this->model->getItems($entityType, $attributeCode));
     }
 
     /**

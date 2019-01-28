@@ -30,7 +30,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
     {
         $formData = ['sender' => [$field => $value]];
         $this->_block->setFormData($formData);
-        $this->assertEquals(trim($value), $this->_callBlockMethod($field));
+        $this->assertSame(trim($value), $this->_callBlockMethod($field));
     }
 
     /**
@@ -61,7 +61,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
         $service = Bootstrap::getObjectManager()->create(\Magento\Customer\Api\AccountManagementInterface::class);
         $customer = $service->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
-        $this->assertEquals($value, $this->_callBlockMethod($field));
+        $this->assertSame($value, $this->_callBlockMethod($field));
     }
 
     /**

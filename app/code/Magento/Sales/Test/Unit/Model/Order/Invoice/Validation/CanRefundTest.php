@@ -67,11 +67,11 @@ class CanRefundTest extends \PHPUnit\Framework\TestCase
                 \Magento\Sales\Model\Order\Invoice::STATE_OPEN,
                 \Magento\Sales\Model\Order\Invoice::STATE_CANCELED
             );
-        $this->assertEquals(
+        $this->assertSame(
             [__('We can\'t create creditmemo for the invoice.')],
             $this->validator->validate($this->invoiceMock)
         );
-        $this->assertEquals(
+        $this->assertSame(
             [__('We can\'t create creditmemo for the invoice.')],
             $this->validator->validate($this->invoiceMock)
         );
@@ -88,7 +88,7 @@ class CanRefundTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getBaseTotalRefunded')
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             [__('We can\'t create creditmemo for the invoice.')],
             $this->validator->validate($this->invoiceMock)
         );
@@ -123,7 +123,7 @@ class CanRefundTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getBaseTotalRefunded')
             ->willReturn(0);
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->validator->validate($this->invoiceMock)
         );

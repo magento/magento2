@@ -125,7 +125,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($result, $this->model->getConfig());
+        $this->assertSame($result, $this->model->getConfig());
     }
 
     /**
@@ -229,6 +229,6 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 json_encode($this->model->getConfig())
             );
 
-        $this->assertEquals(json_encode($result), $this->model->getSerializedConfig());
+        $this->assertSame(json_encode($result), $this->model->getSerializedConfig());
     }
 }

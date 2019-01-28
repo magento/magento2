@@ -28,14 +28,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $ids = [];
 
-        $this->assertEquals(
+        $this->assertSame(
             count($expectedItems),
             count($items),
             'Invalid number of items in the result collection'
         );
 
         foreach ($items as $key => $item) {
-            $this->assertEquals($expectedItems[$key], $item->getName());
+            $this->assertSame($expectedItems[$key], $item->getName());
             $this->assertFalse(
                 in_array($item->getId(), $ids),
                 'Item should be unique in result collection'
@@ -97,7 +97,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             )->getItems()
         );
 
-        $this->assertEquals([$rule->getRuleId()], $appliedRulesArray);
+        $this->assertSame([$rule->getRuleId()], $appliedRulesArray);
     }
 
     /**
@@ -133,7 +133,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $quote->getShippingAddress()
             )->getItems()
         );
-        $this->assertEquals([$rule->getRuleId()], $appliedRulesArray);
+        $this->assertSame([$rule->getRuleId()], $appliedRulesArray);
     }
 
     /**
@@ -167,7 +167,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $quote->getShippingAddress()
             )->getItems()
         );
-        $this->assertEquals(3, count($appliedRulesArray));
+        $this->assertSame(3, count($appliedRulesArray));
     }
 
     /**
@@ -244,7 +244,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
         $collection->addAttributeInConditionFilter('attribute_for_sales_rule_1');
         $item = $collection->getFirstItem();
-        $this->assertEquals('50% Off on some attribute', $item->getName());
+        $this->assertSame('50% Off on some attribute', $item->getName());
     }
 
     /**
@@ -260,7 +260,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
         $collection->addAttributeInConditionFilter('attribute_for_sales_rule_2');
-        $this->assertEquals(0, $collection->count());
+        $this->assertSame(0, $collection->count());
     }
 
     public function tearDown()

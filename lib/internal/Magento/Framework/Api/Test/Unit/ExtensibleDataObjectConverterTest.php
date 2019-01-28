@@ -53,7 +53,7 @@ class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
             ->with($this->dataObject)
             ->willReturn($dataArray);
 
-        $this->assertEquals(
+        $this->assertSame(
             $dataArray,
             $this->converter->toNestedArray($this->dataObject)
         );
@@ -99,7 +99,7 @@ class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
             ->with($this->dataObject)
             ->willReturn($dataArray);
 
-        $this->assertEquals(
+        $this->assertSame(
             $resultArray,
             $this->converter->toNestedArray($this->dataObject, ['custom_attribute_code_skip'])
         );

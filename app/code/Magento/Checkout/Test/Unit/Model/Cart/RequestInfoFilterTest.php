@@ -46,7 +46,7 @@ class RequestInfoFilterTest extends \PHPUnit\Framework\TestCase
             ['data' => ['abc' => 1, 'efg' => 1, 'xyz' => 1]]
         );
         $result = $this->model->filter($params);
-        $this->assertEquals($this->model, $result);
-        $this->assertEquals(['abc' => 1], $params->convertToArray());
+        $this->assertSame($this->model, $result);
+        $this->assertSame(['abc' => 1], $params->convertToArray());
     }
 }

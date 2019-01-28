@@ -39,20 +39,20 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
     {
         $class = 'Phrase';
         $this->parseFile();
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // new
-        $this->assertEquals(true, $this->tokenizer->isMatchingClass($class)); // \Magento\Framework\Phrase(
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // 'Testing'
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // )
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // ;
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // new
-        $this->assertEquals(true, $this->tokenizer->isMatchingClass($class)); // Phrase(
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // 'More testing'
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // )
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // ;
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // new
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // \Magento\Framework\DataObject(
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // )
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // ;
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // new
+        $this->assertSame(true, $this->tokenizer->isMatchingClass($class)); // \Magento\Framework\Phrase(
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // 'Testing'
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // )
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // ;
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // new
+        $this->assertSame(true, $this->tokenizer->isMatchingClass($class)); // Phrase(
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // 'More testing'
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // )
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // ;
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // new
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // \Magento\Framework\DataObject(
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // )
+        $this->assertSame(false, $this->tokenizer->isMatchingClass($class)); // ;
     }
 
     /**
@@ -61,17 +61,17 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
     public function testGetNextRealToken()
     {
         $this->parseFile();
-        $this->assertEquals('new', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('\\', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('Magento', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('\\', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('Framework', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('\\', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('Phrase', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('(', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals('\'Testing\'', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals(')', $this->tokenizer->getNextRealToken()->getValue());
-        $this->assertEquals(';', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('new', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('\\', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('Magento', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('\\', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('Framework', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('\\', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('Phrase', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('(', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame('\'Testing\'', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame(')', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertSame(';', $this->tokenizer->getNextRealToken()->getValue());
     }
 
     /**

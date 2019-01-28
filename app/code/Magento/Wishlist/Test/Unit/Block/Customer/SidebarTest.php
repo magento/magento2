@@ -82,7 +82,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('createBlock');
 
         $result = $this->block->getProductPriceHtml($productMock, $priceType, Render::ZONE_ITEM_LIST);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testGetProductPriceHtmlCreateBlock()
@@ -116,6 +116,6 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->willReturn($renderMock);
 
         $result = $this->block->getProductPriceHtml($productMock, $priceType, Render::ZONE_ITEM_LIST);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

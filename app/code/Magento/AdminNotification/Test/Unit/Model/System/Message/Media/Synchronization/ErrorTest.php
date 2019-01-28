@@ -67,9 +67,9 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
         $this->_syncFlagMock->expects($this->any())->method('save');
         $this->_syncFlagMock->expects($this->any())->method('getFlagData')->will($this->returnValue($data));
         //check first call
-        $this->assertEquals($expectedFirstRun, $model->isDisplayed());
+        $this->assertSame($expectedFirstRun, $model->isDisplayed());
         //check second call(another branch of if operator)
-        $this->assertEquals($expectedFirstRun, $model->isDisplayed());
+        $this->assertSame($expectedFirstRun, $model->isDisplayed());
     }
 
     /**
@@ -87,12 +87,12 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIdentity()
     {
-        $this->assertEquals('MEDIA_SYNCHRONIZATION_ERROR', $this->_model->getIdentity());
+        $this->assertSame('MEDIA_SYNCHRONIZATION_ERROR', $this->_model->getIdentity());
     }
 
     public function testGetSeverity()
     {
         $severity = \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR;
-        $this->assertEquals($severity, $this->_model->getSeverity());
+        $this->assertSame($severity, $this->_model->getSeverity());
     }
 }

@@ -149,7 +149,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($customerGroup);
         $this->tierPriceResource->expects($this->atLeastOnce())->method('savePriceData')->willReturnSelf();
 
-        $this->assertEquals($product, $this->saveHandler->execute($product));
+        $this->assertSame($product, $this->saveHandler->execute($product));
     }
 
     /**

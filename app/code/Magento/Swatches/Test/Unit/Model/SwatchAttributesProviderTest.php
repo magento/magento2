@@ -95,6 +95,6 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->swatchAttributeProvider->provide($this->productMock);
 
-        $this->assertEquals([1 => $attributeMock], $result);
+        $this->assertSame([1 => $attributeMock], $result);
     }
 }

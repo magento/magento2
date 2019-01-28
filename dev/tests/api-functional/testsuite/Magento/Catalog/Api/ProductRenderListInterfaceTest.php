@@ -72,12 +72,12 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
 
         foreach ($result['items'] as $id => $resultItem) {
             $expectedItem = $expectedRenderInfo[$id];
-            $this->assertEquals($expectedItem['name'], $resultItem['name']);
-            $this->assertEquals($expectedItem['type'], $resultItem['type']);
-            $this->assertEquals($expectedItem['is_salable'], $resultItem['is_salable']);
-            $this->assertEquals($expectedItem['store_id'], $resultItem['store_id']);
-            $this->assertEquals($expectedItem['currency_code'], $resultItem['currency_code']);
-            $this->assertEquals(
+            $this->assertSame($expectedItem['name'], $resultItem['name']);
+            $this->assertSame($expectedItem['type'], $resultItem['type']);
+            $this->assertSame($expectedItem['is_salable'], $resultItem['is_salable']);
+            $this->assertSame($expectedItem['store_id'], $resultItem['store_id']);
+            $this->assertSame($expectedItem['currency_code'], $resultItem['currency_code']);
+            $this->assertSame(
                 $expectedItem['final_price'],
                 $resultItem['price_info']['formatted_prices']['final_price']
             );

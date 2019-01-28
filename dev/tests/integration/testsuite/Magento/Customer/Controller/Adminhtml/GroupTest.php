@@ -177,7 +177,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         ksort($customerGroupData);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'code' => self::CUSTOMER_GROUP_CODE,
                 'id' => $groupId,
@@ -249,7 +249,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'edit/'));
-        $this->assertEquals(null, $this->session->getCustomerGroupData());
+        $this->assertSame(null, $this->session->getCustomerGroupData());
     }
 
     /**
@@ -270,10 +270,10 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->assertSessionMessages($this->equalTo(['Customer Group already exists.']), MessageInterface::TYPE_ERROR);
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_SUCCESS);
-        $this->assertEquals($originalCode, $this->groupRepository->getById($groupId)->getCode());
+        $this->assertSame($originalCode, $this->groupRepository->getById($groupId)->getCode());
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'edit/'));
-        $this->assertEquals(self::CUSTOMER_GROUP_CODE, $this->session->getCustomerGroupData()['customer_group_code']);
-        $this->assertEquals(self::TAX_CLASS_ID, $this->session->getCustomerGroupData()['tax_class_id']);
+        $this->assertSame(self::CUSTOMER_GROUP_CODE, $this->session->getCustomerGroupData()['customer_group_code']);
+        $this->assertSame(self::TAX_CLASS_ID, $this->session->getCustomerGroupData()['tax_class_id']);
     }
 
     /**
@@ -296,10 +296,10 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             MessageInterface::TYPE_ERROR
         );
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_SUCCESS);
-        $this->assertEquals($originalCode, $this->groupRepository->getById($groupId)->getCode());
+        $this->assertSame($originalCode, $this->groupRepository->getById($groupId)->getCode());
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'edit/'));
-        $this->assertEquals('', $this->session->getCustomerGroupData()['customer_group_code']);
-        $this->assertEquals(self::TAX_CLASS_ID, $this->session->getCustomerGroupData()['tax_class_id']);
+        $this->assertSame('', $this->session->getCustomerGroupData()['customer_group_code']);
+        $this->assertSame(self::TAX_CLASS_ID, $this->session->getCustomerGroupData()['tax_class_id']);
     }
 
     /**

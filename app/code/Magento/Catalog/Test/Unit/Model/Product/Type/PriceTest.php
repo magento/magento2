@@ -125,10 +125,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         // test when we don't send anything in, that no data changes
         $someValue = 'any fake value';
         $this->product->setData($key, $someValue);
-        $this->assertEquals($someValue, $this->product->getData($key));
+        $this->assertSame($someValue, $this->product->getData($key));
 
         $this->model->$getter($this->product, null);
-        $this->assertEquals($someValue, $this->product->getData($key));
+        $this->assertSame($someValue, $this->product->getData($key));
     }
 
     /**
@@ -198,19 +198,19 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $tpArray = $this->product->getData($this::KEY_TIER_PRICE);
         $this->assertNotNull($tpArray);
         $this->assertTrue(is_array($tpArray));
-        $this->assertEquals(sizeof($tps), sizeof($tpArray));
+        $this->assertSame(sizeof($tps), sizeof($tpArray));
 
         for ($i = 0; $i < sizeof($tps); $i++) {
             $tpData = $tpArray[$i];
-            $this->assertEquals($expectedWebsiteId, $tpData['website_id'], 'Website Id does not match');
-            $this->assertEquals($tps[$i]->getValue(), $tpData['price'], 'Price/Value does not match');
-            $this->assertEquals($tps[$i]->getValue(), $tpData['website_price'], 'WebsitePrice/Value does not match');
-            $this->assertEquals(
+            $this->assertSame($expectedWebsiteId, $tpData['website_id'], 'Website Id does not match');
+            $this->assertSame($tps[$i]->getValue(), $tpData['price'], 'Price/Value does not match');
+            $this->assertSame($tps[$i]->getValue(), $tpData['website_price'], 'WebsitePrice/Value does not match');
+            $this->assertSame(
                 $tps[$i]->getCustomerGroupId(),
                 $tpData['cust_group'],
                 'Customer group Id does not match'
             );
-            $this->assertEquals($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
+            $this->assertSame($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
         }
 
         $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
@@ -226,23 +226,23 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $tpRests = $this->model->getTierPrices($this->product);
         $this->assertNotNull($tpRests);
         $this->assertTrue(is_array($tpRests));
-        $this->assertEquals(sizeof($tps), sizeof($tpRests));
+        $this->assertSame(sizeof($tps), sizeof($tpRests));
         foreach ($tpRests as $tpRest) {
-            $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());
+            $this->assertSame(50, $tpRest->getExtensionAttributes()->getPercentageValue());
         }
 
         for ($i = 0; $i < sizeof($tps); $i++) {
-            $this->assertEquals(
+            $this->assertSame(
                 $tps[$i]->getValue(),
                 $tpRests[$i]->getValue(),
                 'REST: Price/Value does not match'
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $tps[$i]->getCustomerGroupId(),
                 $tpRests[$i]->getCustomerGroupId(),
                 'REST: Customer group Id does not match'
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $tps[$i]->getQty(),
                 $tpRests[$i]->getQty(),
                 'REST: Qty does not match'

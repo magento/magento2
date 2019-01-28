@@ -32,7 +32,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         /** @var DefaultRenderer $renderer */
         $renderer = $this->_addressConfig->getFormatByCode($format)->getRenderer();
         $actual = $renderer->renderArray($addressAttributes);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function renderArrayDataProvider()
@@ -79,7 +79,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         /** @var DefaultRenderer $renderer */
         $renderer = $this->_addressConfig->getFormatByCode($format)->getRenderer();
         $actual = $renderer->render($address);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function renderDataProvider()

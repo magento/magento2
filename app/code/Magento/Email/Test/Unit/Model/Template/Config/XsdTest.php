@@ -124,7 +124,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');
         $actualResult = $dom->validate($schemaFile, $actualErrors);
-        $this->assertEquals(empty($expectedErrors), $actualResult);
-        $this->assertEquals($expectedErrors, $actualErrors);
+        $this->assertSame(empty($expectedErrors), $actualResult);
+        $this->assertSame($expectedErrors, $actualErrors);
     }
 }

@@ -97,6 +97,6 @@ class ValueProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $test = $this->model->getMetadataValues($ruleMock);
-        $this->assertEquals($expectedData, $test);
+        $this->assertSame($expectedData, $test);
     }
 }

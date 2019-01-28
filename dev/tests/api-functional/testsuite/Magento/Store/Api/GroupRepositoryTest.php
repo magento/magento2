@@ -39,6 +39,6 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->assertNotNull($storeGroups);
         $this->assertGreaterThan(1, count($storeGroups));
         $keys = ['id', 'website_id', 'root_category_id', 'default_store_id', 'name', 'code'];
-        $this->assertEquals($keys, array_keys($storeGroups[0]));
+        $this->assertSame($keys, array_keys($storeGroups[0]));
     }
 }

@@ -74,7 +74,7 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        self::assertEquals($resourceConnection->getTablePrefix(), 'some_prefix');
+        self::assertSame($resourceConnection->getTablePrefix(), 'some_prefix');
     }
 
     public function testGetTablePrefix()
@@ -83,7 +83,7 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)
             ->willReturn('pref_');
-        self::assertEquals('pref_', $this->unit->getTablePrefix());
+        self::assertSame('pref_', $this->unit->getTablePrefix());
     }
 
     public function testGetConnectionByName()
@@ -95,7 +95,7 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
             ->with(['config'])
             ->willReturn('connection');
 
-        self::assertEquals('connection', $this->unit->getConnectionByName('default'));
+        self::assertSame('connection', $this->unit->getConnectionByName('default'));
     }
 
     public function testGetExistingConnectionByName()
@@ -109,7 +109,7 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
         );
         $this->deploymentConfigMock->expects(self::never())->method('get');
 
-        self::assertEquals('existing_connection', $unit->getConnectionByName('default'));
+        self::assertSame('existing_connection', $unit->getConnectionByName('default'));
     }
 
     public function testCloseConnection()

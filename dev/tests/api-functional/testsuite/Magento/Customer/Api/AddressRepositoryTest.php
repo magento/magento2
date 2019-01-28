@@ -85,7 +85,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         ];
         $requestData = ['addressId' => $fixtureAddressId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(
+        $this->assertSame(
             $this->getFirstFixtureAddressData(),
             $addressData,
             "Address data is invalid."

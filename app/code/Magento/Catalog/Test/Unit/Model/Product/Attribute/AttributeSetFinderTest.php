@@ -69,6 +69,6 @@ class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
         $this->productCollection->expects($this->once())->method('getSelect')->willReturn($select);
         $this->productCollection->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $this->assertEquals($attributeSetIds, $this->attributeSetFinder->findAttributeSetIdsByProductIds($productIds));
+        $this->assertSame($attributeSetIds, $this->attributeSetFinder->findAttributeSetIdsByProductIds($productIds));
     }
 }

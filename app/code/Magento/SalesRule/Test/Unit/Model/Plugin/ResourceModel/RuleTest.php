@@ -46,7 +46,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundLoadCustomerGroupIds()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->ruleResource,
             $this->plugin->aroundLoadCustomerGroupIds($this->ruleResource, $this->genericClosure, $this->abstractModel)
         );
@@ -54,7 +54,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundLoadWebsiteIds()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->ruleResource,
             $this->plugin->aroundLoadWebsiteIds($this->ruleResource, $this->genericClosure, $this->abstractModel)
         );

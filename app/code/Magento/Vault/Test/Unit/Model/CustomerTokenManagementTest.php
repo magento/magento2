@@ -55,7 +55,7 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerSession->method('isLoggedIn')->willReturn($isLoggedCustomer);
         $this->paymentTokenManagement->expects(static::never())->method('getVisibleAvailableTokens');
 
-        static::assertEquals([], $this->tokenManagement->getCustomerSessionTokens());
+        static::assertSame([], $this->tokenManagement->getCustomerSessionTokens());
     }
 
     /**
@@ -88,7 +88,7 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->willReturn($expectation);
 
-        static::assertEquals(
+        static::assertSame(
             $expectation,
             $this->tokenManagement->getCustomerSessionTokens()
         );

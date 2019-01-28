@@ -43,6 +43,6 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
             ->method('getCode')
             ->willReturn($codes);
 
-        $this->assertEquals($expected, $this->model->toOptionArray());
+        $this->assertSame($expected, $this->model->toOptionArray());
     }
 }

@@ -177,6 +177,6 @@ class BackendTest extends \PHPUnit\Framework\TestCase
      */
     private function configurationCountryCodeAssertResult($expected)
     {
-        $this->assertEquals($expected, $this->helper->getConfigurationCountryCode());
+        $this->assertSame($expected, $this->helper->getConfigurationCountryCode());
     }
 }

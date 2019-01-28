@@ -35,7 +35,7 @@ class PlaceOrderPoolTest extends \PHPUnit\Framework\TestCase
         $placeOrderPool = new PlaceOrderPool($tMapFactory);
         $result = $placeOrderPool->get($paymentProviderCode);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

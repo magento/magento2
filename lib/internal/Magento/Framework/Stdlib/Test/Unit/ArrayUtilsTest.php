@@ -41,7 +41,7 @@ class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
         $iterator = 0;
         foreach ($input as $value) {
             $iterator++;
-            $this->assertEquals($iterator, $value);
+            $this->assertSame($iterator, $value);
         }
     }
 
@@ -64,7 +64,7 @@ class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
         ];
 
         // arrays
-        $this->assertEquals($decorated, $this->_arrayUtils->decorateArray($original, ''));
+        $this->assertSame($decorated, $this->_arrayUtils->decorateArray($original, ''));
 
         // \Magento\Framework\DataObject
         $sample = [
@@ -77,7 +77,7 @@ class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
             new \Magento\Framework\DataObject($decorated[1]),
             new \Magento\Framework\DataObject($decorated[2]),
         ];
-        $this->assertEquals($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
+        $this->assertSame($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
     }
 
     /**

@@ -26,6 +26,6 @@ class CircularTest extends \PHPUnit\Framework\TestCase
             3 => [[3, 1, 2, 3]],
             5 => [[5, 2, 5]],
         ];
-        $this->assertEquals($expectedCircularDependencies, $this->circular->buildCircularDependencies($dependencies));
+        $this->assertSame($expectedCircularDependencies, $this->circular->buildCircularDependencies($dependencies));
     }
 }

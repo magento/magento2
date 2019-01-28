@@ -128,7 +128,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('getFullPath')
             ->willReturn($fullPath);
 
-        $this->assertEquals($fullPath, $this->model->getFullPath());
+        $this->assertSame($fullPath, $this->model->getFullPath());
     }
 
     /**
@@ -148,8 +148,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->willReturn($themePath);
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $this->model->setTheme($theme);
-        $this->assertEquals($themeId, $this->model->getThemeId());
-        $this->assertEquals($themePath, $this->model->getThemePath());
+        $this->assertSame($themeId, $this->model->getThemeId());
+        $this->assertSame($themePath, $this->model->getThemePath());
     }
 
     /**
@@ -191,7 +191,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         $fileName = 'fileName';
         $this->assertInstanceOf(get_class($this->model), $this->model->setFileName($fileName));
-        $this->assertEquals($fileName, $this->model->getFileName());
+        $this->assertSame($fileName, $this->model->getFileName());
     }
 
     /**
@@ -202,7 +202,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         $content = 'content';
         $this->model->setContent($content);
-        $this->assertEquals($content, $this->model->getContent());
+        $this->assertSame($content, $this->model->getContent());
     }
 
     public function testGetFileInfo()
@@ -218,7 +218,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->model->setFileName($fileName);
         $this->model->setIsTemporary(false);
 
-        $this->assertEquals($data, $this->model->getFileInfo());
+        $this->assertSame($data, $this->model->getFileInfo());
     }
 
     /**

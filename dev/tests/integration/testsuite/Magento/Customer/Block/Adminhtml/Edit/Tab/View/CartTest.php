@@ -82,7 +82,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtmlEmptyCart()
     {
-        $this->assertEquals(0, $this->block->getCollection()->getSize());
+        $this->assertSame(0, $this->block->getCollection()->getSize());
         $this->assertContains('There are no items in customer\'s shopping cart.', $this->block->toHtml());
     }
 
@@ -109,6 +109,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCollection()
     {
-        $this->assertEquals(1, $this->block->getCollection()->getSize());
+        $this->assertSame(1, $this->block->getCollection()->getSize());
     }
 }

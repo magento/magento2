@@ -67,7 +67,7 @@ class EavTest extends \PHPUnit\Framework\TestCase
         $expectedMeta = include __DIR__ . '/_files/eav_expected_meta_output.php';
         $actualMeta = $this->eavModifier->modifyMeta([]);
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
-        $this->assertEquals($expectedMeta, $actualMeta);
+        $this->assertSame($expectedMeta, $actualMeta);
     }
 
     public function testModifyMetaNewProduct()
@@ -79,7 +79,7 @@ class EavTest extends \PHPUnit\Framework\TestCase
         $expectedMeta = include __DIR__ . '/_files/eav_expected_meta_output_w_default.php';
         $actualMeta = $this->eavModifier->modifyMeta([]);
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
-        $this->assertEquals($expectedMeta, $actualMeta);
+        $this->assertSame($expectedMeta, $actualMeta);
     }
 
     /**
@@ -94,7 +94,7 @@ class EavTest extends \PHPUnit\Framework\TestCase
         $expectedData = include __DIR__ . '/_files/eav_expected_data_output.php';
         $actualData = $this->eavModifier->modifyData([]);
         $this->prepareDataForComparison($actualData, $expectedData);
-        $this->assertEquals($expectedData, $actualData);
+        $this->assertSame($expectedData, $actualData);
     }
 
     /**

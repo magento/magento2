@@ -26,6 +26,6 @@ class PayflowadvancedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInfoBlockType()
     {
-        static::assertEquals(Info::class, $this->model->getInfoBlockType());
+        static::assertSame(Info::class, $this->model->getInfoBlockType());
     }
 }

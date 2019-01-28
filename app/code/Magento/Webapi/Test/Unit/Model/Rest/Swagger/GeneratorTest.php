@@ -151,7 +151,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $schema,
             $this->generator->generate(
                 $requestedService,
@@ -441,6 +441,6 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
         $actual = $method->invoke($this->generator, 'CustomerDataAddressInterface');
 
-        $this->assertEquals('#/definitions/customer-data-address-interface', $actual);
+        $this->assertSame('#/definitions/customer-data-address-interface', $actual);
     }
 }

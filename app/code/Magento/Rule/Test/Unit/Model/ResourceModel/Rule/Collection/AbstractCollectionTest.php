@@ -109,7 +109,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddWebsitesToResult($flag, $expectedResult)
     {
         $this->abstractCollection->addWebsitesToResult($flag);
-        $this->assertEquals($expectedResult, $this->abstractCollection->getFlag('add_websites_to_result'));
+        $this->assertSame($expectedResult, $this->abstractCollection->getFlag('add_websites_to_result'));
     }
 
     protected function _prepareAddFilterStubs()

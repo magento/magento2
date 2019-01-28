@@ -52,7 +52,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('getLastname')->will($this->returnValue($lastName));
         $customerData->expects($this->any())
             ->method('getSuffix')->will($this->returnValue($suffix));
-        $this->assertEquals($result, $this->object->getCustomerName($customerData));
+        $this->assertSame($result, $this->object->getCustomerName($customerData));
     }
 
     /**

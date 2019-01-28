@@ -64,7 +64,7 @@ class AccessListTest extends TestCase
     {
         $this->accessList->setValue($value);
         $this->accessList->beforeSave();
-        $this->assertEquals($expectedValue, $this->accessList->getValue());
+        $this->assertSame($expectedValue, $this->accessList->getValue());
     }
 
     /**

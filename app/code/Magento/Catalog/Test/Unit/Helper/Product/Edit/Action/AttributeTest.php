@@ -63,6 +63,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsiteId')
             ->will($this->returnValue('return-value'));
 
-        $this->assertEquals('return-value', $this->attribute->getStoreWebsiteId($storeId));
+        $this->assertSame('return-value', $this->attribute->getStoreWebsiteId($storeId));
     }
 }

@@ -35,8 +35,8 @@ class GenericTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertEquals($this->model, $this->model->setItem($itemMock));
-        $this->assertEquals($itemMock, $this->model->getItem());
+        $this->assertSame($this->model, $this->model->setItem($itemMock));
+        $this->assertSame($itemMock, $this->model->getItem());
     }
 
     public function testIsProductVisibleInSiteVisibility()
@@ -63,7 +63,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
             ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
 
-        $this->assertEquals($this->model, $this->model->setItem($itemMock));
+        $this->assertSame($this->model, $this->model->setItem($itemMock));
         $this->assertTrue($this->model->isProductVisibleInSiteVisibility());
     }
 
@@ -81,7 +81,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
             ->method('getIsVirtual')
             ->willReturn(true);
 
-        $this->assertEquals($this->model, $this->model->setItem($itemMock));
+        $this->assertSame($this->model, $this->model->setItem($itemMock));
         $this->assertTrue($this->model->isVirtual());
     }
 }

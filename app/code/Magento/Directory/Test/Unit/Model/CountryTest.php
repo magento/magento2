@@ -36,7 +36,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->willReturn('United States');
 
         $this->country->setId(1);
-        $this->assertEquals('United States', $this->country->getName());
+        $this->assertSame('United States', $this->country->getName());
     }
 
     public function testGetNameWithLocale()
@@ -47,6 +47,6 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Vereinigte Staaten');
 
         $this->country->setId(1);
-        $this->assertEquals('Vereinigte Staaten', $this->country->getName('de_DE'));
+        $this->assertSame('Vereinigte Staaten', $this->country->getName('de_DE'));
     }
 }

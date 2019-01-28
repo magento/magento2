@@ -215,6 +215,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'getAttributeId value' => 'fetchAll value',
         ];
         $actualAttributesOptionsData = $this->configurable->getConfigurableOptions($this->product, $attributes);
-        $this->assertEquals($expectedAttributesOptionsData, $actualAttributesOptionsData);
+        $this->assertSame($expectedAttributesOptionsData, $actualAttributesOptionsData);
     }
 }

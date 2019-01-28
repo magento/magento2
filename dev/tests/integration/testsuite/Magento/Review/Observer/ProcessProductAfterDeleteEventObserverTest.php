@@ -32,12 +32,12 @@ class ProcessProductAfterDeleteEventObserverTest extends AbstractController
         $reviewsCollection = $objectManager->get(ReviewCollectionFactory::class)->create();
         $reviewsCollection->addEntityFilter('product', $product->getId());
 
-        self::assertEquals(1, $reviewsCollection->count());
+        self::assertSame(1, $reviewsCollection->count());
 
         /* Remove product and ensure that the product review is removed as well */
         $productRepository->delete($product);
         $reviewsCollection->clear();
 
-        self::assertEquals(0, $reviewsCollection->count());
+        self::assertSame(0, $reviewsCollection->count());
     }
 }

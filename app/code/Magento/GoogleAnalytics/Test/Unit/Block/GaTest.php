@@ -120,7 +120,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
             ga('send', 'pageview');";
 
         $this->gaBlock->setOrderIds([1, 2]);
-        $this->assertEquals(
+        $this->assertSame(
             $this->packString($expectedCode),
             $this->packString($this->gaBlock->getOrdersTrackingCode())
         );
@@ -138,7 +138,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
         $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)->getMock();
         $websiteMock->expects($this->once())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
-        $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsiteId());
+        $this->assertSame($websiteId, $this->gaBlock->getCurrentWebsiteId());
     }
 
     public function testOrderTrackingData()
@@ -171,7 +171,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->gaBlock->setOrderIds([1, 2]);
-        $this->assertEquals($expectedResult, $this->gaBlock->getOrdersTrackingData());
+        $this->assertSame($expectedResult, $this->gaBlock->getOrdersTrackingData());
     }
 
     public function testGetPageTrackingData()
@@ -186,7 +186,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
         $this->gaBlock->setData('page_name', $pageName);
         $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
         
-        $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
+        $this->assertSame($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 
     /**

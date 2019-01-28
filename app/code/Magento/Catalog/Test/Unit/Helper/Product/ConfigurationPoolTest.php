@@ -32,7 +32,7 @@ class ConfigurationPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByProductType($productType, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->model->getByProductType($productType));
+        $this->assertSame($expectedResult, $this->model->getByProductType($productType));
     }
 
     /**

@@ -29,6 +29,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->load($testDom);
         $expectedArray = include dirname(dirname(__DIR__)) . '/_files/converted_config.php';
-        $this->assertEquals($expectedArray, $this->_model->convert($dom));
+        $this->assertSame($expectedArray, $this->_model->convert($dom));
     }
 }

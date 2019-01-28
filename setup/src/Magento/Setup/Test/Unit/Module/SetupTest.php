@@ -60,7 +60,7 @@ class SetupTest extends \PHPUnit\Framework\TestCase
             ->with($tableName, $fields, $indexType)
             ->will($this->returnValue($expectedIdxName));
 
-        $this->assertEquals('idxName', $this->setup->getIdxName($tableName, $fields, $indexType));
+        $this->assertSame('idxName', $this->setup->getIdxName($tableName, $fields, $indexType));
     }
 
     public function testGetFkName()
@@ -80,6 +80,6 @@ class SetupTest extends \PHPUnit\Framework\TestCase
             ->with($tableName, $columnName, $refTable, $refColumnName)
             ->will($this->returnValue('fkName'));
 
-        $this->assertEquals('fkName', $this->setup->getFkName($tableName, $columnName, $refTable, $refColumnName));
+        $this->assertSame('fkName', $this->setup->getFkName($tableName, $columnName, $refTable, $refColumnName));
     }
 }

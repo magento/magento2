@@ -24,7 +24,7 @@ class ContentConverterTest extends \Magento\TestFramework\TestCase\AbstractContr
      */
     public function testConvert($value, $expected)
     {
-        $this->assertEquals($expected, $this->converter->convert($value));
+        $this->assertSame($expected, $this->converter->convert($value));
     }
 
     public function convertDataProvider()

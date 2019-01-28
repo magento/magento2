@@ -156,7 +156,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturn('string');
 
-        $this->assertEquals(
+        $this->assertSame(
             '<a href="someUrl" target="_blank">string</a> ',
             $fileObject->getCustomizedView($optionInfo)
         );
@@ -314,7 +314,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     public function testGetFormattedOptionValueInvalid()
     {
         $optionValue = 'invalid json option value...';
-        $this->assertEquals($optionValue, $this->getFileObject()->getFormattedOptionValue($optionValue));
+        $this->assertSame($optionValue, $this->getFileObject()->getFormattedOptionValue($optionValue));
     }
 
     public function testGetEditableOptionValue()
@@ -339,7 +339,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->with($optionTitle)
             ->will($this->returnValue($optionTitle));
 
-        $this->assertEquals('Option Title [2]', $fileObject->getEditableOptionValue($optionValue));
+        $this->assertSame('Option Title [2]', $fileObject->getEditableOptionValue($optionValue));
     }
 
     public function testGetEditableOptionValueInvalid()
@@ -349,7 +349,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->escaper->expects($this->never())
             ->method('escapeHtml');
 
-        $this->assertEquals($optionValue, $fileObject->getEditableOptionValue($optionValue));
+        $this->assertSame($optionValue, $fileObject->getEditableOptionValue($optionValue));
     }
 
     public function testParseOptionValue()
@@ -377,7 +377,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals($optionValue, $fileObject->parseOptionValue($userInput, []));
+        $this->assertSame($optionValue, $fileObject->parseOptionValue($userInput, []));
     }
 
     public function testParseOptionValueNoId()
@@ -404,7 +404,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertSame(null, $fileObject->parseOptionValue($userInput, []));
     }
 
     public function testParseOptionValueInvalid()
@@ -431,7 +431,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertSame(null, $fileObject->parseOptionValue($userInput, []));
     }
 
     public function testPrepareOptionValueForRequest()
@@ -439,6 +439,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $resultValue = ['result'];
         $optionValue = json_encode($resultValue);
         $fileObject = $this->getFileObject();
-        $this->assertEquals($resultValue, $fileObject->prepareOptionValueForRequest($optionValue));
+        $this->assertSame($resultValue, $fileObject->prepareOptionValueForRequest($optionValue));
     }
 }

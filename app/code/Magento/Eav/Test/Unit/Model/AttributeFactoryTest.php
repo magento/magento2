@@ -47,7 +47,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateAttribute()
     {
-        $this->assertEquals($this->_className, $this->_factory->createAttribute($this->_className, $this->_arguments));
+        $this->assertSame($this->_className, $this->_factory->createAttribute($this->_className, $this->_arguments));
     }
 
     /**
@@ -59,7 +59,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertInternalType('array', $arguments);
         $this->assertArrayHasKey('data', $arguments);
-        $this->assertEquals($this->_arguments, $arguments['data']);
+        $this->assertSame($this->_arguments, $arguments['data']);
 
         return $className;
     }

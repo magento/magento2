@@ -30,7 +30,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->setDestinationSubdir('image');
         $model->setBaseFile('');
-        $this->assertEquals($defaultPlaceholder->getSourceFile(), $model->getBaseFile());
+        $this->assertSame($defaultPlaceholder->getSourceFile(), $model->getBaseFile());
         return $model;
     }
 

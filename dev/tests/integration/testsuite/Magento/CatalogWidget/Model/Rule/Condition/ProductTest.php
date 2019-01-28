@@ -62,7 +62,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('special_price', $collectedAttributes);
         $query = (string)$collection->getSelect();
         $this->assertContains('special_price', $query);
-        $this->assertEquals('at_special_price.value', $this->conditionProduct->getMappedSqlField());
+        $this->assertSame('at_special_price.value', $this->conditionProduct->getMappedSqlField());
     }
 
     /**
@@ -79,7 +79,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('visibility', $collectedAttributes);
         $query = (string)$collection->getSelect();
         $this->assertNotContains('visibility', $query);
-        $this->assertEquals('', $this->conditionProduct->getMappedSqlField());
+        $this->assertSame('', $this->conditionProduct->getMappedSqlField());
         $this->assertFalse($this->conditionProduct->hasValueParsed());
         $this->assertFalse($this->conditionProduct->hasValue());
     }
@@ -98,7 +98,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('visibility', $collectedAttributes);
         $query = (string)$collection->getSelect();
         $this->assertNotContains('visibility', $query);
-        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+        $this->assertSame('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }
 
     /**
@@ -107,7 +107,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetMappedSqlFieldCategoryIdsAttribute()
     {
         $this->conditionProduct->setAttribute('category_ids');
-        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+        $this->assertSame('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }
 
     /**
@@ -116,6 +116,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetMappedSqlFieldSkuAttribute()
     {
         $this->conditionProduct->setAttribute('sku');
-        $this->assertEquals('e.sku', $this->conditionProduct->getMappedSqlField());
+        $this->assertSame('e.sku', $this->conditionProduct->getMappedSqlField());
     }
 }

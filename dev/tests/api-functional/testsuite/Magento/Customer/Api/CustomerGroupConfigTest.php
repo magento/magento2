@@ -37,7 +37,7 @@ class CustomerGroupConfigTest extends WebapiAbstract
         $requestData = ['id' => $customerGroupId];
         $groupData = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals($customerGroupId, $groupData, "The default group does not match.");
+        $this->assertSame($customerGroupId, $groupData, "The default group does not match.");
     }
 
     /**

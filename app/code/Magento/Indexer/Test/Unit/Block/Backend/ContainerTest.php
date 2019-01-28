@@ -27,6 +27,6 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
 
         $block = new \Magento\Indexer\Block\Backend\Container($contextMock);
 
-        $this->assertEquals($block->getHeaderText(), $headerText);
+        $this->assertSame($block->getHeaderText(), $headerText);
     }
 }

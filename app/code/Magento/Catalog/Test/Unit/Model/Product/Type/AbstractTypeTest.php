@@ -63,7 +63,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(Status::STATUS_ENABLED)
         );
         $this->product->setData('is_salable', 3);
-        $this->assertEquals(true, $this->model->isSalable($this->product));
+        $this->assertSame(true, $this->model->isSalable($this->product));
     }
 
     public function testGetAttributeById()
@@ -76,7 +76,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         );
         $this->attribute->setId(1);
 
-        $this->assertEquals($this->attribute, $this->model->getAttributeById(1, $this->product));
+        $this->assertSame($this->attribute, $this->model->getAttributeById(1, $this->product));
         $this->assertNull($this->model->getAttributeById(0, $this->product));
     }
 
@@ -93,7 +93,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $attribute->expects($this->any())->method('getGroupSortPath')->will($this->returnValue($attr1));
         $attribute2->expects($this->any())->method('getGroupSortPath')->will($this->returnValue($attr2));
 
-        $this->assertEquals($expectedResult, $this->model->attributesCompare($attribute, $attribute2));
+        $this->assertSame($expectedResult, $this->model->attributesCompare($attribute, $attribute2));
     }
 
     /**
@@ -114,14 +114,14 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->productResource)
         );
         $this->productResource->expects($this->once())->method('getSortedAttributes')->will($this->returnValue(5));
-        $this->assertEquals(5, $this->model->getSetAttributes($this->product));
+        $this->assertSame(5, $this->model->getSetAttributes($this->product));
         //Call the method for a second time, the cached copy should be used
-        $this->assertEquals(5, $this->model->getSetAttributes($this->product));
+        $this->assertSame(5, $this->model->getSetAttributes($this->product));
     }
 
     public function testHasOptions()
     {
         $this->product->expects($this->once())->method('getHasOptions')->will($this->returnValue(true));
-        $this->assertEquals(true, $this->model->hasOptions($this->product));
+        $this->assertSame(true, $this->model->hasOptions($this->product));
     }
 }

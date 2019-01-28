@@ -51,7 +51,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     public function testGetIncrementId()
     {
         $this->shipmentModel->setIncrementId('test_increment_id');
-        $this->assertEquals('test_increment_id', $this->shipmentModel->getIncrementId());
+        $this->assertSame('test_increment_id', $this->shipmentModel->getIncrementId());
     }
 
     /**
@@ -89,7 +89,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $actual = $this->shipmentModel->getCommentsCollection();
 
         self::assertTrue(is_object($actual));
-        self::assertEquals($this->commentCollection, $actual);
+        self::assertSame($this->commentCollection, $actual);
     }
 
     /**
@@ -127,7 +127,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->shipmentModel->getComments();
         self::assertTrue(is_array($actual));
-        self::assertEquals($collection, $actual);
+        self::assertSame($collection, $actual);
     }
 
     /**

@@ -25,23 +25,23 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->setOrder('code', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(4, count($items));
+        $this->assertSame(4, count($items));
 
-        $this->assertEquals('General', $items[0]->getCode());
-        $this->assertEquals('1', $items[0]->getId());
-        $this->assertEquals('3', $items[0]->getTaxClassId());
+        $this->assertSame('General', $items[0]->getCode());
+        $this->assertSame('1', $items[0]->getId());
+        $this->assertSame('3', $items[0]->getTaxClassId());
 
-        $this->assertEquals('NOT LOGGED IN', $items[1]->getCode());
-        $this->assertEquals('0', $items[1]->getId());
-        $this->assertEquals('3', $items[1]->getTaxClassId());
+        $this->assertSame('NOT LOGGED IN', $items[1]->getCode());
+        $this->assertSame('0', $items[1]->getId());
+        $this->assertSame('3', $items[1]->getTaxClassId());
 
-        $this->assertEquals('Retailer', $items[2]->getCode());
-        $this->assertEquals('3', $items[2]->getId());
-        $this->assertEquals('3', $items[2]->getTaxClassId());
+        $this->assertSame('Retailer', $items[2]->getCode());
+        $this->assertSame('3', $items[2]->getId());
+        $this->assertSame('3', $items[2]->getTaxClassId());
 
-        $this->assertEquals('Wholesale', $items[3]->getCode());
-        $this->assertEquals('2', $items[3]->getId());
-        $this->assertEquals('3', $items[3]->getTaxClassId());
+        $this->assertSame('Wholesale', $items[3]->getCode());
+        $this->assertSame('2', $items[3]->getId());
+        $this->assertSame('3', $items[3]->getTaxClassId());
     }
 
     public function testArrayFilter()
@@ -49,11 +49,11 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code'], [['NOT LOGGED IN']]);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertSame(1, count($items));
 
-        $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
-        $this->assertEquals('0', $items[0]->getId());
-        $this->assertEquals('3', $items[0]->getTaxClassId());
+        $this->assertSame('NOT LOGGED IN', $items[0]->getCode());
+        $this->assertSame('0', $items[0]->getId());
+        $this->assertSame('3', $items[0]->getTaxClassId());
     }
 
     public function testOrArrayFilter()
@@ -61,15 +61,15 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code', 'code'], ['General', 'Retailer']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertSame(2, count($items));
 
-        $this->assertEquals('General', $items[0]->getCode());
-        $this->assertEquals('1', $items[0]->getId());
-        $this->assertEquals('3', $items[0]->getTaxClassId());
+        $this->assertSame('General', $items[0]->getCode());
+        $this->assertSame('1', $items[0]->getId());
+        $this->assertSame('3', $items[0]->getTaxClassId());
 
-        $this->assertEquals('Retailer', $items[1]->getCode());
-        $this->assertEquals('3', $items[1]->getId());
-        $this->assertEquals('3', $items[1]->getTaxClassId());
+        $this->assertSame('Retailer', $items[1]->getCode());
+        $this->assertSame('3', $items[1]->getId());
+        $this->assertSame('3', $items[1]->getTaxClassId());
     }
 
     public function testSingleFilter()
@@ -77,11 +77,11 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', 'NOT LOGGED IN');
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertSame(1, count($items));
 
-        $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
-        $this->assertEquals('0', $items[0]->getId());
-        $this->assertEquals('3', $items[0]->getTaxClassId());
+        $this->assertSame('NOT LOGGED IN', $items[0]->getCode());
+        $this->assertSame('0', $items[0]->getId());
+        $this->assertSame('3', $items[0]->getTaxClassId());
     }
 
     public function testSingleLikeFilter()
@@ -89,11 +89,11 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', ['like' => 'NOT%']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertSame(1, count($items));
 
-        $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
-        $this->assertEquals('0', $items[0]->getId());
-        $this->assertEquals('3', $items[0]->getTaxClassId());
+        $this->assertSame('NOT LOGGED IN', $items[0]->getCode());
+        $this->assertSame('0', $items[0]->getId());
+        $this->assertSame('3', $items[0]->getTaxClassId());
     }
 
     /**

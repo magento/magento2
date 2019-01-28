@@ -35,7 +35,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('label', $option);
             $this->assertArrayHasKey('value', $option);
             if (strpos((string)$option['label'], (string)$label) !== false) {
-                $this->assertEquals($value, $option['value']);
+                $this->assertSame($value, $option['value']);
                 $hasLabel = true;
                 break;
             } elseif (is_array($option['value'])) {

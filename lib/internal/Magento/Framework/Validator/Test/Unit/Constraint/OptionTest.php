@@ -18,6 +18,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     {
         $expected = 'test_value';
         $option = new \Magento\Framework\Validator\Constraint\Option($expected);
-        $this->assertEquals($expected, $option->getValue());
+        $this->assertSame($expected, $option->getValue());
     }
 }

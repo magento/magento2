@@ -69,6 +69,6 @@ class CustomerGroupConfigTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Customer\Model\GroupManagement::XML_PATH_DEFAULT_ID, $customerGroupId)->willReturnSelf();
         $this->configMock->expects($this->once())->method('save');
 
-        $this->assertEquals($customerGroupId, $this->customerGroupConfig->setDefaultCustomerGroup($customerGroupId));
+        $this->assertSame($customerGroupId, $this->customerGroupConfig->setDefaultCustomerGroup($customerGroupId));
     }
 }

@@ -46,11 +46,11 @@ class CronRemoveCommandTest extends \PHPUnit\Framework\TestCase
             ->method('RemoveTasks');
 
         $this->commandTester->execute([]);
-        $this->assertEquals(
+        $this->assertSame(
             'Magento cron tasks have been removed' . PHP_EOL,
             $this->commandTester->getDisplay()
         );
-        $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
+        $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
     }
 
     /**
@@ -63,10 +63,10 @@ class CronRemoveCommandTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new LocalizedException(new Phrase('Some error')));
 
         $this->commandTester->execute([]);
-        $this->assertEquals(
+        $this->assertSame(
             'Some error' . PHP_EOL,
             $this->commandTester->getDisplay()
         );
-        $this->assertEquals(Cli::RETURN_FAILURE, $this->commandTester->getStatusCode());
+        $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->getStatusCode());
     }
 }

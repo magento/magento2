@@ -130,6 +130,6 @@ TEXT;
             ->with($file)
             ->willReturn($content);
 
-        $this->assertEquals($expectedResult, $this->commentParser->execute($file));
+        $this->assertSame($expectedResult, $this->commentParser->execute($file));
     }
 }

@@ -39,7 +39,7 @@ class CreatePdfFileTest extends \PHPUnit\Framework\TestCase
         $contentTypeHeader = $response->getHeader('Content-type');
 
         /* Check the system returns the correct type */
-        self::assertEquals("Content-Type: $contentType", $contentTypeHeader->toString());
+        self::assertSame("Content-Type: $contentType", $contentTypeHeader->toString());
 
         $varDirectory = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
         $varDirectory->isFile($filename);

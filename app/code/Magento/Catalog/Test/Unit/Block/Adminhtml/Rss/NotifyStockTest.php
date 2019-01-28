@@ -101,12 +101,12 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_string($data['title']));
         $this->assertTrue(is_string($data['description']));
         $this->assertTrue(is_string($data['entries'][0]['description']));
-        $this->assertEquals($this->rssFeed, $data);
+        $this->assertSame($this->rssFeed, $data);
     }
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(600, $this->block->getCacheLifetime());
+        $this->assertSame(600, $this->block->getCacheLifetime());
     }
 
     public function testIsAllowed()

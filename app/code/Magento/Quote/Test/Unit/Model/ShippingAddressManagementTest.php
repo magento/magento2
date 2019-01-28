@@ -168,7 +168,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteAddressMock->expects($this->once())->method('save')->willReturnSelf();
         $this->quoteAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
 
-        $this->assertEquals($addressId, $this->service->assign('cart867', $this->quoteAddressMock));
+        $this->assertSame($addressId, $this->service->assign('cart867', $this->quoteAddressMock));
     }
 
     /**
@@ -260,7 +260,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $quoteMock->expects($this->any())->method('getShippingAddress')->will($this->returnValue($addressMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(false));
-        $this->assertEquals($addressMock, $this->service->get('cartId'));
+        $this->assertSame($addressMock, $this->service->get('cartId'));
     }
 
     /**

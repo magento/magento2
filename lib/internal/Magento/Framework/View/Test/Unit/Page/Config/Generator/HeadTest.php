@@ -175,6 +175,6 @@ class HeadTest extends \PHPUnit\Framework\TestCase
             );
 
         $result = $this->headGenerator->process($readerContextMock, $generatorContextMock);
-        $this->assertEquals($this->headGenerator, $result);
+        $this->assertSame($this->headGenerator, $result);
     }
 }

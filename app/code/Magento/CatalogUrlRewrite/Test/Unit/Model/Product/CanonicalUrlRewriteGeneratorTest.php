@@ -76,7 +76,7 @@ class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)
             ->will($this->returnSelf());
         $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $this->urlRewrite,
             ],

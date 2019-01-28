@@ -104,7 +104,7 @@ class GeneratorTest extends TestCase
     public function testGenerateClassFactoryWithNamespace()
     {
         $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'Factory';
-        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
+        $this->assertSame(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
         $factory = Bootstrap::getObjectManager()->create($factoryClassName);
         $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE, $factory->create());
         $content = $this->_clearDocBlock(
@@ -113,7 +113,7 @@ class GeneratorTest extends TestCase
         $expectedContent = $this->_clearDocBlock(
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceFactory.php.sample')
         );
-        $this->assertEquals($expectedContent, $content);
+        $this->assertSame($expectedContent, $content);
     }
 
     /**
@@ -123,7 +123,7 @@ class GeneratorTest extends TestCase
     public function testGenerateClassProxyWithNamespace()
     {
         $proxyClassName = self::CLASS_NAME_WITH_NAMESPACE . '\Proxy';
-        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($proxyClassName));
+        $this->assertSame(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($proxyClassName));
         $proxy = Bootstrap::getObjectManager()->create($proxyClassName);
         $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE, $proxy);
         $content = $this->_clearDocBlock(
@@ -132,7 +132,7 @@ class GeneratorTest extends TestCase
         $expectedContent = $this->_clearDocBlock(
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceProxy.php.sample')
         );
-        $this->assertEquals($expectedContent, $content);
+        $this->assertSame($expectedContent, $content);
     }
 
     /**
@@ -142,14 +142,14 @@ class GeneratorTest extends TestCase
     public function testGenerateClassInterceptorWithNamespace()
     {
         $interceptorClassName = self::CLASS_NAME_WITH_NAMESPACE . '\Interceptor';
-        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($interceptorClassName));
+        $this->assertSame(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($interceptorClassName));
         $content = $this->_clearDocBlock(
             file_get_contents($this->_ioObject->generateResultFileName($interceptorClassName))
         );
         $expectedContent = $this->_clearDocBlock(
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceInterceptor.php.sample')
         );
-        $this->assertEquals($expectedContent, $content);
+        $this->assertSame($expectedContent, $content);
     }
 
     /**
@@ -160,7 +160,7 @@ class GeneratorTest extends TestCase
     {
         $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
         $this->generatedDirectory->create($this->testRelativePath);
-        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
+        $this->assertSame(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
         $factory = Bootstrap::getObjectManager()->create($factoryClassName);
         $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE . 'Extension', $factory->create());
         $content = $this->_clearDocBlock(
@@ -169,7 +169,7 @@ class GeneratorTest extends TestCase
         $expectedContent = $this->_clearDocBlock(
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample')
         );
-        $this->assertEquals($expectedContent, $content);
+        $this->assertSame($expectedContent, $content);
     }
 
     /**

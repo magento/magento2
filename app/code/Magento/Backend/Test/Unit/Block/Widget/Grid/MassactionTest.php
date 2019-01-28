@@ -124,16 +124,16 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
 
     public function testMassactionDefaultValues()
     {
-        $this->assertEquals(0, $this->_block->getCount());
+        $this->assertSame(0, $this->_block->getCount());
         $this->assertFalse($this->_block->isAvailable());
 
-        $this->assertEquals('massaction', $this->_block->getFormFieldName());
-        $this->assertEquals('internal_massaction', $this->_block->getFormFieldNameInternal());
+        $this->assertSame('massaction', $this->_block->getFormFieldName());
+        $this->assertSame('internal_massaction', $this->_block->getFormFieldNameInternal());
 
-        $this->assertEquals('test_grid_massactionJsObject', $this->_block->getJsObjectName());
-        $this->assertEquals('test_gridJsObject', $this->_block->getGridJsObjectName());
+        $this->assertSame('test_grid_massactionJsObject', $this->_block->getJsObjectName());
+        $this->assertSame('test_gridJsObject', $this->_block->getGridJsObjectName());
 
-        $this->assertEquals('test_grid_massaction', $this->_block->getHtmlId());
+        $this->assertSame('test_grid_massaction', $this->_block->getHtmlId());
         $this->assertTrue($this->_block->getUseSelectAll());
     }
 
@@ -162,14 +162,14 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->_block->addItem($itemId, $item);
-        $this->assertEquals(1, $this->_block->getCount());
+        $this->assertSame(1, $this->_block->getCount());
 
         $actualItem = $this->_block->getItem($itemId);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $actualItem);
-        $this->assertEquals($expectedItem->getData(), $actualItem->getData());
+        $this->assertSame($expectedItem->getData(), $actualItem->getData());
 
         $this->_block->removeItem($itemId);
-        $this->assertEquals(0, $this->_block->getCount());
+        $this->assertSame(0, $this->_block->getCount());
         $this->assertNull($this->_block->getItem($itemId));
     }
 
@@ -239,8 +239,8 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->with($this->_block->getFormFieldNameInternal())
             ->willReturn($param);
 
-        $this->assertEquals($expectedJson, $this->_block->getSelectedJson());
-        $this->assertEquals($expected, $this->_block->getSelected());
+        $this->assertSame($expectedJson, $this->_block->getSelectedJson());
+        $this->assertSame($expected, $this->_block->getSelected());
     }
 
     /**
@@ -301,7 +301,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->with($massActionIdField)
             ->willReturn($items);
 
-        $this->assertEquals($result, $this->_block->getGridIdsJson());
+        $this->assertSame($result, $this->_block->getGridIdsJson());
     }
 
     /**
@@ -358,7 +358,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap($urlReturnValueMap);
 
         $this->_block->addItem($itemId, $item);
-        $this->assertEquals($count, $this->_block->getCount(), $itemId);
+        $this->assertSame($count, $this->_block->getCount(), $itemId);
     }
 
     /**

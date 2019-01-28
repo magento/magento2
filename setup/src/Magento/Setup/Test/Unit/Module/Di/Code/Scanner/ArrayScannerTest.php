@@ -27,6 +27,6 @@ class ArrayScannerTest extends \PHPUnit\Framework\TestCase
     {
         $actual = $this->_model->collectEntities([$this->_testDir . '/additional.php']);
         $expected = ['Some_Model_Proxy', 'Some_Model_EntityFactory'];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

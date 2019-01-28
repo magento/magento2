@@ -111,7 +111,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCode')
             ->will($this->throwException(new NoSuchEntityException()));
-        $this->assertEquals('', $this->block->getCustomerGroupName());
+        $this->assertSame('', $this->block->getCustomerGroupName());
     }
 
     public function testGetCustomerGroupNameWhenGroupExists()
@@ -128,6 +128,6 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('group_code'));
-        $this->assertEquals('group_code', $this->block->getCustomerGroupName());
+        $this->assertSame('group_code', $this->block->getCustomerGroupName());
     }
 }

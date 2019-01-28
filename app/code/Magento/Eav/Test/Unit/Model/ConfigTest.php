@@ -270,7 +270,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValueMap($factoryCalls));
 
-        $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
+        $this->assertSame(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
     }
 
     public function testClear()
@@ -290,7 +290,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEntityTypeInstanceOfTypePassed()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->typeMock,
             $this->config->getEntityType($this->typeMock)
         );

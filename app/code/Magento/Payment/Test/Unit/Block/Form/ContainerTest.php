@@ -33,11 +33,11 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $block->expects($this->atLeastOnce())->method('getChildBlock')->will($this->returnCallback($func));
 
         $template = 'any_template.phtml';
-        $this->assertNotEquals($template, $childBlockA->getTemplate());
-        $this->assertNotEquals($template, $childBlockB->getTemplate());
+        $this->assertNotSame($template, $childBlockA->getTemplate());
+        $this->assertNotSame($template, $childBlockB->getTemplate());
 
         $block->setMethodFormTemplate('a', $template);
-        $this->assertEquals($template, $childBlockA->getTemplate()); // Template is set to the block
-        $this->assertNotEquals($template, $childBlockB->getTemplate()); // Template is not propagated to other blocks
+        $this->assertSame($template, $childBlockA->getTemplate()); // Template is set to the block
+        $this->assertNotSame($template, $childBlockB->getTemplate()); // Template is not propagated to other blocks
     }
 }

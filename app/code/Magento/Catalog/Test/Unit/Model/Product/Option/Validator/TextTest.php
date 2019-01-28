@@ -109,6 +109,6 @@ class TextTest extends \PHPUnit\Framework\TestCase
             'option values' => 'Invalid option value',
         ];
         $this->assertFalse($this->validator->isValid($this->valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 }

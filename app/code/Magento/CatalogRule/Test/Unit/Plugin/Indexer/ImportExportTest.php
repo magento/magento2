@@ -55,6 +55,6 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
         $this->ruleProductProcessor->expects($this->once())
             ->method('markIndexerAsInvalid');
 
-        $this->assertEquals($result, $this->plugin->afterImportSource($this->subject, $result));
+        $this->assertSame($result, $this->plugin->afterImportSource($this->subject, $result));
     }
 }

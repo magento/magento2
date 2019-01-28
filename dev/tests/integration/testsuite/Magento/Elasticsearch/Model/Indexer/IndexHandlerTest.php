@@ -97,7 +97,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
         foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Apple', $storeId);
             $this->assertCount(1, $products);
-            $this->assertEquals($productApple->getId(), $products[0]['_id']);
+            $this->assertSame($productApple->getId(), $products[0]['_id']);
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);
@@ -123,7 +123,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
             $products = $this->searchByName('Cucumber', $storeId);
             $this->assertCount(1, $products);
-            $this->assertEquals($productApple->getId(), $products[0]['_id']);
+            $this->assertSame($productApple->getId(), $products[0]['_id']);
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);

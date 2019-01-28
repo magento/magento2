@@ -52,7 +52,7 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
         };
         $this->_subscriberTwo->expects($this->once())->method('testEvent')->will($this->returnCallback($callback));
         $this->_eventManager->fireEvent('testEvent', [], $reverseOrder);
-        $this->assertEquals($expectedSubscribers, $actualSubscribers);
+        $this->assertSame($expectedSubscribers, $actualSubscribers);
     }
 
     public function fireEventDataProvider()

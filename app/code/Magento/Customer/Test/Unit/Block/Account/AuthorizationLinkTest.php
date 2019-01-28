@@ -59,7 +59,7 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->will($this->returnValue(true));
 
-        $this->assertEquals('Sign Out', $this->_block->getLabel());
+        $this->assertSame('Sign Out', $this->_block->getLabel());
     }
 
     public function testGetLabelLoggedOut()
@@ -68,7 +68,7 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->will($this->returnValue(false));
 
-        $this->assertEquals('Sign In', $this->_block->getLabel());
+        $this->assertSame('Sign In', $this->_block->getLabel());
     }
 
     public function testGetHrefLoggedIn()
@@ -79,7 +79,7 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
 
         $this->_customerUrl->expects($this->once())->method('getLogoutUrl')->will($this->returnValue('logout url'));
 
-        $this->assertEquals('logout url', $this->_block->getHref());
+        $this->assertSame('logout url', $this->_block->getHref());
     }
 
     public function testGetHrefLoggedOut()
@@ -90,6 +90,6 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
 
         $this->_customerUrl->expects($this->once())->method('getLoginUrl')->will($this->returnValue('login url'));
 
-        $this->assertEquals('login url', $this->_block->getHref());
+        $this->assertSame('login url', $this->_block->getHref());
     }
 }

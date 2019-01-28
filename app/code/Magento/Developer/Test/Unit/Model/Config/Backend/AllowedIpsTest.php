@@ -51,7 +51,7 @@ class AllowedIpsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getValue());
         $this->model->setValue($value);
         $this->model->beforeSave();
-        $this->assertEquals($expected, trim($this->model->getValue()));
+        $this->assertSame($expected, trim($this->model->getValue()));
     }
 
     /**

@@ -83,7 +83,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -130,7 +130,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -186,7 +186,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -286,7 +286,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(4, $exceptions);
+        $this->assertSame(4, $exceptions);
     }
 
     /**
@@ -354,7 +354,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -389,7 +389,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -406,7 +406,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $directory = $this->getDirectoryInstance($basePath, $permissions);
         $directory->openFile($path);
         $this->assertTrue($directory->touch($path, $time));
-        $this->assertEquals($time, $directory->stat($path)['mtime']);
+        $this->assertSame($time, $directory->stat($path)['mtime']);
     }
 
     /**
@@ -441,7 +441,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -474,7 +474,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -526,7 +526,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -541,9 +541,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     {
         $directory = $this->getDirectoryInstance('writeFileDir', 0777);
         $directory->writeFile($path, $content);
-        $this->assertEquals($content, $directory->readFile($path));
+        $this->assertSame($content, $directory->readFile($path));
         $directory->writeFile($path, $extraContent);
-        $this->assertEquals($extraContent, $directory->readFile($path));
+        $this->assertSame($extraContent, $directory->readFile($path));
     }
 
     /**
@@ -558,9 +558,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     {
         $directory = $this->getDirectoryInstance('writeFileDir', 0777);
         $directory->writeFile($path, $content, 'a+');
-        $this->assertEquals($content, $directory->readFile($path));
+        $this->assertSame($content, $directory->readFile($path));
         $directory->writeFile($path, $extraContent, 'a+');
-        $this->assertEquals($content . $extraContent, $directory->readFile($path));
+        $this->assertSame($content . $extraContent, $directory->readFile($path));
     }
 
     /**
@@ -592,7 +592,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**

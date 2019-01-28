@@ -42,6 +42,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 
         $expectedResult = require __DIR__ . '/_files/integration.php';
-        $this->assertEquals($expectedResult, $this->configReader->read(), 'Error happened during config reading.');
+        $this->assertSame($expectedResult, $this->configReader->read(), 'Error happened during config reading.');
     }
 }

@@ -75,7 +75,7 @@ class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->weeeConfigMock->expects($this->any())->method('includeInSubtotal')
             ->will($this->returnValue($includeInSubtotal));
 
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 
     /**

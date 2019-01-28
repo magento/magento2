@@ -86,6 +86,6 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
 
         $dataSource = $this->component->prepareDataSource($dataSource);
 
-        $this->assertEquals($expectedDataSource, $dataSource);
+        $this->assertSame($expectedDataSource, $dataSource);
     }
 }

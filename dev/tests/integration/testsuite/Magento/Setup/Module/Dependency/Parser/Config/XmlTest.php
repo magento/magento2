@@ -35,6 +35,6 @@ class XmlTest extends \PHPUnit\Framework\TestCase
             ['files_for_parse' => [$this->fixtureDir . 'module1.xml', $this->fixtureDir . 'module2.xml']]
         );
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

@@ -101,6 +101,6 @@ class WeightTest extends \PHPUnit\Framework\TestCase
         $this->_model->setEntityAttribute(true);
 
         $return = $this->_model->getEscapedValue('30000.4');
-        $this->assertEquals('30.000,40', $return);
+        $this->assertSame('30.000,40', $return);
     }
 }

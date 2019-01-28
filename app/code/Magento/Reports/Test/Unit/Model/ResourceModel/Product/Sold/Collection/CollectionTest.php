@@ -49,6 +49,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->at(7))->method('reset')->with(Select::COLUMNS);
         $this->selectMock->expects($this->at(8))->method('columns')->with('COUNT(DISTINCT order_items.item_id)');
 
-        $this->assertEquals($this->selectMock, $collection->getSelectCountSql());
+        $this->assertSame($this->selectMock, $collection->getSelectCountSql());
     }
 }

@@ -31,10 +31,10 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
         $searchResult = $objectManager->create(
             \Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Failed\SearchResult::class
         );
-        $this->assertEquals(1, $searchResult->getTotalCount());
+        $this->assertSame(1, $searchResult->getTotalCount());
         $expected = $searchResult->getItems();
         $expectedItem = array_shift($expected);
-        $this->assertEquals('Test', $expectedItem->getMetaInformation());
-        $this->assertEquals('5', $expectedItem->getEntityId());
+        $this->assertSame('Test', $expectedItem->getMetaInformation());
+        $this->assertSame('5', $expectedItem->getEntityId());
     }
 }

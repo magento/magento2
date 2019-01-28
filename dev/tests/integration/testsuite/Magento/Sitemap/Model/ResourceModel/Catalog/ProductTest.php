@@ -70,13 +70,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         // Check thumbnail attribute
         $this->assertEmpty($products[1]->getThumbnail(), 'Thumbnail attribute was loaded');
         $this->assertEmpty($products[4]->getImage(), 'Image attribute was loaded');
-        $this->assertEquals('/m/a/magento_image_sitemap.png', $products[4]->getThumbnail(), 'Incorrect thumbnail');
+        $this->assertSame('/m/a/magento_image_sitemap.png', $products[4]->getThumbnail(), 'Incorrect thumbnail');
 
         // Check images loading
         $this->assertEmpty($products[1]->getImages(), 'Images were loaded');
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
-        $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
-        $this->assertEquals(
+        $this->assertSame('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/m/a/magento_image_sitemap.png',
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
@@ -84,12 +84,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $products[4]->getImages()->getCollection(), 'Not all images were loaded');
 
         $imagesCollection = $products[4]->getImages()->getCollection();
-        $this->assertEquals(
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/m/a/magento_image_sitemap.png',
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
         );
-        $this->assertEquals(
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/s/e/second_image.png',
             $imagesCollection[1]->getUrl(),
             'Incorrect image url'
@@ -98,15 +98,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         // Check no selection
         $this->assertEmpty($products[5]->getImage(), 'image is not empty');
-        $this->assertEquals('no_selection', $products[5]->getThumbnail(), 'thumbnail is incorrect');
+        $this->assertSame('no_selection', $products[5]->getThumbnail(), 'thumbnail is incorrect');
         $imagesCollection = $products[5]->getImages()->getCollection();
         $this->assertCount(1, $imagesCollection);
-        $this->assertEquals(
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/s/e/second_image_1.png',
             $imagesCollection[0]->getUrl(),
             'Image url is incorrect'
         );
-        $this->assertEquals(
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/s/e/second_image_1.png',
             $products[5]->getImages()->getThumbnail(),
             'Product thumbnail is incorrect'
@@ -138,13 +138,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         // Check thumbnail attribute
         $this->assertEmpty($products[1]->getImage(), 'image attribute was loaded');
         $this->assertEmpty($products[4]->getThumbnail(), 'thumbnail attribute was loaded');
-        $this->assertEquals('/s/e/second_image.png', $products[4]->getImage(), 'Incorrect image attribute');
+        $this->assertSame('/s/e/second_image.png', $products[4]->getImage(), 'Incorrect image attribute');
 
         // Check images loading
         $this->assertEmpty($products[1]->getImages(), 'Images were loaded');
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
-        $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
-        $this->assertEquals(
+        $this->assertSame('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/s/e/second_image.png',
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
@@ -152,7 +152,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $products[4]->getImages()->getCollection(), 'Number of loaded images is incorrect');
 
         $imagesCollection = $products[4]->getImages()->getCollection();
-        $this->assertEquals(
+        $this->assertSame(
             self::BASE_IMAGE_PATH.'/s/e/second_image.png',
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
@@ -161,7 +161,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         // Check no selection
         $this->assertEmpty($products[5]->getThumbnail(), 'thumbnail is not empty');
-        $this->assertEquals('no_selection', $products[5]->getImage(), 'image is incorrect');
+        $this->assertSame('no_selection', $products[5]->getImage(), 'image is incorrect');
         $this->assertEmpty($products[5]->getImages(), 'Product images were loaded');
     }
 

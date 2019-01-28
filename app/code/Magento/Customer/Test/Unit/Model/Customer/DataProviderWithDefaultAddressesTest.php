@@ -181,7 +181,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
     {
         $meta = $this->dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertEquals($expected, $meta);
+        $this->assertSame($expected, $meta);
     }
 
     /**
@@ -358,7 +358,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerFormData')
             ->willReturn(null);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 1 => [
                     'customer' => [
@@ -417,6 +417,6 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())->method('getCustomerFormData')->willReturn($customerFormData);
         $this->sessionMock->expects($this->once())->method('unsCustomerFormData');
 
-        $this->assertEquals([$customerId => $customerFormData], $this->dataProvider->getData());
+        $this->assertSame([$customerId => $customerFormData], $this->dataProvider->getData());
     }
 }

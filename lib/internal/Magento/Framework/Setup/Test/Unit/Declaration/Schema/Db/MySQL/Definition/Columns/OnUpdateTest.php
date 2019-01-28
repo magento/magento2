@@ -45,7 +45,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('getOnUpdate')
             ->willReturn('on update');
-        $this->assertEquals(
+        $this->assertSame(
             'ON UPDATE CURRENT_TIMESTAMP',
             $this->onUpdate->toDefinition($column)
         );
@@ -64,7 +64,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('getOnUpdate')
             ->willReturn(null);
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $this->onUpdate->toDefinition($column)
         );
@@ -79,7 +79,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assertEquals(
+        $this->assertSame(
             '',
             $this->onUpdate->toDefinition($column)
         );

@@ -24,7 +24,7 @@ class UpdatedTest extends \PHPUnit\Framework\TestCase
         $obj->setValue('');
         $model->setColumn($obj);
         $result = $model->render($obj);
-        $this->assertEquals($result, $assert);
+        $this->assertSame($result, $assert);
     }
 
     /**

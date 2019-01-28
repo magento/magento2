@@ -24,7 +24,7 @@ class TaxRateCollectionTest extends \PHPUnit\Framework\TestCase
         $taxRatesCollection = Bootstrap::getObjectManager()
             ->create(\Magento\Tax\Model\TaxRateCollection::class);
         $collectionTaxRatesQty = $taxRatesCollection->count();
-        $this->assertEquals($dbTaxRatesQty, $collectionTaxRatesQty, 'Tax rates quantity is invalid.');
+        $this->assertSame($dbTaxRatesQty, $collectionTaxRatesQty, 'Tax rates quantity is invalid.');
         $taxRate = $taxRatesCollection->getFirstItem()->getData();
         $expectedTaxRateData = [
             'code' => 'US-CA-*-Rate 1',
@@ -39,6 +39,6 @@ class TaxRateCollectionTest extends \PHPUnit\Framework\TestCase
             'zip_from' => null,
             'zip_to' => null,
         ];
-        $this->assertEquals($expectedTaxRateData, $taxRate, 'Tax rate data is invalid.');
+        $this->assertSame($expectedTaxRateData, $taxRate, 'Tax rate data is invalid.');
     }
 }

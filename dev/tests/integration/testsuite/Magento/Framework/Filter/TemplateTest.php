@@ -25,7 +25,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testFilterFor($results, $values)
     {
         $this->templateFilter->setVariables(['order' => $this->getOrder(), 'things' => $this->getThings()]);
-        $this->assertEquals($results, $this->invokeMethod($this->templateFilter, 'filterFor', [$values]));
+        $this->assertSame($results, $this->invokeMethod($this->templateFilter, 'filterFor', [$values]));
     }
 
     /**

@@ -53,7 +53,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $currencySymbolsDataAfter = $this->currencySymbolModel->getCurrencySymbolsData();
 
         //Make sure symbol data is unchanged
-        $this->assertEquals($currencySymbolsDataBefore, $currencySymbolsDataAfter);
+        $this->assertSame($currencySymbolsDataBefore, $currencySymbolsDataAfter);
     }
 
     /**
@@ -71,13 +71,13 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $this->currencySymbolModel->setCurrencySymbolsData($currencySymbolsData);
 
         //Verify if the new symbol is set
-        $this->assertEquals(
+        $this->assertSame(
             '@',
             $this->currencySymbolModel->getCurrencySymbolsData()['EUR']['displaySymbol'],
             'Symbol not set correctly.'
         );
 
-        $this->assertEquals('@', $this->currencySymbolModel->getCurrencySymbol('EUR'), 'Symbol not set correctly.');
+        $this->assertSame('@', $this->currencySymbolModel->getCurrencySymbol('EUR'), 'Symbol not set correctly.');
     }
 
     public function testGetCurrencySymbolNonExistent()

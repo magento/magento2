@@ -29,7 +29,7 @@ class HeadingTest extends \PHPUnit\Framework\TestCase
 
         $html = $heading->render($elementMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr class="system-fieldset-sub-head" id="row_' . $htmlId . '">' .
             '<td colspan="5">' .
             '<h4 id="' . $htmlId . '">' . $label . '</h4>' .

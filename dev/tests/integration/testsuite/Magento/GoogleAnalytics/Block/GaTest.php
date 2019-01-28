@@ -59,7 +59,7 @@ class GaTest extends AbstractController
      */
     public function testBlockOutputIsEmptyWhenGaIsDisabled()
     {
-        $this->assertEquals(
+        $this->assertSame(
             "",
             $this->getGaBlockFromNode('head.additional')->toHtml()
         );
@@ -75,7 +75,7 @@ class GaTest extends AbstractController
      */
     public function testBlockOutputExistsWhenGaIsEnabled()
     {
-        $this->assertNotEquals(
+        $this->assertNotSame(
             "",
             $this->getGaBlockFromNode('head.additional')->toHtml()
         );

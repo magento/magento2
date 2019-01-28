@@ -39,10 +39,10 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             'tax_calculation_rate_id'
         );
 
-        $this->assertEquals($expectedData['zip_is_range'], $rate->getZipIsRange());
-        $this->assertEquals($expectedData['zip_from'], $rate->getZipFrom());
-        $this->assertEquals($expectedData['zip_to'], $rate->getZipTo());
-        $this->assertEquals($expectedData['tax_postcode'], $rate->getTaxPostcode());
+        $this->assertSame($expectedData['zip_is_range'], $rate->getZipIsRange());
+        $this->assertSame($expectedData['zip_from'], $rate->getZipFrom());
+        $this->assertSame($expectedData['zip_to'], $rate->getZipTo());
+        $this->assertSame($expectedData['tax_postcode'], $rate->getTaxPostcode());
     }
 
     /**
@@ -96,7 +96,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $jsonBody
         );
 
-        $this->assertEquals($expectedData['success'], $result['success']);
+        $this->assertSame($expectedData['success'], $result['success']);
         $this->assertArrayHasKey('error_message', $result);
         $this->assertGreaterThan(1, strlen($result['error_message']));
     }
@@ -219,14 +219,14 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ->create(\Magento\Tax\Model\Calculation\Rate::class)
             ->load($rateClassId, 'tax_calculation_rate_id');
 
-        $this->assertEquals($rateClassData['tax_country_id'], $class->getTaxCountryId());
-        $this->assertEquals($rateClassData['tax_region_id'], $class->getTaxRegionId());
-        $this->assertEquals($rateClassData['code'], $class->getCode());
-        $this->assertEquals($rateClassData['rate'], $class->getRate());
-        $this->assertEquals($rateClassData['zip_is_range']==1 ? 1 : 0, $class->getZipIsRange() ? 1 : 0);
+        $this->assertSame($rateClassData['tax_country_id'], $class->getTaxCountryId());
+        $this->assertSame($rateClassData['tax_region_id'], $class->getTaxRegionId());
+        $this->assertSame($rateClassData['code'], $class->getCode());
+        $this->assertSame($rateClassData['rate'], $class->getRate());
+        $this->assertSame($rateClassData['zip_is_range']==1 ? 1 : 0, $class->getZipIsRange() ? 1 : 0);
         if ($rateClassData['zip_is_range']=='1') {
-            $this->assertEquals($rateClassData['zip_from'], $class->getZipFrom());
-            $this->assertEquals($rateClassData['zip_to'], $class->getZipTo());
+            $this->assertSame($rateClassData['zip_from'], $class->getZipFrom());
+            $this->assertSame($rateClassData['zip_to'], $class->getZipTo());
         }
 
         $postData = [ 'id' => $rateClassId ];
@@ -245,17 +245,17 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertTrue($result['success'] == true);
         $this->assertArrayHasKey('result', $result);
         $this->assertTrue(is_array($result['result']));
-        $this->assertEquals($result['result']['tax_country_id'], $class->getTaxCountryId());
-        $this->assertEquals($result['result']['tax_region_id'], $class->getTaxRegionId());
-        $this->assertEquals($result['result']['tax_postcode'], $class->getTaxPostcode());
-        $this->assertEquals($result['result']['code'], $class->getCode());
-        $this->assertEquals($result['result']['rate'], $class->getRate());
+        $this->assertSame($result['result']['tax_country_id'], $class->getTaxCountryId());
+        $this->assertSame($result['result']['tax_region_id'], $class->getTaxRegionId());
+        $this->assertSame($result['result']['tax_postcode'], $class->getTaxPostcode());
+        $this->assertSame($result['result']['code'], $class->getCode());
+        $this->assertSame($result['result']['rate'], $class->getRate());
 
         $expectedZipIsRange=$result['result']['zip_is_range'] == 1  ? 1 : 0;
-        $this->assertEquals($expectedZipIsRange, $class->getZipIsRange() ? 1 : 0);
+        $this->assertSame($expectedZipIsRange, $class->getZipIsRange() ? 1 : 0);
         if ($expectedZipIsRange) {
-            $this->assertEquals($result['result']['zip_from'], $class->getZipFrom());
-            $this->assertEquals($result['result']['zip_to'], $class->getZipTo());
+            $this->assertSame($result['result']['zip_from'], $class->getZipFrom());
+            $this->assertSame($result['result']['zip_to'], $class->getZipTo());
         }
     }
 

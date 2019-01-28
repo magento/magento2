@@ -31,7 +31,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
         $model = new DateTime($localeMock);
         $localeMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
 
-        $this->assertEquals($expectedDate, $model->filter($inputData));
+        $this->assertSame($expectedDate, $model->filter($inputData));
     }
 
     /**

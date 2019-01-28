@@ -29,7 +29,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTagsWithObject()
     {
-        $this->assertEquals([], $this->model->getTags(new \stdClass));
+        $this->assertSame([], $this->model->getTags(new \stdClass));
     }
 
     public function testGetTagsWithIdentityInterface()
@@ -42,6 +42,6 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
             ->method('getIdentities')
             ->willReturn($identities);
 
-        $this->assertEquals($identities, $this->model->getTags($object));
+        $this->assertSame($identities, $this->model->getTags($object));
     }
 }

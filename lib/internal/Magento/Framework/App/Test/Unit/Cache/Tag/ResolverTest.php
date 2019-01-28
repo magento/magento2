@@ -54,6 +54,6 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             ->with($object)
             ->willReturn($strategyReturnValue);
 
-        $this->assertEquals($strategyReturnValue, $this->model->getTags($object));
+        $this->assertSame($strategyReturnValue, $this->model->getTags($object));
     }
 }

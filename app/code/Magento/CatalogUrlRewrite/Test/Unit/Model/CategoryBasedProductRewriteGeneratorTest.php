@@ -63,7 +63,7 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCa
             ->with([$categoryMock], $productMock, $categoryId)
             ->willReturn($urls);
 
-        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
+        $this->assertSame($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
     }
 
     public function testGenerationWithSpecificStore()
@@ -93,6 +93,6 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCa
             ->with($storeId, [$categoryMock], $productMock, $categoryId)
             ->willReturn($urls);
 
-        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
+        $this->assertSame($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
     }
 }

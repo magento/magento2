@@ -129,6 +129,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('sales/order/index')
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->controller->execute());
+        $this->assertSame($redirectMock, $this->controller->execute());
     }
 }

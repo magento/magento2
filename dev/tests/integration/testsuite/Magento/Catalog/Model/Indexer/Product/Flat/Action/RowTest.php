@@ -97,7 +97,7 @@ class RowTest extends IndexerTestCase
             'Product collection is not using flat resource when flat is on'
         );
 
-        self::assertEquals(
+        self::assertSame(
             2,
             $productCollection->count(),
             'Product collection items count must be exactly 2'
@@ -106,7 +106,7 @@ class RowTest extends IndexerTestCase
         foreach ($productCollection as $product) {
             /** @var $product \Magento\Catalog\Model\Product */
             if ($product->getSku() === 'simple') {
-                self::assertEquals(
+                self::assertSame(
                     'Updated Product',
                     $product->getName(),
                     'Product name from flat does not match with updated name'

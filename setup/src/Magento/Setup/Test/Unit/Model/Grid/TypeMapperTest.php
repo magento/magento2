@@ -33,7 +33,7 @@ class TypeMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testMap($packageType, $expected)
     {
-        static::assertEquals(
+        static::assertSame(
             $expected,
             $this->model->map($packageType)
         );

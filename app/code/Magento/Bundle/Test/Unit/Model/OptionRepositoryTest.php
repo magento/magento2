@@ -203,7 +203,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($newOptionMock);
 
-        $this->assertEquals($newOptionMock, $this->model->get($productSku, $optionId));
+        $this->assertSame($newOptionMock, $this->model->get($productSku, $optionId));
     }
 
     public function testDelete()
@@ -349,7 +349,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($productMock);
 
-        $this->assertEquals($optionId, $this->model->save($productMock, $optionMock));
+        $this->assertSame($optionId, $this->model->save($productMock, $optionMock));
     }
 
     public function testSaveNewOption()
@@ -381,7 +381,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('save')
             ->with($productMock);
-        $this->assertEquals($optionId, $this->model->save($productMock, $optionMock));
+        $this->assertSame($optionId, $this->model->save($productMock, $optionMock));
     }
 
     public function testGetList()
@@ -395,7 +395,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($productSku)
             ->willReturn($productMock);
         $this->optionListMock->expects($this->once())->method('getItems')->with($productMock)->willReturn(['object']);
-        $this->assertEquals(['object'], $this->model->getList($productSku));
+        $this->assertSame(['object'], $this->model->getList($productSku));
     }
 
     /**
@@ -412,6 +412,6 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($productSku)
             ->willReturn($productMock);
-        $this->assertEquals(['object'], $this->model->getList($productSku));
+        $this->assertSame(['object'], $this->model->getList($productSku));
     }
 }

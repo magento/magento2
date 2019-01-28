@@ -129,7 +129,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         setcookie('SomeCookie', 'cookie-value');
         restore_error_handler();
 
-        $this->assertEquals($expectedCanTest, \Magento\TestFramework\Helper\Bootstrap::canTestHeaders());
+        $this->assertSame($expectedCanTest, \Magento\TestFramework\Helper\Bootstrap::canTestHeaders());
 
         if ($expectedCanTest) {
             $actualHeaders = xdebug_get_headers();
@@ -141,7 +141,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     public function testGetAppTempDir()
     {
         $this->_application->expects($this->once())->method('getTempDir')->will($this->returnValue(__DIR__));
-        $this->assertEquals(__DIR__, $this->_object->getAppTempDir());
+        $this->assertSame(__DIR__, $this->_object->getAppTempDir());
     }
 
     public function testGetAppInitParams()
@@ -153,7 +153,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->_fixtureInitParams)
         );
-        $this->assertEquals($this->_fixtureInitParams, $this->_object->getAppInitParams());
+        $this->assertSame($this->_fixtureInitParams, $this->_object->getAppInitParams());
     }
 
     public function testReinitialize()

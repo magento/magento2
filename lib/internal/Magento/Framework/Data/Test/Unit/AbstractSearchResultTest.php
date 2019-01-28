@@ -88,7 +88,7 @@ class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
         $items = $this->searchResult->getItems();
 
         $this->assertCount(1, $items);
-        $this->assertEquals($testItem, end($items));
+        $this->assertSame($testItem, end($items));
     }
 
     public function testGetTotalCount()
@@ -99,12 +99,12 @@ class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn($totalCount);
 
-        $this->assertEquals($totalCount, $this->searchResult->getTotalCount());
+        $this->assertSame($totalCount, $this->searchResult->getTotalCount());
     }
 
     public function testGetSearchCriteria()
     {
-        $this->assertEquals($this->criteria, $this->searchResult->getSearchCriteria());
+        $this->assertSame($this->criteria, $this->searchResult->getSearchCriteria());
     }
 
     public function testGetSize()
@@ -113,6 +113,6 @@ class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
         $this->query->expects($this->once())
             ->method('getSize')
             ->willReturn($size);
-        $this->assertEquals($size, $this->searchResult->getSize());
+        $this->assertSame($size, $this->searchResult->getSize());
     }
 }

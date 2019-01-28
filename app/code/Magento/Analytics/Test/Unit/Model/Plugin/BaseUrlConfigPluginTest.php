@@ -78,7 +78,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('processUrlUpdate');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->configValueMock,
             $this->plugin->afterAfterSave($this->configValueMock, $this->configValueMock)
         );
@@ -136,7 +136,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
             ->method('processUrlUpdate')
             ->with('http://store.com');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->configValueMock,
             $this->plugin->afterAfterSave($this->configValueMock, $this->configValueMock)
         );

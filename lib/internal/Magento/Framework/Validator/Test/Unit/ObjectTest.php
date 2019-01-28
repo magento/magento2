@@ -88,7 +88,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedErrors as $errorIndex => $expectedErrorMessage) {
             /** @var $actualMessage \Magento\Framework\Message\AbstractMessage */
             $actualMessage = $actualMessages[$errorIndex];
-            $this->assertEquals($expectedErrorMessage, $actualMessage);
+            $this->assertSame($expectedErrorMessage, $actualMessage);
         }
     }
 

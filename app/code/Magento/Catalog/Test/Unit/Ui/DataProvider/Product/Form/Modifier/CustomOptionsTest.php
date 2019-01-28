@@ -163,7 +163,7 @@ class CustomOptionsTest extends AbstractModifierTest
         $expectedTargetName = '${ $.ns }.${ $.ns }.' . CustomOptions::GROUP_CUSTOM_OPTIONS_NAME
             . '.' . CustomOptions::GRID_OPTIONS_NAME;
 
-        $this->assertEquals($expectedTargetName, $buttonAddTargetName);
+        $this->assertSame($expectedTargetName, $buttonAddTargetName);
     }
 
     /**
@@ -183,7 +183,7 @@ class CustomOptionsTest extends AbstractModifierTest
         $scope = $config['dataScope'];
         $required = $config['validation']['required-entry'];
 
-        $this->assertEquals(CustomOptions::FIELD_FILE_EXTENSION_NAME, $scope);
+        $this->assertSame(CustomOptions::FIELD_FILE_EXTENSION_NAME, $scope);
         $this->assertTrue($required);
     }
 

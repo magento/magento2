@@ -346,8 +346,8 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($optionsCollection);
         $this->saleableItemMock->expects($this->any())->method('getTypeInstance')->willReturn($typeMock);
 
-        $this->assertEquals($expected['min'], $this->bundleOptions->calculateOptions($this->saleableItemMock));
-        $this->assertEquals($expected['max'], $this->bundleOptions->calculateOptions($this->saleableItemMock, false));
+        $this->assertSame($expected['min'], $this->bundleOptions->calculateOptions($this->saleableItemMock));
+        $this->assertSame($expected['max'], $this->bundleOptions->calculateOptions($this->saleableItemMock, false));
     }
 
     /**

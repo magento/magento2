@@ -35,8 +35,8 @@ class WorkingDirectoryTest extends \PHPUnit\Framework\TestCase
         }
         $this->_object->startTest($this);
         chdir($newWorkingDir);
-        $this->assertEquals($newWorkingDir, getcwd(), 'Unable to change the current working directory.');
+        $this->assertSame($newWorkingDir, getcwd(), 'Unable to change the current working directory.');
         $this->_object->endTest($this);
-        $this->assertEquals($oldWorkingDir, getcwd(), 'Current working directory was not restored.');
+        $this->assertSame($oldWorkingDir, getcwd(), 'Current working directory was not restored.');
     }
 }

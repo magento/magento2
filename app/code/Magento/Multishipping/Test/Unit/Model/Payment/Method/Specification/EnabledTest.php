@@ -55,7 +55,7 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
             ['paymentConfig' => $this->paymentConfigMock]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $configSpecification->isSatisfiedBy($method),
             sprintf('Failed payment method test: "%s"', $method)

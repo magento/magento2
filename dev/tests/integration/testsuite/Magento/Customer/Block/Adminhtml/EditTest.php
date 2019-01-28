@@ -70,7 +70,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerId()
     {
-        $this->assertEquals(self::$customerId, $this->block->getCustomerId());
+        $this->assertSame(self::$customerId, $this->block->getCustomerId());
     }
 
     /**
@@ -90,7 +90,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     public function testGetHeaderTextNewCustomer()
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $this->assertEquals('New Customer', $this->block->getHeaderText());
+        $this->assertSame('New Customer', $this->block->getHeaderText());
     }
 
     /**
@@ -98,7 +98,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetHeaderTextExistingCustomer()
     {
-        $this->assertEquals('John Smith', $this->block->getHeaderText());
+        $this->assertSame('John Smith', $this->block->getHeaderText());
     }
 
     /**

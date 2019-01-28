@@ -183,7 +183,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             ->method('getListUrl')
             ->willReturn('http://list.url');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'count' => $count,
                 'countCaption' =>  __('%1 items', $count),
@@ -228,7 +228,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             ->method('getListUrl')
             ->willReturn('http://list.url');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'count' => $count,
                 'countCaption' =>  __('%1 items', $count),
@@ -266,7 +266,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             ->method('getListUrl')
             ->willReturn('http://list.url');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'count' => 1,
                 'countCaption' =>  __('1 item'),

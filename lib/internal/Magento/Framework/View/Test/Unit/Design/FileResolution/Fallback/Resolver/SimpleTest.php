@@ -243,7 +243,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->willReturn('var/test/web/css');
 
-        $this->assertEquals(
+        $this->assertSame(
             'var/test/../file.ext',
             $this->object->resolve('type', '../file.ext', '', null, '', '')
         );

@@ -96,6 +96,6 @@ class CcConfigProviderTest extends \PHPUnit\Framework\TestCase
                 $ccAvailableTypesMock['ae']['url']
             );
 
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 }

@@ -79,7 +79,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ['foo' => 'bar']
         );
         $this->assertInstanceOf(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class, $result);
-        $this->assertEquals('bar', $result->getFoo());
+        $this->assertSame('bar', $result->getFoo());
     }
 
     public function testCreateWithInjectable()
@@ -99,8 +99,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
             $result->getOne()
         );
-        $this->assertEquals('bar', $result->getOne()->getFoo());
-        $this->assertEquals('optional', $result->getBaz());
+        $this->assertSame('bar', $result->getOne()->getFoo());
+        $this->assertSame('optional', $result->getBaz());
     }
 
     /**

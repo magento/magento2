@@ -203,8 +203,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expiresResult);
 
         $this->model->setPublicHeaders($ttl);
-        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
-        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $this->assertSame($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertSame($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
         $this->assertSame($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
@@ -239,9 +239,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expiresResult);
 
         $this->model->setPrivateHeaders($ttl);
-        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
-        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
-        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
+        $this->assertSame($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertSame($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $this->assertSame($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
@@ -274,9 +274,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expiresResult);
 
         $this->model->setNoCacheHeaders();
-        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
-        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
-        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
+        $this->assertSame($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertSame($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $this->assertSame($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
@@ -286,8 +286,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setHeader('Content-Type', 'text/javascript');
         $this->model->representJson('json_string');
-        $this->assertEquals('application/json', $this->model->getHeader('Content-Type')->getFieldValue());
-        $this->assertEquals('json_string', $this->model->getBody('default'));
+        $this->assertSame('application/json', $this->model->getHeader('Content-Type')->getFieldValue());
+        $this->assertSame('json_string', $this->model->getBody('default'));
     }
 
     /**

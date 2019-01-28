@@ -256,7 +256,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->with($itemMock)
             ->willReturn($itemRemoveParams);
 
-        $this->assertEquals($result, $this->model->getSectionData());
+        $this->assertSame($result, $this->model->getSectionData());
     }
 
     /**
@@ -458,7 +458,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->with($itemMock)
             ->willReturn($itemRemoveParams);
 
-        $this->assertEquals($result, $this->model->getSectionData());
+        $this->assertSame($result, $this->model->getSectionData());
     }
 
     public function testGetSectionDataWithoutItems()
@@ -502,6 +502,6 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $this->wishlistHelperMock->expects($this->never())
             ->method('getRemoveParams');
 
-        $this->assertEquals($result, $this->model->getSectionData());
+        $this->assertSame($result, $this->model->getSectionData());
     }
 }

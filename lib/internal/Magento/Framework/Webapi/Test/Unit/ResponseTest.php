@@ -56,7 +56,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $this->assertEquals($expectedMessage, $this->_response->getMessages(), 'Message is got incorrectly.');
+        $this->assertSame($expectedMessage, $this->_response->getMessages(), 'Message is got incorrectly.');
 
         /** Test message clearing functionality. */
         $this->_response->clearMessages();

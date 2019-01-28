@@ -70,6 +70,6 @@ class AbstractCommandTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_model->chain($command1);
-        $this->assertEquals($itemParams, $this->_model->execute($itemParams));
+        $this->assertSame($itemParams, $this->_model->execute($itemParams));
     }
 }

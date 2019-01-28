@@ -52,6 +52,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $result = $this->converter->convert($dom);
 
         $expectedData = include($fixtureDir . '/valid.php');
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 }

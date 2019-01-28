@@ -28,7 +28,7 @@ class DriverPoolTest extends \PHPUnit\Framework\TestCase
         $object = new DriverPool(['customOne' => $customOne, 'customTwo' => $customTwo]);
         $this->assertSame($customOne, $object->getDriver('customOne'));
         $this->assertInstanceOf(\Magento\Framework\Filesystem\DriverInterface::class, $object->getDriver('customOne'));
-        $this->assertEquals($customTwo, get_class($object->getDriver('customTwo')));
+        $this->assertSame($customTwo, get_class($object->getDriver('customTwo')));
         $this->assertInstanceOf(\Magento\Framework\Filesystem\DriverInterface::class, $object->getDriver('customTwo'));
     }
 

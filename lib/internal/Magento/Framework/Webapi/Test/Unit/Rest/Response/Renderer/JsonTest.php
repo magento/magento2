@@ -51,6 +51,6 @@ class JsonTest extends \PHPUnit\Framework\TestCase
     public function testGetMimeType()
     {
         $expectedMimeType = 'application/json';
-        $this->assertEquals($expectedMimeType, $this->_restJsonRenderer->getMimeType(), 'Unexpected mime type.');
+        $this->assertSame($expectedMimeType, $this->_restJsonRenderer->getMimeType(), 'Unexpected mime type.');
     }
 }

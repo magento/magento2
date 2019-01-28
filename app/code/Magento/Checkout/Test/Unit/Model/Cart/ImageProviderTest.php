@@ -55,6 +55,6 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
         $this->itemRepositoryMock->expects($this->once())->method('getList')->with($cartId)->willReturn([$itemMock]);
         $this->customerItem->expects($this->once())->method('getItemData')->with($itemMock)->willReturn($itemData);
 
-        $this->assertEquals($expectedResult, $this->model->getImages($cartId));
+        $this->assertSame($expectedResult, $this->model->getImages($cartId));
     }
 }

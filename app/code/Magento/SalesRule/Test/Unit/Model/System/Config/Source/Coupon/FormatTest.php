@@ -45,6 +45,6 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             ->method('getFormatsList')
             ->will($this->returnValue([$formatTitle]));
 
-        $this->assertEquals($expected, $this->model->toOptionArray());
+        $this->assertSame($expected, $this->model->toOptionArray());
     }
 }

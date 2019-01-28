@@ -50,7 +50,7 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
     public function testGetDefaultCurrencyReturnDefaultStoreDefaultCurrencyIfNoStoreIsSpecified()
     {
         $this->_configMock->expects($this->once())->method('getValue')->will($this->returnValue('storeCurrency'));
-        $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
+        $this->assertSame('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 
     public function testGetDefaultCurrencyReturnStoreDefaultCurrency()
@@ -75,7 +75,7 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($storeMock)
         );
-        $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
+        $this->assertSame('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 
     public function testGetDefaultCurrencyReturnWebsiteDefaultCurrency()
@@ -104,7 +104,7 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($websiteMock)
         );
-        $this->assertEquals('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
+        $this->assertSame('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 
     public function testGetDefaultCurrencyReturnGroupDefaultCurrency()
@@ -139,6 +139,6 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($groupMock)
         );
-        $this->assertEquals('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
+        $this->assertSame('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 }

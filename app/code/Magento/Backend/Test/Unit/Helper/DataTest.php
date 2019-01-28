@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('custom_backend')
         );
 
-        $this->assertEquals('custom_backend', $this->_helper->getAreaFrontName());
+        $this->assertSame('custom_backend', $this->_helper->getAreaFrontName());
     }
 
     /**
@@ -57,7 +57,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->_helper->prepareFilterString($inputString);
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

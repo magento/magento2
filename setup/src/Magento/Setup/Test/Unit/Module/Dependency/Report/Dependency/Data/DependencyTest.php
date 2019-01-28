@@ -31,7 +31,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         $dependency = $this->createDependency($module);
 
-        $this->assertEquals($module, $dependency->getModule());
+        $this->assertSame($module, $dependency->getModule());
     }
 
     public function testGetType()
@@ -40,20 +40,20 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         $dependency = $this->createDependency('module', $type);
 
-        $this->assertEquals($type, $dependency->getType());
+        $this->assertSame($type, $dependency->getType());
     }
 
     public function testThatHardTypeIsDefault()
     {
         $dependency = $this->createDependency('module');
 
-        $this->assertEquals(Dependency::TYPE_HARD, $dependency->getType());
+        $this->assertSame(Dependency::TYPE_HARD, $dependency->getType());
     }
 
     public function testThatHardTypeIsDefaultIfPassedWrongType()
     {
         $dependency = $this->createDependency('module', 'wrong_type');
 
-        $this->assertEquals(Dependency::TYPE_HARD, $dependency->getType());
+        $this->assertSame(Dependency::TYPE_HARD, $dependency->getType());
     }
 }

@@ -48,7 +48,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
             ['value' => 1, 'label' => 'code1'],
             ['value' => 2, 'label' => 'code2'],
         ];
-        $this->assertEquals($result, $this->model->toOptionArray($items, 'id', $callable));
+        $this->assertSame($result, $this->model->toOptionArray($items, 'id', $callable));
     }
 
     public function testToOptionHash()
@@ -80,7 +80,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
             4 => 'code4',
         ];
 
-        $this->assertEquals($result, $this->model->toOptionHash($items, $callable, 'some'));
+        $this->assertSame($result, $this->model->toOptionHash($items, $callable, 'some'));
     }
 
     public function testConvertDataToArray()
@@ -124,6 +124,6 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
             ],
             'test' => 'test',
         ];
-        $this->assertEquals($result, $this->model->convertDataToArray($data));
+        $this->assertSame($result, $this->model->convertDataToArray($data));
     }
 }

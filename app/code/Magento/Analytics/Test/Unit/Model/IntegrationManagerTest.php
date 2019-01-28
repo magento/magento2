@@ -171,7 +171,7 @@ class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
             ->method('createAccessToken')
             ->with(100500, true)
             ->willReturn(true);
-        $this->assertEquals('IntegrationToken', $this->integrationManager->generateToken());
+        $this->assertSame('IntegrationToken', $this->integrationManager->generateToken());
     }
 
     /**
@@ -209,7 +209,7 @@ class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn('IntegrationToken');
         $this->oauthServiceMock->expects($this->never())
             ->method('createAccessToken');
-        $this->assertEquals('IntegrationToken', $this->integrationManager->generateToken());
+        $this->assertSame('IntegrationToken', $this->integrationManager->generateToken());
     }
 
     /**

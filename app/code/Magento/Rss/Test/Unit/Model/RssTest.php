@@ -119,7 +119,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ->with($this->feedData)
             ->willReturn('serializedData');
 
-        $this->assertEquals($this->feedData, $this->rss->getFeeds());
+        $this->assertSame($this->feedData, $this->rss->getFeeds());
     }
 
     public function testGetFeedsWithCache()
@@ -141,7 +141,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->feedData);
         $this->cacheMock->expects($this->never())->method('save');
 
-        $this->assertEquals($this->feedData, $this->rss->getFeeds());
+        $this->assertSame($this->feedData, $this->rss->getFeeds());
     }
 
     public function testCreateRssXml()

@@ -88,7 +88,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         $this->massAction->addComponent('action', $action);
         $this->massAction->prepare();
         $expected = $expectActionConfig ? ['actions' => [$action->getConfiguration()]] : [];
-        $this->assertEquals($expected, $this->massAction->getConfiguration());
+        $this->assertSame($expected, $this->massAction->getConfiguration());
     }
 
     /**
@@ -219,7 +219,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
             ->with($resource)
             ->willReturn($isAllowed);
 
-        $this->assertEquals($expected, $this->massAction->isActionAllowed($actionType));
+        $this->assertSame($expected, $this->massAction->isActionAllowed($actionType));
     }
 
     /**

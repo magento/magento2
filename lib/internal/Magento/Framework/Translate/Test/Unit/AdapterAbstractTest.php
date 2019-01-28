@@ -42,6 +42,6 @@ class AdapterAbstractTest extends \PHPUnit\Framework\TestCase
      */
     public function testToString()
     {
-        $this->assertEquals(\Magento\Framework\Translate\Adapter::class, $this->_model->toString());
+        $this->assertSame(\Magento\Framework\Translate\Adapter::class, $this->_model->toString());
     }
 }

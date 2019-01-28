@@ -78,7 +78,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(['attributes'])
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['attributes', 'options'],
             $this->plugin->aroundGetOptions($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -88,7 +88,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     {
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('simple'));
         $this->productMock->expects($this->never())->method('getTypeInstance');
-        $this->assertEquals(
+        $this->assertSame(
             ['options'],
             $this->plugin->aroundGetOptions($this->subjectMock, $this->closureMock, $this->itemMock)
         );

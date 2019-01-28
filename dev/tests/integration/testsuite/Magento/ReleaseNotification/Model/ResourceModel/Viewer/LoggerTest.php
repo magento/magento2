@@ -40,16 +40,16 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $this->logger->log($adminUserId, $firstLogVersion);
         $firstLog = $this->logger->get($adminUserId);
         $this->assertInstanceOf(Log::class, $firstLog);
-        $this->assertEquals($firstLogVersion, $firstLog->getLastViewVersion());
-        $this->assertEquals($adminUserId, $firstLog->getViewerId());
+        $this->assertSame($firstLogVersion, $firstLog->getLastViewVersion());
+        $this->assertSame($adminUserId, $firstLog->getViewerId());
 
         $secondLogVersion = '2.3.0';
         $this->logger->log($adminUserId, $secondLogVersion);
         $secondLog = $this->logger->get($adminUserId);
         $this->assertInstanceOf(Log::class, $secondLog);
-        $this->assertEquals($secondLogVersion, $secondLog->getLastViewVersion());
-        $this->assertEquals($adminUserId, $secondLog->getViewerId());
-        $this->assertEquals($firstLog->getId(), $secondLog->getId());
+        $this->assertSame($secondLogVersion, $secondLog->getLastViewVersion());
+        $this->assertSame($adminUserId, $secondLog->getViewerId());
+        $this->assertSame($firstLog->getId(), $secondLog->getId());
     }
 
     /**

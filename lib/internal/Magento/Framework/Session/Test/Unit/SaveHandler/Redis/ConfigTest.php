@@ -54,7 +54,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_LOG_LEVEL)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getLogLevel(), $expected);
+        $this->assertSame($this->config->getLogLevel(), $expected);
     }
 
     public function testGetHost()
@@ -64,7 +64,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_HOST)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getHost(), $expected);
+        $this->assertSame($this->config->getHost(), $expected);
     }
 
     public function testGetPort()
@@ -74,7 +74,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_PORT)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getPort(), $expected);
+        $this->assertSame($this->config->getPort(), $expected);
     }
 
     public function testGetDatabase()
@@ -84,7 +84,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_DATABASE)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getDatabase(), $expected);
+        $this->assertSame($this->config->getDatabase(), $expected);
     }
 
     public function testGetPassword()
@@ -94,7 +94,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_PASSWORD)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getPassword(), $expected);
+        $this->assertSame($this->config->getPassword(), $expected);
     }
 
     public function testGetTimeout()
@@ -104,7 +104,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_TIMEOUT)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getTimeout(), $expected);
+        $this->assertSame($this->config->getTimeout(), $expected);
     }
 
     public function testGetPersistentIdentifier()
@@ -114,7 +114,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_PERSISTENT_IDENTIFIER)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getPersistentIdentifier(), $expected);
+        $this->assertSame($this->config->getPersistentIdentifier(), $expected);
     }
 
     public function testGetCompressionThreshold()
@@ -124,7 +124,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_COMPRESSION_THRESHOLD)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getCompressionThreshold(), $expected);
+        $this->assertSame($this->config->getCompressionThreshold(), $expected);
     }
 
     public function testGetCompressionLibrary()
@@ -134,7 +134,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_COMPRESSION_LIBRARY)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getCompressionLibrary(), $expected);
+        $this->assertSame($this->config->getCompressionLibrary(), $expected);
     }
 
     public function testGetMaxConcurrency()
@@ -144,12 +144,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_MAX_CONCURRENCY)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getMaxConcurrency(), $expected);
+        $this->assertSame($this->config->getMaxConcurrency(), $expected);
     }
 
     public function testGetMaxLifetime()
     {
-        $this->assertEquals($this->config->getMaxLifetime(), Config::SESSION_MAX_LIFETIME);
+        $this->assertSame($this->config->getMaxLifetime(), Config::SESSION_MAX_LIFETIME);
     }
 
     public function testGetMinLifetime()
@@ -159,7 +159,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_MIN_LIFETIME)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getMinLifetime(), $expected);
+        $this->assertSame($this->config->getMinLifetime(), $expected);
     }
 
     public function testGetDisableLocking()
@@ -169,7 +169,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_DISABLE_LOCKING)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getDisableLocking(), $expected);
+        $this->assertSame($this->config->getDisableLocking(), $expected);
     }
 
     public function testGetBotLifetime()
@@ -179,7 +179,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_BOT_LIFETIME)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getBotLifetime(), $expected);
+        $this->assertSame($this->config->getBotLifetime(), $expected);
     }
 
     public function testGetBotFirstLifetime()
@@ -189,7 +189,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_BOT_FIRST_LIFETIME)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getBotFirstLifetime(), $expected);
+        $this->assertSame($this->config->getBotFirstLifetime(), $expected);
     }
 
     public function testGetFirstLifetime()
@@ -199,7 +199,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_FIRST_LIFETIME)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getFirstLifetime(), $expected);
+        $this->assertSame($this->config->getFirstLifetime(), $expected);
     }
 
     public function testBreakAfter()
@@ -213,7 +213,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
-        $this->assertEquals($this->config->getBreakAfter(), $breakAfter);
+        $this->assertSame($this->config->getBreakAfter(), $breakAfter);
     }
 
     public function testGetLifetimeAdmin()
@@ -227,7 +227,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Config::XML_PATH_ADMIN_SESSION_LIFETIME)
             ->willReturn($expectedLifetime);
-        $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
+        $this->assertSame($this->config->getLifetime(), $expectedLifetime);
     }
 
     public function testGetLifetimeFrontend()
@@ -244,7 +244,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ScopeInterface::SCOPE_STORE
             )
             ->willReturn($expectedLifetime);
-        $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
+        $this->assertSame($this->config->getLifetime(), $expectedLifetime);
     }
 
     public function testGetSentinelServers()
@@ -254,7 +254,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_SENTINEL_SERVERS)
             ->willReturn($expected);
-        $this->assertEquals($expected, $this->config->getSentinelServers());
+        $this->assertSame($expected, $this->config->getSentinelServers());
     }
 
     public function testGetSentinelMaster()
@@ -264,7 +264,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_SENTINEL_MASTER)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getSentinelMaster(), $expected);
+        $this->assertSame($this->config->getSentinelMaster(), $expected);
     }
 
     public function testGetSentinelVerifyMaster()
@@ -274,7 +274,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Config::PARAM_SENTINEL_VERIFY_MASTER)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getSentinelVerifyMaster(), $expected);
+        $this->assertSame($this->config->getSentinelVerifyMaster(), $expected);
     }
 
     public function testGetSentinelConnectRetries()
@@ -284,11 +284,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn(Config::PARAM_SENTINEL_CONNECT_RETRIES)
             ->willReturn($expected);
-        $this->assertEquals($this->config->getSentinelConnectRetries(), $expected);
+        $this->assertSame($this->config->getSentinelConnectRetries(), $expected);
     }
 
     public function testGetFailAfter()
     {
-        $this->assertEquals($this->config->getFailAfter(), Config::DEFAULT_FAIL_AFTER);
+        $this->assertSame($this->config->getFailAfter(), Config::DEFAULT_FAIL_AFTER);
     }
 }

@@ -53,8 +53,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     public function testPrepareForm()
     {
         $form = $this->_block->getForm();
-        $this->assertEquals('store_fieldset', $form->getElement('store_fieldset')->getId());
-        $this->assertEquals('store_name', $form->getElement('store_name')->getId());
-        $this->assertEquals('store', $form->getElement('store_type')->getValue());
+        $this->assertSame('store_fieldset', $form->getElement('store_fieldset')->getId());
+        $this->assertSame('store_name', $form->getElement('store_name')->getId());
+        $this->assertSame('store', $form->getElement('store_type')->getValue());
     }
 }

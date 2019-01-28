@@ -22,6 +22,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedConfig = [
             'test' => 'test', \Magento\Framework\Filter\Factory::class, \Magento\Framework\Filter\ZendFactory::class,
         ];
-        $this->assertEquals($expectedConfig, $this->_config->getFactories());
+        $this->assertSame($expectedConfig, $this->_config->getFactories());
     }
 }

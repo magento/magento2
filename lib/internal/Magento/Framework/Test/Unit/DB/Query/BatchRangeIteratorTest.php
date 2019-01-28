@@ -96,8 +96,8 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize, $this->currentBatch);
         $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
-        $this->assertEquals($this->selectMock, $this->model->current());
-        $this->assertEquals(0, $this->model->key());
+        $this->assertSame($this->selectMock, $this->model->current());
+        $this->assertSame(0, $this->model->key());
     }
 
     /**
@@ -112,10 +112,10 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['cnt' => 105]);
 
         foreach ($this->model as $key) {
-            $this->assertEquals($this->selectMock, $key);
+            $this->assertSame($this->selectMock, $key);
             $iterations++;
         }
 
-        $this->assertEquals(11, $iterations);
+        $this->assertSame(11, $iterations);
     }
 }

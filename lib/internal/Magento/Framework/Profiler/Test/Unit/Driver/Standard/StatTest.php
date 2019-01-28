@@ -40,7 +40,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
         foreach ($expected as $timerId => $expectedTimer) {
             $actualTimer = $this->_stat->get($timerId);
             $this->assertInternalType('array', $actualTimer, "Timer '{$timerId}' must be an array");
-            $this->assertEquals($expectedTimer, $actualTimer, "Timer '{$timerId}' has unexpected value");
+            $this->assertSame($expectedTimer, $actualTimer, "Timer '{$timerId}' has unexpected value");
         }
     }
 
@@ -188,7 +188,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
             $this->_executeTimerAction($action, $timerId);
         }
 
-        $this->assertEquals($expectedTimerIds, $this->_stat->getFilteredTimerIds());
+        $this->assertSame($expectedTimerIds, $this->_stat->getFilteredTimerIds());
     }
 
     /**
@@ -262,7 +262,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
             $this->_executeTimerAction($action, $timerId, $time, $realMemory, $emallocMemory);
         }
 
-        $this->assertEquals($expectedTimerIds, $this->_stat->getFilteredTimerIds($thresholds, $filterPattern));
+        $this->assertSame($expectedTimerIds, $this->_stat->getFilteredTimerIds($thresholds, $filterPattern));
     }
 
     /**
@@ -321,7 +321,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
             if (!is_scalar($expectedValue)) {
                 $expectedValue->evaluate($this->_stat->fetch($timerId, $key));
             } else {
-                $this->assertEquals($expectedValue, $this->_stat->fetch($timerId, $key));
+                $this->assertSame($expectedValue, $this->_stat->fetch($timerId, $key));
             }
         }
     }

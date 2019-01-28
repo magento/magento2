@@ -69,6 +69,6 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
             ->method('checkSalesRulesAvailability')
             ->willReturn('true');
 
-        $this->assertEquals($this->model, $this->model->execute($observer));
+        $this->assertSame($this->model, $this->model->execute($observer));
     }
 }

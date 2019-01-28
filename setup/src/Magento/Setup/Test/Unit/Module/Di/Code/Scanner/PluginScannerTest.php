@@ -27,6 +27,6 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
     {
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = [\Magento\Framework\App\Cache\TagPlugin::class, \Magento\Store\Model\Action\Plugin::class];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

@@ -217,7 +217,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->range->expects($this->once())
             ->method('getPriceRange')
             ->willReturn([]);
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->model->getRange()
         );
@@ -251,7 +251,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getQuery')
             ->willReturn([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->getAggregations($this->entityStorage)
         );
@@ -286,7 +286,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($interval);
 
-        $this->assertEquals(
+        $this->assertSame(
             $interval,
             $this->model->getInterval(
                 $bucket,
@@ -348,7 +348,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getQuery')
             ->willReturn([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->getAggregation(
                 $bucket,
@@ -376,7 +376,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'count' => 1,
             ],
         ];
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->prepareData(
                 10,

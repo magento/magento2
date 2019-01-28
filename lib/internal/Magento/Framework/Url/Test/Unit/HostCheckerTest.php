@@ -47,7 +47,7 @@ class HostCheckerTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeResolver->expects($this->atLeastOnce())->method('getScopes')->willReturn($scopes);
 
-        $this->assertEquals($result, $this->object->isOwnOrigin($url));
+        $this->assertSame($result, $this->object->isOwnOrigin($url));
     }
 
     /**

@@ -110,6 +110,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($dateBlock)
         );
-        $this->assertEquals('html', $this->_optionsBlock->getOptionHtml($option));
+        $this->assertSame('html', $this->_optionsBlock->getOptionHtml($option));
     }
 }

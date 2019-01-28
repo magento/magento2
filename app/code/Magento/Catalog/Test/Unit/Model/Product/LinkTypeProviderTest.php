@@ -88,7 +88,7 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
         $this->linkTypeFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->will($this->onConsecutiveCalls($linkTypeMocks[0], $linkTypeMocks[1], $linkTypeMocks[2]));
-        $this->assertEquals($expectedResult, $this->model->getItems());
+        $this->assertSame($expectedResult, $this->model->getItems());
     }
 
     /**
@@ -115,7 +115,7 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
         $linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
         $this->linkFactoryMock->expects($this->once())->method('create')->with($typeId)->willReturn($linkMock);
         $this->linkAttributeFactoryMock->expects($this->once())->method('create')->willReturn($linkAttributeMock);
-        $this->assertEquals($expectedResult, $this->model->getItemAttributes($type));
+        $this->assertSame($expectedResult, $this->model->getItemAttributes($type));
     }
 
     /**

@@ -41,8 +41,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $methods = $this->estimateShipping($cartId);
 
         $this->assertTrue(count($methods) > 0);
-        $this->assertEquals('flatrate', $methods[0]->getMethodCode());
-        $this->assertEquals(0, $methods[0]->getAmount());
+        $this->assertSame('flatrate', $methods[0]->getMethodCode());
+        $this->assertSame(0, $methods[0]->getAmount());
     }
 
     /**
@@ -56,8 +56,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $methods = $this->estimateShipping($cartId);
 
         $this->assertTrue(count($methods) > 0);
-        $this->assertEquals('flatrate', $methods[0]->getMethodCode());
-        $this->assertEquals(25, $methods[0]->getAmount());
+        $this->assertSame('flatrate', $methods[0]->getMethodCode());
+        $this->assertSame(25, $methods[0]->getAmount());
     }
 
     /**

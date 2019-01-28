@@ -87,7 +87,7 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertEquals($resultData, $this->downloadablePanel->modifyData([]));
+        $this->assertSame($resultData, $this->downloadablePanel->modifyData([]));
     }
 
     /**
@@ -115,6 +115,6 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
             ->method('set')
             ->willReturn([]);
 
-        $this->assertEquals([], $this->downloadablePanel->modifyMeta([]));
+        $this->assertSame([], $this->downloadablePanel->modifyMeta([]));
     }
 }

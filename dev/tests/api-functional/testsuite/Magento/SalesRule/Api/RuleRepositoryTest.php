@@ -97,16 +97,16 @@ class RuleRepositoryTest extends WebapiAbstract
         $result = $this->createRule($inputData);
         $ruleId = $result['rule_id'];
         $this->assertArrayHasKey('rule_id', $result);
-        $this->assertEquals($ruleId, $result['rule_id']);
+        $this->assertSame($ruleId, $result['rule_id']);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
-        $this->assertEquals($inputData, $result);
+        $this->assertSame($inputData, $result);
 
         //test getList
         $result = $this->verifyGetList($ruleId);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
-        $this->assertEquals($inputData, $result);
+        $this->assertSame($inputData, $result);
 
         //test update
         $inputData['times_used'] = 2;
@@ -115,16 +115,16 @@ class RuleRepositoryTest extends WebapiAbstract
         $result = $this->updateRule($ruleId, $inputData);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
-        $this->assertEquals($inputData, $result);
+        $this->assertSame($inputData, $result);
 
         //test get
         $result = $this->getRule($ruleId);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
-        $this->assertEquals($inputData, $result);
+        $this->assertSame($inputData, $result);
 
         //test delete
-        $this->assertEquals(true, $this->deleteRule($ruleId));
+        $this->assertSame(true, $this->deleteRule($ruleId));
     }
 
     public function verifyGetList($ruleId)
@@ -165,12 +165,12 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['rule_id']);
-        $this->assertEquals($ruleId, $response['items'][0]['rule_id']);
+        $this->assertSame($ruleId, $response['items'][0]['rule_id']);
 
         return $response['items'][0];
     }
@@ -232,9 +232,9 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('items', $result);
         $this->assertArrayHasKey('search_criteria', $result);
         $this->assertCount(2, $result['items']);
-        $this->assertEquals('#1', $result['items'][0]['name']);
-        $this->assertEquals('#2', $result['items'][1]['name']);
-        $this->assertEquals($searchData, $result['search_criteria']);
+        $this->assertSame('#1', $result['items'][0]['name']);
+        $this->assertSame('#2', $result['items'][1]['name']);
+        $this->assertSame($searchData, $result['search_criteria']);
     }
 
     /**

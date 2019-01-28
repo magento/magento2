@@ -53,7 +53,7 @@ class ShareTest extends \PHPUnit\Framework\TestCase
         $this->resultFactoryMock->expects($this->once())->method('create')->with(ResultFactory::TYPE_PAGE)
             ->willReturn($resultMock);
 
-        $this->assertEquals($resultMock, $this->model->execute());
+        $this->assertSame($resultMock, $this->model->execute());
     }
 
     public function testExecuteAuthenticationFail()

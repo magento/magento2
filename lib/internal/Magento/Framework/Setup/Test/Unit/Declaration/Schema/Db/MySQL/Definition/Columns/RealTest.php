@@ -118,7 +118,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` float UNSIGNED NOT NULL DEFAULT 0 COMMENT "Comment"',
             $this->real->toDefinition($column)
         );
@@ -168,7 +168,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` float(10, 4) UNSIGNED NOT NULL DEFAULT 0 COMMENT "Comment"',
             $this->real->toDefinition($column)
         );
@@ -218,7 +218,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` float(10, 4) UNSIGNED NOT NULL  COMMENT "Comment"',
             $this->real->toDefinition($column)
         );
@@ -243,7 +243,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
         $this->unsignedMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
         $this->nullableMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
         $result = $this->real->fromDefinition(['definition' => $definition]);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     /**

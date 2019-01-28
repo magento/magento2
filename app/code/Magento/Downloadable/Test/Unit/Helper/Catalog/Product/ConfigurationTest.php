@@ -64,7 +64,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
 
-        $this->assertEquals('links_title', $this->helper->getLinksTitle($product));
+        $this->assertSame('links_title', $this->helper->getLinksTitle($product));
     }
 
     public function testGetLinksTitleWithoutTitle()
@@ -80,7 +80,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->willReturn('scope_config_value');
 
-        $this->assertEquals('scope_config_value', $this->helper->getLinksTitle($product));
+        $this->assertSame('scope_config_value', $this->helper->getLinksTitle($product));
     }
 
     public function testGetOptions()
@@ -109,6 +109,6 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
         $productLink->expects($this->once())->method('getTitle')->willReturn('title');
 
-        $this->assertEquals([['label' => 'links_title', 'value' => ['title']]], $this->helper->getOptions($item));
+        $this->assertSame([['label' => 'links_title', 'value' => ['title']]], $this->helper->getOptions($item));
     }
 }

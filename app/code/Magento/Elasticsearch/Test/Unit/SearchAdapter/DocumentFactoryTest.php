@@ -81,7 +81,7 @@ class DocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->create($documents);
         $this->assertInstanceOf($this->instanceName, $result);
-        $this->assertEquals($documents['_id'], $result->getId());
-        $this->assertEquals($documents['_score'], $result->getCustomAttribute('score')->getValue());
+        $this->assertSame($documents['_id'], $result->getId());
+        $this->assertSame($documents['_score'], $result->getCustomAttribute('score')->getValue());
     }
 }

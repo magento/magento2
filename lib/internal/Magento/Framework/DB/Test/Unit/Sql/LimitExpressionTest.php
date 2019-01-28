@@ -38,6 +38,6 @@ class LimitExpressionTest extends \PHPUnit\Framework\TestCase
         $count = 1;
         $offset = 1;
         $model = new \Magento\Framework\DB\Sql\LimitExpression($sql, $count, $offset);
-        $this->assertEquals('select * from test_table LIMIT 1 OFFSET 1', $model->__toString());
+        $this->assertSame('select * from test_table LIMIT 1 OFFSET 1', $model->__toString());
     }
 }

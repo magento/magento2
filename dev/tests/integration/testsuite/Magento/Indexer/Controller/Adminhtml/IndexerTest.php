@@ -20,7 +20,7 @@ class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/indexer/indexer/list/');
         $body = $this->getResponse()->getBody();
         $this->assertContains('<h1 class="page-title">Index Management</h1>', $body);
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="gridIndexer_massaction-select"]',

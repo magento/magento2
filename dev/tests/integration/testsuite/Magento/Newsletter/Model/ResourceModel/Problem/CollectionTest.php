@@ -39,12 +39,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $item = $this->_collection->addSubscriberInfo()->load()->getFirstItem();
 
-        $this->assertEquals($problem->getProblemErrorCode(), $item->getErrorCode());
-        $this->assertEquals($problem->getProblemErrorText(), $item->getErrorText());
-        $this->assertEquals($problem->getSubscriberId(), $item->getSubscriberId());
-        $this->assertEquals($customer->getEmail(), $item->getSubscriberEmail());
-        $this->assertEquals($customer->getFirstname(), $item->getCustomerFirstName());
-        $this->assertEquals($customer->getLastname(), $item->getCustomerLastName());
+        $this->assertSame($problem->getProblemErrorCode(), $item->getErrorCode());
+        $this->assertSame($problem->getProblemErrorText(), $item->getErrorText());
+        $this->assertSame($problem->getSubscriberId(), $item->getSubscriberId());
+        $this->assertSame($customer->getEmail(), $item->getSubscriberEmail());
+        $this->assertSame($customer->getFirstname(), $item->getCustomerFirstName());
+        $this->assertSame($customer->getLastname(), $item->getCustomerLastName());
         $this->assertContains($customer->getFirstname(), $item->getCustomerName());
     }
 }

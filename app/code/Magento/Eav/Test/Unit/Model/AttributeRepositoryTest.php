@@ -216,7 +216,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($searchResultsMock);
 
-        $this->assertEquals($searchResultsMock, $this->model->getList($entityTypeCode, $searchCriteriaMock));
+        $this->assertSame($searchResultsMock, $this->model->getList($entityTypeCode, $searchCriteriaMock));
     }
 
     /**

@@ -74,6 +74,6 @@ class BundleSkuTest extends AbstractModifierTest
     public function testModifyData()
     {
         $expectedData = [];
-        $this->assertEquals($expectedData, $this->getModel()->modifyData($expectedData));
+        $this->assertSame($expectedData, $this->getModel()->modifyData($expectedData));
     }
 }

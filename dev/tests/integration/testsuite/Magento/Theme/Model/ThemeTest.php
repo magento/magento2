@@ -86,7 +86,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         foreach ($theme->getInheritedThemes() as $someTheme) {
             $expected[] = $someTheme->getFullPath();
         }
-        $this->assertEquals(
+        $this->assertSame(
             ['frontend/Vendor_FrameworkThemeTest/default', 'frontend/Vendor_FrameworkThemeTest/custom_theme'],
             $expected
         );

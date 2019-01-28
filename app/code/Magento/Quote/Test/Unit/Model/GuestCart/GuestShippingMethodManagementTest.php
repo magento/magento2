@@ -91,7 +91,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->with($this->cartId, $carrierCode, $methodCode)
             ->will($this->returnValue($retValue));
 
-        $this->assertEquals($retValue, $this->model->set($this->maskedCartId, $carrierCode, $methodCode));
+        $this->assertSame($retValue, $this->model->set($this->maskedCartId, $carrierCode, $methodCode));
     }
 
     public function testGetList()
@@ -102,7 +102,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->with($this->cartId)
             ->will($this->returnValue($retValue));
 
-        $this->assertEquals($retValue, $this->model->getList($this->maskedCartId));
+        $this->assertSame($retValue, $this->model->getList($this->maskedCartId));
     }
 
     public function testGet()
@@ -113,7 +113,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->with($this->cartId)
             ->will($this->returnValue($retValue));
 
-        $this->assertEquals($retValue, $this->model->get($this->maskedCartId));
+        $this->assertSame($retValue, $this->model->get($this->maskedCartId));
     }
 
     /**
@@ -132,6 +132,6 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectedRates);
 
         $carriersRates = $this->model->estimateByExtendedAddress($this->maskedCartId, $address);
-        static::assertEquals($expectedRates, $carriersRates);
+        static::assertSame($expectedRates, $carriersRates);
     }
 }

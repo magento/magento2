@@ -39,7 +39,7 @@ class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
         $mapping = $this->converter->convert($dom);
         $expectedArray = include $this->filePath . 'expected_array.php';
 
-        $this->assertEquals($expectedArray, $mapping);
+        $this->assertSame($expectedArray, $mapping);
     }
 
     /**

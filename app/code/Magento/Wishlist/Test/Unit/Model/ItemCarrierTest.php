@@ -253,7 +253,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('calculate')
             ->willReturnSelf();
 
-        $this->assertEquals($redirectUrl, $this->model->moveAllToCart($wishlistMock, $qtys));
+        $this->assertSame($redirectUrl, $this->model->moveAllToCart($wishlistMock, $qtys));
     }
 
     /**
@@ -449,7 +449,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('calculate')
             ->willReturnSelf();
 
-        $this->assertEquals($indexUrl, $this->model->moveAllToCart($wishlistMock, $qtys));
+        $this->assertSame($indexUrl, $this->model->moveAllToCart($wishlistMock, $qtys));
     }
 
     /**
@@ -640,6 +640,6 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('calculate')
             ->willReturnSelf();
 
-        $this->assertEquals($indexUrl, $this->model->moveAllToCart($wishlistMock, $qtys));
+        $this->assertSame($indexUrl, $this->model->moveAllToCart($wishlistMock, $qtys));
     }
 }

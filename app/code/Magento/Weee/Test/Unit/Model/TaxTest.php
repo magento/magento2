@@ -255,10 +255,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey(0, $result);
         $obj = $result[0];
-        $this->assertEquals(1, $obj->getAmount());
-        $this->assertEquals(0.25, $obj->getTaxAmount());
-        $this->assertEquals($weeeTaxCalculationsByEntity['attribute_code'], $obj->getCode());
-        $this->assertEquals(__($expectedFptLabel), $obj->getName());
+        $this->assertSame(1, $obj->getAmount());
+        $this->assertSame(0.25, $obj->getTaxAmount());
+        $this->assertSame($weeeTaxCalculationsByEntity['attribute_code'], $obj->getCode());
+        $this->assertSame(__($expectedFptLabel), $obj->getName());
     }
 
     /**
@@ -288,7 +288,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $tax->expects($this->once())->method('getProductWeeeAttributes')
             ->willReturn([$weeeDataHelper, $weeeDataHelper]);
-        $this->assertEquals(40, $tax->getWeeeAmountExclTax($product));
+        $this->assertSame(40, $tax->getWeeeAmountExclTax($product));
     }
 
     /**
@@ -310,7 +310,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getProductWeeeAttributes'])
             ->getMock();
         $tax->expects($this->once())->method('getProductWeeeAttributes')->willReturn([$weeeDataHelper]);
-        $this->assertEquals(0, $tax->getWeeeAmountExclTax($product));
+        $this->assertSame(0, $tax->getWeeeAmountExclTax($product));
     }
 
     /**

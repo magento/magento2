@@ -74,7 +74,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->templateMock->expects($this->once())
             ->method('getVariablesOptionArray')
             ->willReturn(['template var 1', 'template var 2']);
-        $this->assertEquals(
+        $this->assertSame(
             ['var1', 'var2', 'var3', 'custom var 1', 'custom var 2', 'template var 1', 'template var 2'],
             $this->form->getVariables()
         );
@@ -86,6 +86,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testGetEmailTemplate()
     {
         $this->form->setEmailTemplate($this->templateMock);
-        $this->assertEquals($this->templateMock, $this->form->getEmailTemplate());
+        $this->assertSame($this->templateMock, $this->form->getEmailTemplate());
     }
 }

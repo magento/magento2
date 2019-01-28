@@ -34,7 +34,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         $taxRulesCollection = Bootstrap::getObjectManager()
             ->create(\Magento\Tax\Model\TaxRuleCollection::class);
         $collectionTaxRulesQty = $taxRulesCollection->count();
-        $this->assertEquals($dbTaxRulesQty, $collectionTaxRulesQty, 'Tax rules quantity is invalid.');
+        $this->assertSame($dbTaxRulesQty, $collectionTaxRulesQty, 'Tax rules quantity is invalid.');
         $taxRule = $taxRulesCollection->getFirstItem()->getData();
         $expectedTaxRuleData = [
             'tax_calculation_rule_id' => $expectedFirstTaxRuleId,
@@ -48,6 +48,6 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
             'tax_rates_codes' => $firstTaxRuleFixture->getTaxRatesCodes()
         ];
 
-        $this->assertEquals($expectedTaxRuleData, $taxRule, 'Tax rule data is invalid.');
+        $this->assertSame($expectedTaxRuleData, $taxRule, 'Tax rule data is invalid.');
     }
 }

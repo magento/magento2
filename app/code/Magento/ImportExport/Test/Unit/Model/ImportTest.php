@@ -280,7 +280,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
         }
 
-        $this->assertEquals(true, $this->import->importSource());
+        $this->assertSame(true, $this->import->importSource());
     }
 
     /**
@@ -338,7 +338,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->disableOriginalConstructor()->getMock();
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
-        $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
+        $this->assertSame('boolean', $this->import->getAttributeType($attribute));
     }
 
     /**
@@ -608,7 +608,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->willReturn($getEntityResult);
 
         $actualResult = $importMock->isReportEntityType($entity);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -640,7 +640,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->willReturn($getEntityResult);
 
         $actualResult = $importMock->isReportEntityType($entity);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -678,7 +678,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $result
         ];
         $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
-        $this->assertEquals($this->import, $actualResult);
+        $this->assertSame($this->import, $actualResult);
     }
 
     /**
@@ -723,7 +723,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $result
         ];
         $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
-        $this->assertEquals($this->import, $actualResult);
+        $this->assertSame($this->import, $actualResult);
     }
 
     /**
@@ -765,7 +765,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $result
         ];
         $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
-        $this->assertEquals($this->import, $actualResult);
+        $this->assertSame($this->import, $actualResult);
     }
 
     /**
@@ -805,7 +805,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $result
         ];
         $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
-        $this->assertEquals($this->import, $actualResult);
+        $this->assertSame($this->import, $actualResult);
     }
 
     /**
@@ -848,7 +848,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $result
         ];
         $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
-        $this->assertEquals($this->import, $actualResult);
+        $this->assertSame($this->import, $actualResult);
     }
 
     /**

@@ -100,7 +100,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
         $expectation = [
             self::TYPE_KEY => $this->_getPreparedType(),
         ];
-        $this->assertEquals($expectation, $this->_typeList->getTypes());
+        $this->assertSame($expectation, $this->_typeList->getTypes());
     }
 
     public function testGetTypeLabels()
@@ -108,7 +108,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
         $expectation = [
             self::TYPE_KEY => $this->_typesArray[self::TYPE_KEY]['label'],
         ];
-        $this->assertEquals($expectation, $this->_typeList->getTypeLabels());
+        $this->assertSame($expectation, $this->_typeList->getTypeLabels());
     }
 
     public function testGetInvalidated()
@@ -121,7 +121,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with('serializedData')
             ->willReturn($this->_typesArray);
-        $this->assertEquals($expectation, $this->_typeList->getInvalidated());
+        $this->assertSame($expectation, $this->_typeList->getInvalidated());
     }
 
     public function testInvalidate()

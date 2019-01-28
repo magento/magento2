@@ -113,6 +113,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
         $resultJson->method('setData')->willReturnSelf();
 
-        $this->assertEquals($resultJson, $this->model->execute());
+        $this->assertSame($resultJson, $this->model->execute());
     }
 }

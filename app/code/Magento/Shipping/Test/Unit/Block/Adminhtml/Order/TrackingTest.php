@@ -56,6 +56,6 @@ class TrackingTest extends \PHPUnit\Framework\TestCase
             ['registry' => $registry, 'shippingConfig' => $config]
         );
 
-        $this->assertEquals(['custom' => 'Custom Value', 'free' => 'configdata'], $model->getCarriers());
+        $this->assertSame(['custom' => 'Custom Value', 'free' => 'configdata'], $model->getCarriers());
     }
 }

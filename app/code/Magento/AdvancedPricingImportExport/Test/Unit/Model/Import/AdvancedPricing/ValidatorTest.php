@@ -58,7 +58,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validatorTest->expects($this->once())->method('isValid')->with($value)->willReturn($validatorResult);
 
         $result = $this->validator->isValid($value);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testIsValidAddMessagesCall()

@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collectionModel->filterByAccountReference('test27.dev@gmail.com')
             ->load();
 
-        $this->assertEquals(1, $this->collectionModel->getSize());
+        $this->assertSame(1, $this->collectionModel->getSize());
     }
 
     /**
@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collectionModel->filterByIp('3232249856')
             ->load();
 
-        $this->assertEquals(1, $this->collectionModel->getSize());
+        $this->assertSame(1, $this->collectionModel->getSize());
     }
 
     /**
@@ -98,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->collectionModel->filterLastItem()
             ->load();
-        $this->assertEquals('2016-01-20 13:00:13', $this->collectionModel->getFirstItem()->getData('created_at'));
+        $this->assertSame('2016-01-20 13:00:13', $this->collectionModel->getFirstItem()->getData('created_at'));
     }
 
     /**
@@ -110,7 +110,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->collectionModel->filterByIpOrAccountReference('3232249856', 'test273.dev@gmail.com')
             ->load();
-        $this->assertEquals(2, $this->collectionModel->getSize());
+        $this->assertSame(2, $this->collectionModel->getSize());
     }
 
     /**

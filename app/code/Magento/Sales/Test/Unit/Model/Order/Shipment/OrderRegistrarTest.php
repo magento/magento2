@@ -51,7 +51,7 @@ class OrderRegistrarTest extends \PHPUnit\Framework\TestCase
 
         $items = [$item1, $item2];
         $this->shipmentMock->expects($this->once())->method('getItems')->willReturn($items);
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->model->register($this->orderMock, $this->shipmentMock)
         );

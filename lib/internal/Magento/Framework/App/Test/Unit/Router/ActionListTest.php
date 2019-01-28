@@ -90,7 +90,7 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
             ->method('getActionFiles')
             ->willReturn($data);
         $this->createActionListInstance();
-        $this->assertEquals($expected, $this->actionList->get($module, $area, $namespace, $action));
+        $this->assertSame($expected, $this->actionList->get($module, $area, $namespace, $action));
     }
 
     /**

@@ -100,7 +100,7 @@ class AttributeSetTest extends AbstractModifierTest
             ->willReturn($locked);
         $modifyMeta = $this->getModel()->modifyMeta([AbstractModifier::DEFAULT_GENERAL_PANEL => []]);
         $children = $modifyMeta[AbstractModifier::DEFAULT_GENERAL_PANEL]['children'];
-        $this->assertEquals(
+        $this->assertSame(
             $locked,
             $children['attribute_set_id']['arguments']['data']['config']['disabled']
         );

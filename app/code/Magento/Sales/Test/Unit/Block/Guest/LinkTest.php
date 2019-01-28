@@ -32,6 +32,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals('', $link->toHtml());
+        $this->assertSame('', $link->toHtml());
     }
 }

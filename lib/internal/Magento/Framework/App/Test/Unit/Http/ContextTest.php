@@ -58,14 +58,14 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     public function testSetGetValue()
     {
         $this->object->setValue('key', 'value', 'default');
-        $this->assertEquals('value', $this->object->getValue('key'));
+        $this->assertSame('value', $this->object->getValue('key'));
     }
 
     public function testSetUnsetGetValue()
     {
         $this->object->setValue('key', 'value', 'default');
         $this->object->unsValue('key');
-        $this->assertEquals('default', $this->object->getValue('key'));
+        $this->assertSame('default', $this->object->getValue('key'));
     }
 
     public function testGetData()
@@ -74,7 +74,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->object->setValue('key2', 'value2', 'default2');
         $this->object->setValue('key3', 'value3', 'value3');
         $this->object->unsValue('key1');
-        $this->assertEquals(['key2' => 'value2'], $this->object->getData());
+        $this->assertSame(['key2' => 'value2'], $this->object->getData());
     }
 
     public function testGetVaryString()
@@ -86,7 +86,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             'key1' => 'value1'
         ];
         ksort($data);
-        $this->assertEquals(sha1(json_encode($data)), $this->object->getVaryString());
+        $this->assertSame(sha1(json_encode($data)), $this->object->getVaryString());
     }
 
     public function testToArray()
@@ -95,7 +95,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $newObject->setValue('key1', 'value1', 'default1');
         $newObject->setValue('key2', 'value2', 'default2');
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'data' => ['key' => 'value', 'key1' => 'value1', 'key2' => 'value2'],
                 'default' => ['key1' => 'default1', 'key2' => 'default2']

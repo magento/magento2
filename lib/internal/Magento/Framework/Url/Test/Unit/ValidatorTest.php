@@ -31,7 +31,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testConstruct()
     {
-        $this->assertEquals($this->expectedValidationMessages, $this->object->getMessageTemplates());
+        $this->assertSame($this->expectedValidationMessages, $this->object->getMessageTemplates());
     }
 
     public function testIsValidWhenValid()
@@ -42,7 +42,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->assertTrue($this->object->isValid('http://example.com'));
-        $this->assertEquals([], $this->object->getMessages());
+        $this->assertSame([], $this->object->getMessages());
     }
 
     public function testIsValidWhenInvalid()
@@ -53,6 +53,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->assertFalse($this->object->isValid('%value%'));
-        $this->assertEquals($this->expectedValidationMessages, $this->object->getMessages());
+        $this->assertSame($this->expectedValidationMessages, $this->object->getMessages());
     }
 }

@@ -151,6 +151,6 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $result = $this->reviewPayment->execute();
-        $this->assertEquals($this->resultRedirectMock, $result);
+        $this->assertSame($this->resultRedirectMock, $result);
     }
 }

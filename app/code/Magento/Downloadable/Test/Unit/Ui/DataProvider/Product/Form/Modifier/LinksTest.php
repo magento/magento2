@@ -139,7 +139,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('getLinksData')
             ->willReturn($linksData);
 
-        $this->assertEquals($resultData, $this->links->modifyData([]));
+        $this->assertSame($resultData, $this->links->modifyData([]));
     }
 
     /**
@@ -192,6 +192,6 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('set')
             ->willReturn([]);
 
-        $this->assertEquals([], $this->links->modifyMeta([]));
+        $this->assertSame([], $this->links->modifyMeta([]));
     }
 }

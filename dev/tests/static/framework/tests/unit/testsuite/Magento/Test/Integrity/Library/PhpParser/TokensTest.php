@@ -89,7 +89,7 @@ class TokensTest extends \PHPUnit\Framework\TestCase
         $this->parseFactory->expects($this->once())->method('getThrows')->will($this->returnValue($throws));
 
         $this->tokens = new Tokens($this->content, $this->parseFactory);
-        $this->assertEquals(['StaticDependency', 'ThrowDependency'], $this->tokens->getDependencies());
+        $this->assertSame(['StaticDependency', 'ThrowDependency'], $this->tokens->getDependencies());
     }
 
     /**
@@ -100,7 +100,7 @@ class TokensTest extends \PHPUnit\Framework\TestCase
     public function testGetPreviousToken()
     {
         $this->tokens = new Tokens($this->content, $this->parseFactory);
-        $this->assertEquals([T_ECHO, 'echo', 1], $this->tokens->getPreviousToken(2));
+        $this->assertSame([T_ECHO, 'echo', 1], $this->tokens->getPreviousToken(2));
     }
 
     /**
@@ -111,7 +111,7 @@ class TokensTest extends \PHPUnit\Framework\TestCase
     public function testGetTokenCodeByKey()
     {
         $this->tokens = new Tokens($this->content, $this->parseFactory);
-        $this->assertEquals(T_ECHO, $this->tokens->getTokenCodeByKey(1));
+        $this->assertSame(T_ECHO, $this->tokens->getTokenCodeByKey(1));
     }
 
     /**
@@ -122,6 +122,6 @@ class TokensTest extends \PHPUnit\Framework\TestCase
     public function testGetTokenValueByKey()
     {
         $this->tokens = new Tokens($this->content, $this->parseFactory);
-        $this->assertEquals('echo', $this->tokens->getTokenValueByKey(1));
+        $this->assertSame('echo', $this->tokens->getTokenValueByKey(1));
     }
 }

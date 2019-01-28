@@ -127,6 +127,6 @@ class ProfileTest extends \PHPUnit\Framework\TestCase
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($profileData);
         $this->profile->expects($this->at(1))->method('setData')->with($profileData);
-        $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
+        $this->assertSame($this->profile, $this->resource->loadActiveProfile($metaId));
     }
 }

@@ -157,7 +157,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
-        $this->assertEquals(true, $this->model->delete($attributeMock));
+        $this->assertSame(true, $this->model->delete($attributeMock));
     }
 
     /**
@@ -175,7 +175,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )->willReturn($attributeMock);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
-        $this->assertEquals(true, $this->model->deleteById($attributeCode));
+        $this->assertSame(true, $this->model->deleteById($attributeCode));
     }
 
     /**
@@ -195,7 +195,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchResultMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
         $expected = [$itemMock];
 
-        $this->assertEquals($expected, $this->model->getCustomAttributesMetadata());
+        $this->assertSame($expected, $this->model->getCustomAttributesMetadata());
     }
 
     /**

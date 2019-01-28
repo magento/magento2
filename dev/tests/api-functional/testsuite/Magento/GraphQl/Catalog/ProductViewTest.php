@@ -252,7 +252,7 @@ QUERY;
         );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertSame(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
@@ -260,16 +260,16 @@ QUERY;
         $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
-        self::assertEquals(
+        self::assertSame(
             'Movable Position 2',
             $responseObject->getData('products/items/0/categories/1/name')
         );
-        self::assertEquals(
+        self::assertSame(
             'Filter category',
             $responseObject->getData('products/items/0/categories/2/name')
         );
         $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
+        self::assertSame(
             $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
             $responseObject->getData('products/items/0/canonical_url')
         );
@@ -483,7 +483,7 @@ QUERY;
         $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertSame(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
@@ -516,7 +516,7 @@ QUERY;
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertSame(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertCustomAttribute($response['products']['items'][0]);
     }
@@ -696,7 +696,7 @@ QUERY;
     private function assertCustomAttribute($actualResponse)
     {
         $customAttribute = null;
-        $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
+        $this->assertSame($customAttribute, $actualResponse['attribute_code_custom']);
     }
 
     /**
@@ -711,7 +711,7 @@ QUERY;
             foreach ($tierPriceArray as $key => $value) {
                 /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
                 $tierPrice = $tierPrices[$tierPriceIndex];
-                $this->assertEquals($value, $tierPrice->getData($key));
+                $this->assertSame($value, $tierPrice->getData($key));
             }
         }
     }
@@ -877,7 +877,7 @@ QUERY;
             ]
         ];
 
-        $this->assertEquals($actualResponse, $assertionMap);
+        $this->assertSame($actualResponse, $assertionMap);
     }
 
     /**

@@ -134,8 +134,8 @@ class SaveHandlerTest extends TestCase
     {
         foreach ($categoryLinks as $categoryLink) {
             $categoryPosition = $categoryPositions[$categoryLink->getCategoryId()];
-            $this->assertEquals($categoryPosition['category_id'], $categoryLink->getCategoryId());
-            $this->assertEquals($categoryPosition['position'], $categoryLink->getPosition());
+            $this->assertSame($categoryPosition['category_id'], $categoryLink->getCategoryId());
+            $this->assertSame($categoryPosition['position'], $categoryLink->getPosition());
         }
     }
 }

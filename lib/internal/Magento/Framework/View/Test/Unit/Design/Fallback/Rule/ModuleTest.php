@@ -58,6 +58,6 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
             ->method('getPatternDirs')
             ->with(['module_name' => $module, 'module_dir' => $modulePath])
             ->will($this->returnValue($expectedResult));
-        $this->assertEquals($expectedResult, $this->model->getPatternDirs(['module_name' => $module]));
+        $this->assertSame($expectedResult, $this->model->getPatternDirs(['module_name' => $module]));
     }
 }

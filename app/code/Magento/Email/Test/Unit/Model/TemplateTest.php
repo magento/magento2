@@ -288,15 +288,15 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $model->loadDefault($templateId);
 
         if ($templateType === 'html') {
-            $this->assertEquals(TemplateTypesInterface::TYPE_HTML, $model->getTemplateType());
+            $this->assertSame(TemplateTypesInterface::TYPE_HTML, $model->getTemplateType());
         } else {
-            $this->assertEquals(TemplateTypesInterface::TYPE_TEXT, $model->getTemplateType());
+            $this->assertSame(TemplateTypesInterface::TYPE_TEXT, $model->getTemplateType());
         }
-        $this->assertEquals($templateId, $model->getId());
-        $this->assertEquals($parsedTemplateText, $model->getTemplateText());
-        $this->assertEquals($expectedTemplateSubject, $model->getTemplateSubject());
-        $this->assertEquals($expectedOrigTemplateVariables, $model->getData('orig_template_variables'));
-        $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
+        $this->assertSame($templateId, $model->getId());
+        $this->assertSame($parsedTemplateText, $model->getTemplateText());
+        $this->assertSame($expectedTemplateSubject, $model->getTemplateSubject());
+        $this->assertSame($expectedOrigTemplateVariables, $model->getData('orig_template_variables'));
+        $this->assertSame($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
     /**
@@ -432,8 +432,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $model = $this->getModelMock();
         $templateId = 'templateId';
-        $this->assertEquals($model, $model->setId($templateId));
-        $this->assertEquals($templateId, $model->getId());
+        $this->assertSame($model, $model->setId($templateId));
+        $this->assertSame($templateId, $model->getId());
     }
 
     /**
@@ -454,7 +454,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $model->expects($this->any())
             ->method('getTemplateSubject')
             ->will($this->returnValue($templateSubject));
-        $this->assertEquals($expectedValue, $model->isValidForSend());
+        $this->assertSame($expectedValue, $model->isValidForSend());
     }
 
     /**
@@ -534,7 +534,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $filterTemplate->expects($this->once())
             ->method('setVariables')
             ->with(array_merge($variables, ['this' => $model]));
-        $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));
+        $this->assertSame($expectedResult, $model->getProcessedTemplateSubject($variables));
     }
 
     /**
@@ -552,7 +552,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 json_decode($templateVariables, true)
             );
-        $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
+        $this->assertSame($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
     /**
@@ -654,7 +654,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->with($vars)
             ->will($this->returnValue($expectedResult));
 
-        $this->assertEquals($expectedResult, $model->processTemplate());
+        $this->assertSame($expectedResult, $model->processTemplate());
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
@@ -705,7 +705,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->method('getProcessedTemplateSubject')
             ->with($variables)
             ->will($this->returnValue($expectedResult));
-        $this->assertEquals($expectedResult, $model->getSubject());
+        $this->assertSame($expectedResult, $model->getSubject());
     }
 
     public function testSetOptions()
@@ -754,7 +754,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $model->setTemplateId(10);
 
-        $this->assertEquals($expectedResult, $model->getType());
+        $this->assertSame($expectedResult, $model->getType());
     }
 
     /**

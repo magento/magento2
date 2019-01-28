@@ -60,7 +60,7 @@ class RadioTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($selectedFlatArray)
         );
-        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
+        $this->assertSame($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
     }
 
     /**

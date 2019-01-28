@@ -110,7 +110,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $object->setImage(['images' => [['value_id' => $valueId]]]);
         $object->setId(555);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 \Magento\Catalog\Model\ResourceModel\Product\Gallery::GALLERY_TABLE => [
                     ['value_id' => $valueId, 'attribute_id' => 345345, 'entity_id' => $object->getId()],
@@ -148,7 +148,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attribute);
 
         $this->dataObject->setData(['attr_code' => 'attribute data']);
-        $this->assertEquals(!$value, $this->model->validate($this->dataObject));
+        $this->assertSame(!$value, $this->model->validate($this->dataObject));
     }
 
     /**

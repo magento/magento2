@@ -36,7 +36,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
     protected function _loadDataForTest($schemaName, $xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchemaPath . $schemaName, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertSame($expectedError, $actualError);
     }
 
     /**
@@ -69,7 +69,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $xmlString = file_get_contents(__DIR__ . '/_files/' . $validFileName);
         $schemaPath = $this->_xsdSchemaPath . $schemaName;
         $actualResult = $this->_xsdValidator->validate($schemaPath, $xmlString);
-        $this->assertEquals([], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
     /**

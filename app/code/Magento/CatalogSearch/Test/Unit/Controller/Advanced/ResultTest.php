@@ -24,7 +24,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $view->expects($this->once())->method('loadLayout')->will(
             $this->returnCallback(
                 function () use (&$filters, $expectedQuery) {
-                    $this->assertEquals($expectedQuery, $filters);
+                    $this->assertSame($expectedQuery, $filters);
                 }
             )
         );
@@ -155,7 +155,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
                 'urlFactory'            => $urlFactoryMock
             ]
         );
-        $this->assertEquals($redirectResultMock, $instance->execute());
+        $this->assertSame($redirectResultMock, $instance->execute());
     }
 
     /**

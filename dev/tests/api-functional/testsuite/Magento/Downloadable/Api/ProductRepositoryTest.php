@@ -152,9 +152,9 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
 
         $response =  $this->createProduct($product);
-        $this->assertEquals(self::PRODUCT_SKU, $response[ProductInterface::SKU]);
-        $this->assertEquals(10, $response['price']);
-        $this->assertEquals(
+        $this->assertSame(self::PRODUCT_SKU, $response[ProductInterface::SKU]);
+        $this->assertSame(10, $response['price']);
+        $this->assertSame(
             \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
             $response['type_id']
         );
@@ -175,7 +175,7 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertSame(2, count($resultLinks));
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
@@ -186,10 +186,10 @@ class ProductRepositoryTest extends WebapiAbstract
         unset($resultLinks[1]['id']);
 
         $expectedLinkData = $this->getExpectedLinkData();
-        $this->assertEquals($expectedLinkData, $resultLinks);
+        $this->assertSame($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertSame(2, count($resultSamples));
         $this->assertTrue(isset($resultSamples[0]['id']));
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[1]['id']));
@@ -198,7 +198,7 @@ class ProductRepositoryTest extends WebapiAbstract
         unset($resultSamples[1]['id']);
 
         $expectedSampleData = $this->getExpectedSampleData();
-        $this->assertEquals($expectedSampleData, $resultSamples);
+        $this->assertSame($expectedSampleData, $resultSamples);
     }
 
     /**
@@ -239,13 +239,13 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(3, count($resultLinks));
+        $this->assertSame(3, count($resultLinks));
         $this->assertTrue(isset($resultLinks[0]['id']));
-        $this->assertEquals($link1Id, $resultLinks[0]['id']);
+        $this->assertSame($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
-        $this->assertEquals($linkFile, $resultLinks[0]['link_file']);
+        $this->assertSame($linkFile, $resultLinks[0]['link_file']);
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
-        $this->assertEquals($sampleFile, $resultLinks[0]['sample_file']);
+        $this->assertSame($sampleFile, $resultLinks[0]['sample_file']);
         unset($resultLinks[0]['id']);
         unset($resultLinks[0]['link_file']);
         unset($resultLinks[0]['sample_file']);
@@ -270,10 +270,10 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
         ];
         $expectedLinkData = array_merge($expectedLinkData, $this->getExpectedLinkData());
-        $this->assertEquals($expectedLinkData, $resultLinks);
+        $this->assertSame($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertSame(2, count($resultSamples));
     }
 
     /**
@@ -341,9 +341,9 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertSame(2, count($resultLinks));
         $this->assertTrue(isset($resultLinks[0]['id']));
-        $this->assertEquals($link1Id, $resultLinks[0]['id']);
+        $this->assertSame($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertGreaterThan(0, strpos($resultLinks[0]['link_file'], $linkFile));
         $this->assertStringEndsWith($extension, $resultLinks[0]['link_file']);
@@ -354,7 +354,7 @@ class ProductRepositoryTest extends WebapiAbstract
         unset($resultLinks[0]['link_file']);
         unset($resultLinks[0]['sample_file']);
         $this->assertTrue(isset($resultLinks[1]['id']));
-        $this->assertEquals($link2Id, $resultLinks[1]['id']);
+        $this->assertSame($link2Id, $resultLinks[1]['id']);
         $this->assertTrue(isset($resultLinks[1]['link_file']));
         $this->assertTrue(isset($resultLinks[1]['sample_file']));
         unset($resultLinks[1]['id']);
@@ -383,10 +383,10 @@ class ProductRepositoryTest extends WebapiAbstract
                 'sample_url' => 'http://www.example.com/link2.jpg',
             ]
         ];
-        $this->assertEquals($expectedLinkData, $resultLinks);
+        $this->assertSame($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertSame(2, count($resultSamples));
     }
 
     public function testUpdateDownloadableProductSamples()
@@ -420,12 +420,12 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertSame(2, count($resultLinks));
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(3, count($resultSamples));
+        $this->assertSame(3, count($resultSamples));
         $this->assertTrue(isset($resultSamples[0]['id']));
-        $this->assertEquals($sample1Id, $resultSamples[0]['id']);
+        $this->assertSame($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertGreaterThan($sample2Id, $resultSamples[1]['id']);
@@ -443,7 +443,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_url' => 'http://www.example.com/sample1.jpg',
         ];
         $expectedSampleData = array_merge($expectedSampleData, $this->getExpectedSampleData());
-        $this->assertEquals($expectedSampleData, $resultSamples);
+        $this->assertSame($expectedSampleData, $resultSamples);
     }
 
     public function testUpdateDownloadableProductSamplesWithNewFile()
@@ -487,19 +487,19 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertSame(2, count($resultLinks));
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertSame(2, count($resultSamples));
         $this->assertTrue(isset($resultSamples[0]['id']));
-        $this->assertEquals($sample1Id, $resultSamples[0]['id']);
+        $this->assertSame($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[0]['sample_file']));
         $this->assertContains('sample1', $resultSamples[0]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[0]['sample_file']);
         unset($resultSamples[0]['sample_file']);
         $this->assertTrue(isset($resultSamples[1]['id']));
-        $this->assertEquals($sample2Id, $resultSamples[1]['id']);
+        $this->assertSame($sample2Id, $resultSamples[1]['id']);
         unset($resultSamples[1]['id']);
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
         $this->assertContains('sample2', $resultSamples[1]['sample_file']);
@@ -519,7 +519,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 'sample_type' => 'file',
             ],
         ];
-        $this->assertEquals($expectedSampleData, $resultSamples);
+        $this->assertSame($expectedSampleData, $resultSamples);
     }
 
     /**

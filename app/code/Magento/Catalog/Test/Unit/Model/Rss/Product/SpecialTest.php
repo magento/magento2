@@ -80,6 +80,6 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
 
         $products = $this->special->getProductsCollection($storeId, $customerGroupId);
-        $this->assertEquals($productCollection, $products);
+        $this->assertSame($productCollection, $products);
     }
 }

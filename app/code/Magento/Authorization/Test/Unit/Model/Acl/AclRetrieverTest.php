@@ -37,7 +37,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
     {
         $expectedResources = ['anonymous'];
         $allowedResources = $this->aclRetriever->getAllowedResourcesByUser(UserContextInterface::USER_TYPE_GUEST, null);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResources,
             $allowedResources,
             'Allowed resources for guests should be \'anonymous\'.'
@@ -51,7 +51,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
             UserContextInterface::USER_TYPE_CUSTOMER,
             null
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResources,
             $allowedResources,
             'Allowed resources for customers should be \'self\'.'
@@ -72,7 +72,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
     {
         $this->roleMock->expects($this->any())->method('getId')->will($this->returnValue(1));
         $expectedResources = ['Magento_Backend::dashboard', 'Magento_Cms::page'];
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResources,
             $this->aclRetriever->getAllowedResourcesByUser(UserContextInterface::USER_TYPE_INTEGRATION, 1)
         );

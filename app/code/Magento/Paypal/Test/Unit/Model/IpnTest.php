@@ -178,7 +178,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->_ipn->processIpnRequest();
-        $this->assertEquals('IPN "Pending"', $paymentMock->getPreparedMessage());
+        $this->assertSame('IPN "Pending"', $paymentMock->getPreparedMessage());
     }
 
     public function testRegisterPaymentDenial()

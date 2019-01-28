@@ -40,11 +40,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
         switch ($isAllowed) {
             case true:
-                $this->assertEquals('select', $model->getType());
+                $this->assertSame('select', $model->getType());
                 $this->assertNull($model->getClass());
                 break;
             case false:
-                $this->assertEquals('hidden', $model->getType());
+                $this->assertSame('hidden', $model->getType());
                 $this->assertContains('hidden', $model->getClass());
                 break;
         }

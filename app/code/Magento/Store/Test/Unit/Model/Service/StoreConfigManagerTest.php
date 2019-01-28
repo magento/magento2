@@ -180,22 +180,22 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getStoreConfigs([$code]);
 
-        $this->assertEquals(1, count($result));
-        $this->assertEquals($id, $result[0]->getId());
-        $this->assertEquals($code, $result[0]->getCode());
-        $this->assertEquals($weightUnit, $result[0]->getWeightUnit());
-        $this->assertEquals($baseUrl, $result[0]->getBaseUrl());
-        $this->assertEquals($secureBaseUrl, $result[0]->getSecureBaseUrl());
-        $this->assertEquals($baseLinkUrl, $result[0]->getBaseLinkUrl());
-        $this->assertEquals($secureBaseLinkUrl, $result[0]->getSecureBaseLinkUrl());
-        $this->assertEquals($baseStaticUrl, $result[0]->getBaseStaticUrl());
-        $this->assertEquals($secureBaseStaticUrl, $result[0]->getSecureBaseStaticUrl());
-        $this->assertEquals($baseMediaUrl, $result[0]->getBaseMediaUrl());
-        $this->assertEquals($secureBaseMediaUrl, $result[0]->getSecureBaseMediaUrl());
+        $this->assertSame(1, count($result));
+        $this->assertSame($id, $result[0]->getId());
+        $this->assertSame($code, $result[0]->getCode());
+        $this->assertSame($weightUnit, $result[0]->getWeightUnit());
+        $this->assertSame($baseUrl, $result[0]->getBaseUrl());
+        $this->assertSame($secureBaseUrl, $result[0]->getSecureBaseUrl());
+        $this->assertSame($baseLinkUrl, $result[0]->getBaseLinkUrl());
+        $this->assertSame($secureBaseLinkUrl, $result[0]->getSecureBaseLinkUrl());
+        $this->assertSame($baseStaticUrl, $result[0]->getBaseStaticUrl());
+        $this->assertSame($secureBaseStaticUrl, $result[0]->getSecureBaseStaticUrl());
+        $this->assertSame($baseMediaUrl, $result[0]->getBaseMediaUrl());
+        $this->assertSame($secureBaseMediaUrl, $result[0]->getSecureBaseMediaUrl());
 
-        $this->assertEquals($timeZone, $result[0]->getTimezone());
-        $this->assertEquals($locale, $result[0]->getLocale());
-        $this->assertEquals($baseCurrencyCode, $result[0]->getBaseCurrencyCode());
-        $this->assertEquals($defaultDisplayCurrencyCode, $result[0]->getDefaultDisplayCurrencyCode());
+        $this->assertSame($timeZone, $result[0]->getTimezone());
+        $this->assertSame($locale, $result[0]->getLocale());
+        $this->assertSame($baseCurrencyCode, $result[0]->getBaseCurrencyCode());
+        $this->assertSame($defaultDisplayCurrencyCode, $result[0]->getDefaultDisplayCurrencyCode());
     }
 }

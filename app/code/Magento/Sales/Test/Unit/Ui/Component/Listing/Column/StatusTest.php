@@ -51,6 +51,6 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         );
         $model->setData('name', $itemName);
         $dataSource = $model->prepareDataSource($dataSource);
-        $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+        $this->assertSame($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

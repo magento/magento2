@@ -61,7 +61,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
         );
         $objectManagerHelper->setBackwardCompatibleProperty($controller, 'request', $requestMock);
 
-        $this->assertEquals(new JsonModel($expectedResult), $controller->indexAction());
+        $this->assertSame(new JsonModel($expectedResult), $controller->indexAction());
     }
 
     /**

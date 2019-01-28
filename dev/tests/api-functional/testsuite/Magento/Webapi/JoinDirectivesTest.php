@@ -77,9 +77,9 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertArrayHasKey('extension_attributes', $itemData);
         $this->assertArrayHasKey('quote_api_test_attribute', $itemData['extension_attributes']);
         $testAttribute = $itemData['extension_attributes']['quote_api_test_attribute'];
-        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
-        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
-        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute['email']);
+        $this->assertSame($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
+        $this->assertSame($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
+        $this->assertSame($expectedExtensionAttributes['email'], $testAttribute['email']);
     }
 
     /**
@@ -119,9 +119,9 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertArrayHasKey('extension_attributes', $itemData);
         $this->assertArrayHasKey('invoice_api_test_attribute', $itemData['extension_attributes']);
         $testAttribute = $itemData['extension_attributes']['invoice_api_test_attribute'];
-        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
-        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
-        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute['email']);
+        $this->assertSame($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
+        $this->assertSame($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
+        $this->assertSame($expectedExtensionAttributes['email'], $testAttribute['email']);
     }
 
     /**

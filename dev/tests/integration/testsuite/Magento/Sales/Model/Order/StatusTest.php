@@ -44,6 +44,6 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
-        $this->assertEquals($result, $order->getStatusLabel());
+        $this->assertSame($result, $order->getStatusLabel());
     }
 }

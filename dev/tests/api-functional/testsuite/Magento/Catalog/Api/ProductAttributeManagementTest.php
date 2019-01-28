@@ -70,9 +70,9 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals([$payload['attributeSetId']], $errorObj['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame([$payload['attributeSetId']], $errorObj['parameters']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 
@@ -93,9 +93,9 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals([$payload['attributeGroupId']], $errorObj['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame([$payload['attributeGroupId']], $errorObj['parameters']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 
@@ -117,9 +117,9 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals([$payload['attributeCode']], $errorObj['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame([$payload['attributeCode']], $errorObj['parameters']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 

@@ -59,12 +59,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetChildrenIds()
     {
-        $this->assertEquals([], $this->_model->getChildrenIds('value'));
+        $this->assertSame([], $this->_model->getChildrenIds('value'));
     }
 
     public function testGetParentIdsByChild()
     {
-        $this->assertEquals([], $this->_model->getParentIdsByChild('value'));
+        $this->assertSame([], $this->_model->getParentIdsByChild('value'));
     }
 
     /**
@@ -100,12 +100,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $attribute[1] = new \Magento\Framework\DataObject(['group_sort_path' => 1, 'sort_path' => 10]);
         $attribute[2] = new \Magento\Framework\DataObject(['group_sort_path' => 1, 'sort_path' => 5]);
         $attribute[3] = new \Magento\Framework\DataObject(['group_sort_path' => 2, 'sort_path' => 10]);
-        $this->assertEquals(1, $this->_model->attributesCompare($attribute[1], $attribute[2]));
-        $this->assertEquals(-1, $this->_model->attributesCompare($attribute[2], $attribute[1]));
-        $this->assertEquals(-1, $this->_model->attributesCompare($attribute[1], $attribute[3]));
-        $this->assertEquals(1, $this->_model->attributesCompare($attribute[3], $attribute[1]));
-        $this->assertEquals(-1, $this->_model->attributesCompare($attribute[2], $attribute[3]));
-        $this->assertEquals(1, $this->_model->attributesCompare($attribute[3], $attribute[2]));
+        $this->assertSame(1, $this->_model->attributesCompare($attribute[1], $attribute[2]));
+        $this->assertSame(-1, $this->_model->attributesCompare($attribute[2], $attribute[1]));
+        $this->assertSame(-1, $this->_model->attributesCompare($attribute[1], $attribute[3]));
+        $this->assertSame(1, $this->_model->attributesCompare($attribute[3], $attribute[1]));
+        $this->assertSame(-1, $this->_model->attributesCompare($attribute[2], $attribute[3]));
+        $this->assertSame(1, $this->_model->attributesCompare($attribute[3], $attribute[2]));
     }
 
     public function testGetAttributeById()
@@ -183,9 +183,9 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($product, $result[0]);
         $buyRequest = $product->getCustomOption('info_buyRequest');
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
-        $this->assertEquals($product->getId(), $buyRequest->getProductId());
+        $this->assertSame($product->getId(), $buyRequest->getProductId());
         $this->assertSame($product, $buyRequest->getProduct());
-        $this->assertEquals(json_encode($requestData), $buyRequest->getValue());
+        $this->assertSame(json_encode($requestData), $buyRequest->getValue());
     }
 
     /**
@@ -207,7 +207,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSpecifyOptionMessage()
     {
-        $this->assertEquals(
+        $this->assertSame(
             "The product's required option(s) weren't entered. Make sure the options are entered and try again.",
             $this->_model->getSpecifyOptionMessage()
         );
@@ -246,7 +246,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
         );
-        $this->assertEquals([], $this->_model->getOrderOptions($product));
+        $this->assertSame([], $this->_model->getOrderOptions($product));
 
         $product->load(1);
         // fixture
@@ -303,7 +303,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         );
         $product = $repository->get('simple');
         // fixture
-        $this->assertEquals('simple', $this->_model->getSku($product));
+        $this->assertSame('simple', $this->_model->getSku($product));
     }
 
     /**
@@ -319,7 +319,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
         $product->load(1);
         // fixture
-        $this->assertEquals('simple', $this->_model->getOptionSku($product));
+        $this->assertSame('simple', $this->_model->getOptionSku($product));
 
         foreach ($product->getOptions() as $option) {
             if ('field' == $option->getType()) {
@@ -327,7 +327,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 $quoteOption = clone $option;
                 $product->addCustomOption("option_{$option->getId()}", $quoteOption);
 
-                $this->assertEquals('simple-1-text', $this->_model->getOptionSku($product));
+                $this->assertSame('simple-1-text', $this->_model->getOptionSku($product));
                 break;
             }
         }
@@ -338,7 +338,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product = new \Magento\Framework\DataObject();
         $this->assertEmpty($this->_model->getWeight($product));
         $product->setWeight('value');
-        $this->assertEquals('value', $this->_model->getWeight($product));
+        $this->assertSame('value', $this->_model->getWeight($product));
     }
 
     public function testHasOptions()
@@ -382,7 +382,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
     public function testPrepareQuoteItemQty()
     {
-        $this->assertEquals(
+        $this->assertSame(
             3.0,
             $this->_model->prepareQuoteItemQty(
                 3,
@@ -456,12 +456,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product = new \StdClass();
         $this->assertSame([[$product]], $this->_model->getProductsToPurchaseByReqGroups($product));
         $this->_model->setConfig(['composite' => 1]);
-        $this->assertEquals([], $this->_model->getProductsToPurchaseByReqGroups($product));
+        $this->assertSame([], $this->_model->getProductsToPurchaseByReqGroups($product));
     }
 
     public function testProcessBuyRequest()
     {
-        $this->assertEquals([], $this->_model->processBuyRequest(1, 2));
+        $this->assertSame([], $this->_model->processBuyRequest(1, 2));
     }
 
     public function testCheckProductConfiguration()

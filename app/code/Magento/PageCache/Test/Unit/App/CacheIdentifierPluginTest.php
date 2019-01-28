@@ -79,7 +79,7 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
             ->method('getThemeByRequest')
             ->will($this->returnValue($uaException));
 
-        $this->assertEquals($expected, $this->plugin->afterGetValue($identifierMock, $result));
+        $this->assertSame($expected, $this->plugin->afterGetValue($identifierMock, $result));
     }
 
     /**

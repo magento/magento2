@@ -83,7 +83,7 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getOptionId());
 
         $this->model->setOptionId(1);
-        $this->assertEquals(1, $this->model->getOptionId());
+        $this->assertSame(1, $this->model->getOptionId());
     }
 
     public function testGetOptionValue()
@@ -91,10 +91,10 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getOptionValue());
 
         $this->model->setData(\Magento\Catalog\Api\Data\CustomOptionInterface::OPTION_VALUE, 'test');
-        $this->assertEquals('test', $this->model->getOptionValue());
+        $this->assertSame('test', $this->model->getOptionValue());
 
         $this->model->setData(\Magento\Catalog\Api\Data\CustomOptionInterface::OPTION_VALUE, 'file');
-        $this->assertEquals('file', $this->model->getOptionValue());
+        $this->assertSame('file', $this->model->getOptionValue());
     }
 
     public function testGetOptionValueWithFileInfo()
@@ -124,12 +124,12 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($imageResult);
 
         $this->model->setData(\Magento\Catalog\Api\Data\CustomOptionInterface::OPTION_VALUE, 'file');
-        $this->assertEquals($imageResult, $this->model->getOptionValue());
+        $this->assertSame($imageResult, $this->model->getOptionValue());
     }
 
     public function testSetOptionValue()
     {
         $this->model->setOptionValue('test');
-        $this->assertEquals('test', $this->model->getOptionValue());
+        $this->assertSame('test', $this->model->getOptionValue());
     }
 }

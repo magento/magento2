@@ -29,22 +29,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
         $exchange = $config->getExchange('magento-topic-based-exchange1', 'amqp');
-        $this->assertEquals('magento-topic-based-exchange1', $exchange->getName());
-        $this->assertEquals('topic', $exchange->getType());
-        $this->assertEquals('amqp', $exchange->getConnection());
+        $this->assertSame('magento-topic-based-exchange1', $exchange->getName());
+        $this->assertSame('topic', $exchange->getType());
+        $this->assertSame('amqp', $exchange->getConnection());
         $exchangeArguments = $exchange->getArguments();
         $expectedArguments = ['alternate-exchange' => 'magento-log-exchange'];
-        $this->assertEquals($expectedArguments, $exchangeArguments);
+        $this->assertSame($expectedArguments, $exchangeArguments);
 
         /** @var BindingInterface $binding */
         $binding = current($exchange->getBindings());
-        $this->assertEquals('topicBasedRouting1', $binding->getId());
-        $this->assertEquals('anotherTopic1', $binding->getTopic());
-        $this->assertEquals('queue', $binding->getDestinationType());
-        $this->assertEquals('topic-queue1', $binding->getDestination());
+        $this->assertSame('topicBasedRouting1', $binding->getId());
+        $this->assertSame('anotherTopic1', $binding->getTopic());
+        $this->assertSame('queue', $binding->getDestinationType());
+        $this->assertSame('topic-queue1', $binding->getDestination());
         $bindingArguments = $binding->getArguments();
         $expectedArguments = ['argument1' => 'value'];
-        $this->assertEquals($expectedArguments, $bindingArguments);
+        $this->assertSame($expectedArguments, $bindingArguments);
     }
 
     public function testGetExchangeByNameWithDefaultValues()
@@ -52,9 +52,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
         $exchange = $config->getExchange('magento-topic-based-exchange2', 'amqp');
-        $this->assertEquals('magento-topic-based-exchange2', $exchange->getName());
-        $this->assertEquals('topic', $exchange->getType());
-        $this->assertEquals('amqp', $exchange->getConnection());
+        $this->assertSame('magento-topic-based-exchange2', $exchange->getName());
+        $this->assertSame('topic', $exchange->getType());
+        $this->assertSame('amqp', $exchange->getConnection());
         $exchangeArguments = $exchange->getArguments();
         $expectedArguments = [
             'alternate-exchange' => 'magento-log-exchange',
@@ -63,17 +63,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'element02' => '20',
             ]
         ];
-        $this->assertEquals($expectedArguments, $exchangeArguments);
+        $this->assertSame($expectedArguments, $exchangeArguments);
 
         /** @var BindingInterface $binding */
         $binding = current($exchange->getBindings());
-        $this->assertEquals('topicBasedRouting2', $binding->getId());
-        $this->assertEquals('anotherTopic2', $binding->getTopic());
-        $this->assertEquals('queue', $binding->getDestinationType());
-        $this->assertEquals('topic-queue2', $binding->getDestination());
+        $this->assertSame('topicBasedRouting2', $binding->getId());
+        $this->assertSame('anotherTopic2', $binding->getTopic());
+        $this->assertSame('queue', $binding->getDestinationType());
+        $this->assertSame('topic-queue2', $binding->getDestination());
         $bindingArguments = $binding->getArguments();
         $expectedArguments = ['argument1' => 'value', 'argument2' => true, 'argument3' => 150];
-        $this->assertEquals($expectedArguments, $bindingArguments);
+        $this->assertSame($expectedArguments, $bindingArguments);
     }
 
     public function testGetAllExchanges()

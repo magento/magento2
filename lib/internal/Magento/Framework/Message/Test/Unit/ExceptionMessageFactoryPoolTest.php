@@ -48,7 +48,7 @@ class ExceptionMessageFactoryPoolTest extends \PHPUnit\Framework\TestCase
     public function testSuccessfulDefaultCreateMessage()
     {
         $exception = new \Exception('message');
-        $this->assertEquals(
+        $this->assertSame(
             $this->defaultExceptionMessageFactoryMock,
             $this->exceptionMessageFactoryPool->getMessageFactory($exception)
         );
@@ -57,7 +57,7 @@ class ExceptionMessageFactoryPoolTest extends \PHPUnit\Framework\TestCase
     public function testSuccessfulSpecificCreateMessage()
     {
         $localizedException = new LocalizedException(__('message'));
-        $this->assertEquals(
+        $this->assertSame(
             $this->specificExceptionMessageFactoryMock,
             $this->exceptionMessageFactoryPool->getMessageFactory($localizedException)
         );

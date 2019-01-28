@@ -176,7 +176,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
             ]);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->load($limit, $offset, $lower, $upper)
         );
@@ -219,7 +219,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
         $this->clientMock->expects($this->any())
             ->method('query')
             ->willReturn($queryResult);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->loadPrevious($data, $index, $lower)
         );
@@ -291,7 +291,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
         $this->clientMock->expects($this->any())
             ->method('query')
             ->willReturn($queryResult);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->loadNext($data, $rightIndex, $upper)
         );

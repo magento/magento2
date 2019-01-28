@@ -100,6 +100,6 @@ class LinksListTest extends \PHPUnit\Framework\TestCase
             ->method('setPriceType')->with('selection_price_type')->willReturnSelf();
         $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($linkMock);
 
-        $this->assertEquals([$linkMock], $this->model->getItems($this->productMock, $optionId));
+        $this->assertSame([$linkMock], $this->model->getItems($this->productMock, $optionId));
     }
 }

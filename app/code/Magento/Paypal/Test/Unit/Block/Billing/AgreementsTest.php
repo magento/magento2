@@ -217,7 +217,7 @@ class AgreementsTest extends \PHPUnit\Framework\TestCase
         $method3->expects($this->any())->method('getConfigData')->willReturn(1);
         $paymentMethods = [$method1, $method2, $method3];
         $this->helper->expects($this->once())->method('getBillingAgreementMethods')->willReturn($paymentMethods);
-        $this->assertEquals(['code1' => 'title1', 'code3' => 'title3'], $this->block->getWizardPaymentMethodOptions());
+        $this->assertSame(['code1' => 'title1', 'code3' => 'title3'], $this->block->getWizardPaymentMethodOptions());
     }
 
     public function testToHtml()

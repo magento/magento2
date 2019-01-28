@@ -26,7 +26,7 @@ class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert($value, $expected)
     {
-        $this->assertEquals($expected, $this->converter->convert($value));
+        $this->assertSame($expected, $this->converter->convert($value));
     }
 
     public function convertDataProvider()

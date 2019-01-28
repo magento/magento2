@@ -44,7 +44,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($observerMock));
 
         $result = $this->observerFactory->get($className);
-        $this->assertEquals($observerMock, $result);
+        $this->assertSame($observerMock, $result);
     }
 
     public function testCreate()
@@ -59,6 +59,6 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($observerMock));
 
         $result = $this->observerFactory->create($className, $arguments);
-        $this->assertEquals($observerMock, $result);
+        $this->assertSame($observerMock, $result);
     }
 }

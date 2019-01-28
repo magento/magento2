@@ -71,8 +71,8 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
 
-        $this->assertEquals($expected, $this->helper->checkDbUsage());
-        $this->assertEquals($expected, $this->helper->checkDbUsage());
+        $this->assertSame($expected, $this->helper->checkDbUsage());
+        $this->assertSame($expected, $this->helper->checkDbUsage());
     }
 
     /**
@@ -229,7 +229,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->with('file')
             ->will($this->returnValue(true));
 
-        $this->assertEquals($expected, $this->helper->fileExists('media-dir/file'));
+        $this->assertSame($expected, $this->helper->fileExists('media-dir/file'));
     }
 
     /**
@@ -317,7 +317,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->fileStorageMock->expects($this->exactly($callSaveFile))
             ->method('saveFile')
             ->will($this->returnValue(true));
-        $this->assertEquals($expected, $this->helper->saveFileToFilesystem('media-dir/filename'));
+        $this->assertSame($expected, $this->helper->saveFileToFilesystem('media-dir/filename'));
     }
 
     /**
@@ -344,7 +344,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMediaRelativePath()
     {
-        $this->assertEquals('fullPath', $this->helper->getMediaRelativePath('media-dir/fullPath'));
+        $this->assertSame('fullPath', $this->helper->getMediaRelativePath('media-dir/fullPath'));
     }
 
     /**
@@ -442,7 +442,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $dbModelMock->expects($this->exactly($callNum))
             ->method('saveFile')
             ->with($expectedFullPath);
-        $this->assertEquals($expected, $this->helper->saveUploadedFile($result));
+        $this->assertSame($expected, $this->helper->saveUploadedFile($result));
     }
 
     /**
@@ -500,7 +500,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals('media-dir', $this->helper->getMediaBaseDir());
-        $this->assertEquals('media-dir', $this->helper->getMediaBaseDir());
+        $this->assertSame('media-dir', $this->helper->getMediaBaseDir());
+        $this->assertSame('media-dir', $this->helper->getMediaBaseDir());
     }
 }

@@ -48,6 +48,6 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->groupServiceMock->expects($this->never())->method('getLoggedInGroups');
         $this->converterMock->expects($this->never())->method('toOptionArray');
         $this->groupSourceLoggedInOnly->expects($this->once())->method('toOptionArray')->willReturn($expectedValue);
-        $this->assertEquals($expectedValue, $this->model->toOptionArray());
+        $this->assertSame($expectedValue, $this->model->toOptionArray());
     }
 }

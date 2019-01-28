@@ -97,7 +97,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
                 ->method($this->anything());
         }
 
-        $this->assertEquals($selectMock, $this->subject->process($selectMock));
+        $this->assertSame($selectMock, $this->subject->process($selectMock));
     }
 
     /**

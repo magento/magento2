@@ -59,6 +59,6 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItems()
     {
-        $this->assertEquals($this->items, $this->search->getItems());
+        $this->assertSame($this->items, $this->search->getItems());
     }
 }

@@ -79,7 +79,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->cookieManagerMock->expects($this->never())
             ->method('setPublicCookie');
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
     public function testAfterRenderResult()
@@ -168,7 +168,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with(true, null)
             ->willReturn($collectionMock);
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
     public function testAfterRenderResultWithNoMessages()
@@ -212,7 +212,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->method('createPublicCookieMetadata')
             ->willReturn(null);
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
     public function testAfterRenderResultWithoutExisting()
@@ -294,7 +294,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with(true, null)
             ->willReturn($collectionMock);
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
     public function testAfterRenderResultWithWrongJson()
@@ -372,7 +372,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with(true, null)
             ->willReturn($collectionMock);
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
     public function testAfterRenderResultWithWrongArray()
@@ -454,7 +454,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with(true, null)
             ->willReturn($collectionMock);
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
     /**
@@ -543,6 +543,6 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with(true, null)
             ->willReturn($collectionMock);
 
-        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 }

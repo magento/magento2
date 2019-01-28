@@ -65,10 +65,10 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $searchResult = $this->repository->getList('test', $searchCriteria);
 
-        $this->assertEquals(3, $searchResult->getTotalCount());
+        $this->assertSame(3, $searchResult->getTotalCount());
 
         $items = array_values($searchResult->getItems());
-        $this->assertEquals(1, count($items));
-        $this->assertEquals('attribute_for_search_3', $items[0]['attribute_code']);
+        $this->assertSame(1, count($items));
+        $this->assertSame('attribute_for_search_3', $items[0]['attribute_code']);
     }
 }

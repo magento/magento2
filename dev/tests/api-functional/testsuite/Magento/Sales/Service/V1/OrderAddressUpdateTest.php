@@ -90,7 +90,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
             OrderAddress::ENTITY_ID => $order->getBillingAddressId(),
         ];
         foreach ($validate as $key => $field) {
-            $this->assertEquals($validate[$key], $billingAddress->getData($key));
+            $this->assertSame($validate[$key], $billingAddress->getData($key));
         }
     }
 }

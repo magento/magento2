@@ -85,7 +85,7 @@ class UnlockButtonTest extends \PHPUnit\Framework\TestCase
         $this->customerModelMock->expects($this->once())->method('isCustomerLocked')->willReturn($expectedValue);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturn('http://website.com/');
 
-        $this->assertEquals($result, $this->block->getButtonData());
+        $this->assertSame($result, $this->block->getButtonData());
     }
 
     /**

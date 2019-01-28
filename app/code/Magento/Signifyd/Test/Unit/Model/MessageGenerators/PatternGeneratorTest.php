@@ -47,7 +47,7 @@ class PatternGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $generator = new PatternGenerator($template, $requiredFields);
         $actual = $generator->generate($data);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**

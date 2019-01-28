@@ -55,7 +55,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Translation\Model\Inline\Config::class,
             ['scopeConfig' => $scopeConfig]
         );
-        $this->assertEquals($result, $config->isActive($store));
+        $this->assertSame($result, $config->isActive($store));
     }
 
     public function testIsDevAllowed()
@@ -73,6 +73,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($result)
         );
 
-        $this->assertEquals($result, $this->model->isDevAllowed($store));
+        $this->assertSame($result, $this->model->isDevAllowed($store));
     }
 }

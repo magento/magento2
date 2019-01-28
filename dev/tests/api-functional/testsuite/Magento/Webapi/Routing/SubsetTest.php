@@ -52,7 +52,7 @@ class SubsetTest extends \Magento\Webapi\Routing\BaseService
         ];
         $requestData = ['id' => $itemId];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($itemId, $item['id'], 'Item was retrieved unsuccessfully');
+        $this->assertSame($itemId, $item['id'], 'Item was retrieved unsuccessfully');
     }
 
     /**
@@ -71,6 +71,6 @@ class SubsetTest extends \Magento\Webapi\Routing\BaseService
         ];
 
         $item = $this->_webApiCall($serviceInfo);
-        $this->assertEquals($itemArr, $item, 'Items were not retrieved');
+        $this->assertSame($itemArr, $item, 'Items were not retrieved');
     }
 }

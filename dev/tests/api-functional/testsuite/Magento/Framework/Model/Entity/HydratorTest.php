@@ -129,7 +129,7 @@ class HydratorTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $actualData['disable_auto_group_change']
         );
 
-        $this->assertEquals($expectedData, $actualData);
+        $this->assertSame($expectedData, $actualData);
     }
 
     /**

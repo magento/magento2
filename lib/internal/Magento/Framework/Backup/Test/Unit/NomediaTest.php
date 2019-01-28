@@ -109,7 +109,7 @@ class NomediaTest extends \PHPUnit\Framework\TestCase
         $model->{$action}();
         $this->assertTrue($model->getIsSuccess());
 
-        $this->assertEquals([$rootDir, $rootDir . '/media', $rootDir . '/pub/media'], $model->getIgnorePaths());
+        $this->assertSame([$rootDir, $rootDir . '/media', $rootDir . '/pub/media'], $model->getIgnorePaths());
     }
 
     /**

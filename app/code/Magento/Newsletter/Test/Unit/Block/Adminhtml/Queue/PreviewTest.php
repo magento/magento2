@@ -98,7 +98,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $this->storeManager->expects($this->once())->method('getDefaultStoreView')->will($this->returnValue($store));
         $result = $this->preview->toHtml();
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
     public function testToHtmlWithId()
@@ -116,6 +116,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $this->storeManager->expects($this->once())->method('getStores')->will($this->returnValue([0 => $store]));
         $result = $this->preview->toHtml();
-        $this->assertEquals('<pre></pre>', $result);
+        $this->assertSame('<pre></pre>', $result);
     }
 }

@@ -79,7 +79,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $this->modifierFactoryMock->expects($this->never())
             ->method('create');
         $this->canShowDownloadablePanel('someProductType');
-        $this->assertEquals([], $this->composite->modifyData([]));
+        $this->assertSame([], $this->composite->modifyData([]));
     }
 
     /**
@@ -90,7 +90,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $this->modifierFactoryMock->expects($this->never())
             ->method('create');
         $this->canShowDownloadablePanel('someProductType');
-        $this->assertEquals([], $this->composite->modifyMeta([]));
+        $this->assertSame([], $this->composite->modifyMeta([]));
     }
 
     /**
@@ -106,7 +106,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $this->modifierMock->expects($this->once())
             ->method('modifyData')
             ->willReturn($modifiedData);
-        $this->assertEquals($modifiedData, $this->composite->modifyData([]));
+        $this->assertSame($modifiedData, $this->composite->modifyData([]));
     }
 
     /**
@@ -122,7 +122,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $this->modifierMock->expects($this->once())
             ->method('modifyMeta')
             ->willReturn($modifiedMeta);
-        $this->assertEquals($modifiedMeta, $this->composite->modifyMeta([]));
+        $this->assertSame($modifiedMeta, $this->composite->modifyMeta([]));
     }
 
     /**

@@ -24,7 +24,7 @@ class OauthInputExceptionTest extends \PHPUnit\Framework\TestCase
         }
         $exception->addError(new Phrase('Message with period.'));
 
-        $this->assertEquals(
+        $this->assertSame(
             '"field1" is required. Enter and try again, "field2" is required. Enter and try again, Message with period',
             $exception->getAggregatedErrorMessage()
         );
@@ -36,6 +36,6 @@ class OauthInputExceptionTest extends \PHPUnit\Framework\TestCase
     public function testGetAggregatedErrorMessageNoError()
     {
         $exception = new OauthInputException();
-        $this->assertEquals('', $exception->getAggregatedErrorMessage());
+        $this->assertSame('', $exception->getAggregatedErrorMessage());
     }
 }

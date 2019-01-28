@@ -85,7 +85,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->model);
         $tester->execute([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_SUCCESS,
             $tester->getStatusCode()
         );
@@ -104,7 +104,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->model);
         $tester->execute([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
@@ -126,7 +126,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->model);
         $tester->execute([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );

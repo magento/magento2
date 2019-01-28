@@ -18,7 +18,7 @@ class HtmlFormConverterTest extends \PHPUnit\Framework\TestCase
         ];
 
         $converter = new HtmlFormConverter();
-        static::assertEquals($expectedResult, $converter->convert($this->getValidFormHtml()));
+        static::assertSame($expectedResult, $converter->convert($this->getValidFormHtml()));
     }
 
     public function testConvertNotValidHtml()

@@ -74,6 +74,6 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 'period' => $reportItem->getData('period')
             ];
         }
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

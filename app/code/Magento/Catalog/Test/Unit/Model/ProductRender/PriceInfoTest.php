@@ -66,7 +66,7 @@ class PriceInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->priceInfo->setMaxRegularPrice($maxRegularPriceValue);
 
-        $this->assertEquals($this->priceInfo->getMaxRegularPrice(), $maxRegularPriceValue);
+        $this->assertSame($this->priceInfo->getMaxRegularPrice(), $maxRegularPriceValue);
     }
 
     public function testEmptyMaxRegularPrice()
@@ -75,7 +75,7 @@ class PriceInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->priceInfo->setMaxPrice($maxRegularPriceValue);
 
-        $this->assertEquals($this->priceInfo->getMaxRegularPrice(), $maxRegularPriceValue);
+        $this->assertSame($this->priceInfo->getMaxRegularPrice(), $maxRegularPriceValue);
     }
 
     public function testGetMinRegularPrice()
@@ -84,7 +84,7 @@ class PriceInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->priceInfo->setMinimalRegularPrice($minRegularPriceValue);
 
-        $this->assertEquals($this->priceInfo->getMinimalRegularPrice(), $minRegularPriceValue);
+        $this->assertSame($this->priceInfo->getMinimalRegularPrice(), $minRegularPriceValue);
     }
 
     public function testEmptyMinRegularPrice()
@@ -93,6 +93,6 @@ class PriceInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->priceInfo->setMinimalPrice($minPriceValue);
 
-        $this->assertEquals($this->priceInfo->getMinimalRegularPrice(), $minPriceValue);
+        $this->assertSame($this->priceInfo->getMinimalRegularPrice(), $minPriceValue);
     }
 }

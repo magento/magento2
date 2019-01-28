@@ -191,7 +191,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->target->apply($this->request);
 
-        $this->assertEquals($this->target, $result);
+        $this->assertSame($this->target, $result);
     }
 
     public function testGetItemsWithApply()
@@ -234,7 +234,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->target->apply($this->request)->getItems();
 
-        $this->assertEquals($expectedFilterItems, $result);
+        $this->assertSame($expectedFilterItems, $result);
     }
 
     /**
@@ -329,7 +329,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->target->getItems();
 
-        $this->assertEquals($expectedFilterItems, $result);
+        $this->assertSame($expectedFilterItems, $result);
     }
 
     /**
@@ -398,7 +398,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         ];
         $result = $this->target->getItems();
 
-        $this->assertEquals($expectedFilterItems, $result);
+        $this->assertSame($expectedFilterItems, $result);
     }
 
     /**
@@ -425,7 +425,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('build')
             ->willReturn([]);
 
-        $this->assertEquals([], $this->target->getItems());
+        $this->assertSame([], $this->target->getItems());
     }
 
     /**

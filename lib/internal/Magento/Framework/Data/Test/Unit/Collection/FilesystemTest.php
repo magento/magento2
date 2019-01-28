@@ -29,7 +29,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     {
         $filterValue = new \Zend_Db_Expr($filterValue);
 
-        $this->assertEquals($expected, $this->model->filterCallbackLike($field, $filterValue, $row));
+        $this->assertSame($expected, $this->model->filterCallbackLike($field, $filterValue, $row));
     }
 
     /**

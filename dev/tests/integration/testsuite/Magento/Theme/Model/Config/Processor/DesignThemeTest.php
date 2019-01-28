@@ -22,6 +22,6 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($config, $designTheme->process($config));
+        $this->assertSame($config, $designTheme->process($config));
     }
 }

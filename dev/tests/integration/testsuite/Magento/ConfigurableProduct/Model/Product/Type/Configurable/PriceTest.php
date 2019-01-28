@@ -168,7 +168,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         );
 
         // final price is the lowest price of configurable variations
-        $this->assertEquals(round($expectedPrice, 2), round($model->getFinalPrice(1, $product), 2));
+        $this->assertSame(round($expectedPrice, 2), round($model->getFinalPrice(1, $product), 2));
     }
 
     /**

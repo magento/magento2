@@ -158,11 +158,11 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $this->assertGreaterThan(0, $taxRuleData['id']);
         $taxRuleId = $taxRuleData['id'];
         unset($taxRuleData['id']);
-        $this->assertEquals($requestData['rule'], $taxRuleData, "Tax rule is created with invalid data.");
+        $this->assertSame($requestData['rule'], $taxRuleData, "Tax rule is created with invalid data.");
         /** Ensure that tax rule was actually created in DB */
         /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
         $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
-        $this->assertEquals($taxRuleId, $taxRule->load($taxRuleId)->getId(), 'Tax rule was not created in DB.');
+        $this->assertSame($taxRuleId, $taxRule->load($taxRuleId)->getId(), 'Tax rule was not created in DB.');
         $taxRule->delete();
     }
 
@@ -239,8 +239,8 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['Code'], $errorObj['parameters']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(['Code'], $errorObj['parameters']);
         }
 
         // Clean up the new tax rule so it won't affect other tests
@@ -282,7 +282,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         ];
         $requestData = ['ruleId' => $taxRuleId];
         $result = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($expectedRuleData, $result);
+        $this->assertSame($expectedRuleData, $result);
     }
 
     /**
@@ -316,7 +316,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(1, $searchResults['total_count']);
+        $this->assertSame(1, $searchResults['total_count']);
 
         $expectedRuleData = [
             [
@@ -330,7 +330,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 'tax_rate_ids' => array_values(array_unique($fixtureRule->getRates())),
             ],
         ];
-        $this->assertEquals($expectedRuleData, $searchResults['items']);
+        $this->assertSame($expectedRuleData, $searchResults['items']);
     }
 
     /**
@@ -382,7 +382,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(2, $searchResults['total_count']);
+        $this->assertSame(2, $searchResults['total_count']);
 
         $expectedRuleData = [
             [
@@ -406,7 +406,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 'tax_rate_ids' => array_values(array_unique($fixtureRule->getRates())),
             ],
         ];
-        $this->assertEquals($expectedRuleData, $searchResults['items']);
+        $this->assertSame($expectedRuleData, $searchResults['items']);
     }
 
     public function testGetTaxRuleNotExist()
@@ -478,33 +478,33 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             ['calculation' => $taxCalculation]
         );
         $taxRuleModel = $taxRule->load($fixtureRule->getId());
-        $this->assertEquals($expectedRuleData['id'], $taxRuleModel->getId(), 'Tax rule was not updated in DB.');
-        $this->assertEquals(
+        $this->assertSame($expectedRuleData['id'], $taxRuleModel->getId(), 'Tax rule was not updated in DB.');
+        $this->assertSame(
             $expectedRuleData['code'],
             $taxRuleModel->getCode(),
             'Tax rule code was updated incorrectly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRuleData['position'],
             $taxRuleModel->getPosition(),
             'Tax rule sort order was updated incorrectly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRuleData['priority'],
             $taxRuleModel->getPriority(),
             'Tax rule priority was updated incorrectly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRuleData['customer_tax_class_ids'],
             array_values(array_unique($taxRuleModel->getCustomerTaxClasses())),
             'Customer Tax classes were updated incorrectly'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRuleData['product_tax_class_ids'],
             array_values(array_unique($taxRuleModel->getProductTaxClasses())),
             'Product Tax classes were updated incorrectly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRuleData['tax_rate_ids'],
             array_values(array_unique($taxRuleModel->getRates())),
             'Tax rates were updated incorrectly.'
@@ -575,9 +575,9 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($fixtureRule->getId(), $searchResults['items'][0]["id"]);
-        $this->assertEquals($fixtureRule->getCode(), $searchResults['items'][0]['code']);
+        $this->assertSame(1, $searchResults['total_count']);
+        $this->assertSame($fixtureRule->getId(), $searchResults['items'][0]["id"]);
+        $this->assertSame($fixtureRule->getCode(), $searchResults['items'][0]['code']);
     }
 
     /**

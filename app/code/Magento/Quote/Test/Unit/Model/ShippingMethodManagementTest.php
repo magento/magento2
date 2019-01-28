@@ -253,7 +253,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->quote->expects($this->once())
             ->method('isVirtual')->will($this->returnValue(true));
 
-        $this->assertEquals([], $this->model->getList($cartId));
+        $this->assertSame([], $this->model->getList($cartId));
     }
 
     public function testGetListForEmptyCart()
@@ -266,7 +266,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->quote->expects($this->once())
             ->method('getItemsCount')->will($this->returnValue(0));
 
-        $this->assertEquals([], $this->model->getList($cartId));
+        $this->assertSame([], $this->model->getList($cartId));
     }
 
     /**
@@ -316,7 +316,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->method('modelToDataObject')
             ->with($shippingRateMock, $currencyCode)
             ->will($this->returnValue('RateValue'));
-        $this->assertEquals(['RateValue'], $this->model->getList($cartId));
+        $this->assertSame(['RateValue'], $this->model->getList($cartId));
     }
 
     /**
@@ -542,7 +542,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($methodObject);
 
         $carriersRates = $this->model->estimateByExtendedAddress($cartId, $address);
-        static::assertEquals($expectedRates, $carriersRates);
+        static::assertSame($expectedRates, $carriersRates);
     }
 
     /**
@@ -626,6 +626,6 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($methodObject);
 
         $carriersRates = $this->model->estimateByAddressId($cartId, $address);
-        static::assertEquals($expectedRates, $carriersRates);
+        static::assertSame($expectedRates, $carriersRates);
     }
 }

@@ -16,42 +16,42 @@ class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $response = $this->getResponse()->getBody();
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add" and @title = "Create Website"]/span[text() = "Create Website"]',
                 $response
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_group"]',
                 $response
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_store"]',
                 $response
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             0,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id = "add" and @class = "disabled"]',
                 $response
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             0,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_group" and contains(@class,"disabled")]',
                 $response
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             0,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_store" and contains(@class,"disabled")]',

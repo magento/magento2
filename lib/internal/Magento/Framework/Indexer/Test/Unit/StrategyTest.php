@@ -43,13 +43,13 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
      */
     public function testUseIdxTable()
     {
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertSame(false, $this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(false);
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertSame(false, $this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(true);
-        $this->assertEquals(true, $this->_model->getUseIdxTable());
+        $this->assertSame(true, $this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable();
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertSame(false, $this->_model->getUseIdxTable());
     }
 
     /**
@@ -59,11 +59,11 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareTableName()
     {
-        $this->assertEquals('test_tmp', $this->_model->prepareTableName('test'));
+        $this->assertSame('test_tmp', $this->_model->prepareTableName('test'));
         $this->_model->setUseIdxTable(true);
-        $this->assertEquals('test_idx', $this->_model->prepareTableName('test'));
+        $this->assertSame('test_idx', $this->_model->prepareTableName('test'));
         $this->_model->setUseIdxTable(false);
-        $this->assertEquals('test_tmp', $this->_model->prepareTableName('test'));
+        $this->assertSame('test_tmp', $this->_model->prepareTableName('test'));
     }
 
     /**
@@ -81,8 +81,8 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
                 }
             )
         );
-        $this->assertEquals('pre_test_tmp', $this->_model->getTableName('test'));
+        $this->assertSame('pre_test_tmp', $this->_model->getTableName('test'));
         $this->_model->setUseIdxTable(true);
-        $this->assertEquals('pre_test_idx', $this->_model->getTableName('test'));
+        $this->assertSame('pre_test_idx', $this->_model->getTableName('test'));
     }
 }

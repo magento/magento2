@@ -57,12 +57,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
         $viewId = 'view_id';
         $this->_resourceMock->expects($this->once())->method('load')->with($this->model, $viewId)->willReturnSelf();
         $this->model->loadByView($viewId);
-        $this->assertEquals($viewId, $this->model->getViewId());
+        $this->assertSame($viewId, $this->model->getViewId());
     }
 
     public function testBeforeSave()
     {
-        $this->assertEquals(null, $this->model->getUpdated());
+        $this->assertSame(null, $this->model->getUpdated());
         $this->model->beforeSave();
         $this->assertTrue(($this->model->getUpdated() != null));
     }
@@ -71,12 +71,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
     {
         $setData = 'data';
         $this->model->setMode($setData);
-        $this->assertEquals($setData, $this->model->getMode());
+        $this->assertSame($setData, $this->model->getMode());
         $this->model->setStatus($setData);
-        $this->assertEquals($setData, $this->model->getStatus());
+        $this->assertSame($setData, $this->model->getStatus());
         $this->model->setUpdated($setData);
-        $this->assertEquals($setData, $this->model->getUpdated());
+        $this->assertSame($setData, $this->model->getUpdated());
         $this->model->setVersionId($setData);
-        $this->assertEquals($setData, $this->model->getVersionId());
+        $this->assertSame($setData, $this->model->getVersionId());
     }
 }

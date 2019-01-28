@@ -129,7 +129,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
         //verify invoice data
         foreach ($expectedResults['creditmemo_data'] as $key => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value,
                 $this->creditmemo->getData($key),
                 'Creditmemo data field '.$key.' is incorrect'
@@ -141,9 +141,9 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             foreach ($itemData as $key => $value) {
                 if ($key == 'tax_ratio') {
                     $taxRatio = json_decode($creditmemoItem->getData($key), true);
-                    $this->assertEquals($value['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
+                    $this->assertSame($value['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
                 } else {
-                    $this->assertEquals(
+                    $this->assertSame(
                         $value,
                         $creditmemoItem->getData($key),
                         'Creditmemo item field '.$key.' is incorrect'

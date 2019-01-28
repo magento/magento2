@@ -77,7 +77,7 @@ class AgreementsTest extends \PHPUnit\Framework\TestCase
             ->with('is_active', 1)
             ->willReturnSelf();
 
-        $this->assertEquals($agreementCollection, $this->model->getAgreements());
+        $this->assertSame($agreementCollection, $this->model->getAgreements());
     }
 
     public function testGetAgreementsIfAgreementsDisabled()
@@ -87,6 +87,6 @@ class AgreementsTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
-        $this->assertEquals($expectedResult, $this->model->getAgreements());
+        $this->assertSame($expectedResult, $this->model->getAgreements());
     }
 }

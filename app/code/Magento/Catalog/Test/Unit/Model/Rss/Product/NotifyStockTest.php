@@ -99,6 +99,6 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
         $this->stock->expects($this->once())->method('addLowStockFilter')->with($productCollection);
 
         $products = $this->notifyStock->getProductsCollection();
-        $this->assertEquals($productCollection, $products);
+        $this->assertSame($productCollection, $products);
     }
 }

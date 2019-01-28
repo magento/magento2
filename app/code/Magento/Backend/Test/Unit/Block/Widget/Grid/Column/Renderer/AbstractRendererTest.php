@@ -69,7 +69,7 @@ class AbstractRendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn($value);
         $this->renderer->setColumn($this->columnMock);
 
-        $this->assertEquals($expectedResult, $this->renderer->render($this->dataObjectMock));
+        $this->assertSame($expectedResult, $this->renderer->render($this->dataObjectMock));
     }
 
     /**

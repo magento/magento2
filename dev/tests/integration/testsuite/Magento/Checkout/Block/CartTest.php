@@ -35,7 +35,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class)->setChild('child', $child);
         $methods = $block->getMethods('child');
-        $this->assertEquals(['method1', 'method2'], $methods);
+        $this->assertSame(['method1', 'method2'], $methods);
     }
 
     public function testGetMethodsEmptyChild()
@@ -48,7 +48,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class)->setChild('child', $childEmpty);
         $methods = $block->getMethods('child');
-        $this->assertEquals([], $methods);
+        $this->assertSame([], $methods);
     }
 
     public function testGetMethodsNoChild()
@@ -60,7 +60,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class);
         $methods = $block->getMethods('child');
-        $this->assertEquals([], $methods);
+        $this->assertSame([], $methods);
     }
 
     public function testGetPagerHtml()
@@ -72,6 +72,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class);
         $pager = $block->getPagerHtml();
-        $this->assertEquals('', $pager);
+        $this->assertSame('', $pager);
     }
 }

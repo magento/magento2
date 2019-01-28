@@ -157,7 +157,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 
         $conditions->expects($this->once())->method('loadArray')->with($conditionsArray);
 
-        $this->assertEquals($conditions, $this->model->getConditions());
+        $this->assertSame($conditions, $this->model->getConditions());
     }
 
     public function testGetActions()
@@ -179,7 +179,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 
         $actions->expects($this->once())->method('loadArray')->with($actionsArray);
 
-        $this->assertEquals($actions, $this->model->getActions());
+        $this->assertSame($actions, $this->model->getActions());
     }
 
     public function testBeforeSave()
@@ -202,8 +202,8 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch');
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
-        $this->assertEquals(json_encode(['conditions' => 'array']), $this->model->getConditionsSerialized());
-        $this->assertEquals(json_encode(['actions' => 'array']), $this->model->getActionsSerialized());
+        $this->assertSame($this->model, $this->model->beforeSave());
+        $this->assertSame(json_encode(['conditions' => 'array']), $this->model->getConditionsSerialized());
+        $this->assertSame(json_encode(['actions' => 'array']), $this->model->getActionsSerialized());
     }
 }

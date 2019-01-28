@@ -56,15 +56,15 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testSetParentItemNull()
     {
-        $this->assertEquals($this->model, $this->model->setParentItem(null));
+        $this->assertSame($this->model, $this->model->setParentItem(null));
         $this->assertNull($this->model->getParentItem());
     }
 
     public function testSetParentItem()
     {
         $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
-        $this->assertEquals($this->model, $this->model->setParentItem($item));
-        $this->assertEquals($item, $this->model->getParentItem());
+        $this->assertSame($this->model, $this->model->setParentItem($item));
+        $this->assertSame($item, $this->model->getParentItem());
         $this->assertTrue($item->getHasChildren());
         $this->assertCount(1, $item->getChildrenItems());
     }
@@ -73,7 +73,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
         $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::PARENT_ITEM, $item);
-        $this->assertEquals($item, $this->model->getParentItem());
+        $this->assertSame($item, $this->model->getParentItem());
     }
 
     public function testSetOrder()
@@ -83,8 +83,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $order->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
-        $this->assertEquals($this->model, $this->model->setOrder($order));
-        $this->assertEquals($orderId, $this->model->getOrderId());
+        $this->assertSame($this->model, $this->model->setOrder($order));
+        $this->assertSame($orderId, $this->model->getOrderId());
     }
 
     public function testGetOrder()
@@ -103,10 +103,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($order);
         $this->model->setOrderId($orderId);
-        $this->assertEquals($order, $this->model->getOrder());
+        $this->assertSame($order, $this->model->getOrder());
 
         //get existed order
-        $this->assertEquals($order, $this->model->getOrder());
+        $this->assertSame($order, $this->model->getOrder());
     }
 
     /**
@@ -137,7 +137,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->model->setQtyRefunded($qtyRefunded);
         $this->model->setQtyShipped($qtyShipped);
 
-        $this->assertEquals($expectedStatus, $this->model->getStatusId());
+        $this->assertSame($expectedStatus, $this->model->getStatusId());
     }
 
     /**
@@ -174,18 +174,18 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Item::STATUS_PARTIAL => 'Partial',
             \Magento\Sales\Model\Order\Item::STATUS_MIXED => 'Mixed',
         ];
-        $this->assertEquals($statuses, $this->model->getStatuses());
+        $this->assertSame($statuses, $this->model->getStatuses());
     }
 
     public function testGetOriginalPrice()
     {
         $price = 9.99;
         $this->model->setPrice($price);
-        $this->assertEquals($price, $this->model->getOriginalPrice());
+        $this->assertSame($price, $this->model->getOriginalPrice());
 
         $originalPrice = 5.55;
         $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::ORIGINAL_PRICE, $originalPrice);
-        $this->assertEquals($originalPrice, $this->model->getOriginalPrice());
+        $this->assertSame($originalPrice, $this->model->getOriginalPrice());
     }
 
     /**

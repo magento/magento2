@@ -108,7 +108,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, 1);
-        $this->assertEquals($expected, $this->convertObjectToArray($taxDetails));
+        $this->assertSame($expected, $this->convertObjectToArray($taxDetails));
     }
 
     /**
@@ -824,7 +824,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, $storeId);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertSame($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
     public function calculateTaxTotalBasedDataProvider()
@@ -1286,7 +1286,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertSame($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
     /**
@@ -2387,7 +2387,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertSame($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
     /**
@@ -2424,7 +2424,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertSame($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
     /**
@@ -2471,7 +2471,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertSame($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
     /**

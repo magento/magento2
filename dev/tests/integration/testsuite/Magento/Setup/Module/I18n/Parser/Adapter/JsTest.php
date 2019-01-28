@@ -48,6 +48,6 @@ class JsTest extends \PHPUnit\Framework\TestCase
                 'quote' => '\''
             ]
         ];
-        $this->assertEquals($expectation, $this->jsPhraseCollector->getPhrases());
+        $this->assertSame($expectation, $this->jsPhraseCollector->getPhrases());
     }
 }

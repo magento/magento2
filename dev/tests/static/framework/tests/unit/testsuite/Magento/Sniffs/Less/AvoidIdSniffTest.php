@@ -49,7 +49,7 @@ class AvoidIdSniffTest extends \PHPUnit\Framework\TestCase
             __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $expectedReportFile
         );
         unlink($reportFile);
-        $this->assertEquals(1, $result);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame(1, $result);
+        $this->assertSame($expected, $actual);
     }
 }

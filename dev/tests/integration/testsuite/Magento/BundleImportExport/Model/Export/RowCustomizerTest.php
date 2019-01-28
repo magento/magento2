@@ -50,7 +50,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $ids = $collection->getConnection()->fetchPairs($select);
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, array_values($ids));
-        $this->assertEquals($select, (string)$collection->getSelect());
+        $this->assertSame($select, (string)$collection->getSelect());
         $result = $this->model->addData(['additional_attributes' => $allAdditionalAttributes], $ids['bundle-product']);
         $this->assertArrayHasKey('bundle_price_type', $result);
         $this->assertArrayHasKey('bundle_shipment_type', $result);
@@ -59,8 +59,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('bundle_weight_type', $result);
         $this->assertArrayHasKey('bundle_values', $result);
         $this->assertContains('sku=simple,', $result['bundle_values']);
-        $this->assertEquals([], $this->model->addData([], $ids['simple']));
-        $this->assertEquals($parsedAdditionalAttributes, $result['additional_attributes']);
+        $this->assertSame([], $this->model->addData([], $ids['simple']));
+        $this->assertSame($parsedAdditionalAttributes, $result['additional_attributes']);
     }
 
     /**

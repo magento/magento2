@@ -43,12 +43,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTabLabel()
     {
-        $this->assertEquals(__('Role Info'), $this->model->getTabLabel());
+        $this->assertSame(__('Role Info'), $this->model->getTabLabel());
     }
 
     public function testGetTabTitle()
     {
-        $this->assertEquals(__('Role Info'), $this->model->getTabTitle());
+        $this->assertSame(__('Role Info'), $this->model->getTabTitle());
     }
 
     public function testCanShowTab()

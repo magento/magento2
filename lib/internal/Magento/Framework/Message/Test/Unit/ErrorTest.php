@@ -25,6 +25,6 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertEquals(MessageInterface::TYPE_ERROR, $this->model->getType());
+        $this->assertSame(MessageInterface::TYPE_ERROR, $this->model->getType());
     }
 }

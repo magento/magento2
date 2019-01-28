@@ -53,7 +53,7 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
                 )
             )
             ->will($this->returnValue($this->amountMock));
-        $this->assertEquals(
+        $this->assertSame(
             $this->amountMock,
             $this->factory->create('this-is-float-amount', ['this-is-array-of-adjustments'])
         );
@@ -78,7 +78,7 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
                 )
             )
             ->will($this->returnValue(new \stdClass()));
-        $this->assertEquals(
+        $this->assertSame(
             $this->amountMock,
             $this->factory->create('this-is-float-amount', ['this-is-array-of-adjustments'])
         );

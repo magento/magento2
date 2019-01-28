@@ -74,7 +74,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
             ->with($configPath, [], $configValue)
             ->willReturn($expectedArray);
 
-        $this->assertEquals($expectedResult, $this->source->get($path));
+        $this->assertSame($expectedResult, $this->source->get($path));
     }
 
     /**

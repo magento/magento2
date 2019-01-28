@@ -42,7 +42,7 @@ class DistinctRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getPart')
             ->with(Select::DISTINCT)
             ->willReturn(false);
-        $this->assertEquals($sql, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($sql, $this->model->render($this->selectMock, $sql));
     }
 
     public function testRender()
@@ -53,6 +53,6 @@ class DistinctRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getPart')
             ->with(Select::DISTINCT)
             ->willReturn(true);
-        $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 }

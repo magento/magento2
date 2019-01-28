@@ -80,7 +80,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
     public function testCanShowTab($integrationData, $expectedValue)
     {
         $this->webapiBlock = $this->getWebapiBlock($integrationData);
-        $this->assertEquals($expectedValue, $this->webapiBlock->canShowTab());
+        $this->assertSame($expectedValue, $this->webapiBlock->canShowTab());
     }
 
     /**
@@ -127,7 +127,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
         $this->rootResource->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($rootResourceId));
-        $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
+        $this->assertSame($expectedValue, $this->webapiBlock->isEverythingAllowed());
     }
 
     /**
@@ -172,7 +172,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
             ->method('mapResources')
             ->with(['resource1', 'resource2', 'resource3'])
             ->will($this->returnValue($rootArray));
-        $this->assertEquals($rootArray, $this->webapiBlock->getTree());
+        $this->assertSame($rootArray, $this->webapiBlock->getTree());
     }
 
     /**
@@ -193,7 +193,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
 
         $this->webapiBlock = $this->getWebapiBlock();
 
-        $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
+        $this->assertSame($expectedValue, $this->webapiBlock->isEverythingAllowed());
     }
 
     /**

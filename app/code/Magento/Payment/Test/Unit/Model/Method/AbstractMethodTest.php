@@ -115,7 +115,7 @@ class AbstractMethodTest extends \PHPUnit\Framework\TestCase
                 $this->countOf(3)
             );
 
-        $this->assertEquals($result, $this->payment->isAvailable($this->quoteMock));
+        $this->assertSame($result, $this->payment->isAvailable($this->quoteMock));
     }
 
     public function testAssignData()

@@ -90,7 +90,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
+        $this->assertSame(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
 
     /**
@@ -127,7 +127,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->getFinalAmount();
 
-        $this->assertEquals($expectedValue, $result);
+        $this->assertSame($expectedValue, $result);
     }
 
     /**
@@ -176,7 +176,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->showInclDescr();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -247,7 +247,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->showExclDescrIncl();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -315,7 +315,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->model->render($amountRender);
         $result = $this->model->getWeeeTaxAttributes();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -346,7 +346,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
 
         $result = $this->model->renderWeeeTaxAttribute($attribute);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -374,7 +374,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
 
         $result = $this->model->renderWeeeTaxAttributeName($attribute);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -402,7 +402,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
 
         $result = $this->model->renderWeeeTaxAttributeWithTax($attribute);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

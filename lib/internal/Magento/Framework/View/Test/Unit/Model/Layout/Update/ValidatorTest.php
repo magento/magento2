@@ -91,7 +91,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValidNotSecurityCheck($layoutUpdate, $expectedResult, $messages)
     {
         $model = $this->_createValidator($layoutUpdate);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $model->isValid(
                 $layoutUpdate,
@@ -99,7 +99,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 false
             )
         );
-        $this->assertEquals($messages, $model->getMessages());
+        $this->assertSame($messages, $model->getMessages());
     }
 
     /**
@@ -121,7 +121,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValidSecurityCheck($layoutUpdate, $expectedResult, $messages)
     {
         $model = $this->_createValidator($layoutUpdate);
-        $this->assertEquals(
+        $this->assertSame(
             $model->isValid(
                 $layoutUpdate,
                 Validator::LAYOUT_SCHEMA_PAGE_HANDLE,
@@ -129,7 +129,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ),
             $expectedResult
         );
-        $this->assertEquals($model->getMessages(), $messages);
+        $this->assertSame($model->getMessages(), $messages);
     }
 
     /**

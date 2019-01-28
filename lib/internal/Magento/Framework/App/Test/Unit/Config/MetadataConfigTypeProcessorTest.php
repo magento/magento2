@@ -159,6 +159,6 @@ class MetadataConfigTypeProcessorTest extends \PHPUnit\Framework\TestCase
         $expectedResult['websites']['website_one']['some']['config']['path1'] = 'website_one_processed_value_path1';
         $expectedResult['websites']['website_one']['some']['config']['path3'] = 'website_one_processed_value_path3';
 
-        $this->assertEquals($expectedResult, $this->_model->process($data));
+        $this->assertSame($expectedResult, $this->_model->process($data));
     }
 }

@@ -83,6 +83,6 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->dateTime->expects($this->once())
             ->method('isEmptyDate')
             ->willReturn(false);
-        $this->assertEquals('1997-12-31T00:00:00+00:00', $this->model->formatDate(1, '1997-12-31'));
+        $this->assertSame('1997-12-31T00:00:00+00:00', $this->model->formatDate(1, '1997-12-31'));
     }
 }

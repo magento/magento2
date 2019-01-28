@@ -204,7 +204,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $url .= '/form/' . $this->model->getJsFormObject();
         }
 
-        $this->assertEquals($url, $this->model->getValueElementChooserUrl());
+        $this->assertSame($url, $this->model->getValueElementChooserUrl());
     }
 
     /**
@@ -301,7 +301,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->setAttribute('quote_item_price');
         $this->model->setData('operator', $operator);
 
-        $this->assertEquals($isValid, $this->model->setValue($conditionValue)->validate($item));
+        $this->assertSame($isValid, $this->model->setValue($conditionValue)->validate($item));
     }
 
     /**

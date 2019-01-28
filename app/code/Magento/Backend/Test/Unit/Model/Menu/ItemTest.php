@@ -95,7 +95,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
-        $this->assertEquals('#', $item->getUrl());
+        $this->assertSame('#', $item->getUrl());
     }
 
     public function testGetUrlWithValidActionReturnsUrl()
@@ -109,7 +109,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('Url')
         );
-        $this->assertEquals('Url', $this->_model->getUrl());
+        $this->assertSame('Url', $this->_model->getUrl());
     }
 
     public function testHasClickCallbackReturnsFalseIfItemHasAction()
@@ -134,12 +134,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
-        $this->assertEquals('return false;', $item->getClickCallback());
+        $this->assertSame('return false;', $item->getClickCallback());
     }
 
     public function testGetClickCallbackReturnsEmptyStringIfItemHasAction()
     {
-        $this->assertEquals('', $this->_model->getClickCallback());
+        $this->assertSame('', $this->_model->getClickCallback());
     }
 
     public function testIsDisabledReturnsTrueIfModuleOutputIsDisabled()
@@ -239,7 +239,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 'data' => $data
             ]
         );
-        $this->assertEquals($expected, $model->toArray());
+        $this->assertSame($expected, $model->toArray());
     }
 
     /**
@@ -279,7 +279,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $model->populateFromArray($populateFromData);
-        $this->assertEquals($expected, $model->toArray());
+        $this->assertSame($expected, $model->toArray());
     }
 
     /**

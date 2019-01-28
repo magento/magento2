@@ -61,7 +61,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         /** @var Item $wishlistItem */
         $wishlistItem = $this->wishlist->getItemCollection()->getFirstItem();
         $this->assertInstanceOf(Item::class, $wishlistItem);
-        $this->assertEquals($wishlistItem->getQty(), 10);
+        $this->assertSame($wishlistItem->getQty(), 10);
     }
 
     /**
@@ -100,7 +100,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $itemCollection = $this->wishlist->getItemCollection();
         /** @var \Magento\Wishlist\Model\Item $item */
         $item = $itemCollection->getFirstItem();
-        $this->assertEquals($productSku, $item->getProduct()->getSku());
+        $this->assertSame($productSku, $item->getProduct()->getSku());
     }
 
     /**

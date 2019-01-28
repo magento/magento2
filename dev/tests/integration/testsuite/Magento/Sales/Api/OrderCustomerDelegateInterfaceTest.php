@@ -81,43 +81,43 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
         OrderAddressInterface $orderAddress,
         AddressInterface $address
     ): void {
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getFirstname(),
             $address->getFirstname()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getLastname(),
             $address->getLastname()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getCompany(),
             $address->getCompany()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getStreet(),
             $address->getStreet()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getCity(),
             $address->getCity()
         );
         if (!$address->getRegionId()) {
             $this->assertEmpty($address->getRegionId());
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 $orderAddress->getRegionId(),
                 $address->getRegionId()
             );
         }
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getPostcode(),
             $address->getPostcode()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getCountryId(),
             $address->getCountryId()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $orderAddress->getTelephone(),
             $address->getTelephone()
         );
@@ -175,7 +175,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
                 $this->compareAddresses($order->getShippingAddress(), $address);
             }
         }
-        $this->assertEquals($order->getCustomerId(), $createdCustomer->getId());
+        $this->assertSame($order->getCustomerId(), $createdCustomer->getId());
     }
 
     /**
@@ -231,6 +231,6 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
             }
         }
 
-        $this->assertEquals($order->getCustomerId(), $createdCustomer->getId());
+        $this->assertSame($order->getCustomerId(), $createdCustomer->getId());
     }
 }

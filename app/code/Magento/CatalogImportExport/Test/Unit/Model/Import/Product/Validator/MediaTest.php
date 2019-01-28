@@ -55,7 +55,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     public function testInit()
     {
         $result = $this->media->init(null);
-        $this->assertEquals($this->media, $result);
+        $this->assertSame($this->media, $result);
     }
 
     /**
@@ -69,9 +69,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->method('isValid');
 
         $result = $this->media->isValid($data);
-        $this->assertEquals($expected['result'], $result);
+        $this->assertSame($expected['result'], $result);
         $messages = $this->media->getMessages();
-        $this->assertEquals($expected['messages'], $messages);
+        $this->assertSame($expected['messages'], $messages);
     }
 
     public function testIsValidClearMessagesCall()
@@ -100,9 +100,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = $this->media->isValid($data);
-        $this->assertEquals($expected['result'], $result);
+        $this->assertSame($expected['result'], $result);
         $messages = $this->media->getMessages();
-        $this->assertEquals($expected['messages'], $messages);
+        $this->assertSame($expected['messages'], $messages);
     }
 
     /**
@@ -118,9 +118,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expected['result']);
 
         $result = $this->media->isValid($data);
-        $this->assertEquals($expected['result'], $result);
+        $this->assertSame($expected['result'], $result);
         $messages = $this->media->getMessages();
-        $this->assertEquals($expected['messages'], $messages);
+        $this->assertSame($expected['messages'], $messages);
     }
 
     /**

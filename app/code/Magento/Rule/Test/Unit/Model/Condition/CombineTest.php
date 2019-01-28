@@ -75,7 +75,7 @@ class CombineTest extends \PHPUnit\Framework\TestCase
             ->setValueOption(['option_key' => 'option_value'])
             ->setValue($value);
 
-        $this->assertEquals($expectingData, $this->combine->getValueName());
+        $this->assertSame($expectingData, $this->combine->getValueName());
     }
 
     /**

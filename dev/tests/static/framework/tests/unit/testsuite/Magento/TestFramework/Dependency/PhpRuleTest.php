@@ -39,7 +39,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->makeMockFilepath($class);
         $module = $this->getModuleFromClass($class);
-        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $content));
+        $this->assertSame($expected, $this->model->getDependencyInfo($module, 'php', $file, $content));
     }
 
     /**
@@ -189,7 +189,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->model = new PhpRule([], $mapLayoutBlocks);
-        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
+        $this->assertSame($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
     }
 
     public function getDefaultModelDependencyDataProvider()

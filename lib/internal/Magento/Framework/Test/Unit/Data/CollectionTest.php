@@ -40,17 +40,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addItem($objTwo);
         $this->collection->addItem($objThree);
 
-        $this->assertEquals([1, 2, 3], $this->collection->getAllIds(), 'Items added incorrectly to the collection');
+        $this->assertSame([1, 2, 3], $this->collection->getAllIds(), 'Items added incorrectly to the collection');
         $this->collection->walk([$this, 'modifyObjectNames'], ['test prefix']);
 
-        $this->assertEquals([1, 2, 3], $this->collection->getAllIds(), 'Incorrect IDs after callback function');
+        $this->assertSame([1, 2, 3], $this->collection->getAllIds(), 'Incorrect IDs after callback function');
         $expectedNames = [
             'test prefix one',
             'test prefix two',
             'test prefix three'
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedNames,
             $this->collection->getColumnValues('name'),
             'Incorrect Names after callback function'

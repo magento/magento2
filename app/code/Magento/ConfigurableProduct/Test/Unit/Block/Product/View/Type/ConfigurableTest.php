@@ -254,7 +254,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerGroupId')
             ->willReturn($customerGroupId);
         $actual = $this->block->getCacheKeyInfo();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -343,7 +343,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->block->setData('product', $productMock);
         $result = $this->block->getJsonConfig();
-        $this->assertEquals($expectedJson, $result);
+        $this->assertSame($expectedJson, $result);
     }
 
     /**

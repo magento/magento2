@@ -205,7 +205,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('createBlock')
             ->willReturn($elementHtmlSelect);
 
-        $this->assertEquals($resultHtml, $this->block->getCountryHtmlSelect());
+        $this->assertSame($resultHtml, $this->block->getCountryHtmlSelect());
     }
 
     /**

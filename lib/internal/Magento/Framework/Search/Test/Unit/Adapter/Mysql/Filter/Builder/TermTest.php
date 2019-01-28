@@ -80,7 +80,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($value));
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

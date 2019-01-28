@@ -145,6 +145,6 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
         $this->taxCalculation->expects($this->once())->method('getResource')->willReturn($resource);
         $resource->expects($this->once())->method('getRateIds')->with($rateRequest)->willReturn($rateIds);
 
-        $this->assertEquals($expected, $this->priceBoxTags->afterGetCacheKey($priceBox, $result));
+        $this->assertSame($expected, $this->priceBoxTags->afterGetCacheKey($priceBox, $result));
     }
 }

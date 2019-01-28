@@ -38,7 +38,7 @@ class ColumnResolverTest extends \PHPUnit\Framework\TestCase
         $columnResolver = $this->createColumnResolver($headers);
         $values = array_values($this->values);
         $result = $columnResolver->getColumnValue($column, $values);
-        $this->assertEquals($expectedValue, $result);
+        $this->assertSame($expectedValue, $result);
     }
 
     /**
@@ -62,7 +62,7 @@ class ColumnResolverTest extends \PHPUnit\Framework\TestCase
         $values = array_values($reversedValues);
         $columnResolver = $this->createColumnResolver($headers);
         $result = $columnResolver->getColumnValue($column, $values);
-        $this->assertEquals($expectedValue, $result);
+        $this->assertSame($expectedValue, $result);
     }
 
     /**

@@ -66,7 +66,7 @@ class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
         $this->orderItemMock->expects($this->any())->method('getSku')->willReturn($sku);
         $unavailableProducts[] = $sku;
 
-        $this->assertEquals(
+        $this->assertSame(
             $unavailableProducts,
             $this->unavailableProductsProvider->getForOrder($this->orderMock)
         );
@@ -76,7 +76,7 @@ class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
     {
         $this->isAvailable(true);
 
-        $this->assertEquals([], $this->unavailableProductsProvider->getForOrder($this->orderMock));
+        $this->assertSame([], $this->unavailableProductsProvider->getForOrder($this->orderMock));
     }
 
     /**

@@ -46,6 +46,6 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_model->setData([], '');
-        $this->assertEquals('group_id', $this->_model->getId());
+        $this->assertSame('group_id', $this->_model->getId());
     }
 }

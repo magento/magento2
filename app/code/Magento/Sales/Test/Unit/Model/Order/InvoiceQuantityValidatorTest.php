@@ -76,7 +76,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMock->expects($this->exactly(2))
             ->method('getOrderId')
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
         );
@@ -99,7 +99,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMock->expects($this->exactly(2))
             ->method('getOrderId')
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
         );
@@ -119,7 +119,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMock->expects($this->exactly(2))
             ->method('getOrderId')
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
         );
@@ -128,7 +128,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateNoOrder()
     {
         $expectedResult = [__('Order Id is required for invoice document')];
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
         );
@@ -150,7 +150,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMock->expects($this->exactly(2))
             ->method('getOrderId')
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
         );

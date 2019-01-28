@@ -29,6 +29,6 @@ class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
         $unavailableProductsProvider =
             $objectManager->create(UnavailableProductsProvider::class);
         $unavailableProducts = $unavailableProductsProvider->getForOrder($order);
-        $this->assertEquals($orderItemSimple->getSku(), $unavailableProducts[0]);
+        $this->assertSame($orderItemSimple->getSku(), $unavailableProducts[0]);
     }
 }

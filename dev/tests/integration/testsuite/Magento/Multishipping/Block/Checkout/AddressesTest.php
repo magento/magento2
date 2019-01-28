@@ -67,6 +67,6 @@ class AddressesTest extends \PHPUnit\Framework\TestCase
         ];
 
         $addressAsHtml = $this->_addresses->getAddressOptions();
-        $this->assertEquals($expectedResult, $addressAsHtml);
+        $this->assertSame($expectedResult, $addressAsHtml);
     }
 }

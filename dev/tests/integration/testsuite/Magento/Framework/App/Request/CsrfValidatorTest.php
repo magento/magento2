@@ -245,7 +245,7 @@ class CsrfValidatorTest extends TestCase
             $response->getHeaders()->toString()
         );
         $this->assertCount(1, $caught->getMessages());
-        $this->assertEquals(
+        $this->assertSame(
             self::AWARE_MESSAGE,
             $caught->getMessages()[0]->getText()
         );

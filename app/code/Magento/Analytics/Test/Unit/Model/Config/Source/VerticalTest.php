@@ -52,7 +52,7 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ['value' => 'Art and Design', 'label' => __('Art and Design')]
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedOptionsArray,
             $this->subject->toOptionArray()
         );

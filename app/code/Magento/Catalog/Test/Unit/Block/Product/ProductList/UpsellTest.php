@@ -33,7 +33,7 @@ class UpsellTest extends \PHPUnit\Framework\TestCase
         $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $productTag,
             $this->block->getIdentities()
         );

@@ -57,7 +57,7 @@ class ItemPoolTest extends \PHPUnit\Framework\TestCase
             ->with($this->defaultItemId)
             ->willReturn($itemMock);
 
-        $this->assertEquals($itemData, $this->model->getItemData($quoteItemMock));
+        $this->assertSame($itemData, $this->model->getItemData($quoteItemMock));
     }
 
     public function testGetItemDataIfItemExistInMap()
@@ -87,7 +87,7 @@ class ItemPoolTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($itemData, $this->model->getItemData($quoteItemMock));
+        $this->assertSame($itemData, $this->model->getItemData($quoteItemMock));
     }
 
     /**
@@ -104,6 +104,6 @@ class ItemPoolTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($this->defaultItemId)
             ->willReturn($this->createMock(\Magento\Quote\Model\Quote\Item::class));
-        $this->assertEquals($itemData, $this->model->getItemData($quoteItemMock));
+        $this->assertSame($itemData, $this->model->getItemData($quoteItemMock));
     }
 }

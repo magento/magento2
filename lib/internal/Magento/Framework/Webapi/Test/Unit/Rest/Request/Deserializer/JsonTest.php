@@ -75,7 +75,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
                 }
             );
         /** Initialize SUT. */
-        $this->assertEquals(
+        $this->assertSame(
             $expectedDecodedJson,
             $this->_jsonDeserializer->deserialize($inputEncodedJson),
             'Deserialization from JSON to array is invalid.'
@@ -99,8 +99,8 @@ class JsonTest extends \PHPUnit\Framework\TestCase
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
-            $this->assertEquals('Decoding error.', $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(
+            $this->assertSame('Decoding error.', $e->getMessage(), 'Exception message is invalid');
+            $this->assertSame(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),
                 'HTTP code is invalid'
@@ -130,7 +130,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertContains('Decoding error:', $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(
+            $this->assertSame(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),
                 'HTTP code is invalid'

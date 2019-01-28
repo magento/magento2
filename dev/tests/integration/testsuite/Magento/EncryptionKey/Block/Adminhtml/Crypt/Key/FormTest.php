@@ -35,8 +35,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $form = $block->getForm();
 
-        $this->assertEquals('edit_form', $form->getId());
-        $this->assertEquals('post', $form->getMethod());
+        $this->assertSame('edit_form', $form->getId());
+        $this->assertSame('post', $form->getMethod());
 
         foreach (['enc_key_note', 'generate_random', 'crypt_key', 'main_fieldset'] as $id) {
             $element = $form->getElement($id);
@@ -44,11 +44,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         }
 
         $generateRandomField = $form->getElement('generate_random');
-        $this->assertEquals('select', $generateRandomField->getType());
-        $this->assertEquals([ 0 => 'No', 1 => 'Yes'], $generateRandomField->getOptions());
+        $this->assertSame('select', $generateRandomField->getType());
+        $this->assertSame([ 0 => 'No', 1 => 'Yes'], $generateRandomField->getOptions());
 
         $cryptKeyField = $form->getElement('crypt_key');
-        $this->assertEquals('text', $cryptKeyField->getType());
-        $this->assertEquals('crypt_key', $cryptKeyField->getName());
+        $this->assertSame('text', $cryptKeyField->getType());
+        $this->assertSame('crypt_key', $cryptKeyField->getName());
     }
 }

@@ -43,6 +43,6 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         ];
         $dataProviderMock = $this->createMock(\Magento\AdminNotification\Ui\Component\DataProvider\DataProvider::class);
         $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
-        $this->assertEquals($expectedResult, $this->plugin->afterGetMeta($dataProviderMock, $result));
+        $this->assertSame($expectedResult, $this->plugin->afterGetMeta($dataProviderMock, $result));
     }
 }

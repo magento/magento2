@@ -17,7 +17,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->with('urn:magento:framework:Acl/etc/acl_merged.xsd')
             ->willReturn($urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl_merged.xsd'));
         $schemaLocator = new \Magento\Framework\Acl\AclResource\Config\SchemaLocator($urnResolverMock);
-        $this->assertEquals(
+        $this->assertSame(
             $urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl_merged.xsd'),
             $schemaLocator->getSchema()
         );

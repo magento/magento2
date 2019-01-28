@@ -159,6 +159,6 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $result = $this->builder->build($this->dataProvider, [], $this->bucket, $table);
-        $this->assertEquals($this->select, $result);
+        $this->assertSame($this->select, $result);
     }
 }

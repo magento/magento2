@@ -118,7 +118,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $actualOutput = $this->model->layoutDirective(
             ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
         );
-        $this->assertEquals($expectedOutput, trim($actualOutput));
+        $this->assertSame($expectedOutput, trim($actualOutput));
     }
 
     /**
@@ -175,7 +175,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
         Phrase::setRenderer($this->objectManager->create(\Magento\Framework\Phrase\RendererInterface::class));
 
-        $this->assertEquals($expectedResult, $this->model->filter($directive));
+        $this->assertSame($expectedResult, $this->model->filter($directive));
 
         Phrase::setRenderer($renderer);
     }

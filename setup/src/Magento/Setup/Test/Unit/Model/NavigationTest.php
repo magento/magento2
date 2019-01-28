@@ -54,12 +54,12 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertEquals(Navigation::NAV_INSTALLER, $this->navigation->getType());
+        $this->assertSame(Navigation::NAV_INSTALLER, $this->navigation->getType());
     }
 
     public function testGetData()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['key1' => 'value1'],
                 ['key2' => 'value2'],
@@ -76,7 +76,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMenuItems()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [['nav' => 'abc', 'key3' => 'value3']],
             $this->navigation->getMenuItems()
         );
@@ -84,6 +84,6 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMainItems()
     {
-        $this->assertEquals([['main' => 'abc', 'key3' => 'value3']], array_values($this->navigation->getMainItems()));
+        $this->assertSame([['main' => 'abc', 'key3' => 'value3']], array_values($this->navigation->getMainItems()));
     }
 }

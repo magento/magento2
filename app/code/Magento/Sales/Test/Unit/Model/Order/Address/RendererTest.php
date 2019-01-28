@@ -104,7 +104,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($addressData, null)
             ->willReturn($result);
 
-        $this->assertEquals($result, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
+        $this->assertSame($result, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
     }
 
     public function testFormatNoRenderer()
@@ -119,7 +119,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects(static::never())
             ->method('dispatch');
 
-        $this->assertEquals(null, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
+        $this->assertSame(null, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
     }
 
     /**

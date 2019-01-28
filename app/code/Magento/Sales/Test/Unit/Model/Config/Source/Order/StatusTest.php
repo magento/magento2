@@ -34,7 +34,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())->method('getStateStatuses')
             ->will($this->returnValue(['status1', 'status2']));
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['value' => '', 'label' => '-- Please Select --'],
                 ['value' => 0, 'label' => 'status1'],

@@ -21,7 +21,7 @@ class HttpMethodMapTest extends TestCase
         $map = new HttpMethodMap(
             ['method1' => '\\Throwable', 'method2' => 'DateTime']
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['method1' => \Throwable::class, 'method2' => \DateTime::class],
             $map->getMap()
         );

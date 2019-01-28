@@ -142,7 +142,7 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
             });
 
         $this->model->process($this->readerContextMock, $this->generatorContextMock);
-        $this->assertEquals($expectedSchedule, $this->scheduledStructure->getElements());
+        $this->assertSame($expectedSchedule, $this->scheduledStructure->getElements());
     }
 
     /**

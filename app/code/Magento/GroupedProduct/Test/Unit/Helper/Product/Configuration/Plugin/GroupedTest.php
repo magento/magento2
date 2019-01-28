@@ -120,7 +120,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ['label' => 'associatedProductName', 'value' => 1],
             ['label' => 'productName', 'value' => 2],
         ];
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -157,7 +157,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->closureMock,
             $this->itemMock
         );
-        $this->assertEquals($chainCallResult, $result);
+        $this->assertSame($chainCallResult, $result);
     }
 
     /**
@@ -185,6 +185,6 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->closureMock,
             $this->itemMock
         );
-        $this->assertEquals($chainCallResult, $result);
+        $this->assertSame($chainCallResult, $result);
     }
 }

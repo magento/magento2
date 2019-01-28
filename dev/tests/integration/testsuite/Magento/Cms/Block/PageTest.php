@@ -21,6 +21,6 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $pageBlock = $layout->createBlock(\Magento\Cms\Block\Page::class);
         $pageBlock->setData('page', $page);
         $pageBlock->toHtml();
-        $this->assertEquals($page, $pageBlock->getPage());
+        $this->assertSame($page, $pageBlock->getPage());
     }
 }

@@ -34,8 +34,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructor()
     {
-        $this->assertAttributeEquals($this->_defaultOutputPrefix, '_defaultOutputPrefix', $this->_factory);
-        $this->assertAttributeEquals($this->_defaultOutputType, '_defaultOutputType', $this->_factory);
+        $this->assertAttributeSame($this->_defaultOutputPrefix, '_defaultOutputPrefix', $this->_factory);
+        $this->assertAttributeSame($this->_defaultOutputType, '_defaultOutputType', $this->_factory);
     }
 
     public function testDefaultConstructor()

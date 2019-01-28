@@ -75,7 +75,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $this->assertEquals($expectedNumLines, $this->helper->getStreetLines());
+        $this->assertSame($expectedNumLines, $this->helper->getStreetLines());
     }
 
     /**
@@ -111,7 +111,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->addressMetadataService,
             $this->addressConfig
         );
-        $this->assertEquals($result, $this->helper->getRenderer($renderer));
+        $this->assertSame($result, $this->helper->getRenderer($renderer));
     }
 
     /**
@@ -147,8 +147,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertNull($this->helper->getConfig('unavailable_key'));
         $this->assertFalse($this->helper->canShowConfig('unavailable_key'));
-        $this->assertEquals($result['key1'], $this->helper->getConfig('key1'));
-        $this->assertEquals($result['key2'], $this->helper->getConfig('key2'));
+        $this->assertSame($result['key1'], $this->helper->getConfig('key1'));
+        $this->assertSame($result['key2'], $this->helper->getConfig('key2'));
         $this->assertTrue($this->helper->canShowConfig('key1'));
         $this->assertTrue($this->helper->canShowConfig('key2'));
     }
@@ -168,7 +168,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeMetadata')
             ->willReturn($attributeMock);
 
-        $this->assertEquals($attributeClass, $this->helper->getAttributeValidationClass($attributeCode));
+        $this->assertSame($attributeClass, $this->helper->getAttributeValidationClass($attributeCode));
     }
 
     public function testGetAttributeValidationClassWithNoAttribute()
@@ -179,7 +179,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeMetadata')
             ->willReturn(null);
 
-        $this->assertEquals('', $this->helper->getAttributeValidationClass($attrCode));
+        $this->assertSame('', $this->helper->getAttributeValidationClass($attrCode));
     }
 
     /**
@@ -190,7 +190,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertStreetLines($origStreets, $toCount, $result)
     {
-        $this->assertEquals($result, $this->helper->convertStreetLines($origStreets, $toCount));
+        $this->assertSame($result, $this->helper->convertStreetLines($origStreets, $toCount));
     }
 
     /**
@@ -219,7 +219,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 $store
             )
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->helper->isVatValidationEnabled($store));
+        $this->assertSame($result, $this->helper->isVatValidationEnabled($store));
     }
 
     /**
@@ -249,7 +249,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 $store
             )
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->helper->hasValidateOnEachTransaction($store));
+        $this->assertSame($result, $this->helper->hasValidateOnEachTransaction($store));
     }
 
     /**
@@ -279,7 +279,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 $store
             )
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->helper->getTaxCalculationAddressType($store));
+        $this->assertSame($result, $this->helper->getTaxCalculationAddressType($store));
     }
 
     /**
@@ -331,7 +331,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(
                 new \Magento\Framework\DataObject($result !== null ? ['renderer' => $result] : [])
             ));
-        $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
+        $this->assertSame($result, $this->helper->getFormatTypeRenderer($code));
     }
 
     /**
@@ -368,7 +368,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Framework\DataObject(!empty($result) ? ['renderer' => $renderer] : [])
             ));
 
-        $this->assertEquals($result, $this->helper->getFormat($code));
+        $this->assertSame($result, $this->helper->getFormat($code));
     }
 
     /**
@@ -401,7 +401,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeMetadata')
             ->with($attributeCode)
             ->willReturn($attributeMetadata);
-        $this->assertEquals($isMetadataExists, $this->helper->isAttributeVisible($attributeCode));
+        $this->assertSame($isMetadataExists, $this->helper->isAttributeVisible($attributeCode));
     }
 
     /**
@@ -438,7 +438,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeMetadata')
             ->with($attributeCode)
             ->willReturn($attributeMetadata);
-        $this->assertEquals($isMetadataExists, $this->helper->isAttributeRequired($attributeCode));
+        $this->assertSame($isMetadataExists, $this->helper->isAttributeRequired($attributeCode));
     }
 
     /**

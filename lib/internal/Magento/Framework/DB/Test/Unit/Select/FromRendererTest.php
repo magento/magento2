@@ -52,7 +52,7 @@ class FromRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getPart')
             ->with(Select::FROM)
             ->willReturn([]);
-        $this->assertEquals($sql, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($sql, $this->model->render($this->selectMock, $sql));
     }
 
     /**
@@ -77,7 +77,7 @@ class FromRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getPart')
             ->with(Select::FROM)
             ->willReturn($from);
-        $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 
     /**

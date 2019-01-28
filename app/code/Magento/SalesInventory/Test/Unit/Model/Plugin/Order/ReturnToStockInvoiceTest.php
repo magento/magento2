@@ -161,7 +161,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit\Framework\TestCase
             ->method('isAutoReturnEnabled')
             ->willReturn(false);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->returnTOStock->afterExecute(
                 $this->refundInvoiceMock,
                 $creditmemoId,

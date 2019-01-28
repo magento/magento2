@@ -107,7 +107,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     public function testGetApiCharset()
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('Windows-1251'));
-        $this->assertEquals(
+        $this->assertSame(
             'Windows-1251',
             $this->_soapServer->getApiCharset(),
             'API charset encoding getting is invalid.'
@@ -120,7 +120,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     public function testGetApiCharsetDefaultEncoding()
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue(null));
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Webapi\Model\Soap\Server::SOAP_DEFAULT_ENCODING,
             $this->_soapServer->getApiCharset(),
             'Default API charset encoding getting is invalid.'
@@ -134,7 +134,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     {
         $expectedResult = 'http://magento.com/soap/storeCode';
         $actualResult = $this->_soapServer->getEndpointUri();
-        $this->assertEquals($expectedResult, $actualResult, 'Endpoint URI building is invalid.');
+        $this->assertSame($expectedResult, $actualResult, 'Endpoint URI building is invalid.');
     }
 
     /**
@@ -147,7 +147,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}&wsdl=1";
         $actualResult = $this->_soapServer->generateUri(true);
-        $this->assertEquals($expectedResult, urldecode($actualResult), 'URI (with WSDL param) generated is invalid.');
+        $this->assertSame($expectedResult, urldecode($actualResult), 'URI (with WSDL param) generated is invalid.');
     }
 
     /**
@@ -160,7 +160,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}";
         $actualResult = $this->_soapServer->generateUri(false);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             urldecode($actualResult),
             'URI (without WSDL param) generated is invalid.'

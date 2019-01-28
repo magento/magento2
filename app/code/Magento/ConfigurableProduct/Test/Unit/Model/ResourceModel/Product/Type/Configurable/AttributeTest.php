@@ -85,7 +85,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
         $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
         $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
-        $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
+        $this->assertSame($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 
     public function testSaveExistingLabel()
@@ -121,6 +121,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
         $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
-        $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
+        $this->assertSame($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 }

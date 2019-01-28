@@ -147,7 +147,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->method('addError')
             ->with(__('Sorry, but the data is invalid or the file is not uploaded.'));
 
-        $this->assertEquals($resultRedirectMock, $this->validate->execute());
+        $this->assertSame($resultRedirectMock, $this->validate->execute());
     }
 
     /**
@@ -192,6 +192,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_LAYOUT)
             ->willReturn($resultLayoutMock);
 
-        $this->assertEquals($resultLayoutMock, $this->validate->execute());
+        $this->assertSame($resultLayoutMock, $this->validate->execute());
     }
 }

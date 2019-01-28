@@ -159,7 +159,7 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->page)
             ->willReturnSelf();
-        $this->assertEquals($this->page, $this->repository->save($this->page));
+        $this->assertSame($this->page, $this->repository->save($this->page));
     }
 
     /**
@@ -263,6 +263,6 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('setItems')
             ->with([$this->page])
             ->willReturnSelf();
-        $this->assertEquals($this->pageSearchResult, $this->repository->getList($criteria));
+        $this->assertSame($this->pageSearchResult, $this->repository->getList($criteria));
     }
 }

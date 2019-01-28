@@ -127,6 +127,6 @@ class NotificationActionsTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $this->assertEquals($expectedResult, $this->actionColumn->prepareDataSource($testData));
+        $this->assertSame($expectedResult, $this->actionColumn->prepareDataSource($testData));
     }
 }

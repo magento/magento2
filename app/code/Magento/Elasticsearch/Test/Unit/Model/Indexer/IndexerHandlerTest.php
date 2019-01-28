@@ -159,7 +159,7 @@ class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->deleteIndex([$dimension], new \ArrayIterator([$documentId]));
 
-        $this->assertEquals($this->model, $result);
+        $this->assertSame($this->model, $result);
     }
 
     public function testSaveIndex()
@@ -196,7 +196,7 @@ class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->saveIndex([$dimension], $documents);
 
-        $this->assertEquals($this->model, $result);
+        $this->assertSame($this->model, $result);
     }
 
     /**
@@ -218,7 +218,7 @@ class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->cleanIndex([$dimension]);
 
-        $this->assertEquals($this->model, $result);
+        $this->assertSame($this->model, $result);
     }
 
     /**
@@ -249,6 +249,6 @@ class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
 
         $result = $model->cleanIndex([$dimension]);
 
-        $this->assertEquals($model, $result);
+        $this->assertSame($model, $result);
     }
 }

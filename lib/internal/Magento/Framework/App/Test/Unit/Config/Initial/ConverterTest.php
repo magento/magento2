@@ -28,6 +28,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($fixturePath . 'config.xml'));
         $expectedResult = include $fixturePath . 'converted_config.php';
-        $this->assertEquals($expectedResult, $this->_model->convert($dom));
+        $this->assertSame($expectedResult, $this->_model->convert($dom));
     }
 }

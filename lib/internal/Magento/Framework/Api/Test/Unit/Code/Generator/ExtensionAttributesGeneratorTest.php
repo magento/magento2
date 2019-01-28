@@ -109,7 +109,7 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
         $reflectionMethod->setAccessible(true);
 
         $expectedValidationResult = false;
-        $this->assertEquals($expectedValidationResult, $reflectionMethod->invoke($model));
+        $this->assertSame($expectedValidationResult, $reflectionMethod->invoke($model));
         $this->assertTrue(
             in_array(
                 'Invalid extension name [\Magento\Catalog\Api\Data\ProductInterface].'
@@ -134,6 +134,6 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
         $generatedCode = $reflectionMethod->invoke($this->model);
         $expectedResult = preg_replace('/\s+/', ' ', $expectedResult);
         $generatedCode = preg_replace('/\s+/', ' ', $generatedCode);
-        $this->assertEquals($expectedResult, $generatedCode);
+        $this->assertSame($expectedResult, $generatedCode);
     }
 }

@@ -78,7 +78,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 'wishlist_id' => 5,
             ]))
             ->will($this->returnValue('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5'));
-        $this->assertEquals('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5', $this->link->getLink());
+        $this->assertSame('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5', $this->link->getLink());
     }
 
     public function testIsRssAllowed()
@@ -88,6 +88,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
-        $this->assertEquals(true, $this->link->isRssAllowed());
+        $this->assertSame(true, $this->link->isRssAllowed());
     }
 }

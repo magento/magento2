@@ -41,7 +41,7 @@ class ClassReflectorTest extends \PHPUnit\Framework\TestCase
             \Magento\Webapi\Test\Unit\Model\Config\TestServiceForClassReflector::class,
             ['generateRandomString' => ['method' => 'generateRandomString']]
         );
-        $this->assertEquals(['generateRandomString' => $this->_getSampleReflectionData()], $data);
+        $this->assertSame(['generateRandomString' => $this->_getSampleReflectionData()], $data);
     }
 
     public function testExtractMethodData()
@@ -53,7 +53,7 @@ class ClassReflectorTest extends \PHPUnit\Framework\TestCase
         $methodReflection = $classReflection->getMethods()[0];
         $methodData = $this->_classReflector->extractMethodData($methodReflection);
         $expectedResponse = $this->_getSampleReflectionData();
-        $this->assertEquals($expectedResponse, $methodData);
+        $this->assertSame($expectedResponse, $methodData);
     }
 
     /**

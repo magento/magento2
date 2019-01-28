@@ -132,7 +132,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->plugin->aroundGetElementByPathParts($this->configStructureMock, $proceed, $pathParts)
         );

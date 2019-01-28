@@ -119,7 +119,7 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $rule = $this->createMock(\Magento\SalesRule\Model\Data\Rule::class);
         $this->toDataModelConverter->expects($this->once())->method('toDataModel')->with($model)->willReturn($rule);
 
-        $this->assertEquals($rule, $this->ruleRepository->getById(10));
+        $this->assertSame($rule, $this->ruleRepository->getById(10));
     }
 
     public function testSave()
@@ -135,7 +135,7 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->toDataModelConverter->expects($this->once())->method('toDataModel')->with($model)->willReturn($rule);
 
-        $this->assertEquals($rule, $this->ruleRepository->save($rule));
+        $this->assertSame($rule, $this->ruleRepository->save($rule));
     }
 
     public function testGetList()
@@ -162,6 +162,6 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
 
-        $this->assertEquals($this->searchResultsMock, $this->ruleRepository->getList($searchCriteriaMock));
+        $this->assertSame($this->searchResultsMock, $this->ruleRepository->getList($searchCriteriaMock));
     }
 }

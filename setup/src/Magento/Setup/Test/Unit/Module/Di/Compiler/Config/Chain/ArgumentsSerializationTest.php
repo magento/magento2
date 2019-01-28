@@ -60,6 +60,6 @@ class ArgumentsSerializationTest extends \PHPUnit\Framework\TestCase
         ];
 
         $modifier = new ArgumentsSerialization($this->serializer);
-        $this->assertEquals($expected, $modifier->modify($inputConfig));
+        $this->assertSame($expected, $modifier->modify($inputConfig));
     }
 }

@@ -60,7 +60,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
             ->method('getPreference')
             ->with(Information::class)
             ->willReturn(Information::class);
-        $this->assertEquals(Information::class, $this->object->getPreference(Information::class));
+        $this->assertSame(Information::class, $this->object->getPreference(Information::class));
     }
 
     public function testGetParameters()
@@ -73,7 +73,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
             ->method('getPreference')
             ->with(Information::class)
             ->willReturn(Information::class);
-        $this->assertEquals(
+        $this->assertSame(
             [['information', Information::class, null]],
             $this->object->getParameters(Information::class)
         );

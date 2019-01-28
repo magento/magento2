@@ -48,6 +48,6 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
                 'paypalConfigFactory' => $paypalConfigFactoryMock
             ]
         );
-        $this->assertEquals(self::ALIAS, $model->getAlias());
+        $this->assertSame(self::ALIAS, $model->getAlias());
     }
 }

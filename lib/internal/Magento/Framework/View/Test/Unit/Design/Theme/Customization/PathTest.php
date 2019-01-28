@@ -67,7 +67,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $this->_theme->expects($this->exactly(2))
             ->method('getId')
             ->will($this->returnValue(123));
-        $this->assertEquals($expectedPath, $this->_model->getCustomizationPath($this->_theme));
+        $this->assertSame($expectedPath, $this->_model->getCustomizationPath($this->_theme));
     }
 
     /**
@@ -95,7 +95,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, 'frontend/Magento/theme')
             ->will($this->returnValue($expectedPath));
-        $this->assertEquals($expectedPath, $this->_model->getThemeFilesPath($this->_theme));
+        $this->assertSame($expectedPath, $this->_model->getThemeFilesPath($this->_theme));
     }
 
     /**
@@ -127,7 +127,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $this->_theme->expects($this->exactly(2))
             ->method('getId')
             ->will($this->returnValue(123));
-        $this->assertEquals($expectedPath, $this->_model->getCustomViewConfigPath($this->_theme));
+        $this->assertSame($expectedPath, $this->_model->getCustomViewConfigPath($this->_theme));
     }
 
     /**

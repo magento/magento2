@@ -38,8 +38,8 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->saveNumResults(30);
 
-        $this->assertEquals($this->model, $result);
-        $this->assertEquals(30, $this->model->getNumResults());
+        $this->assertSame($this->model, $result);
+        $this->assertSame(30, $this->model->getNumResults());
     }
 
     public function testSaveIncrementalPopularity()
@@ -50,6 +50,6 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->saveIncrementalPopularity();
 
-        $this->assertEquals($this->model, $result);
+        $this->assertSame($this->model, $result);
     }
 }

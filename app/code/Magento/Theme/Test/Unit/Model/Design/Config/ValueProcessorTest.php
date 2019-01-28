@@ -55,6 +55,6 @@ class ValueProcessorTest extends \PHPUnit\Framework\TestCase
         $this->backendModel->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->assertEquals($value, $this->valueProcessor->process($value, $scope, $scopeId, ['path' => $path]));
+        $this->assertSame($value, $this->valueProcessor->process($value, $scope, $scopeId, ['path' => $path]));
     }
 }

@@ -35,7 +35,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $tMap = $this->getSimpleInitialized(3);
-        static::assertEquals(3, $tMap->count());
+        static::assertSame(3, $tMap->count());
     }
 
     public function testRead()
@@ -63,11 +63,11 @@ class TMapTest extends \PHPUnit\Framework\TestCase
     {
         $tMap = $this->getSimpleInitialized(3);
 
-        static::assertEquals(3, $tMap->count());
+        static::assertSame(3, $tMap->count());
         foreach ($tMap as $key => $instance) {
             unset($tMap[$key]);
         }
-        static::assertEquals(0, $tMap->count());
+        static::assertSame(0, $tMap->count());
     }
 
     /**
@@ -101,11 +101,11 @@ class TMapTest extends \PHPUnit\Framework\TestCase
 
         $i = 0;
         foreach ($tMap as $key => $item) {
-            static::assertEquals($expectedKeysOrder[$i], $key);
+            static::assertSame($expectedKeysOrder[$i], $key);
             $i++;
         }
 
-        static::assertEquals(4, $tMap->count());
+        static::assertSame(4, $tMap->count());
     }
 
     /**

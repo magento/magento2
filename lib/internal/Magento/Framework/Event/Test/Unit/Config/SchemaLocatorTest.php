@@ -33,7 +33,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd'),
             $this->model->getSchema()
         );
@@ -47,7 +47,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd'),
             $this->model->getPerFileSchema()
         );

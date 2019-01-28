@@ -69,6 +69,6 @@ class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())->method('addIsFilterableInSearchFilter')->will($this->returnSelf());
         $collectionMock->expects($this->once())->method('load');
 
-        $this->assertEquals($collectionMock, $this->model->getList());
+        $this->assertSame($collectionMock, $this->model->getList());
     }
 }

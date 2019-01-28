@@ -79,13 +79,13 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
         $this->dataSourcePool->add($blockName, $blockClass);
 
         $this->assertSame($block, $this->dataSourcePool->get($blockName));
-        $this->assertEquals([$blockName => $block], $this->dataSourcePool->get());
+        $this->assertSame([$blockName => $block], $this->dataSourcePool->get());
         $this->assertNull($this->dataSourcePool->get('WrongName'));
     }
 
     public function testGetEmpty()
     {
-        $this->assertEquals([], $this->dataSourcePool->get());
+        $this->assertSame([], $this->dataSourcePool->get());
     }
 
     public function testAssignAndGetNamespaceData()
@@ -100,7 +100,7 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
         $alias = 'alias';
         $this->dataSourcePool->assign($blockName, $namespace, $alias);
 
-        $this->assertEquals(['alias' => $block], $this->dataSourcePool->getNamespaceData($namespace));
-        $this->assertEquals([], $this->dataSourcePool->getNamespaceData('WrongNamespace'));
+        $this->assertSame(['alias' => $block], $this->dataSourcePool->getNamespaceData($namespace));
+        $this->assertSame([], $this->dataSourcePool->getNamespaceData('WrongNamespace'));
     }
 }

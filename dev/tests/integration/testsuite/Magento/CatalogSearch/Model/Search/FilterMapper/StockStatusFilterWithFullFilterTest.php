@@ -106,7 +106,7 @@ class StockStatusFilterWithFullFilterTest extends TestCase
 
         $data = $select->query()->fetchAll();
 
-        $this->assertEquals($expectedResult, count($data));
+        $this->assertSame($expectedResult, count($data));
     }
 
     /**

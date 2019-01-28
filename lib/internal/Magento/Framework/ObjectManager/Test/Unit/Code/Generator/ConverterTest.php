@@ -110,6 +110,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             ->method('writeResultFile')
             ->with($resultFileName, $generatedCode);
 
-        $this->assertEquals($resultFileName, $this->generator->generate());
+        $this->assertSame($resultFileName, $this->generator->generate());
     }
 }

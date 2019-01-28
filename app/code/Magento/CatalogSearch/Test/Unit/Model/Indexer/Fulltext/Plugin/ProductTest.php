@@ -80,7 +80,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterSaveNonScheduled()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
         );
@@ -88,7 +88,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterSaveScheduled()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
         );
@@ -96,7 +96,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDeleteNonScheduled()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
         );
@@ -104,7 +104,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDeleteScheduled()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
         );

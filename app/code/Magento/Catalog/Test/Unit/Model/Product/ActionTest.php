@@ -127,10 +127,10 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('isIndexable')
             ->will($this->returnValue(false));
-        $this->assertEquals($this->model, $this->model->updateAttributes($productIds, $attrData, $storeId));
-        $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);
-        $this->assertEquals($this->model->getDataByKey('attributes_data'), $attrData);
-        $this->assertEquals($this->model->getDataByKey('store_id'), $storeId);
+        $this->assertSame($this->model, $this->model->updateAttributes($productIds, $attrData, $storeId));
+        $this->assertSame($this->model->getDataByKey('product_ids'), $productIdsUnique);
+        $this->assertSame($this->model->getDataByKey('attributes_data'), $attrData);
+        $this->assertSame($this->model->getDataByKey('store_id'), $storeId);
     }
 
     /**
@@ -159,9 +159,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($productIds));
         $this->prepareIndexer();
         $this->model->updateWebsites($productIds, $websiteIds, $type);
-        $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);
-        $this->assertEquals($this->model->getDataByKey('website_ids'), $websiteIds);
-        $this->assertEquals($this->model->getDataByKey('action_type'), $type);
+        $this->assertSame($this->model->getDataByKey('product_ids'), $productIdsUnique);
+        $this->assertSame($this->model->getDataByKey('website_ids'), $websiteIds);
+        $this->assertSame($this->model->getDataByKey('action_type'), $type);
     }
 
     /**

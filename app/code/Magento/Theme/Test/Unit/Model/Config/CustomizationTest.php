@@ -153,7 +153,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$this->getAssignedTheme(), $this->getUnassignedTheme()]);
 
         $themeAssigned = $this->model->isThemeAssignedToStore($this->getAssignedTheme());
-        $this->assertEquals(true, $themeAssigned);
+        $this->assertSame(true, $themeAssigned);
     }
 
     /**
@@ -167,7 +167,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->getAssignedTheme()->getId());
 
         $themeUnassigned = $this->model->isThemeAssignedToStore($this->getUnassignedTheme(), $this->getStore());
-        $this->assertEquals(false, $themeUnassigned);
+        $this->assertSame(false, $themeUnassigned);
     }
 
     /**

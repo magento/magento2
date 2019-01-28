@@ -86,12 +86,12 @@ class RulesTest extends \PHPUnit\Framework\TestCase
         $actualPermissions = [];
         foreach ($rules as $rule) {
             $actualPermissions[] = $rule['resource_id'];
-            $this->assertEquals(
+            $this->assertSame(
                 'allow',
                 $rule['permission'],
                 "Permission for '{$rule['resource_id']}' resource should be 'allow'"
             );
         }
-        $this->assertEquals($expectedDefaultPermissions, $actualPermissions, 'Default permissions are invalid');
+        $this->assertSame($expectedDefaultPermissions, $actualPermissions, 'Default permissions are invalid');
     }
 }

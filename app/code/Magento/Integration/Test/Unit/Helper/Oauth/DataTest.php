@@ -43,7 +43,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetCleanupExpirationPeriodZero()
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Integration\Helper\Oauth\Data::CLEANUP_EXPIRATION_PERIOD_DEFAULT,
             $this->_dataHelper->getCleanupExpirationPeriod()
         );
@@ -52,25 +52,25 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetCleanupExpirationPeriodNonZero()
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(10));
-        $this->assertEquals(10, $this->_dataHelper->getCleanupExpirationPeriod());
+        $this->assertSame(10, $this->_dataHelper->getCleanupExpirationPeriod());
     }
 
     public function testConsumerPostMaxRedirectsZero()
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
-        $this->assertEquals(0, $this->_dataHelper->getConsumerPostMaxRedirects());
+        $this->assertSame(0, $this->_dataHelper->getConsumerPostMaxRedirects());
     }
 
     public function testConsumerPostMaxRedirectsNonZero()
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(10));
-        $this->assertEquals(10, $this->_dataHelper->getConsumerPostMaxRedirects());
+        $this->assertSame(10, $this->_dataHelper->getConsumerPostMaxRedirects());
     }
 
     public function testGetConsumerPostTimeoutZero()
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Integration\Helper\Oauth\Data::CONSUMER_POST_TIMEOUT_DEFAULT,
             $this->_dataHelper->getConsumerPostTimeout()
         );
@@ -79,7 +79,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetConsumerPostTimeoutNonZero()
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(10));
-        $this->assertEquals(10, $this->_dataHelper->getConsumerPostTimeout());
+        $this->assertSame(10, $this->_dataHelper->getConsumerPostTimeout());
     }
 
     public function testGetCustomerTokenLifetimeNotEmpty()
@@ -89,7 +89,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('oauth/access_token_lifetime/customer')
             ->will($this->returnValue(10));
-        $this->assertEquals(10, $this->_dataHelper->getCustomerTokenLifetime());
+        $this->assertSame(10, $this->_dataHelper->getCustomerTokenLifetime());
     }
 
     public function testGetCustomerTokenLifetimeEmpty()
@@ -99,7 +99,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('oauth/access_token_lifetime/customer')
             ->will($this->returnValue(null));
-        $this->assertEquals(0, $this->_dataHelper->getCustomerTokenLifetime());
+        $this->assertSame(0, $this->_dataHelper->getCustomerTokenLifetime());
     }
 
     public function testGetAdminTokenLifetimeNotEmpty()
@@ -109,7 +109,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('oauth/access_token_lifetime/admin')
             ->will($this->returnValue(10));
-        $this->assertEquals(10, $this->_dataHelper->getAdminTokenLifetime());
+        $this->assertSame(10, $this->_dataHelper->getAdminTokenLifetime());
     }
 
     public function testGetAdminTokenLifetimeEmpty()
@@ -119,6 +119,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('oauth/access_token_lifetime/admin')
             ->will($this->returnValue(null));
-        $this->assertEquals(0, $this->_dataHelper->getAdminTokenLifetime());
+        $this->assertSame(0, $this->_dataHelper->getAdminTokenLifetime());
     }
 }

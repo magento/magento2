@@ -26,7 +26,7 @@ class NameBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildClassName($parts, $expected)
     {
-        $this->assertEquals($expected, $this->nameBuilder->buildClassName($parts));
+        $this->assertSame($expected, $this->nameBuilder->buildClassName($parts));
     }
 
     /**

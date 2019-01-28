@@ -46,7 +46,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($classMock)
         );
 
-        $this->assertEquals($classMock, $this->_factory->create($className));
+        $this->assertSame($classMock, $this->_factory->create($className));
     }
 
     public function testCreateWithArguments()
@@ -66,6 +66,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($classMock)
         );
 
-        $this->assertEquals($classMock, $this->_factory->create($className, $data));
+        $this->assertSame($classMock, $this->_factory->create($className, $data));
     }
 }

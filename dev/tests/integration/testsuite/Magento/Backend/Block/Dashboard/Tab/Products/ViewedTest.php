@@ -57,7 +57,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->getById(1);
         $this->eventManager->dispatch('catalog_controller_product_view', ['product' => $product]);
 
-        $this->assertEquals(
+        $this->assertSame(
             10,
             $viewedProductsTabBlock->getPreparedCollection()->getFirstItem()->getDataByKey('price')
         );

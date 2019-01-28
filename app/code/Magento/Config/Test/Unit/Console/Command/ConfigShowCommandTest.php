@@ -89,7 +89,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = $this->getConfigShowCommandTester($configPath, $scope, $scopeCode);
 
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_SUCCESS,
             $tester->getStatusCode()
         );
@@ -112,7 +112,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = $this->getConfigShowCommandTester($configPath, $scope, $scopeCode);
 
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
@@ -127,7 +127,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
         $configPath = 'some/path';
         $tester = $this->getConfigShowCommandTester($configPath);
 
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );

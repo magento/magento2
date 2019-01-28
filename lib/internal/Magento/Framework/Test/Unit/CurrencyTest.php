@@ -25,7 +25,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
 
         // Create new currency object
         $currency = new Currency($appCache, null, 'en_US');
-        $this->assertEquals($lowLevelFrontend, $currency->getCache());
-        $this->assertEquals('USD', $currency->getShortName());
+        $this->assertSame($lowLevelFrontend, $currency->getCache());
+        $this->assertSame('USD', $currency->getShortName());
     }
 }

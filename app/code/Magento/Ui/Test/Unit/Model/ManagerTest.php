@@ -147,7 +147,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->aggregatedFileCollectorFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->aggregatedFileCollector);
-        $this->assertEquals($this->uiReader, $this->manager->getReader('some_name'));
+        $this->assertSame($this->uiReader, $this->manager->getReader('some_name'));
     }
 
     public function testPrepareDataWithoutName()
@@ -187,7 +187,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->uiReader->expects($this->any())
             ->method('read')
             ->willReturn($readerData);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->manager->prepareData($componentName)->getData($componentName)
         );
@@ -293,7 +293,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         } else {
             $this->argumentInterpreter->expects($this->never())->method('evaluate');
         }
-        $this->assertEquals($componentData, $this->manager->createRawComponentData($componentName, $needEvaluate));
+        $this->assertSame($componentData, $this->manager->createRawComponentData($componentName, $needEvaluate));
     }
 
     /**

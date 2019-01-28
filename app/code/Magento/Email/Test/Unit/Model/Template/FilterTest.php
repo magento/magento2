@@ -190,7 +190,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     public function testTransDirective($value, $expected, array $variables = [])
     {
         $filter = $this->getModel()->setVariables($variables);
-        $this->assertEquals($expected, $filter->filter($value));
+        $this->assertSame($expected, $filter->filter($value));
     }
 
     /**
@@ -346,7 +346,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->setDesignParams($designParams);
 
-        $this->assertEquals($css, $filter->getCssFilesContent([$file]));
+        $this->assertSame($css, $filter->getCssFilesContent([$file]));
     }
 
     /**
@@ -430,7 +430,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->method('afterFilterCallbackMethod');
         $filter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
 
-        $this->assertEquals($exceptionResult, $filter->filter($value));
+        $this->assertSame($exceptionResult, $filter->filter($value));
     }
 
     public function testConfigDirectiveAvailable()
@@ -454,7 +454,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($scopeConfigValue);
 
-        $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+        $this->assertSame($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
 
     public function testConfigDirectiveUnavailable()
@@ -477,6 +477,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn($scopeConfigValue);
 
-        $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+        $this->assertSame($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
 }

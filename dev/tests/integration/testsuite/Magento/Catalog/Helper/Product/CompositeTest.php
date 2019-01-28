@@ -60,7 +60,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $this->helper->renderConfigureResult($configureResult);
 
         $customerId = $this->registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $this->assertEquals(1, $customerId);
+        $this->assertSame(1, $customerId);
         $errorMessage = $this->registry->registry('composite_configure_result_error_message');
         $this->assertNull($errorMessage);
     }
@@ -76,6 +76,6 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $customerId = $this->registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $this->assertNull($customerId);
         $errorMessage = $this->registry->registry('composite_configure_result_error_message');
-        $this->assertEquals('Test Message', $errorMessage);
+        $this->assertSame('Test Message', $errorMessage);
     }
 }

@@ -227,7 +227,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
         $this->abstractType->addAttributeOption($code, $optionKey, $optionValue);
 
-        $this->assertEquals($resultAttributes, $this->getPropertyValue($this->abstractType, '_attributes'));
+        $this->assertSame($resultAttributes, $this->getPropertyValue($this->abstractType, '_attributes'));
     }
 
     public function testAddAttributeOptionReturn()
@@ -238,7 +238,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->abstractType->addAttributeOption($code, $optionKey, $optionValue);
 
-        $this->assertEquals($result, $this->abstractType);
+        $this->assertSame($result, $this->abstractType);
     }
 
     public function testGetCustomFieldsMapping()
@@ -248,7 +248,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->abstractType->getCustomFieldsMapping();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testIsRowValidSuccess()
@@ -367,6 +367,6 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             'boolean_attribute' => 'Yes'
         ];
         $result = $this->simpleType->prepareAttributesWithDefaultValueForSave($rowData);
-        $this->assertEquals(['boolean_attribute' => 1], $result);
+        $this->assertSame(['boolean_attribute' => 1], $result);
     }
 }

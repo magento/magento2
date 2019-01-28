@@ -62,7 +62,7 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
             $this->tokenDetails['expirationDate']
         );
 
-        self::assertEquals($formattedString, $this->paypalTokenFormatter->formatPaymentToken($this->paymentTokenMock));
+        self::assertSame($formattedString, $this->paypalTokenFormatter->formatPaymentToken($this->paymentTokenMock));
     }
 
     /**
@@ -84,7 +84,7 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
             $this->tokenDetails['expirationDate']
         );
 
-        self::assertEquals($formattedString, $this->paypalTokenFormatter->formatPaymentToken($this->paymentTokenMock));
+        self::assertSame($formattedString, $this->paypalTokenFormatter->formatPaymentToken($this->paymentTokenMock));
     }
 
     /**

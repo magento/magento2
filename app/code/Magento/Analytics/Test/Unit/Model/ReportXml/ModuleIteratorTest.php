@@ -44,7 +44,7 @@ class ModuleIteratorTest extends \PHPUnit\Framework\TestCase
             ->with('Coco_Module')
             ->willReturn(true);
         foreach ($this->moduleIterator as $item) {
-            $this->assertEquals(['module_name' => 'Coco_Module', 'status' => 'Enabled'], $item);
+            $this->assertSame(['module_name' => 'Coco_Module', 'status' => 'Enabled'], $item);
         }
     }
 }

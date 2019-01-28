@@ -121,7 +121,7 @@ class LinkProviderTest extends \PHPUnit\Framework\TestCase
         $this->fileInfoMock->expects($this->atLeastOnce())
             ->method('getInitializationVector')
             ->willReturn($fileInitializationVector);
-        $this->assertEquals($this->linkInterfaceMock, $this->linkProvider->get());
+        $this->assertSame($this->linkInterfaceMock, $this->linkProvider->get());
     }
 
     /**

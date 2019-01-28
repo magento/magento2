@@ -54,7 +54,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
         );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetCodeByFrontNameReturnsAreaCode()
@@ -68,7 +68,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
         );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetFrontNameWhenAreaCodeAndFrontNameAreSet()
@@ -82,7 +82,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
         );
 
         $actual = $this->_model->getFrontName('testAreaCode');
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetFrontNameWhenAreaCodeAndFrontNameArentSet()
@@ -112,7 +112,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
 
         $expected = array_keys($areas);
         $actual = $this->_model->getCodes();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetDefaultRouter()
@@ -125,7 +125,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
             ''
         );
 
-        $this->assertEquals($this->_model->getDefaultRouter('area1'), $areas['area1']['router']);
+        $this->assertSame($this->_model->getDefaultRouter('area1'), $areas['area1']['router']);
         $this->assertNull($this->_model->getDefaultRouter('area2'));
     }
 
@@ -141,7 +141,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
             ''
         );
 
-        $this->assertEquals($this->_model->getArea('testArea'), 'ok');
+        $this->assertSame($this->_model->getArea('testArea'), 'ok');
     }
 
     /**

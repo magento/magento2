@@ -71,7 +71,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->with(FormKey::COOKIE_NAME)
             ->will($this->returnValue($formKey));
 
-        $this->assertEquals($formKey, $this->formKey->get());
+        $this->assertSame($formKey, $this->formKey->get());
     }
 
     public function testSet()

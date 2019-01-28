@@ -124,7 +124,7 @@ class StandardTest extends \PHPUnit\Framework\TestCase
 
         $driver = new \Magento\Framework\Profiler\Driver\Standard($config);
         $this->assertAttributeCount(2, '_outputs', $driver);
-        $this->assertAttributeEquals([$outputOne, $outputTwo], '_outputs', $driver);
+        $this->assertAttributeSame([$outputOne, $outputTwo], '_outputs', $driver);
     }
 
     /**

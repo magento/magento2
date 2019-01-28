@@ -46,6 +46,6 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals($expectedResult, $this->model->getTitle());
+        $this->assertSame($expectedResult, $this->model->getTitle());
     }
 }

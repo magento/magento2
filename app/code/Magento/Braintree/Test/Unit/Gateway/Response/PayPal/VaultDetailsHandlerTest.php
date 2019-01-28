@@ -164,9 +164,9 @@ class VaultDetailsHandlerTest extends TestCase
         $tokenDetails = json_decode($paymentToken->getTokenDetails(), true);
 
         self::assertSame($this->paymentTokenMock, $paymentToken);
-        self::assertEquals(self::$token, $paymentToken->getGatewayToken());
-        self::assertEquals(self::$payerEmail, $tokenDetails['payerEmail']);
-        self::assertEquals($expirationDate, $paymentToken->getExpiresAt());
+        self::assertSame(self::$token, $paymentToken->getGatewayToken());
+        self::assertSame(self::$payerEmail, $tokenDetails['payerEmail']);
+        self::assertSame($expirationDate, $paymentToken->getExpiresAt());
     }
 
     public function testHandleWithoutToken()

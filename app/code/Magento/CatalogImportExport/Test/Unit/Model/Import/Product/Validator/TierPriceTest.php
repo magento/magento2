@@ -65,7 +65,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     public function testInit()
     {
         $result = $this->processInit(3);
-        $this->assertEquals($this->tierPrice, $result);
+        $this->assertSame($this->tierPrice, $result);
     }
 
     /**
@@ -86,9 +86,9 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($website['code']);
         }
         $result = $this->tierPrice->isValid($data);
-        $this->assertEquals($expected['result'], $result);
+        $this->assertSame($expected['result'], $result);
         $messages = $this->tierPrice->getMessages();
-        $this->assertEquals($expected['messages'], $messages);
+        $this->assertSame($expected['messages'], $messages);
     }
 
     /**

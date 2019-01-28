@@ -264,7 +264,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             'vaultProvider' => $this->vaultProvider
         ]);
         $actual = $model->isAvailable($quote);
-        static::assertEquals($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**
@@ -338,7 +338,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             'vaultProvider' => $this->vaultProvider,
             'valueHandlerPool' => $handlerPool,
         ]);
-        static::assertEquals($expected, $model->canUseInternal());
+        static::assertSame($expected, $model->canUseInternal());
     }
 
     /**

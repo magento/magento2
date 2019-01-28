@@ -28,7 +28,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd'),
             $config->getSchemaFile()
         );

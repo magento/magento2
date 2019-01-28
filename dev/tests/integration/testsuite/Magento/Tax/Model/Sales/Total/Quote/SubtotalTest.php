@@ -137,18 +137,18 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
         $subtotalCollector = $this->objectManager->create(\Magento\Tax\Model\Sales\Total\Quote\Subtotal::class);
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
 
-        $this->assertEquals($expected['subtotal'], $total->getSubtotal());
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $address->getBaseSubtotalTotalInclTax());
-        $this->assertEquals($expected['discount_amount'], $total->getDiscountAmount());
+        $this->assertSame($expected['subtotal'], $total->getSubtotal());
+        $this->assertSame($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
+        $this->assertSame($expected['subtotal'] + $expected['tax_amount'], $address->getBaseSubtotalTotalInclTax());
+        $this->assertSame($expected['discount_amount'], $total->getDiscountAmount());
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
         $item = $items[0];
-        $this->assertEquals($expected['items'][0]['price'], $item->getPrice());
-        $this->assertEquals($expected['items'][0]['price_incl_tax'], $item->getPriceInclTax());
-        $this->assertEquals($expected['items'][0]['row_total'], $item->getRowTotal());
-        $this->assertEquals($expected['items'][0]['row_total_incl_tax'], $item->getRowTotalInclTax());
-        $this->assertEquals($expected['items'][0]['tax_percent'], $item->getTaxPercent());
+        $this->assertSame($expected['items'][0]['price'], $item->getPrice());
+        $this->assertSame($expected['items'][0]['price_incl_tax'], $item->getPriceInclTax());
+        $this->assertSame($expected['items'][0]['row_total'], $item->getRowTotal());
+        $this->assertSame($expected['items'][0]['row_total_incl_tax'], $item->getRowTotalInclTax());
+        $this->assertSame($expected['items'][0]['tax_percent'], $item->getTaxPercent());
     }
 
     public function collectUnitBasedDataProvider()
@@ -261,16 +261,16 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
         $subtotalCollector = $this->objectManager->create(\Magento\Tax\Model\Sales\Total\Quote\Subtotal::class);
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
 
-        $this->assertEquals($expected['subtotal'], $total->getSubtotal());
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
-        $this->assertEquals($expected['discount_amount'], $total->getDiscountAmount());
+        $this->assertSame($expected['subtotal'], $total->getSubtotal());
+        $this->assertSame($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
+        $this->assertSame($expected['discount_amount'], $total->getDiscountAmount());
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
         $item = $items[0];
-        $this->assertEquals($expected['items'][0]['price'], $item->getPrice());
-        $this->assertEquals($expected['items'][0]['price_incl_tax'], $item->getPriceInclTax());
-        $this->assertEquals($expected['items'][0]['row_total'], $item->getRowTotal());
-        $this->assertEquals($expected['items'][0]['row_total_incl_tax'], $item->getRowTotalInclTax());
+        $this->assertSame($expected['items'][0]['price'], $item->getPrice());
+        $this->assertSame($expected['items'][0]['price_incl_tax'], $item->getPriceInclTax());
+        $this->assertSame($expected['items'][0]['row_total'], $item->getRowTotal());
+        $this->assertSame($expected['items'][0]['row_total_incl_tax'], $item->getRowTotalInclTax());
     }
 
     /**

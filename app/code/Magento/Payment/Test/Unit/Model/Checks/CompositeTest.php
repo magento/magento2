@@ -30,7 +30,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectation)
         );
         $model = new Composite([$specification]);
-        $this->assertEquals($expectation, $model->isApplicable($paymentMethod, $quote));
+        $this->assertSame($expectation, $model->isApplicable($paymentMethod, $quote));
     }
 
     /**

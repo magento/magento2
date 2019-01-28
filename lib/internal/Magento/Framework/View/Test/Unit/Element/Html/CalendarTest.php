@@ -61,7 +61,7 @@ class CalendarTest extends \PHPUnit\Framework\TestCase
         );
 
         $testCurrentYear = (new \DateTime())->format('Y');
-        $this->assertEquals(
+        $this->assertSame(
             (int) $testCurrentYear - 100 . ':' . ($testCurrentYear + 100),
             $calendarBlock->getYearRange()
         );

@@ -23,7 +23,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['one' => 1, 'two' => 'two'];
         $jsonData = '{"one":1,"two":"two"}';
-        $this->assertEquals($jsonData, $this->_helper->jsonEncode($data));
-        $this->assertEquals($data, $this->_helper->jsonDecode($jsonData));
+        $this->assertSame($jsonData, $this->_helper->jsonEncode($data));
+        $this->assertSame($data, $this->_helper->jsonDecode($jsonData));
     }
 }

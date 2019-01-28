@@ -62,7 +62,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->save();
 
         // Assert the validation result matches the expected result given the child product and category rule
-        $this->assertEquals($expectedResult, $rule->validate($quote));
+        $this->assertSame($expectedResult, $rule->validate($quote));
     }
 
     /**
@@ -84,7 +84,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
             ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
 
-        $this->assertEquals(false, $rule->validate($quote));
+        $this->assertSame(false, $rule->validate($quote));
     }
 
     /**

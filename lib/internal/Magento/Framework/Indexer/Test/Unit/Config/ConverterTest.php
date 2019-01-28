@@ -25,7 +25,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->loadXML($data['inputXML']);
 
-        $this->assertEquals($data['expected'], $this->_model->convert($dom));
+        $this->assertSame($data['expected'], $this->_model->convert($dom));
     }
 
     /**
@@ -38,7 +38,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
 
-        $this->assertEquals($indexersSequence, array_keys($this->_model->convert($dom)));
+        $this->assertSame($indexersSequence, array_keys($this->_model->convert($dom)));
     }
 
     /**

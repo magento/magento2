@@ -112,7 +112,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
         $this->indexerMock->method('getTitle')->willReturn($indexerTitle);
         $commandTester->execute($command);
         $actualValue = $commandTester->getDisplay();
-        $this->assertEquals(
+        $this->assertSame(
             $consoleOutput,
             $actualValue
         );
@@ -214,7 +214,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
         $actualValue = $commandTester->getDisplay();
         $consoleOutput = sprintf('%-50s', 'Indexer') . 'Available modes' . PHP_EOL
             . sprintf('%-50s', $indexerTitle) . 'store,website' . PHP_EOL;
-        $this->assertEquals(
+        $this->assertSame(
             $consoleOutput,
             $actualValue
         );

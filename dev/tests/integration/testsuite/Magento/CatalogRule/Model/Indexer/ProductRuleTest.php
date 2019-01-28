@@ -42,7 +42,7 @@ class ProductRuleTest extends \PHPUnit\Framework\TestCase
         $product = $productRepository->get('simple');
         $product->setData('test_attribute', 'test_attribute_value')->save();
 
-        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
+        $this->assertSame(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
     }
 
     /**
@@ -64,7 +64,7 @@ class ProductRuleTest extends \PHPUnit\Framework\TestCase
         );
         $indexBuilder->reindexById($product->getId());
 
-        $this->assertEquals(
+        $this->assertSame(
             7.5,
             $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()),
             "Catalog price rule doesn't apply to product with visibility value \"Not Visibility Individually\""

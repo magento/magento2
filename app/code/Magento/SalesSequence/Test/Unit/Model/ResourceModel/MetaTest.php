@@ -125,7 +125,7 @@ class MetaTest extends \PHPUnit\Framework\TestCase
         $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
         $this->stepCheckSaveWithActiveProfile($metaData);
         $this->meta->expects($this->once())->method('beforeLoad');
-        $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
+        $this->assertSame($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 
     /**

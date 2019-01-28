@@ -39,6 +39,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->_model->setAddressType('billing');
         $this->_model->setRegionId(1);
         $this->_model->save();
-        $this->assertEquals($order->getId(), $this->_model->getParentId());
+        $this->assertSame($order->getId(), $this->_model->getParentId());
     }
 }

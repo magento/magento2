@@ -177,7 +177,7 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->connection));
 
-        $this->assertEquals('idxName', $this->resource->getIdxName($table, $fields, $indexType));
+        $this->assertSame('idxName', $this->resource->getIdxName($table, $fields, $indexType));
     }
 
     public function testGetFkName()
@@ -197,7 +197,7 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->connection));
 
-        $this->assertEquals('fkName', $this->resource->getFkName($table, $columnName, $refTable, $refColumnName));
+        $this->assertSame('fkName', $this->resource->getFkName($table, $columnName, $refTable, $refColumnName));
     }
 
     public function testGetTriggerName()

@@ -85,40 +85,40 @@ class TransactionMapTest extends \PHPUnit\Framework\TestCase
         /** @var AttributeValue[] $result */
         $result = $map->getCustomAttributes();
 
-        $this->assertEquals($fieldsQty, count($result));
+        $this->assertSame($fieldsQty, count($result));
         $this->assertInstanceOf(AttributeValue::class, $result[1]);
-        $this->assertEquals($transaction['id'], $result[0]->getValue());
-        $this->assertEquals($transaction['paypalDetails']->paymentId, $result[4]->getValue());
-        $this->assertEquals(
+        $this->assertSame($transaction['id'], $result[0]->getValue());
+        $this->assertSame($transaction['paypalDetails']->paymentId, $result[4]->getValue());
+        $this->assertSame(
             $transaction['createdAt']->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             $result[6]->getValue()
         );
-        $this->assertEquals(implode(', ', $transaction['refundIds']), $result[11]->getValue());
-        $this->assertEquals($transaction['merchantAccountId'], $result[1]->getValue());
-        $this->assertEquals($transaction['orderId'], $result[2]->getValue());
-        $this->assertEquals($transaction['amount'], $result[7]->getValue());
-        $this->assertEquals($transaction['processorSettlementResponseCode'], $result[8]->getValue());
-        $this->assertEquals($transaction['processorSettlementResponseText'], $result[10]->getValue());
-        $this->assertEquals($transaction['settlementBatchId'], $result[12]->getValue());
-        $this->assertEquals($transaction['currencyIsoCode'], $result[13]->getValue());
+        $this->assertSame(implode(', ', $transaction['refundIds']), $result[11]->getValue());
+        $this->assertSame($transaction['merchantAccountId'], $result[1]->getValue());
+        $this->assertSame($transaction['orderId'], $result[2]->getValue());
+        $this->assertSame($transaction['amount'], $result[7]->getValue());
+        $this->assertSame($transaction['processorSettlementResponseCode'], $result[8]->getValue());
+        $this->assertSame($transaction['processorSettlementResponseText'], $result[10]->getValue());
+        $this->assertSame($transaction['settlementBatchId'], $result[12]->getValue());
+        $this->assertSame($transaction['currencyIsoCode'], $result[13]->getValue());
 
         $this->rendererMock->expects($this->at(0))
             ->method('render')
             ->with([$transaction['paymentInstrumentType']])
             ->willReturn('Credit card');
-        $this->assertEquals('Credit card', $result[3]->getValue()->render());
+        $this->assertSame('Credit card', $result[3]->getValue()->render());
 
         $this->rendererMock->expects($this->at(0))
             ->method('render')
             ->with([$transaction['type']])
             ->willReturn('Sale');
-        $this->assertEquals('Sale', $result[5]->getValue()->render());
+        $this->assertSame('Sale', $result[5]->getValue()->render());
 
         $this->rendererMock->expects($this->at(0))
             ->method('render')
             ->with([$transaction['status']])
             ->willReturn('Pending for settlement');
-        $this->assertEquals('Pending for settlement', $result[9]->getValue()->render());
+        $this->assertSame('Pending for settlement', $result[9]->getValue()->render());
     }
 
     /**

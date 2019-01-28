@@ -43,7 +43,7 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/checkmo/payable_to', 'store', 1)
             ->willReturn('payable');
-        $this->assertEquals('payable', $this->_object->getPayableTo());
+        $this->assertSame('payable', $this->_object->getPayableTo());
     }
 
     public function testGetMailingAddress()
@@ -53,6 +53,6 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/checkmo/mailing_address', 'store', 1)
             ->willReturn('blah@blah.com');
-        $this->assertEquals('blah@blah.com', $this->_object->getMailingAddress());
+        $this->assertSame('blah@blah.com', $this->_object->getMailingAddress());
     }
 }

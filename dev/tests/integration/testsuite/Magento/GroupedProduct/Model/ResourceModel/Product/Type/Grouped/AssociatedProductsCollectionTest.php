@@ -33,6 +33,6 @@ class AssociatedProductsCollectionTest extends \PHPUnit\Framework\TestCase
         $expected = ['virtual-product', 'simple'];
         sort($expected);
         sort($resultData);
-        $this->assertEquals($expected, $resultData);
+        $this->assertSame($expected, $resultData);
     }
 }

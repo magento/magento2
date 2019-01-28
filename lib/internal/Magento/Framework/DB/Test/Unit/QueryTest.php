@@ -115,7 +115,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->method('fetchCol')
             ->will($this->returnValue('fetch-result'));
 
-        $this->assertEquals('fetch-result', $this->query->getAllIds());
+        $this->assertSame('fetch-result', $this->query->getAllIds());
     }
 
     /**
@@ -137,7 +137,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->method('fetchOne')
             ->will($this->returnValue(10.689));
 
-        $this->assertEquals(10, $this->query->getSize());
+        $this->assertSame(10, $this->query->getSize());
     }
 
     /**
@@ -151,7 +151,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->method('fetchAll')
             ->will($this->returnValue('return-value'));
 
-        $this->assertEquals('return-value', $this->query->fetchAll());
+        $this->assertSame('return-value', $this->query->fetchAll());
     }
 
     /**
@@ -172,6 +172,6 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->method('fetch')
             ->will($this->returnValue(null));
 
-        $this->assertEquals([], $this->query->fetchItem());
+        $this->assertSame([], $this->query->fetchItem());
     }
 }

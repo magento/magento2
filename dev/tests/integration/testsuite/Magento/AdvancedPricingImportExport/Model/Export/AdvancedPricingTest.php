@@ -83,7 +83,7 @@ class AdvancedPricingTest extends \Magento\TestFramework\Indexer\TestCase
             $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
-            $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
+            $this->assertSame(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
     }
@@ -144,7 +144,7 @@ class AdvancedPricingTest extends \Magento\TestFramework\Indexer\TestCase
             $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
-            $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
+            $this->assertSame(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
     }
@@ -206,7 +206,7 @@ class AdvancedPricingTest extends \Magento\TestFramework\Indexer\TestCase
             if (in_array($key, $skippedAttributes)) {
                 continue;
             } else {
-                $this->assertEquals(
+                $this->assertSame(
                     $value,
                     $actual[$key],
                     'Assert value at key - ' . $key . ' failed'

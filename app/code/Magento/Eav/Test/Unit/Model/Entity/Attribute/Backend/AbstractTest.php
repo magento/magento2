@@ -42,7 +42,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $object = new \Magento\Framework\DataObject();
         $this->_model->setValueId($valueId);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['table' => [['value_id' => $valueId, 'attribute_id' => $attributeId]]],
             $this->_model->getAffectedFields($object)
         );

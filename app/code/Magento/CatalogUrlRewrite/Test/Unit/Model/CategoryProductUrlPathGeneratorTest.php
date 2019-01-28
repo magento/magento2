@@ -71,7 +71,7 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with($categoryCollectionMock, $productMock, $categoryId)
             ->willReturn($urls);
 
-        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryId));
+        $this->assertSame($urls, $this->generator->generate($productMock, $categoryId));
     }
 
     public function testGenerationWithSpecificStore()
@@ -108,6 +108,6 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with($storeId, $categoryCollectionMock, $productMock, $categoryId)
             ->willReturn($urls);
 
-        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryId));
+        $this->assertSame($urls, $this->generator->generate($productMock, $categoryId));
     }
 }

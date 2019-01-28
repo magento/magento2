@@ -66,6 +66,6 @@ class ModuleServiceTest extends \PHPUnit\Framework\TestCase
 
         $expected = $moduleNames;
         $actual = $this->moduleService->getModules();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

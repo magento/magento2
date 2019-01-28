@@ -162,7 +162,7 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
         $this->queryCacheMock->expects($this->never())
             ->method('save');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->queryMock,
             $this->subject->create($queryName)
         );
@@ -231,7 +231,7 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with(json_encode($this->queryMock), $queryName);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->queryMock,
             $this->subject->create($queryName)
         );

@@ -70,6 +70,6 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             'website_ids' => $websiteIds
         ];
 
-        $this->assertEquals($expectedResult, $this->subject->execute($entityType, $entityData));
+        $this->assertSame($expectedResult, $this->subject->execute($entityType, $entityData));
     }
 }

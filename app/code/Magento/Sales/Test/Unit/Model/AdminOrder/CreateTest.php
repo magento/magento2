@@ -201,7 +201,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     public function testUpdateQuoteItemsNotArray()
     {
         $object = $this->adminOrderCreate->updateQuoteItems('string');
-        self::assertEquals($this->adminOrderCreate, $object);
+        self::assertSame($this->adminOrderCreate, $object);
     }
 
     public function testUpdateQuoteItemsEmptyConfiguredOption()
@@ -228,7 +228,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->adminOrderCreate->setRecollect(false);
         $object = $this->adminOrderCreate->updateQuoteItems($items);
-        self::assertEquals($this->adminOrderCreate, $object);
+        self::assertSame($this->adminOrderCreate, $object);
     }
 
     public function testUpdateQuoteItemsWithConfiguredOption()
@@ -261,7 +261,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->adminOrderCreate->setRecollect(false);
         $object = $this->adminOrderCreate->updateQuoteItems($items);
-        self::assertEquals($this->adminOrderCreate, $object);
+        self::assertSame($this->adminOrderCreate, $object);
     }
 
     public function testApplyCoupon()
@@ -286,7 +286,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
-        self::assertEquals($this->adminOrderCreate, $object);
+        self::assertSame($this->adminOrderCreate, $object);
     }
 
     public function testGetCustomerCart()
@@ -310,6 +310,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->with($customerId, [$storeId])
             ->willReturn($cartResult);
 
-        $this->assertEquals($cartResult, $this->adminOrderCreate->getCustomerCart());
+        $this->assertSame($cartResult, $this->adminOrderCreate->getCustomerCart());
     }
 }

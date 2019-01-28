@@ -77,7 +77,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->model->execute($eventObserver);
 
-        $this->assertEquals(2, $quote->getCustomer()->getGroupId());
+        $this->assertSame(2, $quote->getCustomer()->getGroupId());
     }
 
     /**
@@ -133,6 +133,6 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->model->execute($eventObserver);
 
-        $this->assertEquals(1, $quote->getCustomer()->getGroupId());
+        $this->assertSame(1, $quote->getCustomer()->getGroupId());
     }
 }

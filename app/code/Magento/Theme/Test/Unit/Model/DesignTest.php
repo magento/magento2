@@ -155,7 +155,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
         $change = $this->model->loadChange($storeId);
         $this->assertInstanceOf(get_class($this->model), $change);
-        $this->assertEquals($data, $change->getData());
+        $this->assertSame($data, $change->getData());
     }
 
     /**
@@ -169,7 +169,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     {
         $id = 1;
         $this->model->setId($id);
-        $this->assertEquals([Design::CACHE_TAG . '_' . $id], $this->model->getIdentities());
+        $this->assertSame([Design::CACHE_TAG . '_' . $id], $this->model->getIdentities());
     }
 
     /**

@@ -80,6 +80,6 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $this->concreteAttributeProviderMock->expects($this->once())->method('getAttributes')
             ->with($entityType)
             ->willReturn($attributes);
-        $this->assertEquals($attributes, $this->attributeProvider->getAttributes($entityType));
+        $this->assertSame($attributes, $this->attributeProvider->getAttributes($entityType));
     }
 }

@@ -38,7 +38,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testIsExists($status, $result)
     {
         self::$headers = [$status];
-        $this->assertEquals($result, (new Http())->isExists(''));
+        $this->assertSame($result, (new Http())->isExists(''));
     }
 
     /**
@@ -55,7 +55,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testStat($headers, $result)
     {
         self::$headers = $headers;
-        $this->assertEquals($result, (new Http())->stat(''));
+        $this->assertSame($result, (new Http())->stat(''));
     }
 
     /**
@@ -110,14 +110,14 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $content = 'some content';
         self::$fileGetContents = $content;
-        $this->assertEquals($content, (new Http())->fileGetContents(''));
+        $this->assertSame($content, (new Http())->fileGetContents(''));
     }
 
     public function testFileGetContentsNoContent()
     {
         $content = '';
         self::$fileGetContents = '';
-        $this->assertEquals($content, (new Http())->fileGetContents(''));
+        $this->assertSame($content, (new Http())->fileGetContents(''));
     }
 
     public function testFilePutContents()
@@ -148,6 +148,6 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $fsockopenResult = 'resource';
         self::$fsockopen = $fsockopenResult;
-        $this->assertEquals($fsockopenResult, (new Http())->fileOpen('example.com', 'r'));
+        $this->assertSame($fsockopenResult, (new Http())->fileOpen('example.com', 'r'));
     }
 }

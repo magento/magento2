@@ -110,8 +110,8 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
             ->with($theme, $resolvedPath)
             ->will($this->returnValue($files));
         $this->object->process($chain);
-        $this->assertEquals($expectedContent, $chain->getContent());
-        $this->assertEquals('css', $chain->getContentType());
+        $this->assertSame($expectedContent, $chain->getContent());
+        $this->assertSame('css', $chain->getContentType());
     }
 
     /**
@@ -172,8 +172,8 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
         $this->assetRepo->expects($this->never())
             ->method('createRelated');
         $this->object->process($chain);
-        $this->assertEquals($expectedContent, $chain->getContent());
-        $this->assertEquals('css', $chain->getContentType());
+        $this->assertSame($expectedContent, $chain->getContent());
+        $this->assertSame('css', $chain->getContentType());
     }
 
     public function testProcessException()
@@ -192,7 +192,7 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
             ->method('processException')
             ->with($exception);
         $this->object->process($chain);
-        $this->assertEquals('', $chain->getContent());
-        $this->assertEquals('css', $chain->getContentType());
+        $this->assertSame('', $chain->getContent());
+        $this->assertSame('css', $chain->getContentType());
     }
 }

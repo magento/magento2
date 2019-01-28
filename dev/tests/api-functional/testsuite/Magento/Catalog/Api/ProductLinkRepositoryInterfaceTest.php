@@ -58,7 +58,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
         $this->assertCount(1, $linkedProducts);
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $product */
         $product = current($linkedProducts);
-        $this->assertEquals($product->getLinkedProductSku(), 'simple_with_cross_two');
+        $this->assertSame($product->getLinkedProductSku(), 'simple_with_cross_two');
     }
 
     /**
@@ -98,6 +98,6 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
         $linkManagement = $this->objectManager->get(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
         $actual = $linkManagement->getLinkedItemsByType($productSku, $linkType);
         $this->assertCount(1, $actual, 'Invalid actual linked products count');
-        $this->assertEquals(1000, $actual[0]->getPosition(), 'Product position is not updated');
+        $this->assertSame(1000, $actual[0]->getPosition(), 'Product position is not updated');
     }
 }

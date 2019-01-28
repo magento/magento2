@@ -135,17 +135,17 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStock()
     {
-        $this->assertEquals($this->stock, $this->stockRegistry->getStock($this->websiteId));
+        $this->assertSame($this->stock, $this->stockRegistry->getStock($this->websiteId));
     }
 
     public function testGetStockItem()
     {
-        $this->assertEquals($this->stockItem, $this->stockRegistry->getStockItem($this->productId, $this->websiteId));
+        $this->assertSame($this->stockItem, $this->stockRegistry->getStockItem($this->productId, $this->websiteId));
     }
 
     public function testGetStockItemBySku()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->stockItem,
             $this->stockRegistry->getStockItemBySku($this->productSku, $this->websiteId)
         );
@@ -153,7 +153,7 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStockStatus()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->stockStatus,
             $this->stockRegistry->getStockStatus($this->productId, $this->websiteId)
         );
@@ -161,7 +161,7 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStockStatusBySku()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->stockStatus,
             $this->stockRegistry->getStockStatus($this->productId, $this->websiteId)
         );
@@ -174,7 +174,7 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         $this->stockItem->expects($this->once())->method('getData')->willReturn([]);
         $this->stockItem->expects($this->once())->method('addData')->willReturnSelf();
         $this->stockItem->expects($this->atLeastOnce())->method('getItemId')->willReturn($itemId);
-        $this->assertEquals(
+        $this->assertSame(
             $itemId,
             $this->stockRegistry->updateStockItemBySku($this->productSku, $this->stockItem)
         );

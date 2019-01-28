@@ -23,9 +23,9 @@ class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
 
     public function testAddAndGetHandles()
     {
-        $this->assertEquals([], $this->entitySpecificHandlesList->getHandles());
+        $this->assertSame([], $this->entitySpecificHandlesList->getHandles());
         $this->entitySpecificHandlesList->addHandle('handle1');
         $this->entitySpecificHandlesList->addHandle('handle2');
-        $this->assertEquals(['handle1', 'handle2'], $this->entitySpecificHandlesList->getHandles());
+        $this->assertSame(['handle1', 'handle2'], $this->entitySpecificHandlesList->getHandles());
     }
 }

@@ -52,6 +52,6 @@ class ScoreBuilderTest extends \PHPUnit\Framework\TestCase
             . ' + (LEAST((someCondition6), 1000000) * %1$s + '
             . 'LEAST((someCondition7), 1000000) * %1$s) * 10.2) * 10.3) * 10.4 + (0)) AS ' . $builder->getScoreAlias();
         $expected = sprintf($expected, $weightExpression);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

@@ -87,7 +87,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
 
         // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template
         // instead of existing one.
-        $this->assertEquals('some_unique_code', $this->model->getTemplateCode());
+        $this->assertSame('some_unique_code', $this->model->getTemplateCode());
 
         $this->getRequest()->setParam('id', $this->model->getId());
         $this->dispatch('backend/newsletter/template/save');
@@ -144,6 +144,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
-        $this->assertEquals(404, $this->getResponse()->getStatusCode());
+        $this->assertSame(404, $this->getResponse()->getStatusCode());
     }
 }

@@ -155,7 +155,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
         $sampleData = $this->block->getSampleData();
         foreach ($sampleData as $sample) {
             $fileSave = $sample->getFileSave(0);
-            $this->assertEquals($expectingFileData['sample_file'], $fileSave);
+            $this->assertSame($expectingFileData['sample_file'], $fileSave);
         }
     }
 }

@@ -43,7 +43,7 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
             ->method('addOrderInformation')
             ->with(['increment_id'])
             ->will($this->returnSelf());
-        $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
+        $this->assertSame($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 
     public function testUpdateIfOrderExists()
@@ -64,6 +64,6 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
             ->method('addOrderInformation')
             ->with(['increment_id'])
             ->will($this->returnSelf());
-        $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
+        $this->assertSame($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 }

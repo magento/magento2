@@ -199,12 +199,12 @@ class NvpTest extends \PHPUnit\Framework\TestCase
             ));
         $this->model->callGetExpressCheckoutDetails();
         $address = $this->model->getExportedShippingAddress();
-        $this->assertEquals('Ship To Name', $address->getData('firstname'));
-        $this->assertEquals(implode("\n", ['testStreet','testApartment']), $address->getStreet());
-        $this->assertEquals('testCompany', $address->getCompany());
-        $this->assertEquals('testCity', $address->getCity());
-        $this->assertEquals('223322', $address->getTelephone());
-        $this->assertEquals('testSTATE', $address->getRegion());
+        $this->assertSame('Ship To Name', $address->getData('firstname'));
+        $this->assertSame(implode("\n", ['testStreet','testApartment']), $address->getStreet());
+        $this->assertSame('testCompany', $address->getCompany());
+        $this->assertSame('testCity', $address->getCity());
+        $this->assertSame('223322', $address->getTelephone());
+        $this->assertSame('testSTATE', $address->getRegion());
     }
 
     /**
@@ -240,13 +240,13 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertNotContains($protectionEligibilityType, $this->model->getData());
-        $this->assertEquals($expectedImportedData, $this->model->getData());
+        $this->assertSame($expectedImportedData, $this->model->getData());
     }
 
     public function testGetDebugReplacePrivateDataKeys()
     {
         $debugReplacePrivateDataKeys = $this->_invokeNvpProperty($this->model, '_debugReplacePrivateDataKeys');
-        $this->assertEquals($debugReplacePrivateDataKeys, $this->model->getDebugReplacePrivateDataKeys());
+        $this->assertSame($debugReplacePrivateDataKeys, $this->model->getDebugReplacePrivateDataKeys());
     }
 
     /**
@@ -272,6 +272,6 @@ class NvpTest extends \PHPUnit\Framework\TestCase
             'L_LONGMESSAGE0' => 'Long Message.'
         ];
 
-        $this->assertEquals($expectedResponse, $this->model->call('some method', ['data' => 'some data']));
+        $this->assertSame($expectedResponse, $this->model->call('some method', ['data' => 'some data']));
     }
 }

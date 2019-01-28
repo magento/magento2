@@ -204,7 +204,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
         $this->dbSchemaWriterMock->expects(self::once())
             ->method('resetAutoIncrement')
             ->willReturn($resetAIStatement);
-        self::assertEquals(
+        self::assertSame(
             [$addComplexStatement, $statement, $dropComplexElement, $resetAIStatement],
             $this->model->doOperation($elementHistory)
         );

@@ -55,7 +55,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail('customer_two@example.com');
         $this->assertTrue($subscriber->isSubscribed());
-        $this->assertEquals(0, (int)$subscriber->getCustomerId());
+        $this->assertSame(0, (int)$subscriber->getCustomerId());
 
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
         $customerFactory = $objectManager->get(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
@@ -70,7 +70,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $subscriber->loadByEmail('customer_two@example.com');
         $this->assertTrue($subscriber->isSubscribed());
-        $this->assertEquals((int)$createdCustomer->getId(), (int)$subscriber->getCustomerId());
+        $this->assertSame((int)$createdCustomer->getId(), (int)$subscriber->getCustomerId());
     }
 
     /**
@@ -105,7 +105,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail('customer@example.com');
         $this->assertTrue($subscriber->isSubscribed());
-        $this->assertEquals(1, (int)$subscriber->getCustomerId());
+        $this->assertSame(1, (int)$subscriber->getCustomerId());
 
         $customer = $this->customerRepository->getById(1);
         $customer->setEmail('new@example.com');
@@ -113,7 +113,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $subscriber->loadByEmail('new@example.com');
         $this->assertTrue($subscriber->isSubscribed());
-        $this->assertEquals(1, (int)$subscriber->getCustomerId());
+        $this->assertSame(1, (int)$subscriber->getCustomerId());
     }
 
     /**
@@ -164,7 +164,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail($email);
         $this->assertFalse($subscriber->isSubscribed());
-        $this->assertEquals(0, (int)$subscriber->getId());
+        $this->assertSame(0, (int)$subscriber->getId());
         return $subscriber;
     }
 
@@ -202,7 +202,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $subscriber->loadByEmail('customer@example.com');
 
-        $this->assertEquals($customer->getId(), (int)$subscriber->getCustomerId());
-        $this->assertEquals($currentStore, (int)$subscriber->getStoreId());
+        $this->assertSame($customer->getId(), (int)$subscriber->getCustomerId());
+        $this->assertSame($currentStore, (int)$subscriber->getStoreId());
     }
 }

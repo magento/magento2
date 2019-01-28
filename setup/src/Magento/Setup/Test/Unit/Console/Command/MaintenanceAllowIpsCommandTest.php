@@ -63,7 +63,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
         }
         $tester = new CommandTester($this->command);
         $tester->execute($input);
-        $this->assertEquals($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedMessage, $tester->getDisplay());
     }
 
     /**
@@ -90,7 +90,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute($input);
-        $this->assertEquals($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedMessage, $tester->getDisplay());
     }
 
     /**

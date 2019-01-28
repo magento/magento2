@@ -74,8 +74,8 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
         $state = $this->objectManager->create(DataObject::class);
         $this->model->initialize(Config::PAYMENT_ACTION_AUTH, $state);
 
-        static::assertEquals(Order::STATE_PENDING_PAYMENT, $state->getState());
-        static::assertEquals(Order::STATE_PENDING_PAYMENT, $state->getStatus());
+        static::assertSame(Order::STATE_PENDING_PAYMENT, $state->getState());
+        static::assertSame(Order::STATE_PENDING_PAYMENT, $state->getStatus());
         static::assertFalse($state->getIsNotified());
     }
 

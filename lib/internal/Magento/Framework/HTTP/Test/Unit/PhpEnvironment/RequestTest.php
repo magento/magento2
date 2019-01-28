@@ -63,7 +63,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $actual = $this->model->setPathInfo();
-        $this->assertEquals($this->model, $actual);
+        $this->assertSame($this->model, $actual);
     }
 
     public function testSetPathInfoWithValue()
@@ -71,7 +71,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->getModel();
         $expected = 'testPathInfo';
         $this->model->setPathInfo($expected);
-        $this->assertEquals($expected, $this->model->getPathInfo());
+        $this->assertSame($expected, $this->model->getPathInfo());
     }
 
     public function testSetPathInfoWithQueryPart()
@@ -79,7 +79,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $uri = 'http://test.com/node?queryValue';
         $this->model = $this->getModel($uri);
         $this->model->setPathInfo();
-        $this->assertEquals('/node', $this->model->getPathInfo());
+        $this->assertSame('/node', $this->model->getPathInfo());
     }
 
     /**
@@ -106,7 +106,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'REQUEST_URI' => 'request-uri',
             'SERVER_NAME' => 'server-name',
         ]));
-        $this->assertEquals($result, $this->model->getServer($name, $default));
+        $this->assertSame($result, $this->model->getServer($name, $default));
     }
 
     /**
@@ -145,7 +145,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $this->model->setAlias('AliasName', 'AliasTarget');
-        $this->assertEquals('AliasTarget', $this->model->getAlias('AliasName'));
+        $this->assertSame('AliasTarget', $this->model->getAlias('AliasName'));
     }
 
     public function testGetAliasWhenAliasesIsNull()
@@ -160,7 +160,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $post = ['one' => '111', 'two' => '222'];
         $this->model->setPostValue($post);
-        $this->assertEquals($post, $this->model->getPost()->toArray());
+        $this->assertSame($post, $this->model->getPost()->toArray());
 
         $this->model->setPost(new Parameters([]));
         $this->assertEmpty($this->model->getPost()->toArray());
@@ -168,7 +168,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $post = ['post_var' => 'post_value'];
         $this->model->setPostValue($post);
         $this->model->setPostValue('post_var 2', 'post_value 2');
-        $this->assertEquals(
+        $this->assertSame(
             ['post_var' => 'post_value', 'post_var 2' => 'post_value 2'],
             $this->model->getPost()->toArray()
         );
@@ -181,21 +181,21 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $files = ['one' => '111', 'two' => '222'];
         $this->model->setFiles(new Parameters($files));
 
-        $this->assertEquals($files, $this->model->getFiles()->toArray());
+        $this->assertSame($files, $this->model->getFiles()->toArray());
 
         foreach ($files as $key => $value) {
-            $this->assertEquals($value, $this->model->getFiles($key));
+            $this->assertSame($value, $this->model->getFiles($key));
         }
 
         $this->assertNull($this->model->getFiles('no_such_file'));
-        $this->assertEquals('default', $this->model->getFiles('no_such_file', 'default'));
+        $this->assertSame('default', $this->model->getFiles('no_such_file', 'default'));
     }
 
     public function testGetBaseUrlWithUrl()
     {
         $this->model = $this->getModel();
         $this->model->setBaseUrl('http:\/test.com\one/two');
-        $this->assertEquals('http://test.com/one/two', $this->model->getBaseUrl());
+        $this->assertSame('http://test.com/one/two', $this->model->getBaseUrl());
     }
 
     public function testGetBaseUrlWithEmptyUrl()
@@ -208,7 +208,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $this->model->setAlias('AliasName', 'AliasTarget');
-        $this->assertEquals('AliasTarget', $this->model->getAlias('AliasName'));
+        $this->assertSame('AliasTarget', $this->model->getAlias('AliasName'));
     }
 
     public function testGetAliasWhenAliasAreEmpty()
@@ -241,7 +241,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->with($key, $default)
             ->will($this->returnValue($default));
 
-        $this->assertEquals($default, $this->getModel()->getCookie($key, $default));
+        $this->assertSame($default, $this->getModel()->getCookie($key, $default));
     }
 
     public function testGetCookieNameExists()
@@ -256,7 +256,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->with($key, $default)
             ->will($this->returnValue($value));
 
-        $this->assertEquals($value, $this->getModel()->getCookie($key, $default));
+        $this->assertSame($value, $this->getModel()->getCookie($key, $default));
     }
 
     public function testGetCookieNullName()
@@ -270,6 +270,6 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->with($nullKey, $default)
             ->will($this->returnValue($default));
 
-        $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
+        $this->assertSame($default, $this->getModel()->getCookie($nullKey, $default));
     }
 }

@@ -69,26 +69,26 @@ class StoreConfigResolverTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('storeConfig', $response);
-        $this->assertEquals($storeConfig->getId(), $response['storeConfig']['id']);
-        $this->assertEquals($storeConfig->getCode(), $response['storeConfig']['code']);
-        $this->assertEquals($storeConfig->getLocale(), $response['storeConfig']['locale']);
-        $this->assertEquals($storeConfig->getBaseCurrencyCode(), $response['storeConfig']['base_currency_code']);
-        $this->assertEquals(
+        $this->assertSame($storeConfig->getId(), $response['storeConfig']['id']);
+        $this->assertSame($storeConfig->getCode(), $response['storeConfig']['code']);
+        $this->assertSame($storeConfig->getLocale(), $response['storeConfig']['locale']);
+        $this->assertSame($storeConfig->getBaseCurrencyCode(), $response['storeConfig']['base_currency_code']);
+        $this->assertSame(
             $storeConfig->getDefaultDisplayCurrencyCode(),
             $response['storeConfig']['default_display_currency_code']
         );
-        $this->assertEquals($storeConfig->getTimezone(), $response['storeConfig']['timezone']);
-        $this->assertEquals($storeConfig->getWeightUnit(), $response['storeConfig']['weight_unit']);
-        $this->assertEquals($storeConfig->getBaseUrl(), $response['storeConfig']['base_url']);
-        $this->assertEquals($storeConfig->getBaseLinkUrl(), $response['storeConfig']['base_link_url']);
-        $this->assertEquals($storeConfig->getBaseStaticUrl(), $response['storeConfig']['base_static_url']);
-        $this->assertEquals($storeConfig->getBaseMediaUrl(), $response['storeConfig']['base_media_url']);
-        $this->assertEquals($storeConfig->getSecureBaseUrl(), $response['storeConfig']['secure_base_url']);
-        $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $response['storeConfig']['secure_base_link_url']);
-        $this->assertEquals(
+        $this->assertSame($storeConfig->getTimezone(), $response['storeConfig']['timezone']);
+        $this->assertSame($storeConfig->getWeightUnit(), $response['storeConfig']['weight_unit']);
+        $this->assertSame($storeConfig->getBaseUrl(), $response['storeConfig']['base_url']);
+        $this->assertSame($storeConfig->getBaseLinkUrl(), $response['storeConfig']['base_link_url']);
+        $this->assertSame($storeConfig->getBaseStaticUrl(), $response['storeConfig']['base_static_url']);
+        $this->assertSame($storeConfig->getBaseMediaUrl(), $response['storeConfig']['base_media_url']);
+        $this->assertSame($storeConfig->getSecureBaseUrl(), $response['storeConfig']['secure_base_url']);
+        $this->assertSame($storeConfig->getSecureBaseLinkUrl(), $response['storeConfig']['secure_base_link_url']);
+        $this->assertSame(
             $storeConfig->getSecureBaseStaticUrl(),
             $response['storeConfig']['secure_base_static_url']
         );
-        $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $response['storeConfig']['secure_base_media_url']);
+        $this->assertSame($storeConfig->getSecureBaseMediaUrl(), $response['storeConfig']['secure_base_media_url']);
     }
 }

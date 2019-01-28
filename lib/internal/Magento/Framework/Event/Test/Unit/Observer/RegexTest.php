@@ -41,7 +41,7 @@ class RegexTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->will($this->returnValue($name));
 
-        $this->assertEquals($expectedResult, $this->regex->isValidFor($eventMock));
+        $this->assertSame($expectedResult, $this->regex->isValidFor($eventMock));
     }
 
     /**

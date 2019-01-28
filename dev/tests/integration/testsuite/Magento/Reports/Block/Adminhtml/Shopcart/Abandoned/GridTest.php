@@ -35,8 +35,8 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
         $this->assertCount(1, $result->getItems());
         /** @var Quote $quote */
         $quote = $result->getFirstItem();
-        $this->assertEquals('customer@example.com', $quote->getCustomerEmail());
-        $this->assertEquals(10.00, $quote->getSubtotal());
+        $this->assertSame('customer@example.com', $quote->getCustomerEmail());
+        $this->assertSame(10.00, $quote->getSubtotal());
     }
 
     /**

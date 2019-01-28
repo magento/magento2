@@ -65,7 +65,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructor()
     {
-        $this->assertEquals($this->tempDir, $this->subject->getTempDir(), 'Temp directory is not set in Application');
+        $this->assertSame($this->tempDir, $this->subject->getTempDir(), 'Temp directory is not set in Application');
 
         $initParams = $this->subject->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
@@ -75,7 +75,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             'Directories are not configured'
         );
         $this->assertArrayHasKey(State::PARAM_MODE, $initParams, 'Application mode is not configured');
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\App\State::MODE_DEVELOPER,
             $initParams[State::PARAM_MODE],
             'Wrong application mode configured'

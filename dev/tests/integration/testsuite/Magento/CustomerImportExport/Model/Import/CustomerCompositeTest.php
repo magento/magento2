@@ -110,7 +110,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             // assert customer data (only for required customers)
             if (isset($expectedData[$email]['data'])) {
                 foreach ($expectedData[$email]['data'] as $attribute => $expectedValue) {
-                    $this->assertEquals($expectedValue, $customer->getData($attribute));
+                    $this->assertSame($expectedValue, $customer->getData($attribute));
                 }
             }
 
@@ -166,7 +166,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         // assert validation errors
         // can't use error codes because entity adapter gathers only error messages from aggregated adapters
         $actualErrors = array_values($this->_entityAdapter->getErrorAggregator()->getRowsGroupedByErrorCode());
-        $this->assertEquals($errors, $actualErrors);
+        $this->assertSame($errors, $actualErrors);
 
         // assert data before import
         $this->_assertCustomerData($dataBefore);

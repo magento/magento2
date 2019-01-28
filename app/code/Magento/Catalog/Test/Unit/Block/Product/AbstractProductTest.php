@@ -100,7 +100,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->will($this->returnValue($expectedPriceHtml));
 
-        $this->assertEquals($expectedPriceHtml, $this->block->getProductPrice($product));
+        $this->assertSame($expectedPriceHtml, $this->block->getProductPrice($product));
     }
 
     /**
@@ -121,7 +121,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->will($this->returnValue($expectedPriceHtml));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedPriceHtml,
             $this->block->getProductPriceHtml($product, 'price_code', 'zone_code')
         );
@@ -171,7 +171,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($minSale));
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $productMock */
-        $this->assertEquals($result, $this->block->getMinimalQty($productMock));
+        $this->assertSame($result, $this->block->getMinimalQty($productMock));
     }
 
     /**

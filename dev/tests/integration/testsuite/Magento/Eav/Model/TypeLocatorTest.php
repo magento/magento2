@@ -30,7 +30,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
         array $attributeList
     ) {
         foreach ($attributeList as $attributeCode => $expectedType) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedType,
                 $this->attributeTypeLocator->getType($attributeCode, $entityType),
                 "Expected type of '{$attributeCode}' product attribute was '{$expectedType}"

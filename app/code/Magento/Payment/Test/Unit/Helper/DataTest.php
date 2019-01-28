@@ -78,7 +78,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals($methodInstance, $this->helper->getMethodInstance($code));
+        $this->assertSame($methodInstance, $this->helper->getMethodInstance($code));
     }
 
     /**
@@ -250,7 +250,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($blockHtml);
         $this->appEmulation->expects($this->once())->method('stopEnvironmentEmulation');
 
-        $this->assertEquals($blockHtml, $this->helper->getInfoBlockHtml($infoMock, $storeId));
+        $this->assertSame($blockHtml, $this->helper->getInfoBlockHtml($infoMock, $storeId));
     }
 
     /**

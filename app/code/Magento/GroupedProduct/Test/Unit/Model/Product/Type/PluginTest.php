@@ -33,7 +33,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     public function testAfterGetOptionArray()
     {
         $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will($this->returnValue(false));
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->object->afterGetOptionArray($this->subjectMock, ['grouped' => 'test'])
         );

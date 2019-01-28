@@ -30,7 +30,7 @@ class FileScannerTest extends \PHPUnit\Framework\TestCase
         ];
         $this->assertCount(4, $this->object->getClasses());
         foreach ($this->object->getClasses() as $key => $class) {
-            $this->assertEquals($classes[$key], $class->getName());
+            $this->assertSame($classes[$key], $class->getName());
         }
     }
 }

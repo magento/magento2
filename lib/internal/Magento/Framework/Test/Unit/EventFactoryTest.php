@@ -43,6 +43,6 @@ class EventFactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_expectedObject)
         );
 
-        $this->assertEquals($this->_expectedObject, $this->_model->create($arguments));
+        $this->assertSame($this->_expectedObject, $this->_model->create($arguments));
     }
 }

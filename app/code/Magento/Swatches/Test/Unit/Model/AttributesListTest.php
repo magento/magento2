@@ -87,6 +87,6 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
             ->with($this->attributeMock)
             ->willReturn(true);
 
-        $this->assertEquals($result, $this->attributeListModel->getAttributes($ids));
+        $this->assertSame($result, $this->attributeListModel->getAttributes($ids));
     }
 }

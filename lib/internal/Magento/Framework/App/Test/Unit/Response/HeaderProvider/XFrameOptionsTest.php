@@ -35,12 +35,12 @@ class XFrameOptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetName()
     {
-        $this->assertEquals($this::HEADER_NAME, $this->object->getName(), 'Wrong header name');
+        $this->assertSame($this::HEADER_NAME, $this->object->getName(), 'Wrong header name');
     }
 
     public function testGetValue()
     {
-        $this->assertEquals($this::HEADER_VALUE, $this->object->getValue(), 'Wrong header value');
+        $this->assertSame($this::HEADER_VALUE, $this->object->getValue(), 'Wrong header value');
     }
 
     /**

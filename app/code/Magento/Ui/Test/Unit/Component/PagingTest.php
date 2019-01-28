@@ -163,6 +163,6 @@ class PagingTest extends \PHPUnit\Framework\TestCase
 
         $paging->prepare();
 
-        $this->assertEquals($paging->getData(), $resultData);
+        $this->assertSame($paging->getData(), $resultData);
     }
 }

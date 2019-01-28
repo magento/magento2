@@ -47,7 +47,7 @@ class AddressMetadataTest extends WebapiAbstract
         $attributeMetadata = $this->_webapiCall($serviceInfo, $requestData);
         $validationResult = $this->checkValidationRules($expectedMetadata, $attributeMetadata);
         list($expectedMetadata, $attributeMetadata) = $validationResult;
-        $this->assertEquals($expectedMetadata, $attributeMetadata);
+        $this->assertSame($expectedMetadata, $attributeMetadata);
     }
 
     /**
@@ -135,7 +135,7 @@ class AddressMetadataTest extends WebapiAbstract
         $requestData = ['attribute_code' => $customAttributeCode];
         $attributeMetadata = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertCount(2, $attributeMetadata);
-        $this->assertEquals($customAttributeCode, $attributeMetadata[0]['attribute_code']);
+        $this->assertSame($customAttributeCode, $attributeMetadata[0]['attribute_code']);
     }
 
     /**
@@ -170,7 +170,7 @@ class AddressMetadataTest extends WebapiAbstract
             ) {
                 $validationResult = $this->checkValidationRules($expectedMetadata, $attributeMetadata);
                 list($expectedMetadata, $attributeMetadata) = $validationResult;
-                $this->assertEquals($expectedMetadata, $attributeMetadata);
+                $this->assertSame($expectedMetadata, $attributeMetadata);
                 break;
             }
         }

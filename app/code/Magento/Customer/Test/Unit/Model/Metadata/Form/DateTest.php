@@ -61,7 +61,7 @@ class DateTest extends AbstractFormTestCase
 
         // yyyy-MM-dd
         $actual = $this->date->extractValue($requestMock);
-        $this->assertEquals('1999-01-02', $actual);
+        $this->assertSame('1999-01-02', $actual);
     }
 
     /**
@@ -115,7 +115,7 @@ class DateTest extends AbstractFormTestCase
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue($required));
 
         $actual = $this->date->validateValue($value);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -202,7 +202,7 @@ class DateTest extends AbstractFormTestCase
      */
     public function testOutputValue()
     {
-        $this->assertEquals(null, $this->date->outputValue());
+        $this->assertSame(null, $this->date->outputValue());
         $date = new \Magento\Customer\Model\Metadata\Form\Date(
             $this->localeMock,
             $this->loggerMock,
@@ -211,6 +211,6 @@ class DateTest extends AbstractFormTestCase
             '2012/12/31',
             0
         );
-        $this->assertEquals('2012-12-31', $date->outputValue());
+        $this->assertSame('2012-12-31', $date->outputValue());
     }
 }

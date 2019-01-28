@@ -65,7 +65,7 @@ class RefundAdapterTest extends \PHPUnit\Framework\TestCase
             ->method('execute')
             ->with($this->creditmemoMock, $this->orderMock, $isOnline)
             ->willReturn($this->orderMock);
-        $this->assertEquals(
+        $this->assertSame(
             $this->orderMock,
             $this->subject->refund($this->creditmemoMock, $this->orderMock, $isOnline)
         );

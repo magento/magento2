@@ -77,7 +77,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'NonExistentService'
             ]
         );
-        $this->assertEquals(array_replace_recursive($actual, $expected), $actual);
+        $this->assertSame(array_replace_recursive($actual, $expected), $actual);
     }
 
     public function testGetServiceMethodInfo()
@@ -98,7 +98,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'NonExistentService'
             ]
         );
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetSoapOperation()
@@ -110,6 +110,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'activate',
                 'V1'
             );
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

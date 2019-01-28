@@ -66,6 +66,6 @@ class UsersTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->any())->method('renderElement')->willReturn($html);
 
         $this->model->setLayout($this->layoutMock);
-        $this->assertEquals($html, $this->model->getGridHtml());
+        $this->assertSame($html, $this->model->getGridHtml());
     }
 }

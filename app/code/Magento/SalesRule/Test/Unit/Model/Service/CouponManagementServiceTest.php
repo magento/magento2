@@ -144,7 +144,7 @@ class CouponManagementServiceTest extends \PHPUnit\Framework\TestCase
         $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
 
         $result =  $this->model->generate($couponSpec);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     /**

@@ -60,7 +60,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomerId()
     {
-        $this->assertEquals(self::CUSTOMER_ID_VALUE, $this->_block->getCustomerId());
+        $this->assertSame(self::CUSTOMER_ID_VALUE, $this->_block->getCustomerId());
     }
 
     public function testGetGridUrl()

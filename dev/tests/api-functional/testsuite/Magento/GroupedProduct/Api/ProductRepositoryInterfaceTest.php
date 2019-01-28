@@ -153,8 +153,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct("group_product_500");
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
-        $this->assertEquals($productLinkData, $links[0]);
+        $this->assertSame(1, count($links));
+        $this->assertSame($productLinkData, $links[0]);
 
         // update link information for Group Product
         $productLinkData1 = ["sku" => "group_product_500", "link_type" => "associated",
@@ -179,9 +179,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(2, count($links));
-        $this->assertEquals($productLinkData1, $links[1]);
-        $this->assertEquals($productLinkData2, $links[0]);
+        $this->assertSame(2, count($links));
+        $this->assertSame($productLinkData1, $links[1]);
+        $this->assertSame($productLinkData2, $links[0]);
 
         // Remove link
         $productWithNoLinkData =  [
@@ -199,7 +199,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct("group_product_500");
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals([], $links);
+        $this->assertSame([], $links);
 
         $this->deleteProduct("product_simple_500");
         $this->deleteProduct("group_product_500");

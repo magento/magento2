@@ -116,7 +116,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $layout->expects($this->any())->method('getChildName')->willReturn(false);
         $this->bundleBlock->setLayout($layout);
 
-        $this->assertEquals(
+        $this->assertSame(
             'There is no defined renderer for "checkbox" option type.',
             $this->bundleBlock->getOptionHtml($option)
         );
@@ -143,7 +143,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $layout->expects($this->any())->method('getBlock')->willReturn($optionBlock);
         $this->bundleBlock->setLayout($layout);
 
-        $this->assertEquals('option html', $this->bundleBlock->getOptionHtml($option));
+        $this->assertSame('option html', $this->bundleBlock->getOptionHtml($option));
     }
 
     public function testGetJsonConfigFixedPriceBundleNoOption()
@@ -181,9 +181,9 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED
         );
         $jsonConfig = $this->bundleBlock->getJsonConfig();
-        $this->assertEquals(110, $jsonConfig['prices']['oldPrice']['amount']);
-        $this->assertEquals(100, $jsonConfig['prices']['basePrice']['amount']);
-        $this->assertEquals(100, $jsonConfig['prices']['finalPrice']['amount']);
+        $this->assertSame(110, $jsonConfig['prices']['oldPrice']['amount']);
+        $this->assertSame(100, $jsonConfig['prices']['basePrice']['amount']);
+        $this->assertSame(100, $jsonConfig['prices']['finalPrice']['amount']);
     }
 
     public function testGetJsonConfigFixedPriceBundle()
@@ -277,10 +277,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED
         );
         $jsonConfig = $this->bundleBlock->getJsonConfig();
-        $this->assertEquals(110, $jsonConfig['prices']['oldPrice']['amount']);
-        $this->assertEquals(100, $jsonConfig['prices']['basePrice']['amount']);
-        $this->assertEquals(100, $jsonConfig['prices']['finalPrice']['amount']);
-        $this->assertEquals([1], $jsonConfig['positions']);
+        $this->assertSame(110, $jsonConfig['prices']['oldPrice']['amount']);
+        $this->assertSame(100, $jsonConfig['prices']['basePrice']['amount']);
+        $this->assertSame(100, $jsonConfig['prices']['finalPrice']['amount']);
+        $this->assertSame([1], $jsonConfig['positions']);
     }
 
     /**
@@ -539,7 +539,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->any())->method('getStoreId')->willReturn(0);
         $this->catalogProduct->expects($this->once())->method('getSkipSaleableCheck')->willReturn(true);
 
-        $this->assertEquals($newOptions, $this->bundleBlock->getOptions($stripSelection));
+        $this->assertSame($newOptions, $this->bundleBlock->getOptions($stripSelection));
     }
 
     /**

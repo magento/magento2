@@ -140,7 +140,7 @@ class NewWidgetTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectedHtml);
 
         $result = $this->block->getProductPriceHtml($productMock, $type);
-        $this->assertEquals($expectedHtml, $result);
+        $this->assertSame($expectedHtml, $result);
     }
 
     /**
@@ -157,7 +157,7 @@ class NewWidgetTest extends \PHPUnit\Framework\TestCase
             ->with('page_number')
             ->willReturn($pageNumber);
 
-        $this->assertEquals($expectedResult, $this->block->getCurrentPage());
+        $this->assertSame($expectedResult, $this->block->getCurrentPage());
     }
 
     /**
@@ -174,9 +174,9 @@ class NewWidgetTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductsCount()
     {
-        $this->assertEquals(10, $this->block->getProductsCount());
+        $this->assertSame(10, $this->block->getProductsCount());
         $this->block->setProductsCount(2);
-        $this->assertEquals(2, $this->block->getProductsCount());
+        $this->assertSame(2, $this->block->getProductsCount());
     }
 
     /**

@@ -119,7 +119,7 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
                 ['dev/test/setting2' => false]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'default' => [
                     'dev/test/setting' => true

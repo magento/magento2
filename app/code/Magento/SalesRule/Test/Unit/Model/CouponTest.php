@@ -57,7 +57,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $ruleMock = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['getId', '__wakeup']);
         $ruleMock->expects($this->once())->method('getId');
 
-        $this->assertEquals($this->couponModel, $this->couponModel->setRule($ruleMock));
+        $this->assertSame($this->couponModel, $this->couponModel->setRule($ruleMock));
     }
 
     /**
@@ -67,7 +67,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
     {
         $this->resourceMock->expects($this->once())->method('loadPrimaryByRule');
 
-        $this->assertEquals($this->couponModel, $this->couponModel->loadPrimaryByRule(1));
+        $this->assertSame($this->couponModel, $this->couponModel->loadPrimaryByRule(1));
     }
 
     /**
@@ -78,6 +78,6 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $this->eventManager->expects($this->any())->method('dispatch');
         $this->resourceMock->expects($this->once())->method('load');
 
-        $this->assertEquals($this->couponModel, $this->couponModel->loadByCode('code-value'));
+        $this->assertSame($this->couponModel, $this->couponModel->loadByCode('code-value'));
     }
 }

@@ -24,7 +24,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
             \Magento\Indexer\Model\ResourceModel\Mview\View\State::class,
             $arguments
         );
-        $this->assertEquals(
+        $this->assertSame(
             [['field' => ['view_id'], 'title' => __('State for the same view')]],
             $this->model->getUniqueFields()
         );

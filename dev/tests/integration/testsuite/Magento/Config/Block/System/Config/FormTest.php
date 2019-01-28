@@ -153,12 +153,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
             Xpath::getElementsCountForXpath('//fieldset', $fieldsetHtml),
             'Fieldset HTML is invalid'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $valueSelCtr,
             Xpath::getElementsCountForXpath($valueSel, $fieldsetHtml),
             'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $valueSelCtr,
             Xpath::getElementsCountForXpath($useDefaultSel, $fieldsetHtml),
             '"Use Default" checkbox should appear' . $valueSelCtr . ' times  in fieldset HTML.'
@@ -176,12 +176,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 'Field input should be disabled'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should not be checked'
             );
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
                 'Field input should not be disabled'
@@ -253,7 +253,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'Fieldset HTML is invalid'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $valueSelCtr,
             Xpath::getElementsCountForXpath(
                 $valueSel,
@@ -336,7 +336,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         if (is_array($expectedConfigValue)) {
             $expectedConfigValue = implode('|', $expectedConfigValue);
         }
-        $this->assertEquals(
+        $this->assertSame(
             $expectedConfigValue,
             $this->getElementAttributeValueById($fieldsetHtml, $elementId)
         );
@@ -490,10 +490,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
             );
             $this->assertArrayHasKey($element->getId(), $expectedIds);
             $fields = $element->getElements();
-            $this->assertEquals(count($expectedIds[$element->getId()]), count($fields));
+            $this->assertSame(count($expectedIds[$element->getId()]), count($fields));
             foreach ($element->getElements() as $field) {
                 $this->assertArrayHasKey($field->getId(), $expectedIds[$element->getId()]);
-                $this->assertEquals($expectedIds[$element->getId()][$field->getId()], $field->getType());
+                $this->assertSame($expectedIds[$element->getId()][$field->getId()], $field->getType());
             }
         }
     }

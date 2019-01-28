@@ -94,7 +94,7 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getTree')
             ->with($nodeMock, $depth)
             ->willReturn('expected');
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getTree($rootCategoryId, $depth)
         );
@@ -120,7 +120,7 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getCode')
             ->willReturn(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getTree($rootCategoryId, $depth),
             $this->categoryTreeMock->getTree(null, null)
         );
@@ -293,7 +293,7 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn('expected');
 
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getCount()
         );

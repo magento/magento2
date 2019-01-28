@@ -65,7 +65,7 @@ class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ->with([], 'var')
             ->willThrowException(new \RuntimeException('Failed' . PHP_EOL . 'dependency readiness check'));
         $expected = ['success' => false, 'error' => 'Failed<br/>dependency readiness check'];
-        $this->assertEquals($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
+        $this->assertSame($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
     }
 
     public function testRunReadinessCheck()
@@ -75,6 +75,6 @@ class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ->with([], 'var')
             ->willReturn('Success');
         $expected = ['success' => true];
-        $this->assertEquals($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
+        $this->assertSame($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
     }
 }

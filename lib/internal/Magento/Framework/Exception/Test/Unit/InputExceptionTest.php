@@ -24,12 +24,12 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
             new Phrase('The %fieldName value of "%value" must be greater than or equal to %minValue.', $params)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'The %fieldName value of "%value" must be greater than or equal to %minValue.',
             $inputException->getRawMessage()
         );
         $this->assertStringMatchesFormat('%s greater than or equal to %s', $inputException->getMessage());
-        $this->assertEquals(
+        $this->assertSame(
             'The quantity value of "-100" must be greater than or equal to 0.',
             $inputException->getLogMessage()
         );
@@ -44,12 +44,12 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
     {
         $inputException = new InputException();
 
-        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getRawMessage());
-        $this->assertEquals(
+        $this->assertSame('One or more input exceptions have occurred.', $inputException->getRawMessage());
+        $this->assertSame(
             'One or more input exceptions have occurred.',
             $inputException->getMessage()
         );
-        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getLogMessage());
+        $this->assertSame('One or more input exceptions have occurred.', $inputException->getLogMessage());
 
         $this->assertFalse($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
@@ -63,15 +63,15 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
-        $this->assertEquals(
+        $this->assertSame(
             'The %fieldName value of "%value" must be greater than or equal to %minValue.',
             $inputException->getRawMessage()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'The weight value of "-100" must be greater than or equal to 1.',
             $inputException->getMessage()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'The weight value of "-100" must be greater than or equal to 1.',
             $inputException->getLogMessage()
         );
@@ -82,32 +82,32 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(2, $inputException->getErrors());
 
-        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getRawMessage());
-        $this->assertEquals(
+        $this->assertSame('One or more input exceptions have occurred.', $inputException->getRawMessage());
+        $this->assertSame(
             'One or more input exceptions have occurred.',
             $inputException->getMessage()
         );
-        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getLogMessage());
+        $this->assertSame('One or more input exceptions have occurred.', $inputException->getLogMessage());
 
         $errors = $inputException->getErrors();
         $this->assertCount(2, $errors);
 
-        $this->assertEquals(
+        $this->assertSame(
             'The %fieldName value of "%value" must be greater than or equal to %minValue.',
             $errors[0]->getRawMessage()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'The weight value of "-100" must be greater than or equal to 1.',
             $errors[0]->getMessage()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'The weight value of "-100" must be greater than or equal to 1.',
             $errors[0]->getLogMessage()
         );
 
-        $this->assertEquals('"%fieldName" is required. Enter and try again.', $errors[1]->getRawMessage());
-        $this->assertEquals('"name" is required. Enter and try again.', $errors[1]->getMessage());
-        $this->assertEquals('"name" is required. Enter and try again.', $errors[1]->getLogMessage());
+        $this->assertSame('"%fieldName" is required. Enter and try again.', $errors[1]->getRawMessage());
+        $this->assertSame('"name" is required. Enter and try again.', $errors[1]->getMessage());
+        $this->assertSame('"name" is required. Enter and try again.', $errors[1]->getLogMessage());
     }
 
     /**
@@ -121,28 +121,28 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
         $params = ['var' => 'Bar'];
         $expectedProcessedMessage = 'Foo "Bar"';
         $inputException = new InputException(new Phrase($rawMessage, $params));
-        $this->assertEquals($rawMessage, $inputException->getRawMessage());
-        $this->assertEquals($expectedProcessedMessage, $inputException->getMessage());
-        $this->assertEquals($expectedProcessedMessage, $inputException->getLogMessage());
+        $this->assertSame($rawMessage, $inputException->getRawMessage());
+        $this->assertSame($expectedProcessedMessage, $inputException->getMessage());
+        $this->assertSame($expectedProcessedMessage, $inputException->getLogMessage());
         $this->assertFalse($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
         $inputException->addError(new Phrase($rawMessage, $params));
-        $this->assertEquals($expectedProcessedMessage, $inputException->getMessage());
-        $this->assertEquals($expectedProcessedMessage, $inputException->getLogMessage());
+        $this->assertSame($expectedProcessedMessage, $inputException->getMessage());
+        $this->assertSame($expectedProcessedMessage, $inputException->getLogMessage());
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
         $inputException->addError(new Phrase($rawMessage, $params));
-        $this->assertEquals($expectedProcessedMessage, $inputException->getMessage());
-        $this->assertEquals($expectedProcessedMessage, $inputException->getLogMessage());
+        $this->assertSame($expectedProcessedMessage, $inputException->getMessage());
+        $this->assertSame($expectedProcessedMessage, $inputException->getLogMessage());
         $this->assertTrue($inputException->wasErrorAdded());
 
         $errors = $inputException->getErrors();
         $this->assertCount(2, $errors);
-        $this->assertEquals($expectedProcessedMessage, $errors[0]->getMessage());
-        $this->assertEquals($expectedProcessedMessage, $errors[0]->getLogMessage());
-        $this->assertEquals($expectedProcessedMessage, $errors[1]->getMessage());
-        $this->assertEquals($expectedProcessedMessage, $errors[1]->getLogMessage());
+        $this->assertSame($expectedProcessedMessage, $errors[0]->getMessage());
+        $this->assertSame($expectedProcessedMessage, $errors[0]->getLogMessage());
+        $this->assertSame($expectedProcessedMessage, $errors[1]->getMessage());
+        $this->assertSame($expectedProcessedMessage, $errors[1]->getLogMessage());
     }
 }

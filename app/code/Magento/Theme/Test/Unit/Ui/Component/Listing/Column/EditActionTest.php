@@ -79,7 +79,7 @@ class EditActionTest extends \PHPUnit\Framework\TestCase
         $dataSource = ['data' => ['items' => [$dataSourceItem]]];
         $dataSource = $this->component->prepareDataSource($dataSource);
 
-        $this->assertEquals($expectedDataSource, $dataSource);
+        $this->assertSame($expectedDataSource, $dataSource);
     }
 
     /**

@@ -17,7 +17,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
     public function testGetAllOptions()
     {
         $validResult = [['label' => __('Position'), 'value' => 'position'], ['label' => __('fl'), 'value' => 'fc']];
-        $this->assertEquals($validResult, $this->model->getAllOptions());
+        $this->assertSame($validResult, $this->model->getAllOptions());
     }
 
     protected function setUp()

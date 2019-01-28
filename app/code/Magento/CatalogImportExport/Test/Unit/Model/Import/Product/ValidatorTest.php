@@ -78,7 +78,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             $attrParams,
             $rowData
         );
-        $this->assertEquals($isValid, $result);
+        $this->assertSame($isValid, $result);
         if (!$isValid) {
             $this->assertTrue($this->validator->hasMessages());
         }
@@ -227,7 +227,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validatorTwo->expects($this->once())->method('getMessages')->willReturn($messages);
         $result = $this->validator->isValid($value);
         $this->assertFalse($result);
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 
     public function testInit()

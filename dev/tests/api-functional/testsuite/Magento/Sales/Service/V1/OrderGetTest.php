@@ -83,12 +83,12 @@ class OrderGetTest extends WebapiAbstract
 
         foreach ($expectedOrderData as $field => $value) {
             self::assertArrayHasKey($field, $result);
-            self::assertEquals($value, $result[$field]);
+            self::assertSame($value, $result[$field]);
         }
 
         self::assertArrayHasKey('payment', $result);
         foreach ($expectedPayments as $field => $value) {
-            self::assertEquals($value, $result['payment'][$field]);
+            self::assertSame($value, $result['payment'][$field]);
         }
 
         self::assertArrayHasKey('billing_address', $result);
@@ -104,7 +104,7 @@ class OrderGetTest extends WebapiAbstract
         $shippingAddress = $shippingAssignments[0]['shipping']['address'];
         foreach ($expectedShippingAddress as $key => $value) {
             self::assertArrayHasKey($key, $shippingAddress);
-            self::assertEquals($value, $shippingAddress[$key]);
+            self::assertSame($value, $shippingAddress[$key]);
         }
 
         //check that nullable fields were marked as optional and were not sent
@@ -128,11 +128,11 @@ class OrderGetTest extends WebapiAbstract
         $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
 
         $appliedTaxes = $result['extension_attributes']['applied_taxes'];
-        self::assertEquals($expectedTax['code'], $appliedTaxes[0]['code']);
+        self::assertSame($expectedTax['code'], $appliedTaxes[0]['code']);
         $appliedTaxes = $result['extension_attributes']['item_applied_taxes'];
-        self::assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
+        self::assertSame($expectedTax['type'], $appliedTaxes[0]['type']);
         self::assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        self::assertEquals(true, $result['extension_attributes']['converting_from_quote']);
+        self::assertSame(true, $result['extension_attributes']['converting_from_quote']);
         self::assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
         self::assertNotEmpty($result['extension_attributes']['payment_additional_info']);
     }
@@ -160,7 +160,7 @@ class OrderGetTest extends WebapiAbstract
         $bundleProduct = $this->getBundleProduct($result['items']);
         self::assertNotEmpty($bundleProduct, '"Bundle Product" should not be empty.');
         self::assertNotEmpty($bundleProduct['product_option'], '"Product Option" should not be empty.');
-        self::assertEquals($expected, $bundleProduct['product_option']);
+        self::assertSame($expected, $bundleProduct['product_option']);
     }
 
     /**

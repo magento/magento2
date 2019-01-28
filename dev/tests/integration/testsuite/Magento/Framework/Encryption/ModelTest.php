@@ -25,8 +25,8 @@ class ModelTest extends \PHPUnit\Framework\TestCase
     {
         $encryptor = $this->_model;
 
-        $this->assertEquals('', $encryptor->decrypt($encryptor->encrypt('')));
-        $this->assertEquals('test', $encryptor->decrypt($encryptor->encrypt('test')));
+        $this->assertSame('', $encryptor->decrypt($encryptor->encrypt('')));
+        $this->assertSame('test', $encryptor->decrypt($encryptor->encrypt('test')));
     }
 
     public function testEncryptDecrypt2()
@@ -35,8 +35,8 @@ class ModelTest extends \PHPUnit\Framework\TestCase
 
         $initial = md5(uniqid());
         $encrypted = $encryptor->encrypt($initial);
-        $this->assertNotEquals($initial, $encrypted);
-        $this->assertEquals($initial, $encryptor->decrypt($encrypted));
+        $this->assertNotSame($initial, $encrypted);
+        $this->assertSame($initial, $encryptor->decrypt($encrypted));
     }
 
     public function testValidateKey()

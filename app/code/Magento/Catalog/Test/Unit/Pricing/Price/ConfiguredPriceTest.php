@@ -106,7 +106,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
         });
         $this->item->expects($this->atLeastOnce())->method('getOptionByCode')->will($optionsGetterByCode);
 
-        $this->assertEquals(830., $this->model->getValue());
+        $this->assertSame(830., $this->model->getValue());
     }
 
     /**

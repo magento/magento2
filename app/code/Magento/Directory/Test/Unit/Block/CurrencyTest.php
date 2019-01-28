@@ -74,6 +74,6 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($switchUrl), $this->equalTo(['currency' => $expectedCurrencyCode]))
             ->will($this->returnValue($expectedResult));
 
-        $this->assertEquals($expectedResult, $this->object->getSwitchCurrencyPostData($expectedCurrencyCode));
+        $this->assertSame($expectedResult, $this->object->getSwitchCurrencyPostData($expectedCurrencyCode));
     }
 }

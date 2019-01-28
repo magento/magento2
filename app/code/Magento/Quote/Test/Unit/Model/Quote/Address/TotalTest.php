@@ -44,8 +44,8 @@ class TotalTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->model->setTotalAmount($code, $amount);
         $this->assertArrayHasKey($storedCode, $result);
-        $this->assertEquals($result[$storedCode], $amount);
-        $this->assertEquals($this->model->getAllTotalAmounts()[$code], $amount);
+        $this->assertSame($result[$storedCode], $amount);
+        $this->assertSame($this->model->getAllTotalAmounts()[$code], $amount);
         $this->assertSame($this->model, $result);
     }
 
@@ -78,8 +78,8 @@ class TotalTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->model->setBaseTotalAmount($code, $amount);
         $this->assertArrayHasKey($storedCode, $result);
-        $this->assertEquals($result[$storedCode], $amount);
-        $this->assertEquals($this->model->getAllBaseTotalAmounts()[$code], $amount);
+        $this->assertSame($result[$storedCode], $amount);
+        $this->assertSame($this->model->getAllBaseTotalAmounts()[$code], $amount);
         $this->assertSame($this->model, $result);
     }
 
@@ -114,7 +114,7 @@ class TotalTest extends \PHPUnit\Framework\TestCase
         $this->model->setTotalAmount($code, $initialAmount);
 
         $this->assertSame($this->model, $this->model->addTotalAmount($code, $delta));
-        $this->assertEquals($updatedAmount, $this->model->getTotalAmount($code));
+        $this->assertSame($updatedAmount, $this->model->getTotalAmount($code));
     }
 
     /**
@@ -148,7 +148,7 @@ class TotalTest extends \PHPUnit\Framework\TestCase
         $this->model->setBaseTotalAmount($code, $initialAmount);
 
         $this->assertSame($this->model, $this->model->addBaseTotalAmount($code, $delta));
-        $this->assertEquals($updatedAmount, $this->model->getBaseTotalAmount($code));
+        $this->assertSame($updatedAmount, $this->model->getBaseTotalAmount($code));
     }
 
     /**
@@ -175,12 +175,12 @@ class TotalTest extends \PHPUnit\Framework\TestCase
         $code = 'super';
         $amount = 42;
         $this->model->setTotalAmount($code, $amount);
-        $this->assertEquals($amount, $this->model->getTotalAmount($code));
+        $this->assertSame($amount, $this->model->getTotalAmount($code));
     }
 
     public function testGetTotalAmountAbsent()
     {
-        $this->assertEquals(0, $this->model->getTotalAmount('mega'));
+        $this->assertSame(0, $this->model->getTotalAmount('mega'));
     }
 
     public function testGetBaseTotalAmount()
@@ -188,12 +188,12 @@ class TotalTest extends \PHPUnit\Framework\TestCase
         $code = 'wow';
         $amount = 42;
         $this->model->setBaseTotalAmount($code, $amount);
-        $this->assertEquals($amount, $this->model->getBaseTotalAmount($code));
+        $this->assertSame($amount, $this->model->getBaseTotalAmount($code));
     }
 
     public function testGetBaseTotalAmountAbsent()
     {
-        $this->assertEquals(0, $this->model->getBaseTotalAmount('great'));
+        $this->assertSame(0, $this->model->getBaseTotalAmount('great'));
     }
 
     /**
@@ -207,7 +207,7 @@ class TotalTest extends \PHPUnit\Framework\TestCase
     public function testGetFullInfo($input, $expected)
     {
         $this->model->setFullInfo($input);
-        $this->assertEquals($expected, $this->model->getFullInfo());
+        $this->assertSame($expected, $this->model->getFullInfo());
     }
 
     /**

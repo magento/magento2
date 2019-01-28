@@ -125,6 +125,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($construction, $result);
+        $this->assertSame($construction, $result);
     }
 }

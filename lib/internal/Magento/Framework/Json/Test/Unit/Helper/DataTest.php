@@ -43,7 +43,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->jsonEncoderMock->expects($this->once())
             ->method('encode')
             ->willReturn($expected);
-        $this->assertEquals($expected, $this->helper->jsonEncode($valueToEncode));
+        $this->assertSame($expected, $this->helper->jsonEncode($valueToEncode));
     }
 
     public function testJsonDecode()
@@ -53,6 +53,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->jsonDecoderMock->expects($this->once())
             ->method('decode')
             ->willReturn($expected);
-        $this->assertEquals($expected, $this->helper->jsonDecode($valueToDecode));
+        $this->assertSame($expected, $this->helper->jsonDecode($valueToDecode));
     }
 }

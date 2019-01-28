@@ -185,7 +185,7 @@ class ToPercentTest extends \PHPUnit\Framework\TestCase
             $expectedDiscountData['baseOriginalAmount']
         );
 
-        $this->assertEquals($discountData, $this->model->calculate($rule, $item, $qty));
+        $this->assertSame($discountData, $this->model->calculate($rule, $item, $qty));
     }
 
     /**

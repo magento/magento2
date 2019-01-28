@@ -73,7 +73,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->ruleConditionsMock->expects($this->exactly($runValidateAmount))->method('validateByEntityId')
             ->willReturnMap($validationResult);
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->validation->afterValidate($this->ruleMock, false, $this->productMock)
         );

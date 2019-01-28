@@ -56,6 +56,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $messageMock->expects($this->atLeastOnce())->method('isMessageEmpty')->willReturn(false);
         $messageMock->expects($this->once())->method('save');
         $entityModelMock->expects($this->once())->method('save');
-        $this->assertEquals($this->model, $this->model->saveAllInOrder());
+        $this->assertSame($this->model, $this->model->saveAllInOrder());
     }
 }

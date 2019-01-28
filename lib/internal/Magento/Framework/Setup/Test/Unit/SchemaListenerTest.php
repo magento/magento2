@@ -116,7 +116,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->createTable($this->getCreateTableDDL('new_table'));
         $tables = $this->model->getTables();
         self::assertArrayHasKey('new_table', $tables['First_Module']);
-        self::assertEquals(
+        self::assertSame(
             [
                 'timestamp' =>
                     [
@@ -155,7 +155,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
             ],
             $tables['First_Module']['new_table']['columns']
         );
-        self::assertEquals(
+        self::assertSame(
             [
                 'primary' =>
                     [
@@ -186,7 +186,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
             $tables['First_Module']['new_table']['constraints']
         );
 
-        self::assertEquals(
+        self::assertSame(
             [
                 'INDEX_KEY' =>
                     [

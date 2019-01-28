@@ -47,7 +47,7 @@ class ProductManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn('expected');
 
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getCount($statusEnabled)
         );
@@ -72,7 +72,7 @@ class ProductManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn('expected');
 
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getCount($statusDisabled)
         );

@@ -73,7 +73,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($resultAfterSecond)
         );
 
-        $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));
+        $this->assertSame($resultAfterSecond, $this->object->render([$text], $arguments));
     }
 
     public function testRenderException()

@@ -284,7 +284,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $allRates1 = $this->carrier->collectRates($request)->getAllRates();
         foreach ($allRates1 as $rate) {
-            $this->assertEquals($expected, $rate->getData('cost'));
+            $this->assertSame($expected, $rate->getData('cost'));
         }
     }
 
@@ -350,7 +350,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $refMethod = $refClass->getMethod('filterDebugData');
         $refMethod->setAccessible(true);
         $result = $refMethod->invoke($this->carrier, $data);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -409,12 +409,12 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
 
-        $this->assertEquals(1, count($tracks));
+        $this->assertSame(1, count($tracks));
 
         /** @var Error $current */
         $current = $tracks[0];
         $this->assertInstanceOf(Error::class, $current);
-        $this->assertEquals(__($errorMessage), $current->getErrorMessage());
+        $this->assertSame(__($errorMessage), $current->getErrorMessage());
     }
 
     /**
@@ -466,7 +466,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($status);
 
         $tracks = $this->carrier->getTracking($tracking)->getAllTrackings();
-        $this->assertEquals(1, count($tracks));
+        $this->assertSame(1, count($tracks));
 
         $current = $tracks[0];
         $fields = [
@@ -480,9 +480,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             $this->assertNotEmpty($current[$field]);
         });
 
-        $this->assertEquals($expectedDate, $current['deliverydate']);
-        $this->assertEquals($expectedTime, $current['deliverytime']);
-        $this->assertEquals($expectedDate, $current['shippeddate']);
+        $this->assertSame($expectedDate, $current['deliverydate']);
+        $this->assertSame($expectedTime, $current['deliverytime']);
+        $this->assertSame($expectedDate, $current['shippeddate']);
     }
 
     /**
@@ -590,19 +590,19 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
-        $this->assertEquals(1, count($tracks));
+        $this->assertSame(1, count($tracks));
 
         $current = $tracks[0];
         $this->assertNotEmpty($current['progressdetail']);
-        $this->assertEquals(1, count($current['progressdetail']));
+        $this->assertSame(1, count($current['progressdetail']));
 
         $event = $current['progressdetail'][0];
         $fields = ['activity', 'deliverylocation'];
         array_walk($fields, function ($field) use ($event) {
             $this->assertNotEmpty($event[$field]);
         });
-        $this->assertEquals($expectedDate, $event['deliverydate']);
-        $this->assertEquals($expectedTime, $event['deliverytime']);
+        $this->assertSame($expectedDate, $event['deliverydate']);
+        $this->assertSame($expectedTime, $event['deliverytime']);
     }
 
     /**

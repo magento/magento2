@@ -242,7 +242,7 @@ QUERY;
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('total_count', $response['products']);
         $this->assertProductItems($filteredProducts, $response);
-        $this->assertEquals(4, $response['products']['page_info']['page_size']);
+        $this->assertSame(4, $response['products']['page_info']['page_size']);
     }
 
     /**
@@ -314,7 +314,7 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('total_count', $response['products']);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertSame(2, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
     }
 
@@ -462,17 +462,17 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('total_count', $response['products']);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertSame(2, $response['products']['total_count']);
         $this->assertProductItems($filteredChildProducts, $response);
-        $this->assertEquals(4, $response['products']['page_info']['page_size']);
-        $this->assertEquals(1, $response['products']['page_info']['current_page']);
+        $this->assertSame(4, $response['products']['page_info']['page_size']);
+        $this->assertSame(1, $response['products']['page_info']['current_page']);
         $this->assertArrayHasKey('sort_fields', $response['products']);
         $this->assertArrayHasKey('options', $response['products']['sort_fields']);
         $this->assertArrayHasKey('default', $response['products']['sort_fields']);
-        $this->assertEquals('position', $response['products']['sort_fields']['default']);
+        $this->assertSame('position', $response['products']['sort_fields']['default']);
         $this->assertArrayHasKey('value', $response['products']['sort_fields']['options'][0]);
         $this->assertArrayHasKey('label', $response['products']['sort_fields']['options'][0]);
-        $this->assertEquals('position', $response['products']['sort_fields']['options'][0]['value']);
+        $this->assertSame('position', $response['products']['sort_fields']['options'][0]['value']);
     }
 
     /**
@@ -519,9 +519,9 @@ QUERY;
         $product = $productRepository->get('simple2');
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
-        $this->assertEquals(['page_size' => 1, 'current_page' => 2], $response['products']['page_info']);
-        $this->assertEquals(
+        $this->assertSame(2, $response['products']['total_count']);
+        $this->assertSame(['page_size' => 1, 'current_page' => 2], $response['products']['page_info']);
+        $this->assertSame(
             [['sku' => $product->getSku(), 'name' => $product->getName()]],
             $response['products']['items']
         );
@@ -563,7 +563,7 @@ QUERY;
         }
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
         $this->assertNotNull($response['products']['items'][0]['categories'], "categories must not be null");
-        $this->assertEquals($categoryIds, $response['products']['items'][0]['categories']);
+        $this->assertSame($categoryIds, $response['products']['items'][0]['categories']);
         /** @var MetadataPool $metaData */
         $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
         $linkField = $metaData->getMetadata(ProductInterface::class)->getLinkField();
@@ -626,13 +626,13 @@ QUERY;
         $links = $productLinks->getAssignedProducts($queryCategoryId);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
-            $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
+            $this->assertSame($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
             /** @var ProductRepositoryInterface $productRepository */
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var ProductInterface $product */
             $product = $productRepository->get($links[$itemIndex]->getSku());
-            $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
-            $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
+            $this->assertSame($response['products']['items'][$itemIndex]['name'], $product->getName());
+            $this->assertSame($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
             $categoryIds  = $product->getCategoryIds();
             foreach ($categoryIds as $index => $value) {
                 $categoryIds[$index] = (int)$value;
@@ -721,10 +721,10 @@ QUERY;
         $visibleProduct2 = $productRepository->get('simple2');
         $filteredProducts = [$visibleProduct2, $visibleProduct1];
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertSame(2, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
-        $this->assertEquals(20, $response['products']['page_info']['page_size']);
-        $this->assertEquals(1, $response['products']['page_info']['current_page']);
+        $this->assertSame(20, $response['products']['page_info']['page_size']);
+        $this->assertSame(1, $response['products']['page_info']['current_page']);
     }
 
     /**
@@ -774,7 +774,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertSame(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple1');
@@ -823,7 +823,7 @@ QUERY;
         $prod1 = $productRepository->get('simple1');
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
+        $this->assertSame(1, $response['products']['total_count']);
 
         $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
@@ -897,7 +897,7 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertSame(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
@@ -986,7 +986,7 @@ products(
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(0, $response['products']['total_count']);
+        $this->assertSame(0, $response['products']['total_count']);
         $this->assertEmpty($response['products']['items'], "No items should be returned.");
     }
 
@@ -1120,15 +1120,15 @@ QUERY;
             ->clean(\Magento\Framework\App\Config::CACHE_TAG);
         $response = $this->graphQlQuery($query);
         $responseObject = new DataObject($response);
-        self::assertEquals(
+        self::assertSame(
             'simple_visible_in_stock',
             $responseObject->getData('products/items/0/sku')
         );
-        self::assertEquals(
+        self::assertSame(
             'Simple Product Visible and InStock',
             $responseObject->getData('products/items/0/name')
         );
-        $this->assertEquals(1, $response['products']['total_count']);
+        $this->assertSame(1, $response['products']['total_count']);
     }
 
     /**

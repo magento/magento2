@@ -35,7 +35,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
         self::$curlExectClosure = function () use ($response) {
             return $response;
         };
-        $this->assertEquals(file_get_contents(__DIR__ . '/_files/curl_response_expected.txt'), $this->model->read());
+        $this->assertSame(file_get_contents(__DIR__ . '/_files/curl_response_expected.txt'), $this->model->read());
     }
 
     /**

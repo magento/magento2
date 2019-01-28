@@ -93,7 +93,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock->expects($this->never())->method('unserialize');
 
-        $this->assertEquals($configData, $this->object->load($area));
+        $this->assertSame($configData, $this->object->load($area));
     }
 
     /**
@@ -126,6 +126,6 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
             ->with($serializedData)
             ->willReturn($configData);
         $this->serializerMock->expects($this->never())->method('serialize');
-        $this->assertEquals($configData, $this->object->load('testArea'));
+        $this->assertSame($configData, $this->object->load('testArea'));
     }
 }

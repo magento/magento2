@@ -52,7 +52,7 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
     }
 
     public function testIndexActionWithExceptions()
@@ -64,8 +64,8 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+        $this->assertSame(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
         $this->assertArrayHasKey('error', $variables);
-        $this->assertEquals("Test error message", $variables['error']);
+        $this->assertSame("Test error message", $variables['error']);
     }
 }

@@ -34,7 +34,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $this->model->setEntity($entityMock);
-        $this->assertEquals($entityMock, $this->model->getEntity());
+        $this->assertSame($entityMock, $this->model->getEntity());
     }
 
     /**
@@ -61,7 +61,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     {
         $extractedData = ['index' => 'value', 'otherIndex' => 'otherValue'];
         $this->model->setExtractedData($extractedData);
-        $this->assertEquals($expectedResult, $this->model->getExtractedData($index));
+        $this->assertSame($expectedResult, $this->model->getExtractedData($index));
     }
 
     /**
@@ -117,7 +117,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->model->setAttribute($attributeMock);
         $this->model->setRequestScope($requestScope);
         $this->model->setRequestScopeOnly($requestScopeOnly);
-        $this->assertEquals($expectedResult, $this->model->extractValue($requestMock));
+        $this->assertSame($expectedResult, $this->model->extractValue($requestMock));
     }
 
     /**

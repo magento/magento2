@@ -143,7 +143,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->trackCollectionFactory->expects($this->atLeastOnce())->method('create')->willReturn($trackCollection);
         $this->info->loadByHash($hash);
 
-        $this->assertEquals([$shipmentIncrementId => [$trackDetails]], $this->info->getTrackingInfo());
+        $this->assertSame([$shipmentIncrementId => [$trackDetails]], $this->info->getTrackingInfo());
     }
 
     public function testLoadByHashWithOrderIdWrongCode()
@@ -219,7 +219,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $this->info->loadByHash($hash);
 
-        $this->assertEquals([$shipmentIncrementId => [$trackDetails]], $this->info->getTrackingInfo());
+        $this->assertSame([$shipmentIncrementId => [$trackDetails]], $this->info->getTrackingInfo());
     }
 
     public function testLoadByHashWithShipmentIdWrongCode()
@@ -286,7 +286,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->trackFactory->expects($this->atLeastOnce())->method('create')->willReturn($track);
         $this->info->loadByHash($hash);
 
-        $this->assertEquals($trackDetails, $this->info->getTrackingInfo());
+        $this->assertSame($trackDetails, $this->info->getTrackingInfo());
     }
 
     /**

@@ -80,9 +80,9 @@ class DbTest extends \PHPUnit\Framework\TestCase
 
         $this->collection->load();
         $selectOrders = $select->getPart(\Magento\Framework\DB\Select::ORDER);
-        $this->assertEquals(['select_field', 'ASC'], array_shift($selectOrders));
-        $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
-        $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
+        $this->assertSame(['select_field', 'ASC'], array_shift($selectOrders));
+        $this->assertSame('some_field ASC', (string)array_shift($selectOrders));
+        $this->assertSame('other_field DESC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
     }
 
@@ -101,8 +101,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
 
         $this->collection->load();
         $selectOrders = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
-        $this->assertEquals('other_field ASC', (string)array_shift($selectOrders));
-        $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
+        $this->assertSame('other_field ASC', (string)array_shift($selectOrders));
+        $this->assertSame('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
     }
 
@@ -133,7 +133,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $select = $this->collection->getSelect()->from('test');
 
         $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
-        $this->assertEquals('SELECT `test`.* FROM `test` WHERE (is_imported = 1)', $select->assemble());
+        $this->assertSame('SELECT `test`.* FROM `test` WHERE (is_imported = 1)', $select->assemble());
     }
 
     /**
@@ -171,12 +171,12 @@ class DbTest extends \PHPUnit\Framework\TestCase
             [['in' => [1, 3]], ['like' => 'M%']]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%'))",
             $select->assemble()
         );
         $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
-        $this->assertEquals(
+        $this->assertSame(
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%')) AND (is_imported = 1)",
             $select->assemble()
         );
@@ -211,7 +211,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
 
         $select = $this->collection->getSelect()->from('test');
         $this->collection->addFieldToFilter('email', ['like' => 'value?']);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (email LIKE '%value?%')", $select->assemble());
+        $this->assertSame("SELECT `test`.* FROM `test` WHERE (email LIKE '%value?%')", $select->assemble());
     }
 
     /**
@@ -252,7 +252,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $select = $this->collection->getSelect()->from('test');
 
         $this->collection->addFieldToFilter('email', ['eq' => 'foo@example.com']);
-        $this->assertEquals('SELECT `test`.* FROM `test` WHERE (`email` = "foo@example.com")', $select->assemble());
+        $this->assertSame('SELECT `test`.* FROM `test` WHERE (`email` = "foo@example.com")', $select->assemble());
     }
 
     /**
@@ -375,7 +375,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\DataObject::class)
             ->will($this->returnValue($objectMock));
 
-        $this->assertEquals($objectMock, $this->collection->fetchItem());
+        $this->assertSame($objectMock, $this->collection->fetchItem());
     }
 
     public function testGetSize()
@@ -438,8 +438,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFilter('testField3', 'testValue3', 'public');
         $this->collection->addFilter('testField4', 'testValue4');
         $this->collection->setConnection($adapterMock);
-        $this->assertEquals($countSql, $this->collection->getSize());
-        $this->assertEquals($countSql, $this->collection->getSize());
+        $this->assertSame($countSql, $this->collection->getSize());
+        $this->assertSame($countSql, $this->collection->getSize());
     }
 
     public function testGetSelectSql()
@@ -465,8 +465,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($sql));
 
         $this->collection->setConnection($adapterMock);
-        $this->assertEquals($sql, $this->collection->getSelectSql(true));
-        $this->assertEquals($selectMock, $this->collection->getSelectSql());
+        $this->assertSame($sql, $this->collection->getSelectSql(true));
+        $this->assertSame($selectMock, $this->collection->getSelectSql());
     }
 
     public function testGetData()
@@ -586,6 +586,6 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->collection->setConnection($adapterMock);
         $this->collection->loadData(false, false);
         $this->collection->loadData(false, false);
-        $this->assertEquals($data, $this->collection->toOptionHash());
+        $this->assertSame($data, $this->collection->toOptionHash());
     }
 }

@@ -39,6 +39,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         // one year
         $age = 365 * 24 * 60 * 60;
-        $this->assertEquals($age, \Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
+        $this->assertSame($age, \Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
     }
 }

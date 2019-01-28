@@ -40,6 +40,6 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
             ->with('design/header/welcome', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn('Welcome Message');
 
-        $this->assertEquals('Welcome Message', $this->unit->getWelcome());
+        $this->assertSame('Welcome Message', $this->unit->getWelcome());
     }
 }

@@ -54,7 +54,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
-        $this->assertEquals(0, $resourceConnection->getConnection('default')->getTransactionLevel());
+        $this->assertSame(0, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 
     /**
@@ -64,13 +64,13 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
-        $this->assertEquals(1, $resourceConnection->getConnection('default')->getTransactionLevel());
+        $this->assertSame(1, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 
     public function testTransactionLevelDbIsolationDefault()
     {
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
-        $this->assertEquals(0, $resourceConnection->getConnection('default')->getTransactionLevel());
+        $this->assertSame(0, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 }

@@ -42,7 +42,7 @@ class NoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('note', $this->_model->getType());
+        $this->assertSame('note', $this->_model->getType());
     }
 
     /**
@@ -56,7 +56,7 @@ class NoteTest extends \PHPUnit\Framework\TestCase
         $this->_model->setData('ui_id', 'ui_id');
         $this->_model->setValue('Note Text');
         $html = $this->_model->getElementHtml();
-        $this->assertEquals(
+        $this->assertSame(
             "note_before<div id=\"note_id\" class=\"control-value admin__field-value\"></div>note_after",
             $html
         );

@@ -31,6 +31,6 @@ class RoleLocatorTest extends \PHPUnit\Framework\TestCase
         $this->_sessionMock->expects($this->once())->method('hasUser')->will($this->returnValue(true));
         $this->_sessionMock->expects($this->once())->method('getUser')->will($this->returnSelf());
         $this->_sessionMock->expects($this->once())->method('getAclRole')->will($this->returnValue('some_role'));
-        $this->assertEquals('some_role', $this->_model->getAclRoleId());
+        $this->assertSame('some_role', $this->_model->getAclRoleId());
     }
 }

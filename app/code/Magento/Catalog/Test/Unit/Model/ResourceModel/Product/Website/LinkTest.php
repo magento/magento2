@@ -66,7 +66,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('fetchCol')
             ->willReturn($websiteIds);
 
-        $this->assertEquals($websiteIds, $this->model->getWebsiteIdsByProductId($productId));
+        $this->assertSame($websiteIds, $this->model->getWebsiteIdsByProductId($productId));
     }
 
     public function testSaveWebsiteIds()

@@ -268,7 +268,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
         $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $this->assertEquals($quoteId, $this->model->createEmptyCart());
+        $this->assertSame($quoteId, $this->model->createEmptyCart());
     }
 
     public function testCreateEmptyCartForCustomer()
@@ -295,7 +295,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
         $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
+        $this->assertSame($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
 
     public function testCreateEmptyCartForCustomerReturnExistsQuote()
@@ -621,7 +621,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->method('dispatch')
             ->with('sales_model_service_quote_submit_success', ['order' => $order, 'quote' => $quote]);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
-        $this->assertEquals($order, $this->model->submit($quote, $orderData));
+        $this->assertSame($order, $this->model->submit($quote, $orderData));
     }
 
     public function testPlaceOrderIfCustomerIsGuest()
@@ -700,7 +700,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
 
-        $this->assertEquals($orderId, $service->placeOrder($cartId));
+        $this->assertSame($orderId, $service->placeOrder($cartId));
     }
 
     public function testPlaceOrder()
@@ -780,7 +780,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $paymentMethod->expects($this->once())->method('setChecks');
         $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
 
-        $this->assertEquals($orderId, $service->placeOrder($cartId, $paymentMethod));
+        $this->assertSame($orderId, $service->placeOrder($cartId, $paymentMethod));
     }
 
     /**
@@ -946,7 +946,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getActiveForCustomer')
             ->with($customerId)
             ->willReturn($cartMock);
-        $this->assertEquals($cartMock, $this->model->getCartForCustomer($customerId));
+        $this->assertSame($cartMock, $this->model->getCartForCustomer($customerId));
     }
 
     /**
@@ -1076,7 +1076,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->method('dispatch')
             ->with('sales_model_service_quote_submit_success', ['order' => $order, 'quote' => $quote]);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
-        $this->assertEquals($order, $this->model->submit($quote, $orderData));
+        $this->assertSame($order, $this->model->submit($quote, $orderData));
     }
 
     /**

@@ -49,10 +49,10 @@ class DirectoryScannerTest extends \PHPUnit\Framework\TestCase
             'design' => [$this->_testDir . '/app/design/adminhtml/Magento/backend/layout.xml'],
             'etc' => [$this->_testDir . '/app/etc/additional.xml', $this->_testDir . '/app/etc/config.xml'],
         ];
-        $this->assertEquals(sort($expected['php']), sort($actual['php']), 'Incorrect php files list');
-        $this->assertEquals(sort($expected['config']), sort($actual['config']), 'Incorrect config files list');
-        $this->assertEquals(sort($expected['view']), sort($actual['view']), 'Incorrect view files list');
-        $this->assertEquals(sort($expected['design']), sort($actual['design']), 'Incorrect design files list');
-        $this->assertEquals(sort($expected['etc']), sort($actual['etc']), 'Incorrect etc files list');
+        $this->assertSame(sort($expected['php']), sort($actual['php']), 'Incorrect php files list');
+        $this->assertSame(sort($expected['config']), sort($actual['config']), 'Incorrect config files list');
+        $this->assertSame(sort($expected['view']), sort($actual['view']), 'Incorrect view files list');
+        $this->assertSame(sort($expected['design']), sort($actual['design']), 'Incorrect design files list');
+        $this->assertSame(sort($expected['etc']), sort($actual['etc']), 'Incorrect etc files list');
     }
 }

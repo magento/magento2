@@ -43,7 +43,7 @@ class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
         $quote->expects($this->once())->method('getBaseGrandTotal')->will($this->returnValue($baseGrandTotal));
 
         $model = new TotalMinMax();
-        $this->assertEquals($expectation, $model->isApplicable($paymentMethod, $quote));
+        $this->assertSame($expectation, $model->isApplicable($paymentMethod, $quote));
     }
 
     /**

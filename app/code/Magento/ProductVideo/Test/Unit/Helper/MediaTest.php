@@ -46,7 +46,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->with(Media::XML_PATH_PLAY_IF_BASE)
             ->will($this->returnValue($return));
 
-        $this->assertEquals(
+        $this->assertSame(
             $return,
             $this->helper->getPlayIfBaseAttribute()
         );
@@ -62,7 +62,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->with(Media::XML_PATH_SHOW_RELATED)
             ->will($this->returnValue($return));
 
-        $this->assertEquals(
+        $this->assertSame(
             $return,
             $this->helper->getShowRelatedAttribute()
         );
@@ -78,7 +78,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->with(Media::XML_PATH_VIDEO_AUTO_RESTART)
             ->will($this->returnValue($return));
 
-        $this->assertEquals(
+        $this->assertSame(
             $return,
             $this->helper->getVideoAutoRestartAttribute()
         );
@@ -94,7 +94,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->with(Media::XML_PATH_YOUTUBE_API_KEY)
             ->will($this->returnValue($return));
 
-        $this->assertEquals(
+        $this->assertSame(
             $return,
             $this->helper->getYouTubeApiKey()
         );

@@ -72,6 +72,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->willReturn($configureUrl);
 
         $this->model->setItem($itemMock);
-        $this->assertEquals($configureUrl, $this->model->getConfigureUrl());
+        $this->assertSame($configureUrl, $this->model->getConfigureUrl());
     }
 }

@@ -21,7 +21,7 @@ class AlphanumTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllowedChars()
     {
-        $this->assertEquals('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', $this->model->getAllowedChars());
+        $this->assertSame('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', $this->model->getAllowedChars());
     }
 
     /**
@@ -34,7 +34,7 @@ class AlphanumTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setPrefix($prefix);
         $this->model->setLastId($lastId);
-        $this->assertEquals($expectedResult, $this->model->getNextId());
+        $this->assertSame($expectedResult, $this->model->getNextId());
     }
 
     /**

@@ -76,8 +76,8 @@ class ModuleGridTest extends \PHPUnit\Framework\TestCase
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $this->assertEquals($moduleList, $variables['modules']);
+        $this->assertSame($moduleList, $variables['modules']);
         $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals(2, $variables['total']);
+        $this->assertSame(2, $variables['total']);
     }
 }

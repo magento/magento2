@@ -139,7 +139,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->assertEquals('test@com.com', $api->getBillingAddress()->getEmail());
+        $this->assertSame('test@com.com', $api->getBillingAddress()->getEmail());
     }
 
     /**
@@ -171,15 +171,15 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $customerService = $this->objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerService->getById($quote->getCustomerId());
 
-        $this->assertEquals(1, $quote->getCustomerId());
-        $this->assertEquals(2, count($customer->getAddresses()));
+        $this->assertSame(1, $quote->getCustomerId());
+        $this->assertSame(2, count($customer->getAddresses()));
 
-        $this->assertEquals(1, $quote->getBillingAddress()->getCustomerAddressId());
-        $this->assertEquals(2, $quote->getShippingAddress()->getCustomerAddressId());
+        $this->assertSame(1, $quote->getBillingAddress()->getCustomerAddressId());
+        $this->assertSame(2, $quote->getShippingAddress()->getCustomerAddressId());
 
         $order = $checkout->getOrder();
-        $this->assertEquals(1, $order->getBillingAddress()->getCustomerAddressId());
-        $this->assertEquals(2, $order->getShippingAddress()->getCustomerAddressId());
+        $this->assertSame(1, $order->getBillingAddress()->getCustomerAddressId());
+        $this->assertSame(2, $order->getShippingAddress()->getCustomerAddressId());
     }
 
     /**
@@ -202,7 +202,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($quote->getCustomerId());
         $this->assertTrue($quote->getCustomerIsGuest());
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             $quote->getCustomerGroupId()
         );
@@ -272,7 +272,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $billingAddress = $quote->getBillingAddress();
         $this->assertContains($prefix, $billingAddress->getFirstname());
-        $this->assertEquals('note', $billingAddress->getCustomerNote());
+        $this->assertSame('note', $billingAddress->getCustomerNote());
 
         $shippingAddress = $quote->getShippingAddress();
         $this->assertTrue((bool)$shippingAddress->getSameAsBilling());
@@ -311,17 +311,17 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $billingAddress = $quote->getBillingAddress();
         $exportedShippingData = $this->getExportedData()['shipping'];
 
-        $this->assertEquals([$exportedShippingData['street']], $shippingAddress->getStreet());
-        $this->assertEquals($exportedShippingData['firstname'], $shippingAddress->getFirstname());
-        $this->assertEquals($exportedShippingData['city'], $shippingAddress->getCity());
-        $this->assertEquals($exportedShippingData['telephone'], $shippingAddress->getTelephone());
-        $this->assertEquals($exportedShippingData['email'], $shippingAddress->getEmail());
+        $this->assertSame([$exportedShippingData['street']], $shippingAddress->getStreet());
+        $this->assertSame($exportedShippingData['firstname'], $shippingAddress->getFirstname());
+        $this->assertSame($exportedShippingData['city'], $shippingAddress->getCity());
+        $this->assertSame($exportedShippingData['telephone'], $shippingAddress->getTelephone());
+        $this->assertSame($exportedShippingData['email'], $shippingAddress->getEmail());
 
-        $this->assertEquals([$exportedShippingData['street']], $billingAddress->getStreet());
-        $this->assertEquals($exportedShippingData['firstname'], $billingAddress->getFirstname());
-        $this->assertEquals($exportedShippingData['city'], $billingAddress->getCity());
-        $this->assertEquals($exportedShippingData['telephone'], $billingAddress->getTelephone());
-        $this->assertEquals($exportedShippingData['email'], $billingAddress->getEmail());
+        $this->assertSame([$exportedShippingData['street']], $billingAddress->getStreet());
+        $this->assertSame($exportedShippingData['firstname'], $billingAddress->getFirstname());
+        $this->assertSame($exportedShippingData['city'], $billingAddress->getCity());
+        $this->assertSame($exportedShippingData['telephone'], $billingAddress->getTelephone());
+        $this->assertSame($exportedShippingData['email'], $billingAddress->getEmail());
     }
 
     /**
@@ -350,17 +350,17 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $exportedBillingData = $this->getExportedData()['billing'];
         $exportedShippingData = $this->getExportedData()['shipping'];
 
-        $this->assertEquals([$exportedShippingData['street']], $shippingAddress->getStreet());
-        $this->assertEquals($exportedShippingData['firstname'], $shippingAddress->getFirstname());
-        $this->assertEquals($exportedShippingData['city'], $shippingAddress->getCity());
-        $this->assertEquals($exportedShippingData['telephone'], $shippingAddress->getTelephone());
-        $this->assertEquals($exportedShippingData['email'], $shippingAddress->getEmail());
+        $this->assertSame([$exportedShippingData['street']], $shippingAddress->getStreet());
+        $this->assertSame($exportedShippingData['firstname'], $shippingAddress->getFirstname());
+        $this->assertSame($exportedShippingData['city'], $shippingAddress->getCity());
+        $this->assertSame($exportedShippingData['telephone'], $shippingAddress->getTelephone());
+        $this->assertSame($exportedShippingData['email'], $shippingAddress->getEmail());
 
-        $this->assertEquals([$exportedBillingData['street']], $billingAddress->getStreet());
-        $this->assertEquals($exportedBillingData['firstname'], $billingAddress->getFirstname());
-        $this->assertEquals($exportedBillingData['city'], $billingAddress->getCity());
-        $this->assertEquals($exportedBillingData['telephone'], $billingAddress->getTelephone());
-        $this->assertEquals($exportedBillingData['email'], $billingAddress->getEmail());
+        $this->assertSame([$exportedBillingData['street']], $billingAddress->getStreet());
+        $this->assertSame($exportedBillingData['firstname'], $billingAddress->getFirstname());
+        $this->assertSame($exportedBillingData['city'], $billingAddress->getCity());
+        $this->assertSame($exportedBillingData['telephone'], $billingAddress->getTelephone());
+        $this->assertSame($exportedBillingData['email'], $billingAddress->getEmail());
     }
 
     /**
@@ -387,15 +387,15 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $shippingAddress = $quote->getShippingAddress();
         $billingAddress = $quote->getBillingAddress();
 
-        $this->assertEquals($originalShippingAddress->getStreet(), $shippingAddress->getStreet());
-        $this->assertEquals($originalShippingAddress->getFirstname(), $shippingAddress->getFirstname());
-        $this->assertEquals($originalShippingAddress->getCity(), $shippingAddress->getCity());
-        $this->assertEquals($originalShippingAddress->getTelephone(), $shippingAddress->getTelephone());
+        $this->assertSame($originalShippingAddress->getStreet(), $shippingAddress->getStreet());
+        $this->assertSame($originalShippingAddress->getFirstname(), $shippingAddress->getFirstname());
+        $this->assertSame($originalShippingAddress->getCity(), $shippingAddress->getCity());
+        $this->assertSame($originalShippingAddress->getTelephone(), $shippingAddress->getTelephone());
 
-        $this->assertEquals($originalBillingAddress->getStreet(), $billingAddress->getStreet());
-        $this->assertEquals($originalBillingAddress->getFirstname(), $billingAddress->getFirstname());
-        $this->assertEquals($originalBillingAddress->getCity(), $billingAddress->getCity());
-        $this->assertEquals($originalBillingAddress->getTelephone(), $billingAddress->getTelephone());
+        $this->assertSame($originalBillingAddress->getStreet(), $billingAddress->getStreet());
+        $this->assertSame($originalBillingAddress->getFirstname(), $billingAddress->getFirstname());
+        $this->assertSame($originalBillingAddress->getCity(), $billingAddress->getCity());
+        $this->assertSame($originalBillingAddress->getTelephone(), $billingAddress->getTelephone());
     }
 
     /**
@@ -426,15 +426,15 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $billingAddress = $quote->getBillingAddress();
         $exportedBillingData = $this->getExportedData()['billing'];
 
-        $this->assertEquals($originalShippingAddress->getStreet(), $shippingAddress->getStreet());
-        $this->assertEquals($originalShippingAddress->getFirstname(), $shippingAddress->getFirstname());
-        $this->assertEquals($originalShippingAddress->getCity(), $shippingAddress->getCity());
-        $this->assertEquals($originalShippingAddress->getTelephone(), $shippingAddress->getTelephone());
+        $this->assertSame($originalShippingAddress->getStreet(), $shippingAddress->getStreet());
+        $this->assertSame($originalShippingAddress->getFirstname(), $shippingAddress->getFirstname());
+        $this->assertSame($originalShippingAddress->getCity(), $shippingAddress->getCity());
+        $this->assertSame($originalShippingAddress->getTelephone(), $shippingAddress->getTelephone());
 
-        $this->assertEquals([$prefix . $exportedBillingData['street']], $billingAddress->getStreet());
-        $this->assertEquals($prefix . $exportedBillingData['firstname'], $billingAddress->getFirstname());
-        $this->assertEquals($prefix . $exportedBillingData['city'], $billingAddress->getCity());
-        $this->assertEquals($prefix . $exportedBillingData['telephone'], $billingAddress->getTelephone());
+        $this->assertSame([$prefix . $exportedBillingData['street']], $billingAddress->getStreet());
+        $this->assertSame($prefix . $exportedBillingData['firstname'], $billingAddress->getFirstname());
+        $this->assertSame($prefix . $exportedBillingData['city'], $billingAddress->getCity());
+        $this->assertSame($prefix . $exportedBillingData['telephone'], $billingAddress->getTelephone());
     }
 
     /**
@@ -523,7 +523,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 $item = [$item];
             }
 
-            $this->assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
+            $this->assertSame($item, $address->$methodName(), 'The "'. $key . '" does not match.');
         }
     }
 
@@ -654,7 +654,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $checkoutModel->returnFromPaypal('token');
 
-        $this->assertEquals(Onepage::METHOD_GUEST, $quote->getCheckoutMethod());
+        $this->assertSame(Onepage::METHOD_GUEST, $quote->getCheckoutMethod());
     }
 
     /**

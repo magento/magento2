@@ -191,7 +191,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             array_unshift($options, ['label' => ' ', 'value' => '']);
         }
 
-        $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
+        $this->assertSame($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
     }
 
     /**
@@ -249,7 +249,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             ->method('toOptionArray')
             ->willReturn($options);
 
-        $this->assertEquals($expectedResult, $this->model->getOptionText($value));
+        $this->assertSame($expectedResult, $this->model->getOptionText($value));
     }
 
     /**
@@ -316,7 +316,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $select->expects($this->once())->method('order')->with("{$attributeCode} {$dir}");
 
-        $this->assertEquals($this->model, $this->model->addValueSortToCollection($collection, $dir));
+        $this->assertSame($this->model, $this->model->addValueSortToCollection($collection, $dir));
     }
 
     /**
@@ -370,7 +370,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals($expectedResult, $this->model->getAllOptions($withEmpty, $defaultValues));
+        $this->assertSame($expectedResult, $this->model->getAllOptions($withEmpty, $defaultValues));
     }
 
     /**

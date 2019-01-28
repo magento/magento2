@@ -66,6 +66,6 @@ class CompositeProductRelationsCalculatorTest extends \PHPUnit\Framework\TestCas
             ->with($maxSelectMock)
             ->willReturn($maxRelatedProductCount);
 
-        $this->assertEquals($maxRelatedProductCount, $this->model->getMaxRelationsCount());
+        $this->assertSame($maxRelatedProductCount, $this->model->getMaxRelationsCount());
     }
 }

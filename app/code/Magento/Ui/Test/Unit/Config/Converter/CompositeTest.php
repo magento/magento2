@@ -32,7 +32,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($element)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $composite->convert($element, ['type' => 'key']));
+        $this->assertSame($expectedResult, $composite->convert($element, ['type' => 'key']));
     }
 
     /**

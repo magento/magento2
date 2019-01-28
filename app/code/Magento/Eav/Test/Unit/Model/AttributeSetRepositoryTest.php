@@ -103,7 +103,7 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
         $attributeSetMock->expects($this->any())->method('getId')->will($this->returnValue($attributeSetId));
-        $this->assertEquals($attributeSetMock, $this->model->get($attributeSetId));
+        $this->assertSame($attributeSetMock, $this->model->get($attributeSetId));
     }
 
     /**
@@ -127,7 +127,7 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('save')->with($attributeSetMock);
-        $this->assertEquals($attributeSetMock, $this->model->save($attributeSetMock));
+        $this->assertSame($attributeSetMock, $this->model->save($attributeSetMock));
     }
 
     /**

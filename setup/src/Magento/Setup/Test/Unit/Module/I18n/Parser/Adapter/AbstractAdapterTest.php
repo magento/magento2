@@ -61,10 +61,10 @@ class AbstractAdapterTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_adapterReflection->invoke($this->_adapterMock, $phrase, $line);
         $actual = $this->_adapterMock->getPhrases();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $this->_adapterReflection->invoke($this->_adapterMock, '', '');
         $actual = $this->_adapterMock->getPhrases();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

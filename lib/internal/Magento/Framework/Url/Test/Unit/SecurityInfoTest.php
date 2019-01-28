@@ -29,7 +29,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsSecureChecksIfUrlIsInSecureList($url, $expected)
     {
-        $this->assertEquals($expected, $this->_model->isSecure($url));
+        $this->assertSame($expected, $this->_model->isSecure($url));
     }
 
     /**

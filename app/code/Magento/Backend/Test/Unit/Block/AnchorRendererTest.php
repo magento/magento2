@@ -84,7 +84,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
             . '<span>' . $html . '</span>'
             . '</strong>';
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, 1)
         );
@@ -97,7 +97,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
 
         $expected =  '';
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemWithoutChildrenMock, 1)
         );
@@ -135,7 +135,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
             . '">' . '<span>' . $html
             . '</span>' . '</a>';
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, $level)
         );

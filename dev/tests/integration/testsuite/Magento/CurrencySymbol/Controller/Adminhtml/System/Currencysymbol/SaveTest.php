@@ -42,7 +42,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->assertRedirect();
 
-        $this->assertEquals(
+        $this->assertSame(
             $outputCurrencySymbol,
             $currencySymbol->getCurrencySymbol($currencyCode),
             'Currency symbol has not been saved'

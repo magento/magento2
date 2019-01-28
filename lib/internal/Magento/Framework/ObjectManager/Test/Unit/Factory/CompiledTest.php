@@ -100,9 +100,9 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertInstanceOf($sharedType, $result->getSharedDependency());
         $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
-        $this->assertEquals('value', $result->getValue());
-        $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
-        $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
+        $this->assertSame('value', $result->getValue());
+        $this->assertSame(['default_value1', 'default_value2'], $result->getValueArray());
+        $this->assertSame('GLOBAL_ARGUMENT', $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
     }
 
@@ -151,8 +151,8 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertInstanceOf($sharedType, $result->getSharedDependency());
         $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
-        $this->assertEquals('value', $result->getValue());
-        $this->assertEquals(
+        $this->assertSame('value', $result->getValue());
+        $this->assertSame(
             [
                 'array_value' => 'value',
                 'array_configured_instance' => new $sharedType(),
@@ -166,7 +166,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
             ],
             $result->getValueArray()
         );
-        $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
+        $this->assertSame('GLOBAL_ARGUMENT', $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
     }
 
@@ -200,9 +200,9 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf($type, $result);
         $this->assertInstanceOf($sharedType, $result->getSharedDependency());
         $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
-        $this->assertEquals('value', $result->getValue());
-        $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
-        $this->assertEquals(null, $result->getGlobalValue());
+        $this->assertSame('value', $result->getValue());
+        $this->assertSame(['default_value1', 'default_value2'], $result->getValueArray());
+        $this->assertSame(null, $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
     }
 

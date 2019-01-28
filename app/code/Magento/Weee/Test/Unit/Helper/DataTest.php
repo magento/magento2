@@ -75,7 +75,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->any())->method('hasData')->will($this->returnValue(false));
         $this->product->expects($this->any())->method('getData')->will($this->returnValue(11.26));
 
-        $this->assertEquals('11.26', $this->helperData->getAmountExclTax($this->product));
+        $this->assertSame('11.26', $this->helperData->getAmountExclTax($this->product));
     }
 
     /**
@@ -127,56 +127,56 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeAmountInvoiced($orderItem);
-        $this->assertEquals(self::ROW_AMOUNT_INVOICED, $value);
+        $this->assertSame(self::ROW_AMOUNT_INVOICED, $value);
     }
 
     public function testGetBaseWeeeAmountInvoiced()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeAmountInvoiced($orderItem);
-        $this->assertEquals(self::BASE_ROW_AMOUNT_INVOICED, $value);
+        $this->assertSame(self::BASE_ROW_AMOUNT_INVOICED, $value);
     }
 
     public function testGetWeeeTaxAmountInvoiced()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeTaxAmountInvoiced($orderItem);
-        $this->assertEquals(self::TAX_AMOUNT_INVOICED, $value);
+        $this->assertSame(self::TAX_AMOUNT_INVOICED, $value);
     }
 
     public function testGetWeeeBaseTaxAmountInvoiced()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeTaxAmountInvoiced($orderItem);
-        $this->assertEquals(self::BASE_TAX_AMOUNT_INVOICED, $value);
+        $this->assertSame(self::BASE_TAX_AMOUNT_INVOICED, $value);
     }
 
     public function testGetWeeeAmountRefunded()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeAmountRefunded($orderItem);
-        $this->assertEquals(self::ROW_AMOUNT_REFUNDED, $value);
+        $this->assertSame(self::ROW_AMOUNT_REFUNDED, $value);
     }
 
     public function testGetBaseWeeeAmountRefunded()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeAmountRefunded($orderItem);
-        $this->assertEquals(self::BASE_ROW_AMOUNT_REFUNDED, $value);
+        $this->assertSame(self::BASE_ROW_AMOUNT_REFUNDED, $value);
     }
 
     public function testGetWeeeTaxAmountRefunded()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeTaxAmountRefunded($orderItem);
-        $this->assertEquals(self::TAX_AMOUNT_REFUNDED, $value);
+        $this->assertSame(self::TAX_AMOUNT_REFUNDED, $value);
     }
 
     public function testGetBaseWeeeTaxAmountRefunded()
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeTaxAmountRefunded($orderItem);
-        $this->assertEquals(self::BASE_TAX_AMOUNT_REFUNDED, $value);
+        $this->assertSame(self::BASE_TAX_AMOUNT_REFUNDED, $value);
     }
 
     /**
@@ -275,7 +275,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($product));
 
         $result =  $this->helperData->getWeeeAttributesForBundle($product);
-        $this->assertEquals($expectedArray, $result);
+        $this->assertSame($expectedArray, $result);
     }
 
     /**
@@ -312,7 +312,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->will($this->returnValue($testArray));
 
-        $this->assertEquals($testArray, $this->helperData->getApplied($itemProductSimple));
+        $this->assertSame($testArray, $this->helperData->getApplied($itemProductSimple));
     }
 
     public function testGetAppliedBundle()
@@ -351,7 +351,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->will($this->returnValue($testArray));
 
-        $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
+        $this->assertSame($testArray, $this->helperData->getApplied($itemProductBundle));
     }
 
     public function testGetRecursiveAmountSimple()
@@ -374,8 +374,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getWeeeTaxAppliedRowAmount')
             ->will($this->returnValue($testAmountRow));
 
-        $this->assertEquals($testAmountUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductSimple));
-        $this->assertEquals($testAmountRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductSimple));
+        $this->assertSame($testAmountUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductSimple));
+        $this->assertSame($testAmountRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductSimple));
     }
 
     public function testGetRecursiveAmountBundle()
@@ -425,8 +425,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getChildren')
             ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
 
-        $this->assertEquals($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
-        $this->assertEquals($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
+        $this->assertSame($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
+        $this->assertSame($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
     }
 
     public function testGetProductWeeeAttributesForDisplay()
@@ -451,7 +451,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
 
-        $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
+        $this->assertSame($expected, $helperData->getTaxDisplayConfig());
     }
 
     public function testGetTotalAmounts()
@@ -476,7 +476,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getWeeeTaxAppliedRowAmount')
             ->willReturn($item2Weee);
 
-        $this->assertEquals($expected, $this->helperData->getTotalAmounts($items));
+        $this->assertSame($expected, $this->helperData->getTotalAmounts($items));
     }
 
     public function testGetBaseTotalAmounts()
@@ -501,6 +501,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseWeeeTaxAppliedRowAmnt')
             ->willReturn($item2BaseWeee);
 
-        $this->assertEquals($expected, $this->helperData->getBaseTotalAmounts($items));
+        $this->assertSame($expected, $this->helperData->getBaseTotalAmounts($items));
     }
 }

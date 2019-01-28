@@ -85,7 +85,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects($this->atLeastOnce())->method('dispatch');
         $expected = $this->blockModel;
         $actual = $this->blockModel->beforeSave();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -128,7 +128,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::BLOCK_ID, $blockId);
         $expected = $blockId;
         $actual = $this->blockModel->getId();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -142,7 +142,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::IDENTIFIER, $identifier);
         $expected = $identifier;
         $actual = $this->blockModel->getIdentifier();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -156,7 +156,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::TITLE, $title);
         $expected = $title;
         $actual = $this->blockModel->getTitle();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -170,7 +170,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::CONTENT, $content);
         $expected = $content;
         $actual = $this->blockModel->getContent();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -184,7 +184,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::CREATION_TIME, $creationTime);
         $expected = $creationTime;
         $actual = $this->blockModel->getCreationTime();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -198,7 +198,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData(Block::UPDATE_TIME, $updateTime);
         $expected = $updateTime;
         $actual = $this->blockModel->getUpdateTime();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -225,7 +225,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setId($blockId);
         $expected = $blockId;
         $actual = $this->blockModel->getData(Block::BLOCK_ID);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -239,7 +239,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setIdentifier($identifier);
         $expected = $identifier;
         $actual = $this->blockModel->getData(Block::IDENTIFIER);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -253,7 +253,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setTitle($title);
         $expected = $title;
         $actual = $this->blockModel->getData(Block::TITLE);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -267,7 +267,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setContent($content);
         $expected = $content;
         $actual = $this->blockModel->getData(Block::CONTENT);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -281,7 +281,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setCreationTime($creationTime);
         $expected = $creationTime;
         $actual = $this->blockModel->getData(Block::CREATION_TIME);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -295,7 +295,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setUpdateTime($updateTime);
         $expected = $updateTime;
         $actual = $this->blockModel->getData(Block::UPDATE_TIME);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -321,7 +321,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->blockModel->setData('stores', $stores);
         $expected = $stores;
         $actual = $this->blockModel->getStores();
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**

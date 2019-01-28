@@ -74,7 +74,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             /** @var $actualField \Magento\Framework\Data\Form\Element\AbstractElement */
             foreach ($actualFieldset->getElements() as $actualField) {
                 $this->assertArrayHasKey($actualField->getId(), $expectedFields);
-                $this->assertEquals($expectedFields[$actualField->getId()], $actualField->getName());
+                $this->assertSame($expectedFields[$actualField->getId()], $actualField->getName());
             }
         }
     }

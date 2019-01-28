@@ -85,12 +85,12 @@ class TaxClassProcessorTest extends \PHPUnit\Framework\TestCase
     public function testUpsertTaxClassExist()
     {
         $taxClassId = $this->taxClassProcessor->upsertTaxClass(self::TEST_TAX_CLASS_NAME, $this->product);
-        $this->assertEquals(self::TEST_TAX_CLASS_ID, $taxClassId);
+        $this->assertSame(self::TEST_TAX_CLASS_ID, $taxClassId);
     }
 
     public function testUpsertTaxClassNotExist()
     {
         $taxClassId = $this->taxClassProcessor->upsertTaxClass('noExistClassName', $this->product);
-        $this->assertEquals(self::TEST_JUST_CREATED_TAX_CLASS_ID, $taxClassId);
+        $this->assertSame(self::TEST_JUST_CREATED_TAX_CLASS_ID, $taxClassId);
     }
 }

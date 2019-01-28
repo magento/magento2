@@ -62,7 +62,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
 
         $html = $notification->render($elementMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr id="row_' . $htmlId . '">' .
             '<td class="label">' .
             '<label for="' . $htmlId . '"><span>' . $label . '</span></label>' .

@@ -89,7 +89,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $this->block->getItemPriceHtml($this->itemMock));
+        $this->assertSame($html, $this->block->getItemPriceHtml($this->itemMock));
     }
 
     public function testGetItemRowTotalHtml()
@@ -109,7 +109,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $this->block->getItemRowTotalHtml($this->itemMock));
+        $this->assertSame($html, $this->block->getItemRowTotalHtml($this->itemMock));
     }
 
     public function testGetItemRowTotalAfterDiscountHtml()
@@ -129,7 +129,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $this->block->getItemRowTotalAfterDiscountHtml($this->itemMock));
+        $this->assertSame($html, $this->block->getItemRowTotalAfterDiscountHtml($this->itemMock));
     }
 
     public function testGetTotalAmount()
@@ -161,6 +161,6 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getWeeeTaxAppliedRowAmount')
             ->will($this->returnValue($weeeTaxAppliedRowAmount));
 
-        $this->assertEquals($expectedResult, $this->block->getTotalAmount($this->itemMock));
+        $this->assertSame($expectedResult, $this->block->getTotalAmount($this->itemMock));
     }
 }

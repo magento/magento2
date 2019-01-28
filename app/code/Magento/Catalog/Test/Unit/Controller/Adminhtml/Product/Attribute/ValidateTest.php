@@ -343,7 +343,7 @@ class ValidateTest extends AttributeTest
 
         $response = $this->getModel()->execute();
         $responseObject = json_decode($response);
-        $this->assertEquals($responseObject, $result);
+        $this->assertSame($responseObject, $result);
     }
 
     /**

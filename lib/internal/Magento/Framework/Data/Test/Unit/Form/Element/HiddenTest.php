@@ -42,8 +42,8 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('hidden', $this->_model->getType());
-        $this->assertEquals('hiddenfield', $this->_model->getExtType());
+        $this->assertSame('hidden', $this->_model->getType());
+        $this->assertSame('hiddenfield', $this->_model->getExtType());
     }
 
     /**
@@ -55,6 +55,6 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('<input', $html);
         $this->assertContains('type="hidden"', $html);
         $this->_model->setDefaultHtml('testhtml');
-        $this->assertEquals('testhtml', $this->_model->getDefaultHtml());
+        $this->assertSame('testhtml', $this->_model->getDefaultHtml());
     }
 }

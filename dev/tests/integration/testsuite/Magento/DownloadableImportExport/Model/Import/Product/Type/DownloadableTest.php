@@ -103,8 +103,8 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $product->load($productId);
 
         $this->assertFalse($product->isObjectNew());
-        $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
-        $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
+        $this->assertSame(self::TEST_PRODUCT_NAME, $product->getName());
+        $this->assertSame(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
         $downloadableProductLinks   = $product->getExtensionAttributes()->getDownloadableProductLinks();
         $downloadableLinks          = $product->getDownloadableLinks();
@@ -139,17 +139,17 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('link_type', $actualLink);
             foreach ($expectedLinks[$actualLink['link_type']] as $expectedKey => $expectedValue) {
                 $this->assertArrayHasKey($expectedKey, $actualLink);
-                $this->assertEquals($actualLink[$expectedKey], $expectedValue);
+                $this->assertSame($actualLink[$expectedKey], $expectedValue);
             }
         }
         foreach ($downloadableLinks as $link) {
             $actualLink = $link->getData();
             $this->assertArrayHasKey('link_type', $actualLink);
             $this->assertArrayHasKey('product_id', $actualLink);
-            $this->assertEquals($actualLink['product_id'], $product->getData($this->productMetadata->getLinkField()));
+            $this->assertSame($actualLink['product_id'], $product->getData($this->productMetadata->getLinkField()));
             foreach ($expectedLinks[$actualLink['link_type']] as $expectedKey => $expectedValue) {
                 $this->assertArrayHasKey($expectedKey, $actualLink);
-                $this->assertEquals($actualLink[$expectedKey], $expectedValue);
+                $this->assertSame($actualLink[$expectedKey], $expectedValue);
             }
         }
 
@@ -172,17 +172,17 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('sample_type', $actualSample);
             foreach ($expectedSamples[$actualSample['sample_type']] as $expectedKey => $expectedValue) {
                 $this->assertArrayHasKey($expectedKey, $actualSample);
-                $this->assertEquals($actualSample[$expectedKey], $expectedValue);
+                $this->assertSame($actualSample[$expectedKey], $expectedValue);
             }
         }
         foreach ($downloadableSamples as $sample) {
             $actualSample = $sample->getData();
             $this->assertArrayHasKey('sample_type', $actualSample);
             $this->assertArrayHasKey('product_id', $actualSample);
-            $this->assertEquals($actualSample['product_id'], $product->getData($this->productMetadata->getLinkField()));
+            $this->assertSame($actualSample['product_id'], $product->getData($this->productMetadata->getLinkField()));
             foreach ($expectedSamples[$actualSample['sample_type']] as $expectedKey => $expectedValue) {
                 $this->assertArrayHasKey($expectedKey, $actualSample);
-                $this->assertEquals($actualSample[$expectedKey], $expectedValue);
+                $this->assertSame($actualSample[$expectedKey], $expectedValue);
             }
         }
     }

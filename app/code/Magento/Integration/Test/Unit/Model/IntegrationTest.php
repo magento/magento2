@@ -94,12 +94,12 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($integrationData));
 
         $this->integrationModel->loadActiveIntegrationByConsumerId($consumerId);
-        $this->assertEquals($integrationData, $this->integrationModel->getData());
+        $this->assertSame($integrationData, $this->integrationModel->getData());
     }
 
     public function testGetStatus()
     {
         $this->integrationModel->setStatus(1);
-        $this->assertEquals(1, $this->integrationModel->getStatus());
+        $this->assertSame(1, $this->integrationModel->getStatus());
     }
 }

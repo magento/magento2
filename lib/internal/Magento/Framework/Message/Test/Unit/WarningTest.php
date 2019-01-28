@@ -25,6 +25,6 @@ class WarningTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertEquals(MessageInterface::TYPE_WARNING, $this->model->getType());
+        $this->assertSame(MessageInterface::TYPE_WARNING, $this->model->getType());
     }
 }

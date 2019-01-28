@@ -32,7 +32,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $element = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Multiselect::class);
         $element->setValue([['te<s>t' => 't<e>st', 'data&1' => 'da&ta1']]);
         $this->model->setElement($element);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 new \Magento\Framework\DataObject(
                     [
@@ -54,6 +54,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->model->__construct($contextMock);
 
-        $this->assertEquals("Add", $this->model->getAddButtonLabel());
+        $this->assertSame("Add", $this->model->getAddButtonLabel());
     }
 }

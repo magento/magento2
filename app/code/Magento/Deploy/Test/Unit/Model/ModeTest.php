@@ -175,7 +175,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 $mode = $modeModel->getMode();
             });
         $this->model->enableProductionMode();
-        $this->assertEquals(State::MODE_PRODUCTION, $mode);
+        $this->assertSame(State::MODE_PRODUCTION, $mode);
     }
 
     /**
@@ -216,7 +216,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->method("regenerateStatic")
             ->willThrowException(new LocalizedException(__('Exception')));
         $this->model->enableProductionMode();
-        $this->assertEquals(State::MODE_PRODUCTION, $mode);
+        $this->assertSame(State::MODE_PRODUCTION, $mode);
     }
 
     public function testEnableProductionModeMinimal()

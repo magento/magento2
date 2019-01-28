@@ -37,7 +37,7 @@ class DataSizeTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertSizeToInteger($value, $expected)
     {
-        $this->assertEquals($expected, $this->dataSize->convertSizeToBytes($value));
+        $this->assertSame($expected, $this->dataSize->convertSizeToBytes($value));
     }
 
     /**

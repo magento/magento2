@@ -128,7 +128,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->uut = $this->getUut();
 
         $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
-        $this->assertEquals(null, $this->uut->getMainTable());
+        $this->assertSame(null, $this->uut->getMainTable());
     }
 
     public function testSetMainTableFirst()
@@ -141,7 +141,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->never())->method('getPart');
 
         $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
-        $this->assertEquals(self::TABLE_NAME, $this->uut->getMainTable());
+        $this->assertSame(self::TABLE_NAME, $this->uut->getMainTable());
     }
 
     public function testSetMainTableNoSelect()
@@ -162,7 +162,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->never())->method('getPart');
 
         $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
-        $this->assertEquals(self::TABLE_NAME, $this->uut->getMainTable());
+        $this->assertSame(self::TABLE_NAME, $this->uut->getMainTable());
     }
 
     public function testSetMainTable()
@@ -185,7 +185,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
         $this->assertTrue($this->uut->setMainTable($anotherTableName) instanceof Uut);
-        $this->assertEquals($anotherTableName, $this->uut->getMainTable());
+        $this->assertSame($anotherTableName, $this->uut->getMainTable());
     }
 
     public function testGetSelectCached()
@@ -247,7 +247,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddFieldToSelect($field, $alias, $expectedFieldsToSelect)
     {
         $this->assertTrue($this->uut->addFieldToSelect($field, $alias) instanceof Uut);
-        $this->assertEquals($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
+        $this->assertSame($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
         $this->assertTrue($this->uut->wereFieldsToSelectChanged());
     }
 
@@ -296,8 +296,8 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->uut->setFieldsToSelect($initialFieldsToSelect);
         $this->assertTrue($this->uut->removeFieldFromSelect($field, $isAlias) instanceof Uut);
-        $this->assertEquals($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
-        $this->assertEquals($expectedWereFieldsToSelectChanged, $this->uut->wereFieldsToSelectChanged());
+        $this->assertSame($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
+        $this->assertSame($expectedWereFieldsToSelectChanged, $this->uut->wereFieldsToSelectChanged());
     }
 
     /**
@@ -323,7 +323,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->uut->setFieldsToSelect(['alias' => 'field']);
         $this->assertTrue($this->uut->removeAllFieldsFromSelect() instanceof Uut);
         $this->assertTrue($this->uut->wereFieldsToSelectChanged());
-        $this->assertEquals(['id_field'], $this->uut->getFieldsToSelect());
+        $this->assertSame(['id_field'], $this->uut->getFieldsToSelect());
     }
 
     public function testSetModelNotString()
@@ -349,13 +349,13 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetModelName()
     {
         $this->uut->setModel(\Magento\Framework\DataObject::class);
-        $this->assertEquals(\Magento\Framework\DataObject::class, $this->uut->getModelName());
+        $this->assertSame(\Magento\Framework\DataObject::class, $this->uut->getModelName());
     }
 
     public function testGetResourceModelName()
     {
         $this->uut->setResourceModel('string');
-        $this->assertEquals('string', $this->uut->getResourceModelName());
+        $this->assertSame('string', $this->uut->getResourceModelName());
     }
 
     public function testGetResource()
@@ -378,7 +378,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
             ->method('getTable')
             ->will($this->returnValue(self::TABLE_NAME));
 
-        $this->assertEquals(self::TABLE_NAME, $this->uut->getTable(''));
+        $this->assertSame(self::TABLE_NAME, $this->uut->getTable(''));
     }
 
     /**
@@ -387,7 +387,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testJoin($table, $cond, $cols, $expected)
     {
         $this->assertTrue($this->uut->join($table, $cond, $cols) instanceof Uut);
-        $this->assertEquals($expected, $this->uut->getJoinedTables());
+        $this->assertSame($expected, $this->uut->getJoinedTables());
     }
 
     /**

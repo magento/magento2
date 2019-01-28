@@ -33,30 +33,30 @@ class TwoPluginTest extends AbstractPlugin
     public function testPluginBeforeWins()
     {
         $subject = $this->_objectManager->create(\Magento\Framework\Interception\Fixture\Intercepted::class);
-        $this->assertEquals('<X><P:bX/></X>', $subject->X('test'));
+        $this->assertSame('<X><P:bX/></X>', $subject->X('test'));
     }
 
     public function testPluginAroundWins()
     {
         $subject = $this->_objectManager->create(\Magento\Framework\Interception\Fixture\Intercepted::class);
-        $this->assertEquals('<F:Y>test<F:Y/>', $subject->Y('test'));
+        $this->assertSame('<F:Y>test<F:Y/>', $subject->Y('test'));
     }
 
     public function testPluginAfterWins()
     {
         $subject = $this->_objectManager->create(\Magento\Framework\Interception\Fixture\Intercepted::class);
-        $this->assertEquals('<P:aZ/>', $subject->Z('test'));
+        $this->assertSame('<P:aZ/>', $subject->Z('test'));
     }
 
     public function testPluginBeforeAroundWins()
     {
         $subject = $this->_objectManager->create(\Magento\Framework\Interception\Fixture\Intercepted::class);
-        $this->assertEquals('<F:V><F:bV/><F:V/>', $subject->V('test'));
+        $this->assertSame('<F:V><F:bV/><F:V/>', $subject->V('test'));
     }
 
     public function testPluginBeforeAroundAfterWins()
     {
         $subject = $this->_objectManager->create(\Magento\Framework\Interception\Fixture\Intercepted::class);
-        $this->assertEquals('<F:aW/>', $subject->W('test'));
+        $this->assertSame('<F:aW/>', $subject->W('test'));
     }
 }

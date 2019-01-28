@@ -147,7 +147,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->willReturnMap($translateMap);
 
-        $this->assertEquals($expectedResult, $this->model->getData($themePath));
+        $this->assertSame($expectedResult, $this->model->getData($themePath));
     }
 
     /**

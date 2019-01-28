@@ -113,7 +113,7 @@ class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
             ->method('setGroupId')
             ->with($this->equalTo($this->customerGroupId))
             ->will($this->returnSelf());
-        $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
+        $this->assertSame($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 
     /**
@@ -132,6 +132,6 @@ class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
             ->method('getById')
             ->with($this->equalTo($this->customerId))
             ->will($this->returnValue($this->customerDataMock));
-        $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
+        $this->assertSame($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 }

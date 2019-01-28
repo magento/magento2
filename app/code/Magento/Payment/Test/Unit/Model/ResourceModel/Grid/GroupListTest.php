@@ -31,6 +31,6 @@ class GroupListTest extends \PHPUnit\Framework\TestCase
             ->method('getPaymentMethodList')
             ->with(true, true, true)
             ->will($this->returnValue(['group data']));
-        $this->assertEquals(['group data'], $this->groupArrayModel->toOptionArray());
+        $this->assertSame(['group data'], $this->groupArrayModel->toOptionArray());
     }
 }

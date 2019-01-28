@@ -52,7 +52,7 @@ class AbstractHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testEscapeLikeValue($expected, array $data)
     {
-        $this->assertEquals($expected, $this->_model->escapeLikeValue($data['value'], $data['options']));
+        $this->assertSame($expected, $this->_model->escapeLikeValue($data['value'], $data['options']));
     }
 
     public function testGetCILike()
@@ -73,7 +73,7 @@ class AbstractHelperTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->_model->getCILike($field, $value, $options);
         $this->assertInstanceOf('Zend_Db_Expr', $result);
-        $this->assertEquals($field . ' LIKE ' . $value, (string)$result);
+        $this->assertSame($field . ' LIKE ' . $value, (string)$result);
     }
 
     /**

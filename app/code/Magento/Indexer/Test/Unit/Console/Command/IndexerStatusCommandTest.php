@@ -99,44 +99,44 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
         $spacer = '+----------------+------------------+-----------+-------------------------+---------------------+';
 
         $this->assertCount(8, $linesOutput, 'There should be 8 lines output. 3 Spacers, 1 header, 4 content.');
-        $this->assertEquals($linesOutput[0], $spacer, "Lines 0, 2, 7 should be spacer lines");
-        $this->assertEquals($linesOutput[2], $spacer, "Lines 0, 2, 7 should be spacer lines");
-        $this->assertEquals($linesOutput[7], $spacer, "Lines 0, 2, 7 should be spacer lines");
+        $this->assertSame($linesOutput[0], $spacer, "Lines 0, 2, 7 should be spacer lines");
+        $this->assertSame($linesOutput[2], $spacer, "Lines 0, 2, 7 should be spacer lines");
+        $this->assertSame($linesOutput[7], $spacer, "Lines 0, 2, 7 should be spacer lines");
 
         $headerValues = array_values(array_filter(explode('|', $linesOutput[1])));
-        $this->assertEquals('Title', trim($headerValues[0]));
-        $this->assertEquals('Status', trim($headerValues[1]));
-        $this->assertEquals('Update On', trim($headerValues[2]));
-        $this->assertEquals('Schedule Status', trim($headerValues[3]));
-        $this->assertEquals('Schedule Updated', trim($headerValues[4]));
+        $this->assertSame('Title', trim($headerValues[0]));
+        $this->assertSame('Status', trim($headerValues[1]));
+        $this->assertSame('Update On', trim($headerValues[2]));
+        $this->assertSame('Schedule Status', trim($headerValues[3]));
+        $this->assertSame('Schedule Updated', trim($headerValues[4]));
 
         $indexer1 = array_values(array_filter(explode('|', $linesOutput[3])));
-        $this->assertEquals('Title_indexer1', trim($indexer1[0]));
-        $this->assertEquals('Ready', trim($indexer1[1]));
-        $this->assertEquals('Schedule', trim($indexer1[2]));
-        $this->assertEquals('idle (10 in backlog)', trim($indexer1[3]));
-        $this->assertEquals('2017-01-01 11:11:11', trim($indexer1[4]));
+        $this->assertSame('Title_indexer1', trim($indexer1[0]));
+        $this->assertSame('Ready', trim($indexer1[1]));
+        $this->assertSame('Schedule', trim($indexer1[2]));
+        $this->assertSame('idle (10 in backlog)', trim($indexer1[3]));
+        $this->assertSame('2017-01-01 11:11:11', trim($indexer1[4]));
 
         $indexer2 = array_values(array_filter(explode('|', $linesOutput[4])));
-        $this->assertEquals('Title_indexer2', trim($indexer2[0]));
-        $this->assertEquals('Reindex required', trim($indexer2[1]));
-        $this->assertEquals('Save', trim($indexer2[2]));
-        $this->assertEquals('', trim($indexer2[3]));
-        $this->assertEquals('', trim($indexer2[4]));
+        $this->assertSame('Title_indexer2', trim($indexer2[0]));
+        $this->assertSame('Reindex required', trim($indexer2[1]));
+        $this->assertSame('Save', trim($indexer2[2]));
+        $this->assertSame('', trim($indexer2[3]));
+        $this->assertSame('', trim($indexer2[4]));
 
         $indexer3 = array_values(array_filter(explode('|', $linesOutput[5])));
-        $this->assertEquals('Title_indexer3', trim($indexer3[0]));
-        $this->assertEquals('Processing', trim($indexer3[1]));
-        $this->assertEquals('Schedule', trim($indexer3[2]));
-        $this->assertEquals('idle (100 in backlog)', trim($indexer3[3]));
-        $this->assertEquals('2017-01-01 11:11:11', trim($indexer3[4]));
+        $this->assertSame('Title_indexer3', trim($indexer3[0]));
+        $this->assertSame('Processing', trim($indexer3[1]));
+        $this->assertSame('Schedule', trim($indexer3[2]));
+        $this->assertSame('idle (100 in backlog)', trim($indexer3[3]));
+        $this->assertSame('2017-01-01 11:11:11', trim($indexer3[4]));
 
         $indexer4 = array_values(array_filter(explode('|', $linesOutput[6])));
-        $this->assertEquals('Title_indexer4', trim($indexer4[0]));
-        $this->assertEquals('unknown', trim($indexer4[1]));
-        $this->assertEquals('Schedule', trim($indexer4[2]));
-        $this->assertEquals('running (20 in backlog)', trim($indexer4[3]));
-        $this->assertEquals('2017-01-01 11:11:11', trim($indexer4[4]));
+        $this->assertSame('Title_indexer4', trim($indexer4[0]));
+        $this->assertSame('unknown', trim($indexer4[1]));
+        $this->assertSame('Schedule', trim($indexer4[2]));
+        $this->assertSame('running (20 in backlog)', trim($indexer4[3]));
+        $this->assertSame('2017-01-01 11:11:11', trim($indexer4[4]));
     }
 
     /**

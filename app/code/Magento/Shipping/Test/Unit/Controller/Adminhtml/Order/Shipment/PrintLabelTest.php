@@ -220,7 +220,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             ->method('getShippingLabel')
             ->will($this->returnValue($labelContent));
 
-        $this->assertEquals($this->fileCreate(), $this->controller->execute());
+        $this->assertSame($this->fileCreate(), $this->controller->execute());
     }
 
     /**
@@ -249,7 +249,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             ->method('getObject')
             ->will($this->returnSelf());
 
-        $this->assertEquals($this->fileCreate(), $this->controller->execute());
+        $this->assertSame($this->fileCreate(), $this->controller->execute());
     }
 
     /**

@@ -45,7 +45,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProtectedFileExtensions()
     {
-        $this->assertEquals($this->_protectedList, $this->_model->getProtectedFileExtensions());
+        $this->assertSame($this->_protectedList, $this->_model->getProtectedFileExtensions());
     }
 
     public function testInitialization()
@@ -58,7 +58,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
         $defaultMess = [
             'protectedExtension' => new Phrase('File with an extension "%value%" is protected and cannot be uploaded'),
         ];
-        $this->assertEquals($defaultMess, $property->getValue($this->_model));
+        $this->assertSame($defaultMess, $property->getValue($this->_model));
 
         $property = new \ReflectionProperty(
             \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
@@ -66,7 +66,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
         );
         $property->setAccessible(true);
         $protectedList = ['exe', 'php', 'jar'];
-        $this->assertEquals($protectedList, $property->getValue($this->_model));
+        $this->assertSame($protectedList, $property->getValue($this->_model));
     }
 
     public function testIsValid()

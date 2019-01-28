@@ -119,10 +119,10 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         // change phone #
         $proposedAddressObject->setTelephone('555' . $address->getTelephone());
         $proposedAddress = $this->repository->save($proposedAddressObject);
-        $this->assertEquals(2, $proposedAddress->getId());
+        $this->assertSame(2, $proposedAddress->getId());
 
         $savedAddress = $this->repository->getById(2);
-        $this->assertNotEquals($this->expectedAddresses[1]->getTelephone(), $savedAddress->getTelephone());
+        $this->assertNotSame($this->expectedAddresses[1]->getTelephone(), $savedAddress->getTelephone());
     }
 
     /**
@@ -153,7 +153,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $addressId = 2;
         $address = $this->repository->getById($addressId);
-        $this->assertEquals($this->expectedAddresses[1], $address);
+        $this->assertSame($this->expectedAddresses[1], $address);
     }
 
     /**
@@ -188,12 +188,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->expectedAddresses[1]->getRegion());
 
-        $this->assertEquals($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
-        $this->assertEquals(
+        $this->assertSame($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
+        $this->assertSame(
             $expectedNewAddress->getRegion()->getExtensionAttributes(),
             $savedAddress->getRegion()->getExtensionAttributes()
         );
-        $this->assertEquals($expectedNewAddress, $savedAddress);
+        $this->assertSame($expectedNewAddress, $savedAddress);
     }
 
     /**
@@ -215,7 +215,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $returnedAddress = $this->repository->save($proposedAddress);
 
         $savedAddress = $this->repository->getById($returnedAddress->getId());
-        $this->assertNotEquals($proposedAddress, $savedAddress);
+        $this->assertNotSame($proposedAddress, $savedAddress);
         $this->assertArrayNotHasKey(
             'weird',
             $savedAddress->getCustomAttributes(),
@@ -241,11 +241,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         try {
             $this->repository->save($address);
         } catch (InputException $exception) {
-            $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
+            $this->assertSame('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(2, $errors);
-            $this->assertEquals('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
-            $this->assertEquals('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
+            $this->assertSame('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
+            $this->assertSame('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
         }
     }
 
@@ -261,7 +261,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->repository->save($proposedAddress);
             $this->fail('Expected exception not thrown');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals('No such entity with customerId = 4200', $nsee->getMessage());
+            $this->assertSame('No such entity with customerId = 4200', $nsee->getMessage());
         }
     }
 
@@ -277,7 +277,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->repository->save($proposedAddress);
             $this->fail('Expected exception not thrown');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals('No such entity with customerId = this_is_not_a_valid_id', $nsee->getMessage());
+            $this->assertSame('No such entity with customerId = this_is_not_a_valid_id', $nsee->getMessage());
         }
     }
 
@@ -292,7 +292,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         // See that customer already has an address with expected addressId
         $addressDataObject = $this->repository->getById($addressId);
-        $this->assertEquals($addressDataObject->getId(), $addressId);
+        $this->assertSame($addressDataObject->getId(), $addressId);
 
         // Delete the address from the customer
         $this->repository->delete($addressDataObject);
@@ -302,7 +302,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $addressDataObject = $this->repository->getById($addressId);
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals('No such entity with addressId = 1', $exception->getMessage());
+            $this->assertSame('No such entity with addressId = 1', $exception->getMessage());
         }
     }
 
@@ -317,7 +317,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         // See that customer already has an address with expected addressId
         $addressDataObject = $this->repository->getById($addressId);
-        $this->assertEquals($addressDataObject->getId(), $addressId);
+        $this->assertSame($addressDataObject->getId(), $addressId);
 
         // Delete the address from the customer
         $this->repository->deleteById($addressId);
@@ -327,7 +327,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $addressDataObject = $this->repository->getById($addressId);
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals('No such entity with addressId = 1', $exception->getMessage());
+            $this->assertSame('No such entity with addressId = 1', $exception->getMessage());
         }
     }
 
@@ -342,7 +342,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->repository->deleteById(12345);
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals('No such entity with addressId = 12345', $exception->getMessage());
+            $this->assertSame('No such entity with addressId = 12345', $exception->getMessage());
         }
     }
 
@@ -385,15 +385,15 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $items = array_values($searchResults->getItems());
 
-        $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
-        $this->assertEquals(1, count($items));
+        $this->assertSame(count($expectedResult), $searchResults->getTotalCount());
+        $this->assertSame(1, count($items));
 
         $expectedResultIndex = count($expectedResult) - 1;
 
-        $this->assertEquals($expectedResult[$expectedResultIndex]['id'], $items[0]->getId());
-        $this->assertEquals($expectedResult[$expectedResultIndex]['city'], $items[0]->getCity());
-        $this->assertEquals($expectedResult[$expectedResultIndex]['postcode'], $items[0]->getPostcode());
-        $this->assertEquals($expectedResult[$expectedResultIndex]['firstname'], $items[0]->getFirstname());
+        $this->assertSame($expectedResult[$expectedResultIndex]['id'], $items[0]->getId());
+        $this->assertSame($expectedResult[$expectedResultIndex]['city'], $items[0]->getCity());
+        $this->assertSame($expectedResult[$expectedResultIndex]['postcode'], $items[0]->getPostcode());
+        $this->assertSame($expectedResult[$expectedResultIndex]['firstname'], $items[0]->getFirstname());
     }
 
     /**

@@ -48,7 +48,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
             $core->getBackend()
         );
-        $this->assertEquals($this->_mockBackend, $core->getBackend());
+        $this->assertSame($this->_mockBackend, $core->getBackend());
     }
 
     /**
@@ -139,7 +139,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $frontend->setBackend($backendMock);
 
         $result = $frontend->clean($mode, $tags);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testGetIdsMatchingTags()
@@ -164,7 +164,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $frontend->setBackend($backendMock);
 
         $result = $frontend->getIdsMatchingTags($tags);
-        $this->assertEquals($ids, $result);
+        $this->assertSame($ids, $result);
     }
 
     public function testGetIdsNotMatchingTags()
@@ -189,6 +189,6 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $frontend->setBackend($backendMock);
 
         $result = $frontend->getIdsNotMatchingTags($tags);
-        $this->assertEquals($ids, $result);
+        $this->assertSame($ids, $result);
     }
 }

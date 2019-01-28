@@ -51,7 +51,7 @@ class ProductIdentitiesExtenderTest extends TestCase
             'cat_p_' . $simpleProduct2->getId(),
 
         ];
-        $this->assertEquals($expectedIdentities, $configurableProduct->getIdentities());
+        $this->assertSame($expectedIdentities, $configurableProduct->getIdentities());
     }
 
     /**
@@ -68,6 +68,6 @@ class ProductIdentitiesExtenderTest extends TestCase
         $expectedIdentities = [
             'cat_p_' . $configurableProduct->getId(),
         ];
-        $this->assertEquals($expectedIdentities, $configurableProduct->getIdentities());
+        $this->assertSame($expectedIdentities, $configurableProduct->getIdentities());
     }
 }

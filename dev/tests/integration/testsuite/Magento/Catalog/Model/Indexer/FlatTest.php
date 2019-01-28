@@ -130,8 +130,8 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $result = $this->getLoadedDefaultCategory()->getCollection()->getItems();
         $this->assertTrue(is_array($result));
 
-        $this->assertEquals(self::$defaultCategoryId, $result[self::$categoryOne]->getParentId());
-        $this->assertEquals(self::$categoryOne, $result[self::$categoryTwo]->getParentId());
+        $this->assertSame(self::$defaultCategoryId, $result[self::$categoryOne]->getParentId());
+        $this->assertSame(self::$categoryOne, $result[self::$categoryTwo]->getParentId());
 
         $this->removeSubCategoriesInDefaultCategory();
     }
@@ -169,7 +169,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryTwo->getResource());
 
-        $this->assertEquals(self::$categoryOne, $categoryTwo->getParentId());
+        $this->assertSame(self::$categoryOne, $categoryTwo->getParentId());
         $this->checkCategoryData($categoryTwo);
 
         $this->removeSubCategoriesInDefaultCategory();
@@ -186,7 +186,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $this->moveSubCategoriesInDefaultCategory();
         $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
-        $this->assertEquals($categoryTwo->getData('parent_id'), self::$defaultCategoryId);
+        $this->assertSame($categoryTwo->getData('parent_id'), self::$defaultCategoryId);
 
         $this->removeSubCategoriesInDefaultCategory();
     }
@@ -301,7 +301,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
     protected function checkCategoryData(\Magento\Catalog\Model\Category $category)
     {
         foreach (self::$attributeCodes as $attributeCode) {
-            $this->assertEquals(
+            $this->assertSame(
                 self::$attributeValues[$category->getId()][$attributeCode],
                 $category->getData($attributeCode),
                 "Data for {$category->getId()} attribute code [{$attributeCode}] is wrong"

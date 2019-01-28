@@ -317,8 +317,8 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
              ->willReturn($response);
   
         $rates = $this->model->collectRates($this->rateRequest)->getAllRates();
-        $this->assertEquals($expectedprice, $rates[0]->getData('cost'));
-        $this->assertEquals($method, $rates[0]->getData('method'));
+        $this->assertSame($expectedprice, $rates[0]->getData('cost'));
+        $this->assertSame($method, $rates[0]->getData('method'));
     }
 
     /**

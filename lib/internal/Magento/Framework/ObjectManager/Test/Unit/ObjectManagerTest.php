@@ -134,8 +134,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
         $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->parent);
         $this->assertInstanceOf(\Magento\Test\Di\Child\A::class, $result->child);
-        $this->assertEquals('scalarValue', $result->scalar);
-        $this->assertEquals('1', $result->optionalScalar);
+        $this->assertSame('scalarValue', $result->scalar);
+        $this->assertSame('1', $result->optionalScalar);
     }
 
     public function testGetCreatesSharedInstancesEveryTime()
@@ -208,10 +208,10 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         );
         $customChild = $this->_object->get('customChildType');
         $this->assertInstanceOf(\Magento\Test\Di\Aggregate\Child::class, $customChild);
-        $this->assertEquals('configuredScalar', $customChild->scalar);
-        $this->assertEquals('configuredSecondScalar', $customChild->secondScalar);
-        $this->assertEquals(1, $customChild->optionalScalar);
-        $this->assertEquals('configuredOptionalScalar', $customChild->secondOptionalScalar);
+        $this->assertSame('configuredScalar', $customChild->scalar);
+        $this->assertSame('configuredSecondScalar', $customChild->secondScalar);
+        $this->assertSame(1, $customChild->optionalScalar);
+        $this->assertSame('configuredOptionalScalar', $customChild->secondOptionalScalar);
         $this->assertSame($customChild, $this->_object->get('customChildType'));
     }
 
@@ -337,8 +337,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         );
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\AggregateParent::class);
-        $this->assertEquals('first_param_value', $result->scalar);
-        $this->assertEquals('second_param_value', $result->optionalScalar);
+        $this->assertSame('first_param_value', $result->scalar);
+        $this->assertSame('second_param_value', $result->optionalScalar);
     }
 
     public function testConfiguredArgumentsAreInherited()
@@ -361,9 +361,9 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         /** @var $result \Magento\Test\Di\Aggregate\Child */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
         $this->assertInstanceOf(\Magento\Test\Di\DiParent::class, $result->interface);
-        $this->assertEquals('first_param_value', $result->scalar);
-        $this->assertEquals('childSecondScalar', $result->secondScalar);
-        $this->assertEquals('parentOptionalScalar', $result->optionalScalar);
+        $this->assertSame('first_param_value', $result->scalar);
+        $this->assertSame('childSecondScalar', $result->secondScalar);
+        $this->assertSame('parentOptionalScalar', $result->optionalScalar);
     }
 
     public function testConfiguredArgumentsOverrideInheritedArguments()
@@ -391,9 +391,9 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         /** @var $result \Magento\Test\Di\Aggregate\Child */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
         $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
-        $this->assertEquals('second_param_value', $result->scalar);
-        $this->assertEquals('childSecondScalar', $result->secondScalar);
-        $this->assertEquals('childOptionalScalar', $result->optionalScalar);
+        $this->assertSame('second_param_value', $result->scalar);
+        $this->assertSame('childSecondScalar', $result->secondScalar);
+        $this->assertSame('childOptionalScalar', $result->optionalScalar);
     }
 
     public function testGetIgnoresFirstSlash()

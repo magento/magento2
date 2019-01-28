@@ -54,7 +54,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAddressEditUrl()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'http://localhost/index.php/customer/address/edit/id/1/',
             $this->_block->getAddressEditUrl(1)
         );
@@ -72,7 +72,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         if (!empty($customerId)) {
             $this->currentCustomer->setCustomerId($customerId);
         }
-        $this->assertEquals($expected, $this->_block->hasPrimaryAddress());
+        $this->assertSame($expected, $this->_block->hasPrimaryAddress());
     }
 
     public function hasPrimaryAddressDataProvider()
@@ -94,7 +94,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\AddressInterface::class,
             $this->_block->getAdditionalAddresses()[0]
         );
-        $this->assertEquals(2, $this->_block->getAdditionalAddresses()[0]->getId());
+        $this->assertSame(2, $this->_block->getAdditionalAddresses()[0]->getId());
     }
 
     /**
@@ -107,7 +107,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         if (!empty($customerId)) {
             $this->currentCustomer->setCustomerId($customerId);
         }
-        $this->assertEquals($expected, $this->_block->getAdditionalAddresses());
+        $this->assertSame($expected, $this->_block->getAdditionalAddresses());
     }
 
     public function getAdditionalAddressesDataProvider()
@@ -128,12 +128,12 @@ class BookTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\AddressRepositoryInterface::class
         )->getById(1);
         $html = $this->_block->getAddressHtml($address);
-        $this->assertEquals($expected, $html);
+        $this->assertSame($expected, $html);
     }
 
     public function testGetAddressHtmlWithoutAddress()
     {
-        $this->assertEquals('', $this->_block->getAddressHtml(null));
+        $this->assertSame('', $this->_block->getAddressHtml(null));
     }
 
     /**
@@ -150,7 +150,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
         $this->currentCustomer->setCustomerId(1);
         $object = $this->_block->getCustomer();
-        $this->assertEquals($customer, $object);
+        $this->assertSame($customer, $object);
     }
 
     public function testGetCustomerMissingCustomer()
@@ -168,7 +168,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
     public function testGetDefaultBilling($customerId, $expected)
     {
         $this->currentCustomer->setCustomerId($customerId);
-        $this->assertEquals($expected, $this->_block->getDefaultBilling());
+        $this->assertSame($expected, $this->_block->getDefaultBilling());
     }
 
     public function getDefaultBillingDataProvider()
@@ -188,7 +188,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         if (!empty($customerId)) {
             $this->currentCustomer->setCustomerId($customerId);
         }
-        $this->assertEquals($expected, $this->_block->getDefaultShipping());
+        $this->assertSame($expected, $this->_block->getDefaultShipping());
     }
 
     public function getDefaultShippingDataProvider()

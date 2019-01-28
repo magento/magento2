@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributeSetName($model)
     {
-        $this->assertEquals('name', $model->getAttributeSetName(1, 1));
+        $this->assertSame('name', $model->getAttributeSetName(1, 1));
         $this->assertFalse($model->getAttributeSetName(2, 1));
     }
 
@@ -58,7 +58,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributeSetId($model)
     {
-        $this->assertEquals(1, $model->getAttributeSetId(1, 'name'));
+        $this->assertSame(1, $model->getAttributeSetId(1, 'name'));
         $this->assertFalse($model->getAttributeSetId(1, 'noname'));
     }
 
@@ -102,7 +102,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributeGroupName($model)
     {
-        $this->assertEquals('name', $model->getAttributeGroupName(1, 1));
+        $this->assertSame('name', $model->getAttributeGroupName(1, 1));
         $this->assertFalse($model->getAttributeGroupName(2, 1));
     }
 
@@ -112,7 +112,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributeGroupId($model)
     {
-        $this->assertEquals(1, $model->getAttributeGroupId(1, 'name'));
+        $this->assertSame(1, $model->getAttributeGroupId(1, 'name'));
         $this->assertFalse($model->getAttributeGroupId(1, 'noname'));
     }
 
@@ -144,7 +144,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductTypeId($model)
     {
-        $this->assertEquals(1, $model->getProductTypeId('name'));
+        $this->assertSame(1, $model->getProductTypeId('name'));
         $this->assertFalse($model->getProductTypeId('noname'));
     }
 
@@ -154,7 +154,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductTypeName($model)
     {
-        $this->assertEquals('name', $model->getProductTypeName(1));
+        $this->assertSame('name', $model->getProductTypeName(1));
         $this->assertFalse($model->getProductTypeName(2));
     }
 
@@ -172,7 +172,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $object->expects($this->once())->method('getAllOptions')->will($this->returnValue($data));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject(\Magento\Catalog\Model\Config::class);
-        $this->assertEquals($expected, $model->getSourceOptionId($object, $search));
+        $this->assertSame($expected, $model->getSourceOptionId($object, $search));
     }
 
     /**
@@ -248,7 +248,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributesUsedInProductListing()
     {
         list($model, $attribute) = $this->prepareConfigModelForAttributes();
-        $this->assertEquals([1 => $attribute], $model->getAttributesUsedInProductListing());
+        $this->assertSame([1 => $attribute], $model->getAttributesUsedInProductListing());
         return $model;
     }
 
@@ -258,7 +258,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductAttributes($model)
     {
-        $this->assertEquals([1], $model->getProductAttributes());
+        $this->assertSame([1], $model->getProductAttributes());
     }
 
     /**
@@ -267,7 +267,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributesUsedForSortBy()
     {
         list($model, $attribute) = $this->prepareConfigModelForAttributes();
-        $this->assertEquals([1 => $attribute], $model->getAttributesUsedForSortBy());
+        $this->assertSame([1 => $attribute], $model->getAttributesUsedForSortBy());
     }
 
     /**
@@ -276,7 +276,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributeUsedForSortByArray()
     {
         list($model) = $this->prepareConfigModelForAttributes();
-        $this->assertEquals(['position' => 'Position', 'code' => 'label'], $model->getAttributeUsedForSortByArray());
+        $this->assertSame(['position' => 'Position', 'code' => 'label'], $model->getAttributeUsedForSortByArray());
     }
 
     /**
@@ -292,6 +292,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/frontend/default_sort_by', 'store', null)->will($this->returnValue(1));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject(\Magento\Catalog\Model\Config::class, ['scopeConfig' => $scopeConfig]);
-        $this->assertEquals(1, $model->getProductListDefaultSortBy());
+        $this->assertSame(1, $model->getProductListDefaultSortBy());
     }
 }

@@ -33,9 +33,9 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($fileName);
 
         $model->setFileName($testFileName);
-        $this->assertEquals($testFileName, $model->getFileName());
+        $this->assertSame($testFileName, $model->getFileName());
 
         $fileName = $model->getFileName();
-        $this->assertEquals($testFileName, $fileName);
+        $this->assertSame($testFileName, $fileName);
     }
 }

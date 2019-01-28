@@ -39,7 +39,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
         $this->request->setServer(new Parameters(array_merge($_SERVER, ['HTTPS' => 'on'])));
         $cookieScope = $this->createCookieScope();
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
@@ -71,7 +71,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
                 'cookieMetadata' => null,
             ]
         );
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_PATH => 'default path',
                 SensitiveCookieMetadata::KEY_DOMAIN => 'default domain',
@@ -98,7 +98,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($defaultValues, $cookieScope->getPublicCookieMetadata()->__toArray());
+        $this->assertSame($defaultValues, $cookieScope->getPublicCookieMetadata()->__toArray());
     }
 
     public function testGetCookieMetadataDefaults()
@@ -113,7 +113,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
                 'deleteCookieMetadata' => $cookieMetadata,
             ]
         );
-        $this->assertEquals($defaultValues, $cookieScope->getCookieMetadata()->__toArray());
+        $this->assertSame($defaultValues, $cookieScope->getCookieMetadata()->__toArray());
     }
 
     public function testGetSensitiveCookieMetadataOverrides()
@@ -133,7 +133,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $override = $this->createSensitiveMetadata($overrideValues);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 SensitiveCookieMetadata::KEY_PATH => 'override path',
                 SensitiveCookieMetadata::KEY_DOMAIN => 'override domain',
@@ -168,7 +168,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
         );
         $override = $this->createPublicMetadata($overrideValues);
 
-        $this->assertEquals($overrideValues, $cookieScope->getPublicCookieMetadata($override)->__toArray());
+        $this->assertSame($overrideValues, $cookieScope->getPublicCookieMetadata($override)->__toArray());
     }
 
     public function testGetCookieMetadataOverrides()
@@ -188,7 +188,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $override = $this->createCookieMetadata($overrideValues);
-        $this->assertEquals($overrideValues, $cookieScope->getCookieMetadata($override)->__toArray());
+        $this->assertSame($overrideValues, $cookieScope->getCookieMetadata($override)->__toArray());
     }
 
     /**

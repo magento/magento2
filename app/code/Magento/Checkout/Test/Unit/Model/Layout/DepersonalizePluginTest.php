@@ -67,7 +67,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedResult));
 
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testAfterGenerateXmlNoDepersonalize()
@@ -81,6 +81,6 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedResult));
 
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

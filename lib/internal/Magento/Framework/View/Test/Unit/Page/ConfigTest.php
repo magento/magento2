@@ -145,20 +145,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         ];
         $this->model->setMetadata('name', 'test_value');
         $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
-        $this->assertEquals($expectedMetadata, $this->model->getMetadata());
+        $this->assertSame($expectedMetadata, $this->model->getMetadata());
     }
 
     public function testContentType()
     {
         $contentType = 'test_content_type';
         $this->model->setContentType($contentType);
-        $this->assertEquals($contentType, $this->model->getContentType());
+        $this->assertSame($contentType, $this->model->getContentType());
     }
 
     public function testContentTypeEmpty()
     {
         $expectedData = null;
-        $this->assertEquals($expectedData, $this->model->getContentType());
+        $this->assertSame($expectedData, $this->model->getContentType());
     }
 
     public function testContentTypeAuto()
@@ -169,14 +169,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('default_media_type'));
         $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')
             ->will($this->returnValue('default_charset'));
-        $this->assertEquals($expectedData, $this->model->getContentType());
+        $this->assertSame($expectedData, $this->model->getContentType());
     }
 
     public function testMediaType()
     {
         $mediaType = 'test_media_type';
         $this->model->setMediaType($mediaType);
-        $this->assertEquals($mediaType, $this->model->getMediaType());
+        $this->assertSame($mediaType, $this->model->getMediaType());
     }
 
     public function testMediaTypeEmpty()
@@ -184,14 +184,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedData = 'default_media_type';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_media_type', 'store')
             ->will($this->returnValue('default_media_type'));
-        $this->assertEquals($expectedData, $this->model->getMediaType());
+        $this->assertSame($expectedData, $this->model->getMediaType());
     }
 
     public function testCharset()
     {
         $charset = 'test_charset';
         $this->model->setCharset($charset);
-        $this->assertEquals($charset, $this->model->getCharset());
+        $this->assertSame($charset, $this->model->getCharset());
     }
 
     public function testCharsetEmpty()
@@ -199,14 +199,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedData = 'default_charset';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_charset', 'store')
             ->will($this->returnValue('default_charset'));
-        $this->assertEquals($expectedData, $this->model->getCharset());
+        $this->assertSame($expectedData, $this->model->getCharset());
     }
 
     public function testDescription()
     {
         $description = 'test_description';
         $this->model->setDescription($description);
-        $this->assertEquals($description, $this->model->getDescription());
+        $this->assertSame($description, $this->model->getDescription());
     }
 
     public function testDescriptionEmpty()
@@ -214,14 +214,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedData = 'default_description';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_description', 'store')
             ->will($this->returnValue('default_description'));
-        $this->assertEquals($expectedData, $this->model->getDescription());
+        $this->assertSame($expectedData, $this->model->getDescription());
     }
 
     public function testKeywords()
     {
         $keywords = 'test_keywords';
         $this->model->setKeywords($keywords);
-        $this->assertEquals($keywords, $this->model->getKeywords());
+        $this->assertSame($keywords, $this->model->getKeywords());
     }
 
     public function testKeywordsEmpty()
@@ -229,7 +229,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedData = 'default_keywords';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_keywords', 'store')
             ->will($this->returnValue('default_keywords'));
-        $this->assertEquals($expectedData, $this->model->getKeywords());
+        $this->assertSame($expectedData, $this->model->getKeywords());
     }
 
     public function testRobots()
@@ -237,7 +237,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $robots = 'test_robots';
         $this->model->setRobots($robots);
-        $this->assertEquals($robots, $this->model->getRobots());
+        $this->assertSame($robots, $this->model->getRobots());
     }
 
     public function testRobotsEmpty()
@@ -249,7 +249,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'store'
         )
             ->will($this->returnValue('default_robots'));
-        $this->assertEquals($expectedData, $this->model->getRobots());
+        $this->assertSame($expectedData, $this->model->getRobots());
     }
 
     public function testRobotsAdminhtml()
@@ -257,7 +257,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('adminhtml');
         $robots = 'test_robots';
         $this->model->setRobots($robots);
-        $this->assertEquals('NOINDEX,NOFOLLOW', $this->model->getRobots());
+        $this->assertSame('NOINDEX,NOFOLLOW', $this->model->getRobots());
     }
 
     public function testGetAssetCollection()
@@ -373,7 +373,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $className = 'test class';
         $this->assertInstanceOf(\Magento\Framework\View\Page\Config::class, $this->model->addBodyClass($className));
-        $this->assertEquals('test-class', $this->model->getElementAttribute('body', 'class'));
+        $this->assertSame('test-class', $this->model->getElementAttribute('body', 'class'));
     }
 
     /**
@@ -386,7 +386,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testElementAttribute($elementType, $attribute, $value)
     {
         $this->model->setElementAttribute($elementType, $attribute, $value);
-        $this->assertEquals($value, $this->model->getElementAttribute($elementType, $attribute));
+        $this->assertSame($value, $this->model->getElementAttribute($elementType, $attribute));
     }
 
     /**
@@ -462,7 +462,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         foreach ($attributes as $attribute => $value) {
             $this->model->setElementAttribute($elementType, $attribute, $value);
         }
-        $this->assertEquals($attributes, $this->model->getElementAttributes($elementType));
+        $this->assertSame($attributes, $this->model->getElementAttributes($elementType));
     }
 
     /**
@@ -489,7 +489,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testPageLayout($handle)
     {
         $this->model->setPageLayout($handle);
-        $this->assertEquals($handle, $this->model->getPageLayout());
+        $this->assertSame($handle, $this->model->getPageLayout());
     }
 
     /**
@@ -519,7 +519,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $expected = 'test';
         $this->favicon->expects($this->once())->method('getFaviconFile')->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->model->getFaviconFile());
+        $this->assertSame($expected, $this->model->getFaviconFile());
     }
 
     public function testGetDefaultFavicon()
@@ -552,7 +552,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('design/head/includes', 'store')
             ->willReturn($result);
-        $this->assertEquals($result, $model->getIncludes());
+        $this->assertSame($result, $model->getIncludes());
     }
 
     /**

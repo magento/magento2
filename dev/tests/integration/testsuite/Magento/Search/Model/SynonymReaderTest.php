@@ -63,9 +63,9 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
 
         $i = 0;
         foreach ($expectedResult as $r) {
-            $this->assertEquals($r['synonyms'], $data[$i]['synonyms']);
-            $this->assertEquals($r['store_id'], $data[$i]['store_id']);
-            $this->assertEquals($r['website_id'], $data[$i]['website_id']);
+            $this->assertSame($r['synonyms'], $data[$i]['synonyms']);
+            $this->assertSame($r['store_id'], $data[$i]['store_id']);
+            $this->assertSame($r['website_id'], $data[$i]['website_id']);
             ++$i;
         }
     }

@@ -91,7 +91,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->willReturn($websiteId);
 
         $this->assertSame($this->model, $this->model->setWebsiteId($websiteId));
-        $this->assertEquals($websiteId, $this->model->getWebsiteId());
+        $this->assertSame($websiteId, $this->model->getWebsiteId());
     }
 
     public function testGetWebsiteId()
@@ -111,19 +111,19 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsite')
             ->willReturn($websiteMock);
 
-        $this->assertEquals($websiteId, $this->model->getWebsiteId());
+        $this->assertSame($websiteId, $this->model->getWebsiteId());
 
         $this->storeManagerMock->expects($this->never())
             ->method('getWebsite')
             ->willReturn($websiteMock);
 
-        $this->assertEquals($websiteId, $this->model->getWebsiteId());
+        $this->assertSame($websiteId, $this->model->getWebsiteId());
     }
 
     public function testSetAndGetConditionName()
     {
         $conditionName = 'someName';
-        $this->assertEquals($this->model, $this->model->setConditionName($conditionName));
-        $this->assertEquals($conditionName, $this->model->getConditionName());
+        $this->assertSame($this->model, $this->model->setConditionName($conditionName));
+        $this->assertSame($conditionName, $this->model->getConditionName());
     }
 }

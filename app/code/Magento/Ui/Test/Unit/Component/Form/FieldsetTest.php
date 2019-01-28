@@ -53,6 +53,6 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetComponentName()
     {
-        $this->assertEquals(self::NAME, $this->fieldset->getComponentName());
+        $this->assertSame(self::NAME, $this->fieldset->getComponentName());
     }
 }

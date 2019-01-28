@@ -59,8 +59,8 @@ class MatchTest extends \PHPUnit\Framework\TestCase
         $select->from('someTable');
 
         $resultSelect = $match->build($scoreBuilder, $select, $query, $conditionType);
-        $this->assertEquals($expectedScoreCondition, $scoreBuilder->build());
-        $this->assertEquals($expectedSql, $resultSelect->assemble());
+        $this->assertSame($expectedScoreCondition, $scoreBuilder->build());
+        $this->assertSame($expectedSql, $resultSelect->assemble());
     }
 
     /**

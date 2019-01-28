@@ -82,9 +82,9 @@ class BillingTest extends \PHPUnit\Framework\TestCase
     {
         $addressFromFixture = $this->_addressRepository->getById(self::FIXTURE_ADDRESS_ID);
         $address = $this->_block->getAddress();
-        $this->assertEquals($addressFromFixture->getFirstname(), $address->getFirstname());
-        $this->assertEquals($addressFromFixture->getLastname(), $address->getLastname());
-        $this->assertEquals($addressFromFixture->getCustomerId(), $address->getCustomerId());
+        $this->assertSame($addressFromFixture->getFirstname(), $address->getFirstname());
+        $this->assertSame($addressFromFixture->getLastname(), $address->getLastname());
+        $this->assertSame($addressFromFixture->getCustomerId(), $address->getCustomerId());
     }
 
     /**
@@ -97,8 +97,8 @@ class BillingTest extends \PHPUnit\Framework\TestCase
         $this->_updateQuoteCustomerName();
         $address = $this->_block->getAddress();
         //Make sure the data from sample address was set correctly to the block from customer
-        $this->assertEquals(self::SAMPLE_FIRST_NAME, $address->getFirstname());
-        $this->assertEquals(self::SAMPLE_LAST_NAME, $address->getLastname());
+        $this->assertSame(self::SAMPLE_FIRST_NAME, $address->getFirstname());
+        $this->assertSame(self::SAMPLE_LAST_NAME, $address->getLastname());
     }
 
     /**
@@ -110,8 +110,8 @@ class BillingTest extends \PHPUnit\Framework\TestCase
     {
         $this->_updateQuoteCustomerName();
         //Make sure the data from sample address was set correctly to the block from customer
-        $this->assertEquals(self::SAMPLE_FIRST_NAME, $this->_block->getFirstname());
-        $this->assertEquals(self::SAMPLE_LAST_NAME, $this->_block->getLastname());
+        $this->assertSame(self::SAMPLE_FIRST_NAME, $this->_block->getFirstname());
+        $this->assertSame(self::SAMPLE_LAST_NAME, $this->_block->getLastname());
     }
 
     /**
@@ -133,7 +133,7 @@ class BillingTest extends \PHPUnit\Framework\TestCase
         $this->_block->getQuote()->setCustomer($customer);
         $this->_block->getQuote()->save();
 
-        $this->assertEquals(self::SAMPLE_FIRST_NAME, $this->_block->getFirstname());
-        $this->assertEquals(self::SAMPLE_LAST_NAME, $this->_block->getLastname());
+        $this->assertSame(self::SAMPLE_FIRST_NAME, $this->_block->getFirstname());
+        $this->assertSame(self::SAMPLE_LAST_NAME, $this->_block->getLastname());
     }
 }

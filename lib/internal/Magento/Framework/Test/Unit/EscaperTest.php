@@ -74,13 +74,13 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
                 || ($chr >= 0x61 && $chr <= 0x7A)
             ) {
                 $literal = $this->codepointToUtf8($chr);
-                $this->assertEquals($literal, $this->escaper->escapeJs($literal));
+                $this->assertSame($literal, $this->escaper->escapeJs($literal));
             } else {
                 $literal = $this->codepointToUtf8($chr);
                 if (in_array($literal, $immune)) {
-                    $this->assertEquals($literal, $this->escaper->escapeJs($literal));
+                    $this->assertSame($literal, $this->escaper->escapeJs($literal));
                 } else {
-                    $this->assertNotEquals(
+                    $this->assertNotSame(
                         $literal,
                         $this->escaper->escapeJs($literal),
                         $literal . ' should be escaped!'
@@ -97,7 +97,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      */
     public function testEscapeJs($data, $expected)
     {
-        $this->assertEquals($expected, $this->escaper->escapeJs($data));
+        $this->assertSame($expected, $this->escaper->escapeJs($data));
     }
 
     /**
@@ -142,7 +142,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     public function testEscapeHtml($data, $expected, $allowedTags = [])
     {
         $actual = $this->escaper->escapeHtml($data, $allowedTags);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -154,7 +154,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical');
         $actual = $this->escaper->escapeHtml($data, $allowedTags);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -267,8 +267,8 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     {
         $data = 'http://example.com/search?term=this+%26+that&view=list';
         $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
-        $this->assertEquals($expected, $this->escaper->escapeUrl($data));
-        $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
+        $this->assertSame($expected, $this->escaper->escapeUrl($data));
+        $this->assertSame($expected, $this->escaper->escapeUrl($expected));
     }
 
     /**
@@ -278,8 +278,8 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     {
         $data = ["Don't do that.", 'lost_key' => "Can't do that."];
         $expected = ["Don\\'t do that.", "Can\\'t do that."];
-        $this->assertEquals($expected, $this->escaper->escapeJsQuote($data));
-        $this->assertEquals($expected[0], $this->escaper->escapeJsQuote($data[0]));
+        $this->assertSame($expected, $this->escaper->escapeJsQuote($data));
+        $this->assertSame($expected[0], $this->escaper->escapeJsQuote($data[0]));
     }
 
     /**
@@ -292,8 +292,8 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
             "Text with &#039;single&#039; and &quot;double&quot; quotes",
             "Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes",
         ];
-        $this->assertEquals($expected[0], $this->escaper->escapeQuote($data));
-        $this->assertEquals($expected[1], $this->escaper->escapeQuote($data, true));
+        $this->assertSame($expected[0], $this->escaper->escapeQuote($data));
+        $this->assertSame($expected[1], $this->escaper->escapeQuote($data, true));
     }
 
     /**
@@ -304,7 +304,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      */
     public function testEscapeXssInUrl($input, $expected)
     {
-        $this->assertEquals($expected, $this->escaper->escapeXssInUrl($input));
+        $this->assertSame($expected, $this->escaper->escapeXssInUrl($input));
     }
 
     /**

@@ -45,14 +45,14 @@ class RequestDataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNameRetrievesFileName()
     {
-        $this->assertEquals('file_name_1', $this->_model->getName('section_1/group_1/field_1'));
-        $this->assertEquals('file_name_2', $this->_model->getName('section_1/group_2/group_2_1/field_2'));
+        $this->assertSame('file_name_1', $this->_model->getName('section_1/group_1/field_1'));
+        $this->assertSame('file_name_2', $this->_model->getName('section_1/group_2/group_2_1/field_2'));
     }
 
     public function testGetTmpNameRetrievesFileName()
     {
-        $this->assertEquals('file_tmp_name_1', $this->_model->getTmpName('section_1/group_1/field_1'));
-        $this->assertEquals('file_tmp_name_2', $this->_model->getTmpName('section_1/group_2/group_2_1/field_2'));
+        $this->assertSame('file_tmp_name_1', $this->_model->getTmpName('section_1/group_1/field_1'));
+        $this->assertSame('file_tmp_name_2', $this->_model->getTmpName('section_1/group_2/group_2_1/field_2'));
     }
 
     public function testGetNameReturnsNullIfInvalidPathIsProvided()

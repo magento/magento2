@@ -116,12 +116,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
         $quote->collectTotals();
 
         /** Check results */
-        $this->assertEquals(
+        $this->assertSame(
             $customerTaxClass->getId(),
             $quote->getCustomerTaxClassId(),
             'Customer tax class ID in quote is invalid.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             21.5,
             $quote->getGrandTotal(),
             'Customer tax was collected by \Magento\Tax\Model\Sales\Total\Quote\Tax::collect incorrectly.'
@@ -172,7 +172,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     protected function verifyItem($item, $expectedItemData)
     {
         foreach ($expectedItemData as $key => $value) {
-            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+            $this->assertSame($value, $item->getData($key), 'item ' . $key . ' is incorrect');
         }
 
         return $this;
@@ -188,7 +188,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     protected function verifyAppliedTaxRate($appliedTaxRate, $expectedAppliedTaxRate)
     {
         foreach ($expectedAppliedTaxRate as $key => $value) {
-            $this->assertEquals($value, $appliedTaxRate[$key], 'Applied tax rate ' . $key . ' is incorrect');
+            $this->assertSame($value, $appliedTaxRate[$key], 'Applied tax rate ' . $key . ' is incorrect');
         }
         return $this;
     }
@@ -208,7 +208,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
                     $this->verifyAppliedTaxRate($appliedTax['rates'][$index], $taxRate);
                 }
             } else {
-                $this->assertEquals($value, $appliedTax[$key], 'Applied tax ' . $key . ' is incorrect');
+                $this->assertSame($value, $appliedTax[$key], 'Applied tax ' . $key . ' is incorrect');
             }
         }
         return $this;
@@ -243,7 +243,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
             if ($key == 'applied_taxes') {
                 $this->verifyAppliedTaxes($quoteAddress->getAppliedTaxes(), $value);
             } else {
-                $this->assertEquals($value, $quoteAddress->getData($key), 'Quote address ' . $key . ' is incorrect');
+                $this->assertSame($value, $quoteAddress->getData($key), 'Quote address ' . $key . ' is incorrect');
             }
         }
 

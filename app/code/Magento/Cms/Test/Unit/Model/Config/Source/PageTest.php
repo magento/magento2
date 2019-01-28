@@ -59,6 +59,6 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->method('toOptionIdArray')
             ->will($this->returnValue('return-value'));
 
-        $this->assertEquals('return-value', $this->page->toOptionArray());
+        $this->assertSame('return-value', $this->page->toOptionArray());
     }
 }

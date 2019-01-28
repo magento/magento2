@@ -143,7 +143,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->scope->expects($this->any())->method('getId')->willReturn(123);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->select,
             $this->model->getSelect($this->abstractAttributeMock, 4, $this->scope)
         );
@@ -189,7 +189,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->scope->expects($this->any())->method('getId')->willReturn(123);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->select,
             $this->model->getSelect($this->abstractAttributeMock, 4, $this->scope)
         );

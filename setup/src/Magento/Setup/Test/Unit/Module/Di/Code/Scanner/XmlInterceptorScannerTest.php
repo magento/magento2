@@ -39,6 +39,6 @@ class XmlInterceptorScannerTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\Cache\Interceptor::class,
             \Magento\Framework\App\Action\Context\Interceptor::class,
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

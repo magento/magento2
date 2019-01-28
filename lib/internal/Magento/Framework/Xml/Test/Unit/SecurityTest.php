@@ -39,7 +39,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
      */
     public function testScan($xmlContent, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->security->scan($xmlContent));
+        $this->assertSame($expectedResult, $this->security->scan($xmlContent));
     }
 
     /**

@@ -39,20 +39,20 @@ class ChainTest extends \PHPUnit\Framework\TestCase
 
     public function testGettersAndSetters()
     {
-        $this->assertEquals('origType', $this->object->getOrigContentType());
-        $this->assertEquals('origType', $this->object->getContentType());
-        $this->assertEquals('origContent', $this->object->getOrigContent());
-        $this->assertEquals('origContent', $this->object->getContent());
-        $this->assertEquals('assetType', $this->object->getTargetContentType());
+        $this->assertSame('origType', $this->object->getOrigContentType());
+        $this->assertSame('origType', $this->object->getContentType());
+        $this->assertSame('origContent', $this->object->getOrigContent());
+        $this->assertSame('origContent', $this->object->getContent());
+        $this->assertSame('assetType', $this->object->getTargetContentType());
 
         $this->object->setContent('anotherContent');
         $this->object->setContentType('anotherType');
 
-        $this->assertEquals('origType', $this->object->getOrigContentType());
-        $this->assertEquals('anotherType', $this->object->getContentType());
-        $this->assertEquals('origContent', $this->object->getOrigContent());
-        $this->assertEquals('anotherContent', $this->object->getContent());
-        $this->assertEquals('assetType', $this->object->getTargetContentType());
+        $this->assertSame('origType', $this->object->getOrigContentType());
+        $this->assertSame('anotherType', $this->object->getContentType());
+        $this->assertSame('origContent', $this->object->getOrigContent());
+        $this->assertSame('anotherContent', $this->object->getContent());
+        $this->assertSame('assetType', $this->object->getTargetContentType());
     }
 
     /**
@@ -75,7 +75,7 @@ class ChainTest extends \PHPUnit\Framework\TestCase
     {
         $this->object->setContent($content);
         $this->object->setContentType($type);
-        $this->assertEquals($expected, $this->object->isChanged());
+        $this->assertSame($expected, $this->object->isChanged());
     }
 
     /**

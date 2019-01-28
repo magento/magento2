@@ -81,9 +81,9 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
 
         $actual = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'type' => $linkType]);
 
-        $this->assertEquals('simple', $actual[0]['linked_product_type']);
-        $this->assertEquals('simple', $actual[0]['linked_product_sku']);
-        $this->assertEquals(1, $actual[0]['position']);
+        $this->assertSame('simple', $actual[0]['linked_product_type']);
+        $this->assertSame('simple', $actual[0]['linked_product_sku']);
+        $this->assertSame(1, $actual[0]['position']);
     }
 
     /**
@@ -125,7 +125,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
         array_walk($actual, function (&$item) {
             $item = $item->__toArray();
         });
-        $this->assertEquals([$linkData], $actual);
+        $this->assertSame([$linkData], $actual);
     }
 
     /**

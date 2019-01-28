@@ -47,7 +47,7 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
         );
         $commandTester->execute([]);
         $expectedMsg = 'Cron is disabled. Jobs were not run.' . PHP_EOL;
-        $this->assertEquals($expectedMsg, $commandTester->getDisplay());
+        $this->assertSame($expectedMsg, $commandTester->getDisplay());
     }
 
     /**
@@ -76,6 +76,6 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
         );
         $commandTester->execute([]);
         $expectedMsg = 'Ran jobs by schedule.' . PHP_EOL;
-        $this->assertEquals($expectedMsg, $commandTester->getDisplay());
+        $this->assertSame($expectedMsg, $commandTester->getDisplay());
     }
 }

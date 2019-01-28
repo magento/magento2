@@ -39,7 +39,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $document = new \DOMDocument();
         $document->load(__DIR__ . '/ConvertibleContent/rules.xml');
 
-        $this->assertEquals($expected, $this->converter->convert($document));
+        $this->assertSame($expected, $this->converter->convert($document));
     }
 
     /**

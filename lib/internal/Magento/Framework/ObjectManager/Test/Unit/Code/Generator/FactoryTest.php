@@ -58,6 +58,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $generator->method('_validateData')
             ->willReturn(true);
         $generated = $generator->generate();
-        $this->assertEquals('sample_file.php', $generated);
+        $this->assertSame('sample_file.php', $generated);
     }
 }

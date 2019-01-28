@@ -95,6 +95,6 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
         $expected = [
             \Magento\Robots\Model\Config\Value::CACHE_TAG . '_' . $storeId,
         ];
-        $this->assertEquals($expected, $this->model->getIdentities());
+        $this->assertSame($expected, $this->model->getIdentities());
     }
 }

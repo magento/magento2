@@ -30,7 +30,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStateKey()
     {
-        $this->assertEquals('STORE_1_CAT_4_CUSTGROUP_0', $this->_model->getStateKey());
+        $this->assertSame('STORE_1_CAT_4_CUSTGROUP_0', $this->_model->getStateKey());
     }
 
     public function testGetProductCollection()
@@ -39,7 +39,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $collection = $this->_model->getProductCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
         $ids = $collection->getAllIds();
-        $this->assertEquals(2, count($ids));
+        $this->assertSame(2, count($ids));
         $this->assertSame($collection, $this->_model->getProductCollection());
     }
 
@@ -74,13 +74,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_model->apply();
-        $this->assertEquals(
+        $this->assertSame(
             'STORE_1_CAT_4_CUSTGROUP_0_cat_expected-value-string_decimal_1234',
             $this->_model->getStateKey()
         );
 
         $this->_model->apply();
-        $this->assertEquals(
+        $this->assertSame(
             'STORE_1_CAT_4_CUSTGROUP_0_cat_expected-value-string_decimal_1234_cat_expected-value-string_decimal_1234',
             $this->_model->getStateKey()
         );
@@ -108,7 +108,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $model->setCurrentCategory(3);
         $actualCategory = $model->getCurrentCategory();
         $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $actualCategory);
-        $this->assertEquals(3, $actualCategory->getId());
+        $this->assertSame(3, $actualCategory->getId());
         $this->assertSame($actualCategory, $model->getCurrentCategory());
 
         /* Category in registry */

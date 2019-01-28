@@ -71,8 +71,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit\Form::class, 'block');
         $form = $block->getForm();
 
-        $this->assertEquals('edit_form', $form->getId());
-        $this->assertEquals('post', $form->getMethod());
+        $this->assertSame('edit_form', $form->getId());
+        $this->assertSame('post', $form->getMethod());
         $baseFieldSet = $form->getElement('base_fieldset');
         $this->assertNotNull($baseFieldSet);
         $groupCodeElement = $form->getElement('customer_group_code');
@@ -81,12 +81,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($taxClassIdElement);
         $idElement = $form->getElement('id');
         $this->assertNotNull($idElement);
-        $this->assertEquals('1', $idElement->getValue());
-        $this->assertEquals('3', $taxClassIdElement->getValue());
+        $this->assertSame('1', $idElement->getValue());
+        $this->assertSame('3', $taxClassIdElement->getValue());
         /** @var \Magento\Tax\Model\TaxClass\Source\Customer $taxClassCustomer */
         $taxClassCustomer = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Customer::class);
-        $this->assertEquals($taxClassCustomer->toOptionArray(false), $taxClassIdElement->getData('values'));
-        $this->assertEquals('General', $groupCodeElement->getValue());
+        $this->assertSame($taxClassCustomer->toOptionArray(false), $taxClassIdElement->getData('values'));
+        $this->assertSame('General', $groupCodeElement->getValue());
     }
 
     /**
@@ -107,8 +107,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit\Form::class, 'block');
         $form = $block->getForm();
 
-        $this->assertEquals('edit_form', $form->getId());
-        $this->assertEquals('post', $form->getMethod());
+        $this->assertSame('edit_form', $form->getId());
+        $this->assertSame('post', $form->getMethod());
         $baseFieldSet = $form->getElement('base_fieldset');
         $this->assertNotNull($baseFieldSet);
         $groupCodeElement = $form->getElement('customer_group_code');
@@ -117,11 +117,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($taxClassIdElement);
         $idElement = $form->getElement('id');
         $this->assertNotNull($idElement);
-        $this->assertEquals($customerGroup->getId(), $idElement->getValue());
-        $this->assertEquals($customerGroup->getTaxClassId(), $taxClassIdElement->getValue());
+        $this->assertSame($customerGroup->getId(), $idElement->getValue());
+        $this->assertSame($customerGroup->getTaxClassId(), $taxClassIdElement->getValue());
         /** @var \Magento\Tax\Model\TaxClass\Source\Customer $taxClassCustomer */
         $taxClassCustomer = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Customer::class);
-        $this->assertEquals($taxClassCustomer->toOptionArray(false), $taxClassIdElement->getData('values'));
-        $this->assertEquals($customerGroup->getCode(), $groupCodeElement->getValue());
+        $this->assertSame($taxClassCustomer->toOptionArray(false), $taxClassIdElement->getData('values'));
+        $this->assertSame($customerGroup->getCode(), $groupCodeElement->getValue());
     }
 }

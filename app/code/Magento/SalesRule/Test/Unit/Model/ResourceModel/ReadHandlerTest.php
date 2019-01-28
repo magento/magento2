@@ -97,6 +97,6 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             'website_ids' => [3, 4, 5],
         ];
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

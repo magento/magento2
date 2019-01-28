@@ -34,10 +34,10 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall($serviceInfo, $arguments);
         $this->assertNotNull($result);
-        $this->assertEquals($attributeSet->getId(), $result['attribute_set_id']);
-        $this->assertEquals($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
-        $this->assertEquals($attributeSet->getEntityTypeId(), $result['entity_type_id']);
-        $this->assertEquals($attributeSet->getSortOrder(), $result['sort_order']);
+        $this->assertSame($attributeSet->getId(), $result['attribute_set_id']);
+        $this->assertSame($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
+        $this->assertSame($attributeSet->getEntityTypeId(), $result['entity_type_id']);
+        $this->assertSame($attributeSet->getSortOrder(), $result['sort_order']);
     }
 
     /**
@@ -98,11 +98,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $this->assertNotNull($result);
         // Reload attribute set data
         $attributeSet = $this->getAttributeSetByName($attributeSetName);
-        $this->assertEquals($attributeSet->getAttributeSetId(), $result['attribute_set_id']);
-        $this->assertEquals($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
-        $this->assertEquals($attributeSet->getEntityTypeId(), $result['entity_type_id']);
-        $this->assertEquals($updatedSortOrder, $result['sort_order']);
-        $this->assertEquals($attributeSet->getSortOrder(), $result['sort_order']);
+        $this->assertSame($attributeSet->getAttributeSetId(), $result['attribute_set_id']);
+        $this->assertSame($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
+        $this->assertSame($attributeSet->getEntityTypeId(), $result['entity_type_id']);
+        $this->assertSame($updatedSortOrder, $result['sort_order']);
+        $this->assertSame($attributeSet->getSortOrder(), $result['sort_order']);
     }
 
     /**
@@ -189,7 +189,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 

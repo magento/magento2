@@ -285,7 +285,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->attribute->setData('is_searchable_in_grid', $isSearchableInGrid);
         $this->attribute->setData(AttributeInterface::FRONTEND_INPUT, $frontendInput);
 
-        $this->assertEquals($result, $this->attribute->canBeSearchableInGrid());
+        $this->assertSame($result, $this->attribute->canBeSearchableInGrid());
     }
 
     /**
@@ -321,7 +321,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->attribute->setData('is_filterable_in_grid', $isFilterableInGrid);
         $this->attribute->setData(AttributeInterface::FRONTEND_INPUT, $frontendInput);
 
-        $this->assertEquals($result, $this->attribute->canBeFilterableInGrid());
+        $this->assertSame($result, $this->attribute->canBeFilterableInGrid());
     }
 
     /**

@@ -45,7 +45,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEmpty($this->_model->getPrice());
         $this->_model->setPrice(10.0);
-        $this->assertEquals(10.0, $this->_model->getPrice());
+        $this->assertSame(10.0, $this->_model->getPrice());
     }
 
     /**
@@ -63,7 +63,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTierPrice()
     {
-        $this->assertEquals([], $this->_model->getTierPrice());
+        $this->assertSame([], $this->_model->getTierPrice());
     }
 
     /**
@@ -71,7 +71,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTierPriceCount()
     {
-        $this->assertEquals(0, $this->_model->getTierPriceCount());
+        $this->assertSame(0, $this->_model->getTierPriceCount());
     }
 
     /**
@@ -79,7 +79,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormatedPrice()
     {
-        $this->assertEquals('<span class="price">$0.00</span>', $this->_model->getFormatedPrice());
+        $this->assertSame('<span class="price">$0.00</span>', $this->_model->getFormatedPrice());
     }
 
     /**
@@ -87,10 +87,10 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetGetFinalPrice()
     {
-        $this->assertEquals(0, $this->_model->getFinalPrice());
+        $this->assertSame(0, $this->_model->getFinalPrice());
         $this->_model->setPrice(10);
         $this->_model->setFinalPrice(10);
-        $this->assertEquals(10, $this->_model->getFinalPrice());
+        $this->assertSame(10, $this->_model->getFinalPrice());
     }
 
     /**
@@ -107,7 +107,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
         $collection->load();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $collection->getFirstItem();
-        $this->assertEquals(323, $product->getData('min_price'));
+        $this->assertSame(323, $product->getData('min_price'));
     }
 
     /**
@@ -122,7 +122,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
         $collection->addPriceData();
         $collection->load();
         $product = $collection->getFirstItem();
-        $this->assertEquals(10, $product->getData('min_price'));
+        $this->assertSame(10, $product->getData('min_price'));
 
         $childProduct = $this->productRepository->get('simple_10');
         $stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
@@ -131,6 +131,6 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
         $stockRegistry->updateStockItemBySku($childProduct->getSku(), $stockItem);
         $collection->clear()->load();
         $product = $collection->getFirstItem();
-        $this->assertEquals(20, $product->getData('min_price'));
+        $this->assertSame(20, $product->getData('min_price'));
     }
 }

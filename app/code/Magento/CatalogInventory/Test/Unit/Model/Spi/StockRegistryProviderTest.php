@@ -229,7 +229,7 @@ class StockRegistryProviderTest extends \PHPUnit\Framework\TestCase
         $stockCollection->expects($this->once())->method('getItems')->willReturn([$this->stock]);
         $this->stockRepository->expects($this->once())->method('getList')->willReturn($stockCollection);
         $this->stock->expects($this->once())->method('getStockId')->willReturn(true);
-        $this->assertEquals($this->stock, $this->stockRegistryProvider->getStock($this->scopeId));
+        $this->assertSame($this->stock, $this->stockRegistryProvider->getStock($this->scopeId));
     }
 
     public function testGetStockItem()
@@ -243,7 +243,7 @@ class StockRegistryProviderTest extends \PHPUnit\Framework\TestCase
         $stockItemCollection->expects($this->once())->method('getItems')->willReturn([$this->stockItem]);
         $this->stockItemRepository->expects($this->once())->method('getList')->willReturn($stockItemCollection);
         $this->stockItem->expects($this->once())->method('getItemId')->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             $this->stockItem,
             $this->stockRegistryProvider->getStockItem($this->productId, $this->scopeId)
         );
@@ -263,7 +263,7 @@ class StockRegistryProviderTest extends \PHPUnit\Framework\TestCase
         $stockStatusCollection->expects($this->once())->method('getItems')->willReturn([$this->stockStatus]);
         $this->stockStatusRepository->expects($this->once())->method('getList')->willReturn($stockStatusCollection);
         $this->stockStatus->expects($this->once())->method('getProductId')->willReturn($this->productId);
-        $this->assertEquals(
+        $this->assertSame(
             $this->stockStatus,
             $this->stockRegistryProvider->getStockStatus($this->productId, $this->scopeId)
         );

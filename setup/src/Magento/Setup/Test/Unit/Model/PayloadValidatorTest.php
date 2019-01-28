@@ -35,7 +35,7 @@ class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidatePayLoad($type, $has, $moduleExists)
     {
         $this->fullModuleList->expects($this->exactly($has))->method('has')->willReturn($moduleExists);
-        $this->assertEquals('', $this->model->validatePayload($type));
+        $this->assertSame('', $this->model->validatePayload($type));
     }
 
     /**

@@ -219,7 +219,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
                 '2_10' => ['count' => 5],
                 '*_*' => ['count' => 2]
             ]);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $this->filterItem
             ],

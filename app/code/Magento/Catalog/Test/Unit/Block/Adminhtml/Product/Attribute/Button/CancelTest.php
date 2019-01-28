@@ -25,7 +25,7 @@ class CancelTest extends GenericTest
 
     public function testGetButtonData()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'label' => __('Cancel'),
                 'data_attribute' => [

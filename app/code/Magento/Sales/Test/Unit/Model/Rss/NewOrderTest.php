@@ -152,17 +152,17 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
         $this->layout->expects($this->once())->method('getBlockSingleton')->will($this->returnValue($block));
         $this->urlBuilder->expects($this->once())->method('getUrl')
             ->will($this->returnValue('http://magento.com/sales/order/view/order_id/1'));
-        $this->assertEquals($this->feedData, $this->model->getRssData());
+        $this->assertSame($this->feedData, $this->model->getRssData());
     }
 
     public function testGetCacheKey()
     {
-        $this->assertEquals('rss_new_orders_data', $this->model->getCacheKey());
+        $this->assertSame('rss_new_orders_data', $this->model->getCacheKey());
     }
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(60, $this->model->getCacheLifetime());
+        $this->assertSame(60, $this->model->getCacheLifetime());
     }
 
     public function getFeeds()

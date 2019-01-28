@@ -247,6 +247,6 @@ class CreditmemoLoaderTest extends \PHPUnit\Framework\TestCase
             ->with($invoiceMock, $data)
             ->willReturn($creditmemoMock);
 
-        $this->assertEquals($creditmemoMock, $this->loader->load());
+        $this->assertSame($creditmemoMock, $this->loader->load());
     }
 }

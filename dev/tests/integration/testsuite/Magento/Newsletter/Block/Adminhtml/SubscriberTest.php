@@ -22,8 +22,8 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $childBlock = $layout->addBlock(\Magento\Framework\View\Element\Template::class, 'grid', 'block');
 
         $expected = 'test_data';
-        $this->assertNotEquals($expected, $block->getShowQueueAdd());
+        $this->assertNotSame($expected, $block->getShowQueueAdd());
         $childBlock->setShowQueueAdd($expected);
-        $this->assertEquals($expected, $block->getShowQueueAdd());
+        $this->assertSame($expected, $block->getShowQueueAdd());
     }
 }

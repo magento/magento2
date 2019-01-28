@@ -293,7 +293,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('assignCustomer')->with($dataCustomerMock);
         $quoteMock->expects($this->once())->method('setIgnoreOldQty')->with(true);
         $quoteMock->expects($this->once())->method('setIsSuperMode')->with(true);
-        $this->assertEquals($quoteMock, $this->quote->getQuote());
+        $this->assertSame($quoteMock, $this->quote->getQuote());
     }
 
     /**
@@ -360,7 +360,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->with($quoteId)
             ->willReturn($quoteMock);
 
-        $this->assertEquals($quoteMock, $this->quote->getQuote());
+        $this->assertSame($quoteMock, $this->quote->getQuote());
     }
 
     /**

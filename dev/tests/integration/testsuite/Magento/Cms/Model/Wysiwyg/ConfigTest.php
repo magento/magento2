@@ -74,8 +74,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['configProvider' => $compositeConfigProvider]
         );
         $config = $model->getConfig();
-        $this->assertEquals(TestModuleWysiwygConfig::CONFIG_HEIGHT, $config['height']);
-        $this->assertEquals(TestModuleWysiwygConfig::CONFIG_CONTENT_CSS, $config['content_css']);
+        $this->assertSame(TestModuleWysiwygConfig::CONFIG_HEIGHT, $config['height']);
+        $this->assertSame(TestModuleWysiwygConfig::CONFIG_CONTENT_CSS, $config['content_css']);
         $this->assertArrayHasKey('tinymce4', $config);
         $this->assertArrayHasKey('toolbar', $config['tinymce4']);
         $this->assertNotContains(

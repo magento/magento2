@@ -119,7 +119,7 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
         )->willReturn(
             $lastInsertId
         );
-        $this->assertEquals(
+        $this->assertSame(
             sprintf(
                 Sequence::DEFAULT_PATTERN,
                 $this->sequenceParameters()->prefix,

@@ -70,7 +70,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(['simple_name' => 'simpleName'])
         );
-        $this->assertEquals(
+        $this->assertSame(
             'simpleName',
             $this->configurable->aroundGetName($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -80,7 +80,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
         $this->itemMock->expects($this->never())->method('getProductOptions');
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->configurable->aroundGetName($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -102,7 +102,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(['simple_sku' => 'simpleName'])
         );
-        $this->assertEquals(
+        $this->assertSame(
             'simpleName',
             $this->configurable->aroundGetSku($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -112,7 +112,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
         $this->itemMock->expects($this->never())->method('getProductOptions');
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->configurable->aroundGetSku($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -150,7 +150,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('id')
         );
-        $this->assertEquals(
+        $this->assertSame(
             'id',
             $this->configurable->aroundGetProductId($this->subjectMock, $this->closureMock, $this->itemMock)
         );
@@ -160,7 +160,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
         $this->itemMock->expects($this->never())->method('getProductOptions');
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->configurable->aroundGetProductId($this->subjectMock, $this->closureMock, $this->itemMock)
         );

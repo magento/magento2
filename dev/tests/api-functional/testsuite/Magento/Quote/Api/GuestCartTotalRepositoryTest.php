@@ -103,7 +103,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
             unset($actual['extension_attributes']);
         }
 
-        $this->assertEquals($data, $actual);
+        $this->assertSame($data, $actual);
     }
 
     /**

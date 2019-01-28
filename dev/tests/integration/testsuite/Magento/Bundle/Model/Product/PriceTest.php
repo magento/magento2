@@ -32,9 +32,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         // Note that this is really not the "tier price" but the "tier discount percentage"
         // so it is expected to be increasing instead of decreasing
-        $this->assertEquals(8.0, $this->_model->getTierPrice(2, $product));
-        $this->assertEquals(20.0, $this->_model->getTierPrice(3, $product));
-        $this->assertEquals(20.0, $this->_model->getTierPrice(4, $product));
-        $this->assertEquals(30.0, $this->_model->getTierPrice(5, $product));
+        $this->assertSame(8.0, $this->_model->getTierPrice(2, $product));
+        $this->assertSame(20.0, $this->_model->getTierPrice(3, $product));
+        $this->assertSame(20.0, $this->_model->getTierPrice(4, $product));
+        $this->assertSame(30.0, $this->_model->getTierPrice(5, $product));
     }
 }

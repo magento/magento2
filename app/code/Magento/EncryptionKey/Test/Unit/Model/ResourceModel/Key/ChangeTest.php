@@ -134,14 +134,14 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
         $this->setUpChangeEncryptionKey();
         $this->randomMock->expects($this->never())->method('getRandomString');
         $key = 'key';
-        $this->assertEquals($key, $this->model->changeEncryptionKey($key));
+        $this->assertSame($key, $this->model->changeEncryptionKey($key));
     }
 
     public function testChangeEncryptionKeyAutogenerate()
     {
         $this->setUpChangeEncryptionKey();
         $this->randomMock->expects($this->once())->method('getRandomString')->willReturn('abc');
-        $this->assertEquals(md5('abc'), $this->model->changeEncryptionKey());
+        $this->assertSame(md5('abc'), $this->model->changeEncryptionKey());
     }
 
     public function testChangeEncryptionKeyThrowsException()

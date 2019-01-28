@@ -172,7 +172,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
             'test_template',
             'test_title'
         ];
-        $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
+        $this->assertSame($cacheKey, $this->productsList->getCacheKeyInfo());
     }
 
     public function testGetProductPriceHtml()
@@ -198,7 +198,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
             ->willReturn('<html>');
         $this->layout->expects($this->once())->method('getBlock')->willReturn($priceRenderer);
 
-        $this->assertEquals('<html>', $this->productsList->getProductPriceHtml(
+        $this->assertSame('<html>', $this->productsList->getProductPriceHtml(
             $product,
             'some-price-type',
             \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
@@ -211,7 +211,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPagerHtmlEmpty()
     {
-        $this->assertEquals('', $this->productsList->getPagerHtml());
+        $this->assertSame('', $this->productsList->getPagerHtml());
     }
 
     public function testGetPagerHtml()
@@ -248,7 +248,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
         $pagerBlock->expects($this->once())->method('toHtml')->willReturn('<pager_html>');
         $this->layout->expects($this->once())->method('createBlock')->willReturn($pagerBlock);
-        $this->assertEquals('<pager_html>', $this->productsList->getPagerHtml());
+        $this->assertSame('<pager_html>', $this->productsList->getPagerHtml());
     }
 
     /**
@@ -339,27 +339,27 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductsCount()
     {
-        $this->assertEquals(10, $this->productsList->getProductsCount());
+        $this->assertSame(10, $this->productsList->getProductsCount());
         $this->productsList->setProductsCount(2);
-        $this->assertEquals(2, $this->productsList->getProductsCount());
+        $this->assertSame(2, $this->productsList->getProductsCount());
     }
 
     public function testGetProductsPerPage()
     {
         $this->productsList->setData('products_per_page', 2);
-        $this->assertEquals(2, $this->productsList->getProductsPerPage());
+        $this->assertSame(2, $this->productsList->getProductsPerPage());
     }
 
     public function testGetDefaultProductsPerPage()
     {
-        $this->assertEquals(ProductsList::DEFAULT_PRODUCTS_PER_PAGE, $this->productsList->getProductsPerPage());
+        $this->assertSame(ProductsList::DEFAULT_PRODUCTS_PER_PAGE, $this->productsList->getProductsPerPage());
     }
 
     public function testShowPager()
     {
-        $this->assertEquals(false, $this->productsList->showPager());
+        $this->assertSame(false, $this->productsList->showPager());
         $this->productsList->setData('show_pager', true);
-        $this->assertEquals(true, $this->productsList->showPager());
+        $this->assertSame(true, $this->productsList->showPager());
     }
 
     public function testGetIdentities()
@@ -382,7 +382,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         );
         $this->productsList->setData('product_collection', $collection);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['product_identity'],
             $this->productsList->getIdentities()
         );
@@ -416,7 +416,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
     public function testGetNonDefaultTitle()
     {
         $this->productsList->setTitle('Custom Title');
-        $this->assertEquals('Custom Title', $this->productsList->getTitle());
+        $this->assertSame('Custom Title', $this->productsList->getTitle());
     }
 
     public function testScope()

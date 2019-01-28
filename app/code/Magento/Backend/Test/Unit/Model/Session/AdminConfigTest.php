@@ -96,7 +96,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals('/backend', $adminConfig->getCookiePath());
+        $this->assertSame('/backend', $adminConfig->getCookiePath());
     }
 
     /**

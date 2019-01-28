@@ -29,12 +29,12 @@ class FilesCollectorTest extends \PHPUnit\Framework\TestCase
     {
         $expectedResult = [$this->_testDir . 'default.xml', $this->_testDir . 'file.js'];
         $files = $this->_filesCollector->getFiles([$this->_testDir]);
-        $this->assertEquals($expectedResult, $files);
+        $this->assertSame($expectedResult, $files);
     }
 
     public function testGetFilesWithMask()
     {
         $expectedResult = [$this->_testDir . 'file.js'];
-        $this->assertEquals($expectedResult, $this->_filesCollector->getFiles([$this->_testDir], '/\.js$/'));
+        $this->assertSame($expectedResult, $this->_filesCollector->getFiles([$this->_testDir], '/\.js$/'));
     }
 }

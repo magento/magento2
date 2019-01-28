@@ -66,7 +66,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $dataSourceModel->getIterator());
 
         $bunch = $dataSourceModel->getNextBunch();
-        $this->assertEquals($expected, $bunch[0]);
+        $this->assertSame($expected, $bunch[0]);
 
         //Delete created bunch from DB
         $dataSourceModel->cleanBunches();

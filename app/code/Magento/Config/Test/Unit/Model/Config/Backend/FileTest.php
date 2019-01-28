@@ -152,8 +152,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->with($uploadDir . '/' . $scope . '/' . $scopeId, null)
             ->willReturn($result);
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
-        $this->assertEquals($this->model->getValue(), $scope . '/' . $scopeId . '/' . $fileName);
+        $this->assertSame($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model->getValue(), $scope . '/' . $scopeId . '/' . $fileName);
     }
 
     public function testBeforeWithoutRequest()
@@ -197,8 +197,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->with($uploadDir, null)
             ->willReturn($result);
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
-        $this->assertEquals($this->model->getValue(), $fileName);
+        $this->assertSame($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model->getValue(), $fileName);
     }
 
     public function testBeforeWithoutFile()
@@ -223,8 +223,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->with($path)
             ->willReturn('');
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
-        $this->assertEquals($this->model->getValue(), null);
+        $this->assertSame($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model->getValue(), null);
     }
 
     public function testBeforeWithDelete()
@@ -249,8 +249,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->with($path)
             ->willReturn('');
 
-        $this->assertEquals($this->model, $this->model->beforeSave());
-        $this->assertEquals($this->model->getValue(), '');
+        $this->assertSame($this->model, $this->model->beforeSave());
+        $this->assertSame($this->model->getValue(), '');
     }
 
     /**

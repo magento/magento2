@@ -21,6 +21,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultCountry()
     {
-        $this->assertEquals('US', $this->helper->getDefaultCountry());
+        $this->assertSame('US', $this->helper->getDefaultCountry());
     }
 }

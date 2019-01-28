@@ -75,7 +75,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->sampleRepositoryMock->expects($this->never())
             ->method('delete');
 
-        $this->assertEquals($entityMock, $this->model->execute($entityMock));
+        $this->assertSame($entityMock, $this->model->execute($entityMock));
     }
 
     public function testExecuteNonDownloadable()
@@ -101,6 +101,6 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->sampleRepositoryMock->expects($this->never())
             ->method('delete');
 
-        $this->assertEquals($entityMock, $this->model->execute($entityMock));
+        $this->assertSame($entityMock, $this->model->execute($entityMock));
     }
 }

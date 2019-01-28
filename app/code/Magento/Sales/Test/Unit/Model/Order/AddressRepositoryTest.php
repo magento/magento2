@@ -101,7 +101,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
                 $this->subject->get($id);
             } else {
-                $this->assertEquals($address, $this->subject->get($id));
+                $this->assertSame($address, $this->subject->get($id));
 
                 $address->expects($this->never())
                     ->method('load')
@@ -116,7 +116,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
                     ->willReturn($address);
 
                 // Retrieve Address from registry.
-                $this->assertEquals($address, $this->subject->get($id));
+                $this->assertSame($address, $this->subject->get($id));
             }
         }
     }
@@ -145,7 +145,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->subject->getList($searchCriteria));
+        $this->assertSame($collection, $this->subject->getList($searchCriteria));
     }
 
     public function testDelete()
@@ -229,7 +229,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($address, $this->subject->save($address));
+        $this->assertSame($address, $this->subject->save($address));
     }
 
     /**
@@ -259,7 +259,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($address, $this->subject->save($address));
+        $this->assertSame($address, $this->subject->save($address));
     }
 
     public function testCreate()
@@ -270,6 +270,6 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getNewInstance')
             ->willReturn($address);
 
-        $this->assertEquals($address, $this->subject->create());
+        $this->assertSame($address, $this->subject->create());
     }
 }

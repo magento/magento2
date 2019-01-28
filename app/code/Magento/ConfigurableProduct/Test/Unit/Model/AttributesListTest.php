@@ -76,6 +76,6 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
         $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue(['options']));
         $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
 
-        $this->assertEquals($result, $this->attributeListModel->getAttributes($ids));
+        $this->assertSame($result, $this->attributeListModel->getAttributes($ids));
     }
 }

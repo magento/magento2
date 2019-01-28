@@ -172,11 +172,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('image_link'));
 
         $data = $this->block->getRssData();
-        $this->assertEquals($this->rssFeed['link'], $data['link']);
-        $this->assertEquals($this->rssFeed['title'], $data['title']);
-        $this->assertEquals($this->rssFeed['description'], $data['description']);
-        $this->assertEquals($this->rssFeed['entries'][0]['title'], $data['entries'][0]['title']);
-        $this->assertEquals($this->rssFeed['entries'][0]['link'], $data['entries'][0]['link']);
+        $this->assertSame($this->rssFeed['link'], $data['link']);
+        $this->assertSame($this->rssFeed['title'], $data['title']);
+        $this->assertSame($this->rssFeed['description'], $data['description']);
+        $this->assertSame($this->rssFeed['entries'][0]['title'], $data['entries'][0]['title']);
+        $this->assertSame($this->rssFeed['entries'][0]['link'], $data['entries'][0]['link']);
         $this->assertContains('<a href="http://magento.com/product.html">', $data['entries'][0]['description']);
         $this->assertContains(
             '<img src="image_link" border="0" align="left" height="75" width="75">',
@@ -191,7 +191,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheLifetime()
     {
-        $this->assertEquals(600, $this->block->getCacheLifetime());
+        $this->assertSame(600, $this->block->getCacheLifetime());
     }
 
     public function testIsAllowed()
@@ -199,7 +199,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertSame(true, $this->block->isAllowed());
     }
 
     public function testGetFeeds()
@@ -253,6 +253,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $feeds = ['group' => 'Categories', 'feeds' => [
             ['label' => 'Category Name', 'link' => 'http://magento.com/category-name.html'],
         ]];
-        $this->assertEquals($feeds, $this->block->getFeeds());
+        $this->assertSame($feeds, $this->block->getFeeds());
     }
 }

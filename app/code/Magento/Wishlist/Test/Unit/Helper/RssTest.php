@@ -125,7 +125,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ->with($wishlistId, null)
             ->willReturnSelf();
 
-        $this->assertEquals($wishlist, $this->model->getWishlist());
+        $this->assertSame($wishlist, $this->model->getWishlist());
         // Check that wishlist is cached
         $this->assertSame($wishlist, $this->model->getWishlist());
     }
@@ -179,7 +179,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ->with($customerId, false)
             ->willReturnSelf();
 
-        $this->assertEquals($wishlist, $this->model->getWishlist());
+        $this->assertSame($wishlist, $this->model->getWishlist());
     }
 
     public function testGetCustomerWithSession()
@@ -212,7 +212,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
         $this->customerFactoryMock->expects($this->never())
             ->method('create');
 
-        $this->assertEquals($customer, $this->model->getCustomer());
+        $this->assertSame($customer, $this->model->getCustomer());
         // Check that customer is cached
         $this->assertSame($customer, $this->model->getCustomer());
     }
@@ -235,7 +235,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn($isWishlistActive);
 
-        $this->assertEquals($result, $this->model->isRssAllow());
+        $this->assertSame($result, $this->model->isRssAllow());
     }
 
     /**

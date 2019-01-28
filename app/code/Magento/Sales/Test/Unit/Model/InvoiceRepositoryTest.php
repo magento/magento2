@@ -75,7 +75,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $this->assertEquals($entity, $this->invoice->get($id));
+        $this->assertSame($entity, $this->invoice->get($id));
     }
 
     /**
@@ -121,7 +121,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->invoiceMetadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
-        $this->assertEquals($entity, $this->invoice->create());
+        $this->assertSame($entity, $this->invoice->create());
     }
 
     public function testGetList()
@@ -139,7 +139,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->invoice->getList($searchCriteria));
+        $this->assertSame($collection, $this->invoice->getList($searchCriteria));
     }
 
     public function testDelete()
@@ -218,6 +218,6 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($entity, $this->invoice->save($entity));
+        $this->assertSame($entity, $this->invoice->save($entity));
     }
 }

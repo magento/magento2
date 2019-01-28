@@ -26,7 +26,7 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsClassUsed($fileContent, $isClassUsed)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $isClassUsed,
             $this->codeCheck->isClassUsed('MyClass', $fileContent)
         );
@@ -56,7 +56,7 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDirectDescendant($fileContent, $isDirectDescendant)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $isDirectDescendant,
             $this->codeCheck->isDirectDescendant($fileContent, 'MyClass')
         );

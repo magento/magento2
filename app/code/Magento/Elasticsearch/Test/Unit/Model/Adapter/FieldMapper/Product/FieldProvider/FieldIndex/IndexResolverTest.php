@@ -78,7 +78,7 @@ class IndexResolverTest extends \PHPUnit\Framework\TestCase
             ->method('isAlwaysIndexable')
             ->willReturn($isAlwaysIndexable);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->resolver->getFieldIndex($attributeMock, $serviceFieldType)
         );

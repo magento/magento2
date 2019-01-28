@@ -31,7 +31,7 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
             array_keys($modifiedStructure)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             self::$specialGroups,
             $presentSpecialGroups,
             sprintf('All special groups must be present in %s case', $case)
@@ -52,7 +52,7 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
             self::$specialGroups
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $presentNotSpecialGroups,
             sprintf('Only special groups should be present at top level in "%s" case', $case)
@@ -74,7 +74,7 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
             $this->fetchAllAvailableGroups($modifiedStructure)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $removedGroups,
             sprintf('Groups should not be removed after modification in "%s" case', $case)
@@ -113,7 +113,7 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
         $modifier = new PaymentSectionModifier();
         $modifiedStructure = $modifier->modify($structure);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'account' => [],
                 'recommended_solutions' => [

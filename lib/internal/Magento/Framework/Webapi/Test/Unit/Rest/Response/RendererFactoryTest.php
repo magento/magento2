@@ -80,8 +80,8 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
             $exceptionMessage = 'Server cannot match any of the given Accept HTTP header media type(s) '.
                 'from the request: "" with media types from the config of response renderer.';
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
-            $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(
+            $this->assertSame($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
+            $this->assertSame(
                 \Magento\Framework\Webapi\Exception::HTTP_NOT_ACCEPTABLE,
                 $e->getHttpCode(),
                 'HTTP code is invalid'

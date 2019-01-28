@@ -28,8 +28,8 @@ class ConfigDataTest extends \PHPUnit\Framework\TestCase
         $configData->set('test/path/value3', 'val3');
         $configData->set('test/path/value2', 'val4');
 
-        $this->assertEquals($expectedValue, $configData->getData());
-        $this->assertEquals($fileKey, $configData->getFileKey());
+        $this->assertSame($expectedValue, $configData->getData());
+        $this->assertSame($fileKey, $configData->getFileKey());
     }
 
     /**

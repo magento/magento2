@@ -29,6 +29,6 @@ class WebsitesOptionsProviderTest extends \PHPUnit\Framework\TestCase
             ['label' => 'label', 'value' => 'value']
         ];
         $this->storeMock->expects($this->once())->method('getWebsiteValuesForForm')->willReturn($options);
-        $this->assertEquals($options, $this->model->toOptionArray());
+        $this->assertSame($options, $this->model->toOptionArray());
     }
 }

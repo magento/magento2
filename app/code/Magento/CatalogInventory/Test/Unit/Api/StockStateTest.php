@@ -115,7 +115,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testVerifyStock()
     {
-        $this->assertEquals(
+        $this->assertSame(
             true,
             $this->stockState->verifyStock($this->productId, $this->websiteId)
         );
@@ -123,7 +123,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testVerifyNotification()
     {
-        $this->assertEquals(
+        $this->assertSame(
             true,
             $this->stockState->verifyNotification($this->productId, $this->websiteId)
         );
@@ -131,7 +131,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckQty()
     {
-        $this->assertEquals(
+        $this->assertSame(
             true,
             $this->stockState->checkQty($this->productId, $this->qty, $this->websiteId)
         );
@@ -139,7 +139,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testSuggestQty()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->qty,
             $this->stockState->suggestQty($this->productId, $this->qty, $this->websiteId)
         );
@@ -147,7 +147,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStockQty()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->qty,
             $this->stockState->getStockQty($this->productId, $this->websiteId)
         );
@@ -155,7 +155,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckQtyIncrements()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->objectResult,
             $this->stockState->checkQtyIncrements($this->productId, $this->qty, $this->websiteId)
         );
@@ -163,7 +163,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckQuoteItemQty()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->objectResult,
             $this->stockState->checkQuoteItemQty(
                 $this->productId,

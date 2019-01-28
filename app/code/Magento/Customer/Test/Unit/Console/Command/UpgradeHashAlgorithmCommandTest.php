@@ -46,8 +46,8 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigure()
     {
-        $this->assertEquals('customer:hash:upgrade', $this->command->getName());
-        $this->assertEquals(
+        $this->assertSame('customer:hash:upgrade', $this->command->getName());
+        $this->assertSame(
             'Upgrade customer\'s hash according to the latest algorithm',
             $this->command->getDescription()
         );

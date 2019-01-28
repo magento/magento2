@@ -21,7 +21,7 @@ class CategorySetupTest extends \PHPUnit\Framework\TestCase
     {
         $defaultEntities = $this->unit->getDefaultEntities();
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'name',
                 'is_active',
@@ -55,7 +55,7 @@ class CategorySetupTest extends \PHPUnit\Framework\TestCase
             array_keys($defaultEntities['catalog_category']['attributes'])
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'name',
                 'sku',

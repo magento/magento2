@@ -76,6 +76,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('setBaseUrl')
             ->with('base_url');
 
-        $this->assertEquals('', $block->toHtml());
+        $this->assertSame('', $block->toHtml());
     }
 }

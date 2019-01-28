@@ -35,10 +35,10 @@ class InstructionsTest extends \PHPUnit\Framework\TestCase
             ->method('getAdditionalInformation')
             ->with('instructions')
             ->willReturn('get the instruction here');
-        $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
+        $this->assertSame('get the instruction here', $this->_instructions->getInstructions());
 
         // And we get the already setted param $this->_instructions
-        $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
+        $this->assertSame('get the instruction here', $this->_instructions->getInstructions());
     }
 
     public function testGetInstruction()
@@ -57,6 +57,6 @@ class InstructionsTest extends \PHPUnit\Framework\TestCase
         $this->_info->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($methodInstance);
-        $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
+        $this->assertSame('get the instruction here', $this->_instructions->getInstructions());
     }
 }

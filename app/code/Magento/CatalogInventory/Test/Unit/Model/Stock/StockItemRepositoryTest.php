@@ -306,7 +306,7 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->stockItemMock)
             ->willReturnSelf();
 
-        $this->assertEquals($this->stockItemMock, $this->model->save($this->stockItemMock));
+        $this->assertSame($this->stockItemMock, $this->model->save($this->stockItemMock));
     }
 
     public function testSaveWithoutProductId()
@@ -318,7 +318,7 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->stockRegistryStorage->expects($this->never())->method('removeStockItem');
         $this->stockRegistryStorage->expects($this->never())->method('removeStockStatus');
 
-        $this->assertEquals($this->stockItemMock, $this->model->save($this->stockItemMock));
+        $this->assertSame($this->stockItemMock, $this->model->save($this->stockItemMock));
     }
 
     /**
@@ -368,6 +368,6 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $queryBuilderMock->expects($this->once())->method('create')->willReturn($queryMock);
         $this->stockItemCollectionMock->expects($this->once())->method('create')->willReturn($queryCollectionMock);
 
-        $this->assertEquals($queryCollectionMock, $this->model->getList($criteriaMock));
+        $this->assertSame($queryCollectionMock, $this->model->getList($criteriaMock));
     }
 }

@@ -114,7 +114,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $parentNode = new \Magento\Framework\View\Layout\Element('<' . $block . ' name="' . $parentNodeName . '"/>');
 
         $result = $this->helper->scheduleStructure($this->scheduledStructureMock, $currentNode, $parentNode);
-        $this->assertEquals($actualNodeName, $result);
+        $this->assertSame($actualNodeName, $result);
     }
 
     /**

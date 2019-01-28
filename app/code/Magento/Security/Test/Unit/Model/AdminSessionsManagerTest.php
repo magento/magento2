@@ -306,7 +306,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->willReturnSelf();
 
-        $this->assertEquals($this->currentSessionMock, $this->model->getCurrentSession());
+        $this->assertSame($this->currentSessionMock, $this->model->getCurrentSession());
     }
 
     /**
@@ -345,7 +345,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getStatus')
             ->will($this->returnValue($sessionStatus));
 
-        $this->assertEquals($expectedResult, $this->model->getLogoutReasonMessage());
+        $this->assertSame($expectedResult, $this->model->getLogoutReasonMessage());
     }
 
     /**

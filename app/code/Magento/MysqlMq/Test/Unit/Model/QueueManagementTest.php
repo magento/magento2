@@ -83,7 +83,7 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
             ->method('saveMessage')->with($topicName, $message)->willReturn($messageId);
         $this->messageResource->expects($this->once())
             ->method('linkQueues')->with($messageId, $queueNames)->willReturnSelf();
-        $this->assertEquals(
+        $this->assertSame(
             $this->queueManagement,
             $this->queueManagement->addMessageToQueues($topicName, $message, $queueNames)
         );
@@ -104,7 +104,7 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
             ->method('saveMessages')->with($topicName, $messages)->willReturn($messageIds);
         $this->messageResource->expects($this->once())
             ->method('linkMessagesWithQueues')->with($messageIds, $queueNames)->willReturnSelf();
-        $this->assertEquals(
+        $this->assertSame(
             $this->queueManagement,
             $this->queueManagement->addMessagesToQueues($topicName, $messages, $queueNames)
         );

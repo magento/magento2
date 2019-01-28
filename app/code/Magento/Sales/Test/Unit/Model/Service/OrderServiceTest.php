@@ -215,7 +215,7 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->with($this->searchCriteriaMock)
             ->willReturn($this->orderSearchResultMock);
-        $this->assertEquals($this->orderSearchResultMock, $this->orderService->getCommentsList(123));
+        $this->assertSame($this->orderSearchResultMock, $this->orderService->getCommentsList(123));
     }
 
     public function testAddComment()
@@ -264,7 +264,7 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getStatus')
             ->willReturn('test-status');
-        $this->assertEquals('test-status', $this->orderService->getStatus(123));
+        $this->assertSame('test-status', $this->orderService->getStatus(123));
     }
 
     public function testHold()

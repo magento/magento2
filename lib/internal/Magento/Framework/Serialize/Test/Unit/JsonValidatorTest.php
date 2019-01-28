@@ -26,7 +26,7 @@ class JsonValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValid($value, $expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->jsonValidator->isValid($value)
         );

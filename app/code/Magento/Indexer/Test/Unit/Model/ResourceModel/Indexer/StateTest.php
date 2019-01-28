@@ -24,7 +24,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
             \Magento\Indexer\Model\ResourceModel\Indexer\State::class,
             $arguments
         );
-        $this->assertEquals(
+        $this->assertSame(
             [['field' => ['indexer_id'], 'title' => __('State for the same indexer')]],
             $this->model->getUniqueFields()
         );

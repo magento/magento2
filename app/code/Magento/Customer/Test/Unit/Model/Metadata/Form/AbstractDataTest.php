@@ -122,7 +122,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         if ($input) {
             $this->_attributeMock->expects($this->once())->method('getInputFilter')->will($this->returnValue($filter));
         }
-        $this->assertEquals($output, $this->_model->applyInputFilter($input));
+        $this->assertSame($output, $this->_model->applyInputFilter($input));
     }
 
     /**
@@ -163,7 +163,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             );
         }
         $actual = $this->_model->dateFilterFormat($format);
-        $this->assertEquals($output, $actual);
+        $this->assertSame($output, $actual);
     }
 
     /**
@@ -185,7 +185,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         if ($input) {
             $this->_attributeMock->expects($this->once())->method('getInputFilter')->will($this->returnValue($filter));
         }
-        $this->assertEquals($output, $this->_model->applyOutputFilter($input));
+        $this->assertSame($output, $this->_model->applyOutputFilter($input));
     }
 
     /**
@@ -237,7 +237,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals($expectedOutput, $this->_model->validateInputRule($value));
+        $this->assertSame($expectedOutput, $this->_model->validateInputRule($value));
     }
 
     /**
@@ -328,7 +328,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         );
         $this->_model->setRequestScope($requestScope);
         $this->_model->setRequestScopeOnly($requestScopeOnly);
-        $this->assertEquals($expectedValue, $this->_model->getRequestValue($request));
+        $this->assertSame($expectedValue, $this->_model->getRequestValue($request));
     }
 
     /**

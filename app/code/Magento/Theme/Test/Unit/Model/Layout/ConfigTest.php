@@ -49,10 +49,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with(null, null)
             ->willReturn($data);
 
-        $this->assertEquals($expectedResult, $this->_model->getPageLayouts());
-        $this->assertEquals($expectedResult['code'], $this->_model->getPageLayout('code'));
+        $this->assertSame($expectedResult, $this->_model->getPageLayouts());
+        $this->assertSame($expectedResult['code'], $this->_model->getPageLayout('code'));
         $this->assertFalse($this->_model->getPageLayout('wrong_code'));
-        $this->assertEquals(
+        $this->assertSame(
             [$expectedResult['code']['code'] => $expectedResult['code']['code']],
             $this->_model->getPageLayoutHandles()
         );

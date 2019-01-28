@@ -34,6 +34,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->method('getLabels')
             ->willReturn($list);
 
-        $this->assertEquals($list, $this->model->toOptionArray());
+        $this->assertSame($list, $this->model->toOptionArray());
     }
 }

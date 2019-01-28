@@ -33,7 +33,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//button[@type="submit" and @title="Update Cart"]',
@@ -42,7 +42,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Response for configurable product doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//select[contains(@class,"super-attribute-select")]',

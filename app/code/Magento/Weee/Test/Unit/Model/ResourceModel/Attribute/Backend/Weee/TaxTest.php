@@ -60,6 +60,6 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->method('insert')
             ->with('table_name', ['entity_id' => $productId]);
 
-        $this->assertEquals($this->model, $this->model->insertProductData($productMock, []));
+        $this->assertSame($this->model, $this->model->insertProductData($productMock, []));
     }
 }

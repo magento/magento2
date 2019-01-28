@@ -179,7 +179,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 }
             ));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->provider->getFields(['storeId' => 1])
         );

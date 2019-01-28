@@ -45,7 +45,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
         /** @var $store \Magento\Store\Model\Group   */
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
-        $this->assertEquals(
+        $this->assertSame(
             self::STORE_NAME_FROM_FIXTURE,
             $store->getName(),
             'Precondition failed: fixture store was not created.'
@@ -70,13 +70,13 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
         $requestData = ['id' => $sku, 'sku' => $sku];
         $defaultStoreResponse = $this->_webApiCall($serviceInfo, $requestData);
         $nameInDefaultStore = 'Simple Product';
-        $this->assertEquals(
+        $this->assertSame(
             $nameInDefaultStore,
             $defaultStoreResponse[Product::NAME],
             'Product name in default store is invalid.'
         );
         $fixtureStoreResponse = $this->_webApiCall($serviceInfo, $requestData, null, self::STORE_CODE_FROM_FIXTURE);
-        $this->assertEquals(
+        $this->assertSame(
             $nameInFixtureStore,
             $fixtureStoreResponse[Product::NAME],
             'Product name in fixture store is invalid.'

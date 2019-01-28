@@ -100,7 +100,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
             ->method('getIsInProcess')
             ->willReturn($isInProcess);
         $this->state->check($this->orderMock);
-        $this->assertEquals($expectedState, $this->orderMock->getState());
+        $this->assertSame($expectedState, $this->orderMock->getState());
     }
 
     public function stateCheckDataProvider()

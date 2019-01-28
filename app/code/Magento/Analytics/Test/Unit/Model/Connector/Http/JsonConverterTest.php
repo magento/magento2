@@ -45,7 +45,7 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConverterContainsHeader()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'Content-Type: ' . JsonConverter::CONTENT_MEDIA_TYPE,
             $this->converter->getContentTypeHeader()
         );
@@ -61,7 +61,7 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn($unserializedResult);
-        $this->assertEquals($expected, $this->converter->fromBody('body'));
+        $this->assertSame($expected, $this->converter->fromBody('body'));
     }
 
     /**
@@ -83,6 +83,6 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturn('serializedResult');
-        $this->assertEquals('serializedResult', $this->converter->toBody(["token" => "secret-token"]));
+        $this->assertSame('serializedResult', $this->converter->toBody(["token" => "secret-token"]));
     }
 }

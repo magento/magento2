@@ -31,6 +31,6 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
         $expected = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Helper\Data::class
         )->getHomePageUrl();
-        $this->assertEquals($expected, $this->_block->getHomeLink());
+        $this->assertSame($expected, $this->_block->getHomeLink());
     }
 }

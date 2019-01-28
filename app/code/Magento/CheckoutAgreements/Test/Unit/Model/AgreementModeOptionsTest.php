@@ -26,6 +26,6 @@ class AgreementModeOptionsTest extends \PHPUnit\Framework\TestCase
             AgreementModeOptions::MODE_AUTO => __('Automatically'),
             AgreementModeOptions::MODE_MANUAL => __('Manually')
         ];
-        $this->assertEquals($expected, $this->model->getOptionsArray());
+        $this->assertSame($expected, $this->model->getOptionsArray());
     }
 }

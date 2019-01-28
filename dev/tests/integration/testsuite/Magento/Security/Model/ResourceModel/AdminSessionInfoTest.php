@@ -71,7 +71,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         foreach (array_keys($testData) as $key) {
             $newModelData[$key] = $newModel->getData($key);
         }
-        $this->assertEquals($testData, $newModelData);
+        $this->assertSame($testData, $newModelData);
     }
 
     /**
@@ -88,7 +88,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             ->addFieldToFilter('main_table.updated_at', ['lt' => '2016-01-20 12:00:00'])
             ->load();
         $count = $collection->count();
-        $this->assertEquals(0, $count);
+        $this->assertSame(0, $count);
     }
 
     /**

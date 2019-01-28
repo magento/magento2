@@ -51,7 +51,7 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getCcTypes')
             ->willReturn($data);
 
-        $this->assertEquals($data, $this->model->getCcAvailableTypes());
+        $this->assertSame($data, $this->model->getCcAvailableTypes());
     }
 
     public function testGetCcMonths()
@@ -61,7 +61,7 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getMonths')
             ->willReturn($data);
 
-        $this->assertEquals($data, $this->model->getCcMonths());
+        $this->assertSame($data, $this->model->getCcMonths());
     }
 
     public function testGetCcYears()
@@ -71,12 +71,12 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getYears')
             ->willReturn($data);
 
-        $this->assertEquals($data, $this->model->getCcYears());
+        $this->assertSame($data, $this->model->getCcYears());
     }
 
     public function testHasVerification()
     {
-        $this->assertEquals(true, $this->model->hasVerification());
+        $this->assertSame(true, $this->model->hasVerification());
     }
 
     public function testGetCvvImageUrl()
@@ -94,7 +94,7 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
             ->with($fileId, $params)
             ->willReturn($fileUrl);
 
-        $this->assertEquals($fileUrl, $this->model->getCvvImageUrl());
+        $this->assertSame($fileUrl, $this->model->getCvvImageUrl());
     }
 
     public function getViewFileUrlWithException()
@@ -124,6 +124,6 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
             ->with('', ['_direct' => 'core/index/notFound'])
             ->willReturn($fileUrl);
 
-        $this->assertEquals($fileUrl, $this->model->getViewFileUrl($fileId, $params));
+        $this->assertSame($fileUrl, $this->model->getViewFileUrl($fileId, $params));
     }
 }

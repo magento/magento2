@@ -45,7 +45,7 @@ class TypeResolverTest extends \PHPUnit\Framework\TestCase
                    [$interfaceName, true]
                 ]
             );
-        $this->assertEquals($interfaceName, $this->resolver->resolve($customerDataObject));
+        $this->assertSame($interfaceName, $this->resolver->resolve($customerDataObject));
     }
 
     /**

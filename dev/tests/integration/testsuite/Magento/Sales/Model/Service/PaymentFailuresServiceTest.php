@@ -93,6 +93,6 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
             'shippingAddress' => $this->quote->getShippingAddress(),
         ];
 
-        $this->assertEquals($expectedVars, $templateVars);
+        $this->assertSame($expectedVars, $templateVars);
     }
 }

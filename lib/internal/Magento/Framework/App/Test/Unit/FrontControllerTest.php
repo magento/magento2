@@ -104,7 +104,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(1))->method('setDispatched')->with(true);
         $this->request->expects($this->at(2))->method('isDispatched')->will($this->returnValue(true));
 
-        $this->assertEquals($response, $this->model->dispatch($this->request));
+        $this->assertSame($response, $this->model->dispatch($this->request));
     }
 
     public function testDispatchedNotFoundException()
@@ -142,6 +142,6 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(5))->method('setDispatched')->with(true);
         $this->request->expects($this->at(6))->method('isDispatched')->will($this->returnValue(true));
 
-        $this->assertEquals($response, $this->model->dispatch($this->request));
+        $this->assertSame($response, $this->model->dispatch($this->request));
     }
 }

@@ -82,7 +82,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareEntityIndex($expected, array $data)
     {
-        $this->assertEquals($expected, $this->model->prepareEntityIndex($data['index'], $data['separator']));
+        $this->assertSame($expected, $this->model->prepareEntityIndex($data['index'], $data['separator']));
     }
 
     /**
@@ -90,7 +90,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testAllowAdvancedIndex()
     {
-        $this->assertEquals(false, $this->model->allowAdvancedIndex());
+        $this->assertSame(false, $this->model->allowAdvancedIndex());
     }
 
     /**
@@ -98,7 +98,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAvailable()
     {
-        $this->assertEquals(true, $this->model->isAvailable());
+        $this->assertSame(true, $this->model->isAvailable());
     }
 
     /**
@@ -111,7 +111,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
             ->method('getVisibleInSiteIds')
             ->willReturn([3, 2, 4]);
 
-        $this->assertEquals([3, 2, 4], $this->model->getAllowedVisibility());
+        $this->assertSame([3, 2, 4], $this->model->getAllowedVisibility());
     }
 
     /**
@@ -119,7 +119,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessAttributeValue()
     {
-        $this->assertEquals(1, $this->model->processAttributeValue('attribute', 1));
+        $this->assertSame(1, $this->model->processAttributeValue('attribute', 1));
     }
 
     /**

@@ -73,7 +73,7 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
             ->method('isAvailable')
             ->willReturn(false);
 
-        $this->assertEquals($expected, $this->source->get($path));
+        $this->assertSame($expected, $this->source->get($path));
     }
 
     /**
@@ -100,6 +100,6 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
             ->method('isAvailable')
             ->willReturn(true);
 
-        $this->assertEquals([], $this->source->get($path));
+        $this->assertSame([], $this->source->get($path));
     }
 }

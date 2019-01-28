@@ -33,7 +33,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertTrue(is_array($attribute));
         $this->assertArrayHasKey('attribute_id', $attribute);
         $this->assertArrayHasKey('attribute_code', $attribute);
-        $this->assertEquals($attributeCode, $attribute['attribute_code']);
+        $this->assertSame($attributeCode, $attribute['attribute_code']);
     }
 
     /**
@@ -77,7 +77,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
@@ -106,18 +106,18 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             "is_filterable_in_search" => true,
         ];
 
-        $this->assertEquals('default_label', $attribute['default_frontend_label']);
-        $this->assertEquals('front_lbl_store1', $attribute['frontend_labels'][0]['label']);
+        $this->assertSame('default_label', $attribute['default_frontend_label']);
+        $this->assertSame('front_lbl_store1', $attribute['frontend_labels'][0]['label']);
         foreach ($expectedData as $key => $value) {
-            $this->assertEquals($value, $attribute[$key]);
+            $this->assertSame($value, $attribute[$key]);
         }
         //Validate options
         //'Blue' should be first as it has sort_order = 0
-        $this->assertEquals('Default Blue', $attribute['options'][1]['label']);
+        $this->assertSame('Default Blue', $attribute['options'][1]['label']);
         $this->assertArrayHasKey('default_value', $attribute);
         //'Blue' should be set as default
-        $this->assertEquals($attribute['default_value'], $attribute['options'][1]['value']);
-        $this->assertEquals('Default Red', $attribute['options'][2]['label']);
+        $this->assertSame($attribute['default_value'], $attribute['options'][1]['value']);
+        $this->assertSame('Default Red', $attribute['options'][2]['label']);
     }
 
     /**
@@ -133,7 +133,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         } catch (\SoapFault $e) {
             //Expects soap exception
         } catch (\Exception $e) {
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertSame(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 
@@ -147,7 +147,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attribute = $this->createAttribute($attributeCode);
 
         //Make sure that 'Blue' is set as default
-        $this->assertEquals($attribute['default_value'], $attribute['options'][1]['value']);
+        $this->assertSame($attribute['default_value'], $attribute['options'][1]['value']);
         $attributeData = [
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
@@ -197,14 +197,14 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
-        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
-        $this->assertEquals($attributeCode, $result['attribute_code']);
-        $this->assertEquals('default_label_new', $result['default_frontend_label']);
-        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+        $this->assertSame($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertSame(true, $result['is_used_in_grid']);
+        $this->assertSame($attributeCode, $result['attribute_code']);
+        $this->assertSame('default_label_new', $result['default_frontend_label']);
+        $this->assertSame('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
         //New option set as default
-        $this->assertEquals($result['options'][3]['value'], $result['default_value']);
-        $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
+        $this->assertSame($result['options'][3]['value'], $result['default_value']);
+        $this->assertSame("Default Blue Updated", $result['options'][1]['label']);
     }
 
     /**
@@ -233,11 +233,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
-        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
-        $this->assertEquals($attributeCode, $result['attribute_code']);
-        $this->assertEquals('front_lbl_store0_new', $result['default_frontend_label']);
-        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+        $this->assertSame($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertSame(true, $result['is_used_in_grid']);
+        $this->assertSame($attributeCode, $result['attribute_code']);
+        $this->assertSame('front_lbl_store0_new', $result['default_frontend_label']);
+        $this->assertSame('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
     }
 
     /**
@@ -265,11 +265,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
-        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
-        $this->assertEquals($attributeCode, $result['attribute_code']);
-        $this->assertEquals('default_label', $result['default_frontend_label']);
-        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+        $this->assertSame($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertSame(true, $result['is_used_in_grid']);
+        $this->assertSame($attributeCode, $result['attribute_code']);
+        $this->assertSame('default_label', $result['default_frontend_label']);
+        $this->assertSame('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
     }
 
     /**
@@ -307,7 +307,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
 
         $output = $this->updateAttribute($attributeCode, $attributeData);
-        $this->assertEquals(4, count($output['options']));
+        $this->assertSame(4, count($output['options']));
     }
 
     /**
@@ -352,9 +352,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals([$attributeCode], $errorObj['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame([$attributeCode], $errorObj['parameters']);
+            $this->assertSame(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
 

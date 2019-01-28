@@ -67,6 +67,6 @@ class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
-        $this->assertEquals($this->block, $bundleComponents[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['block']);
+        $this->assertSame($this->block, $bundleComponents[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['block']);
     }
 }

@@ -25,6 +25,6 @@ class SummaryTest extends \PHPUnit\Framework\TestCase
             ['value' => 0, 'label' => __('Display number of items in cart')],
             ['value' => 1, 'label' => __('Display item quantities')],
         ];
-        $this->assertEquals($expectedResult, $this->model->toOptionArray());
+        $this->assertSame($expectedResult, $this->model->toOptionArray());
     }
 }

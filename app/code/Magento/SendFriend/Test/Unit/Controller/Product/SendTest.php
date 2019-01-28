@@ -175,7 +175,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->with($formData)
             ->willReturnSelf();
 
-        $this->assertEquals($pageMock, $this->model->execute());
+        $this->assertSame($pageMock, $this->model->execute());
     }
 
     /**
@@ -254,7 +254,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->with('sendfriend.send')
             ->willReturn(false);
 
-        $this->assertEquals($pageMock, $this->model->execute());
+        $this->assertSame($pageMock, $this->model->execute());
     }
 
     public function testExecuteWithNoticeAndNoData()
@@ -320,7 +320,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
         $pageMock->expects($this->never())
             ->method('getLayout');
 
-        $this->assertEquals($pageMock, $this->model->execute());
+        $this->assertSame($pageMock, $this->model->execute());
     }
 
     public function testExecuteWithoutParam()
@@ -345,7 +345,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($forwardMock, $this->model->execute());
+        $this->assertSame($forwardMock, $this->model->execute());
     }
 
     public function testExecuteWithoutProduct()
@@ -377,7 +377,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($forwardMock, $this->model->execute());
+        $this->assertSame($forwardMock, $this->model->execute());
     }
 
     public function testExecuteWithNonVisibleProduct()
@@ -418,6 +418,6 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($forwardMock, $this->model->execute());
+        $this->assertSame($forwardMock, $this->model->execute());
     }
 }

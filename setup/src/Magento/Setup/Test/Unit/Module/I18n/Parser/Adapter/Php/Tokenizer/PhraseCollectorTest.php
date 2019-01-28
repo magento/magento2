@@ -96,7 +96,7 @@ class PhraseCollectorTest extends \PHPUnit\Framework\TestCase
 
         $this->phraseCollector->setIncludeObjects();
         $this->phraseCollector->parse($file);
-        $this->assertEquals($result, $this->phraseCollector->getPhrases());
+        $this->assertSame($result, $this->phraseCollector->getPhrases());
     }
 
     /**

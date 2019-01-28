@@ -156,7 +156,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->any())
             ->method('roundPrice')->will($this->returnArgument(0));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->model->calculateSpecialPrice($finalPrice, $specialPrice, date('Y-m-d'), date('Y-m-d'))
         );
@@ -194,7 +194,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->method('hasCustomOptions')
             ->willReturn(false);
 
-        $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
+        $this->assertSame(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 
     /**
@@ -226,7 +226,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $dataObjectMock->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
+        $this->assertSame(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 
     /**
@@ -307,6 +307,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
+        $this->assertSame(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 }

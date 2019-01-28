@@ -26,7 +26,7 @@ class MultipleTopicsPerQueueTest extends QueueTestCaseAbstract
         foreach (['multi.topic.queue.topic.a', 'multi.topic.queue.topic.b'] as $topic) {
             $input = "Input value for topic '{$topic}'";
             $response = $this->publisher->publish($topic, $input);
-            $this->assertEquals($input . ' processed by RPC handler', $response);
+            $this->assertSame($input . ' processed by RPC handler', $response);
         }
     }
 }

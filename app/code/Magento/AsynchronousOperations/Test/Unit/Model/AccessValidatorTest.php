@@ -64,7 +64,7 @@ class AccessValidatorTest extends \PHPUnit\Framework\TestCase
         $bulkSummaryMock->expects($this->once())->method('getUserId')->willReturn($bulkUserId);
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($adminId);
 
-        $this->assertEquals($this->model->isAllowed($uuid), $expectedResult);
+        $this->assertSame($this->model->isAllowed($uuid), $expectedResult);
     }
 
     /**

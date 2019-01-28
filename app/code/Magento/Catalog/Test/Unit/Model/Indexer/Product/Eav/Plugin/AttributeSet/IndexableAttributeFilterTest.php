@@ -77,6 +77,6 @@ class IndexableAttributeFilterTest extends \PHPUnit\Framework\TestCase
             $eavAttributeFactoryMock
         );
 
-        $this->assertEquals(['indexable_attribute'], $model->filter($attributeSetMock));
+        $this->assertSame(['indexable_attribute'], $model->filter($attributeSetMock));
     }
 }

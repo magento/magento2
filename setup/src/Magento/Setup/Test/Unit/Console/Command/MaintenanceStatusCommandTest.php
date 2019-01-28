@@ -38,7 +38,7 @@ class MaintenanceStatusCommandTest extends \PHPUnit\Framework\TestCase
         $this->maintenanceMode->expects($this->once())->method('getAddressInfo')->willReturn($maintenanceData[1]);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedMessage, $tester->getDisplay());
     }
 
     /**

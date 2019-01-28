@@ -93,7 +93,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->menuMock->expects($this->once())->method('unserialize')->with('menu_cache');
 
-        $this->assertEquals($this->menuMock, $this->model->getMenu());
+        $this->assertSame($this->menuMock, $this->model->getMenu());
     }
 
     public function testGetMenuWithNotCachedObjectBuildsObject()
@@ -118,7 +118,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->menuMock)
         );
 
-        $this->assertEquals($this->menuMock, $this->model->getMenu());
+        $this->assertSame($this->menuMock, $this->model->getMenu());
     }
 
     /**

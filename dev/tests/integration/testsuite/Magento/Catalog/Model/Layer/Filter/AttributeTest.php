@@ -92,15 +92,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $items = $this->_model->getItems();
 
         $this->assertInternalType('array', $items);
-        $this->assertEquals(1, count($items));
+        $this->assertSame(1, count($items));
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];
 
         $this->assertInstanceOf(\Magento\Catalog\Model\Layer\Filter\Item::class, $item);
         $this->assertSame($this->_model, $item->getFilter());
-        $this->assertEquals('Option Label', $item->getLabel());
-        $this->assertEquals($this->_attributeOptionId, $item->getValue());
-        $this->assertEquals(1, $item->getCount());
+        $this->assertSame('Option Label', $item->getLabel());
+        $this->assertSame($this->_attributeOptionId, $item->getValue());
+        $this->assertSame(1, $item->getCount());
     }
 }

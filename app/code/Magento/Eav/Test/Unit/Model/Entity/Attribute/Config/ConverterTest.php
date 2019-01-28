@@ -31,6 +31,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $path = $this->_filePath . 'eav_attributes.xml';
         $dom->load($path);
         $expectedData = include $this->_filePath . 'eav_attributes.php';
-        $this->assertEquals($expectedData, $this->_model->convert($dom));
+        $this->assertSame($expectedData, $this->_model->convert($dom));
     }
 }

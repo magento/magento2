@@ -88,7 +88,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('dataHasChangedFor')
             ->with('is_searchable')
             ->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->model->beforeSave($this->subjectMock, $this->attributeMock)
         );
@@ -96,7 +96,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterSaveNoInvalidation()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->afterSave($this->subjectMock, $this->subjectMock)
         );
@@ -119,7 +119,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())
             ->method('reset');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $model->afterSave($this->subjectMock, $this->subjectMock)
         );
@@ -133,7 +133,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())
             ->method('getIsSearchable')
             ->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->model->beforeDelete($this->subjectMock, $this->attributeMock)
         );
@@ -141,7 +141,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDeleteNoInvalidation()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->model->afterDelete($this->subjectMock, $this->subjectMock)
         );
@@ -161,7 +161,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->prepareIndexer();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $model->afterDelete($this->subjectMock, $this->subjectMock)
         );

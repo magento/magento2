@@ -50,7 +50,7 @@ class MaintenanceDisableCommandTest extends \PHPUnit\Framework\TestCase
         $this->ipValidator->expects($this->once())->method('validateIps')->willReturn($validatorMessages);
         $tester = new CommandTester($this->command);
         $tester->execute($input);
-        $this->assertEquals($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedMessage, $tester->getDisplay());
     }
 
     /**
@@ -96,7 +96,7 @@ class MaintenanceDisableCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getAddressInfo')
             ->willReturn($ip);
 
-        $this->assertEquals($expected, $this->command->isSetAddressInfo());
+        $this->assertSame($expected, $this->command->isSetAddressInfo());
     }
 
     /**

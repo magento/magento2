@@ -79,7 +79,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
         )->createBlock(
             \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples::class
         );
-        $this->assertEquals($expectedResult, $block->getSamplesTitle());
+        $this->assertSame($expectedResult, $block->getSamplesTitle());
     }
 
     /**

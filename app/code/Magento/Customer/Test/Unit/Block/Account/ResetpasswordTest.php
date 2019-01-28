@@ -56,7 +56,7 @@ class ResetpasswordTest extends \PHPUnit\Framework\TestCase
             ->with(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH)
             ->willReturn($minimumPasswordLength);
 
-        $this->assertEquals($minimumPasswordLength, $this->block->getMinimumPasswordLength());
+        $this->assertSame($minimumPasswordLength, $this->block->getMinimumPasswordLength());
     }
 
     /**
@@ -71,6 +71,6 @@ class ResetpasswordTest extends \PHPUnit\Framework\TestCase
             ->with(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER)
             ->willReturn($requiredCharacterClassesNumber);
 
-        $this->assertEquals($requiredCharacterClassesNumber, $this->block->getRequiredCharacterClassesNumber());
+        $this->assertSame($requiredCharacterClassesNumber, $this->block->getRequiredCharacterClassesNumber());
     }
 }

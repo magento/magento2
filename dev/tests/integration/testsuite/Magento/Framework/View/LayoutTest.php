@@ -112,14 +112,14 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\View\Layout\Element::class
             )
         );
-        $this->assertEquals([], $this->_layout->getAllBlocks());
+        $this->assertSame([], $this->_layout->getAllBlocks());
         $this->_layout->generateElements();
         $expected = ['block1', 'block1_schedule_block0', 'schedule_block1', 'schedule_block2'];
         $this->assertSame($expected, array_keys($this->_layout->getAllBlocks()));
         $child = $this->_layout->getBlock('block1_schedule_block0');
         $this->assertSame($this->_layout->getBlock('block1'), $child->getParentBlock());
-        $this->assertEquals('test', $this->_layout->getBlock('schedule_block1')->getData('template'));
-        $this->assertEquals('360', $this->_layout->getBlock('schedule_block1')->getData('ttl'));
+        $this->assertSame('test', $this->_layout->getBlock('schedule_block1')->getData('template'));
+        $this->assertSame('360', $this->_layout->getBlock('schedule_block1')->getData('ttl'));
         $this->assertFalse($this->_layout->getBlock('nonexisting'));
     }
 
@@ -127,18 +127,18 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $name = 'test';
         $this->_layout->addContainer($name, 'Test', ['option1' => 1, 'option2' => 2]);
-        $this->assertEquals(
+        $this->assertSame(
             'Test',
             $this->_layout->getElementProperty($name, \Magento\Framework\View\Layout\Element::CONTAINER_OPT_LABEL)
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\View\Layout\Element::TYPE_CONTAINER,
             $this->_layout->getElementProperty($name, 'type')
         );
         $this->assertSame(2, $this->_layout->getElementProperty($name, 'option2'));
 
         $this->_layout->addBlock(\Magento\Framework\View\Element\Text::class, 'text', $name);
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\View\Layout\Element::TYPE_BLOCK,
             $this->_layout->getElementProperty('text', 'type')
         );
@@ -184,7 +184,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $block = $this->_layout->createBlock($blockType, $blockName, ['data' => $blockData]);
 
         $this->assertRegExp($expectedName, $block->getNameInLayout());
-        $this->assertEquals($expectedData, $block->getData());
+        $this->assertSame($expectedData, $block->getData());
     }
 
     public function createBlockDataProvider()
@@ -231,7 +231,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->_layout->hasElement('block1'));
         $this->assertTrue($this->_layout->hasElement('block2'));
-        $this->assertEquals('block1', $this->_layout->getParentName('block2'));
+        $this->assertSame('block1', $this->_layout->getParentName('block2'));
     }
 
     /**
@@ -244,10 +244,10 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->_layout->addContainer('container', 'Container', ['htmlTag' => $htmlTag]);
         $this->assertTrue($this->_layout->hasElement('container'));
         $this->assertTrue($this->_layout->isContainer('container'));
-        $this->assertEquals($htmlTag, $this->_layout->getElementProperty('container', 'htmlTag'));
+        $this->assertSame($htmlTag, $this->_layout->getElementProperty('container', 'htmlTag'));
 
         $this->_layout->addContainer('container1', 'Container 1', [], 'container', 'c1');
-        $this->assertEquals('container1', $this->_layout->getChildName('container', 'c1'));
+        $this->assertSame('container1', $this->_layout->getChildName('container', 'c1'));
     }
 
     public function addContainerDataProvider()
@@ -406,9 +406,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $block = $this->_layout->createBlock(\Magento\Framework\View\Element\Text::class, $blockName);
         $this->_layout->addContainer($containerName, 'Container');
 
-        $this->assertEquals($block, $this->_layout->getBlock($blockName));
+        $this->assertSame($block, $this->_layout->getBlock($blockName));
         $this->_layout->renameElement($blockName, $expBlockName);
-        $this->assertEquals($block, $this->_layout->getBlock($expBlockName));
+        $this->assertSame($block, $this->_layout->getBlock($expBlockName));
 
         $this->_layout->hasElement($containerName);
         $this->_layout->renameElement($containerName, $expContainerName);
@@ -435,7 +435,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->_layout->addContainer('one', 'One');
         $this->_layout->addContainer('two', 'Two', [], 'one');
         $this->assertFalse($this->_layout->getParentName('one'));
-        $this->assertEquals('one', $this->_layout->getParentName('two'));
+        $this->assertSame('one', $this->_layout->getParentName('two'));
     }
 
     public function testGetElementAlias()
@@ -443,7 +443,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->_layout->addContainer('one', 'One');
         $this->_layout->addContainer('two', 'One', [], 'one', '1');
         $this->assertFalse($this->_layout->getElementAlias('one'));
-        $this->assertEquals('1', $this->_layout->getElementAlias('two'));
+        $this->assertSame('1', $this->_layout->getElementAlias('two'));
     }
 
     /**
@@ -462,7 +462,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->_layout->addOutputElement($blockName);
         // add the same element twice should not produce output duplicate
         $this->_layout->addOutputElement($blockName);
-        $this->assertEquals($expectedText, $this->_layout->getOutput());
+        $this->assertSame($expectedText, $this->_layout->getOutput());
 
         $this->_layout->removeOutputElement($blockName);
         $this->assertEmpty($this->_layout->getOutput());
@@ -490,9 +490,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         );
         $this->_layout->generateElements();
         $result = $this->_layout->renderElement('container1', false);
-        $this->assertEquals('<div id="container1-2" class="class12">Test11Test12</div>', $result);
+        $this->assertSame('<div id="container1-2" class="class12">Test11Test12</div>', $result);
         $result = $this->_layout->renderElement('container2', false);
-        $this->assertEquals('<div id="container2-2" class="class22">Test21Test22</div>', $result);
+        $this->assertSame('<div id="container2-2" class="class22">Test21Test22</div>', $result);
     }
 
     public function testIsCacheable()

@@ -60,7 +60,7 @@ class CompositeProductRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
             ->method('getMaxRelationsCount')
             ->willReturn($maxRelatedProductCount);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->estimateRowSize()
         );

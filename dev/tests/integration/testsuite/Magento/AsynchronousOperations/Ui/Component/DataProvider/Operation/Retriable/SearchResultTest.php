@@ -32,6 +32,6 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
         $searchResult = $objectManager->create(
             \Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult::class
         );
-        $this->assertEquals(1, $searchResult->getTotalCount());
+        $this->assertSame(1, $searchResult->getTotalCount());
     }
 }

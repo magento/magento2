@@ -36,7 +36,7 @@ class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($itemId);
 
-        $this->assertEquals($result, $this->model->process($jsLayout, $itemMock));
+        $this->assertSame($result, $this->model->process($jsLayout, $itemMock));
     }
 
     /**

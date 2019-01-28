@@ -201,7 +201,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedLink as $key => $value) {
             $this->assertTrue($link->hasData($key), 'Key ' . $key . ' not exist!');
             $this->assertArrayHasKey($key, $link);
-            $this->assertEquals($value, $link->getData($key));
+            $this->assertSame($value, $link->getData($key));
         }
 
         $expectedSample = [
@@ -213,13 +213,13 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $samples = $product->getExtensionAttributes()->getDownloadableProductSamples();
         $sample = reset($samples);
         $this->assertNotEmpty($sample->getData());
-        $this->assertEquals(1, count($samples));
+        $this->assertSame(1, count($samples));
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $sample->getData();
         /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
         foreach ($expectedSample as $key => $value) {
             $this->assertArrayHasKey($key, $sample);
-            $this->assertEquals($value, $sample[$key]);
+            $this->assertSame($value, $sample[$key]);
         }
     }
 
@@ -250,7 +250,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $linksFactory = $this->objectManager
             ->get(\Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory::class);
         $allLinksIds = $linksFactory->create()->addProductToFilter($product->getEntityId())->getAllIds();
-        $this->assertEquals(
+        $this->assertSame(
             '{"qty":23,"links":["' . implode('","', $allLinksIds). '"]}',
             $product->getCustomOption('info_buyRequest')->getValue()
         );

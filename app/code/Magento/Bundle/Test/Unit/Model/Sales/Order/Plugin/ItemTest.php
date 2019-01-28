@@ -32,7 +32,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->itemMock->expects($this->once())->method('isDummy')->willReturn(true);
         $this->itemMock->expects($this->once())->method('getQtyToInvoice')->willReturn(15);
         $this->itemMock->expects($this->once())->method('getSimpleQtyToShip')->willReturn($qtyToCancel);
-        $this->assertEquals($qtyToCancel, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
+        $this->assertSame($qtyToCancel, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
     }
 
     public function testAfterGetQtyToCancelIfParentProductIsBundle()
@@ -53,7 +53,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->itemMock->expects($this->once())->method('isDummy')->willReturn(false);
         $this->itemMock->expects($this->once())->method('getQtyToInvoice')->willReturn(15);
         $this->itemMock->expects($this->once())->method('getQtyToShip')->willReturn($qtyToCancel);
-        $this->assertEquals($qtyToCancel, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
+        $this->assertSame($qtyToCancel, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
     }
     public function testAfterGetQtyToCancelForSimpleProduct()
     {
@@ -65,7 +65,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->itemMock->expects($this->any())->method('getParentItem')->willReturn(false);
         $this->itemMock->expects($this->never())->method('isDummy');
         $this->itemMock->expects($this->never())->method('getQtyToInvoice');
-        $this->assertEquals($result, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
+        $this->assertSame($result, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
     }
 
     public function testAfterIsProcessingAvailableForProductWithoutParent()

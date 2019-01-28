@@ -36,7 +36,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()
         );
-        $this->assertEquals('not_temporary', $result);
+        $this->assertSame('not_temporary', $result);
     }
 
     /**

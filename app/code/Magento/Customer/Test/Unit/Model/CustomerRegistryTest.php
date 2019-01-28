@@ -77,9 +77,9 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->customer));
         $actual = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
-        $this->assertEquals($this->customer, $actual);
+        $this->assertSame($this->customer, $actual);
         $actualCached = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
-        $this->assertEquals($this->customer, $actualCached);
+        $this->assertSame($this->customer, $actualCached);
     }
 
     public function testRetrieveByEmail()
@@ -107,9 +107,9 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->customer));
         $actual = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
-        $this->assertEquals($this->customer, $actual);
+        $this->assertSame($this->customer, $actual);
         $actualCached = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
-        $this->assertEquals($this->customer, $actualCached);
+        $this->assertSame($this->customer, $actualCached);
     }
 
     /**
@@ -170,10 +170,10 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->customer));
         $actual = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
-        $this->assertEquals($this->customer, $actual);
+        $this->assertSame($this->customer, $actual);
         $this->customerRegistry->remove(self::CUSTOMER_ID);
         $actual = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
-        $this->assertEquals($this->customer, $actual);
+        $this->assertSame($this->customer, $actual);
     }
 
     public function testRemoveByEmail()
@@ -201,9 +201,9 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->customer));
         $actual = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
-        $this->assertEquals($this->customer, $actual);
+        $this->assertSame($this->customer, $actual);
         $this->customerRegistry->removeByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
         $actual = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
-        $this->assertEquals($this->customer, $actual);
+        $this->assertSame($this->customer, $actual);
     }
 }

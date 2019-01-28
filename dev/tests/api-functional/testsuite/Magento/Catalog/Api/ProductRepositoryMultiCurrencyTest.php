@@ -25,13 +25,13 @@ class ProductRepositoryMultiCurrencyTest extends WebapiAbstract
         $sku = 'simple';
         $this->assignProductToWebsite($sku, $this->getWebsiteId('test'));
         $product = $this->getProduct($sku);
-        $this->assertEquals(10, $product['price']);
+        $this->assertSame(10, $product['price']);
 
         $product['price'] = 20;
         $this->saveProduct($product, 'fixture_second_store');
 
         $product = $this->getProduct($sku, 'fixture_third_store');
-        $this->assertEquals(20, $product['price']);
+        $this->assertSame(20, $product['price']);
     }
 
     private function saveProduct($product, $storeCode = null)

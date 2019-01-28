@@ -38,6 +38,6 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPathInfo()
     {
-        $this->assertEquals($this->_pathInfo, $this->_model->getPathInfo());
+        $this->assertSame($this->_pathInfo, $this->_model->getPathInfo());
     }
 }

@@ -37,8 +37,8 @@ class ProductMediaAttributeManagementTest extends WebapiAbstract
         $this->assertNotEmpty($mediaAttributes);
         $attribute = $this->getAttributeByCode($mediaAttributes, 'funny_image');
         $this->assertNotNull($attribute);
-        $this->assertEquals('Funny image', $attribute['default_frontend_label']);
-        $this->assertEquals(1, $attribute['is_user_defined']);
+        $this->assertSame('Funny image', $attribute['default_frontend_label']);
+        $this->assertSame(1, $attribute['is_user_defined']);
     }
 
     /**

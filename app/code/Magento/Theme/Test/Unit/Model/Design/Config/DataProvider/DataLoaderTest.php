@@ -113,7 +113,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_array($result[$scope]));
         $this->assertTrue(array_key_exists('scope', $result[$scope]));
         $this->assertTrue(array_key_exists('scope_id', $result[$scope]));
-        $this->assertEquals($scope, $result[$scope]['scope']);
-        $this->assertEquals($scopeId, $result[$scope]['scope_id']);
+        $this->assertSame($scope, $result[$scope]['scope']);
+        $this->assertSame($scopeId, $result[$scope]['scope_id']);
     }
 }

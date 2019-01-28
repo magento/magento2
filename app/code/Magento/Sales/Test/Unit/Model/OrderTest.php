@@ -175,8 +175,8 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($orderItem, $this->order->getItemById($realOrderItemId));
-        $this->assertEquals(null, $this->order->getItemById($fakeOrderItemId));
+        $this->assertSame($orderItem, $this->order->getItemById($realOrderItemId));
+        $this->assertSame(null, $this->order->getItemById($fakeOrderItemId));
     }
 
     /**
@@ -196,7 +196,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             $result = $this->item;
         }
 
-        $this->assertEquals($result, $this->order->getItemByQuoteItemId($quoteItemId));
+        $this->assertSame($result, $this->order->getItemByQuoteItemId($quoteItemId));
     }
 
     /**
@@ -232,7 +232,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             $result = [$this->item];
         }
 
-        $this->assertEquals($result, $this->order->getAllVisibleItems());
+        $this->assertSame($result, $this->order->getAllVisibleItems());
     }
 
     /**
@@ -698,7 +698,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->method('getQtyToInvoice')
             ->willReturn(42);
 
-        $this->assertEquals($cancelActionFlag, $this->order->canCancel());
+        $this->assertSame($cancelActionFlag, $this->order->canCancel());
     }
 
     /**
@@ -745,7 +745,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         } else {
             $payment->expects($this->never())->method('canVoid');
         }
-        $this->assertEquals($expected, $order->canVoidPayment());
+        $this->assertSame($expected, $order->canVoidPayment());
     }
 
     /**
@@ -892,12 +892,12 @@ class OrderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIncrementId()
     {
-        $this->assertEquals($this->incrementId, $this->order->getIncrementId());
+        $this->assertSame($this->incrementId, $this->order->getIncrementId());
     }
 
     public function testGetEntityType()
     {
-        $this->assertEquals('order', $this->order->getEntityType());
+        $this->assertSame('order', $this->order->getEntityType());
     }
 
     /**
@@ -956,7 +956,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($collectionMock);
 
         for ($i = 10; --$i;) {
-            $this->assertEquals($collectionItems, $this->order->getStatusHistories());
+            $this->assertSame($collectionItems, $this->order->getStatusHistories());
         }
     }
 
@@ -999,7 +999,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
         $this->order->setPayment($payment);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->order->getData(
                 OrderInterface::PAYMENT
             ),
@@ -1036,7 +1036,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
         $this->order->setPayment($payment);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->order->getData(
                 OrderInterface::PAYMENT
             ),
@@ -1050,9 +1050,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
     public function testSetPaymentNull()
     {
-        $this->assertEquals(null, $this->order->setPayment(null));
+        $this->assertSame(null, $this->order->setPayment(null));
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->order->getData(
                 OrderInterface::PAYMENT
             ),
@@ -1071,7 +1071,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->order->setData(OrderInterface::PAYMENT, $payment);
         $this->order->reset();
-        $this->assertEquals(
+        $this->assertSame(
             $this->order->getData(
                 OrderInterface::PAYMENT
             ),

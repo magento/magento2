@@ -72,7 +72,7 @@ class CreditmemoItemRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->repository->getList($searchCriteria);
 
         $items = array_values($searchResult->getItems());
-        $this->assertEquals(1, count($items));
-        $this->assertEquals('item 2', $items[0][CreditmemoItemInterface::NAME]);
+        $this->assertSame(1, count($items));
+        $this->assertSame('item 2', $items[0][CreditmemoItemInterface::NAME]);
     }
 }

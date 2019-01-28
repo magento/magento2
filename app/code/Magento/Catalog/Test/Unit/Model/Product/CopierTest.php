@@ -163,7 +163,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             ->with($this->productMock, $duplicateMock);
         $resourceMock->expects($this->once())->method('duplicate')->with(1, 2);
 
-        $this->assertEquals($duplicateMock, $this->_model->copy($this->productMock));
+        $this->assertSame($duplicateMock, $this->_model->copy($this->productMock));
     }
 
     /**

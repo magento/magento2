@@ -74,7 +74,7 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
     public function testIsReadonlyWithGroupId()
     {
         $testGroup = ['id' => 3, 'code' => 'General', 'tax_class_id' => 3, 'tax_class_name' => 'Retail Customer'];
-        $this->assertEquals(false, $this->groupManagement->isReadonly($testGroup['id']));
+        $this->assertSame(false, $this->groupManagement->isReadonly($testGroup['id']));
     }
 
     /**
@@ -89,22 +89,22 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetNotLoggedInGroup()
     {
         $notLoggedInGroup = $this->groupManagement->getNotLoggedInGroup();
-        $this->assertEquals(GroupManagement::NOT_LOGGED_IN_ID, $notLoggedInGroup->getId());
+        $this->assertSame(GroupManagement::NOT_LOGGED_IN_ID, $notLoggedInGroup->getId());
     }
 
     public function testGetLoggedInGroups()
     {
         $loggedInGroups = $this->groupManagement->getLoggedInGroups();
         foreach ($loggedInGroups as $group) {
-            $this->assertNotEquals(GroupManagement::NOT_LOGGED_IN_ID, $group->getId());
-            $this->assertNotEquals(GroupManagement::CUST_GROUP_ALL, $group->getId());
+            $this->assertNotSame(GroupManagement::NOT_LOGGED_IN_ID, $group->getId());
+            $this->assertNotSame(GroupManagement::CUST_GROUP_ALL, $group->getId());
         }
     }
 
     public function testGetAllGroup()
     {
         $allGroup = $this->groupManagement->getAllCustomersGroup();
-        $this->assertEquals(32000, $allGroup->getId());
+        $this->assertSame(32000, $allGroup->getId());
     }
 
     /**
@@ -134,9 +134,9 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
     private function assertDefaultGroupMatches($testGroup, $storeId)
     {
         $group = $this->groupManagement->getDefaultGroup($storeId);
-        $this->assertEquals($testGroup['id'], $group->getId());
-        $this->assertEquals($testGroup['code'], $group->getCode());
-        $this->assertEquals($testGroup['tax_class_id'], $group->getTaxClassId());
-        $this->assertEquals($testGroup['tax_class_name'], $group->getTaxClassName());
+        $this->assertSame($testGroup['id'], $group->getId());
+        $this->assertSame($testGroup['code'], $group->getCode());
+        $this->assertSame($testGroup['tax_class_id'], $group->getTaxClassId());
+        $this->assertSame($testGroup['tax_class_name'], $group->getTaxClassName());
     }
 }

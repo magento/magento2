@@ -84,7 +84,7 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->storeDocumentsFromSelect($select);
 
-        $this->assertEquals($table, $result);
+        $this->assertSame($table, $result);
     }
 
     public function testStoreDocuments()
@@ -114,7 +114,7 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->storeDocuments([$document]);
 
-        $this->assertEquals($result, $table);
+        $this->assertSame($result, $table);
     }
 
     public function testStoreApiDocuments()
@@ -144,7 +144,7 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->storeApiDocuments([$document]);
 
-        $this->assertEquals($result, $table);
+        $this->assertSame($result, $table);
     }
 
     public function testNoDropIfNotPersistent()

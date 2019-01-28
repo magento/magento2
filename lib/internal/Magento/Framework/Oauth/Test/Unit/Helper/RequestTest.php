@@ -50,7 +50,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->with($expected[1]);
 
         $errorResponse = $this->oauthRequestHelper->prepareErrorResponse($exception, $this->response);
-        $this->assertEquals(['oauth_problem' => $expected[0]], $errorResponse);
+        $this->assertSame(['oauth_problem' => $expected[0]], $errorResponse);
     }
 
     /**
@@ -94,7 +94,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $httpRequestMock->expects($this->any())->method('getScheme')->will($this->returnValue('http'));
         $httpRequestMock->expects($this->any())->method('getRequestUri')->will($this->returnValue('/'));
 
-        $this->assertEquals($url, $this->oauthRequestHelper->getRequestUrl($httpRequestMock));
+        $this->assertSame($url, $this->oauthRequestHelper->getRequestUrl($httpRequestMock));
     }
 
     /**
@@ -144,7 +144,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
                 }
             });
 
-        $this->assertEquals($expectedParams, $this->oauthRequestHelper->prepareRequest($httpRequestMock));
+        $this->assertSame($expectedParams, $this->oauthRequestHelper->prepareRequest($httpRequestMock));
     }
 
     /**

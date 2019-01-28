@@ -32,6 +32,6 @@ MUTATION;
         $this->assertArrayHasKey('testItem', $response);
         $testItem = $response['testItem'];
         $this->assertArrayHasKey('integer_list', $testItem);
-        $this->assertEquals([4, 5, 6], $testItem['integer_list']);
+        $this->assertSame([4, 5, 6], $testItem['integer_list']);
     }
 }

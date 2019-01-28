@@ -77,7 +77,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedUrl)
         );
 
-        $this->assertEquals($expectedUrl, $this->_filesContent->getNewfolderUrl());
+        $this->assertSame($expectedUrl, $this->_filesContent->getNewfolderUrl());
     }
 
     /**
@@ -107,7 +107,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedUrl)
         );
 
-        $this->assertEquals($expectedUrl, $this->_filesContent->getDeleteFilesUrl());
+        $this->assertSame($expectedUrl, $this->_filesContent->getDeleteFilesUrl());
     }
 
     /**
@@ -137,7 +137,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedUrl)
         );
 
-        $this->assertEquals($expectedUrl, $this->_filesContent->getOnInsertUrl());
+        $this->assertSame($expectedUrl, $this->_filesContent->getOnInsertUrl());
     }
 
     /**
@@ -171,7 +171,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedRequest)
         );
 
-        $this->assertEquals($expectedRequest, $this->_filesContent->getTargetElementId());
+        $this->assertSame($expectedRequest, $this->_filesContent->getTargetElementId());
     }
 
     public function testGetContentsUrl()
@@ -215,6 +215,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($requestParams)
         );
 
-        $this->assertEquals($expectedUrl, $this->_filesContent->getContentsUrl());
+        $this->assertSame($expectedUrl, $this->_filesContent->getContentsUrl());
     }
 }

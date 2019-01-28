@@ -48,6 +48,6 @@ class ProductLinkTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbst
         ];
         $actual = $this->_webApiCall($serviceInfo, ['type' => $linkType]);
         $expected = [['code' => 'position', 'type' => 'int']];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $block = $layout->createBlock(\Magento\Backend\Block\System\Store\Edit::class, 'block');
         $block->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $this->assertEquals($expected, $block->getHeaderText());
+        $this->assertSame($expected, $block->getHeaderText());
     }
 
     /**

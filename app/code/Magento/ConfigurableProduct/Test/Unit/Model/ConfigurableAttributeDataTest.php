@@ -149,6 +149,6 @@ class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
             ->method('getPreconfiguredValues')
             ->willReturn($configuredValueMock);
 
-        $this->assertEquals($expected, $this->configurableAttributeData->getAttributesData($this->product, $options));
+        $this->assertSame($expected, $this->configurableAttributeData->getAttributesData($this->product, $options));
     }
 }

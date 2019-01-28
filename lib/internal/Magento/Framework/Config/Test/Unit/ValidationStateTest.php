@@ -15,7 +15,7 @@ class ValidationStateTest extends \PHPUnit\Framework\TestCase
     public function testIsValidationRequired($appMode, $expectedResult)
     {
         $model = new \Magento\Framework\App\Arguments\ValidationState($appMode);
-        $this->assertEquals($model->isValidationRequired(), $expectedResult);
+        $this->assertSame($model->isValidationRequired(), $expectedResult);
     }
 
     /**

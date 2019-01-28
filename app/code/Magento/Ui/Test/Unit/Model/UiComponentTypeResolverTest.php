@@ -40,7 +40,7 @@ class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
         $uiComponentContextMock = $this->createMock(ContextInterface::class);
         $uiComponentContextMock->expects($this->atLeastOnce())->method('getAcceptType')->willReturn($acceptType);
 
-        $this->assertEquals($contentType, $this->model->resolve($uiComponentContextMock));
+        $this->assertSame($contentType, $this->model->resolve($uiComponentContextMock));
     }
 
     /**

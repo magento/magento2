@@ -52,7 +52,7 @@ class SignifydOrderSessionIdTest extends \PHPUnit\Framework\TestCase
             ->with($quoteId)
             ->willReturn($signifydOrderSessionId);
 
-        $this->assertEquals(
+        $this->assertSame(
             $signifydOrderSessionId,
             $this->signifydOrderSessionId->get($quoteId)
         );

@@ -67,10 +67,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->request->setDataFromOrder($this->order, $payment);
 
-        static::assertEquals('US', $result->getXCountry());
-        static::assertEquals('UK', $result->getXShipToCountry());
-        static::assertEquals($customerEmail, $result->getXEmailCustomer());
-        static::assertEquals($merchantEmail, $result->getXMerchantEmail());
+        static::assertSame('US', $result->getXCountry());
+        static::assertSame('UK', $result->getXShipToCountry());
+        static::assertSame($customerEmail, $result->getXEmailCustomer());
+        static::assertSame($merchantEmail, $result->getXMerchantEmail());
     }
 
     /**

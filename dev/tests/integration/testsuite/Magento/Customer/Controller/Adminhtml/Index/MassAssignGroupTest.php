@@ -70,7 +70,7 @@ class MassAssignGroupTest extends AbstractBackendController
         $customerEmail = 'customer1@example.com';
         /** @var CustomerInterface $customer */
         $customer = $this->customerRepository->get($customerEmail);
-        $this->assertEquals(1, $customer->getGroupId());
+        $this->assertSame(1, $customer->getGroupId());
 
         $params = [
             'group' => 0,
@@ -88,7 +88,7 @@ class MassAssignGroupTest extends AbstractBackendController
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
 
         $customer = $this->customerRepository->get($customerEmail);
-        $this->assertEquals(0, $customer->getGroupId());
+        $this->assertSame(0, $customer->getGroupId());
     }
 
     /**
@@ -103,7 +103,7 @@ class MassAssignGroupTest extends AbstractBackendController
         for ($i = 1; $i <= 5; $i++) {
             /** @var CustomerInterface $customer */
             $customer = $this->customerRepository->get('customer' . $i . '@example.com');
-            $this->assertEquals(1, $customer->getGroupId());
+            $this->assertSame(1, $customer->getGroupId());
             $ids[] = $customer->getId();
         }
 
@@ -124,7 +124,7 @@ class MassAssignGroupTest extends AbstractBackendController
         for ($i = 1; $i < 5; $i++) {
             /** @var CustomerInterface $customer */
             $customer = $this->customerRepository->get('customer' . $i . '@example.com');
-            $this->assertEquals(0, $customer->getGroupId());
+            $this->assertSame(0, $customer->getGroupId());
         }
     }
 

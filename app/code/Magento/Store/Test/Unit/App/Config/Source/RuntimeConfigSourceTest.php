@@ -64,7 +64,7 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
         $this->connection->expects($this->any())->method('fetchAll')->willReturn([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'websites' => [],
                 'groups' => [],
@@ -82,6 +82,6 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->resourceConnection->expects($this->never())->method('getConnection');
 
-        $this->assertEquals([], $this->configSource->get());
+        $this->assertSame([], $this->configSource->get());
     }
 }

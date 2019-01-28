@@ -104,7 +104,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $item = $collection->getItemByCode($code);
 
-        $this->assertEquals($expectedResult, $item->getAdjustmentCode());
+        $this->assertSame($expectedResult, $item->getAdjustmentCode());
     }
 
     /**

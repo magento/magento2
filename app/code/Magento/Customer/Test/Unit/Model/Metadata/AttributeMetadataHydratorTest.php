@@ -156,7 +156,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         $attributeMetadata = $this->attributeMetadataHydrator->hydrate($attributeMetadataData);
 
         $this->assertInstanceOf(AttributeMetadataInterface::class, $attributeMetadata);
-        $this->assertEquals(
+        $this->assertSame(
             $attributeMetadataData['attribute_code'],
             $attributeMetadata->getAttributeCode()
         );
@@ -169,7 +169,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
             $attributeMetadata->getOptions()
         );
         $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[0]);
-        $this->assertEquals(
+        $this->assertSame(
             $optionOneData['label'],
             $attributeMetadata->getOptions()[0]->getLabel()
         );
@@ -182,7 +182,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertArrayHasKey(0, $attributeMetadata->getOptions()[1]->getOptions());
         $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]->getOptions()[0]);
-        $this->assertEquals(
+        $this->assertSame(
             $optionThreeData['label'],
             $attributeMetadata->getOptions()[1]->getOptions()[0]->getLabel()
         );
@@ -192,7 +192,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertArrayHasKey(0, $attributeMetadata->getValidationRules());
         $this->assertInstanceOf(ValidationRuleInterface::class, $attributeMetadata->getValidationRules()[0]);
-        $this->assertEquals(
+        $this->assertSame(
             $validationRuleOneData['name'],
             $attributeMetadata->getValidationRules()[0]->getName()
         );

@@ -51,8 +51,8 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testPrepareForm()
     {
         $form = $this->_block->getForm();
-        $this->assertEquals('website_fieldset', $form->getElement('website_fieldset')->getId());
-        $this->assertEquals('website_name', $form->getElement('website_name')->getId());
-        $this->assertEquals('website', $form->getElement('store_type')->getValue());
+        $this->assertSame('website_fieldset', $form->getElement('website_fieldset')->getId());
+        $this->assertSame('website_name', $form->getElement('website_name')->getId());
+        $this->assertSame('website', $form->getElement('store_type')->getValue());
     }
 }

@@ -93,7 +93,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($childrenIds)
         );
-        $this->assertEquals($childrenIds, $this->_model->getChildrenIds($parentId));
+        $this->assertSame($childrenIds, $this->_model->getChildrenIds($parentId));
     }
 
     public function testGetParentIdsByChild()
@@ -110,7 +110,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($parentIds)
         );
-        $this->assertEquals($parentIds, $this->_model->getParentIdsByChild($childId));
+        $this->assertSame($parentIds, $this->_model->getParentIdsByChild($childId));
     }
 
     public function testGetAssociatedProducts()
@@ -119,7 +119,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $associatedProducts = [5, 7, 11, 13, 17];
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
-        $this->assertEquals($associatedProducts, $this->_model->getAssociatedProducts($this->product));
+        $this->assertSame($associatedProducts, $this->_model->getAssociatedProducts($this->product));
     }
 
     /**
@@ -132,7 +132,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $this->product->expects($this->once())->method('getData')->will($this->returnValue($filters));
         $this->product->expects($this->once())->method('setData')->with('_cache_instance_status_filters', $result);
-        $this->assertEquals($this->_model, $this->_model->addStatusFilter($status, $this->product));
+        $this->assertSame($this->_model, $this->_model->addStatusFilter($status, $this->product));
     }
 
     /**
@@ -156,7 +156,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($saleableIds)
         );
         $this->product->expects($this->once())->method('setData')->with($key, $saleableIds);
-        $this->assertEquals($this->_model, $this->_model->setSaleableStatus($this->product));
+        $this->assertSame($this->_model, $this->_model->setSaleableStatus($this->product));
     }
 
     public function testGetStatusFiltersNoData()
@@ -166,7 +166,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
         ];
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue(false));
-        $this->assertEquals($result, $this->_model->getStatusFilters($this->product));
+        $this->assertSame($result, $this->_model->getStatusFilters($this->product));
     }
 
     public function testGetStatusFiltersWithData()
@@ -177,7 +177,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         ];
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue(true));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue($result));
-        $this->assertEquals($result, $this->_model->getStatusFilters($this->product));
+        $this->assertSame($result, $this->_model->getStatusFilters($this->product));
     }
 
     public function testGetAssociatedProductIdsCached()
@@ -189,7 +189,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->never())->method('setData');
         $this->product->expects($this->once())->method('getData')->with($key)->will($this->returnValue($cachedData));
 
-        $this->assertEquals($cachedData, $this->_model->getAssociatedProductIds($this->product));
+        $this->assertSame($cachedData, $this->_model->getAssociatedProductIds($this->product));
     }
 
     public function testGetAssociatedProductIdsNonCached()
@@ -233,7 +233,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($associatedIds)
         );
 
-        $this->assertEquals($associatedIds, $model->getAssociatedProductIds($this->product));
+        $this->assertSame($associatedIds, $model->getAssociatedProductIds($this->product));
     }
 
     public function testGetAssociatedProductCollection()
@@ -257,7 +257,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $link->expects($this->once())->method('getProductCollection')->will($this->returnValue($collection));
         $collection->expects($this->any())->method('setFlag')->will($this->returnValue($collection));
         $collection->expects($this->once())->method('setIsStrongMode')->will($this->returnValue($collection));
-        $this->assertEquals($collection, $this->_model->getAssociatedProductCollection($this->product));
+        $this->assertSame($collection, $this->_model->getAssociatedProductCollection($this->product));
     }
 
     /**
@@ -270,7 +270,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $buyRequest = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
         $buyRequest->expects($this->any())->method('getSuperGroup')->will($this->returnValue($superGroup));
 
-        $this->assertEquals($result, $this->_model->processBuyRequest($this->product, $buyRequest));
+        $this->assertSame($result, $this->_model->processBuyRequest($this->product, $buyRequest));
     }
 
     /**
@@ -295,7 +295,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->never())->method('setData');
         $this->product->expects($this->once())->method('getData')->with($key)->will($this->returnValue([]));
 
-        $this->assertEquals(0, $this->_model->getChildrenMsrp($this->product));
+        $this->assertSame(0, $this->_model->getChildrenMsrp($this->product));
     }
 
     public function testPrepareForCartAdvancedEmpty()
@@ -369,13 +369,13 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($items);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedMsg,
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
 
         $buyRequest->setSuperGroup(1);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedMsg,
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
@@ -398,7 +398,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue($associatedProducts));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedMsg,
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
@@ -423,7 +423,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->willReturn(json_encode($buyRequest->getData()));
 
-        $this->assertEquals(
+        $this->assertSame(
             [0 => $this->product],
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
         );
@@ -457,7 +457,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals(
+        $this->assertSame(
             $associatedPrepareResult,
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
         );
@@ -492,7 +492,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedMsg,
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
         );
@@ -535,7 +535,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals(
+        $this->assertSame(
             [$this->product],
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
         );
@@ -581,7 +581,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'grouped',
             $this->product
         );
-        $this->assertEquals(
+        $this->assertSame(
             [$associatedPrepareResult],
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
@@ -606,7 +606,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->expects($this->atLeastOnce())
             ->method('getData')
             ->will($this->returnValue([$associatedProduct]));
-        $this->assertEquals($expectedMsg, $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+        $this->assertSame($expectedMsg, $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
     }
 
     public function testFlushAssociatedProductsCache()
@@ -616,6 +616,6 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ->method('unsetData')
             ->with('_cache_instance_associated_products')
             ->willReturnSelf();
-        $this->assertEquals($productMock, $this->_model->flushAssociatedProductsCache($productMock));
+        $this->assertSame($productMock, $this->_model->flushAssociatedProductsCache($productMock));
     }
 }

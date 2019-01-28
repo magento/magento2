@@ -51,7 +51,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $lines = $this->_csvToArray($data, 'email');
 
-        $this->assertEquals(
+        $this->assertSame(
             count($expectedAttributes),
             count(array_intersect($expectedAttributes, $lines['header'])),
             'Expected attribute codes were not exported'
@@ -70,7 +70,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         foreach ($customers as $key => $customer) {
             foreach ($expectedAttributes as $code) {
                 if (!in_array($code, $this->_model->getDisabledAttributes()) && isset($lines[$key][$code])) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         $customer->getData($code),
                         $lines[$key][$code],
                         'Attribute "' . $code . '" is not equal'
@@ -85,7 +85,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntityTypeCode()
     {
-        $this->assertEquals('customer', $this->_model->getEntityTypeCode());
+        $this->assertSame('customer', $this->_model->getEntityTypeCode());
     }
 
     /**
@@ -131,7 +131,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         foreach ($collection as $attribute) {
             if (isset($overriddenAttributes[$attribute->getAttributeCode()])) {
                 foreach ($overriddenAttributes[$attribute->getAttributeCode()] as $propertyKey => $property) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         $property,
                         $attribute->getData($propertyKey),
                         'Value of property "' . $propertyKey . '" is not equals'
@@ -196,7 +196,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $collection->load();
 
         $this->assertCount(1, $collection);
-        $this->assertEquals($customers[0]->getId(), $collection->getFirstItem()->getId());
+        $this->assertSame($customers[0]->getId(), $collection->getFirstItem()->getId());
     }
 
     /**

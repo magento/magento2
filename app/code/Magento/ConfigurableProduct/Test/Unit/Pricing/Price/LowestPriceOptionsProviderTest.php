@@ -121,6 +121,6 @@ class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(Store::DEFAULT_STORE_ID);
 
-        $this->assertEquals($linkedProducts, $this->model->getProducts($product));
+        $this->assertSame($linkedProducts, $this->model->getProducts($product));
     }
 }

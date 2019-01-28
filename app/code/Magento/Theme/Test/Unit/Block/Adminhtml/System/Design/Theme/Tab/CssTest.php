@@ -76,7 +76,7 @@ class CssTest extends \PHPUnit\Framework\TestCase
         $expectedResult = 'Allowed file types *.css.<br />';
         $expectedResult .= 'This file will replace the current custom.css file and can\'t be more than 2 MB.<br />';
         $expectedResult .= sprintf('Max file size to upload %sM', $sizeModel->getMaxFileSizeInMb());
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testGetAdditionalElementTypes()
@@ -101,12 +101,12 @@ class CssTest extends \PHPUnit\Framework\TestCase
             'links' => \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links::class,
             'css_file' => \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class,
         ];
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testGetTabLabel()
     {
-        $this->assertEquals('CSS Editor', $this->_model->getTabLabel());
+        $this->assertSame('CSS Editor', $this->_model->getTabLabel());
     }
 
     /**

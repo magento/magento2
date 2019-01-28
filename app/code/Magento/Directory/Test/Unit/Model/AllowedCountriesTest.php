@@ -60,7 +60,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
             ->with(AllowedCountries::ALLOWED_COUNTRIES_PATH, 'website', 1)
             ->willReturn('AM');
 
-        $this->assertEquals(['AM' => 'AM'], $this->allowedCountriesReader->getAllowedCountries());
+        $this->assertSame(['AM' => 'AM'], $this->allowedCountriesReader->getAllowedCountries());
     }
 
     /**
@@ -73,7 +73,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
             ->with(AllowedCountries::ALLOWED_COUNTRIES_PATH, 'website', 1)
             ->willReturn('AM');
 
-        $this->assertEquals(
+        $this->assertSame(
             ['AM' => 'AM'],
             $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, true)
         );
@@ -92,7 +92,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
             ->with(AllowedCountries::ALLOWED_COUNTRIES_PATH, ScopeInterface::SCOPE_STORE, 0)
             ->willReturn('AM');
 
-        $this->assertEquals(
+        $this->assertSame(
             ['AM' => 'AM'],
             $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, 0)
         );

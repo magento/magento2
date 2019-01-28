@@ -69,7 +69,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
             ->with(CVV2Match::CONFIG_NAME)
             ->willReturn($avsSecurityCodeFlag);
 
-        $this->assertEquals($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
+        $this->assertSame($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
 
         if (!$expectedResult) {
             $this->assertNotEmpty($response->getRespmsg());

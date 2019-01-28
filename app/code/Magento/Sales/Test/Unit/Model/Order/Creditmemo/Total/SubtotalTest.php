@@ -111,6 +111,6 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
             ->method('setBaseGrandTotal')
             ->with(2)
             ->willReturnSelf();
-        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+        $this->assertSame($this->total, $this->total->collect($this->creditmemoMock));
     }
 }

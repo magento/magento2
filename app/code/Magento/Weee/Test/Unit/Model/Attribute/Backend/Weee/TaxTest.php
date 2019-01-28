@@ -25,7 +25,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBackendModelName()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
             \Magento\Weee\Model\Attribute\Backend\Weee\Tax::getBackendModelName()
         );

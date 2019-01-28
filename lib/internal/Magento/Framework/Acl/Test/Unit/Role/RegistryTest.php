@@ -48,7 +48,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->model->getParents($roleId));
         $this->model->addParent($role, $parentRole);
         $this->model->getParents($roleId);
-        $this->assertEquals([$parentRoleId => $parentRole], $this->model->getParents($roleId));
+        $this->assertSame([$parentRoleId => $parentRole], $this->model->getParents($roleId));
     }
 
     public function testAddParentByIds()
@@ -60,7 +60,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->model->getParents($roleId));
         $this->model->addParent($roleId, $parentRoleId);
         $this->model->getParents($roleId);
-        $this->assertEquals([$parentRoleId => $parentRole], $this->model->getParents($roleId));
+        $this->assertSame([$parentRoleId => $parentRole], $this->model->getParents($roleId));
     }
 
     /**

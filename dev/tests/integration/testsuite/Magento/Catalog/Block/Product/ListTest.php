@@ -41,7 +41,7 @@ class ListTest extends \PHPUnit\Framework\TestCase
         $collection = $this->_block->getLoadedProductCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
         /* Check that root category was defined for Layer as current */
-        $this->assertEquals(2, $this->_block->getLayer()->getCurrentCategory()->getId());
+        $this->assertSame(2, $this->_block->getLayer()->getCurrentCategory()->getId());
     }
 
     /**
@@ -66,7 +66,7 @@ class ListTest extends \PHPUnit\Framework\TestCase
         $parent->setChild('toolbar', $toolbar);
         /* In order to initialize toolbar collection block toHtml should be called before toolbar toHtml */
         $this->assertEmpty($parent->toHtml(), 'Block HTML'); /* Template not specified */
-        $this->assertEquals('grid', $parent->getMode(), 'Default Mode'); /* default mode */
+        $this->assertSame('grid', $parent->getMode(), 'Default Mode'); /* default mode */
         $this->assertNotEmpty($parent->getToolbarHtml(), 'Toolbar HTML'); /* toolbar for one simple product */
     }
 
@@ -87,20 +87,20 @@ class ListTest extends \PHPUnit\Framework\TestCase
             ['data' => ['text' => 'test']]
         );
         $layout->setChild($parent->getNameInLayout(), $childBlock->getNameInLayout(), 'additional');
-        $this->assertEquals('test', $parent->getAdditionalHtml());
+        $this->assertSame('test', $parent->getAdditionalHtml());
     }
 
     public function testSetCollection()
     {
         $this->_block->setCollection('test');
-        $this->assertEquals('test', $this->_block->getLoadedProductCollection());
+        $this->assertSame('test', $this->_block->getLoadedProductCollection());
     }
 
     public function testGetPriceBlockTemplate()
     {
         $this->assertNull($this->_block->getPriceBlockTemplate());
         $this->_block->setData('price_block_template', 'test');
-        $this->assertEquals('test', $this->_block->getPriceBlockTemplate());
+        $this->assertSame('test', $this->_block->getPriceBlockTemplate());
     }
 
     public function testPrepareSortableFieldsByCategory()
@@ -111,7 +111,7 @@ class ListTest extends \PHPUnit\Framework\TestCase
         );
         $category->setDefaultSortBy('name');
         $this->_block->prepareSortableFieldsByCategory($category);
-        $this->assertEquals('name', $this->_block->getSortBy());
+        $this->assertSame('name', $this->_block->getSortBy());
     }
 
     protected function _getLayout()

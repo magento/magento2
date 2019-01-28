@@ -34,6 +34,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('getPostData')
             ->with('someUrl')
             ->will($this->returnValue('{parsedAction}'));
-        $this->assertEquals('{parsedAction}', $this->block->getPostAction());
+        $this->assertSame('{parsedAction}', $this->block->getPostAction());
     }
 }

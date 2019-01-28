@@ -45,7 +45,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->shipmentMock->expects($this->once())
             ->method('getOrderId')
             ->willReturn(null);
-        $this->assertEquals(
+        $this->assertSame(
             [__('Order Id is required for shipment document')],
             $this->validator->validate($this->shipmentMock)
         );
@@ -59,7 +59,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->shipmentMock->expects($this->once())
             ->method('getItems')
             ->willReturn(null);
-        $this->assertEquals(
+        $this->assertSame(
             [__('You can\'t create a shipment without products.')],
             $this->validator->validate($this->shipmentMock)
         );

@@ -37,7 +37,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getPaths')
             ->willReturnMap($pathValues);
         $this->context = new Context($this->componentRegistrar);
-        $this->assertEquals($context, $this->context->getContextByPath($path));
+        $this->assertSame($context, $this->context->getContextByPath($path));
     }
 
     /**
@@ -105,7 +105,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->willReturnMap($registrar);
         $this->context = new Context($this->componentRegistrar);
-        $this->assertEquals($path, $this->context->buildPathToLocaleDirectoryByContext($context[0], $context[1]));
+        $this->assertSame($path, $this->context->buildPathToLocaleDirectoryByContext($context[0], $context[1]));
     }
 
     /**

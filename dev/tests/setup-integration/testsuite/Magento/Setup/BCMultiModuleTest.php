@@ -79,7 +79,7 @@ class BCMultiModuleTest extends SetupTestCase
         //Check UpgradeSchema old format, that modify declaration
         $columns = $this->dbSchemaReader->readColumns('test_table', 'default');
         $floatColumn = $columns['float'];
-        self::assertEquals(29, $floatColumn['default']);
+        self::assertSame(29, $floatColumn['default']);
     }
 
     private function doUsToUsRevision()
@@ -135,7 +135,7 @@ class BCMultiModuleTest extends SetupTestCase
         self::assertContains('custom_table', $usToUsTables);
         self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule7'));
         self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule7'));
-        self::assertEquals(
+        self::assertSame(
             [6,12],
             $this->tableData->describeTableData('reference_table', 'bigint_without_padding')
         );
@@ -150,14 +150,14 @@ class BCMultiModuleTest extends SetupTestCase
         $columns = $this->dbSchemaReader->readColumns('test_table', 'default');
         $floatColumn = $columns['float'];
         //Check whether declaration will be applied
-        self::assertEquals(35, $floatColumn['default']);
+        self::assertSame(35, $floatColumn['default']);
         self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule7'));
         self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule7'));
-        self::assertEquals(
+        self::assertSame(
             [6,12],
             $this->tableData->describeTableData('reference_table', 'bigint_without_padding')
         );
-        self::assertEquals(
+        self::assertSame(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );

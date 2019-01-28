@@ -129,7 +129,7 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($newOptionMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$newOptionMock],
             $this->model->getItems($productMock)
         );

@@ -65,7 +65,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('old_value')
         );
 
-        $this->assertEquals('old_value', $this->model->getOldValue());
+        $this->assertSame('old_value', $this->model->getOldValue());
     }
 
     /**
@@ -89,7 +89,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setValue($value);
 
-        $this->assertEquals($result, $this->model->isValueChanged());
+        $this->assertSame($result, $this->model->isValueChanged());
     }
 
     /**
@@ -141,7 +141,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldsetDataValue($fieldsetData, $key, $result)
     {
         $this->model->setData('fieldset_data', $fieldsetData);
-        $this->assertEquals($result, $this->model->getFieldsetDataValue($key));
+        $this->assertSame($result, $this->model->getFieldsetDataValue($key));
     }
 
     /**

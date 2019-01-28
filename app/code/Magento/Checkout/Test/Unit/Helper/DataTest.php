@@ -149,14 +149,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCheckout()
     {
-        $this->assertEquals($this->checkoutSession, $this->helper->getCheckout());
+        $this->assertSame($this->checkoutSession, $this->helper->getCheckout());
     }
 
     public function testGetQuote()
     {
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->checkoutSession->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->assertEquals($quoteMock, $this->helper->getQuote());
+        $this->assertSame($quoteMock, $this->helper->getQuote());
     }
 
     public function testFormatPrice()
@@ -167,14 +167,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSession->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $this->priceCurrency->expects($this->once())->method('format')->will($this->returnValue('5.5'));
-        $this->assertEquals('5.5', $this->helper->formatPrice($price));
+        $this->assertSame('5.5', $this->helper->formatPrice($price));
     }
 
     public function testConvertPrice()
     {
         $price = 5.5;
         $this->priceCurrency->expects($this->once())->method('convertAndFormat')->willReturn($price);
-        $this->assertEquals(5.5, $this->helper->convertPrice($price));
+        $this->assertSame(5.5, $this->helper->convertPrice($price));
     }
 
     public function testCanOnepageCheckout()
@@ -215,7 +215,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getPriceInclTax']);
         $itemMock->expects($this->exactly(2))->method('getPriceInclTax')->will($this->returnValue(5.5));
-        $this->assertEquals(5.5, $this->helper->getPriceInclTax($itemMock));
+        $this->assertSame(5.5, $this->helper->getPriceInclTax($itemMock));
     }
 
     public function testGetPriceInclTaxWithoutTax()
@@ -247,7 +247,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getDiscountTaxCompensation')->will($this->returnValue($discountTaxCompensation));
         $itemMock->expects($this->once())->method('getRowTotal')->will($this->returnValue($rowTotal));
         $this->priceCurrency->expects($this->once())->method('round')->with($roundPrice)->willReturn($roundPrice);
-        $this->assertEquals($expected, $helper->getPriceInclTax($itemMock));
+        $this->assertSame($expected, $helper->getPriceInclTax($itemMock));
     }
 
     public function testGetSubtotalInclTax()
@@ -256,7 +256,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $expected = 5.5;
         $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getRowTotalInclTax']);
         $itemMock->expects($this->exactly(2))->method('getRowTotalInclTax')->will($this->returnValue($rowTotalInclTax));
-        $this->assertEquals($expected, $this->helper->getSubtotalInclTax($itemMock));
+        $this->assertSame($expected, $this->helper->getSubtotalInclTax($itemMock));
     }
 
     public function testGetSubtotalInclTaxNegative()
@@ -274,7 +274,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $itemMock->expects($this->once())
             ->method('getDiscountTaxCompensation')->will($this->returnValue($discountTaxCompensation));
         $itemMock->expects($this->once())->method('getRowTotal')->will($this->returnValue($rowTotal));
-        $this->assertEquals($expected, $this->helper->getSubtotalInclTax($itemMock));
+        $this->assertSame($expected, $this->helper->getSubtotalInclTax($itemMock));
     }
 
     public function testGetBasePriceInclTaxWithoutQty()

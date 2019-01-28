@@ -122,7 +122,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
             Parser::class,
             ['translateInline' => $this->translateInlineMock]
         );
-        $this->assertEquals($expected, $this->model->processAjaxPost([]));
+        $this->assertSame($expected, $this->model->processAjaxPost([]));
     }
 
     public function testProcessAjaxPost()

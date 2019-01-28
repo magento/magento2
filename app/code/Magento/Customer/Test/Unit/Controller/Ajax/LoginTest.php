@@ -230,7 +230,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->resultJson->method('setData')
             ->with($result)
             ->willReturn($loginSuccessResponse);
-        self::assertEquals($loginSuccessResponse, $this->controller->execute());
+        self::assertSame($loginSuccessResponse, $this->controller->execute());
     }
 
     /**
@@ -269,7 +269,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
             ->with($result)
             ->willReturn($loginFailureResponse);
 
-        self::assertEquals($loginFailureResponse, $this->controller->execute());
+        self::assertSame($loginFailureResponse, $this->controller->execute());
     }
 
     /**

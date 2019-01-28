@@ -20,7 +20,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->dispatch('backend/paypal/billing_agreement/view/agreement/' . $agreementId);
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//a[@name="billing_agreement_info"]',
@@ -29,7 +29,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             'Response for billing agreement info doesn\'t contain billing agreement info tab'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//a[contains(text(), "customer@example.com")]',

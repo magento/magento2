@@ -109,7 +109,7 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
             ['label' => 'Saturday', 'value' => 'Sat'],
         ];
 
-        $this->assertEquals($expectedArray, $this->listsModel->getOptionWeekdays(true, true));
+        $this->assertSame($expectedArray, $this->listsModel->getOptionWeekdays(true, true));
     }
 
     public function testGetOptionTimezones()

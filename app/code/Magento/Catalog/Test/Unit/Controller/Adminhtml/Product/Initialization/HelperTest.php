@@ -303,8 +303,8 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeFilterMock->expects($this->any())->method('prepareProductAttributes')->willReturnArgument(1);
 
-        $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
-        $this->assertEquals($expWebsiteIds, $this->productMock->getDataByKey('website_ids'));
+        $this->assertSame($this->productMock, $this->helper->initialize($this->productMock));
+        $this->assertSame($expWebsiteIds, $this->productMock->getDataByKey('website_ids'));
 
         $productOptions = $this->productMock->getOptions();
         $this->assertTrue(2 == count($productOptions));
@@ -318,16 +318,16 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($expectedLinks), $productLinks);
         $resultLinks = [];
 
-        $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
+        $this->assertSame($tierPrice ?: [], $this->productMock->getData('tier_price'));
 
         foreach ($productLinks as $link) {
             $this->assertInstanceOf(ProductLink::class, $link);
-            $this->assertEquals('sku', $link->getSku());
+            $this->assertSame('sku', $link->getSku());
             $resultLinks[] = ['type' => $link->getLinkType(), 'linked_product_sku' => $link->getLinkedProductSku()];
         }
 
-        $this->assertEquals($expectedLinks, $resultLinks);
-        $this->assertEquals($specialFromDate, $productData['special_from_date']);
+        $this->assertSame($expectedLinks, $resultLinks);
+        $this->assertSame($specialFromDate, $productData['special_from_date']);
     }
 
     /**
@@ -661,7 +661,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     public function testMergeProductOptions($productOptions, $defaultOptions, $expectedResults)
     {
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
-        $this->assertEquals($expectedResults, $result);
+        $this->assertSame($expectedResults, $result);
     }
 
     /**

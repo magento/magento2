@@ -103,6 +103,6 @@ class ProductVariationsBuilderTest extends \PHPUnit\Framework\TestCase
         $output->expects($this->once())->method('setVisibility')
             ->with(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
 
-        $this->assertEquals([$output], $this->model->create($this->product, $attributes));
+        $this->assertSame([$output], $this->model->create($this->product, $attributes));
     }
 }

@@ -49,6 +49,6 @@ class CompositeBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
         $baseSelectProcessors = $this->objectManager->getObject(CompositeBaseSelectProcessor::class, [
             'baseSelectProcessors' => [$processorFirst, $processorSecond],
         ]);
-        $this->assertEquals($select, $baseSelectProcessors->process($select));
+        $this->assertSame($select, $baseSelectProcessors->process($select));
     }
 }

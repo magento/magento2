@@ -38,7 +38,7 @@ class ConflictCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($packageInfoMock));
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
-        $this->assertEquals($expected, $conflictChecker->checkConflictsWhenEnableModules($moduleName));
+        $this->assertSame($expected, $conflictChecker->checkConflictsWhenEnableModules($moduleName));
     }
 
     /**
@@ -138,7 +138,7 @@ class ConflictCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($packageInfoMock));
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
-        $this->assertEquals(
+        $this->assertSame(
             ['Vendor_C' => ['Vendor_C conflicts with current Vendor_A version 0.2 (version should not be >=0.2,<0.3)']],
             $conflictChecker->checkConflictsWhenEnableModules(['Vendor_C'])
         );
@@ -163,7 +163,7 @@ class ConflictCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($packageInfoMock));
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
-        $this->assertEquals(
+        $this->assertSame(
             ['Vendor_C' => ['Vendor_C conflicts with current Vendor_A version 0.2 (version should not be >=0.2,<0.3)']],
             $conflictChecker->checkConflictsWhenEnableModules(['Vendor_C'], ['Vendor_A', 'Vendor_B'])
         );

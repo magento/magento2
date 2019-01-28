@@ -57,6 +57,6 @@ class QtyTest extends \PHPUnit\Framework\TestCase
         $columnMock->expects($this->once())->method('getId')->will($this->returnValue('id_name'));
         $columnMock->expects($this->once())->method('getInlineCss')->will($this->returnValue('inline_css'));
 
-        $this->assertEquals($expected, $this->renderer->render($this->rowMock));
+        $this->assertSame($expected, $this->renderer->render($this->rowMock));
     }
 }

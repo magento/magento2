@@ -198,7 +198,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $expectedResult = $result;
         asort($expectedResult);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

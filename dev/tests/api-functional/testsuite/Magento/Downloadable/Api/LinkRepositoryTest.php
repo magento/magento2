@@ -150,15 +150,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $newLinkId);
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['link']['title'], $link->getTitle());
-        $this->assertEquals($requestData['link']['title'], $globalScopeLink->getTitle());
-        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['link']['price'], $link->getPrice());
-        $this->assertEquals($requestData['link']['price'], $globalScopeLink->getPrice());
-        $this->assertEquals($requestData['link']['is_shareable'], (int)$link->getIsShareable());
-        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
-        $this->assertEquals($requestData['link']['link_type'], $link->getLinkType());
-        $this->assertEquals($requestData['link']['sample_type'], $link->getSampleType());
+        $this->assertSame($requestData['link']['title'], $link->getTitle());
+        $this->assertSame($requestData['link']['title'], $globalScopeLink->getTitle());
+        $this->assertSame($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertSame($requestData['link']['price'], $link->getPrice());
+        $this->assertSame($requestData['link']['price'], $globalScopeLink->getPrice());
+        $this->assertSame($requestData['link']['is_shareable'], (int)$link->getIsShareable());
+        $this->assertSame($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertSame($requestData['link']['link_type'], $link->getLinkType());
+        $this->assertSame($requestData['link']['sample_type'], $link->getSampleType());
         $this->assertStringEndsWith('.jpg', $link->getSampleFile());
         $this->assertStringEndsWith('.jpg', $link->getLinkFile());
         $this->assertNull($link->getLinkUrl());
@@ -190,15 +190,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $newLinkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['link']['title'], $link->getTitle());
-        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['link']['price'], $link->getPrice());
-        $this->assertEquals($requestData['link']['is_shareable'], (int)$link->getIsShareable());
-        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
-        $this->assertEquals($requestData['link']['link_url'], $link->getLinkUrl());
-        $this->assertEquals($requestData['link']['link_type'], $link->getLinkType());
-        $this->assertEquals($requestData['link']['sample_url'], $link->getSampleUrl());
-        $this->assertEquals($requestData['link']['sample_type'], $link->getSampleType());
+        $this->assertSame($requestData['link']['title'], $link->getTitle());
+        $this->assertSame($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertSame($requestData['link']['price'], $link->getPrice());
+        $this->assertSame($requestData['link']['is_shareable'], (int)$link->getIsShareable());
+        $this->assertSame($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertSame($requestData['link']['link_url'], $link->getLinkUrl());
+        $this->assertSame($requestData['link']['link_type'], $link->getLinkType());
+        $this->assertSame($requestData['link']['sample_url'], $link->getSampleUrl());
+        $this->assertSame($requestData['link']['sample_type'], $link->getSampleType());
         $this->assertEmpty($globalScopeLink->getTitle());
         $this->assertEmpty($globalScopeLink->getPrice());
     }
@@ -227,15 +227,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $newLinkId = $this->_webApiCall($this->createServiceInfo, $requestData);
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['link']['title'], $link->getTitle());
-        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['link']['price'], $link->getPrice());
-        $this->assertEquals($requestData['link']['is_shareable'], (int)$link->getIsShareable());
-        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
-        $this->assertEquals($requestData['link']['link_url'], $link->getLinkUrl());
-        $this->assertEquals($requestData['link']['link_type'], $link->getLinkType());
-        $this->assertEquals($requestData['link']['sample_type'], $link->getSampleType());
-        $this->assertEquals($requestData['link']['sample_url'], $link->getSampleUrl());
+        $this->assertSame($requestData['link']['title'], $link->getTitle());
+        $this->assertSame($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertSame($requestData['link']['price'], $link->getPrice());
+        $this->assertSame($requestData['link']['is_shareable'], (int)$link->getIsShareable());
+        $this->assertSame($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertSame($requestData['link']['link_url'], $link->getLinkUrl());
+        $this->assertSame($requestData['link']['link_type'], $link->getLinkType());
+        $this->assertSame($requestData['link']['sample_type'], $link->getSampleType());
+        $this->assertSame($requestData['link']['sample_url'], $link->getSampleUrl());
     }
 
     /**
@@ -613,14 +613,14 @@ class LinkRepositoryTest extends WebapiAbstract
                 'sample_type' => 'url',
             ],
         ];
-        $this->assertEquals($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertSame($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $link = $this->getTargetLink($this->getTargetProduct(), $linkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['link']['title'], $link->getTitle());
-        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['link']['price'], $link->getPrice());
-        $this->assertEquals($requestData['link']['is_shareable'], (int)$link->getIsShareable());
-        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertSame($requestData['link']['title'], $link->getTitle());
+        $this->assertSame($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertSame($requestData['link']['price'], $link->getPrice());
+        $this->assertSame($requestData['link']['is_shareable'], (int)$link->getIsShareable());
+        $this->assertSame($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
     }
 
     /**
@@ -647,18 +647,18 @@ class LinkRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertEquals($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertSame($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $link = $this->getTargetLink($this->getTargetProduct(), $linkId);
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $linkId);
         $this->assertNotNull($link);
         // Title and price were set on store view level in fixture so they must be the same
-        $this->assertEquals($originalLink->getTitle(), $link->getTitle());
-        $this->assertEquals($originalLink->getPrice(), $link->getPrice());
-        $this->assertEquals($requestData['link']['title'], $globalScopeLink->getTitle());
-        $this->assertEquals($requestData['link']['price'], $globalScopeLink->getPrice());
-        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['link']['is_shareable'], (int)$link->getIsShareable());
-        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertSame($originalLink->getTitle(), $link->getTitle());
+        $this->assertSame($originalLink->getPrice(), $link->getPrice());
+        $this->assertSame($requestData['link']['title'], $globalScopeLink->getTitle());
+        $this->assertSame($requestData['link']['price'], $globalScopeLink->getPrice());
+        $this->assertSame($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertSame($requestData['link']['is_shareable'], (int)$link->getIsShareable());
+        $this->assertSame($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
     }
 
     /**
@@ -854,7 +854,7 @@ class LinkRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
-            $this->assertEquals($expectedMessage, $e->getMessage());
+            $this->assertSame($expectedMessage, $e->getMessage());
         } catch (\Exception $e) {
             $this->assertContains($expectedMessage, $e->getMessage());
         }
@@ -910,11 +910,11 @@ class LinkRepositoryTest extends WebapiAbstract
 
         $list = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(1, count($list));
+        $this->assertSame(1, count($list));
 
         $link = reset($list);
         foreach ($expectations['fields'] as $index => $value) {
-            $this->assertEquals($value, $link[$index]);
+            $this->assertSame($value, $link[$index]);
         }
         $this->assertContains('jellyfish_1_3.jpg', $link['sample_file']);
     }

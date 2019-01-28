@@ -37,7 +37,7 @@ class MinificationFilenameResolverTest extends \PHPUnit\Framework\TestCase
 
         $resolver = new MinificationFilenameResolver($minificationMock);
 
-        self::assertEquals($expected, $resolver->resolve($input));
+        self::assertSame($expected, $resolver->resolve($input));
     }
 
     /**

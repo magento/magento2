@@ -86,7 +86,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -136,6 +136,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

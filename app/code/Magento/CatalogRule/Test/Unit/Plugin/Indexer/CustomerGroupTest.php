@@ -51,6 +51,6 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
         $this->ruleProductProcessor->expects($this->once())
             ->method('markIndexerAsInvalid');
 
-        $this->assertEquals($this->subject, $this->plugin->afterDelete($this->subject, $this->subject));
+        $this->assertSame($this->subject, $this->plugin->afterDelete($this->subject, $this->subject));
     }
 }

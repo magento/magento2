@@ -23,11 +23,11 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEventPrefix()
     {
-        $this->assertEquals('sales_order', $this->model->getEventPrefix());
+        $this->assertSame('sales_order', $this->model->getEventPrefix());
     }
 
     public function testGetEventObject()
     {
-        $this->assertEquals('order', $this->model->getEventObject());
+        $this->assertSame('order', $this->model->getEventObject());
     }
 }

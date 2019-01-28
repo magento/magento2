@@ -67,7 +67,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $this->model->setEntityAttribute(new \Magento\Framework\DataObject(['store_id' => 1]));
 
         $return = $this->model->getEscapedValue();
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['value' => '30.000,40'],
             ],

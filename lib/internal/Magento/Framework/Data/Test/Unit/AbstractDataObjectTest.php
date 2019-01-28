@@ -29,7 +29,7 @@ class AbstractDataObjectTest extends \PHPUnit\Framework\TestCase
         $data = ['key' => 'value', 'object' => $subObject, 'nestedArray' => ['nestedObject' => $nestedObject]];
         $dataObject->setData($data);
 
-        $this->assertEquals($result, $dataObject->toArray());
+        $this->assertSame($result, $dataObject->toArray());
     }
 
     public function testGet()
@@ -42,6 +42,6 @@ class AbstractDataObjectTest extends \PHPUnit\Framework\TestCase
         $dataObject = $objectManager->getObject(\Magento\Framework\Data\Test\Unit\Stub\DataObject::class);
         $dataObject->setData($data);
 
-        $this->assertEquals($value, $dataObject->get($key));
+        $this->assertSame($value, $dataObject->get($key));
     }
 }

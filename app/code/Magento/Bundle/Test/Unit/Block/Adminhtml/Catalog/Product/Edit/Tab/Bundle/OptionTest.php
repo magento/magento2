@@ -39,8 +39,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         );
         $block->expects($this->atLeastOnce())->method('getLayout')->will($this->returnValue($layout));
 
-        $this->assertNotEquals(42, $block->getAddButtonId());
+        $this->assertNotSame(42, $block->getAddButtonId());
         $button->setId(42);
-        $this->assertEquals(42, $block->getAddButtonId());
+        $this->assertSame(42, $block->getAddButtonId());
     }
 }

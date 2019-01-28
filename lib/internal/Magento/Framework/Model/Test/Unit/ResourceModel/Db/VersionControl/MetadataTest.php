@@ -70,9 +70,9 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())->method('describeTable')->with($mainTable)->willReturn(
             $expectedDescribedTable
         );
-        $this->assertEquals($expectedDescribedTable, $this->entityMetadata->getFields($this->model));
+        $this->assertSame($expectedDescribedTable, $this->entityMetadata->getFields($this->model));
         //get from cached
         $this->connection->expects($this->never())->method('describeTable');
-        $this->assertEquals($expectedDescribedTable, $this->entityMetadata->getFields($this->model));
+        $this->assertSame($expectedDescribedTable, $this->entityMetadata->getFields($this->model));
     }
 }

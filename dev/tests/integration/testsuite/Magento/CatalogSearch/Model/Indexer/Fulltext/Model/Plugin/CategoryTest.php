@@ -47,7 +47,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $status = $state->getStatus();
 
         $this->assertTrue($isIndexerValid);
-        $this->assertEquals(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID, $status);
+        $this->assertSame(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID, $status);
     }
 
     /**

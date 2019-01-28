@@ -83,6 +83,6 @@ class AttributeSetTextTest extends AbstractColumnTest
             ->with(self::ATTRIBUTE_SET_ID)
             ->willReturn($this->attributeSetMock);
 
-        $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
+        $this->assertSame($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
     }
 }

@@ -34,6 +34,6 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
         $this->assertInstanceOf(\Magento\Quote\Model\Quote\Item::class, $quoteItem);
 
         $this->assertGreaterThan(0, (int)$quoteItem->getProductId());
-        $this->assertEquals('Simple Product', $quoteItem->getName());
+        $this->assertSame('Simple Product', $quoteItem->getName());
     }
 }

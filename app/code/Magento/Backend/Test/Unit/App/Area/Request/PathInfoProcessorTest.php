@@ -52,7 +52,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('storeCode')
         );
-        $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
+        $this->assertSame($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
 
     public function testProcessIfStoreCodeNotEqualToAreaFrontName()
@@ -74,6 +74,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('Expected')
         );
-        $this->assertEquals('Expected', $this->_model->process($this->_requestMock, $this->_pathInfo));
+        $this->assertSame('Expected', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
 }

@@ -25,7 +25,7 @@ class FooterTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIdentities()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG],
             $this->block->getIdentities()
         );
@@ -42,6 +42,6 @@ class FooterTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('getCacheLifetime');
         $method->setAccessible(true);
-        $this->assertEquals(3600, $method->invoke($this->block));
+        $this->assertSame(3600, $method->invoke($this->block));
     }
 }

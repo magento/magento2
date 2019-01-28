@@ -130,6 +130,6 @@ class BasePriceTest extends \PHPUnit\Framework\TestCase
             ->with(false, $this->saleableItemMock)
             ->willReturn($amount);
 
-        $this->assertEquals($amount, $this->basePrice->getAmount());
+        $this->assertSame($amount, $this->basePrice->getAmount());
     }
 }

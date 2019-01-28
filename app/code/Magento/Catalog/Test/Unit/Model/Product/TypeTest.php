@@ -44,12 +44,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $property = new \ReflectionProperty($this->_model, '_types');
         $property->setAccessible(true);
         $this->assertNull($property->getValue($this->_model));
-        $this->assertEquals($this->_productTypes, $this->_model->getTypes());
+        $this->assertSame($this->_productTypes, $this->_model->getTypes());
     }
 
     public function testGetOptionArray()
     {
-        $this->assertEquals($this->getOptionArray(), $this->_model->getOptionArray());
+        $this->assertSame($this->getOptionArray(), $this->_model->getOptionArray());
     }
 
     public function testGetAllOptions()
@@ -58,7 +58,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         foreach ($this->getOptionArray() as $index => $value) {
             $res[] = ['value' => $index, 'label' => $value];
         }
-        $this->assertEquals($res, $this->_model->getAllOptions());
+        $this->assertSame($res, $this->_model->getAllOptions());
     }
 
     public function testGetOptions()
@@ -67,22 +67,22 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         foreach ($this->getOptionArray() as $index => $value) {
             $res[] = ['value' => $index, 'label' => $value];
         }
-        $this->assertEquals($res, $this->_model->getOptions());
+        $this->assertSame($res, $this->_model->getOptions());
     }
 
     public function testGetAllOption()
     {
         $options = $this->getOptionArray();
         array_unshift($options, ['value' => '', 'label' => '']);
-        $this->assertEquals($options, $this->_model->getAllOption());
+        $this->assertSame($options, $this->_model->getAllOption());
     }
 
     public function testGetOptionText()
     {
         $options = $this->getOptionArray();
-        $this->assertEquals($options['type_id_3'], $this->_model->getOptionText('type_id_3'));
-        $this->assertEquals($options['type_id_1'], $this->_model->getOptionText('type_id_1'));
-        $this->assertNotEquals($options['type_id_1'], $this->_model->getOptionText('simple'));
+        $this->assertSame($options['type_id_3'], $this->_model->getOptionText('type_id_3'));
+        $this->assertSame($options['type_id_1'], $this->_model->getOptionText('type_id_1'));
+        $this->assertNotSame($options['type_id_1'], $this->_model->getOptionText('simple'));
         $this->assertNull($this->_model->getOptionText('not_exist'));
     }
 
@@ -92,7 +92,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $property->setAccessible(true);
         $this->assertNull($property->getValue($this->_model));
 
-        $this->assertEquals(['type_id_3'], $this->_model->getCompositeTypes());
+        $this->assertSame(['type_id_3'], $this->_model->getCompositeTypes());
     }
 
     public function testGetTypesByPriority()
@@ -108,7 +108,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $expected['type_id_1'] = $options['type_id_1'];
         $expected['type_id_3'] = $options['type_id_3'];
 
-        $this->assertEquals($expected, $this->_model->getTypesByPriority());
+        $this->assertSame($expected, $this->_model->getTypesByPriority());
     }
 
     public function testGetPriceInfo()

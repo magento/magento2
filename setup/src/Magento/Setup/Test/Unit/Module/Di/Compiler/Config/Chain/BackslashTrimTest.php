@@ -22,7 +22,7 @@ class BackslashTrimTest extends \PHPUnit\Framework\TestCase
     public function testModifyArguments()
     {
         $modifier = new BackslashTrim();
-        $this->assertEquals($this->getOutputConfig(), $modifier->modify($this->getInputConfig()));
+        $this->assertSame($this->getOutputConfig(), $modifier->modify($this->getInputConfig()));
     }
 
     /**

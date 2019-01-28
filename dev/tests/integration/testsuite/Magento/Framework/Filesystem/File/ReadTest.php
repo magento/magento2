@@ -55,7 +55,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getFileInstance($path);
         $result = $file->read($length);
-        $this->assertEquals($result, $expectedResult);
+        $this->assertSame($result, $expectedResult);
     }
 
     /**
@@ -78,7 +78,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testReadAll($path, $content)
     {
         $file = $this->getFileInstance($path);
-        $this->assertEquals($content, $file->readAll($path));
+        $this->assertSame($content, $file->readAll($path));
     }
 
     /**
@@ -106,7 +106,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getFileInstance($path);
         foreach ($lines as $line) {
-            $this->assertEquals($line, $file->readLine($length, "\n"));
+            $this->assertSame($line, $file->readLine($length, "\n"));
         }
     }
 
@@ -182,8 +182,8 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $file = $this->getFileInstance($path);
         $actualRow1 = $file->readCsv($length, $delimiter, $enclosure, $escape);
         $actualRow2 = $file->readCsv($length, $delimiter, $enclosure, $escape);
-        $this->assertEquals($expectedRow1, $actualRow1);
-        $this->assertEquals($expectedRow2, $actualRow2);
+        $this->assertSame($expectedRow1, $actualRow1);
+        $this->assertSame($expectedRow2, $actualRow2);
     }
 
     /**
@@ -207,7 +207,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getFileInstance($path);
         $file->read($position);
-        $this->assertEquals($position, $file->tell());
+        $this->assertSame($position, $file->tell());
     }
 
     /**
@@ -233,7 +233,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getFileInstance($path);
         $file->seek($position, $whence);
-        $this->assertEquals($tell, $file->tell());
+        $this->assertSame($tell, $file->tell());
     }
 
     /**

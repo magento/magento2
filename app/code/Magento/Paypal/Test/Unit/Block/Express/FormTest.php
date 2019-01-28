@@ -100,7 +100,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('shouldAskToCreateBillingAgreement')
             ->with($this->identicalTo($this->_paypalConfig), 'customer id')
             ->will($this->returnValue($ask));
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->_model->getBillingAgreementCode()
         );

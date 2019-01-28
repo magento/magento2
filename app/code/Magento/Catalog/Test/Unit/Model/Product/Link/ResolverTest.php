@@ -34,7 +34,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with('links', [])
             ->willReturn($someLinks);
-        $this->assertEquals($someLinks, $this->resolver->getLinks());
+        $this->assertSame($someLinks, $this->resolver->getLinks());
     }
 
     public function testGetLinksOverridden()
@@ -44,6 +44,6 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getParam');
 
         $this->resolver->override($overriddenLinks);
-        $this->assertEquals($overriddenLinks, $this->resolver->getLinks());
+        $this->assertSame($overriddenLinks, $this->resolver->getLinks());
     }
 }

@@ -29,13 +29,13 @@ class ConfigFilePoolTest extends \PHPUnit\Framework\TestCase
         $expected[ConfigFilePool::APP_CONFIG] = 'config.php';
         $expected[ConfigFilePool::APP_ENV] = 'env.php';
 
-        $this->assertEquals($expected, $this->configFilePool->getPaths());
+        $this->assertSame($expected, $this->configFilePool->getPaths());
     }
 
     public function testGetPath()
     {
         $expected = 'config.php';
-        $this->assertEquals($expected, $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG));
+        $this->assertSame($expected, $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG));
     }
 
     /**

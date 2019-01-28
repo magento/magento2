@@ -496,7 +496,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($amount, $this->saleableItem, [])
             ->will($this->returnValue($result));
 
-        $this->assertEquals($result, $calculatorMock->getAmountWithoutOption($amount, $this->saleableItem));
+        $this->assertSame($result, $calculatorMock->getAmountWithoutOption($amount, $this->saleableItem));
     }
 
     public function testGetMinRegularAmount()
@@ -519,7 +519,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $result = $calculatorMock->getMinRegularAmount($amount, $this->saleableItem, $exclude);
 
-        $this->assertEquals($expectedResult, $result, 'Incorrect result');
+        $this->assertSame($expectedResult, $result, 'Incorrect result');
     }
 
     public function testGetMaxRegularAmount()
@@ -542,7 +542,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $result = $calculatorMock->getMaxRegularAmount($amount, $this->saleableItem, $exclude);
 
-        $this->assertEquals($expectedResult, $result, 'Incorrect result');
+        $this->assertSame($expectedResult, $result, 'Incorrect result');
     }
 
     /**
@@ -582,7 +582,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             $useRegularPrice
         );
 
-        $this->assertEquals($expectedResult, $result, 'Incorrect result');
+        $this->assertSame($expectedResult, $result, 'Incorrect result');
     }
 
     /**

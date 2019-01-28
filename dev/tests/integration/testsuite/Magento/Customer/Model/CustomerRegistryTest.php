@@ -42,7 +42,7 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
     {
         $customer = $this->_model->retrieve(self::CUSTOMER_ID);
         $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
-        $this->assertEquals(self::CUSTOMER_ID, $customer->getId());
+        $this->assertSame(self::CUSTOMER_ID, $customer->getId());
     }
 
     /**
@@ -52,7 +52,7 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
     {
         $customer = $this->_model->retrieveByEmail('customer@example.com', self::WEBSITE_ID);
         $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
-        $this->assertEquals(self::CUSTOMER_EMAIL, $customer->getEmail());
+        $this->assertSame(self::CUSTOMER_EMAIL, $customer->getEmail());
     }
 
     /**
@@ -68,9 +68,9 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Customer::class
         )->load(self::CUSTOMER_ID)->delete();
         //Verify presence of Customer in registry
-        $this->assertEquals($customerBeforeDeletion, $this->_model->retrieve(self::CUSTOMER_ID));
+        $this->assertSame($customerBeforeDeletion, $this->_model->retrieve(self::CUSTOMER_ID));
         //Verify presence of Customer in email registry
-        $this->assertEquals($customerBeforeDeletion, $this->_model
+        $this->assertSame($customerBeforeDeletion, $this->_model
                 ->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID));
     }
 
@@ -95,7 +95,7 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
                 'field2Name' => 'websiteId',
                 'field2Value' => 1,
             ];
-            $this->assertEquals($expectedParams, $e->getParameters());
+            $this->assertSame($expectedParams, $e->getParameters());
         }
     }
 

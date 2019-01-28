@@ -96,6 +96,6 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ['label' => 'Item 1', 'value' => 'item1'],
             ['label' => $paddingString . 'Item 2', 'value' => 'item2'],
         ];
-        $this->assertEquals($expected, $this->_model->toOptionArray());
+        $this->assertSame($expected, $this->_model->toOptionArray());
     }
 }

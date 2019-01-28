@@ -73,7 +73,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
     public function testAddUniqueField($fieldNameType, $expectedResult)
     {
         $this->_model->addUniqueField($fieldNameType);
-        $this->assertEquals($expectedResult, $this->_model->getUniqueFields());
+        $this->assertSame($expectedResult, $this->_model->getUniqueFields());
     }
 
     /**
@@ -131,7 +131,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         );
         $idFieldNameProperty->setAccessible(true);
         $idFieldNameProperty->setValue($this->_model, $data);
-        $this->assertEquals($data, $this->_model->getIdFieldName());
+        $this->assertSame($data, $this->_model->getIdFieldName());
     }
 
     /**
@@ -160,7 +160,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->with($expectedResult)
             ->will($this->returnValue($expectedResult));
-        $this->assertEquals($expectedResult, $this->_model->getMainTable());
+        $this->assertSame($expectedResult, $this->_model->getMainTable());
     }
 
     /**
@@ -195,12 +195,12 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         );
         $tablesProperty->setAccessible(true);
         $tablesProperty->setValue($this->_model, [$data]);
-        $this->assertEquals($data, $this->_model->getTable($data));
+        $this->assertSame($data, $this->_model->getTable($data));
     }
 
     public function testGetChecksumNegative()
     {
-        $this->assertEquals(false, $this->_model->getChecksum(null));
+        $this->assertSame(false, $this->_model->getChecksum(null));
     }
 
     /**
@@ -217,7 +217,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->_resourcesMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($connectionMock)
         );
-        $this->assertEquals($expected, $this->_model->getChecksum($checksum));
+        $this->assertSame($expected, $this->_model->getChecksum($checksum));
     }
 
     /**
@@ -246,7 +246,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $uniqueFields->setAccessible(true);
         $uniqueFields->setValue($this->_model, ['uniqueField1', 'uniqueField2']);
         $this->_model->resetUniqueField();
-        $this->assertEquals([], $this->_model->getUniqueFields());
+        $this->assertSame([], $this->_model->getUniqueFields());
     }
 
     public function testGetUniqueFields()
@@ -257,7 +257,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         );
         $uniqueFieldsReflection->setAccessible(true);
         $uniqueFieldsReflection->setValue($this->_model, null);
-        $this->assertEquals([], $this->_model->getUniqueFields());
+        $this->assertSame([], $this->_model->getUniqueFields());
     }
 
     public function testGetValidationRulesBeforeSave()
@@ -276,7 +276,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $object->expects($this->once())->method('setOrigData')->willReturnSelf();
         $object->expects($this->once())->method('setHasDataChanges')->with(false)->willReturnSelf();
         $result = $this->_model->load($object, 'some_value', 'field_name');
-        $this->assertEquals($this->_model, $result);
+        $this->assertSame($this->_model, $result);
         $this->assertInstanceOf(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             $result
@@ -403,7 +403,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $connectionInterfaceMock->expects($this->any())->method('describeTable')->with('tableName')->will(
             $this->returnValue(['tableName'])
         );
-        $this->assertEquals($expected, $this->_model->hasDataChanged($abstractModelMock));
+        $this->assertSame($expected, $this->_model->hasDataChanged($abstractModelMock));
     }
 
     /**
@@ -476,13 +476,13 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $abstractModelMock->afterLoad();
-        $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
+        $this->assertSame($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $newData = ['value' => 'Test Value New'];
         $this->_model->expects($this->atLeastOnce())
             ->method('_prepareDataForTable')
             ->will($this->returnValue($newData));
         $abstractModelMock->addData($newData);
-        $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
+        $this->assertNotSame($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $abstractModelMock->isObjectNew(false);
         $connectionMock->expects($this->once())
             ->method('update')

@@ -87,7 +87,7 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
         $addressMock->method('getCountryId')->willReturn($data['country_id']);
 
         $actual = $this->model->validate($addressMock);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

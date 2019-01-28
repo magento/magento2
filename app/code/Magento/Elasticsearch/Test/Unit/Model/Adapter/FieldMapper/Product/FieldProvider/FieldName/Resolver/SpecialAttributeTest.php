@@ -51,7 +51,7 @@ class SpecialAttributeTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->resolver->getFieldName($attributeMock)
         );

@@ -117,7 +117,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     public function testValidateConsumer()
     {
         $this->consumerMock->expects($this->once())->method('isValidForTokenExchange')->willReturn(true);
-        $this->assertEquals(true, $this->tokenProvider->validateConsumer($this->consumerMock));
+        $this->assertSame(true, $this->tokenProvider->validateConsumer($this->consumerMock));
     }
 
     /**
@@ -143,7 +143,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->requestTokenMock->expects($this->once())->method('getId')->willReturn($tokenId);
 
         $actualToken = $this->tokenProvider->getIntegrationTokenByConsumerId($consumerId);
-        $this->assertEquals($this->requestTokenMock, $actualToken);
+        $this->assertSame($this->requestTokenMock, $actualToken);
     }
 
     /**
@@ -204,8 +204,8 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('oauth_token', $response);
         $this->assertArrayHasKey('oauth_token_secret', $response);
-        $this->assertEquals($tokenString, $response['oauth_token']);
-        $this->assertEquals($secret, $response['oauth_token_secret']);
+        $this->assertSame($tokenString, $response['oauth_token']);
+        $this->assertSame($secret, $response['oauth_token_secret']);
     }
 
     /**
@@ -265,8 +265,8 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $response = $this->tokenProvider->getAccessToken($this->consumerMock);
         $this->assertArrayHasKey('oauth_token', $response);
         $this->assertArrayHasKey('oauth_token_secret', $response);
-        $this->assertEquals($tokenString, $response['oauth_token']);
-        $this->assertEquals($secret, $response['oauth_token_secret']);
+        $this->assertSame($tokenString, $response['oauth_token']);
+        $this->assertSame($secret, $response['oauth_token_secret']);
     }
 
     /**
@@ -313,7 +313,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->requestTokenMock->expects($this->once())->method('getSecret')->willReturn($secret);
         $this->requestTokenMock->expects($this->once())->method('getVerifier')->willReturn($oauthVerifier);
 
-        $this->assertEquals(
+        $this->assertSame(
             $secret,
             $this->tokenProvider->validateRequestToken($requestTokenString, $this->consumerMock, $oauthVerifier)
         );
@@ -505,7 +505,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->accessTokenMock->expects($this->once())->method('getSecret')->willReturn($secret);
 
-        $this->assertEquals(
+        $this->assertSame(
             $secret,
             $this->tokenProvider->validateAccessTokenRequest($accessTokenString, $this->consumerMock)
         );
@@ -607,7 +607,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->accessTokenMock->expects($this->once())->method('getType')->willReturn(Token::TYPE_ACCESS);
         $this->accessTokenMock->expects($this->once())->method('getRevoked')->willReturn(0);
-        $this->assertEquals(
+        $this->assertSame(
             $consumerId,
             $this->tokenProvider->validateAccessToken($accessTokenString)
         );
@@ -710,7 +710,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->consumerMock->expects($this->once())->method('loadByKey')->with($consumerKeyString)->willReturnSelf();
         $this->consumerMock->expects($this->once())->method('getId')->willReturn($consumerId);
 
-        $this->assertEquals($this->consumerMock, $this->tokenProvider->getConsumerByKey($consumerKeyString));
+        $this->assertSame($this->consumerMock, $this->tokenProvider->getConsumerByKey($consumerKeyString));
     }
 
     /**

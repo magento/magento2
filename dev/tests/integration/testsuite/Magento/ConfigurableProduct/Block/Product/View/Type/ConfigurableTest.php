@@ -78,7 +78,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $config = json_decode($this->_block->getJsonConfig(), true);
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
-        $this->assertEquals(1, $config['productId']);
+        $this->assertSame(1, $config['productId']);
         $this->assertArrayHasKey('attributes', $config);
         $this->assertArrayHasKey('template', $config);
         $this->assertArrayHasKey('prices', $config);

@@ -31,17 +31,17 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
     public function testSanitizeEmpty()
     {
-        $this->assertEquals('', $this->sanitizeMethod->invokeArgs($this->model, ['']));
+        $this->assertSame('', $this->sanitizeMethod->invokeArgs($this->model, ['']));
     }
 
     public function testSanitizeSimpleFilename()
     {
-        $this->assertEquals('custom.log', $this->sanitizeMethod->invokeArgs($this->model, ['custom.log']));
+        $this->assertSame('custom.log', $this->sanitizeMethod->invokeArgs($this->model, ['custom.log']));
     }
 
     public function testSanitizeLeadingSlashFilename()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'customfolder/custom.log',
             $this->sanitizeMethod->invokeArgs($this->model, ['/customfolder/custom.log'])
         );
@@ -49,7 +49,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
     public function testSanitizeParentLevelFolder()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'var/hack/custom.log',
             $this->sanitizeMethod->invokeArgs($this->model, ['../../../var/hack/custom.log'])
         );

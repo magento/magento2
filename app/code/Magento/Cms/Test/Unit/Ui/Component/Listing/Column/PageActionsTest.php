@@ -106,6 +106,6 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
         $model->setName($name);
         $items = $model->prepareDataSource($items);
         // Run test
-        $this->assertEquals($expectedItems, $items['data']['items']);
+        $this->assertSame($expectedItems, $items['data']['items']);
     }
 }

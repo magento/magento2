@@ -76,6 +76,6 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(new \Magento\Framework\DataObject(['body' => 'RESULTval=12&val2=34'])));
         $expectedResult = ['resultval' => '12', 'val2' => '34', 'result_code' => null];
 
-        $this->assertEquals($expectedResult, $this->_model->acceptPayment($order->getPayment()));
+        $this->assertSame($expectedResult, $this->_model->acceptPayment($order->getPayment()));
     }
 }

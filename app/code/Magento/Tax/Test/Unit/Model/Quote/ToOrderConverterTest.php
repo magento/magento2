@@ -126,7 +126,7 @@ class ToOrderConverterTest extends \PHPUnit\Framework\TestCase
             ->method('setExtensionAttributes')
             ->with($orderExtensionAttributeMock);
 
-        $this->assertEquals($orderMock, $this->model->afterConvert($this->subjectMock, $orderMock));
+        $this->assertSame($orderMock, $this->model->afterConvert($this->subjectMock, $orderMock));
     }
 
     /**
@@ -178,7 +178,7 @@ class ToOrderConverterTest extends \PHPUnit\Framework\TestCase
             ->method('setExtensionAttributes')
             ->with($orderExtensionAttributeMock);
 
-        $this->assertEquals($orderMock, $this->model->afterConvert($this->subjectMock, $orderMock));
+        $this->assertSame($orderMock, $this->model->afterConvert($this->subjectMock, $orderMock));
     }
 
     /**

@@ -73,6 +73,6 @@ class StatusTextTest extends AbstractColumnTest
             ->with(self::STATUS_ID)
             ->willReturn(self::STATUS_TEXT);
 
-        $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
+        $this->assertSame($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
     }
 }

@@ -36,6 +36,6 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
             ->with('newsletter/manage/save', [])
             ->willReturn('newsletter/manage/save');
 
-        $this->assertEquals('newsletter/manage/save', $this->block->getAction());
+        $this->assertSame('newsletter/manage/save', $this->block->getAction());
     }
 }

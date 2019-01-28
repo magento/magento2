@@ -119,7 +119,7 @@ class ImageTest extends \Magento\Ui\Test\Unit\Component\Form\Element\DataType\Me
 
         $actualRelevantPreparedConfig = array_intersect_key($this->image->getConfiguration(), $initialConfig);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedPreparedConfig,
             $actualRelevantPreparedConfig
         );

@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $billingAgreementCollection->addCustomerDetails();
 
-        $this->assertEquals(1, $billingAgreementCollection->count(), "Invalid collection items quantity.");
+        $this->assertSame(1, $billingAgreementCollection->count(), "Invalid collection items quantity.");
         /** @var \Magento\Paypal\Model\Billing\Agreement $billingAgreement */
         $billingAgreement = $billingAgreementCollection->getFirstItem();
 
@@ -38,7 +38,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'customer_lastname' => 'Smith',
         ];
         foreach ($expectedData as $field => $expectedValue) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedValue,
                 $billingAgreement->getData($field),
                 "'{$field}' field value is invalid."

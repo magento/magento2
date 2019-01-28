@@ -173,13 +173,13 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
         foreach ($addressData as $key => $value) {
             $totalsMock->setData($key, $value);
         }
-        $this->assertEquals(
+        $this->assertSame(
             $this->quoteDetailsItemDataObject,
             $this->commonTaxCollector->getShippingDataObject($shippingAssignmentMock, $totalsMock, $useBaseCurrency)
         );
 
         if ($shippingAmount) {
-            $this->assertEquals($expectedDiscountAmount, $this->quoteDetailsItemDataObject->getDiscountAmount());
+            $this->assertSame($expectedDiscountAmount, $this->quoteDetailsItemDataObject->getDiscountAmount());
         }
     }
 

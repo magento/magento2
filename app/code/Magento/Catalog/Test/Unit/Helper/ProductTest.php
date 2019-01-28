@@ -32,7 +32,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDataForPriceIndexerWasChanged($data, $result)
     {
-        $this->assertEquals($this->_productHelper->isDataForPriceIndexerWasChanged($data), $result);
+        $this->assertSame($this->_productHelper->isDataForPriceIndexerWasChanged($data), $result);
     }
 
     /**

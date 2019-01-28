@@ -82,8 +82,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $product->load($productId);
 
         $this->assertFalse($product->isObjectNew());
-        $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
-        $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
+        $this->assertSame(self::TEST_PRODUCT_NAME, $product->getName());
+        $this->assertSame(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
         $childProductCollection = $product->getTypeInstance()->getAssociatedProducts($product);
 

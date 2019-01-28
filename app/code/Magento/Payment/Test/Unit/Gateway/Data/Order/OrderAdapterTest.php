@@ -46,21 +46,21 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $expected = 'USD';
         $this->orderMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getCurrencyCode());
+        $this->assertSame($expected, $this->model->getCurrencyCode());
     }
 
     public function testGetOrderIncrementId()
     {
         $expected = '1';
         $this->orderMock->expects($this->once())->method('getIncrementId')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getOrderIncrementId());
+        $this->assertSame($expected, $this->model->getOrderIncrementId());
     }
 
     public function testGetCustomerId()
     {
         $expected = 1;
         $this->orderMock->expects($this->once())->method('getCustomerId')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getCustomerId());
+        $this->assertSame($expected, $this->model->getCustomerId());
     }
 
     public function testGetBillingAddressIsNull()

@@ -91,7 +91,7 @@ class BeforeTest extends \PHPUnit\Framework\TestCase
     {
         $actualEntities = $this->_model->getEntityBehaviors();
         $expectedEntities = json_encode($this->_expectedEntities);
-        $this->assertEquals($expectedEntities, $actualEntities);
+        $this->assertSame($expectedEntities, $actualEntities);
     }
 
     /**
@@ -103,6 +103,6 @@ class BeforeTest extends \PHPUnit\Framework\TestCase
     {
         $actualBehaviors = $this->_model->getUniqueBehaviors();
         $expectedBehaviors = json_encode($this->_expectedBehaviors);
-        $this->assertEquals($expectedBehaviors, $actualBehaviors);
+        $this->assertSame($expectedBehaviors, $actualBehaviors);
     }
 }

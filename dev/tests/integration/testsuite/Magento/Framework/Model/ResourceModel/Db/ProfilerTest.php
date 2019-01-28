@@ -89,7 +89,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $queryProfile = end($queryProfiles);
         $this->assertInstanceOf('Zend_Db_Profiler_Query', $queryProfile);
 
-        $this->assertEquals($selectQuery, $queryProfile->getQuery());
+        $this->assertSame($selectQuery, $queryProfile->getQuery());
     }
 
     /**

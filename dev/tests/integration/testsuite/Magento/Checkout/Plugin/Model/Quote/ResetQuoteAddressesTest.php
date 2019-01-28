@@ -67,7 +67,7 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $quoteBillingAddressUpdated = $quote->getBillingAddress();
         $customer = $quote->getCustomer();
 
-        $this->assertEquals($quoteBillingAddressUpdated->getEmail(), $customer->getEmail());
+        $this->assertSame($quoteBillingAddressUpdated->getEmail(), $customer->getEmail());
         $this->assertEmpty($quoteBillingAddressUpdated->getCountryId());
         $this->assertEmpty($quoteBillingAddressUpdated->getRegionId());
         $this->assertEmpty($quoteBillingAddressUpdated->getRegion());

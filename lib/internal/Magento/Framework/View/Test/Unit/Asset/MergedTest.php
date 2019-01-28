@@ -196,6 +196,6 @@ class MergedTest extends \PHPUnit\Framework\TestCase
         foreach ($actual as $actualItem) {
             $actualItems[] = $actualItem;
         }
-        $this->assertEquals($expectedItems, $actualItems);
+        $this->assertSame($expectedItems, $actualItems);
     }
 }

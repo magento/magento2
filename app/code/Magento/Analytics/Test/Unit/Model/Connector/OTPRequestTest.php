@@ -127,7 +127,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             ->method('getResult')
             ->willReturn($data['otp']);
 
-        $this->assertEquals(
+        $this->assertSame(
             $data['otp'],
             $this->subject->call()
         );

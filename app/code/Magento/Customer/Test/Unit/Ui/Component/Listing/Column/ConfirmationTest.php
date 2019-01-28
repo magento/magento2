@@ -120,7 +120,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->confirmation->setData('name', 'confirmation');
         $result = $this->confirmation->prepareDataSource($dataSource);
 
-        $this->assertEquals($result['data']['items'][0]['confirmation'], $expected);
+        $this->assertSame($result['data']['items'][0]['confirmation'], $expected);
     }
 
     /**

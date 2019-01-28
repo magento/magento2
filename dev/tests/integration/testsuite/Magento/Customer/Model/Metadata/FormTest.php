@@ -89,7 +89,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testCompactData()
     {
         $attributeValues = $this->_form->compactData($this->_form->extractData($this->_request));
-        $this->assertEquals($this->_expected, $attributeValues);
+        $this->assertSame($this->_expected, $attributeValues);
     }
 
     /**
@@ -114,7 +114,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'fax',
             'vat_id',
         ];
-        $this->assertEquals($expectedAttributes, array_keys($this->_form->getAttributes()));
+        $this->assertSame($expectedAttributes, array_keys($this->_form->getAttributes()));
     }
 
     /**
@@ -132,7 +132,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testGetUserAttributes()
     {
         $expectedAttributes = ['address_user_attribute'];
-        $this->assertEquals($expectedAttributes, array_keys($this->_form->getUserAttributes()));
+        $this->assertSame($expectedAttributes, array_keys($this->_form->getUserAttributes()));
     }
 
     /**
@@ -141,6 +141,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testRestoreData()
     {
         $attributeValues = $this->_form->restoreData($this->_form->extractData($this->_request));
-        $this->assertEquals($this->_expected, $attributeValues);
+        $this->assertSame($this->_expected, $attributeValues);
     }
 }

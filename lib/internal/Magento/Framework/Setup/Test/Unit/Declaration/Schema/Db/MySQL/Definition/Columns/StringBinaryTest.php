@@ -103,7 +103,7 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('COMMENT "Comment"');
-        $this->assertEquals(
+        $this->assertSame(
             '`col` varchar(50) NULL DEFAULT "test" COMMENT "Comment"',
             $this->stringBinary->toDefinition($column)
         );
@@ -125,7 +125,7 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
             $expectedData['length'] = $expectedLength;
         }
         $result = $this->stringBinary->fromDefinition(['definition' => $definition]);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     /**

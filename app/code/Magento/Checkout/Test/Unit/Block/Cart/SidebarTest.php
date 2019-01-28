@@ -120,7 +120,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->with('checkout.cart.minicart.totals')
             ->will($this->returnValue($totalsBlockMock));
 
-        $this->assertEquals($totalsHtml, $this->model->getTotalsHtml());
+        $this->assertSame($totalsHtml, $this->model->getTotalsHtml());
     }
 
     public function testGetConfig()
@@ -180,7 +180,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 
     public function testGetIsNeedToDisplaySideBar()
@@ -202,6 +202,6 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getTotals')->willReturn($totalsMock);
 
-        $this->assertEquals($totalsMock, $this->model->getTotalsCache());
+        $this->assertSame($totalsMock, $this->model->getTotalsCache());
     }
 }

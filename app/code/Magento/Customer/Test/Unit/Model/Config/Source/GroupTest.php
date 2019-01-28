@@ -61,6 +61,6 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectedValue);
 
         array_unshift($expectedValue, ['value' => '', 'label' => __('-- Please Select --')]);
-        $this->assertEquals($expectedValue, $this->model->toOptionArray());
+        $this->assertSame($expectedValue, $this->model->toOptionArray());
     }
 }

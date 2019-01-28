@@ -37,7 +37,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
         $lineLengthProperty = new \ReflectionProperty(\Magento\Framework\File\Csv::class, '_lineLength');
         $lineLengthProperty->setAccessible(true);
         $actual = $lineLengthProperty->getValue($this->_model);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testSetDelimiter()

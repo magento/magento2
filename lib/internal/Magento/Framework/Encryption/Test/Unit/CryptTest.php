@@ -95,9 +95,9 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
         $crypt = new \Magento\Framework\Encryption\Crypt($this->_key, $cipher, $mode, $initVector);
 
-        $this->assertEquals($cipher, $crypt->getCipher());
-        $this->assertEquals($mode, $crypt->getMode());
-        $this->assertEquals($initVector, $crypt->getInitVector());
+        $this->assertSame($cipher, $crypt->getCipher());
+        $this->assertSame($mode, $crypt->getMode());
+        $this->assertSame($initVector, $crypt->getInitVector());
     }
 
     /**
@@ -136,9 +136,9 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $cryptExpected = new \Magento\Framework\Encryption\Crypt($this->_key, MCRYPT_BLOWFISH, MCRYPT_MODE_ECB, false);
         $cryptActual = new \Magento\Framework\Encryption\Crypt($this->_key);
 
-        $this->assertEquals($cryptExpected->getCipher(), $cryptActual->getCipher());
-        $this->assertEquals($cryptExpected->getMode(), $cryptActual->getMode());
-        $this->assertEquals($cryptExpected->getInitVector(), $cryptActual->getInitVector());
+        $this->assertSame($cryptExpected->getCipher(), $cryptActual->getCipher());
+        $this->assertSame($cryptExpected->getMode(), $cryptActual->getMode());
+        $this->assertSame($cryptExpected->getInitVector(), $cryptActual->getInitVector());
     }
 
     /**
@@ -164,7 +164,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     {
         $crypt = new \Magento\Framework\Encryption\Crypt($key, $cipher, $mode, $initVector);
         $actualData = $crypt->encrypt($inputData);
-        $this->assertEquals($expectedData, $actualData);
+        $this->assertSame($expectedData, $actualData);
     }
 
     /**
@@ -174,7 +174,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     {
         $crypt = new \Magento\Framework\Encryption\Crypt($key, $cipher, $mode, $initVector);
         $actualData = $crypt->decrypt($inputData);
-        $this->assertEquals($expectedData, $actualData);
+        $this->assertSame($expectedData, $actualData);
     }
 
     /**
@@ -189,9 +189,9 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $initVector2 = $crypt2->getInitVector();
 
         $expectedSize = $this->_getInitVectorSize($cipher, $mode);
-        $this->assertEquals($expectedSize, strlen($initVector1));
-        $this->assertEquals($expectedSize, strlen($initVector2));
-        $this->assertNotEquals($initVector2, $initVector1);
+        $this->assertSame($expectedSize, strlen($initVector1));
+        $this->assertSame($expectedSize, strlen($initVector2));
+        $this->assertNotSame($initVector2, $initVector1);
     }
 
     /**
@@ -203,6 +203,6 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $actualInitVector = $crypt->getInitVector();
 
         $expectedInitVector = str_repeat("\0", $this->_getInitVectorSize($cipher, $mode));
-        $this->assertEquals($expectedInitVector, $actualInitVector);
+        $this->assertSame($expectedInitVector, $actualInitVector);
     }
 }

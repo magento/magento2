@@ -161,7 +161,7 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->block)
             ->willReturnSelf();
-        $this->assertEquals($this->block, $this->repository->save($this->block));
+        $this->assertSame($this->block, $this->repository->save($this->block));
     }
 
     /**
@@ -265,6 +265,6 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('setItems')
             ->with([$this->block])
             ->willReturnSelf();
-        $this->assertEquals($this->blockSearchResult, $this->repository->getList($criteria));
+        $this->assertSame($this->blockSearchResult, $this->repository->getList($criteria));
     }
 }

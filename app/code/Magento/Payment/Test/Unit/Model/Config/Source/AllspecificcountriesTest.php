@@ -17,6 +17,6 @@ class AllspecificcountriesTest extends \PHPUnit\Framework\TestCase
             ['value' => 1, 'label' => __('Specific Countries')],
         ];
         $model = new Allspecificcountries();
-        $this->assertEquals($expectedArray, $model->toOptionArray());
+        $this->assertSame($expectedArray, $model->toOptionArray());
     }
 }

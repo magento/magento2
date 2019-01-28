@@ -84,7 +84,7 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
 
         $this->model->registerSnapshot($dataObjectMock);
 
-        $this->assertEquals($expected, $this->model->isModified($dataObjectMock));
+        $this->assertSame($expected, $this->model->isModified($dataObjectMock));
     }
 
     /**
@@ -124,6 +124,6 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
 
         $this->model->registerSnapshot($dataObjectMock);
 
-        $this->assertEquals(true, $this->model->isModified($dataObjectMock));
+        $this->assertSame(true, $this->model->isModified($dataObjectMock));
     }
 }

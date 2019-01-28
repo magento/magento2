@@ -93,7 +93,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $params = ['a' => 123, 'b' => 145];
         $this->_prepareSutForGetBodyParamsTest($params);
-        $this->assertEquals($params, $this->_request->getBodyParams(), 'Body parameters were retrieved incorrectly.');
+        $this->assertSame($params, $this->_request->getBodyParams(), 'Body parameters were retrieved incorrectly.');
     }
 
     /**
@@ -161,10 +161,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         );
 
         try {
-            $this->assertEquals($contentType, $this->_request->getContentType());
+            $this->assertSame($contentType, $this->_request->getContentType());
         } catch (\Magento\Framework\Exception\InputException $e) {
             if ($exceptionMessage) {
-                $this->assertEquals(
+                $this->assertSame(
                     $exceptionMessage,
                     $e->getMessage(),
                     'Exception message does not match the expected one.'

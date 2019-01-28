@@ -45,7 +45,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     public function testReadCustomerId(): void
     {
         $customerId = 1;
-        $this->assertEquals($customerId, $this->subjectReader->readCustomerId(['customer_id' => $customerId]));
+        $this->assertSame($customerId, $this->subjectReader->readCustomerId(['customer_id' => $customerId]));
     }
 
     /**
@@ -66,7 +66,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     public function testReadPublicHash(): void
     {
         $hash = 'fj23djf2o1fd';
-        $this->assertEquals($hash, $this->subjectReader->readPublicHash(['public_hash' => $hash]));
+        $this->assertSame($hash, $this->subjectReader->readPublicHash(['public_hash' => $hash]));
     }
 
     /**
@@ -98,7 +98,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
             'paypal' => $paypal,
         ]);
 
-        $this->assertEquals($paypal, $this->subjectReader->readPayPal($transaction));
+        $this->assertSame($paypal, $this->subjectReader->readPayPal($transaction));
     }
 
     /**

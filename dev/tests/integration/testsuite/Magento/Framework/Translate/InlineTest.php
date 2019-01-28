@@ -105,7 +105,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $actual->preserveWhiteSpace = false;
         $actual->loadHTML($actualText);
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

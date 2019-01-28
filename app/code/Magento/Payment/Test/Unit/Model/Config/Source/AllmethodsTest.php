@@ -38,6 +38,6 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
             ->method('getPaymentMethodList')
             ->with(true, true, true)
             ->will($this->returnValue($expectedArray));
-        $this->assertEquals($expectedArray, $this->_model->toOptionArray());
+        $this->assertSame($expectedArray, $this->_model->toOptionArray());
     }
 }

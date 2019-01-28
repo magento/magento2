@@ -44,12 +44,12 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('some value')
         );
-        $this->assertEquals('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
+        $this->assertSame('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
     }
 
     public function testGetTaxContainer()
     {
-        $this->assertEquals($this->_orderMock, $this->_model->getTaxContainer());
+        $this->assertSame($this->_orderMock, $this->_model->getTaxContainer());
     }
 
     public function testGetAllItems()
@@ -95,6 +95,6 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ),
         ];
         $this->_orderMock->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
-        $this->assertEquals($expected, $this->_model->getAllItems());
+        $this->assertSame($expected, $this->_model->getAllItems());
     }
 }

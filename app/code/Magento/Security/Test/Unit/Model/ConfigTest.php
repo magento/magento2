@@ -52,7 +52,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLimitationTimePeriod()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Security\Model\Config::LIMITATION_TIME_PERIOD,
             $this->model->getLimitationTimePeriod()
         );
@@ -74,7 +74,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnValue($email)
             );
-        $this->assertEquals($email, $this->model->getCustomerServiceEmail());
+        $this->assertSame($email, $this->model->getCustomerServiceEmail());
     }
 
     /**
@@ -90,7 +90,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnValue($lifetime)
             );
-        $this->assertEquals($lifetime, $this->model->getAdminSessionLifetime());
+        $this->assertSame($lifetime, $this->model->getAdminSessionLifetime());
     }
 
     /**
@@ -105,7 +105,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnValue($isShared)
             );
-        $this->assertEquals($isShared, $this->model->isAdminAccountSharingEnabled());
+        $this->assertSame($isShared, $this->model->isAdminAccountSharingEnabled());
     }
 
     /**
@@ -133,7 +133,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType($scope));
+        $this->assertSame($resetMethod, $this->model->getPasswordResetProtectionType($scope));
     }
 
     /**
@@ -187,7 +187,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($limitNumber, $this->model->getMaxNumberPasswordResetRequests());
+        $this->assertSame($limitNumber, $this->model->getMaxNumberPasswordResetRequests());
     }
 
     /**
@@ -207,7 +207,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($limitTime * 60, $this->model->getMinTimeBetweenPasswordResetRequests());
+        $this->assertSame($limitTime * 60, $this->model->getMinTimeBetweenPasswordResetRequests());
     }
 
     /**

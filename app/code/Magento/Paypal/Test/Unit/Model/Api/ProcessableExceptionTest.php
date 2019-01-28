@@ -25,7 +25,7 @@ class ProcessableExceptionTest extends \PHPUnit\Framework\TestCase
     public function testGetUserMessage($code, $msg)
     {
         $this->model = new ProcessableException(__($msg), null, $code);
-        $this->assertEquals($msg, $this->model->getUserMessage());
+        $this->assertSame($msg, $this->model->getUserMessage());
     }
 
     /**

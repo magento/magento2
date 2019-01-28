@@ -77,7 +77,7 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
             ->willReturn($encodedValue);
 
         $this->model->beforeSave();
-        $this->assertEquals($encodedValue, $this->model->getValue());
+        $this->assertSame($encodedValue, $this->model->getValue());
     }
 
     /**
@@ -179,7 +179,7 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
             ->willReturn($value);
 
         $this->model->afterLoad();
-        $this->assertEquals($expected, $this->model->getValue());
+        $this->assertSame($expected, $this->model->getValue());
     }
 
     /**

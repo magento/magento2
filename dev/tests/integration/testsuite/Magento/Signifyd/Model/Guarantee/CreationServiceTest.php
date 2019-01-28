@@ -126,8 +126,8 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($result);
 
         $updatedCase = $this->getCaseEntity();
-        self::assertEquals(CaseInterface::GUARANTEE_IN_REVIEW, $updatedCase->getGuaranteeDisposition());
-        self::assertEquals(CaseInterface::STATUS_PROCESSING, $updatedCase->getStatus());
+        self::assertSame(CaseInterface::GUARANTEE_IN_REVIEW, $updatedCase->getGuaranteeDisposition());
+        self::assertSame(CaseInterface::STATUS_PROCESSING, $updatedCase->getStatus());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
@@ -138,7 +138,7 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
         self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        self::assertEquals('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
+        self::assertSame('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
     }
 
     /**

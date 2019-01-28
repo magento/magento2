@@ -68,7 +68,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn($expected);
         $result = $this->widget->getWidgets();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -84,7 +84,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $result = $this->widget->getWidgets(['name' => 'CMS Page Link', 'description' => 'Link to a CMS Page']);
         $configFileOne = __DIR__ . '/_files/mappedConfigArray1.php';
         $expected = ['cms_page_link' => include $configFileOne];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -99,7 +99,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             ->willReturn($widgets);
         $result = $this->widget->getWidgets(['name' => 'unknown', 'description' => 'unknown']);
         $expected = [];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -112,7 +112,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->dataStorageMock->expects($this->any())
             ->method('get')
             ->willReturn($widgets);
-        $this->assertEquals($widgetOne, $this->widget->getWidgetByClassType('type1'));
+        $this->assertSame($widgetOne, $this->widget->getWidgetByClassType('type1'));
         $this->assertNull($this->widget->getWidgetByClassType('type2'));
     }
 

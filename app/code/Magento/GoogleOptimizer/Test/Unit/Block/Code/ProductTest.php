@@ -46,6 +46,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($product)
         );
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertSame($productTags, $this->block->getIdentities());
     }
 }

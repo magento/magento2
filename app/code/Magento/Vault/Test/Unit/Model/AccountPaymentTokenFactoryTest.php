@@ -63,6 +63,6 @@ class AccountPaymentTokenFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->factory->create();
         static::assertInstanceOf(PaymentTokenInterface::class, $paymentToken);
-        static::assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $paymentToken->getType());
+        static::assertSame(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $paymentToken->getType());
     }
 }

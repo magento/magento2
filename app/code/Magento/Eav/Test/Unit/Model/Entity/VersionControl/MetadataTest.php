@@ -85,7 +85,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
 
         $this->model->expects($this->any())->method('getAttributes')->willReturn($expectedAttributes);
         //check that fields load with null initial value
-        $this->assertEquals(
+        $this->assertSame(
             array_fill_keys(array_keys($expectedResults), null),
             $this->metadata->getFields($this->model)
         );
@@ -93,7 +93,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         // Testing loading data from cache.
         $this->connection->expects($this->never())->method('describeTable');
 
-        $this->assertEquals(
+        $this->assertSame(
             array_fill_keys(array_keys($expectedResults), null),
             $this->metadata->getFields($this->model)
         );

@@ -26,6 +26,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
         );
         $errorMessage = 'Default Config value for Store->Configuration->Sales->Checkout->Shopping Cart->'
         . 'Number of items to display pager shouold be ' . $configValue;
-        $this->assertEquals($configValue, $defaultConfigValue, $errorMessage);
+        $this->assertSame($configValue, $defaultConfigValue, $errorMessage);
     }
 }

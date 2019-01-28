@@ -57,6 +57,6 @@ class CostTest extends \PHPUnit\Framework\TestCase
             ->method('setBaseCost')
             ->with(40)
             ->willReturnSelf();
-        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+        $this->assertSame($this->total, $this->total->collect($this->creditmemoMock));
     }
 }

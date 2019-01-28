@@ -92,7 +92,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
             ->method('installDataFixtures');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute($options));
-        $this->assertEquals($expectedString, $this->commandTester->getDisplay());
+        $this->assertSame($expectedString, $this->commandTester->getDisplay());
     }
 
     /**

@@ -114,7 +114,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->method('getResolvedConstructorArguments')
             ->willReturnMap($getResolvedConstructorArgumentsMap);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->getExpectedGlobalConfig(),
             $this->model->generateCachePerScope($definitionCollection, Area::AREA_GLOBAL)
         );

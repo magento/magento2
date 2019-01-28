@@ -61,11 +61,11 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $layer->setCurrentCategory($category);
         $productCollection = $layer->getProductCollection();
 
-        $this->assertEquals(1, $productCollection->count());
+        $this->assertSame(1, $productCollection->count());
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals($this->_product->getId(), $product->getId());
-            $this->assertEquals($this->_product->getPrice(), $product->getPrice());
+            $this->assertSame($this->_product->getId(), $product->getId());
+            $this->assertSame($this->_product->getPrice(), $product->getPrice());
         }
     }
 }

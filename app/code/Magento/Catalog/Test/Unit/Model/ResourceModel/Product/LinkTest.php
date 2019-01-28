@@ -74,7 +74,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->dbSelect)
         );
         $this->connection->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
-        $this->assertEquals($result, $this->model->getAttributesByType($typeId));
+        $this->assertSame($result, $this->model->getAttributesByType($typeId));
     }
 
     public function testGetAttributeTypeTable()
@@ -91,7 +91,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($resultTable)
         );
-        $this->assertEquals($resultTable, $this->model->getAttributeTypeTable($inputTable));
+        $this->assertSame($resultTable, $this->model->getAttributeTypeTable($inputTable));
     }
 
     public function testGetChildrenIds()
@@ -120,7 +120,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($fetchedData)
         );
 
-        $this->assertEquals($result, $this->model->getChildrenIds($parentId, $typeId));
+        $this->assertSame($result, $this->model->getChildrenIds($parentId, $typeId));
     }
 
     public function testGetParentIdsByChild()
@@ -145,6 +145,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($fetchedData)
         );
 
-        $this->assertEquals($result, $this->model->getParentIdsByChild($childId, $typeId));
+        $this->assertSame($result, $this->model->getParentIdsByChild($childId, $typeId));
     }
 }

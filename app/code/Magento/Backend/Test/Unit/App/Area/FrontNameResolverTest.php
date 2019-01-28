@@ -66,7 +66,7 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('expectedValue')
         );
-        $this->assertEquals('expectedValue', $this->model->getFrontName());
+        $this->assertSame('expectedValue', $this->model->getFrontName());
     }
 
     public function testIfCustomPathNotUsed()
@@ -80,7 +80,7 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(false)
         );
-        $this->assertEquals($this->_defaultFrontName, $this->model->getFrontName());
+        $this->assertSame($this->_defaultFrontName, $this->model->getFrontName());
     }
 
     /**
@@ -115,7 +115,7 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->assertEquals($this->model->isHostBackend(), $expectedValue);
+        $this->assertSame($this->model->isHostBackend(), $expectedValue);
     }
 
     /**

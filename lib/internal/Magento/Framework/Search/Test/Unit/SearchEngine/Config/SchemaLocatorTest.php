@@ -27,11 +27,11 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSchema()
     {
-        $this->assertEquals('xsd/path', $this->model->getSchema());
+        $this->assertSame('xsd/path', $this->model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals('xsd/path', $this->model->getPerFileSchema());
+        $this->assertSame('xsd/path', $this->model->getPerFileSchema());
     }
 }

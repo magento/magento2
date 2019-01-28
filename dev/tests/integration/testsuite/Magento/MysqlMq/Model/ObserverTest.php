@@ -47,22 +47,22 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         //Check how many messages in collection by the beginning of tests
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
-        $this->assertEquals(1, $messageCollection->getSize());
+        $this->assertSame(1, $messageCollection->getSize());
         $messageId = $messageCollection->getFirstItem()->getId();
 
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId);
-        $this->assertEquals(3, $messageStatusCollection->getSize());
+        $this->assertSame(3, $messageStatusCollection->getSize());
 
         //Run clean up once. It should move 3 out of 4 statuses to TO BE DELETED status
         $this->observer->cleanupMessages();
 
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
-        $this->assertEquals(0, $messageCollection->getSize());
+        $this->assertSame(0, $messageCollection->getSize());
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId);
-        $this->assertEquals(0, $messageStatusCollection->getSize());
+        $this->assertSame(0, $messageStatusCollection->getSize());
     }
 
     /**
@@ -84,25 +84,25 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         //Check how many messages in collection by the beginning of tests
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
-        $this->assertEquals(1, $messageCollection->getSize());
+        $this->assertSame(1, $messageCollection->getSize());
         $messageId = $messageCollection->getFirstItem()->getId();
 
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId);
-        $this->assertEquals(4, $messageStatusCollection->getSize());
+        $this->assertSame(4, $messageStatusCollection->getSize());
 
         //Run clean up once. It should move 3 out of 4 statuses to TO BE DELETED status
         $this->observer->cleanupMessages();
 
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
-        $this->assertEquals(1, $messageCollection->getSize());
+        $this->assertSame(1, $messageCollection->getSize());
 
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId)
             ->addFieldToFilter('status', \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_TO_BE_DELETED);
 
-        $this->assertEquals(3, $messageStatusCollection->getSize());
+        $this->assertSame(3, $messageStatusCollection->getSize());
 
         // Change the Updated At in order to make job visible
         $lastMessageStatus = $messageStatusCollectionFactory->create()
@@ -116,10 +116,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
-        $this->assertEquals(0, $messageCollection->getSize());
+        $this->assertSame(0, $messageCollection->getSize());
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId);
-        $this->assertEquals(0, $messageStatusCollection->getSize());
+        $this->assertSame(0, $messageStatusCollection->getSize());
     }
 
     /**
@@ -140,22 +140,22 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         //Check how many messages in collection by the beginning of tests
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic_second.updated.use.just.in.tests');
-        $this->assertEquals(1, $messageCollection->getSize());
+        $this->assertSame(1, $messageCollection->getSize());
         $messageId = $messageCollection->getFirstItem()->getId();
 
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId);
-        $this->assertEquals(2, $messageStatusCollection->getSize());
+        $this->assertSame(2, $messageStatusCollection->getSize());
 
         $this->observer->cleanupMessages();
 
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic_second.updated.use.just.in.tests');
-        $this->assertEquals(1, $messageCollection->getSize());
+        $this->assertSame(1, $messageCollection->getSize());
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId)
             ->addFieldToFilter('status', \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED);
-        $this->assertEquals(1, $messageStatusCollection->getSize());
-        $this->assertEquals(1, $messageStatusCollection->getFirstItem()->getNumberOfTrials());
+        $this->assertSame(1, $messageStatusCollection->getSize());
+        $this->assertSame(1, $messageStatusCollection->getFirstItem()->getNumberOfTrials());
     }
 }

@@ -31,7 +31,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('some value')
         );
-        $this->assertEquals('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
+        $this->assertSame('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
     }
 
     public function testGetTaxContainer()
@@ -50,9 +50,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('shipping address')
         );
-        $this->assertEquals('shipping address', $this->_model->getTaxContainer());
+        $this->assertSame('shipping address', $this->_model->getTaxContainer());
         $this->_quoteMock->expects($this->any())->method('getIsVirtual')->will($this->returnValue(1));
-        $this->assertEquals('billing address', $this->_model->getTaxContainer());
+        $this->assertSame('billing address', $this->_model->getTaxContainer());
     }
 
     /**
@@ -81,7 +81,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ),
         ];
         $this->_quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$itemMock]));
-        $this->assertEquals($expected, $this->_model->getAllItems());
+        $this->assertSame($expected, $this->_model->getAllItems());
     }
 
     /**
@@ -107,7 +107,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(100)
         );
-        $this->assertEquals(100, $this->_model->getBaseSubtotal());
+        $this->assertSame(100, $this->_model->getBaseSubtotal());
     }
 
     /**
@@ -135,7 +135,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         }
         $quoteMock->expects($this->any())->method($method)->will($this->returnValue($address));
         $model = new \Magento\Payment\Model\Cart\SalesModel\Quote($quoteMock);
-        $this->assertEquals($getterMethod, $model->{$getterMethod}());
+        $this->assertSame($getterMethod, $model->{$getterMethod}());
     }
 
     /**

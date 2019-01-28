@@ -127,7 +127,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'test' => [
                     'test' => [
@@ -163,7 +163,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'default' => [
                     'web' => [
@@ -181,7 +181,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
 
     public function testGetExcludedFields()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'web/secure/environment_type',
                 'web/some_key/sensitive_type',

@@ -73,7 +73,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
     public function testWrapBrackets($query, $expectedResult)
     {
         $actualResult = $this->conditionManager->wrapBrackets($query);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -112,7 +112,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
         $unionOperator = 'AND';
         $expectedResult = 'a = b AND 1 AND 0 AND test';
         $actualResult = $this->conditionManager->combineQueries($queries, $unionOperator);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -125,7 +125,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
     public function testGenerateCondition($field, $operator, $value, $expectedResult)
     {
         $actualResult = $this->conditionManager->generateCondition($field, $operator, $value);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

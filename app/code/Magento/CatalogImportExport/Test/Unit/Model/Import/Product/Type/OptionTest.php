@@ -537,11 +537,11 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     public function verifyDelete($table, $where)
     {
         if ($table == 'catalog_product_option') {
-            $this->assertEquals($this->_tables['catalog_product_option'], $table);
-            $this->assertEquals($this->_whereForOption, $where);
+            $this->assertSame($this->_tables['catalog_product_option'], $table);
+            $this->assertSame($this->_whereForOption, $where);
         } else {
-            $this->assertEquals($this->_tables['catalog_product_option_type_value'], $table);
-            $this->assertEquals($this->_whereForType, $where);
+            $this->assertSame($this->_tables['catalog_product_option_type_value'], $table);
+            $this->assertSame($this->_whereForType, $where);
         }
     }
 
@@ -555,10 +555,10 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         switch ($table) {
             case $this->_tables['catalog_product_option']:
-                $this->assertEquals($this->_expectedOptions, $data);
+                $this->assertSame($this->_expectedOptions, $data);
                 break;
             case $this->_tables['catalog_product_option_type_value']:
-                $this->assertEquals($this->_expectedTypeValues, $data);
+                $this->assertSame($this->_expectedTypeValues, $data);
                 break;
             default:
                 break;
@@ -576,20 +576,20 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         switch ($table) {
             case $this->_tables['catalog_product_option_title']:
-                $this->assertEquals($this->_expectedTitles, $data);
-                $this->assertEquals(['title'], $fields);
+                $this->assertSame($this->_expectedTitles, $data);
+                $this->assertSame(['title'], $fields);
                 break;
             case $this->_tables['catalog_product_option_price']:
-                $this->assertEquals($this->_expectedPrices, $data);
-                $this->assertEquals(['price', 'price_type'], $fields);
+                $this->assertSame($this->_expectedPrices, $data);
+                $this->assertSame(['price', 'price_type'], $fields);
                 break;
             case $this->_tables['catalog_product_option_type_price']:
-                $this->assertEquals($this->_expectedTypePrices, $data);
-                $this->assertEquals(['price', 'price_type'], $fields);
+                $this->assertSame($this->_expectedTypePrices, $data);
+                $this->assertSame(['price', 'price_type'], $fields);
                 break;
             case $this->_tables['catalog_product_option_type_title']:
-                $this->assertEquals($this->_expectedTypeTitles, $data);
-                $this->assertEquals(['title'], $fields);
+                $this->assertSame($this->_expectedTypeTitles, $data);
+                $this->assertSame(['title'], $fields);
                 break;
             case $this->_tables['catalog_product_entity']:
                 // there is no point in updated_at data verification which is just current time
@@ -597,8 +597,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                     $this->assertArrayHasKey('updated_at', $row);
                     unset($row['updated_at']);
                 }
-                $this->assertEquals($this->_expectedUpdate, $data);
-                $this->assertEquals(['has_options', 'required_options', 'updated_at'], $fields);
+                $this->assertSame($this->_expectedUpdate, $data);
+                $this->assertSame(['has_options', 'required_options', 'updated_at'], $fields);
                 break;
             default:
                 break;
@@ -610,7 +610,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testGetEntityTypeCode()
     {
-        $this->assertEquals('product_options', $this->model->getEntityTypeCode());
+        $this->assertSame('product_options', $this->model->getEntityTypeCode());
     }
 
     /**
@@ -731,7 +731,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->assertFalse($this->modelMock->validateRow($rowData, 0));
         }
         $resultErrors = $this->productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
-        $this->assertEquals($errors, $resultErrors);
+        $this->assertSame($errors, $resultErrors);
     }
 
     /**
@@ -773,7 +773,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->assertFalse($this->modelMock->validateAmbiguousData());
         }
         $resultErrors = $this->productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
-        $this->assertEquals($errors, $resultErrors);
+        $this->assertSame($errors, $resultErrors);
     }
 
     /**

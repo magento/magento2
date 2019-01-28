@@ -82,7 +82,7 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator($regions)));
 
-        $this->assertEquals($expectedResult, $this->model->toOptionArray($isMultiselect));
+        $this->assertSame($expectedResult, $this->model->toOptionArray($isMultiselect));
     }
 
     /**

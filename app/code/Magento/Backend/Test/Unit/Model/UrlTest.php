@@ -190,7 +190,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->_menuMock->expects($this->any())->method('getFirstAvailableChild')->will($this->returnValue(null));
 
-        $this->assertEquals('*/*/denied', $this->_model->findFirstAvailableMenu());
+        $this->assertSame('*/*/denied', $this->_model->findFirstAvailableMenu());
     }
 
     public function testFindFirstAvailableMenu()
@@ -206,12 +206,12 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $itemMock->expects($this->once())->method('getAction')->will($this->returnValue('adminhtml/user'));
         $this->_menuMock->expects($this->any())->method('getFirstAvailable')->will($this->returnValue($itemMock));
 
-        $this->assertEquals('adminhtml/user', $this->_model->findFirstAvailableMenu());
+        $this->assertSame('adminhtml/user', $this->_model->findFirstAvailableMenu());
     }
 
     public function testGetStartupPageUrl()
     {
-        $this->assertEquals('adminhtml/user_role', (string)$this->_model->getStartupPageUrl());
+        $this->assertSame('adminhtml/user_role', (string)$this->_model->getStartupPageUrl());
     }
 
     public function testGetAreaFrontName()
@@ -251,8 +251,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $keyWithoutRouteName = $this->_model->getSecretKey(null, $controllerName, $actionName);
         $keyDummyRouteName = $this->_model->getSecretKey('dummy', $controllerName, $actionName);
 
-        $this->assertNotEquals($keyWithRouteName, $keyWithoutRouteName);
-        $this->assertNotEquals($keyWithRouteName, $keyDummyRouteName);
+        $this->assertNotSame($keyWithRouteName, $keyWithoutRouteName);
+        $this->assertNotSame($keyWithRouteName, $keyDummyRouteName);
     }
 
     /**
@@ -268,7 +268,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $keyWithRouteName1 = $this->_model->getSecretKey($routeName, $controllerName, $actionName);
         $keyWithRouteName2 = $this->_model->getSecretKey($routeName, $controllerName, $actionName);
 
-        $this->assertEquals($keyWithRouteName1, $keyWithRouteName2);
+        $this->assertSame($keyWithRouteName1, $keyWithRouteName2);
     }
 
     /**
@@ -301,7 +301,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->_model->setRequest($this->_requestMock);
 
         $keyFromRequest = $this->_model->getSecretKey();
-        $this->assertEquals($keyFromParams, $keyFromRequest);
+        $this->assertSame($keyFromParams, $keyFromRequest);
     }
 
     /**
@@ -377,12 +377,12 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setRequest($this->_requestMock);
         $keyFromRequest = $this->_model->getSecretKey();
-        $this->assertEquals($keyFromParams, $keyFromRequest);
+        $this->assertSame($keyFromParams, $keyFromRequest);
     }
 
     public function testGetUrlWithUrlInRoutePath()
     {
         $routePath = 'https://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor';
-        static::assertEquals($routePath, $this->_model->getUrl($routePath));
+        static::assertSame($routePath, $this->_model->getUrl($routePath));
     }
 }

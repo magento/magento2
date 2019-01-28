@@ -72,7 +72,7 @@ class QtyincrementsTest extends \PHPUnit\Framework\TestCase
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertSame($productTags, $this->block->getIdentities());
     }
 
     /**

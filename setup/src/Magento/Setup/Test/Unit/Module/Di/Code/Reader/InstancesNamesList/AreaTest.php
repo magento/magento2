@@ -78,6 +78,6 @@ class AreaTest extends \PHPUnit\Framework\TestCase
             $classes[1] => $constructors[1][1]
         ];
 
-        $this->assertEquals($result, $expected);
+        $this->assertSame($result, $expected);
     }
 }

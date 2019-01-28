@@ -68,7 +68,7 @@ class ExchangeFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->amqpExchangeFactory->expects($this->once())
             ->method('create')->with($connectionName, $data)->willReturn($exchange);
-        $this->assertEquals($exchange, $this->exchangeFactory->create($connectionName, $data));
+        $this->assertSame($exchange, $this->exchangeFactory->create($connectionName, $data));
     }
 
     /**

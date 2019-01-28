@@ -110,7 +110,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $response = $this->objectManager->get(\Magento\TestFramework\Response::class);
         $this->page->renderResult($response);
         $this->assertNotEmpty($response->getBody());
-        $this->assertEquals(
+        $this->assertSame(
             10,
             $this->objectManager->get(
                 \Magento\Catalog\Model\Session::class

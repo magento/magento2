@@ -43,6 +43,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $expectedResult = require __DIR__ . '/_files/integration.php';
         $this->resourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($aclResources);
 
-        $this->assertEquals($expectedResult, $this->model->convert($inputData));
+        $this->assertSame($expectedResult, $this->model->convert($inputData));
     }
 }

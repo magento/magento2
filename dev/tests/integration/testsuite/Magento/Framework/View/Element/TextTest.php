@@ -24,27 +24,27 @@ class TextTest extends \PHPUnit\Framework\TestCase
     public function testSetGetText()
     {
         $this->_block->setText('text');
-        $this->assertEquals('text', $this->_block->getText());
+        $this->assertSame('text', $this->_block->getText());
     }
 
     public function testAddText()
     {
         $this->_block->addText('a');
-        $this->assertEquals('a', $this->_block->getText());
+        $this->assertSame('a', $this->_block->getText());
 
         $this->_block->addText('b');
-        $this->assertEquals('ab', $this->_block->getText());
+        $this->assertSame('ab', $this->_block->getText());
 
         $this->_block->addText('c', false);
-        $this->assertEquals('abc', $this->_block->getText());
+        $this->assertSame('abc', $this->_block->getText());
 
         $this->_block->addText('-', true);
-        $this->assertEquals('-abc', $this->_block->getText());
+        $this->assertSame('-abc', $this->_block->getText());
     }
 
     public function testToHtml()
     {
         $this->_block->setText('test');
-        $this->assertEquals('test', $this->_block->toHtml());
+        $this->assertSame('test', $this->_block->toHtml());
     }
 }

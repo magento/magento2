@@ -39,7 +39,7 @@ class EncryptionUpdateTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         foreach ($collection->getItems() as $payment) {
-            $this->assertEquals(
+            $this->assertSame(
                 static::TEST_CC_NUMBER,
                 $encyptor->decrypt($payment->getCcNumberEnc())
             );

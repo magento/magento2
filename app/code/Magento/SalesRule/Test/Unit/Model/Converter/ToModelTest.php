@@ -121,7 +121,7 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->dataModelToArray($dataCondition);
 
-        $this->assertEquals($array, $result);
+        $this->assertSame($array, $result);
     }
 
     public function testToModel()
@@ -184,7 +184,7 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
             ->willReturn($ruleModel);
 
         $result = $this->model->toModel($dataModel);
-        $this->assertEquals($ruleModel, $result);
+        $this->assertSame($ruleModel, $result);
     }
 
     /**

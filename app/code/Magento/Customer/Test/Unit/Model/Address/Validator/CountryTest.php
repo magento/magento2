@@ -99,7 +99,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
         $addressMock->method('getRegion')->willReturn(null);
 
         $actual = $this->model->validate($addressMock);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

@@ -41,7 +41,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->configWriter->write(self::CACHE_KEY, $sampleData);
-        $this->assertEquals($sampleData, $this->configReader->load(self::CACHE_KEY));
+        $this->assertSame($sampleData, $this->configReader->load(self::CACHE_KEY));
     }
 
     public function testOverwrite()
@@ -54,6 +54,6 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->configWriter->write(self::CACHE_KEY, $sampleData);
-        $this->assertEquals($sampleData, $this->configReader->load(self::CACHE_KEY));
+        $this->assertSame($sampleData, $this->configReader->load(self::CACHE_KEY));
     }
 }

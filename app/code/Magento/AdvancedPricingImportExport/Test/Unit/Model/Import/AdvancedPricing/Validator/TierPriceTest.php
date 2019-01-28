@@ -114,7 +114,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->tierPrice->init(null);
 
-        $this->assertEquals($expectedCustomerGroups, $this->getPropertyValue($this->tierPrice, 'customerGroups'));
+        $this->assertSame($expectedCustomerGroups, $this->getPropertyValue($this->tierPrice, 'customerGroups'));
     }
 
     public function testIsValidResultTrue()

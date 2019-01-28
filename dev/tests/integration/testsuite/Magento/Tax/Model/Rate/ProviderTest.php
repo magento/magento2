@@ -51,7 +51,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
         $searchCriteria = $searchCriteriaBuilder->create();
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $provider->toOptionArray($searchCriteria),
             'Tax rate options are invalid.'

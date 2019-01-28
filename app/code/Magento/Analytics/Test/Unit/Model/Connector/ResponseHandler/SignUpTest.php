@@ -26,6 +26,6 @@ class SignUpTest extends \PHPUnit\Framework\TestCase
             ['analyticsToken' => $analyticsToken]
         );
         $this->assertFalse($signUpHandler->handleResponse([]));
-        $this->assertEquals($accessToken, $signUpHandler->handleResponse(['access-token' => $accessToken]));
+        $this->assertSame($accessToken, $signUpHandler->handleResponse(['access-token' => $accessToken]));
     }
 }

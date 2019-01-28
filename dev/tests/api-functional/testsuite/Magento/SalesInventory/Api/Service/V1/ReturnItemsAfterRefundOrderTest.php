@@ -68,7 +68,7 @@ class ReturnItemsAfterRefundOrderTest extends \Magento\TestFramework\TestCase\We
         $qtyAfterRefund = $this->getQtyInStockBySku($productSku);
 
         try {
-            $this->assertEquals(
+            $this->assertSame(
                 $qtyBeforeRefund + $expectedItems[0]['qty'],
                 $qtyAfterRefund,
                 'Failed asserting qty of returned items incorrect.'

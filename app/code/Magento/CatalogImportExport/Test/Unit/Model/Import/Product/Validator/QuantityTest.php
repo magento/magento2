@@ -42,7 +42,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     public function testIsValid($expectedResult, $value)
     {
         $result = $this->quantity->isValid($value);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

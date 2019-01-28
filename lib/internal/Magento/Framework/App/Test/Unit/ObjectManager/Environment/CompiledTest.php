@@ -22,7 +22,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMode()
     {
-        $this->assertEquals(Compiled::MODE, $this->_compiled->getMode());
+        $this->assertSame(Compiled::MODE, $this->_compiled->getMode());
     }
 
     public function testGetObjectManagerFactory()

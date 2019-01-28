@@ -97,7 +97,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoRoutePage()
     {
-        $this->assertEquals($this->model, $this->model->noRoutePage());
+        $this->assertSame($this->model, $this->model->noRoutePage());
     }
 
     /**

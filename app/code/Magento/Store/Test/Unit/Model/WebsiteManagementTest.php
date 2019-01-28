@@ -41,7 +41,7 @@ class WebsiteManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn('expected');
 
-        $this->assertEquals(
+        $this->assertSame(
             'expected',
             $this->model->getCount()
         );

@@ -193,6 +193,6 @@ class PageTest extends TestCase
 
         $result = $this->model->getCollection($storeId);
         $resultPage = array_shift($result);
-        $this->assertEquals($expectedPage, $resultPage);
+        $this->assertSame($expectedPage, $resultPage);
     }
 }

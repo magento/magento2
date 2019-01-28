@@ -108,6 +108,6 @@ class ReadEntityRowTest extends \PHPUnit\Framework\TestCase
 
         $actualData = $this->subject->execute('Test\Entity\Type', $identifier, $context);
 
-        $this->assertEquals($expectedData, $actualData);
+        $this->assertSame($expectedData, $actualData);
     }
 }

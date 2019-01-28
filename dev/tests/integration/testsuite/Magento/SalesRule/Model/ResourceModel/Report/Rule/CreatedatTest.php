@@ -45,8 +45,8 @@ class CreatedatTest extends \PHPUnit\Framework\TestCase
             \Magento\SalesRule\Model\ResourceModel\Report\Collection::class
         );
         $salesRuleReportItem = $reportCollection->getFirstItem();
-        $this->assertEquals($this->getTotalAmount($order), $salesRuleReportItem['total_amount']);
-        $this->assertEquals($this->getTotalAmountActual($order), $salesRuleReportItem['total_amount_actual']);
+        $this->assertSame($this->getTotalAmount($order), $salesRuleReportItem['total_amount']);
+        $this->assertSame($this->getTotalAmountActual($order), $salesRuleReportItem['total_amount_actual']);
     }
 
     /**

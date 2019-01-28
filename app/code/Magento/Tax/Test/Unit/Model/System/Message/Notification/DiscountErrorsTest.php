@@ -93,7 +93,7 @@ class DiscountErrorsTest extends \PHPUnit\Framework\TestCase
             ->with('tax/tax/ignoreTaxNotification', ['section' => 'discount'])
             ->willReturn('http://example.com');
         $this->discountErrorsNotification->isDisplayed();
-        $this->assertEquals(
+        $this->assertSame(
             '<strong>With customer tax applied “Before Discount”, the final discount calculation may not match '
             . 'customers’ expectations. </strong><p>Store(s) affected: testWebsiteName (testStoreName)'
             . '</p><p>Click on the link to <a href="http://example.com">ignore this notification</a></p>',

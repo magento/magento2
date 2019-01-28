@@ -46,6 +46,6 @@ class ResetTest extends \PHPUnit\Framework\TestCase
     {
         $expectedInstructions = 'User-agent: *';
         $this->configMock->expects($this->once())->method('getValue')->will($this->returnValue($expectedInstructions));
-        $this->assertEquals($expectedInstructions, $this->_resetRobotsBlock->getRobotsDefaultCustomInstructions());
+        $this->assertSame($expectedInstructions, $this->_resetRobotsBlock->getRobotsDefaultCustomInstructions());
     }
 }

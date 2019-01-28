@@ -71,7 +71,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGroupOfOption()
     {
-        $this->assertEquals('default', $this->block->getGroupOfOption('test'));
+        $this->assertSame('default', $this->block->getGroupOfOption('test'));
     }
 
     /**
@@ -101,7 +101,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     {
         $config = json_decode($this->block->getJsonConfig(), true);
         $configValues = array_values($config);
-        $this->assertEquals($this->getExpectedJsonConfig(), array_values($configValues[0]));
+        $this->assertSame($this->getExpectedJsonConfig(), array_values($configValues[0]));
     }
 
     /**

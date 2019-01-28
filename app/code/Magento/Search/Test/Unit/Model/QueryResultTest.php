@@ -33,8 +33,8 @@ class QueryResultTest extends \PHPUnit\Framework\TestCase
                 'resultsCount' => $resultsCount,
             ]
         );
-        $this->assertEquals($queryText, $queryResult->getQueryText());
-        $this->assertEquals($resultsCount, $queryResult->getResultsCount());
+        $this->assertSame($queryText, $queryResult->getQueryText());
+        $this->assertSame($resultsCount, $queryResult->getResultsCount());
     }
 
     /**

@@ -48,7 +48,7 @@ class ActiveTableSwitcherTest extends \PHPUnit\Framework\TestCase
     public function testGetAdditionalTableName()
     {
         $tableName = 'table_name';
-        $this->assertEquals(
+        $this->assertSame(
             $tableName . '_replica',
             $this->model->getAdditionalTableName($tableName)
         );

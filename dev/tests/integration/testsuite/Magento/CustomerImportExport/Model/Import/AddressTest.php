@@ -160,8 +160,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Address::class
         );
         $testAddress->load($addressId);
-        $this->assertEquals($addressId, $testAddress->getId(), 'Incorrect address ID.');
-        $this->assertEquals($customerId, $testAddress->getParentId(), 'Incorrect address customer ID.');
+        $this->assertSame($addressId, $testAddress->getId(), 'Incorrect address ID.');
+        $this->assertSame($customerId, $testAddress->getParentId(), 'Incorrect address customer ID.');
     }
 
     /**
@@ -244,8 +244,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Address::class
         );
         $testAddress->load($addressId);
-        $this->assertEquals($addressId, $testAddress->getId(), 'Incorrect address ID.');
-        $this->assertEquals($attributeValue, $testAddress->getData($attributeName), 'There is no attribute value.');
+        $this->assertSame($addressId, $testAddress->getId(), 'Incorrect address ID.');
+        $this->assertSame($attributeValue, $testAddress->getData($attributeName), 'There is no attribute value.');
     }
 
     /**
@@ -302,15 +302,15 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Customer::class
         );
         $testCustomer->load($customerId);
-        $this->assertEquals($customerId, $testCustomer->getId(), 'Customer must exists.');
+        $this->assertSame($customerId, $testCustomer->getId(), 'Customer must exists.');
         $this->assertNotNull($testCustomer->getDefaultBillingAddress(), 'Default billing address must exists.');
         $this->assertNotNull($testCustomer->getDefaultShippingAddress(), 'Default shipping address must exists.');
-        $this->assertEquals(
+        $this->assertSame(
             $addressId,
             $testCustomer->getDefaultBillingAddress()->getId(),
             'Incorrect default billing address.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $addressId,
             $testCustomer->getDefaultShippingAddress()->getId(),
             'Incorrect default shipping address.'
@@ -388,13 +388,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $updatedAddress = $addresses[$updatedAddressId];
         $updatedData = $this->_updateData['update'][$updatedAddressId];
         foreach ($updatedData as $fieldName => $fieldValue) {
-            $this->assertEquals($fieldValue, $updatedAddress->getData($fieldName));
+            $this->assertSame($fieldValue, $updatedAddress->getData($fieldName));
         }
 
         // are removed data fields have old values
         $removedData = $this->_updateData['remove'][$updatedAddressId];
         foreach ($removedData as $fieldName => $fieldValue) {
-            $this->assertEquals($fieldValue, $updatedAddress->getData($fieldName));
+            $this->assertSame($fieldValue, $updatedAddress->getData($fieldName));
         }
 
         // are default billing/shipping addresses have new value
@@ -405,12 +405,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $customer->setWebsiteId(0);
         $customer->loadByEmail('BetsyParker@example.com');
         $defaultsData = $this->_updateData['default'];
-        $this->assertEquals(
+        $this->assertSame(
             $defaultsData['billing'],
             $customer->getDefaultBillingAddress()->getData($keyAttribute),
             'Incorrect default billing address'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $defaultsData['shipping'],
             $customer->getDefaultShippingAddress()->getData($keyAttribute),
             'Incorrect default shipping address'

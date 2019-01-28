@@ -118,6 +118,6 @@ class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
         }
         array_multisort($resultValues);
         array_multisort($map);
-        $this->assertEquals($resultValues, $map);
+        $this->assertSame($resultValues, $map);
     }
 }

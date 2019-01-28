@@ -130,7 +130,7 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->messageMock));
         $this->messageMock->expects($this->once())->method('load')->will($this->returnValue($this->messageMock));
 
-        $this->assertEquals($this->messageMock, $this->cartRepository->get($this->cartId));
+        $this->assertSame($this->messageMock, $this->cartRepository->get($this->cartId));
     }
 
     /**

@@ -69,6 +69,6 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
 
         $testDataObjectType = \Magento\Framework\Reflection\Test\Unit\TestDataInterface::class;
         $outputData = $this->dataObjectProcessor->buildOutputDataArray($testDataObject, $testDataObjectType);
-        $this->assertEquals($expectedOutputDataArray, $outputData);
+        $this->assertSame($expectedOutputDataArray, $outputData);
     }
 }

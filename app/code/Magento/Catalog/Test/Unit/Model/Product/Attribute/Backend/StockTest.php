@@ -68,7 +68,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
         $object = new \Magento\Framework\DataObject(['id' => $productId, 'store' => $store]);
         $this->model->afterLoad($object);
         $data = $object->getData();
-        $this->assertEquals(1, $data[self::ATTRIBUTE_NAME]['is_in_stock']);
-        $this->assertEquals(5, $data[self::ATTRIBUTE_NAME]['qty']);
+        $this->assertSame(1, $data[self::ATTRIBUTE_NAME]['is_in_stock']);
+        $this->assertSame(5, $data[self::ATTRIBUTE_NAME]['qty']);
     }
 }

@@ -96,7 +96,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(false)
         );
-        $this->assertEquals('/node_one/', $this->model->process($this->requestMock, $this->pathInfo));
+        $this->assertSame('/node_one/', $this->model->process($this->requestMock, $this->pathInfo));
     }
 
     public function testProcessIfStoreExistsAndDirectAccessToFrontName()
@@ -116,7 +116,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             'storeCode'
         )->willReturn(true);
         $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
-        $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
+        $this->assertSame($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
 
     public function testProcessIfStoreIsEmpty()
@@ -135,7 +135,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             'isDirectAccessFrontendName'
         );
         $this->requestMock->expects($this->never())->method('setActionName');
-        $this->assertEquals($path, $this->model->process($this->requestMock, $path));
+        $this->assertSame($path, $this->model->process($this->requestMock, $path));
     }
 
     public function testProcessIfStoreCodeIsNotExist()
@@ -146,7 +146,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new NoSuchEntityException());
         $this->requestMock->expects($this->never())->method('isDirectAccessFrontendName');
 
-        $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
+        $this->assertSame($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
 
     public function testProcessIfStoreUrlNotEnabled()
@@ -159,6 +159,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->willReturn(1);
 
-        $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
+        $this->assertSame($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
 }

@@ -108,7 +108,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Male');
 
         $attribute = $this->document->getCustomAttribute('gender');
-        static::assertEquals('Male', $attribute->getValue());
+        static::assertSame('Male', $attribute->getValue());
     }
 
     /**
@@ -135,7 +135,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             ->willReturn('General');
 
         $attribute = $this->document->getCustomAttribute('group_id');
-        static::assertEquals('General', $attribute->getValue());
+        static::assertSame('General', $attribute->getValue());
     }
 
     /**
@@ -163,7 +163,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Main Website');
 
         $attribute = $this->document->getCustomAttribute('website_id');
-        static::assertEquals('Main Website', $attribute->getValue());
+        static::assertSame('Main Website', $attribute->getValue());
     }
 
     /**
@@ -184,7 +184,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $value = $attribute->getValue();
         static::assertInstanceOf(Phrase::class, $value);
-        static::assertEquals('Confirmed', (string)$value);
+        static::assertSame('Confirmed', (string)$value);
     }
 
     /**
@@ -198,7 +198,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $value = $attribute->getValue();
         static::assertInstanceOf(Phrase::class, $value);
-        static::assertEquals('Unlocked', (string)$value);
+        static::assertSame('Unlocked', (string)$value);
     }
 
     /**

@@ -33,7 +33,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->typeProcessor->setTypeData('typeA', ['dataA']);
         $this->typeProcessor->setTypeData('typeB', ['dataB']);
-        $this->assertEquals(
+        $this->assertSame(
             ['typeA' => ['dataA'], 'typeB' => ['dataB']],
             $this->typeProcessor->getTypesData()
         );
@@ -45,10 +45,10 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testSetTypesData()
     {
         $this->typeProcessor->setTypeData('typeC', ['dataC']);
-        $this->assertEquals(['typeC' => ['dataC']], $this->typeProcessor->getTypesData());
+        $this->assertSame(['typeC' => ['dataC']], $this->typeProcessor->getTypesData());
         $typeData = ['typeA' => ['dataA'], 'typeB' => ['dataB']];
         $this->typeProcessor->setTypesData($typeData);
-        $this->assertEquals($typeData, $this->typeProcessor->getTypesData());
+        $this->assertSame($typeData, $this->typeProcessor->getTypesData());
     }
 
     /**
@@ -66,7 +66,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testGetTypeData()
     {
         $this->typeProcessor->setTypeData('typeA', ['dataA']);
-        $this->assertEquals(['dataA'], $this->typeProcessor->getTypeData('typeA'));
+        $this->assertSame(['dataA'], $this->typeProcessor->getTypeData('typeA'));
     }
 
     /**
@@ -78,7 +78,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $this->typeProcessor->setTypeData('typeA', ['dataA2']);
         $this->typeProcessor->setTypeData('typeA', ['dataA3']);
         $this->typeProcessor->setTypeData('typeA', [null]);
-        $this->assertEquals(
+        $this->assertSame(
             ['dataA1', 'dataA2', 'dataA3', null],
             $this->typeProcessor->getTypeData('typeA')
         );
@@ -86,11 +86,11 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testNormalizeType()
     {
-        $this->assertEquals('blah', $this->typeProcessor->normalizeType('blah'));
-        $this->assertEquals('string', $this->typeProcessor->normalizeType('str'));
-        $this->assertEquals('int', $this->typeProcessor->normalizeType('integer'));
-        $this->assertEquals('boolean', $this->typeProcessor->normalizeType('bool'));
-        $this->assertEquals('anyType', $this->typeProcessor->normalizeType('mixed'));
+        $this->assertSame('blah', $this->typeProcessor->normalizeType('blah'));
+        $this->assertSame('string', $this->typeProcessor->normalizeType('str'));
+        $this->assertSame('int', $this->typeProcessor->normalizeType('integer'));
+        $this->assertSame('boolean', $this->typeProcessor->normalizeType('bool'));
+        $this->assertSame('anyType', $this->typeProcessor->normalizeType('mixed'));
     }
 
     public function testIsTypeSimple()
@@ -140,20 +140,20 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function getArrayItemType()
     {
-        $this->assertEquals('string', $this->typeProcessor->getArrayItemType('str[]'));
-        $this->assertEquals('string', $this->typeProcessor->getArrayItemType('string[]'));
-        $this->assertEquals('integer', $this->typeProcessor->getArrayItemType('int[]'));
-        $this->assertEquals('boolean', $this->typeProcessor->getArrayItemType('bool[]'));
-        $this->assertEquals('any', $this->typeProcessor->getArrayItemType('mixed[]'));
+        $this->assertSame('string', $this->typeProcessor->getArrayItemType('str[]'));
+        $this->assertSame('string', $this->typeProcessor->getArrayItemType('string[]'));
+        $this->assertSame('integer', $this->typeProcessor->getArrayItemType('int[]'));
+        $this->assertSame('boolean', $this->typeProcessor->getArrayItemType('bool[]'));
+        $this->assertSame('any', $this->typeProcessor->getArrayItemType('mixed[]'));
     }
 
     public function testTranslateTypeName()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'TestModule1V1EntityItem',
             $this->typeProcessor->translateTypeName(\Magento\TestModule1\Service\V1\Entity\Item::class)
         );
-        $this->assertEquals(
+        $this->assertSame(
             'TestModule3V1EntityParameter[]',
             $this->typeProcessor->translateTypeName('\Magento\TestModule3\Service\V1\Entity\Parameter[]')
         );
@@ -170,7 +170,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testTranslateArrayTypeName()
     {
-        $this->assertEquals('ArrayOfComplexType', $this->typeProcessor->translateArrayTypeName('complexType'));
+        $this->assertSame('ArrayOfComplexType', $this->typeProcessor->translateArrayTypeName('complexType'));
     }
 
     public function testProcessSimpleTypeIntToString()
@@ -266,7 +266,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $class = new ClassReflection(DataObject::class);
         $methodReflection = $class->getMethod($methodName);
         $params = $methodReflection->getParameters();
-        $this->assertEquals($type, $this->typeProcessor->getParamType(array_pop($params)));
+        $this->assertSame($type, $this->typeProcessor->getParamType(array_pop($params)));
     }
 
     /**
@@ -296,7 +296,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $paramsReflection = $methodReflection->getParameters();
         foreach ($paramsReflection as $paramReflection) {
             $description = array_shift($descriptions);
-            $this->assertEquals(
+            $this->assertSame(
                 $description,
                 $this->typeProcessor->getParamDescription($paramReflection)
             );
@@ -318,7 +318,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOperationName()
     {
-        $this->assertEquals(
+        $this->assertSame(
             "resNameMethodName",
             $this->typeProcessor->getOperationName("resName", "methodName")
         );
@@ -339,7 +339,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $classReflection = new ClassReflection(TSample::class);
         $methodReflection = $classReflection->getMethod('getPropertyName');
 
-        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+        self::assertSame($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
     }
 
     /**

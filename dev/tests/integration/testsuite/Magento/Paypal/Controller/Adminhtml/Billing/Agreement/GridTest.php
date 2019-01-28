@@ -32,7 +32,7 @@ class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $response = $this->getResponse();
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//button[@type="button" and @title="Reset Filter"]',
@@ -41,7 +41,7 @@ class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             "Response for billing agreement grid doesn't contain 'Reset Filter' button"
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="billing_agreements"]',

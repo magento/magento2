@@ -127,6 +127,6 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
                 ]
             )
         );
-        $this->assertEquals($expectedWhitelistContent, $whitelistFileContent);
+        $this->assertSame($expectedWhitelistContent, $whitelistFileContent);
     }
 }

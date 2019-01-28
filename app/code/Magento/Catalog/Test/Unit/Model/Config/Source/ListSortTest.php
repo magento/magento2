@@ -40,6 +40,6 @@ class ListSortTest extends \PHPUnit\Framework\TestCase
         $this->catalogConfig->expects($this->any())->method('getAttributesUsedForSortBy')
             ->will($this->returnValue([['frontend_label' => 'testLabel', 'attribute_code' => 'testAttributeCode']]));
 
-        $this->assertEquals($except, $this->model->toOptionArray());
+        $this->assertSame($except, $this->model->toOptionArray());
     }
 }

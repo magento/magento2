@@ -268,20 +268,20 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function validateWriteRow(array $row)
     {
         $billingColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_NAME_DEFAULT_BILLING;
-        $this->assertEquals($this->_customerData['default_billing'], $row[$billingColumn]);
+        $this->assertSame($this->_customerData['default_billing'], $row[$billingColumn]);
 
         $shippingColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_NAME_DEFAULT_SHIPPING;
-        $this->assertEquals($this->_customerData['default_shipping'], $row[$shippingColumn]);
+        $this->assertSame($this->_customerData['default_shipping'], $row[$shippingColumn]);
 
         $idColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_ADDRESS_ID;
-        $this->assertEquals($this->_addressData['id'], $row[$idColumn]);
+        $this->assertSame($this->_addressData['id'], $row[$idColumn]);
 
         $emailColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_EMAIL;
-        $this->assertEquals($this->_customerData['email'], $row[$emailColumn]);
+        $this->assertSame($this->_customerData['email'], $row[$emailColumn]);
 
         $websiteColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_WEBSITE;
-        $this->assertEquals($this->_websites[$this->_customerData['website_id']], $row[$websiteColumn]);
+        $this->assertSame($this->_websites[$this->_customerData['website_id']], $row[$websiteColumn]);
 
-        $this->assertEquals($this->_addressData[self::ATTRIBUTE_CODE], $row[self::ATTRIBUTE_CODE]);
+        $this->assertSame($this->_addressData[self::ATTRIBUTE_CODE], $row[self::ATTRIBUTE_CODE]);
     }
 }

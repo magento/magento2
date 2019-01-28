@@ -83,19 +83,19 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testGetActionClass()
     {
         $this->model->setData('action_class', 'actionClass');
-        $this->assertEquals('actionClass', $this->model->getActionClass());
+        $this->assertSame('actionClass', $this->model->getActionClass());
     }
 
     public function testGetGroup()
     {
         $this->model->setData('group', 'some_group');
-        $this->assertEquals('some_group', $this->model->getGroup());
+        $this->assertSame('some_group', $this->model->getGroup());
     }
 
     public function testGetSubscriptions()
     {
         $this->model->setData('subscriptions', ['subscription']);
-        $this->assertEquals(['subscription'], $this->model->getSubscriptions());
+        $this->assertSame(['subscription'], $this->model->getSubscriptions());
     }
 
     public function testLoad()
@@ -507,7 +507,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testSetState()
     {
         $this->model->setState($this->stateMock);
-        $this->assertEquals($this->stateMock, $this->model->getState());
+        $this->assertSame($this->stateMock, $this->model->getState());
     }
 
     /**
@@ -520,7 +520,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue($mode));
-        $this->assertEquals($result, $this->model->isEnabled());
+        $this->assertSame($result, $this->model->isEnabled());
     }
 
     /**
@@ -544,7 +544,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue($status));
-        $this->assertEquals($result, $this->model->isIdle());
+        $this->assertSame($result, $this->model->isIdle());
     }
 
     /**
@@ -569,7 +569,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue($status));
-        $this->assertEquals($result, $this->model->isWorking());
+        $this->assertSame($result, $this->model->isWorking());
     }
 
     /**
@@ -594,7 +594,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue($status));
-        $this->assertEquals($result, $this->model->isSuspended());
+        $this->assertSame($result, $this->model->isSuspended());
     }
 
     /**
@@ -614,7 +614,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('getUpdated')
             ->will($this->returnValue('some datetime'));
-        $this->assertEquals('some datetime', $this->model->getUpdated());
+        $this->assertSame('some datetime', $this->model->getUpdated());
     }
 
     protected function loadView()

@@ -30,7 +30,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         if ($expectedErrorsQty > 0) {
             $this->assertNotEmpty($result);
         }
-        $this->assertEquals($expectedErrorsQty, $errorsQty);
+        $this->assertSame($expectedErrorsQty, $errorsQty);
     }
 
     /**

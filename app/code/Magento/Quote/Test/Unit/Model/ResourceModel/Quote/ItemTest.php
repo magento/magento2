@@ -119,7 +119,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
+        $this->assertSame($this->model, $this->model->save($this->quoteItemMock));
     }
 
     public function testSaveSavedBeforeItem()
@@ -139,7 +139,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
+        $this->assertSame($this->model, $this->model->save($this->quoteItemMock));
     }
 
     public function testSaveModifiedItem()
@@ -159,6 +159,6 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
+        $this->assertSame($this->model, $this->model->save($this->quoteItemMock));
     }
 }

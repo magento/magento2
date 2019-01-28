@@ -53,7 +53,7 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
         $this->userContextMock->expects($this->any())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
-        $this->assertEquals($quoteMock, $this->authorization->afterGetActive($quoteRepositoryMock, $quoteMock));
+        $this->assertSame($quoteMock, $this->authorization->afterGetActive($quoteRepositoryMock, $quoteMock));
     }
 
     /**
@@ -80,6 +80,6 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
         $this->userContextMock->expects($this->any())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
-        $this->assertEquals($quoteMock, $this->authorization->afterGetActive($quoteRepositoryMock, $quoteMock));
+        $this->assertSame($quoteMock, $this->authorization->afterGetActive($quoteRepositoryMock, $quoteMock));
     }
 }

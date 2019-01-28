@@ -114,7 +114,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'arguments' => $dependencies,
             ]
         );
-        $this->assertEquals($expectedData, $object->getNextBunch());
+        $this->assertSame($expectedData, $object->getNextBunch());
     }
 
     /**

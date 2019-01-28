@@ -83,7 +83,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDeclaredFeatures($searchEngine, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->config->getDeclaredFeatures($searchEngine));
+        $this->assertSame($expectedResult, $this->config->getDeclaredFeatures($searchEngine));
     }
 
     /**
@@ -160,6 +160,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsFeatureSupported($searchEngine, $feature, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->config->isFeatureSupported($searchEngine, $feature));
+        $this->assertSame($expectedResult, $this->config->isFeatureSupported($searchEngine, $feature));
     }
 }

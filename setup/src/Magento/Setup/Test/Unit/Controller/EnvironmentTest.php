@@ -205,7 +205,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
             ->method('checkUpdater')
             ->willReturn(['success' => true]);
         $expected = new JsonModel(['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]);
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testCronScriptActionSetupFailed()
@@ -222,7 +222,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
                 'setupErrorMessage' => 'Error from Setup Application Cron Script:<br/>error message setup'
             ]
         );
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testCronScriptActionUpdaterFailed()
@@ -237,7 +237,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
                 'updaterErrorMessage' => 'Error from Updater Application Cron Script:<br/>error message updater'
             ]
         );
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testCronScriptActionBothFailed()
@@ -255,7 +255,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
                 'updaterErrorMessage' => 'Error from Updater Application Cron Script:<br/>error message updater',
             ]
         );
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testCronScriptActionSetupNotice()
@@ -272,7 +272,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
                 'setupNoticeMessage' => 'Notice from Setup Application Cron Script:<br/>notice setup'
             ]
         );
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testCronScriptActionUpdaterNotice()
@@ -287,7 +287,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
                 'updaterNoticeMessage' => 'Notice from Updater Application Cron Script:<br/>notice updater'
             ]
         );
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testCronScriptActionBothNotice()
@@ -305,7 +305,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
                 'updaterNoticeMessage' => 'Notice from Updater Application Cron Script:<br/>notice updater'
             ]
         );
-        $this->assertEquals($expected, $this->environment->cronScriptAction());
+        $this->assertSame($expected, $this->environment->cronScriptAction());
     }
 
     public function testIndexAction()

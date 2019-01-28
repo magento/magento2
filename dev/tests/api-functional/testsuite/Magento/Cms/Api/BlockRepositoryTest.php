@@ -100,8 +100,8 @@ class BlockRepositoryTest extends WebapiAbstract
         $this->assertNotNull($block['id']);
 
         $blockData = $this->blockRepository->getById($block['id']);
-        $this->assertEquals($blockData->getTitle(), $blockTitle);
-        $this->assertEquals($blockData->getIdentifier(), $blockIdentifier);
+        $this->assertSame($blockData->getTitle(), $blockTitle);
+        $this->assertSame($blockData->getIdentifier(), $blockIdentifier);
     }
 
     /**
@@ -137,8 +137,8 @@ class BlockRepositoryTest extends WebapiAbstract
         $this->assertNotNull($block['id']);
 
         $this->currentBlock = $this->blockRepository->getById($block['id']);
-        $this->assertEquals($this->currentBlock->getTitle(), $blockTitle);
-        $this->assertEquals($this->currentBlock->getIdentifier(), $blockIdentifier);
+        $this->assertSame($this->currentBlock->getTitle(), $blockTitle);
+        $this->assertSame($this->currentBlock->getIdentifier(), $blockIdentifier);
     }
 
     /**
@@ -180,7 +180,7 @@ class BlockRepositoryTest extends WebapiAbstract
         $this->assertNotNull($block['id']);
 
         $blockData = $this->blockRepository->getById($block['id']);
-        $this->assertEquals($blockData->getTitle(), $newBlockTitle);
+        $this->assertSame($blockData->getTitle(), $newBlockTitle);
     }
 
     /**
@@ -275,9 +275,9 @@ class BlockRepositoryTest extends WebapiAbstract
         ];
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
-        $this->assertEquals(
+        $this->assertSame(2, $searchResult['total_count']);
+        $this->assertSame(1, count($searchResult['items']));
+        $this->assertSame(
             $searchResult['items'][0][BlockInterface::IDENTIFIER],
             $cmsBlocks['third']->getIdentifier()
         );

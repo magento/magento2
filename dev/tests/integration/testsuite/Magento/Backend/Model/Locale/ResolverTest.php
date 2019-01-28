@@ -85,6 +85,6 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setLocale();
         $localeCode = $this->_model->getLocale();
-        $this->assertEquals($localeCode, $localeCodeToCheck);
+        $this->assertSame($localeCode, $localeCodeToCheck);
     }
 }

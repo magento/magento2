@@ -44,7 +44,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->with(0)
             ->will($this->returnValue($scopeMock));
 
-        $this->assertEquals($scopeMock, $this->_model->getScope());
+        $this->assertSame($scopeMock, $this->_model->getScope());
     }
 
     /**
@@ -59,6 +59,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->with(0)
             ->will($this->returnValue($scopeMock));
 
-        $this->assertEquals($scopeMock, $this->_model->getScope());
+        $this->assertSame($scopeMock, $this->_model->getScope());
     }
 }

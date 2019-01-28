@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($encodedValue)
             ->willReturn($value);
 
-        static::assertEquals(
+        static::assertSame(
             $expected,
             $this->model->getCountrySpecificCardTypeConfig()
         );
@@ -105,7 +105,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->getPath(Config::KEY_CC_TYPES), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
-        static::assertEquals(
+        static::assertSame(
             $expected,
             $this->model->getAvailableCardTypes()
         );
@@ -140,7 +140,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->getPath(Config::KEY_CC_TYPES_BRAINTREE_MAPPER), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
-        static::assertEquals(
+        static::assertSame(
             $expected,
             $this->model->getCcTypesMapper()
         );
@@ -188,11 +188,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         foreach ($countryData as $countryId => $types) {
             $result = $this->model->getCountryAvailableCardTypes($countryId);
-            static::assertEquals($types, $result);
+            static::assertSame($types, $result);
         }
 
         if (empty($countryData)) {
-            static::assertEquals($data, "");
+            static::assertSame($data, "");
         }
     }
 
@@ -206,7 +206,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->getPath(Config::KEY_USE_CVV), ScopeInterface::SCOPE_STORE, null)
             ->willReturn(1);
 
-        static::assertEquals(true, $this->model->isCvvEnabled());
+        static::assertSame(true, $this->model->isCvvEnabled());
     }
 
     /**
@@ -221,7 +221,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with($this->getPath(Config::KEY_VERIFY_3DSECURE), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($data);
-        static::assertEquals($expected, $this->model->isVerify3DSecure());
+        static::assertSame($expected, $this->model->isVerify3DSecure());
     }
 
     /**
@@ -252,7 +252,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with($this->getPath(Config::KEY_THRESHOLD_AMOUNT), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($data);
-        static::assertEquals($expected, $this->model->getThresholdAmount());
+        static::assertSame($expected, $this->model->getThresholdAmount());
     }
 
     /**
@@ -292,7 +292,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ->with($this->getPath(Config::KEY_VERIFY_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
                 ->willReturn('GB,US');
         }
-        static::assertEquals($expected, $this->model->get3DSecureSpecificCountries());
+        static::assertSame($expected, $this->model->get3DSecureSpecificCountries());
     }
 
     /**
@@ -331,7 +331,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn($url);
 
         $actual = $this->model->getDynamicDescriptors();
-        static::assertEquals($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**

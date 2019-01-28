@@ -53,7 +53,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             ->with('attribute_name', $result)
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->beforeSave($customerMock));
+        $this->assertSame($this->model, $this->model->beforeSave($customerMock));
     }
 
     /**

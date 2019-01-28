@@ -74,6 +74,6 @@ class PathTest extends \PHPUnit\Framework\TestCase
         ];
 
         $actual = $this->_model->map($data);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

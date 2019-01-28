@@ -32,7 +32,7 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
 
     public function testGetScopeReturnsDefaultScopeIfNoScopeDataIsSpecified()
     {
-        $this->assertEquals(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $this->_model->getScope());
+        $this->assertSame(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsStoreScopeIfStoreIsSpecified()
@@ -44,7 +44,7 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, 'someStore']])
         );
-        $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
+        $this->assertSame(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsWebsiteScopeIfWebsiteIsSpecified()
@@ -56,6 +56,6 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, null]])
         );
-        $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
+        $this->assertSame(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
     }
 }

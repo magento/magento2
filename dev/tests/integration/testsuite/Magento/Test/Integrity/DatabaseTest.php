@@ -25,7 +25,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             . ' h=' . $db->getHost()['db-host'] . ',u=' . $db->getUser() . ',p=' . $db->getPassword();
 
         exec($command, $output, $exitCode);
-        $this->assertEquals(0, $exitCode);
+        $this->assertSame(0, $exitCode);
         $output = implode(PHP_EOL, $output);
         if (preg_match('/Total Duplicate Indexes\s+(\d+)/', $output, $matches)) {
             $this->fail($matches[1] . ' duplicate indexes found.' . PHP_EOL . PHP_EOL . $output);

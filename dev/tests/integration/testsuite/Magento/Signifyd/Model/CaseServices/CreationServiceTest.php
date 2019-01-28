@@ -180,8 +180,8 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($caseEntity->getOrderId());
 
         self::assertNotEmpty($caseEntity);
-        self::assertEquals($order->getEntityId(), $caseEntity->getOrderId());
-        self::assertEquals(
+        self::assertSame($order->getEntityId(), $caseEntity->getOrderId());
+        self::assertSame(
             $gridGuarantyStatus,
             $caseEntity->getGuaranteeDisposition(),
             'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
@@ -190,7 +190,7 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
-        self::assertEquals(Order::STATE_HOLDED, $order->getState());
+        self::assertSame(Order::STATE_HOLDED, $order->getState());
 
         $histories = $order->getStatusHistories();
         self::assertNotEmpty($histories);
@@ -198,7 +198,7 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderStatusHistoryInterface $orderHoldComment */
         $orderHoldComment = array_pop($histories);
         self::assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
-        self::assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
+        self::assertSame("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
     }
 
     /**

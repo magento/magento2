@@ -24,7 +24,7 @@ class CacheStatusCommandTest extends AbstractCacheCommandTest
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
 
-        $this->assertEquals($this->getExpectedExecutionOutput($cacheTypes), $commandTester->getDisplay());
+        $this->assertSame($this->getExpectedExecutionOutput($cacheTypes), $commandTester->getDisplay());
     }
 
     /**

@@ -67,7 +67,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
 
         $storeSource = new Store($initialConfig, $websiteSource, $storeManager, $converter);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'general' => [
                     'locale' => [

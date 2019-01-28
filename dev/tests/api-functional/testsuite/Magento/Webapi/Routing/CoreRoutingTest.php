@@ -29,7 +29,7 @@ class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
         ];
         $requestData = ['itemId' => $itemId];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals('testProduct1', $item['name'], "Item was retrieved unsuccessfully");
+        $this->assertSame('testProduct1', $item['name'], "Item was retrieved unsuccessfully");
     }
 
     public function testDisabledIntegrationAuthorizationException()
@@ -86,6 +86,6 @@ class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
             \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\RestClient::class
         );
         $response = $curlClient->get('/V1/testmodule1/resource1/1', [], ['Accept:']);
-        $this->assertEquals('testProduct1', $response['name'], "Empty Accept header failed to return response.");
+        $this->assertSame('testProduct1', $response['name'], "Empty Accept header failed to return response.");
     }
 }

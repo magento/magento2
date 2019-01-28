@@ -40,17 +40,17 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('name', $this->module->getName());
+        $this->assertSame('name', $this->module->getName());
     }
 
     public function testGetDependencies()
     {
-        $this->assertEquals([$this->dependencyFirst, $this->dependencySecond], $this->module->getDependencies());
+        $this->assertSame([$this->dependencyFirst, $this->dependencySecond], $this->module->getDependencies());
     }
 
     public function testGetDependenciesCount()
     {
-        $this->assertEquals(2, $this->module->getDependenciesCount());
+        $this->assertSame(2, $this->module->getDependenciesCount());
     }
 
     public function testGetHardDependenciesCount()
@@ -61,7 +61,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->dependencySecond->expects($this->once())->method('isHard')->will($this->returnValue(false));
         $this->dependencySecond->expects($this->never())->method('isSoft');
 
-        $this->assertEquals(1, $this->module->getHardDependenciesCount());
+        $this->assertSame(1, $this->module->getHardDependenciesCount());
     }
 
     public function testGetSoftDependenciesCount()
@@ -72,6 +72,6 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->dependencySecond->expects($this->never())->method('isHard');
         $this->dependencySecond->expects($this->once())->method('isSoft')->will($this->returnValue(false));
 
-        $this->assertEquals(1, $this->module->getSoftDependenciesCount());
+        $this->assertSame(1, $this->module->getSoftDependenciesCount());
     }
 }

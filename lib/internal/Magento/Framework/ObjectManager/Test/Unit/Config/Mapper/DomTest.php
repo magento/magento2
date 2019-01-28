@@ -60,7 +60,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
 
         $resultFile = __DIR__ . '/_files/mapped_simple_di_config.php';
         $expectedResult = include $resultFile;
-        $this->assertEquals($expectedResult, $this->_mapper->convert($dom));
+        $this->assertSame($expectedResult, $this->_mapper->convert($dom));
     }
 
     /**

@@ -129,12 +129,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
-        $this->assertEquals($actualResult, $updatedImage['value_id']);
-        $this->assertEquals('Image Text', $updatedImage['label']);
-        $this->assertEquals(1, $updatedImage['position']);
-        $this->assertEquals(0, $updatedImage['disabled']);
+        $this->assertSame($actualResult, $updatedImage['value_id']);
+        $this->assertSame('Image Text', $updatedImage['label']);
+        $this->assertSame(1, $updatedImage['position']);
+        $this->assertSame(0, $updatedImage['disabled']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
+        $this->assertSame($updatedImage['file'], $targetProduct->getData('image'));
     }
 
     /**
@@ -162,12 +162,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
-        $this->assertEquals($actualResult, $updatedImage['value_id']);
-        $this->assertEquals('Image Text', $updatedImage['label']);
-        $this->assertEquals(1, $updatedImage['position']);
-        $this->assertEquals(0, $updatedImage['disabled']);
+        $this->assertSame($actualResult, $updatedImage['value_id']);
+        $this->assertSame('Image Text', $updatedImage['label']);
+        $this->assertSame(1, $updatedImage['position']);
+        $this->assertSame(0, $updatedImage['disabled']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
+        $this->assertSame($updatedImage['file'], $targetProduct->getData('image'));
     }
 
     /**
@@ -202,12 +202,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
         // Values for not default store view were provided
-        $this->assertEquals('Image Text', $updatedImage['label']);
-        $this->assertEquals($actualResult, $updatedImage['value_id']);
-        $this->assertEquals(1, $updatedImage['position']);
-        $this->assertEquals(0, $updatedImage['disabled']);
+        $this->assertSame('Image Text', $updatedImage['label']);
+        $this->assertSame($actualResult, $updatedImage['value_id']);
+        $this->assertSame(1, $updatedImage['position']);
+        $this->assertSame(0, $updatedImage['disabled']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
+        $this->assertSame($updatedImage['file'], $targetProduct->getData('image'));
         // No values for default store view were provided
         $this->assertNull($updatedImage['label_default']);
         $this->assertNull($updatedImage['position_default']);
@@ -237,19 +237,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all'));
 
         $targetProduct = $this->getTargetSimpleProduct();
-        $this->assertEquals('/m/a/magento_image.jpg', $targetProduct->getData('thumbnail'));
-        $this->assertEquals('no_selection', $targetProduct->getData('image'));
-        $this->assertEquals('no_selection', $targetProduct->getData('small_image'));
+        $this->assertSame('/m/a/magento_image.jpg', $targetProduct->getData('thumbnail'));
+        $this->assertSame('no_selection', $targetProduct->getData('image'));
+        $this->assertSame('no_selection', $targetProduct->getData('small_image'));
         $mediaGallery = $targetProduct->getData('media_gallery');
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
-        $this->assertEquals('Updated Image Text', $updatedImage['label']);
-        $this->assertEquals('/m/a/magento_image.jpg', $updatedImage['file']);
-        $this->assertEquals(10, $updatedImage['position']);
-        $this->assertEquals(1, $updatedImage['disabled']);
-        $this->assertEquals('Updated Image Text', $updatedImage['label_default']);
-        $this->assertEquals(10, $updatedImage['position_default']);
-        $this->assertEquals(1, $updatedImage['disabled_default']);
+        $this->assertSame('Updated Image Text', $updatedImage['label']);
+        $this->assertSame('/m/a/magento_image.jpg', $updatedImage['file']);
+        $this->assertSame(10, $updatedImage['position']);
+        $this->assertSame(1, $updatedImage['disabled']);
+        $this->assertSame('Updated Image Text', $updatedImage['label_default']);
+        $this->assertSame(10, $updatedImage['position_default']);
+        $this->assertSame(1, $updatedImage['disabled_default']);
     }
 
     /**
@@ -275,19 +275,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData, null, 'default'));
 
         $targetProduct = $this->getTargetSimpleProduct();
-        $this->assertEquals('/m/a/magento_image.jpg', $targetProduct->getData('thumbnail'));
+        $this->assertSame('/m/a/magento_image.jpg', $targetProduct->getData('thumbnail'));
         $mediaGallery = $targetProduct->getData('media_gallery');
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
         // Not default store view values were updated
-        $this->assertEquals('Updated Image Text', $updatedImage['label']);
-        $this->assertEquals('/m/a/magento_image.jpg', $updatedImage['file']);
-        $this->assertEquals(10, $updatedImage['position']);
-        $this->assertEquals(1, $updatedImage['disabled']);
+        $this->assertSame('Updated Image Text', $updatedImage['label']);
+        $this->assertSame('/m/a/magento_image.jpg', $updatedImage['file']);
+        $this->assertSame(10, $updatedImage['position']);
+        $this->assertSame(1, $updatedImage['disabled']);
         // Default store view values were not updated
-        $this->assertEquals('Image Alt Text', $updatedImage['label_default']);
-        $this->assertEquals(1, $updatedImage['position_default']);
-        $this->assertEquals(0, $updatedImage['disabled_default']);
+        $this->assertSame('Image Alt Text', $updatedImage['label_default']);
+        $this->assertSame(1, $updatedImage['position_default']);
+        $this->assertSame(0, $updatedImage['disabled_default']);
     }
 
     /**
@@ -551,12 +551,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         ];
         $data = $this->_webApiCall($serviceInfo, $requestData);
         $actual = (array)$data;
-        $this->assertEquals($expected['label'], $actual['label']);
-        $this->assertEquals($expected['position'], $actual['position']);
-        $this->assertEquals($expected['file'], $actual['file']);
-        $this->assertEquals($expected['types'], $actual['types']);
-        $this->assertEquals($expected['media_type'], $actual['media_type']);
-        $this->assertEquals($expected['disabled'], (bool)$actual['disabled']);
+        $this->assertSame($expected['label'], $actual['label']);
+        $this->assertSame($expected['position'], $actual['position']);
+        $this->assertSame($expected['file'], $actual['file']);
+        $this->assertSame($expected['types'], $actual['types']);
+        $this->assertSame($expected['media_type'], $actual['media_type']);
+        $this->assertSame($expected['disabled'], (bool)$actual['disabled']);
     }
 
     /**
@@ -583,7 +583,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $imageList = $this->_webApiCall($serviceInfo, $requestData);
 
         $image = reset($imageList);
-        $this->assertEquals('/m/a/magento_image.jpg', $image['file']);
+        $this->assertSame('/m/a/magento_image.jpg', $image['file']);
         $this->assertNotEmpty($image['types']);
         $imageTypes = $image['types'];
         $this->assertContains('image', $imageTypes);
@@ -658,11 +658,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
-        $this->assertEquals($actualResult, $updatedImage['value_id']);
-        $this->assertEquals('Image Text', $updatedImage['label']);
-        $this->assertEquals(1, $updatedImage['position']);
-        $this->assertEquals(0, $updatedImage['disabled']);
+        $this->assertSame($actualResult, $updatedImage['value_id']);
+        $this->assertSame('Image Text', $updatedImage['label']);
+        $this->assertSame(1, $updatedImage['position']);
+        $this->assertSame(0, $updatedImage['disabled']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($videoContent, array_intersect($updatedImage, $videoContent));
+        $this->assertSame($videoContent, array_intersect($updatedImage, $videoContent));
     }
 }

@@ -45,7 +45,7 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
 
         $this->registry->expects($this->once())->method('registry');
         $this->registry->expects($this->once())->method('register');
-        $this->assertEquals($inputTypesSet, $this->inputtypeModel->toOptionArray());
+        $this->assertSame($inputTypesSet, $this->inputtypeModel->toOptionArray());
     }
 
     /**

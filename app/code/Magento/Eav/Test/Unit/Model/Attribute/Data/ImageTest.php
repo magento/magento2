@@ -67,7 +67,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
         $this->model->setIsAjaxRequest($isAjaxRequest);
-        $this->assertEquals($expectedResult, $this->model->validateValue($value));
+        $this->assertSame($expectedResult, $this->model->validateValue($value));
     }
 
     /**

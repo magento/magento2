@@ -34,6 +34,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $currentCategoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $currentCategoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
         $this->block->setCurrentCategory($currentCategoryMock);
-        $this->assertEquals($categoryTag, $this->block->getIdentities());
+        $this->assertSame($categoryTag, $this->block->getIdentities());
     }
 }

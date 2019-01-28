@@ -219,14 +219,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $attribute->loadByCode($entityTypeId, 'test_many_swatches');
             $options = $attribute->getOptions();
             // assert that all options are saved without truncation
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedOptionsCount,
                 count($options),
                 'Expected options count does not match (regarding first empty option for non-required attribute)'
             );
 
             foreach ($expectedLabels as $optionOrderNum => $label) {
-                $this->assertEquals(
+                $this->assertSame(
                     $label,
                     $options[$optionOrderNum]->getLabel(),
                     "Label for option #{$optionOrderNum} does not match expected."

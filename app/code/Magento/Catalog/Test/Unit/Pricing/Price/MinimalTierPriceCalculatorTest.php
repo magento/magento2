@@ -96,7 +96,7 @@ class MinimalTierPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     public function testGetValueTierPricesExistShouldReturnMinTierPrice()
     {
         $minPrice = $this->getValueTierPricesExistShouldReturnMinTierPrice();
-        $this->assertEquals($minPrice, $this->object->getValue($this->saleable));
+        $this->assertSame($minPrice, $this->object->getValue($this->saleable));
     }
 
     public function testGetGetAmountMinTierPriceExistShouldReturnAmountObject()

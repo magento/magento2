@@ -96,7 +96,7 @@ class DeclarativeInstallerTest extends SetupTestCase
              */
             if (preg_match('#ON DELETE\s+NO ACTION#i', $shardData[$tableName] === 1)) {
                 preg_replace('#ON DELETE\s+NO ACTION#i', '', $sql);
-                self::assertEquals($sql, $shardData[$tableName]);
+                self::assertSame($sql, $shardData[$tableName]);
             }
         }
     }
@@ -210,7 +210,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        self::assertSame($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -239,7 +239,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        self::assertSame($this->getData(), $shardData);
     }
 
     /**
@@ -259,7 +259,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $beforeRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getTrimmedData()['before'], $beforeRollback);
+        self::assertSame($this->getTrimmedData()['before'], $beforeRollback);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -270,7 +270,7 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommad->upgrade();
         $afterRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['after'], $afterRollback);
+        self::assertSame($this->getData()['after'], $afterRollback);
     }
 
     /**
@@ -296,7 +296,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->resourceConnection->getTableName('some_table'),
             $dataToMigrate
         );
-        self::assertEquals($this->getData()['before'], $before['some_table']);
+        self::assertSame($this->getData()['before'], $before['some_table']);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -307,10 +307,10 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommad->upgrade();
         $after = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['after'], $after['some_table_renamed']);
+        self::assertSame($this->getData()['after'], $after['some_table_renamed']);
         $select = $adapter->select()
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
-        self::assertEquals([$dataToMigrate], $adapter->fetchAll($select));
+        self::assertSame([$dataToMigrate], $adapter->fetchAll($select));
     }
 
     /**

@@ -194,9 +194,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $config = $this->wysiwygConfig->getConfig($data);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $config);
-        $this->assertEquals($expectedResults[0], $config->getData('someData'));
-        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticUrl'));
-        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
+        $this->assertSame($expectedResults[0], $config->getData('someData'));
+        $this->assertSame('localhost/pub/static/', $config->getData('baseStaticUrl'));
+        $this->assertSame('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
     }
 
     /**
@@ -248,7 +248,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->willReturn($placeholderPath);
 
-        $this->assertEquals($expectedResult, $this->wysiwygConfig->getSkinImagePlaceholderPath());
+        $this->assertSame($expectedResult, $this->wysiwygConfig->getSkinImagePlaceholderPath());
     }
 
     /**
@@ -268,7 +268,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with('cms/wysiwyg/enabled', 'store', $storeId)
             ->willReturn($wysiwygState);
 
-        $this->assertEquals($expectedResult, $this->wysiwygConfig->isEnabled());
+        $this->assertSame($expectedResult, $this->wysiwygConfig->isEnabled());
     }
 
     /**
@@ -297,7 +297,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with('cms/wysiwyg/enabled', 'store')
             ->willReturn($status);
 
-        $this->assertEquals($expectedResult, $this->wysiwygConfig->isHidden());
+        $this->assertSame($expectedResult, $this->wysiwygConfig->isHidden());
     }
 
     /**

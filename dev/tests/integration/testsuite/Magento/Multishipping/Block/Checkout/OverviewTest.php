@@ -59,7 +59,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
         $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $item->setQuote($quote);
         // assure that default renderer was obtained
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[contains(@class,"product") and contains(@class,"name")]/a',

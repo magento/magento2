@@ -50,7 +50,7 @@ class FallbackContextTest extends \PHPUnit\Framework\TestCase
                 'localeCode' => $localeCode
             ]
         );
-        $this->assertEquals($expectedResult, $this->fallbackContext->getConfigPath());
+        $this->assertSame($expectedResult, $this->fallbackContext->getConfigPath());
     }
 
     /**

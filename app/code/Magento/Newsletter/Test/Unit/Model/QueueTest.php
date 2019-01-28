@@ -120,7 +120,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->queue->setQueueStatus(2);
         $this->queue->setQueueStartAt(1);
 
-        $this->assertEquals($this->queue, $this->queue->sendPerSubscriber());
+        $this->assertSame($this->queue, $this->queue->sendPerSubscriber());
     }
 
     public function testSendPerSubscriberZeroSize()
@@ -132,7 +132,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->subscribersCollection->expects($this->once())->method('getSize')->willReturn(0);
         $this->date->expects($this->once())->method('gmtDate')->willReturn('any_date');
 
-        $this->assertEquals($this->queue, $this->queue->sendPerSubscriber());
+        $this->assertSame($this->queue, $this->queue->sendPerSubscriber());
     }
 
     public function testSendPerSubscriber2()
@@ -168,7 +168,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->transportBuilder->expects($this->once())->method('getTransport')->willReturn($transport);
         $item->expects($this->once())->method('received')->with($this->queue)->willReturnSelf();
 
-        $this->assertEquals($this->queue, $this->queue->sendPerSubscriber());
+        $this->assertSame($this->queue, $this->queue->sendPerSubscriber());
     }
 
     public function testGetDataForSave()
@@ -184,7 +184,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->queue->setQueueStartAt('start_at');
         $this->queue->setQueueFinishAt('finish_at');
 
-        $this->assertEquals($result, $this->queue->getDataForSave());
+        $this->assertSame($result, $this->queue->getDataForSave());
     }
 
     public function testGetTemplate()
@@ -196,7 +196,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->templateFactory->expects($this->once())->method('create')->willReturn($template);
         $template->expects($this->once())->method('load')->with(2)->willReturnSelf();
 
-        $this->assertEquals($template, $this->queue->getTemplate());
+        $this->assertSame($template, $this->queue->getTemplate());
     }
 
     public function testGetStores()
@@ -204,6 +204,6 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $stores = ['store'];
         $this->resource->expects($this->once())->method('getStores')->willReturn($stores);
 
-        $this->assertEquals($stores, $this->queue->getStores());
+        $this->assertSame($stores, $this->queue->getStores());
     }
 }

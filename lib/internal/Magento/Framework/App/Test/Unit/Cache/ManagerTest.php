@@ -69,7 +69,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->method('setEnabled')
             ->will($this->returnValueMap([['bar', true], ['baz', true]]));
         $this->cacheState->expects($this->once())->method('persist');
-        $this->assertEquals(['bar', 'baz'], $this->model->setEnabled($caches, true));
+        $this->assertSame(['bar', 'baz'], $this->model->setEnabled($caches, true));
     }
 
     /**
@@ -89,7 +89,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->cacheState->expects($this->once())->method('setEnabled')->with('foo', false);
         $this->cacheState->expects($this->once())->method('persist');
         $this->frontendPool->expects($this->never())->method('get');
-        $this->assertEquals(['foo'], $this->model->setEnabled($caches, false));
+        $this->assertSame(['foo'], $this->model->setEnabled($caches, false));
     }
 
     /**

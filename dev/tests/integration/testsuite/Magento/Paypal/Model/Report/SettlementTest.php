@@ -58,7 +58,7 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
 
         $result = $model->getSftpCredentials($automaticMode);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

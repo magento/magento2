@@ -116,7 +116,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'emailFactory' => $emailFactory
             ]
         );
-        $this->assertEquals(self::MALICIOUS_TEXT, $preview->toHtml());
+        $this->assertSame(self::MALICIOUS_TEXT, $preview->toHtml());
     }
 
     /**

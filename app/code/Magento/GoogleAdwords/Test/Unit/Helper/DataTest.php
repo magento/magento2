@@ -72,7 +72,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals($returnValue, $this->_helper->isGoogleAdwordsActive());
+        $this->assertSame($returnValue, $this->_helper->isGoogleAdwordsActive());
     }
 
     public function testGetLanguageCodes()
@@ -88,7 +88,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($languages)
         );
-        $this->assertEquals($languages, $this->_helper->getLanguageCodes());
+        $this->assertSame($languages, $this->_helper->getLanguageCodes());
     }
 
     /**
@@ -122,7 +122,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($convertArray)
         );
-        $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
+        $this->assertSame($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
 
     public function testGetConversionImgSrc()
@@ -144,7 +144,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($imgSrc)
         );
-        $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
+        $this->assertSame($imgSrc, $this->_helper->getConversionImgSrc());
     }
 
     public function testGetConversionJsSrc()
@@ -159,7 +159,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($jsSrc)
         );
-        $this->assertEquals($jsSrc, $this->_helper->getConversionJsSrc());
+        $this->assertSame($jsSrc, $this->_helper->getConversionJsSrc());
     }
 
     /**
@@ -196,7 +196,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($returnValue)
         );
 
-        $this->assertEquals($returnValue, $this->_helper->{$method}());
+        $this->assertSame($returnValue, $this->_helper->{$method}());
     }
 
     public function testHasSendConversionValueCurrency()
@@ -228,7 +228,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($returnValue)
         );
 
-        $this->assertEquals($returnValue, $this->_helper->getConversionValue());
+        $this->assertSame($returnValue, $this->_helper->getConversionValue());
     }
 
     public function testGetConversionValueCurrency()
@@ -245,7 +245,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($returnValueCurrency)
         );
 
-        $this->assertEquals($returnValueCurrency, $this->_helper->getConversionValueCurrency());
+        $this->assertSame($returnValueCurrency, $this->_helper->getConversionValueCurrency());
     }
 
     /**
@@ -283,6 +283,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($conversionValueConst)
         );
 
-        $this->assertEquals($returnValue, $this->_helper->getConversionValue());
+        $this->assertSame($returnValue, $this->_helper->getConversionValue());
     }
 }

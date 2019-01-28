@@ -151,7 +151,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
 
         $this->_soapController->dispatch($this->_requestMock);
-        $this->assertEquals($wsdl, $this->_responseMock->getBody());
+        $this->assertSame($wsdl, $this->_responseMock->getBody());
     }
 
     public function testDispatchInvalidWsdlRequest()
@@ -203,7 +203,7 @@ EXPECTED_MESSAGE;
     {
         $this->_soapServerMock->expects($this->once())->method('handle');
         $response = $this->_soapController->dispatch($this->_requestMock);
-        $this->assertEquals(200, $response->getHttpResponseCode());
+        $this->assertSame(200, $response->getHttpResponseCode());
     }
 
     /**

@@ -26,7 +26,7 @@ class IpValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateIpsNoneAllowed($ips, $expectedMessages)
     {
-        $this->assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, true));
+        $this->assertSame($expectedMessages, $this->ipValidator->validateIps($ips, true));
     }
 
     /**
@@ -53,7 +53,7 @@ class IpValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateIpsNoneNotAllowed($ips, $expectedMessages)
     {
-        $this->assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, false));
+        $this->assertSame($expectedMessages, $this->ipValidator->validateIps($ips, false));
     }
 
     /**

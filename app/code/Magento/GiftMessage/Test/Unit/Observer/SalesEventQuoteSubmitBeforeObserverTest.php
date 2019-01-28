@@ -32,7 +32,7 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit\Framework\TestCas
         $quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($giftMessageId);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
         $orderMock->expects($this->once())->method('setGiftMessageId')->with($giftMessageId);
-        $this->assertEquals(
+        $this->assertSame(
             $this->salesEventQuoteSubmitBeforeObserver,
             $this->salesEventQuoteSubmitBeforeObserver->execute($observerMock)
         );

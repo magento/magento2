@@ -92,7 +92,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('saveAttribute')
             ->with($this->orderMock, ['billing_address_id'])
             ->will($this->returnSelf());
-        $this->assertEquals($this->address, $this->address->process($this->orderMock));
+        $this->assertSame($this->address, $this->address->process($this->orderMock));
     }
 
     /**
@@ -122,7 +122,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('saveAttribute')
             ->with($this->orderMock, ['shipping_address_id'])
             ->will($this->returnSelf());
-        $this->assertEquals($this->address, $this->address->process($this->orderMock));
+        $this->assertSame($this->address, $this->address->process($this->orderMock));
     }
 
     /**
@@ -148,6 +148,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('unsShippingAddressId')
             ->will($this->returnSelf());
-        $this->assertEquals($this->address, $this->address->removeEmptyAddresses($this->orderMock));
+        $this->assertSame($this->address, $this->address->removeEmptyAddresses($this->orderMock));
     }
 }

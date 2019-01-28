@@ -100,7 +100,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $this->objectFactoryMock->expects($this->once())->method('create')->with($requestDataMock)
             ->willReturn($dataObjectMock);
 
-        $this->assertEquals($dataObjectMock, $this->model->convertToBuyRequest($cartItemMock));
+        $this->assertSame($dataObjectMock, $this->model->convertToBuyRequest($cartItemMock));
     }
 
     public function testConvertToBuyRequestInvalidData()

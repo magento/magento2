@@ -57,7 +57,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $result = $plugin->afterGetOptionsMediaGalleryDataJson($galleryMock, $resultJson);
-        $this->assertEquals(json_encode($expectedGalleryJson), $result);
+        $this->assertSame(json_encode($expectedGalleryJson), $result);
     }
 
     /**

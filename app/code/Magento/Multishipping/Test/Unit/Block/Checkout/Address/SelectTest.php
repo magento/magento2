@@ -98,7 +98,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->addressMock->expects($this->once())->method('getId')->willReturn(1);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getDefaultBilling')->willReturn($id);
-        $this->assertEquals($expectedValue, $this->block->isAddressDefaultBilling($this->addressMock));
+        $this->assertSame($expectedValue, $this->block->isAddressDefaultBilling($this->addressMock));
     }
 
     /**
@@ -111,7 +111,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->addressMock->expects($this->once())->method('getId')->willReturn(1);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getDefaultShipping')->willReturn($id);
-        $this->assertEquals($expectedValue, $this->block->isAddressDefaultShipping($this->addressMock));
+        $this->assertSame($expectedValue, $this->block->isAddressDefaultShipping($this->addressMock));
     }
 
     /**
@@ -149,8 +149,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             ->with($this->searchCriteriaMock)
             ->willReturn($searchResultMock);
         $searchResultMock->expects($this->once())->method('getItems')->willReturn([$this->addressMock]);
-        $this->assertEquals([$this->addressMock], $this->block->getAddress());
-        $this->assertEquals([$this->addressMock], $this->block->getData('address_collection'));
+        $this->assertSame([$this->addressMock], $this->block->getAddress());
+        $this->assertSame([$this->addressMock], $this->block->getData('address_collection'));
     }
 
     public function testGetAlreadyExistingAddress()
@@ -170,7 +170,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->addressRepositoryMock
             ->expects($this->never())
             ->method('getList');
-        $this->assertEquals([$this->addressMock], $this->block->getAddress());
+        $this->assertSame([$this->addressMock], $this->block->getAddress());
     }
 
     public function testGetAddressWhenItNotExistInCustomer()
@@ -198,6 +198,6 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             ->willReturn($searchResultMock);
 
         $searchResultMock->expects($this->once())->method('getItems')->willThrowException(new NoSuchEntityException());
-        $this->assertEquals([], $this->block->getAddress());
+        $this->assertSame([], $this->block->getAddress());
     }
 }

@@ -49,7 +49,7 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
         ksort($result);
         ksort($expected['product_links'][0]);
         ksort($result['product_links'][0]);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -91,7 +91,7 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
         ksort($result[0]);
         ksort($expected[0]['product_links'][0]);
         ksort($result[0]['product_links'][0]);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -139,7 +139,7 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
 
         ksort($result);
         ksort($request);
-        $this->assertEquals($request, $result);
+        $this->assertSame($request, $result);
     }
 
     /**
@@ -167,7 +167,7 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
 
         $this->assertCount(7, $result);
         $this->assertArrayHasKey('title', $result);
-        $this->assertEquals($request['title'], $result['title']);
+        $this->assertSame($request['title'], $result['title']);
     }
 
     /**

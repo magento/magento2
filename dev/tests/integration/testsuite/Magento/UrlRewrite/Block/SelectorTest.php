@@ -25,6 +25,6 @@ class SelectorTest extends \PHPUnit\Framework\TestCase
         $block = $layout->createBlock(\Magento\UrlRewrite\Block\Selector::class);
 
         $modeUrl = $block->getModeUrl('mode');
-        $this->assertEquals(1, preg_match('/admin\/index\/index\/key\/[0-9a-zA-Z]+\/mode/', $modeUrl));
+        $this->assertSame(1, preg_match('/admin\/index\/index\/key\/[0-9a-zA-Z]+\/mode/', $modeUrl));
     }
 }

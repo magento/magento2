@@ -52,7 +52,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getAdjustments();
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -62,7 +62,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->model->getAdjustmentByCode($code);
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

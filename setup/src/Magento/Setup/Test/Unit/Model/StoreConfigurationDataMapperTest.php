@@ -24,7 +24,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit\Framework\TestCase
     public function testGetConfigData(array $data, array $expected)
     {
         $userConfigurationDataMapper = new StoreConfigurationDataMapper();
-        $this->assertEquals($expected, $userConfigurationDataMapper->getConfigData($data));
+        $this->assertSame($expected, $userConfigurationDataMapper->getConfigData($data));
     }
 
     /**

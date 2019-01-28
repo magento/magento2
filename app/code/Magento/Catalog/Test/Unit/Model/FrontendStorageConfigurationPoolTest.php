@@ -40,7 +40,7 @@ class FrontendStorageConfigurationPoolTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertEquals($this->defaultStorageConfiguration, $this->model->get('default'));
+        $this->assertSame($this->defaultStorageConfiguration, $this->model->get('default'));
     }
 
     /**
@@ -49,6 +49,6 @@ class FrontendStorageConfigurationPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWithException()
     {
-        $this->assertEquals($this->defaultStorageConfiguration, $this->model->get('product'));
+        $this->assertSame($this->defaultStorageConfiguration, $this->model->get('product'));
     }
 }

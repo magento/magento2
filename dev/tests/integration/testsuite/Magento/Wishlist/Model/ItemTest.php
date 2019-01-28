@@ -51,12 +51,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         // Assert getBuyRequest method
         $buyRequest = $this->model->getBuyRequest();
-        $this->assertEquals($buyRequest->getOriginalQty(), 23);
+        $this->assertSame($buyRequest->getOriginalQty(), 23);
 
         // Assert mergeBuyRequest method
         $this->model->mergeBuyRequest(['qty' => 11, 'additional_data' => 'some value']);
         $buyRequest = $this->model->getBuyRequest();
-        $this->assertEquals(
+        $this->assertSame(
             ['additional_data' => 'some value', 'qty' => 0, 'original_qty' => 11],
             $buyRequest->getData()
         );
@@ -71,7 +71,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setBuyRequest($buyRequest);
 
-        $this->assertEquals(
+        $this->assertSame(
             '{"field_1":"some data","field_2":234,"id":null}',
             $this->model->getData('buy_request')
         );

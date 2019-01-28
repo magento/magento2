@@ -33,7 +33,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getSku')
             ->willReturn($sku);
         $result = $this->item->getSku($this->orderItemMock);
-        $this->assertEquals($sku, $result);
+        $this->assertSame($sku, $result);
     }
 
     public function testGetName()
@@ -43,7 +43,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($name);
         $result = $this->item->getName($this->orderItemMock);
-        $this->assertEquals($name, $result);
+        $this->assertSame($name, $result);
     }
 
     public function testGetProductId()
@@ -53,6 +53,6 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('getProductId')
             ->willReturn($productId);
         $result = $this->item->getProductId($this->orderItemMock);
-        $this->assertEquals($productId, $result);
+        $this->assertSame($productId, $result);
     }
 }

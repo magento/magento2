@@ -101,6 +101,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetMappedSqlFieldSku()
     {
         $this->model->setAttribute('sku');
-        $this->assertEquals('e.sku', $this->model->getMappedSqlField());
+        $this->assertSame('e.sku', $this->model->getMappedSqlField());
     }
 }

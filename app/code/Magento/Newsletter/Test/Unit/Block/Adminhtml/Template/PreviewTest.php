@@ -86,7 +86,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn('Processed Template');
 
-        $this->assertEquals('Processed Template', $this->preview->toHtml());
+        $this->assertSame('Processed Template', $this->preview->toHtml());
     }
 
     public function testToHtmlForNewTemplate()
@@ -129,7 +129,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn('Processed Template');
 
-        $this->assertEquals('<pre>Processed Template</pre>', $this->preview->toHtml());
+        $this->assertSame('<pre>Processed Template</pre>', $this->preview->toHtml());
     }
 
     public function testToHtmlWithSubscriber()
@@ -163,6 +163,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn('Processed Template');
 
-        $this->assertEquals('Processed Template', $this->preview->toHtml());
+        $this->assertSame('Processed Template', $this->preview->toHtml());
     }
 }

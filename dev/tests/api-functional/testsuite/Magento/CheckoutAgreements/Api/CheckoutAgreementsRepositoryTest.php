@@ -73,12 +73,12 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
         $agreements = $this->_webApiCall($this->listServiceInfo, []);
         $this->assertCount(1, $agreements);
         $agreementData = $agreements[0];
-        $this->assertEquals($agreementModel->getId(), $agreementData['agreement_id']);
-        $this->assertEquals($agreementModel->getName(), $agreementData['name']);
-        $this->assertEquals($agreementModel->getContent(), $agreementData['content']);
-        $this->assertEquals($agreementModel->getContentHeight(), $agreementData['content_height']);
-        $this->assertEquals($agreementModel->getCheckboxText(), $agreementData['checkbox_text']);
-        $this->assertEquals($agreementModel->getIsActive(), $agreementData['is_active']);
-        $this->assertEquals($agreementModel->getIsHtml(), $agreementData['is_html']);
+        $this->assertSame($agreementModel->getId(), $agreementData['agreement_id']);
+        $this->assertSame($agreementModel->getName(), $agreementData['name']);
+        $this->assertSame($agreementModel->getContent(), $agreementData['content']);
+        $this->assertSame($agreementModel->getContentHeight(), $agreementData['content_height']);
+        $this->assertSame($agreementModel->getCheckboxText(), $agreementData['checkbox_text']);
+        $this->assertSame($agreementModel->getIsActive(), $agreementData['is_active']);
+        $this->assertSame($agreementModel->getIsHtml(), $agreementData['is_html']);
     }
 }

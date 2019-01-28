@@ -92,7 +92,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($value);
         }
 
-        static::assertEquals($expected, $this->configProvider->getConfig());
+        static::assertSame($expected, $this->configProvider->getConfig());
     }
 
     /**
@@ -110,7 +110,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->with($params)
             ->willReturn(self::CLIENT_TOKEN);
 
-        static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
+        static::assertSame(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
     }
 
     /**

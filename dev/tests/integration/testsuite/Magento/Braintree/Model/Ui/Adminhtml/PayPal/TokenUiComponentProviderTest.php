@@ -53,10 +53,10 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
 
         static::assertNotEmpty($config[TokenUiComponentProviderInterface::COMPONENT_DETAILS]);
         static::assertNotEmpty($config[TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH]);
-        static::assertEquals(ConfigProvider::PAYPAL_VAULT_CODE, $config['code']);
+        static::assertSame(ConfigProvider::PAYPAL_VAULT_CODE, $config['code']);
 
         $details = $config[TokenUiComponentProviderInterface::COMPONENT_DETAILS];
-        static::assertEquals($payerEmail, $details['payerEmail']);
+        static::assertSame($payerEmail, $details['payerEmail']);
         static::assertNotEmpty($details['icon']);
     }
 }

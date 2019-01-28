@@ -198,13 +198,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $duplicate = $copier->copy($this->_model);
         try {
             $this->assertNotEmpty($duplicate->getId());
-            $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
-            $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
-            $this->assertEquals(
+            $this->assertNotSame($duplicate->getId(), $this->_model->getId());
+            $this->assertNotSame($duplicate->getSku(), $this->_model->getSku());
+            $this->assertSame(
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
                 $duplicate->getStatus()
             );
-            $this->assertEquals(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
+            $this->assertSame(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
             $this->_undo($duplicate);
         } catch (\Exception $e) {
             $this->_undo($duplicate);
@@ -219,13 +219,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model = $this->productRepository->get('simple');
 
-        $this->assertEquals('simple', $this->_model->getSku());
+        $this->assertSame('simple', $this->_model->getSku());
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Copier::class
         );
         $duplicate = $copier->copy($this->_model);
-        $this->assertEquals('simple-5', $duplicate->getSku());
+        $this->assertSame('simple-5', $duplicate->getSku());
     }
 
     /**
@@ -252,11 +252,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testVisibilityApi()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED],
             $this->_model->getVisibleInCatalogStatuses()
         );
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED],
             $this->_model->getVisibleStatuses()
         );
@@ -267,7 +267,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->assertTrue($this->_model->isVisibleInCatalog());
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
                 \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
@@ -353,9 +353,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testToArray()
     {
-        $this->assertEquals([], $this->_model->toArray());
+        $this->assertSame([], $this->_model->toArray());
         $this->_model->setSku('sku')->setName('name');
-        $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->toArray());
+        $this->assertSame(['sku' => 'sku', 'name' => 'name'], $this->_model->toArray());
     }
 
     /**
@@ -364,7 +364,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testFromArray()
     {
         $this->_model->fromArray(['sku' => 'sku', 'name' => 'name', 'stock_item' => ['key' => 'value']]);
-        $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->getData());
+        $this->assertSame(['sku' => 'sku', 'name' => 'name'], $this->_model->getData());
     }
 
     /**
@@ -374,7 +374,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEmpty($this->_model->getOrigData());
         $this->_model->setOrigData('key', 'value');
-        $this->assertEquals('value', $this->_model->getOrigData('key'));
+        $this->assertSame('value', $this->_model->getOrigData('key'));
     }
 
     /**
@@ -410,9 +410,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected function _assertEmpty($model)
     {
-        $this->assertEquals([], $model->getData());
+        $this->assertSame([], $model->getData());
         $this->assertEmpty($model->getOrigData());
-        $this->assertEquals([], $model->getCustomOptions());
+        $this->assertSame([], $model->getCustomOptions());
         // impossible to test $_optionInstance
         $this->assertFalse($model->canAffectOptions());
     }
@@ -472,7 +472,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             true
         );
         $validationResult = $this->_model->validate();
-        $this->assertEquals('SKU length should be 64 characters maximum.', $validationResult['sku']);
+        $this->assertSame('SKU length should be 64 characters maximum.', $validationResult['sku']);
         unset($validationResult['sku']);
         foreach ($validationResult as $error) {
             $this->assertTrue($error);
@@ -585,7 +585,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 continue;
             }
             foreach ($option->getValues() as $value) {
-                $this->assertEquals($expectedValue[$value->getSku()], (float)$value->getPrice());
+                $this->assertSame($expectedValue[$value->getSku()], (float)$value->getPrice());
             }
         }
     }
@@ -605,7 +605,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
-        $this->assertEquals(false, $stockItem->getIsInStock());
+        $this->assertSame(false, $stockItem->getIsInStock());
         $stockData = [
             'backorders' => 1,
             'qty' => $qty,
@@ -615,7 +615,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->save();
         $stockItem = $product->getExtensionAttributes()->getStockItem();
 
-        $this->assertEquals($expectedStockStatus, $stockItem->getIsInStock());
+        $this->assertSame($expectedStockStatus, $stockItem->getIsInStock());
     }
 
     /**

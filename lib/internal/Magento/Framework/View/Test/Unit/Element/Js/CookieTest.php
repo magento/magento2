@@ -80,7 +80,7 @@ class CookieTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($isIp));
 
         $result = $this->model->getDomain($domain);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -104,7 +104,7 @@ class CookieTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($path));
 
         $result = $this->model->getPath();
-        $this->assertEquals($path, $result);
+        $this->assertSame($path, $result);
     }
 
     public function testGetLifetime()
@@ -114,6 +114,6 @@ class CookieTest extends \PHPUnit\Framework\TestCase
             ->method('getCookieLifetime')
             ->willReturn($lifetime);
 
-        $this->assertEquals($lifetime, $this->model->getLifetime());
+        $this->assertSame($lifetime, $this->model->getLifetime());
     }
 }

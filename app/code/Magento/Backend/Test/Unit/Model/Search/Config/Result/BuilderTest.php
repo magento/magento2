@@ -51,7 +51,7 @@ class BuilderTest extends TestCase
             ->method('getData')
             ->will($this->returnValue(['_elementType' => 'not_declared_structure_element_type']));
         $this->model->add($this->structureElementMock, '');
-        $this->assertEquals([], $this->model->getAll());
+        $this->assertSame([], $this->model->getAll());
     }
 
     public function testAddWithSupportedStructureElements()
@@ -95,6 +95,6 @@ class BuilderTest extends TestCase
             ->will($this->returnValue($generatedUrl));
 
         $this->model->add($this->structureElementMock, $structureElementLabel);
-        $this->assertEquals($expectedSearchResult, $this->model->getAll());
+        $this->assertSame($expectedSearchResult, $this->model->getAll());
     }
 }

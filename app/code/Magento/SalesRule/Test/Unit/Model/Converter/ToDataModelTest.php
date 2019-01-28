@@ -309,6 +309,6 @@ class ToDataModelTest extends \PHPUnit\Framework\TestCase
 
         $return = $this->model->arrayToConditionDataModel($array);
 
-        $this->assertEquals($dataCondition, $return);
+        $this->assertSame($dataCondition, $return);
     }
 }

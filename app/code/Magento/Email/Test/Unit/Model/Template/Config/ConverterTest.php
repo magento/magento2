@@ -22,6 +22,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $inputData = new \DOMDocument();
         $inputData->load(__DIR__ . '/_files/email_templates_merged.xml');
         $expectedResult = require __DIR__ . '/_files/email_templates_merged.php';
-        $this->assertEquals($expectedResult, $this->_model->convert($inputData));
+        $this->assertSame($expectedResult, $this->_model->convert($inputData));
     }
 }

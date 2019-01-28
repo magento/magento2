@@ -53,7 +53,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($resultPrice)
         );
-        $this->assertEquals($expectedPrice, $this->priceModifier->modifyPrice(100, $this->productMock));
+        $this->assertSame($expectedPrice, $this->priceModifier->modifyPrice(100, $this->productMock));
     }
 
     /**
@@ -67,6 +67,6 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
     public function testModifyPriceIfPriceNotExist()
     {
         $this->ruleFactoryMock->expects($this->never())->method('create');
-        $this->assertEquals(null, $this->priceModifier->modifyPrice(null, $this->productMock));
+        $this->assertSame(null, $this->priceModifier->modifyPrice(null, $this->productMock));
     }
 }

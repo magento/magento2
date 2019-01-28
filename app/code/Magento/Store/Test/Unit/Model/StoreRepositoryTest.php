@@ -102,7 +102,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($storeMock);
 
-        $this->assertEquals($storeMock, $this->storeRepository->get('some_code'));
+        $this->assertSame($storeMock, $this->storeRepository->get('some_code'));
     }
 
     public function testGetByIdWithAvailableStoreFromScope()
@@ -123,7 +123,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn([]);
 
-        $this->assertEquals($storeMock, $this->storeRepository->getById(1));
+        $this->assertSame($storeMock, $this->storeRepository->getById(1));
     }
 
     /**
@@ -177,7 +177,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($storeMock2);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['some_code' => $storeMock1, 'some_code_2' => $storeMock2],
             $this->storeRepository->getList()
         );

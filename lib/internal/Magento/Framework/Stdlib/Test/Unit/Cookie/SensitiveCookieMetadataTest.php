@@ -54,9 +54,9 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
 
             ]
         );
-        $this->assertEquals($httpOnly, $object->getHttpOnly());
-        $this->assertEquals('domain', $object->getDomain());
-        $this->assertEquals('path', $object->getPath());
+        $this->assertSame($httpOnly, $object->getHttpOnly());
+        $this->assertSame('domain', $object->getDomain());
+        $this->assertSame('path', $object->getPath());
     }
 
     /**
@@ -104,7 +104,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
                 'metadata' => $metadata,
             ]
         );
-        $this->assertEquals($expected, $object->getSecure());
+        $this->assertSame($expected, $object->getSecure());
     }
 
     /**
@@ -163,7 +163,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
                 'metadata' => $metadata,
             ]
         );
-        $this->assertEquals($expected, $object->__toArray());
+        $this->assertSame($expected, $object->__toArray());
     }
 
     /**

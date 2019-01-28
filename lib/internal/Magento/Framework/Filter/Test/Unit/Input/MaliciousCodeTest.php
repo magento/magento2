@@ -26,7 +26,7 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter($input, $expectedOutput)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedOutput,
             $this->filter->filter($input),
             'Malicious code is not filtered out correctly.'
@@ -121,7 +121,7 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
     {
         $customExpression = '/<\/?(customMalicious).*>/Uis';
         $this->filter->addExpression($customExpression);
-        $this->assertEquals(
+        $this->assertSame(
             /** Tabs should be filtered out along with custom malicious code */
             'Custom malicious tag is removed customMalicious',
             $this->filter->filter(
@@ -138,7 +138,7 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
     {
         $customExpression = '/<\/?(customMalicious).*>/Uis';
         $this->filter->setExpressions([$customExpression]);
-        $this->assertEquals(
+        $this->assertSame(
             /** Tabs should not be filtered out along with custom malicious code */
             "Custom \tmalicious tag\t\t is removed customMalicious",
             $this->filter->filter(

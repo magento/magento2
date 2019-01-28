@@ -91,12 +91,12 @@ class BackendTemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSystemConfigPathsWhereCurrentlyUsedNoId()
     {
-        $this->assertEquals([], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
+        $this->assertSame([], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
     }
 
     public function testGetSystemConfigPathsWhereCurrentlyUsedValidId()
     {
         $this->model->setId(1);
-        $this->assertEquals(['test_config' => 2015], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
+        $this->assertSame(['test_config' => 2015], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
     }
 }

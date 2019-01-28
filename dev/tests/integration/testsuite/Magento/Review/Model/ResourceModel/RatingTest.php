@@ -48,7 +48,7 @@ class RatingTest extends \PHPUnit\Framework\TestCase
             \Magento\Review\Model\Rating::class
         );
         $rating->load($this->id);
-        $this->assertEquals('Test Rating', $rating->getRatingCode());
+        $this->assertSame('Test Rating', $rating->getRatingCode());
     }
 
     /**
@@ -60,7 +60,7 @@ class RatingTest extends \PHPUnit\Framework\TestCase
             \Magento\Review\Model\Rating::class
         );
         $rating->load($this->id);
-        $this->assertEquals('Test Rating', $rating->getRatingCode());
+        $this->assertSame('Test Rating', $rating->getRatingCode());
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()->getId();
@@ -68,8 +68,8 @@ class RatingTest extends \PHPUnit\Framework\TestCase
         $rating->setRatingCodes([$storeId => 'Test Rating Edited']);
         $rating->save();
 
-        $this->assertEquals('Test Rating Edited', $rating->getRatingCode());
-        $this->assertEquals([$storeId => 'Test Rating Edited'], $rating->getRatingCodes());
+        $this->assertSame('Test Rating Edited', $rating->getRatingCode());
+        $this->assertSame([$storeId => 'Test Rating Edited'], $rating->getRatingCodes());
     }
 
     /**

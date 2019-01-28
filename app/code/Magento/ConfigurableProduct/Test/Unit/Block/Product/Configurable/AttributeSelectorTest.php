@@ -38,7 +38,7 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('some_url')
         );
-        $this->assertEquals('some_url', $this->attributeSelector->getAttributeSetCreationUrl());
+        $this->assertSame('some_url', $this->attributeSelector->getAttributeSetCreationUrl());
     }
 
     public function testGetSuggestWidgetOptions()
@@ -54,6 +54,6 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($source)
         );
         $expected = ['source' => $source, 'minLength' => 0, 'className' => 'category-select', 'showAll' => true];
-        $this->assertEquals($expected, $this->attributeSelector->getSuggestWidgetOptions());
+        $this->assertSame($expected, $this->attributeSelector->getSuggestWidgetOptions());
     }
 }

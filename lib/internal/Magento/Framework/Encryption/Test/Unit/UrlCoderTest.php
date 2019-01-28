@@ -44,11 +44,11 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('expected')
         );
-        $this->assertEquals('expected', $this->_urlCoder->decode($this->_encodeUrl));
+        $this->assertSame('expected', $this->_urlCoder->decode($this->_encodeUrl));
     }
 
     public function testEncode()
     {
-        $this->assertEquals($this->_encodeUrl, $this->_urlCoder->encode($this->_url));
+        $this->assertSame($this->_encodeUrl, $this->_urlCoder->encode($this->_url));
     }
 }

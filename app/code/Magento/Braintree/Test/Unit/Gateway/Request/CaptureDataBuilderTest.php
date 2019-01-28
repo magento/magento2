@@ -113,6 +113,6 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($amount);
 
-        static::assertEquals($expected, $this->builder->build($buildSubject));
+        static::assertSame($expected, $this->builder->build($buildSubject));
     }
 }

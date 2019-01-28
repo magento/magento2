@@ -116,7 +116,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Sales\Block\Order\Items model */
         $this->model = $this->layout->createBlock(\Magento\Sales\Block\Order\Items::class, 'items_block');
-        $this->assertEquals($order, $this->model->getOrder());
+        $this->assertSame($order, $this->model->getOrder());
     }
 
     /**

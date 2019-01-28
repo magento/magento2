@@ -35,6 +35,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($attributes)
         );
-        $this->assertEquals($attributes, $this->_model->getProductAttributes());
+        $this->assertSame($attributes, $this->_model->getProductAttributes());
     }
 }

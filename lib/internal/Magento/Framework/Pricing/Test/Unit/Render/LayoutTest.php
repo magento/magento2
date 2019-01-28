@@ -104,6 +104,6 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->with($blockName)
             ->will($this->returnValue($block));
 
-        $this->assertEquals($block, $this->model->getBlock($blockName));
+        $this->assertSame($block, $this->model->getBlock($blockName));
     }
 }

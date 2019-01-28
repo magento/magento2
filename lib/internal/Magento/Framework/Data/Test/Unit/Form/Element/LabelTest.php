@@ -38,7 +38,7 @@ class LabelTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('label', $this->_label->getType());
+        $this->assertSame('label', $this->_label->getType());
     }
 
     /**

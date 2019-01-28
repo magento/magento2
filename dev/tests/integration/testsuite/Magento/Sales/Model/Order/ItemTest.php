@@ -16,7 +16,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $model = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Sales\Model\Order\Item::class);
         $model->setData('product_options', $options);
-        $this->assertEquals($expectedData, $model->getProductOptions());
+        $this->assertSame($expectedData, $model->getProductOptions());
     }
 
     /**

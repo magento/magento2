@@ -25,7 +25,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
         $quoteRepository = $objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
         $customerQuote = $quoteRepository->getForCustomer(1);
-        $this->assertEquals(0, $customerQuote->getBaseGrandTotal());
+        $this->assertSame(0, $customerQuote->getBaseGrandTotal());
     }
 
     /**
@@ -74,8 +74,8 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             'amount' => 0
         ];
         foreach ($result as $rate) {
-            $this->assertEquals($expectedResult['amount'], $rate->getAmount());
-            $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
+            $this->assertSame($expectedResult['amount'], $rate->getAmount());
+            $this->assertSame($expectedResult['method_code'], $rate->getMethodCode());
         }
     }
 
@@ -169,8 +169,8 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         foreach ($result as $rate) {
-            $this->assertEquals($expectedResult[$rate->getCarrierCode()]['amount'], $rate->getAmount());
-            $this->assertEquals($expectedResult[$rate->getCarrierCode()]['method_code'], $rate->getMethodCode());
+            $this->assertSame($expectedResult[$rate->getCarrierCode()]['amount'], $rate->getAmount());
+            $this->assertSame($expectedResult[$rate->getCarrierCode()]['method_code'], $rate->getMethodCode());
         }
     }
 }

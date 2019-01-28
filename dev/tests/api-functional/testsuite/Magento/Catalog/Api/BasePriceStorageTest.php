@@ -55,8 +55,8 @@ class BasePriceStorageTest extends WebapiAbstract
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
 
         $this->assertNotEmpty($response);
-        $this->assertEquals($product->getPrice(), $response[0]['price']);
-        $this->assertEquals($product->getSku(), $response[0]['sku']);
+        $this->assertSame($product->getPrice(), $response[0]['price']);
+        $this->assertSame($product->getSku(), $response[0]['sku']);
     }
 
     /**
@@ -96,7 +96,7 @@ class BasePriceStorageTest extends WebapiAbstract
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
 
         $this->assertEmpty($response);
-        $this->assertEquals($product->getPrice(), $newPrice);
+        $this->assertSame($product->getPrice(), $newPrice);
     }
 
     /**
@@ -155,6 +155,6 @@ class BasePriceStorageTest extends WebapiAbstract
             ]
         ];
 
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertSame($expectedResponse, $response);
     }
 }

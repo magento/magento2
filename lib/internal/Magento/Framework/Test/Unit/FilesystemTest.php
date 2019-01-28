@@ -40,7 +40,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
         $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
-        $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryRead(DirectoryList::ROOT));
+        $this->assertSame($dirReadMock, $this->_filesystem->getDirectoryRead(DirectoryList::ROOT));
     }
 
     public function testGetDirectoryReadByPath()
@@ -48,7 +48,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
         $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
-        $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryReadByPath('path/to/some/file'));
+        $this->assertSame($dirReadMock, $this->_filesystem->getDirectoryReadByPath('path/to/some/file'));
     }
 
     public function testGetDirectoryWrite()
@@ -56,12 +56,12 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $dirWriteMock */
         $dirWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->_dirWriteFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirWriteMock));
-        $this->assertEquals($dirWriteMock, $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT));
+        $this->assertSame($dirWriteMock, $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT));
     }
 
     public function testGetUri()
     {
         $this->_directoryListMock->expects($this->once())->method('getUrlPath')->with('code')->willReturn('result');
-        $this->assertEquals('result', $this->_filesystem->getUri('code'));
+        $this->assertSame('result', $this->_filesystem->getUri('code'));
     }
 }

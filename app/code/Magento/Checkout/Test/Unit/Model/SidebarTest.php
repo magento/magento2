@@ -43,7 +43,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResponseData($error, $result)
     {
-        $this->assertEquals($result, $this->sidebar->getResponseData($error));
+        $this->assertSame($result, $this->sidebar->getResponseData($error));
     }
 
     /**
@@ -93,7 +93,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->assertEquals($this->sidebar, $this->sidebar->checkQuoteItem($itemId));
+        $this->assertSame($this->sidebar, $this->sidebar->checkQuoteItem($itemId));
     }
 
     /**
@@ -131,7 +131,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->assertEquals($this->sidebar, $this->sidebar->removeQuoteItem($itemId));
+        $this->assertSame($this->sidebar, $this->sidebar->removeQuoteItem($itemId));
     }
 
     public function testUpdateQuoteItem()
@@ -151,7 +151,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->assertEquals($this->sidebar, $this->sidebar->updateQuoteItem($itemId, $itemQty));
+        $this->assertSame($this->sidebar, $this->sidebar->updateQuoteItem($itemId, $itemQty));
     }
 
     public function testUpdateQuoteItemWithZeroQty()
@@ -170,6 +170,6 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->assertEquals($this->sidebar, $this->sidebar->updateQuoteItem($itemId, $itemQty));
+        $this->assertSame($this->sidebar, $this->sidebar->updateQuoteItem($itemId, $itemQty));
     }
 }

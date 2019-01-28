@@ -35,8 +35,8 @@ class ContainerAbstractTest extends \PHPUnit\Framework\TestCase
         );
 
         $template = 'any_template.phtml';
-        $this->assertNotEquals($template, $childBlock->getTemplate());
+        $this->assertNotSame($template, $childBlock->getTemplate());
         $block->setInfoTemplate('checkmo', $template);
-        $this->assertEquals($template, $childBlock->getTemplate());
+        $this->assertSame($template, $childBlock->getTemplate());
     }
 }

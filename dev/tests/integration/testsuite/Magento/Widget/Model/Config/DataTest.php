@@ -28,6 +28,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $configData = $objectManager->create(\Magento\Widget\Model\Config\Data::class, ['reader' => $reader]);
         $result = $configData->get();
         $expected = include '_files/expectedGlobalDesignArray.php';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

@@ -93,7 +93,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSelectQuery,
             $query,
             sprintf('Wrong "match" query. Should be processed with "%s"', $match)
@@ -132,7 +132,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedSelectQuery, $selectQuery, $errorMessage);
+        $this->assertSame($expectedSelectQuery, $selectQuery, $errorMessage);
     }
 
     /**

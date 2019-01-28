@@ -105,8 +105,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressId = $this->model->$methodName();
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
-        self::assertEquals(
+        self::assertSame($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
+        self::assertSame(
             $secondFixtureAddressStreet,
             $address->getStreet(),
             "Street in default {$addressType} address is invalid."
@@ -120,7 +120,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals(
+        self::assertSame(
             $secondFixtureAddressId,
             $address->getId(),
             "Method results are not cached properly."
@@ -161,8 +161,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressId = $this->model->$methodName();
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
-        self::assertEquals(
+        self::assertSame($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
+        self::assertSame(
             $firstFixtureAddressStreet,
             $address->getStreet(),
             "Street in default {$addressType} address is invalid."
@@ -433,7 +433,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($expected as $key => $item) {
             $methodName = 'get' . ucfirst($key);
-            self::assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
+            self::assertSame($item, $address->$methodName(), 'The "'. $key . '" does not match.');
         }
     }
 
@@ -474,6 +474,6 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private function performOrderTotalAssertions(float $total, float $expected)
     {
-        self::assertEquals($expected, $total, 'Order total amount does not match.');
+        self::assertSame($expected, $total, 'Order total amount does not match.');
     }
 }

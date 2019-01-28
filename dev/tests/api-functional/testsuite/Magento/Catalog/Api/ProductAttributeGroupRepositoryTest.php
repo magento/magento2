@@ -83,9 +83,9 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
         $result = $this->_webApiCall($serviceInfo, ['group' => $newGroupData]);
 
         $this->assertArrayHasKey('attribute_group_id', $result);
-        $this->assertEquals($group->getId(), $result['attribute_group_id']);
+        $this->assertSame($group->getId(), $result['attribute_group_id']);
         $this->assertArrayHasKey('attribute_group_name', $result);
-        $this->assertEquals($newGroupData['attribute_group_name'], $result['attribute_group_name']);
+        $this->assertSame($newGroupData['attribute_group_name'], $result['attribute_group_name']);
     }
 
     public function testGetList()
@@ -126,7 +126,7 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 

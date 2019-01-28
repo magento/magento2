@@ -106,7 +106,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->collectionMock,
             $this->collectionMock->filterByUser($userId, $status, $sessionIdToExclude)
         );
@@ -128,7 +128,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('addFieldToFilter')
             ->willReturnSelf();
 
-        $this->assertEquals($this->collectionMock, $this->collectionMock->filterExpiredSessions($sessionLifeTime));
+        $this->assertSame($this->collectionMock, $this->collectionMock->filterExpiredSessions($sessionLifeTime));
     }
 
     /**
@@ -143,7 +143,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->with($timestamp);
 
         $result = $this->collectionMock->deleteSessionsOlderThen($timestamp);
-        $this->assertEquals($this->collectionMock, $result);
+        $this->assertSame($this->collectionMock, $result);
     }
 
     /**
@@ -167,7 +167,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $updateOlderThen
             )->willReturn($result);
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->collectionMock->updateActiveSessionsStatus($status, $userId, $sessionIdToExclude, $updateOlderThen)
         );

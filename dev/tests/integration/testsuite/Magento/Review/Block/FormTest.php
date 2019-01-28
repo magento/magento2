@@ -56,7 +56,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Review\Block\Form $form */
         $form = $this->objectManager->create(\Magento\Review\Block\Form::class);
         $result = $form->getAllowWriteReviewFlag();
-        $this->assertEquals($result, $expectedResult);
+        $this->assertSame($result, $expectedResult);
     }
 
     public function getCorrectFlagDataProvider()

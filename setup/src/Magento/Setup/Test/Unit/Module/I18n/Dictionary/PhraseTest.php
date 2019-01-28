@@ -18,7 +18,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
     public function testPhraseCreation($constructArguments, $getter, $result)
     {
         $phrase = new Phrase(...array_values($constructArguments));
-        $this->assertEquals($result, $phrase->{$getter}());
+        $this->assertSame($result, $phrase->{$getter}());
     }
 
     /**
@@ -84,7 +84,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase = new Phrase('phrase', 'translation');
         $phrase->{$setter}($value);
 
-        $this->assertEquals($value, $phrase->{$getter}());
+        $this->assertSame($value, $phrase->{$getter}());
     }
 
     /**
@@ -106,7 +106,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase->addContextValue('context_value2');
         $phrase->addContextValue('context_value3');
 
-        $this->assertEquals(['context_value1', 'context_value2', 'context_value3'], $phrase->getContextValue());
+        $this->assertSame(['context_value1', 'context_value2', 'context_value3'], $phrase->getContextValue());
     }
 
     public function testContextValueDuplicationResolving()
@@ -115,7 +115,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase->addContextValue('context_value1');
         $phrase->addContextValue('context_value1');
 
-        $this->assertEquals(['context_value1'], $phrase->getContextValue());
+        $this->assertSame(['context_value1'], $phrase->getContextValue());
     }
 
     /**
@@ -134,7 +134,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase->addContextValue('context_value2');
         $phrase->setContextValue(null);
 
-        $this->assertEquals([], $phrase->getContextValue());
+        $this->assertSame([], $phrase->getContextValue());
     }
 
     public function testGetContextValueAsString()
@@ -143,7 +143,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase->addContextValue('context_value2');
         $phrase->addContextValue('context_value3');
 
-        $this->assertEquals('context_value1,context_value2,context_value3', $phrase->getContextValueAsString());
+        $this->assertSame('context_value1,context_value2,context_value3', $phrase->getContextValueAsString());
     }
 
     public function testGetContextValueAsStringWithCustomSeparator()
@@ -152,12 +152,12 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $phrase->addContextValue('context_value2');
         $phrase->addContextValue('context_value3');
 
-        $this->assertEquals('context_value1::context_value2::context_value3', $phrase->getContextValueAsString('::'));
+        $this->assertSame('context_value1::context_value2::context_value3', $phrase->getContextValueAsString('::'));
     }
 
     public function testGetKey()
     {
         $phrase = new Phrase('phrase', 'translation', 'context_type', 'context_value1');
-        $this->assertEquals('phrase::context_type', $phrase->getKey());
+        $this->assertSame('phrase::context_type', $phrase->getKey());
     }
 }

@@ -51,7 +51,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->dispatch('backend/admin/dashboard/index/');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
         $this->assertContains('1-mainContent title', $actual);
@@ -69,7 +69,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->dispatch('backend/admin/dashboard/index/');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
         $this->assertNotContains('"autoOpen":true', $actual);
@@ -84,7 +84,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->dispatch('backend/admin/dashboard/index/');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
         $this->assertNotContains('"autoOpen":true', $actual);

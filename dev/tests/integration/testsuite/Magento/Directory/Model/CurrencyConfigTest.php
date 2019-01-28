@@ -78,23 +78,23 @@ class CurrencyConfigTest extends TestCase
         $storeManager->setCurrentStore($store->getId());
 
         if ($areaCode === Area::AREA_ADMINHTML) {
-            self::assertEquals($expected['allowed'], $this->currency->getConfigAllowCurrencies());
-            self::assertEquals($expected['base'], $this->currency->getConfigBaseCurrencies());
-            self::assertEquals($expected['default'], $this->currency->getConfigDefaultCurrencies());
+            self::assertSame($expected['allowed'], $this->currency->getConfigAllowCurrencies());
+            self::assertSame($expected['base'], $this->currency->getConfigBaseCurrencies());
+            self::assertSame($expected['default'], $this->currency->getConfigDefaultCurrencies());
         } else {
             /** @var StoreManagerInterface $storeManager */
             $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
             foreach ($storeManager->getStores() as $store) {
                 $storeManager->setCurrentStore($store->getId());
-                self::assertEquals(
+                self::assertSame(
                     $expected[$store->getCode()]['allowed'],
                     $this->currency->getConfigAllowCurrencies()
                 );
-                self::assertEquals(
+                self::assertSame(
                     $expected[$store->getCode()]['base'],
                     $this->currency->getConfigBaseCurrencies()
                 );
-                self::assertEquals(
+                self::assertSame(
                     $expected[$store->getCode()]['default'],
                     $this->currency->getConfigDefaultCurrencies()
                 );

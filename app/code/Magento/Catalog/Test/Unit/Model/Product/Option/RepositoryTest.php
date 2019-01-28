@@ -85,7 +85,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($productSku, true)
             ->willReturn($this->productMock);
         $this->productMock->expects($this->once())->method('getOptions')->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->optionRepository->getList($productSku));
+        $this->assertSame($expectedResult, $this->optionRepository->getList($productSku));
     }
 
     public function testDelete()
@@ -127,7 +127,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getOptionById')
             ->with($optionId)->willReturn($this->optionMock);
-        $this->assertEquals($this->optionMock, $this->optionRepository->get($productSku, $optionId));
+        $this->assertSame($this->optionMock, $this->optionRepository->get($productSku, $optionId));
     }
 
     /**
@@ -266,7 +266,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             $originalValue2,
             $originalValue3
         ]);
-        $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
+        $this->assertSame($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
 
     public function testSaveWhenOptionTypeWasChanged()
@@ -291,6 +291,6 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
         $this->optionMock->expects($this->once())->method('getValues')->willReturn(null);
-        $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
+        $this->assertSame($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
 }

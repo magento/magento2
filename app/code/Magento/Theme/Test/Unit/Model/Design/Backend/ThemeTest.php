@@ -120,7 +120,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testGetValue($value, $expectedResult)
     {
         $this->model->setValue($value);
-        $this->assertEquals($expectedResult, $this->model->getValue());
+        $this->assertSame($expectedResult, $this->model->getValue());
     }
 
     /**

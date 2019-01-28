@@ -28,7 +28,7 @@ class ImageTest extends TestCase
      */
     public function testGetUrl(string $expectedImage, string $productImage)
     {
-        $this->assertEquals($expectedImage, $this->model->getUrl($this->getMockedProduct($productImage)));
+        $this->assertSame($expectedImage, $this->model->getUrl($this->getMockedProduct($productImage)));
     }
 
     /**

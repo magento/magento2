@@ -81,6 +81,6 @@ class DefaultItemsTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
+        $this->assertSame($html, $this->block->getItemPrice($this->itemMock));
     }
 }

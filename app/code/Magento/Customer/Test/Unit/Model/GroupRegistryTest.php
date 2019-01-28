@@ -52,7 +52,7 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($group));
         $actual = $this->unit->retrieve($groupId);
-        $this->assertEquals($group, $actual);
+        $this->assertSame($group, $actual);
         $actualCached = $this->unit->retrieve($groupId);
         $this->assertSame($group, $actualCached);
     }

@@ -132,7 +132,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($this->defaultTimezone);
 
-        $this->assertEquals($this->defaultTimezone, $this->block->getStoreLastLoginDateTimezone());
+        $this->assertSame($this->defaultTimezone, $this->block->getStoreLastLoginDateTimezone());
     }
 
     /**
@@ -157,7 +157,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         $this->customerLog->expects($this->any())->method('getLastVisitAt')->willReturn($lastVisitAt);
         $this->customerLog->expects($this->any())->method('getLastLogoutAt')->willReturn($lastLogoutAt);
 
-        $this->assertEquals($status, (string) $this->block->getCurrentStatus());
+        $this->assertSame($status, (string) $this->block->getCurrentStatus());
     }
 
     /**
@@ -184,7 +184,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         $this->customerLog->expects($this->once())->method('getLastLoginAt')->willReturn($lastLoginAt);
         $this->localeDate->expects($this->any())->method('formatDateTime')->willReturn($lastLoginAt);
 
-        $this->assertEquals($result, $this->block->getLastLoginDate());
+        $this->assertSame($result, $this->block->getLastLoginDate());
     }
 
     /**
@@ -211,7 +211,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         $this->localeDate->expects($this->any())->method('scopeDate')->will($this->returnValue($lastLoginAt));
         $this->localeDate->expects($this->any())->method('formatDateTime')->willReturn($lastLoginAt);
 
-        $this->assertEquals($result, $this->block->getStoreLastLoginDate());
+        $this->assertSame($result, $this->block->getStoreLastLoginDate());
     }
 
     /**
@@ -236,7 +236,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->once())->method('retrieve')->willReturn($this->customerModel);
         $this->customerModel->expects($this->once())->method('isCustomerLocked')->willReturn($value);
         $expectedResult =  new \Magento\Framework\Phrase($expectedResult);
-        $this->assertEquals($expectedResult, $this->block->getAccountLock());
+        $this->assertSame($expectedResult, $this->block->getAccountLock());
     }
 
     /**

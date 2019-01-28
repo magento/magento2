@@ -111,7 +111,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setId($htmlId);
         $this->_model->setForm($formMock);
-        $this->assertEquals($htmlIdPrefix . $htmlId . $htmlIdSuffix, $this->_model->getHtmlId());
+        $this->assertSame($htmlIdPrefix . $htmlId . $htmlIdSuffix, $this->_model->getHtmlId());
     }
 
     /**
@@ -153,7 +153,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setForm($formMock);
 
-        $this->assertEquals($returnValue, $this->_model->getName());
+        $this->assertSame($returnValue, $this->_model->getName());
     }
 
     /**
@@ -203,7 +203,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             'data-action',
             'checked',
         ];
-        $this->assertEquals($htmlAttributes, $this->_model->getHtmlAttributes());
+        $this->assertSame($htmlAttributes, $this->_model->getHtmlAttributes());
     }
 
     /**
@@ -216,7 +216,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_model->addClass($oldClass);
         $this->_model->addClass($newClass);
 
-        $this->assertEquals(' ' . $oldClass . ' ' . $newClass, $this->_model->getClass());
+        $this->assertSame(' ' . $oldClass . ' ' . $newClass, $this->_model->getClass());
     }
 
     /**
@@ -233,7 +233,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->removeClass($oneMoreClass);
 
-        $this->assertEquals(' ' . $oldClass . ' ' . $newClass, $this->_model->getClass());
+        $this->assertSame(' ' . $oldClass . ' ' . $newClass, $this->_model->getClass());
     }
 
     /**
@@ -242,7 +242,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     public function testGetEscapedValueWithoutFilter()
     {
         $this->_model->setValue('<a href="#hash_tag">my \'quoted\' string</a>');
-        $this->assertEquals(
+        $this->assertSame(
             '&lt;a href=&quot;#hash_tag&quot;&gt;my \'quoted\' string&lt;/a&gt;',
             $this->_model->getEscapedValue()
         );
@@ -264,7 +264,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setValueFilter($filterMock);
         $this->_model->setValue($value);
-        $this->assertEquals($expectedValue, $this->_model->getEscapedValue());
+        $this->assertSame($expectedValue, $this->_model->getEscapedValue());
     }
 
     /**
@@ -280,7 +280,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_model->setData($initialData);
-        $this->assertEquals($expectedValue, $this->_model->getElementHtml());
+        $this->assertSame($expectedValue, $this->_model->getElementHtml());
     }
 
     /**
@@ -296,7 +296,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_model->setForm(
             $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
         );
-        $this->assertEquals($expectedValue, $this->_model->getLabelHtml($idSuffix));
+        $this->assertSame($expectedValue, $this->_model->getLabelHtml($idSuffix));
     }
 
     /**
@@ -311,7 +311,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_model->setForm(
             $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
         );
-        $this->assertEquals($expectedValue, $this->_model->getDefaultHtml());
+        $this->assertSame($expectedValue, $this->_model->getDefaultHtml());
     }
 
     /**
@@ -328,8 +328,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></div>'
             . "\n";
 
-        $this->assertEquals($expectedHtml, $this->_model->getHtml());
-        $this->assertEquals(' required-entry _required', $this->_model->getClass());
+        $this->assertSame($expectedHtml, $this->_model->getHtml());
+        $this->assertSame(' required-entry _required', $this->_model->getClass());
     }
 
     /**
@@ -350,8 +350,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedHtml));
         $this->_model->setRenderer($rendererMock);
 
-        $this->assertEquals($expectedHtml, $this->_model->getHtml());
-        $this->assertEquals(' required-entry _required', $this->_model->getClass());
+        $this->assertSame($expectedHtml, $this->_model->getHtml());
+        $this->assertSame(' required-entry _required', $this->_model->getClass());
     }
 
     /**
@@ -368,7 +368,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             unset($initialData['attributes']);
         }
         $this->_model->setData($initialData);
-        $this->assertEquals($expectedValue, $this->_model->serialize($attributes));
+        $this->assertSame($expectedValue, $this->_model->serialize($attributes));
     }
 
     /**
@@ -379,7 +379,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_model->setForm(
             $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
         );
-        $this->assertEquals('', $this->_model->getHtmlContainerId());
+        $this->assertSame('', $this->_model->getHtmlContainerId());
     }
 
     /**
@@ -392,7 +392,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_model->setForm(
             $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
         );
-        $this->assertEquals($containerId, $this->_model->getHtmlContainerId());
+        $this->assertSame($containerId, $this->_model->getHtmlContainerId());
     }
 
     /**
@@ -412,7 +412,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setId($id);
         $this->_model->setForm($formMock);
-        $this->assertEquals($prefix . $id, $this->_model->getHtmlContainerId());
+        $this->assertSame($prefix . $id, $this->_model->getHtmlContainerId());
     }
 
     /**
@@ -429,7 +429,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_model->setValues($initialData['initial_values']);
         $this->_model->addElementValues($initialData['add_values'], $initialData['overwrite']);
 
-        $this->assertEquals($expectedValue, $this->_model->getValues());
+        $this->assertSame($expectedValue, $this->_model->getValues());
     }
 
     /**

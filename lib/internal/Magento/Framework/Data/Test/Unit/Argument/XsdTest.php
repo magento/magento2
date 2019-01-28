@@ -35,7 +35,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
     public function testSchemaCorrectlyIdentifiesInvalidTypesXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_typesXsdSchema, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertSame($expectedError, $actualError);
     }
 
     /**

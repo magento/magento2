@@ -33,8 +33,8 @@ QUERY;
         $testItem = $response['testItem'];
         $this->assertArrayHasKey('item_id', $testItem);
         $this->assertArrayHasKey('name', $testItem);
-        $this->assertEquals(1, $testItem['item_id']);
-        $this->assertEquals('itemName', $testItem['name']);
+        $this->assertSame(1, $testItem['item_id']);
+        $this->assertSame('itemName', $testItem['name']);
     }
 
     public function testQueryTestModuleExtensionAttribute()
@@ -56,6 +56,6 @@ QUERY;
         $this->assertArrayHasKey('testItem', $response);
         $testItem = $response['testItem'];
         $this->assertArrayHasKey('integer_list', $testItem);
-        $this->assertEquals([3, 4, 5], $testItem['integer_list']);
+        $this->assertSame([3, 4, 5], $testItem['integer_list']);
     }
 }

@@ -38,7 +38,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('26321')
         );
-        $this->assertEquals(26952704, $object->getRealMemoryUsage());
+        $this->assertSame(26952704, $object->getRealMemoryUsage());
     }
 
     public function testGetRealMemoryUsageWin()
@@ -53,7 +53,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('"php.exe","12345","N/A","0","26,321 K"')
         );
         $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
-        $this->assertEquals(26952704, $object->getRealMemoryUsage());
+        $this->assertSame(26952704, $object->getRealMemoryUsage());
     }
 
     /**
@@ -63,7 +63,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertToBytes($number, $expected)
     {
-        $this->assertEquals($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
+        $this->assertSame($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
     }
 
     /**
@@ -116,7 +116,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
         if (PHP_INT_SIZE <= 4) {
             $this->markTestSkipped('A 64-bit system is required to perform this test.');
         }
-        $this->assertEquals($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
+        $this->assertSame($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
     }
 
     /**

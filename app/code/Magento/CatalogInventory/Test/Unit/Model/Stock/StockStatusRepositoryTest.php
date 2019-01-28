@@ -109,7 +109,7 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->stockStatusMock)
             ->willReturnSelf();
 
-        $this->assertEquals($this->stockStatusMock, $this->model->save($this->stockStatusMock));
+        $this->assertSame($this->stockStatusMock, $this->model->save($this->stockStatusMock));
     }
 
     /**
@@ -148,7 +148,7 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
         $queryBuilderMock->expects($this->once())->method('create')->willReturn($queryMock);
         $this->stockStatusCollectionMock->expects($this->once())->method('create')->willReturn($queryCollectionMock);
 
-        $this->assertEquals($queryCollectionMock, $this->model->getList($criteriaMock));
+        $this->assertSame($queryCollectionMock, $this->model->getList($criteriaMock));
     }
 
     public function testDelete()

@@ -51,6 +51,6 @@ class ActiveStoreAgreementsFilterTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $searchCriteria = $this->model->buildSearchCriteria();
-        $this->assertEquals($expected, $searchCriteria->__toArray());
+        $this->assertSame($expected, $searchCriteria->__toArray());
     }
 }

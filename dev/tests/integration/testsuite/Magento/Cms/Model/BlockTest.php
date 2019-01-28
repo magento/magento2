@@ -70,7 +70,7 @@ class BlockTest extends TestCase
         # Load previously created block and compare identifiers
         $storeId = reset($blockData['stores']);
         $block   = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
-        $this->assertEquals($blockData['identifier'], $block->getIdentifier());
+        $this->assertSame($blockData['identifier'], $block->getIdentifier());
     }
 
     /**

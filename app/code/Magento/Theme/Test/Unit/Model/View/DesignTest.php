@@ -83,7 +83,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $theme->expects($this->once())->method('getThemePath')->will($this->returnValue($themePath));
         $theme->expects($this->any())->method('getId')->will($this->returnValue($themeId));
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-        $this->assertEquals($expectedResult, $this->model->getThemePath($theme));
+        $this->assertSame($expectedResult, $this->model->getThemePath($theme));
     }
 
     /**
@@ -164,8 +164,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $params = $this->model->getDesignParams();
 
         $this->assertInstanceOf(\Magento\Framework\View\Design\ThemeInterface::class, $params['themeModel']);
-        $this->assertEquals($area, $params['area']);
-        $this->assertEquals($locale, $params['locale']);
+        $this->assertSame($area, $params['area']);
+        $this->assertSame($locale, $params['locale']);
     }
 
     /**

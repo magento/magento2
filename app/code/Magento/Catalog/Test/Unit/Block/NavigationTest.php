@@ -54,7 +54,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIdentities()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Catalog\Model\Category::CACHE_TAG, \Magento\Store\Model\Group::CACHE_TAG],
             $this->block->getIdentities()
         );
@@ -68,7 +68,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
         $this->registry->expects($this->any())->method('registry')->with('current_category')->willReturn($category);
 
-        $this->assertEquals($categoryKey, $this->block->getCurrentCategoryKey());
+        $this->assertSame($categoryKey, $this->block->getCurrentCategoryKey());
     }
 
     public function testGetCurrentCategoryKeyFromRootCategory()
@@ -79,7 +79,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->assertEquals($categoryKey, $this->block->getCurrentCategoryKey());
+        $this->assertSame($categoryKey, $this->block->getCurrentCategoryKey());
     }
 
     public function testGetCacheKeyInfo()
@@ -115,6 +115,6 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             'short_cache_id' => 'c3de6d1160d1e7730b04d6cad409a2b4'
         ];
 
-        $this->assertEquals($expectedResult, $this->block->getCacheKeyInfo());
+        $this->assertSame($expectedResult, $this->block->getCacheKeyInfo());
     }
 }

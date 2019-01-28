@@ -186,7 +186,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $data = require __DIR__ . '/_files/rates_request_data.php';
         $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[1]]);
         $rates = $this->carrier->collectRates($request)->getAllRates();
-        $this->assertEquals($expectedCount, count($rates));
+        $this->assertSame($expectedCount, count($rates));
     }
 
     public function testReturnOfShipment()
@@ -313,7 +313,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $result = $refMethod->invoke($this->carrier, $data);
         $expectedXml = new \SimpleXMLElement($expected);
         $resultXml = new \SimpleXMLElement($result);
-        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
+        $this->assertSame($expectedXml->asXML(), $resultXml->asXML());
     }
 
     /**
@@ -353,7 +353,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->with($carrierMethodCode)
             ->willReturn($displayGirthValueResult);
 
-        $this->assertEquals($result, $this->carrier->isGirthAllowed($countyCode, $carrierMethodCode));
+        $this->assertSame($result, $this->carrier->isGirthAllowed($countyCode, $carrierMethodCode));
     }
 
     /**

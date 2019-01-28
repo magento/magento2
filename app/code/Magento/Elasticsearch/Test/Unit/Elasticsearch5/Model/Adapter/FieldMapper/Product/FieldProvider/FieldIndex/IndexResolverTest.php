@@ -139,7 +139,7 @@ class IndexResolverTest extends \PHPUnit\Framework\TestCase
             ->method('isFloatType')
             ->willReturn($isFloatType);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->resolver->getFieldIndex($attributeMock)
         );

@@ -82,7 +82,7 @@ class CustomFlatAttributeTest extends IndexerTestCase
             'Product should be received from flat resource'
         );
 
-        self::assertEquals(
+        self::assertSame(
             'changed flat attribute',
             $product->getFlatAttribute(),
             'Product flat attribute should be able to change.'

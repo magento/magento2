@@ -81,7 +81,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                 'rangeFieldAlias' => 'product_id'
             ]
         )->willReturn($this->iteratorMock);
-        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
+        $this->assertSame($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
 
     /**
@@ -137,7 +137,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                 'rangeFieldAlias' => 'entity_id'
             ]
         )->willReturn($this->iteratorMock);
-        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
+        $this->assertSame($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
 
     /**
@@ -171,7 +171,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                 'rangeFieldAlias' => 'entity_id'
             ]
         )->willReturn($this->iteratorMock);
-        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
+        $this->assertSame($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
 
     /**
@@ -204,7 +204,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                 'rangeFieldAlias' => 'product_id'
             ]
         )->willReturn($this->iteratorMock);
-        $this->assertEquals(
+        $this->assertSame(
             $this->iteratorMock,
             $this->model->generate('entity_id', $this->selectMock, 100, 'non_unique')
         );

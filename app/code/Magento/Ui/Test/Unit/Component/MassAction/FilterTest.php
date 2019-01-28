@@ -207,7 +207,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with(Filter::EXCLUDED_PARAM)
             ->willReturn($excludedIds);
-        $this->assertEquals($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
+        $this->assertSame($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
     }
 
     /**
@@ -239,7 +239,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 [Filter::EXCLUDED_PARAM, null, $excludedIds],
             ]);
 
-        $this->assertEquals($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
+        $this->assertSame($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
     }
 
     /**
@@ -260,7 +260,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with('namespace')
             ->willReturn('');
-        $this->assertEquals($this->uiComponentMock, $this->filter->getComponent());
+        $this->assertSame($this->uiComponentMock, $this->filter->getComponent());
     }
 
     /**
@@ -277,7 +277,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->dataProviderMock->expects($this->once())
             ->method('getConfigData')
             ->willReturn($returnArray);
-        $this->assertEquals('referer_url', $this->filter->getComponentRefererUrl());
+        $this->assertSame('referer_url', $this->filter->getComponentRefererUrl());
     }
 
     /**

@@ -38,14 +38,14 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
     public function testGetIterator()
     {
         foreach ($this->aggregation as $bucket) {
-            $this->assertEquals($bucket->getName(), "1");
-            $this->assertEquals($bucket->getValues(), 1);
+            $this->assertSame($bucket->getName(), "1");
+            $this->assertSame($bucket->getValues(), 1);
         }
     }
 
     public function testGetBucketNames()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->aggregation->getBucketNames(),
             ['1']
         );
@@ -54,7 +54,7 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
     public function testGetBucket()
     {
         $bucket = $this->aggregation->getBucket('1');
-        $this->assertEquals($bucket->getName(), '1');
-        $this->assertEquals($bucket->getValues(), 1);
+        $this->assertSame($bucket->getName(), '1');
+        $this->assertSame($bucket->getValues(), 1);
     }
 }

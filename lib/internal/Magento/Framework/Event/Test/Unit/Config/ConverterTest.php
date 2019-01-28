@@ -42,7 +42,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $this->source->loadXML(file_get_contents($this->filePath . 'event_config.xml'));
         $convertedFile = include $this->filePath . 'event_config.php';
-        $this->assertEquals($convertedFile, $this->model->convert($this->source));
+        $this->assertSame($convertedFile, $this->model->convert($this->source));
     }
 
     /**

@@ -49,6 +49,6 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
             'on_click' => '',
         ];
 
-        $this->assertEquals($data, $this->model->getButtonData());
+        $this->assertSame($data, $this->model->getButtonData());
     }
 }

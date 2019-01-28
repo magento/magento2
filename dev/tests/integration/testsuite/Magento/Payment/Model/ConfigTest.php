@@ -54,7 +54,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         foreach ($paymentMethods as $method) {
             static::assertNotEmpty($method->getCode());
             static::assertTrue($method->isActive());
-            static::assertEquals(0, $method->getStore());
+            static::assertSame(0, $method->getStore());
         }
     }
 
@@ -62,14 +62,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $expected = ['AE' => 'American Express', 'SM' => 'Switch/Maestro', 'SO' => 'Solo'];
         $ccTypes = $this->model->getCcTypes();
-        $this->assertEquals($expected, $ccTypes);
+        $this->assertSame($expected, $ccTypes);
     }
 
     public function testGetGroups()
     {
         $expected = ['any_payment' => 'Any Payment Methods', 'offline' => 'Offline Payment Methods'];
         $groups = $this->model->getGroups();
-        $this->assertEquals($expected, $groups);
+        $this->assertSame($expected, $groups);
     }
 
     protected function tearDown()

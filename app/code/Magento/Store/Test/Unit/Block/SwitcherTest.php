@@ -94,9 +94,9 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         $storeMock->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
 
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-        $this->assertEquals($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
+        $this->assertSame($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
         // check value is cached
-        $this->assertEquals($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
+        $this->assertSame($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
     }
 
     /**

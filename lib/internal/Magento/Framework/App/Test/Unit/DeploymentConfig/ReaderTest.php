@@ -73,7 +73,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('configKeyOne', $files);
         $this->assertArrayHasKey('configKeyTwo', $files);
         $object = new Reader($this->dirList, $this->driverPool, $this->configFilePool, 'customOne.php');
-        $this->assertEquals(['customOne.php'], $object->getFiles());
+        $this->assertSame(['customOne.php'], $object->getFiles());
     }
 
     /**

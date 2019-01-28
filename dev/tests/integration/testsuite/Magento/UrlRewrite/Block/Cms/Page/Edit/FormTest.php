@@ -60,8 +60,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form = $this->_getFormInstance($args);
         $this->assertContains($action, $form->getAction());
 
-        $this->assertEquals($requestPath, $form->getElement('request_path')->getValue());
-        $this->assertEquals($targetPath, $form->getElement('target_path')->getValue());
+        $this->assertSame($requestPath, $form->getElement('request_path')->getValue());
+        $this->assertSame($targetPath, $form->getElement('target_path')->getValue());
 
         $this->assertTrue($form->getElement('target_path')->getData('disabled'));
     }
@@ -84,7 +84,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 'value' => [['label' => '    Default Store View', 'value' => 1]]
             ],
         ];
-        $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());
+        $this->assertSame($expectedStores, $form->getElement('store_id')->getValues());
     }
 
     /**
@@ -97,8 +97,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $args = ['cms_page' => $this->_getCmsPageWithStoresMock([])];
         $form = $this->_getFormInstance($args);
-        $this->assertEquals([], $form->getElement('store_id')->getValues());
-        $this->assertEquals(
+        $this->assertSame([], $form->getElement('store_id')->getValues());
+        $this->assertSame(
             'Please assign a website to the selected CMS page.',
             $form->getElement('store_id')->getAfterElementHtml()
         );

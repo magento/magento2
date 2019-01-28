@@ -50,7 +50,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $expectedData = include($fixtureDir . '/valid.php');
         foreach ($expectedData as $key => $value) {
-            $this->assertEquals($value, $result[$key], 'Invalid data for ' . $key);
+            $this->assertSame($value, $result[$key], 'Invalid data for ' . $key);
         }
     }
 }

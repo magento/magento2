@@ -42,7 +42,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A", "params" : []}, {"name": "job B", "params" : []}]}');
-        $this->assertEquals(['name' => 'job A', 'params' => []], $this->queue->peek());
+        $this->assertSame(['name' => 'job A', 'params' => []], $this->queue->peek());
     }
 
     public function testPeekEmpty()
@@ -50,7 +50,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('');
-        $this->assertEquals([], $this->queue->peek());
+        $this->assertSame([], $this->queue->peek());
     }
 
     /**
@@ -86,7 +86,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->jobFactory->expects($this->once())->method('create')->with('job A', [])->willReturn($job);
         $rawData = ['jobs' => [['name' => 'job B', 'params' => []]]];
         $this->writer->expects($this->once())->method('write')->with(json_encode($rawData, JSON_PRETTY_PRINT));
-        $this->assertEquals($job, $this->queue->popQueuedJob());
+        $this->assertSame($job, $this->queue->popQueuedJob());
     }
 
     public function testPopQueuedJobEmptyAfter()
@@ -97,7 +97,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
         $this->jobFactory->expects($this->once())->method('create')->with('job A', [])->willReturn($job);
         $this->writer->expects($this->once())->method('write')->with('');
-        $this->assertEquals($job, $this->queue->popQueuedJob());
+        $this->assertSame($job, $this->queue->popQueuedJob());
     }
 
     /**

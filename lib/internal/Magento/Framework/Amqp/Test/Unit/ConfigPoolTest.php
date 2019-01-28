@@ -13,8 +13,8 @@ class ConfigPoolTest extends \PHPUnit\Framework\TestCase
         $config = $this->createMock(\Magento\Framework\Amqp\Config::class);
         $factory->expects($this->once())->method('create')->with(['connectionName' => 'amqp'])->willReturn($config);
         $model = new \Magento\Framework\Amqp\ConfigPool($factory);
-        $this->assertEquals($config, $model->get('amqp'));
+        $this->assertSame($config, $model->get('amqp'));
         //test that object is cached
-        $this->assertEquals($config, $model->get('amqp'));
+        $this->assertSame($config, $model->get('amqp'));
     }
 }

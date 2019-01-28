@@ -68,7 +68,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($column->getComponentName(), Column::NAME . '.testType');
+        $this->assertSame($column->getComponentName(), Column::NAME . '.testType');
     }
 
     /**
@@ -84,7 +84,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             ['context' => $this->contextMock]
         );
 
-        $this->assertEquals($testItems, $column->prepareItems($testItems));
+        $this->assertSame($testItems, $column->prepareItems($testItems));
     }
 
     /**

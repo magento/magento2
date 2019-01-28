@@ -42,7 +42,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom->load($testDom);
         $expectedArray = include $this->filePath . 'import.php';
         $this->moduleManager->expects($this->any())->method('isOutputEnabled')->willReturn(true);
-        $this->assertEquals($expectedArray, $this->model->convert($dom));
+        $this->assertSame($expectedArray, $this->model->convert($dom));
     }
 
     public function testConvertWithDisabledModules()
@@ -52,6 +52,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom->load($testDom);
         $notExpectedArray = include $this->filePath . 'import.php';
         $this->moduleManager->expects($this->any())->method('isOutputEnabled')->willReturn(false);
-        $this->assertNotEquals($notExpectedArray, $this->model->convert($dom));
+        $this->assertNotSame($notExpectedArray, $this->model->convert($dom));
     }
 }

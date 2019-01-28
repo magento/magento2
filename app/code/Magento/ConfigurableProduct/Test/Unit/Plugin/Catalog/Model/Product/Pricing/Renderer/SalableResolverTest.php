@@ -46,7 +46,7 @@ class SalableResolverTest extends TestCase
             ->willReturn($typeIsSalable);
 
         $result = $this->salableResolver->afterIsSalable($salableResolver, $isSalable, $salableItem);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

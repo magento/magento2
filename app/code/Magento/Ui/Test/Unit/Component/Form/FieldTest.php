@@ -92,7 +92,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $this->field->prepare();
         $result = $this->field->getData();
 
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     /**

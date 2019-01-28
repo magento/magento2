@@ -57,7 +57,7 @@ class GiftOptionsTest extends \PHPUnit\Framework\TestCase
             ->method('encode')
             ->with($this->jsLayout)
             ->willReturnArgument(0);
-        $this->assertEquals($this->jsLayout, $this->model->getJsLayout());
+        $this->assertSame($this->jsLayout, $this->model->getJsLayout());
     }
 
     public function testGetGiftOptionsConfigJson()
@@ -69,6 +69,6 @@ class GiftOptionsTest extends \PHPUnit\Framework\TestCase
             ->method('encode')
             ->with($this->jsLayout)
             ->willReturnArgument(0);
-        $this->assertEquals($this->jsLayout, $this->model->getGiftOptionsConfigJson());
+        $this->assertSame($this->jsLayout, $this->model->getGiftOptionsConfigJson());
     }
 }

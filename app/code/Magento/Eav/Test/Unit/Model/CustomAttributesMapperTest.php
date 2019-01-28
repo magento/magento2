@@ -116,7 +116,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ],
             'test' => 'test'
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testDatabaseToEntity()
@@ -195,7 +195,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ],
             'test' => 'test'
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

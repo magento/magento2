@@ -46,7 +46,7 @@ class InvoiceGetTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, ['id' => $invoice->getId()]);
         foreach ($expectedInvoiceData as $field => $value) {
             $this->assertArrayHasKey($field, $result);
-            $this->assertEquals($value, $result[$field]);
+            $this->assertSame($value, $result[$field]);
         }
 
         //check that nullable fields were marked as optional and were not sent

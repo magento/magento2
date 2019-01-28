@@ -240,6 +240,6 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $this->model->afterProcess($this->subjectMock, $totalSegments, $addressTotals);
-        $this->assertEquals($totalSegments, $result);
+        $this->assertSame($totalSegments, $result);
     }
 }

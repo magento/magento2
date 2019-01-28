@@ -41,7 +41,7 @@ class BatchProviderTest extends \PHPUnit\Framework\TestCase
         $adapterMock->expects($this->once())->method('fetchOne')->with($selectMock, [])->willReturn($maxLinkFieldValue);
         $batches = $this->model->getBatches($adapterMock, $tableName, $linkField, $batchSize);
         foreach ($batches as $index => $batch) {
-            $this->assertEquals($expectedResult[$index], $batch);
+            $this->assertSame($expectedResult[$index], $batch);
         }
     }
 
@@ -66,7 +66,7 @@ class BatchProviderTest extends \PHPUnit\Framework\TestCase
         $selectMock->expects($this->once())->method('where')->with('(entity_id BETWEEN 10 AND 100)')->willReturnSelf();
         $adapterMock->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
         $adapterMock->expects($this->once())->method('fetchCol')->with($selectMock, [])->willReturn([1, 2, 3]);
-        $this->assertEquals(
+        $this->assertSame(
             [1, 2, 3],
             $this->model->getBatchIds($adapterMock, $selectMock, ['from' => 10, 'to' => 100])
         );

@@ -123,7 +123,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             . '"dependsOnConfig":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
             . '"path":"","action":"admin\/backend\/acl\/index","dependsOnModule":null,"toolTip":null,"title":"Acl",'
             . '"target":null,"sub_menu":null}]}]';
-        $this->assertEquals($expected, $serializedString);
+        $this->assertSame($expected, $serializedString);
     }
 
     /**
@@ -175,6 +175,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
                     ],
             ],
         ];
-        $this->assertEquals($expected, $menu->toArray());
+        $this->assertSame($expected, $menu->toArray());
     }
 }

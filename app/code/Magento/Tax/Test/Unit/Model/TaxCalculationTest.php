@@ -115,7 +115,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->calculationTool->expects($this->once())->method('getRate')->with($rateRequestMock)->willReturn($rate);
-        $this->assertEquals(
+        $this->assertSame(
             $rate,
             $this->taxCalculationService->getCalculatedRate($productTaxClassId, $customerId, null)
         );
@@ -144,7 +144,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->calculationTool->expects($this->once())->method('getRate')->with($rateRequestMock)->willReturn($rate);
-        $this->assertEquals(
+        $this->assertSame(
             $rate,
             $this->taxCalculationService->getDefaultCalculatedRate($productTaxClassId, $customerId, null)
         );
@@ -179,7 +179,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->taxDetailsDataObjectFactory->expects($this->once())->method('create')->willReturn($taxDetailsMock);
 
-        $this->assertEquals($taxDetailsMock, $this->taxCalculationService->calculateTax($quoteDetailsMock));
+        $this->assertSame($taxDetailsMock, $this->taxCalculationService->calculateTax($quoteDetailsMock));
     }
 
     public function testCalculateTax()
@@ -235,6 +235,6 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
             ->with($taxDetailsMock, $taxDetailsData)
             ->willReturnSelf();
 
-        $this->assertEquals($taxDetailsMock, $this->taxCalculationService->calculateTax($quoteDetailsMock));
+        $this->assertSame($taxDetailsMock, $this->taxCalculationService->calculateTax($quoteDetailsMock));
     }
 }

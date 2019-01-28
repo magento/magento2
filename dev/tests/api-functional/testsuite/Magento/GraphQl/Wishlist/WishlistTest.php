@@ -79,18 +79,18 @@ QUERY;
             $this->getCustomerAuthHeaders('customer@example.com', 'password')
         );
 
-        $this->assertEquals($wishlist->getItemsCount(), $response['wishlist']['items_count']);
-        $this->assertEquals($wishlist->getName(), $response['wishlist']['name']);
-        $this->assertEquals($wishlist->getSharingCode(), $response['wishlist']['sharing_code']);
-        $this->assertEquals($wishlist->getUpdatedAt(), $response['wishlist']['updated_at']);
+        $this->assertSame($wishlist->getItemsCount(), $response['wishlist']['items_count']);
+        $this->assertSame($wishlist->getName(), $response['wishlist']['name']);
+        $this->assertSame($wishlist->getSharingCode(), $response['wishlist']['sharing_code']);
+        $this->assertSame($wishlist->getUpdatedAt(), $response['wishlist']['updated_at']);
 
-        $this->assertEquals($wishlistItem->getId(), $response['wishlist']['items'][0]['id']);
-        $this->assertEquals($wishlistItem->getData('qty'), $response['wishlist']['items'][0]['qty']);
-        $this->assertEquals($wishlistItem->getDescription(), $response['wishlist']['items'][0]['description']);
-        $this->assertEquals($wishlistItem->getAddedAt(), $response['wishlist']['items'][0]['added_at']);
+        $this->assertSame($wishlistItem->getId(), $response['wishlist']['items'][0]['id']);
+        $this->assertSame($wishlistItem->getData('qty'), $response['wishlist']['items'][0]['qty']);
+        $this->assertSame($wishlistItem->getDescription(), $response['wishlist']['items'][0]['description']);
+        $this->assertSame($wishlistItem->getAddedAt(), $response['wishlist']['items'][0]['added_at']);
 
-        $this->assertEquals($wishlistItemProduct->getSku(), $response['wishlist']['items'][0]['product']['sku']);
-        $this->assertEquals($wishlistItemProduct->getName(), $response['wishlist']['items'][0]['product']['name']);
+        $this->assertSame($wishlistItemProduct->getSku(), $response['wishlist']['items'][0]['product']['sku']);
+        $this->assertSame($wishlistItemProduct->getName(), $response['wishlist']['items'][0]['product']['name']);
     }
 
     /**

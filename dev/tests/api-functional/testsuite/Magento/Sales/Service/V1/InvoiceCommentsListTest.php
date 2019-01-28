@@ -50,7 +50,7 @@ class InvoiceCommentsListTest extends WebapiAbstract
             /** @var \Magento\Sales\Model\Order\Invoice\Comment $invoiceHistoryStatus */
             $invoiceHistoryStatus = $objectManager->get(\Magento\Sales\Model\Order\Invoice\Comment::class)
                 ->load($item['entity_id']);
-            $this->assertEquals($invoiceHistoryStatus->getComment(), $item['comment']);
+            $this->assertSame($invoiceHistoryStatus->getComment(), $item['comment']);
         }
     }
 }

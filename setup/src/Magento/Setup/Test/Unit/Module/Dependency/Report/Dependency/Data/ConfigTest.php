@@ -44,7 +44,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->moduleSecond->expects($this->once())->method('getHardDependenciesCount')->will($this->returnValue(3));
         $this->moduleSecond->expects($this->once())->method('getSoftDependenciesCount')->will($this->returnValue(4));
 
-        $this->assertEquals(10, $this->config->getDependenciesCount());
+        $this->assertSame(10, $this->config->getDependenciesCount());
     }
 
     public function testGetHardDependenciesCount()
@@ -55,7 +55,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->moduleSecond->expects($this->once())->method('getHardDependenciesCount')->will($this->returnValue(2));
         $this->moduleSecond->expects($this->never())->method('getSoftDependenciesCount');
 
-        $this->assertEquals(3, $this->config->getHardDependenciesCount());
+        $this->assertSame(3, $this->config->getHardDependenciesCount());
     }
 
     public function testGetSoftDependenciesCount()
@@ -66,6 +66,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->moduleSecond->expects($this->never())->method('getHardDependenciesCount');
         $this->moduleSecond->expects($this->once())->method('getSoftDependenciesCount')->will($this->returnValue(3));
 
-        $this->assertEquals(4, $this->config->getSoftDependenciesCount());
+        $this->assertSame(4, $this->config->getSoftDependenciesCount());
     }
 }

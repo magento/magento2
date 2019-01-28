@@ -26,13 +26,13 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTable()
     {
-        $this->assertEquals('test_table', $this->_model->getTable());
+        $this->assertSame('test_table', $this->_model->getTable());
     }
 
     public function testGetConfig()
     {
         $this->assertInstanceOf(\Magento\Framework\Simplexml\Config::class, $this->_model->getConfig());
-        $this->assertEquals('test', $this->_model->getConfig('test_key'));
+        $this->assertSame('test', $this->_model->getConfig('test_key'));
         $this->assertFalse($this->_model->getConfig('some_key'));
     }
 }

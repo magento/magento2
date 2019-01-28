@@ -123,6 +123,6 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('QueryResponseObject'));
 
         $result = $this->model->create($rawResponse);
-        $this->assertEquals('QueryResponseObject', $result);
+        $this->assertSame('QueryResponseObject', $result);
     }
 }

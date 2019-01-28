@@ -52,7 +52,7 @@ class SetupInfoTest extends \PHPUnit\Framework\TestCase
     public function testGetUrl($server, $expected)
     {
         $info = new SetupInfo($server);
-        $this->assertEquals($expected, $info->getUrl());
+        $this->assertSame($expected, $info->getUrl());
     }
 
     /**
@@ -84,7 +84,7 @@ class SetupInfoTest extends \PHPUnit\Framework\TestCase
     public function testGetProjectUrl($server, $expected)
     {
         $info = new SetupInfo($server);
-        $this->assertEquals($expected, $info->getProjectUrl());
+        $this->assertSame($expected, $info->getProjectUrl());
     }
 
     /**
@@ -116,7 +116,7 @@ class SetupInfoTest extends \PHPUnit\Framework\TestCase
     public function testGetDir($server, $projectRoot, $expected)
     {
         $info = new SetupInfo($server);
-        $this->assertEquals($expected, $info->getDir($projectRoot));
+        $this->assertSame($expected, $info->getDir($projectRoot));
     }
 
     /**
@@ -151,7 +151,7 @@ class SetupInfoTest extends \PHPUnit\Framework\TestCase
     public function testIsAvailable($server, $expected)
     {
         $info = new SetupInfo($server);
-        $this->assertEquals($expected, $info->isAvailable());
+        $this->assertSame($expected, $info->isAvailable());
     }
 
     /**

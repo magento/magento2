@@ -54,6 +54,6 @@ class StoreSwitcherTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $toStore = $storeRepository->get($toStoreCode);
 
-        $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+        $this->assertSame($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
 }

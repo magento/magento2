@@ -61,21 +61,21 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMethodReturnType()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'string',
             $this->object->getMethodReturnType(
                 \Magento\Framework\Reflection\FieldNamer::class,
                 'getFieldNameForMethodName'
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             'mixed',
             $this->object->getMethodReturnType(
                 \Magento\Framework\Reflection\TypeCaster::class,
                 'castValueToType'
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             'array',
             $this->object->getMethodReturnType(
                 \Magento\Framework\Reflection\MethodsMap::class,
@@ -124,7 +124,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->with($data);
         $methodsMap = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
-        $this->assertEquals(
+        $this->assertSame(
             $data,
             $methodsMap
         );
@@ -138,7 +138,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMethodValidForDataField($type, $methodName, $expectedResult)
     {
-        $this->assertEquals($this->object->isMethodValidForDataField($type, $methodName), $expectedResult);
+        $this->assertSame($this->object->isMethodValidForDataField($type, $methodName), $expectedResult);
     }
 
     /**
@@ -170,7 +170,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMethodReturnValueRequired($type, $methodName, $expectedResult)
     {
-        $this->assertEquals($this->object->isMethodValidForDataField($type, $methodName), $expectedResult);
+        $this->assertSame($this->object->isMethodValidForDataField($type, $methodName), $expectedResult);
     }
 
     /**

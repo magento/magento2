@@ -66,12 +66,12 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $orderedQty += $item->getQtyOrdered();
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             (int)$shipment->getTotalQty(),
             (int)$orderedQty,
             'Failed asserting that quantity of ordered and shipped items is equal'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $productsQuantity,
             count($shipment->getItems()),
             'Failed asserting that quantity of products and sales shipment items is equal'
@@ -125,7 +125,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $existingOrder->getStatus(),
             $updatedOrder->getStatus(),
             'Failed asserting that Order status was changed'
@@ -211,7 +211,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $this->fail('Failed asserting that Shipment was created');
         }
 
-        $this->assertEquals(1, $shipment->getTotalQty());
+        $this->assertSame(1, $shipment->getTotalQty());
 
         /** @var \Magento\Sales\Model\Order $existingOrder */
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
@@ -219,10 +219,10 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         foreach ($existingOrder->getAllItems() as $item) {
             if ($item->getItemId() == $shippedItemId) {
-                $this->assertEquals(1, $item->getQtyShipped());
+                $this->assertSame(1, $item->getQtyShipped());
                 continue;
             }
-            $this->assertEquals(0, $item->getQtyShipped());
+            $this->assertSame(0, $item->getQtyShipped());
         }
     }
 

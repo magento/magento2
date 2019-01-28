@@ -43,6 +43,6 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             0 => 'sku',
             1 => 'associated_skus'
         ];
-        $this->assertEquals($expectedData, $this->rowCustomizerMock->addHeaderColumns($productData));
+        $this->assertSame($expectedData, $this->rowCustomizerMock->addHeaderColumns($productData));
     }
 }

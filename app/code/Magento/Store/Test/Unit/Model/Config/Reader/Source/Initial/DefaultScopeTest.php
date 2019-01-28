@@ -29,6 +29,6 @@ class DefaultScopeTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
 
         $defaultSource = new DefaultScope($initialConfig, $converter);
-        $this->assertEquals([], $defaultSource->get());
+        $this->assertSame([], $defaultSource->get());
     }
 }

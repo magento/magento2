@@ -28,7 +28,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $name = 'name';
         $module = $this->createModule($name, []);
 
-        $this->assertEquals($name, $module->getName());
+        $this->assertSame($name, $module->getName());
     }
 
     public function testGetChains()
@@ -36,13 +36,13 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $chains = ['foo', 'baz', 'bar'];
         $module = $this->createModule('name', $chains);
 
-        $this->assertEquals($chains, $module->getChains());
+        $this->assertSame($chains, $module->getChains());
     }
 
     public function testGetChainsCount()
     {
         $module = $this->createModule('name', ['foo', 'baz', 'bar']);
 
-        $this->assertEquals(3, $module->getChainsCount());
+        $this->assertSame(3, $module->getChainsCount());
     }
 }

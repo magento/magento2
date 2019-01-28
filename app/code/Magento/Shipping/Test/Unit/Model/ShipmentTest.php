@@ -73,11 +73,11 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValue($order));
 
-        $this->assertEquals($order, $this->shipment->getOrder());
+        $this->assertSame($order, $this->shipment->getOrder());
     }
 
     public function testGetEntityType()
     {
-        $this->assertEquals('shipment', $this->shipment->getEntityType());
+        $this->assertSame('shipment', $this->shipment->getEntityType());
     }
 }

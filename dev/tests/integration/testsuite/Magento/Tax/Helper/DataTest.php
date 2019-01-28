@@ -33,7 +33,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultCustomerTaxClass()
     {
-        $this->assertEquals(1, $this->helper->getDefaultCustomerTaxClass());
+        $this->assertSame(1, $this->helper->getDefaultCustomerTaxClass());
     }
 
     /**
@@ -41,6 +41,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultProductTaxClass()
     {
-        $this->assertEquals(1, $this->helper->getDefaultProductTaxClass());
+        $this->assertSame(1, $this->helper->getDefaultProductTaxClass());
     }
 }

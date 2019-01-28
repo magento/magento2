@@ -72,7 +72,7 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptions')
             ->will($this->returnValue($collection));
-        $this->assertEquals($collection, $this->bundleOptionPrice->getOptions());
+        $this->assertSame($collection, $this->bundleOptionPrice->getOptions());
     }
 
     /**
@@ -89,7 +89,7 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getOptionSelectionAmount')
             ->will($this->returnValue($selectionAmount))
             ->with($product, $selection, false);
-        $this->assertEquals($selectionAmount, $this->bundleOptionPrice->getOptionSelectionAmount($selection));
+        $this->assertSame($selectionAmount, $this->bundleOptionPrice->getOptionSelectionAmount($selection));
     }
 
     /**
@@ -116,6 +116,6 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     {
         $value = 1;
         $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->will($this->returnValue($value));
-        $this->assertEquals($value, $this->bundleOptionPrice->getValue());
+        $this->assertSame($value, $this->bundleOptionPrice->getValue());
     }
 }

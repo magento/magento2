@@ -47,19 +47,19 @@ class CustomerSessionUserContextTest extends \PHPUnit\Framework\TestCase
     {
         $userId = 1;
         $this->setupUserId($userId);
-        $this->assertEquals($userId, $this->customerSessionUserContext->getUserId());
+        $this->assertSame($userId, $this->customerSessionUserContext->getUserId());
     }
 
     public function testGetUserIdDoesNotExist()
     {
         $userId = null;
         $this->setupUserId($userId);
-        $this->assertEquals($userId, $this->customerSessionUserContext->getUserId());
+        $this->assertSame($userId, $this->customerSessionUserContext->getUserId());
     }
 
     public function testGetUserType()
     {
-        $this->assertEquals(UserContextInterface::USER_TYPE_CUSTOMER, $this->customerSessionUserContext->getUserType());
+        $this->assertSame(UserContextInterface::USER_TYPE_CUSTOMER, $this->customerSessionUserContext->getUserType());
     }
 
     /**

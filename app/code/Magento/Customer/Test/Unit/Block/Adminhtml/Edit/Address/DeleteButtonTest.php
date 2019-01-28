@@ -101,6 +101,6 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
             )->willReturn('url');
 
         $buttonData = $this->deleteButton->getButtonData();
-        $this->assertEquals('Delete', (string)$buttonData['label']);
+        $this->assertSame('Delete', (string)$buttonData['label']);
     }
 }

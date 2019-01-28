@@ -90,7 +90,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('max_characters=10', $exportData);
         $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
         $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
-        $this->assertEquals(1, $occurrencesCount);
+        $this->assertSame(1, $occurrencesCount);
     }
 
     /**

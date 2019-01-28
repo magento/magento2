@@ -225,8 +225,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $websiteColumn = Customer::COLUMN_WEBSITE;
         $storeColumn = Customer::COLUMN_STORE;
-        $this->assertEquals($this->_websites[$this->_customerData['website_id']], $row[$websiteColumn]);
-        $this->assertEquals($this->_stores[$this->_customerData['store_id']], $row[$storeColumn]);
-        $this->assertEquals($this->_customerData[self::ATTRIBUTE_CODE], $row[self::ATTRIBUTE_CODE]);
+        $this->assertSame($this->_websites[$this->_customerData['website_id']], $row[$websiteColumn]);
+        $this->assertSame($this->_stores[$this->_customerData['store_id']], $row[$storeColumn]);
+        $this->assertSame($this->_customerData[self::ATTRIBUTE_CODE], $row[self::ATTRIBUTE_CODE]);
     }
 }

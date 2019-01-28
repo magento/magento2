@@ -67,7 +67,7 @@ class AbstractCreateTest extends \PHPUnit\Framework\TestCase
             ->method('convertPrice')
             ->with($price)
             ->willReturn($resultPrice);
-        $this->assertEquals($resultPrice, $this->model->getItemPrice($this->productMock));
+        $this->assertSame($resultPrice, $this->model->getItemPrice($this->productMock));
     }
 
     /**

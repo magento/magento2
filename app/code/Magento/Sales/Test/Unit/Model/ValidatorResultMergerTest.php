@@ -82,6 +82,6 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
             $creditmemoValidationResultMock,
             ...$itemsValidationMessages
         );
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

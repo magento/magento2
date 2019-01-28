@@ -131,6 +131,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetSearchCriteria()
     {
-        $this->assertEquals($this->model, $this->model->setSearchCriteria());
+        $this->assertSame($this->model, $this->model->setSearchCriteria());
     }
 }

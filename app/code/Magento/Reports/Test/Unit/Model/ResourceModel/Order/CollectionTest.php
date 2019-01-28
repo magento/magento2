@@ -258,7 +258,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $interval = $result['to']->diff($result['from']);
         date_default_timezone_set($timeZoneToReturn);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        $this->assertEquals($expectedInterval, $intervalResult);
+        $this->assertSame($expectedInterval, $intervalResult);
     }
 
     /**
@@ -281,7 +281,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
 
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
-        $this->assertEquals(3, count($result));
+        $this->assertSame(3, count($result));
     }
 
     /**
@@ -289,8 +289,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDateRangeWithReturnObject()
     {
-        $this->assertEquals(2, count($this->collection->getDateRange('7d', '', '', true)));
-        $this->assertEquals(3, count($this->collection->getDateRange('7d', '', '', false)));
+        $this->assertSame(2, count($this->collection->getDateRange('7d', '', '', true)));
+        $this->assertSame(3, count($this->collection->getDateRange('7d', '', '', false)));
     }
 
     /**

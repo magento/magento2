@@ -113,7 +113,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $block->expects($this->atLeastOnce())->method('setCollection')->with($addressCollection)->willReturnSelf();
         $this->gridBlock->setNameInLayout('NameInLayout');
         $this->gridBlock->setLayout($layout);
-        $this->assertEquals('OutputString', $this->gridBlock->getChildHtml('pager'));
+        $this->assertSame('OutputString', $this->gridBlock->getChildHtml('pager'));
     }
 
     /**
@@ -126,7 +126,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
             ->with('customer/address/edit', ['_secure' => true, 'id' => $addressId])
             ->willReturn($expectedUrl);
-        $this->assertEquals($expectedUrl, $this->gridBlock->getAddressEditUrl($addressId));
+        $this->assertSame($expectedUrl, $this->gridBlock->getAddressEditUrl($addressId));
     }
 
     public function testGetAdditionalAddresses()
@@ -162,7 +162,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->addressCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($addressCollection);
 
-        $this->assertEquals($addressDataModel, $this->gridBlock->getAdditionalAddresses()[0]);
+        $this->assertSame($addressDataModel, $this->gridBlock->getAdditionalAddresses()[0]);
     }
 
     /**
@@ -174,7 +174,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $expectedAddress = 'Line 1, Line 2';
         $address = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
         $address->expects($this->atLeastOnce())->method('getStreet')->willReturn($street);
-        $this->assertEquals($expectedAddress, $this->gridBlock->getStreetAddress($address));
+        $this->assertSame($expectedAddress, $this->gridBlock->getStreetAddress($address));
     }
 
     /**
@@ -191,6 +191,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->countryFactory->expects($this->atLeastOnce())->method('create')->willReturn($country);
         $country->expects($this->atLeastOnce())->method('loadByCode')->with($countryId)->willReturnSelf();
         $country->expects($this->atLeastOnce())->method('getName')->willReturn($countryName);
-        $this->assertEquals($countryName, $this->gridBlock->getCountryByCode($countryId));
+        $this->assertSame($countryName, $this->gridBlock->getCountryByCode($countryId));
     }
 }

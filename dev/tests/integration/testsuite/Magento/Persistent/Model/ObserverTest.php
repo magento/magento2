@@ -89,6 +89,6 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->_observer->emulateWelcomeBlock($block);
 
-        $this->assertEquals('&nbsp;', $block->getWelcome());
+        $this->assertSame('&nbsp;', $block->getWelcome());
     }
 }

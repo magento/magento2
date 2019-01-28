@@ -118,7 +118,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock->expects(self::once())
             ->method('getDirectoryRead')
             ->willReturn($directoryMock);
-        self::assertEquals(
+        self::assertSame(
             $this->model->get('db_schema.xml', 'all'),
             [
                 'some_path' => '<xml>Some Content</xml>',
@@ -221,7 +221,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->with('module', 'Magento_Some')
             ->willReturn('some_path');
-        self::assertEquals(
+        self::assertSame(
             [
                 'some_path/etc/db_schema.xml' => '<xml>Some Content</xml>',
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'

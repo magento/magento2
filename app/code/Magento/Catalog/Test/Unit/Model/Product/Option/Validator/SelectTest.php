@@ -82,7 +82,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
                 ->method('getNumber')
                 ->will($this->returnValue($value['price']));
         }
-        $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
+        $this->assertSame($expectedResult, $this->validator->isValid($this->valueMock));
     }
 
     /**
@@ -135,7 +135,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             'option values' => 'Invalid option value',
         ];
         $this->assertFalse($this->validator->isValid($this->valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 
     /**
@@ -152,7 +152,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             'option values' => 'Invalid option value',
         ];
         $this->assertFalse($this->validator->isValid($this->valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 
     /**
@@ -178,7 +178,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             'option values' => 'Invalid option value',
         ];
         $this->assertFalse($this->validator->isValid($this->valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertSame($messages, $this->validator->getMessages());
     }
 
     /**

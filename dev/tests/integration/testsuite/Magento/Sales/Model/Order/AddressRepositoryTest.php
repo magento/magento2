@@ -75,7 +75,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $result = $this->repository->getList($searchCriteria);
         $items = $result->getItems();
         $this->assertCount(2, $items);
-        $this->assertEquals('ZX0789', array_shift($items)->getPostcode());
-        $this->assertEquals('47676', array_shift($items)->getPostcode());
+        $this->assertSame('ZX0789', array_shift($items)->getPostcode());
+        $this->assertSame('47676', array_shift($items)->getPostcode());
     }
 }

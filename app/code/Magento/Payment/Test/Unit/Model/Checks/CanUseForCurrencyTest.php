@@ -49,7 +49,7 @@ class CanUseForCurrencyTest extends \PHPUnit\Framework\TestCase
         );
         $quoteMock->expects($this->once())->method('getStore')->will($this->returnValue($store));
 
-        $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));
+        $this->assertSame($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));
     }
 
     /**

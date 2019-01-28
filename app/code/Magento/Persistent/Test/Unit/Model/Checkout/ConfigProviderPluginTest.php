@@ -78,7 +78,7 @@ class ConfigProviderPluginTest extends \PHPUnit\Framework\TestCase
         $this->persistentSessionMock->expects($this->any())->method('isPersistent')->willReturn($isPersistent);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
         $this->maskFactoryMock->expects($this->never())->method('create');
-        $this->assertEquals($result, $this->plugin->afterGetConfig($this->subjectMock, $result));
+        $this->assertSame($result, $this->plugin->afterGetConfig($this->subjectMock, $result));
     }
 
     /**
@@ -111,6 +111,6 @@ class ConfigProviderPluginTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMaskMock->expects($this->once())->method('load')->willReturnSelf();
         $quoteMaskMock->expects($this->once())->method('getMaskedId')->willReturn($maskedId);
-        $this->assertEquals($expectedResult, $this->plugin->afterGetConfig($this->subjectMock, $result));
+        $this->assertSame($expectedResult, $this->plugin->afterGetConfig($this->subjectMock, $result));
     }
 }

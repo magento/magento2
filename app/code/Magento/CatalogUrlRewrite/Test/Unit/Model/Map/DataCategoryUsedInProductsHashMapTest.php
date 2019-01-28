@@ -97,12 +97,12 @@ class DataCategoryUsedInProductsHashMapTest extends \PHPUnit\Framework\TestCase
             ->method('resetMap')
             ->with(DataCategoryHashMap::class, 1);
 
-        $this->assertEquals($categoryIds, $this->model->getAllData(1));
-        $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
-        $this->assertEquals($categoryIdsOther, $this->model->getAllData(2));
-        $this->assertEquals($categoryIdsOther[2], $this->model->getData(2, 2));
+        $this->assertSame($categoryIds, $this->model->getAllData(1));
+        $this->assertSame($categoryIds[2], $this->model->getData(1, 2));
+        $this->assertSame($categoryIdsOther, $this->model->getAllData(2));
+        $this->assertSame($categoryIdsOther[2], $this->model->getData(2, 2));
         $this->model->resetData(1);
-        $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
-        $this->assertEquals($categoryIds, $this->model->getAllData(1));
+        $this->assertSame($categoryIds[2], $this->model->getData(1, 2));
+        $this->assertSame($categoryIds, $this->model->getAllData(1));
     }
 }

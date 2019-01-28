@@ -151,7 +151,7 @@ class FormTest extends TestCase
 
         $this->withQuote();
 
-        self::assertEquals($expected, json_decode($this->block->getOrderDataJson(), true));
+        self::assertSame($expected, json_decode($this->block->getOrderDataJson(), true));
     }
 
     /**

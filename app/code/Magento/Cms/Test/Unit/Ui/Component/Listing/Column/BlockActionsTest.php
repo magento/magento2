@@ -130,6 +130,6 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
         $this->blockActions->setData('name', $name);
 
         $actual = $this->blockActions->prepareDataSource($items);
-        static::assertEquals($expectedItems, $actual['data']['items']);
+        static::assertSame($expectedItems, $actual['data']['items']);
     }
 }

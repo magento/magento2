@@ -54,6 +54,6 @@ class DisableAutoGroupAssignDefaultTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setValue($value);
 
-        $this->assertEquals($this->model, $this->model->afterSave());
+        $this->assertSame($this->model, $this->model->afterSave());
     }
 }

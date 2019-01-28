@@ -36,7 +36,7 @@ class ItalicMixinTest extends \PHPUnit\Framework\TestCase
 
     public function testEmptyApply()
     {
-        $this->assertEquals('', $this->mixin->apply(''));
+        $this->assertSame('', $this->mixin->apply(''));
     }
 
     public function testApply()
@@ -57,6 +57,6 @@ class ItalicMixinTest extends \PHPUnit\Framework\TestCase
             ->with($fixtureString, $randWordsFixture, '<i>%s</i>')
             ->willReturn($fixtureStringResult);
 
-        $this->assertEquals($fixtureStringResult, $this->mixin->apply($fixtureString));
+        $this->assertSame($fixtureStringResult, $this->mixin->apply($fixtureString));
     }
 }

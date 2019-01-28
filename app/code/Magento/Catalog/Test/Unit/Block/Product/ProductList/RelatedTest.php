@@ -36,7 +36,7 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
         $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $productTag,
             $this->block->getIdentities()
         );
@@ -66,7 +66,7 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
         $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $canItemsAddToCart,
             $this->block->canItemsAddToCart()
         );

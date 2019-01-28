@@ -56,19 +56,19 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $this->order->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->model->setOrder($this->order);
-        $this->assertEquals($this->order, $this->model->getOrder());
+        $this->assertSame($this->order, $this->model->getOrder());
     }
 
     public function testSetIsCustomerNotified()
     {
         $this->model->setIsCustomerNotified(true);
-        $this->assertEquals(true, $this->model->getIsCustomerNotified());
+        $this->assertSame(true, $this->model->getIsCustomerNotified());
     }
 
     public function testSetIsCustomerNotifiedNotApplicable()
     {
         $this->model->setIsCustomerNotified();
-        $this->assertEquals($this->model->isCustomerNotificationNotApplicable(), $this->model->getIsCustomerNotified());
+        $this->assertSame($this->model->isCustomerNotificationNotApplicable(), $this->model->getIsCustomerNotified());
     }
 
     public function testGetStatusLabel()
@@ -80,14 +80,14 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $config->expects($this->once())->method('getStatusLabel')->with($status)->willReturn($status);
         $this->order->expects($this->once())->method('getConfig')->willReturn($config);
         $this->model->setOrder($this->order);
-        $this->assertEquals($status, $this->model->getStatusLabel());
+        $this->assertSame($status, $this->model->getStatusLabel());
     }
 
     public function testGetStoreFromStoreManager()
     {
         $resultStore = 1;
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($resultStore);
-        $this->assertEquals($resultStore, $this->model->getStore());
+        $this->assertSame($resultStore, $this->model->getStore());
     }
 
     public function testGetStoreFromOrder()
@@ -95,6 +95,6 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $resultStore = 1;
         $this->model->setOrder($this->order);
         $this->order->expects($this->once())->method('getStore')->willReturn($resultStore);
-        $this->assertEquals($resultStore, $this->model->getStore());
+        $this->assertSame($resultStore, $this->model->getStore());
     }
 }

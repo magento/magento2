@@ -61,6 +61,6 @@ class FileProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($items);
 
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-        $this->assertEquals($items, $this->model->getItems($theme, $filters));
+        $this->assertSame($items, $this->model->getItems($theme, $filters));
     }
 }

@@ -126,6 +126,6 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
         /** @var $queryInterfaceMock \Magento\Search\Model\QueryInterface */
         $queryInterfaceMock = $this->createMock(\Magento\Search\Model\QueryInterface::class);
         $result = $this->model->getItems($queryInterfaceMock);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 }

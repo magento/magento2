@@ -73,6 +73,6 @@ class EmailLinkTest extends \PHPUnit\Framework\TestCase
                 'sharing_code' => 'somesharingcode',
             ]))
             ->will($this->returnValue('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5'));
-        $this->assertEquals('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5', $this->link->getLink());
+        $this->assertSame('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5', $this->link->getLink());
     }
 }

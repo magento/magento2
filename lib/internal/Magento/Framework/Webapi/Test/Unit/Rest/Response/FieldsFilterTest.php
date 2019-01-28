@@ -116,7 +116,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
-        $this->assertEquals($expected, $filteredResponse);
+        $this->assertSame($expected, $filteredResponse);
     }
 
     public function testFilterSimpleNesting()
@@ -133,7 +133,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
-        $this->assertEquals($expected, $filteredResponse);
+        $this->assertSame($expected, $filteredResponse);
     }
 
     public function testFilterMultilevelNesting()
@@ -168,7 +168,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($nestedFilter));
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
-        $this->assertEquals($expected, $filteredResponse);
+        $this->assertSame($expected, $filteredResponse);
     }
 
     public function testNonExistentFieldFilter()
@@ -207,7 +207,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($nonExistentFieldFilter));
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
-        $this->assertEquals($expected, $filteredResponse);
+        $this->assertSame($expected, $filteredResponse);
     }
 
     /**

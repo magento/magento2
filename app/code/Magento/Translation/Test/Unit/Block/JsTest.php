@@ -55,7 +55,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
         $this->fileManagerMock->expects($this->once())
             ->method('getTranslationFileTimestamp')
             ->willReturn(1445736974);
-        $this->assertEquals(1445736974, $this->model->getTranslationFileTimestamp());
+        $this->assertSame(1445736974, $this->model->getTranslationFileTimestamp());
     }
 
     public function testGetTranslationFilePath()
@@ -63,7 +63,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
         $this->fileManagerMock->expects($this->once())
             ->method('getTranslationFilePath')
             ->willReturn('frontend/Magento/luma/en_EN');
-        $this->assertEquals('frontend/Magento/luma/en_EN', $this->model->getTranslationFilePath());
+        $this->assertSame('frontend/Magento/luma/en_EN', $this->model->getTranslationFilePath());
     }
 
     public function testGetTranslationFileVersion()
@@ -73,6 +73,6 @@ class JsTest extends \PHPUnit\Framework\TestCase
         $this->fileManagerMock->expects($this->once())
             ->method('getTranslationFileVersion')
             ->willReturn($version);
-        $this->assertEquals($version, $this->model->getTranslationFileVersion());
+        $this->assertSame($version, $this->model->getTranslationFileVersion());
     }
 }

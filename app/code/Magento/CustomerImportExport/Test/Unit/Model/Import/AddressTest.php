@@ -584,7 +584,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntityTypeCode()
     {
-        $this->assertEquals('customer_address', $this->_model->getEntityTypeCode());
+        $this->assertSame('customer_address', $this->_model->getEntityTypeCode());
     }
 
     /**

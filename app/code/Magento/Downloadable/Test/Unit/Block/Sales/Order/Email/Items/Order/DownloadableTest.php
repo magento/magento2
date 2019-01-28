@@ -81,6 +81,6 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->with('order_item_id', 'itemId')
             ->willReturnSelf();
 
-        $this->assertEquals($linkPurchased, $this->block->getLinks());
+        $this->assertSame($linkPurchased, $this->block->getLinks());
     }
 }

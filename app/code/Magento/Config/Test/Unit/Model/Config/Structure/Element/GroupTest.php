@@ -83,7 +83,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($cloneModel)
         );
         $this->_model->setData(['clone_model' => 'clone_model_name'], 'scope');
-        $this->assertEquals($cloneModel, $this->_model->getCloneModel());
+        $this->assertSame($cloneModel, $this->_model->getCloneModel());
     }
 
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
@@ -117,9 +117,9 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFieldsetCss()
     {
-        $this->assertEquals('', $this->_model->getFieldsetCss());
+        $this->assertSame('', $this->_model->getFieldsetCss());
         $this->_model->setData(['fieldset_css' => 'some_css'], 'scope');
-        $this->assertEquals('some_css', $this->_model->getFieldsetCss());
+        $this->assertSame('some_css', $this->_model->getFieldsetCss());
     }
 
     public function testGetDependenciesWithoutDependencies()
@@ -148,6 +148,6 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             $this->returnArgument(0)
         );
 
-        $this->assertEquals($fields, $this->_model->getDependencies('test_scope'));
+        $this->assertSame($fields, $this->_model->getDependencies('test_scope'));
     }
 }

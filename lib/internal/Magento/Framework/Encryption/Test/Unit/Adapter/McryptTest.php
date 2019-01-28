@@ -82,9 +82,9 @@ class McryptTest extends \PHPUnit\Framework\TestCase
 
         $crypt = new \Magento\Framework\Encryption\Adapter\Mcrypt($this->key, $cipher, $mode, $initVector);
 
-        $this->assertEquals($cipher, $crypt->getCipher());
-        $this->assertEquals($mode, $crypt->getMode());
-        $this->assertEquals($initVector, $crypt->getInitVector());
+        $this->assertSame($cipher, $crypt->getCipher());
+        $this->assertSame($mode, $crypt->getMode());
+        $this->assertSame($initVector, $crypt->getInitVector());
     }
 
     public function getConstructorExceptionData(): array
@@ -125,9 +125,9 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         );
         $cryptActual = new \Magento\Framework\Encryption\Adapter\Mcrypt($this->key);
 
-        $this->assertEquals($cryptExpected->getCipher(), $cryptActual->getCipher());
-        $this->assertEquals($cryptExpected->getMode(), $cryptActual->getMode());
-        $this->assertEquals($cryptExpected->getInitVector(), $cryptActual->getInitVector());
+        $this->assertSame($cryptExpected->getCipher(), $cryptActual->getCipher());
+        $this->assertSame($cryptExpected->getMode(), $cryptActual->getMode());
+        $this->assertSame($cryptExpected->getInitVector(), $cryptActual->getInitVector());
     }
 
     public function getCryptData(): array
@@ -157,7 +157,7 @@ class McryptTest extends \PHPUnit\Framework\TestCase
     ) {
         $crypt = new \Magento\Framework\Encryption\Adapter\Mcrypt($key, $cipher, $mode, $initVector);
         $actualData = $crypt->decrypt($inputData);
-        $this->assertEquals($expectedData, $actualData);
+        $this->assertSame($expectedData, $actualData);
     }
 
     /**
@@ -174,6 +174,6 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         $actualInitVector = $crypt->getInitVector();
 
         $expectedInitVector = str_repeat("\0", $this->getInitVectorSize($cipher, $mode));
-        $this->assertEquals($expectedInitVector, $actualInitVector);
+        $this->assertSame($expectedInitVector, $actualInitVector);
     }
 }

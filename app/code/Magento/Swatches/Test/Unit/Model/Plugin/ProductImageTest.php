@@ -95,7 +95,7 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
         $productImageMock = $this->createMock(\Magento\Catalog\Block\Product\AbstractProduct::class);
 
         $result = $this->pluginModel->beforeGetImage($productImageMock, $this->productMock, $expected['page_handle']);
-        $this->assertEquals([$this->productMock, $expected['page_handle'], []], $result);
+        $this->assertSame([$this->productMock, $expected['page_handle'], []], $result);
     }
 
     /**

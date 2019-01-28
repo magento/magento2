@@ -87,7 +87,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
                 ->setQuery(null);
         }
 
-        $this->assertEquals($uris, $this->model->getUris());
+        $this->assertSame($uris, $this->model->getUris());
     }
 
     /**

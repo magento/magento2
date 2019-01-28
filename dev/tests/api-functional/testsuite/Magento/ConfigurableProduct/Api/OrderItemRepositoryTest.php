@@ -119,7 +119,7 @@ class OrderItemRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('option_id', $actualOptions[0]);
         $this->assertArrayHasKey('option_value', $actualOptions[0]);
 
-        $this->assertEquals(key($expected), $actualOptions[0]['option_id']);
-        $this->assertEquals(current($expected), $actualOptions[0]['option_value']);
+        $this->assertSame(key($expected), $actualOptions[0]['option_id']);
+        $this->assertSame(current($expected), $actualOptions[0]['option_value']);
     }
 }

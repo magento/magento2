@@ -65,6 +65,6 @@ class VariationMatrixTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($result, $this->model->getVariations($input));
+        $this->assertSame($result, $this->model->getVariations($input));
     }
 }

@@ -130,7 +130,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
+        $this->assertSame($this->queryMatch, $mapper->getRootQuery());
     }
 
     /**
@@ -181,7 +181,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
+        $this->assertSame($this->queryMatch, $mapper->getRootQuery());
     }
 
     /**
@@ -212,7 +212,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
+        $this->assertSame($this->queryMatch, $mapper->getRootQuery());
     }
 
     /**
@@ -262,7 +262,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     /**
@@ -336,7 +336,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryBool, $mapper->getRootQuery());
+        $this->assertSame($this->queryBool, $mapper->getRootQuery());
     }
 
     /**
@@ -444,7 +444,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     public function testGetFilterWildcard()
@@ -509,7 +509,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     public function testGetFilterRange()
@@ -576,7 +576,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     public function testGetFilterBool()
@@ -663,7 +663,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     /**
@@ -737,7 +737,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     /**
@@ -778,7 +778,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
+        $this->assertSame($this->queryMatch, $mapper->getRootQuery());
     }
 
     /**
@@ -816,7 +816,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
+        $this->assertSame($this->queryFilter, $mapper->getRootQuery());
     }
 
     /**
@@ -849,7 +849,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->queryBool, $mapper->getRootQuery());
+        $this->assertSame($this->queryBool, $mapper->getRootQuery());
     }
 
     /**

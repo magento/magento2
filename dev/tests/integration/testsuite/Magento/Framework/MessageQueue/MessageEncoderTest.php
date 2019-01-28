@@ -51,7 +51,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         $createdAt = $customer->getCreatedAt();
         $updatedAt = $customer->getUpdatedAt();
         $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt, $updatedAt), true);
-        $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData);
+        $this->assertSame($expectedEncodedCustomerData, $encodedCustomerData);
     }
 
     /**
@@ -72,7 +72,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         $createdAt = $customer->getCreatedAt();
         $updatedAt = $customer->getUpdatedAt();
         $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt, $updatedAt), true);
-        $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData[0]);
+        $this->assertSame($expectedEncodedCustomerData, $encodedCustomerData[0]);
     }
 
     public function testDecode()
@@ -81,28 +81,28 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Customer\Api\Data\CustomerInterface $decodedCustomerObject */
         $decodedCustomerObject = $this->encoder->decode('customer.created', $encodedMessage);
         $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $decodedCustomerObject);
-        $this->assertEquals('customer@example.com', $decodedCustomerObject->getEmail());
-        $this->assertEquals(1, $decodedCustomerObject->getGroupId());
+        $this->assertSame('customer@example.com', $decodedCustomerObject->getEmail());
+        $this->assertSame(1, $decodedCustomerObject->getGroupId());
 
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\CustomerExtensionInterface::class,
             $decodedCustomerObject->getExtensionAttributes()
         );
-        $this->assertEquals('Some Group Code', $decodedCustomerObject->getExtensionAttributes()->getTestGroupCode());
+        $this->assertSame('Some Group Code', $decodedCustomerObject->getExtensionAttributes()->getTestGroupCode());
         $addresses = $decodedCustomerObject->getAddresses();
         $this->assertCount(1, $addresses, "Address was not decoded.");
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\AddressInterface::class,
             $addresses[0]
         );
-        $this->assertEquals('3468676', $addresses[0]->getTelephone());
-        $this->assertEquals(true, $addresses[0]->isDefaultBilling());
+        $this->assertSame('3468676', $addresses[0]->getTelephone());
+        $this->assertSame(true, $addresses[0]->isDefaultBilling());
 
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\RegionInterface::class,
             $addresses[0]->getRegion()
         );
-        $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
+        $this->assertSame('AL', $addresses[0]->getRegion()->getRegionCode());
     }
 
     /**

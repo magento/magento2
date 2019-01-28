@@ -40,14 +40,14 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
     public function testWriteln()
     {
         $this->multipleStreamOutput->writeln('Hello world');
-        $this->assertEquals('Hello world' . PHP_EOL, file_get_contents(__DIR__ . '/_files/a.txt'));
-        $this->assertEquals('Hello world' . PHP_EOL, file_get_contents(__DIR__ . '/_files/b.txt'));
+        $this->assertSame('Hello world' . PHP_EOL, file_get_contents(__DIR__ . '/_files/a.txt'));
+        $this->assertSame('Hello world' . PHP_EOL, file_get_contents(__DIR__ . '/_files/b.txt'));
     }
 
     public function testWrite()
     {
         $this->multipleStreamOutput->write('Hello world');
-        $this->assertEquals('Hello world', file_get_contents(__DIR__ . '/_files/a.txt'));
-        $this->assertEquals('Hello world', file_get_contents(__DIR__ . '/_files/b.txt'));
+        $this->assertSame('Hello world', file_get_contents(__DIR__ . '/_files/a.txt'));
+        $this->assertSame('Hello world', file_get_contents(__DIR__ . '/_files/b.txt'));
     }
 }

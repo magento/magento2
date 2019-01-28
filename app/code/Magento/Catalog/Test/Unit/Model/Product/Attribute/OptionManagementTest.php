@@ -32,7 +32,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->with(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
             ->willReturn([]);
-        $this->assertEquals([], $this->model->getItems($attributeCode));
+        $this->assertSame([], $this->model->getItems($attributeCode));
     }
 
     public function testAdd()

@@ -117,7 +117,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($classReflection)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Core\Model\Object::class],
             $this->injectable->getDependencies($this->fileReflection)
         );
@@ -138,7 +138,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [\Magento\Core\Model\Object::class],
             $this->injectable->getDependencies($this->fileReflection)
         );

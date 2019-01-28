@@ -52,6 +52,6 @@ class OrderGetStatusTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertEquals($order->getStatus(), $this->_webApiCall($serviceInfo, ['id' => $order->getId()]));
+        $this->assertSame($order->getStatus(), $this->_webApiCall($serviceInfo, ['id' => $order->getId()]));
     }
 }

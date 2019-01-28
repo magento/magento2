@@ -98,7 +98,7 @@ class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('createEmptyCart')->willReturn($cartId);
 
-        $this->assertEquals($maskedCartId, $this->guestCartManagement->createEmptyCart());
+        $this->assertSame($maskedCartId, $this->guestCartManagement->createEmptyCart());
     }
 
     public function testAssignCustomer()
@@ -113,7 +113,7 @@ class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('assignCustomer')->willReturn(true);
 
-        $this->assertEquals(true, $this->guestCartManagement->assignCustomer($cartId, $customerId, $storeId));
+        $this->assertSame(true, $this->guestCartManagement->assignCustomer($cartId, $customerId, $storeId));
     }
 
     public function testPlaceOrder()
@@ -129,6 +129,6 @@ class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('placeOrder')->willReturn($orderId);
 
-        $this->assertEquals($orderId, $this->guestCartManagement->placeOrder($cartId));
+        $this->assertSame($orderId, $this->guestCartManagement->placeOrder($cartId));
     }
 }

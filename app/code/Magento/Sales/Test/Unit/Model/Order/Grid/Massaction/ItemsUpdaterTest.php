@@ -44,6 +44,6 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
 
                 ]
             );
-        $this->assertEquals(['other' => null], $this->itemUpdater->update($arguments));
+        $this->assertSame(['other' => null], $this->itemUpdater->update($arguments));
     }
 }

@@ -169,7 +169,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->sendEmailCheck();
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
-        $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->subscribe($email));
+        $this->assertSame(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->subscribe($email));
     }
 
     public function testSubscribeNotLoggedIn()
@@ -208,7 +208,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->sendEmailCheck();
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
-        $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->subscribe($email));
+        $this->assertSame(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->subscribe($email));
     }
 
     public function testUpdateSubscription()
@@ -244,7 +244,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
 
-        $this->assertEquals($this->subscriber, $this->subscriber->updateSubscription($customerId));
+        $this->assertSame($this->subscriber, $this->subscriber->updateSubscription($customerId));
     }
 
     public function testUnsubscribeCustomerById()
@@ -330,7 +330,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->with()->willReturn(true);
 
         $this->subscriber->subscribeCustomerById($customerId);
-        $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->getStatus());
+        $this->assertSame(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->getStatus());
     }
 
     public function testSubscribeCustomerByIdAfterConfirmation()
@@ -360,7 +360,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->with()->willReturn(true);
 
         $this->subscriber->updateSubscription($customerId);
-        $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $this->subscriber->getStatus());
+        $this->assertSame(Subscriber::STATUS_SUBSCRIBED, $this->subscriber->getStatus());
     }
 
     public function testUnsubscribe()
@@ -368,7 +368,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->once())->method('save')->willReturnSelf();
         $this->sendEmailCheck();
 
-        $this->assertEquals($this->subscriber, $this->subscriber->unsubscribe());
+        $this->assertSame($this->subscriber, $this->subscriber->unsubscribe());
     }
 
     /**
@@ -388,7 +388,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->setFirstname('John');
         $this->subscriber->setLastname('Doe');
 
-        $this->assertEquals('John Doe', $this->subscriber->getSubscriberFullName());
+        $this->assertSame('John Doe', $this->subscriber->getSubscriberFullName());
     }
 
     public function testConfirm()
@@ -415,7 +415,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->resource->expects($this->once())->method('received')->with($this->subscriber, $queue)->willReturnSelf();
 
-        $this->assertEquals($this->subscriber, $this->subscriber->received($queue));
+        $this->assertSame($this->subscriber, $this->subscriber->received($queue));
     }
 
     /**

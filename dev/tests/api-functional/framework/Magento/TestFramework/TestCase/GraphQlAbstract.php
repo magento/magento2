@@ -122,7 +122,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            self::assertEquals(
+            self::assertSame(
                 $expectedValue,
                 $actualResponse[$responseField],
                 "Value of '{$responseField}' field in response does not match expected value: "

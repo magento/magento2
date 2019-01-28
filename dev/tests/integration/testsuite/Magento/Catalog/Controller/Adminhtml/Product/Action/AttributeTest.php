@@ -29,7 +29,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
-        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(302, $this->getResponse()->getHttpResponseCode());
         /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
         $urlBuilder = $objectManager->get(\Magento\Framework\UrlInterface::class);
 
@@ -89,7 +89,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $layer->setCurrentCategory($category);
         $productCollection = $layer->getProductCollection();
         $productItem = $productCollection->getFirstItem();
-        $this->assertEquals($session->getProductIds(), [$productItem->getId()]);
+        $this->assertSame($session->getProductIds(), [$productItem->getId()]);
     }
 
     /**
@@ -115,7 +115,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         $this->dispatch('backend/catalog/product_action_attribute/validate/store/0');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $response = $this->getResponse()->getBody();
         $this->assertJson($response);

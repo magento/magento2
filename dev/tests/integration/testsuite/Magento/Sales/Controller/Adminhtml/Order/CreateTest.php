@@ -55,7 +55,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setParam('block', ',');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
-        $this->assertEquals('{"message":""}', $this->getResponse()->getBody());
+        $this->assertSame('{"message":""}', $this->getResponse()->getBody());
     }
 
     /**
@@ -259,7 +259,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $method = new \ReflectionMethod(\Magento\Sales\Controller\Adminhtml\Order\Create::class, '_getAclResource');
         $method->setAccessible(true);
         $result = $method->invoke($orderController);
-        $this->assertEquals($result, $expectedResult);
+        $this->assertSame($result, $expectedResult);
     }
 
     /**
@@ -324,7 +324,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/sales/order_create/save');
-        $this->assertEquals('403', $this->getResponse()->getHttpResponseCode());
+        $this->assertSame('403', $this->getResponse()->getHttpResponseCode());
     }
 
     /**
@@ -368,17 +368,17 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         );
 
         $this->dispatch('backend/sales/order_create/loadBlock/block/shipping_address');
-        self::assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        self::assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $updatedQuote = $quoteRepository->get($quote->getId());
 
         $billingAddress = $updatedQuote->getBillingAddress();
-        self::assertEquals($data['region_id'], $billingAddress->getRegionId());
-        self::assertEquals($data['country_id'], $billingAddress->getCountryId());
+        self::assertSame($data['region_id'], $billingAddress->getRegionId());
+        self::assertSame($data['country_id'], $billingAddress->getCountryId());
 
         $shippingAddress = $updatedQuote->getShippingAddress();
-        self::assertEquals($data['city'], $shippingAddress->getCity());
-        self::assertEquals($data['street'], $shippingAddress->getStreet());
+        self::assertSame($data['city'], $shippingAddress->getCity());
+        self::assertSame($data['street'], $shippingAddress->getStreet());
     }
 
     /**

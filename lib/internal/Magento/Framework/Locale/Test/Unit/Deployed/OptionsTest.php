@@ -95,7 +95,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->prepareGetLocalesFull($mode, $scdOnDemand);
 
-        $this->assertEquals($locales, array_values($this->model->getOptionLocales()));
+        $this->assertSame($locales, array_values($this->model->getOptionLocales()));
     }
 
     /**
@@ -114,7 +114,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->prepareGetLocalesFull($mode, $scdOnDemand);
 
-        $this->assertEquals($locales, array_values($this->model->getTranslatedOptionLocales()));
+        $this->assertSame($locales, array_values($this->model->getTranslatedOptionLocales()));
     }
 
     /**
@@ -140,7 +140,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->prepareGetLocalesLimited($mode, $scdOnDemand, $deployedCodes);
 
-        $this->assertEquals($expectedLocales, array_values($this->model->getOptionLocales()));
+        $this->assertSame($expectedLocales, array_values($this->model->getOptionLocales()));
     }
 
     /**
@@ -166,7 +166,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->prepareGetLocalesLimited($mode, $scdOnDemand, $deployedCodes);
 
-        $this->assertEquals($expectedLocales, array_values($this->model->getTranslatedOptionLocales()));
+        $this->assertSame($expectedLocales, array_values($this->model->getTranslatedOptionLocales()));
     }
 
     /**

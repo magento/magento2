@@ -476,6 +476,6 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->object->copy($this->sourceTheme, $this->targetTheme);
 
-        $this->assertEquals($expectedCopyEvents, $actualCopyEvents);
+        $this->assertSame($expectedCopyEvents, $actualCopyEvents);
     }
 }

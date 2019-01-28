@@ -54,7 +54,7 @@ class SuperProductsSkuTest extends \PHPUnit\Framework\TestCase
                 ->willReturn('someNewSku');
         }
 
-        $this->assertEquals($expectedResult, $this->model->isValid($value));
+        $this->assertSame($expectedResult, $this->model->isValid($value));
     }
 
     /**

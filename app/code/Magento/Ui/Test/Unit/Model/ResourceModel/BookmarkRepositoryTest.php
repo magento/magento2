@@ -84,7 +84,7 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->bookmarkResourceMock->expects($this->once())
             ->method('save')
             ->with($this->bookmarkMock);
-        $this->assertEquals($this->bookmarkMock, $this->bookmarkRepository->save($this->bookmarkMock));
+        $this->assertSame($this->bookmarkMock, $this->bookmarkRepository->save($this->bookmarkMock));
     }
 
     public function testSaveWithException()
@@ -109,7 +109,7 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with($this->bookmarkMock, $bookmarkId)
             ->willReturn($this->bookmarkMock);
-        $this->assertEquals($this->bookmarkMock, $this->bookmarkRepository->getById($bookmarkId));
+        $this->assertSame($this->bookmarkMock, $this->bookmarkRepository->getById($bookmarkId));
     }
 
     public function testGetByIdWithException()
@@ -173,7 +173,7 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($collection);
         $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
             ->getMockForAbstractClass();
-        $this->assertEquals($this->searchResultsMock, $this->bookmarkRepository->getList($searchCriteria));
+        $this->assertSame($this->searchResultsMock, $this->bookmarkRepository->getList($searchCriteria));
     }
 
     public function testDeleteById()

@@ -55,7 +55,7 @@ class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             \IntlDateFormatter::formatObject(
                 $object,
                 $format,

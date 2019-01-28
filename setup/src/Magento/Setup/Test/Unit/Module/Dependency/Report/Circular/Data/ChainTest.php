@@ -20,6 +20,6 @@ class ChainTest extends \PHPUnit\Framework\TestCase
             ['modules' => $modules]
         );
 
-        $this->assertEquals($modules, $chain->getModules());
+        $this->assertSame($modules, $chain->getModules());
     }
 }

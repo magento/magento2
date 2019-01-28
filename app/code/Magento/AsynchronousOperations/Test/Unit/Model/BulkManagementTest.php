@@ -227,7 +227,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->once())->method('getTopicName')->willReturn($topicName);
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
-        $this->assertEquals(1, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
+        $this->assertSame(1, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
     }
 
     /**
@@ -276,7 +276,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('rollBack')->willReturnSelf();
         $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);
         $this->publisher->expects($this->never())->method('publish');
-        $this->assertEquals(0, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
+        $this->assertSame(0, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
     }
 
     /**

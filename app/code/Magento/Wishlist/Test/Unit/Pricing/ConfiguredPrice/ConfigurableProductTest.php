@@ -95,7 +95,7 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
             ->with('simple_product')
             ->willReturn($wishlistItemOptionMock);
 
-        $this->assertEquals($priceValue, $this->model->getValue());
+        $this->assertSame($priceValue, $this->model->getValue());
     }
 
     public function testGetValueWithNoCustomOption()
@@ -122,6 +122,6 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct::PRICE_CODE)
             ->willReturn($priceMock);
 
-        $this->assertEquals(100, $this->model->getValue());
+        $this->assertSame(100, $this->model->getValue());
     }
 }

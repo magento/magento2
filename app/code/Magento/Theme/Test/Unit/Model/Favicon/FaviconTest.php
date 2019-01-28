@@ -122,7 +122,7 @@ class FaviconTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $results = $this->object->getFaviconFile();
-        $this->assertEquals(
+        $this->assertSame(
             $expectedUrl,
             $results
         );
@@ -134,6 +134,6 @@ class FaviconTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultFavicon()
     {
-        $this->assertEquals('Magento_Theme::favicon.ico', $this->object->getDefaultFavicon());
+        $this->assertSame('Magento_Theme::favicon.ico', $this->object->getDefaultFavicon());
     }
 }

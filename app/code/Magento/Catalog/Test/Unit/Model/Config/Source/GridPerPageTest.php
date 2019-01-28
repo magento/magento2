@@ -30,6 +30,6 @@ class GridPerPageTest extends \PHPUnit\Framework\TestCase
             ['value' => 'values', 'label' => 'values'],
         ];
 
-        $this->assertEquals($expect, $this->model->toOptionArray());
+        $this->assertSame($expect, $this->model->toOptionArray());
     }
 }

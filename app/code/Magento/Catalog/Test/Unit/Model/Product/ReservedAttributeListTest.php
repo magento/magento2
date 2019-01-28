@@ -37,7 +37,7 @@ class ReservedAttributeListTest extends \PHPUnit\Framework\TestCase
         $attribute->expects($this->once())->method('getIsUserDefined')->will($this->returnValue($isUserDefined));
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
 
-        $this->assertEquals($expected, $this->model->isReservedAttribute($attribute));
+        $this->assertSame($expected, $this->model->isReservedAttribute($attribute));
     }
 
     /**

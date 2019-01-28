@@ -58,6 +58,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $amount->expects($this->once())->method('getValue')->willReturn($finalPrice);
         $configurableProduct->expects($this->once())->method('setFinalPrice')->with($finalPrice)->willReturnSelf();
 
-        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty, $configurableProduct));
+        $this->assertSame($finalPrice, $this->model->getFinalPrice($qty, $configurableProduct));
     }
 }

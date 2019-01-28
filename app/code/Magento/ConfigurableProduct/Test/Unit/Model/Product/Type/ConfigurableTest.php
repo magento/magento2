@@ -316,9 +316,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $info = $this->model->getRelationInfo();
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $info);
-        $this->assertEquals('catalog_product_super_link', $info->getData('table'));
-        $this->assertEquals('parent_id', $info->getData('parent_field_name'));
-        $this->assertEquals('product_id', $info->getData('child_field_name'));
+        $this->assertSame('catalog_product_super_link', $info->getData('table'));
+        $this->assertSame('parent_id', $info->getData('parent_field_name'));
+        $this->assertSame('product_id', $info->getData('child_field_name'));
     }
 
     public function testCanUseAttribute()
@@ -438,7 +438,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->with($usedProductsData)
             ->willReturn($usedProductsData);
 
-        $this->assertEquals($usedProducts, $this->model->getUsedProducts($product));
+        $this->assertSame($usedProducts, $this->model->getUsedProducts($product));
     }
 
     /**
@@ -520,7 +520,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
         $product->expects($this->once())->method('getId')->willReturn(null);
 
-        $this->assertEquals([], $this->model->getConfigurableAttributes($product));
+        $this->assertSame([], $this->model->getConfigurableAttributes($product));
     }
 
     public function testGetConfigurableAttributes()
@@ -556,7 +556,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->with($configurableAttributes)
             ->willReturn($attributeCollection);
 
-        $this->assertEquals($attributeCollection, $this->model->getConfigurableAttributes($product));
+        $this->assertSame($attributeCollection, $this->model->getConfigurableAttributes($product));
     }
 
     public function testResetConfigurableAttributes()
@@ -570,7 +570,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->with('_cache_instance_configurable_attributes')
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->resetConfigurableAttributes($product));
+        $this->assertSame($this->model, $this->model->resetConfigurableAttributes($product));
     }
 
     public function testHasOptions()
@@ -714,7 +714,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('getStoreLabel')->willReturn('attr_store_label');
         $attributeMock->expects($this->once())->method('getSourceModel')->willReturn(false);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getSelectedAttributesInfo($productMock),
             [
                 [
@@ -756,7 +756,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->assertEquals($this->model, $this->model->checkProductBuyState($productMock));
+        $this->assertSame($this->model, $this->model->checkProductBuyState($productMock));
     }
 
     /**
@@ -832,7 +832,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->attributeData[1]);
         $this->eavConfig->expects($this->any())->method('getAttribute')->willReturn($eavAttributeMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $usedProductMock,
             $this->model->getProductByAttributes($this->attributeData, $productMock)
         );
@@ -859,7 +859,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $firstItemMock->expects($this->once())->method('getId')->willReturn(3);
         $this->productRepository->expects($this->once())->method('getById')->with(3)->willReturn($firstItemMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $firstItemMock,
             $this->model->getProductByAttributes($this->attributeData, $productMock)
         );

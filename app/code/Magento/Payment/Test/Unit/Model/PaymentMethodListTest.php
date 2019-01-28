@@ -111,7 +111,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
             $this->paymentMethodList->getList($storeId)
         );
 
-        $this->assertEquals($expected, $codes);
+        $this->assertSame($expected, $codes);
     }
 
     /**
@@ -156,7 +156,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
             $this->paymentMethodList->getActiveList($storeId)
         );
 
-        $this->assertEquals($expected, $codes);
+        $this->assertSame($expected, $codes);
     }
 
     /**

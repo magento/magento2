@@ -31,6 +31,6 @@ class ListPerPageTest extends \PHPUnit\Framework\TestCase
             ['value' => 'options', 'label' => 'options'],
         ];
 
-        $this->assertEquals($expect, $this->model->toOptionArray());
+        $this->assertSame($expect, $this->model->toOptionArray());
     }
 }

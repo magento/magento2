@@ -99,8 +99,8 @@ class PageRepositoryTest extends WebapiAbstract
         $this->assertNotNull($page['id']);
 
         $pageData = $this->pageRepository->getById($page['id']);
-        $this->assertEquals($pageData->getTitle(), $pageTitle);
-        $this->assertEquals($pageData->getIdentifier(), $pageIdentifier);
+        $this->assertSame($pageData->getTitle(), $pageTitle);
+        $this->assertSame($pageData->getIdentifier(), $pageIdentifier);
     }
 
     /**
@@ -136,8 +136,8 @@ class PageRepositoryTest extends WebapiAbstract
         $this->assertNotNull($page['id']);
 
         $this->currentPage = $this->pageRepository->getById($page['id']);
-        $this->assertEquals($this->currentPage->getTitle(), $pageTitle);
-        $this->assertEquals($this->currentPage->getIdentifier(), $pageIdentifier);
+        $this->assertSame($this->currentPage->getTitle(), $pageTitle);
+        $this->assertSame($this->currentPage->getIdentifier(), $pageIdentifier);
     }
 
     /**
@@ -179,7 +179,7 @@ class PageRepositoryTest extends WebapiAbstract
         $this->assertNotNull($page['id']);
 
         $pageData = $this->pageRepository->getById($page['id']);
-        $this->assertEquals($pageData->getTitle(), $newPageTitle);
+        $this->assertSame($pageData->getTitle(), $newPageTitle);
     }
 
     /**
@@ -276,9 +276,9 @@ class PageRepositoryTest extends WebapiAbstract
         ];
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
-        $this->assertEquals(
+        $this->assertSame(2, $searchResult['total_count']);
+        $this->assertSame(1, count($searchResult['items']));
+        $this->assertSame(
             $searchResult['items'][0][PageInterface::IDENTIFIER],
             $cmsPages['third']->getIdentifier()
         );

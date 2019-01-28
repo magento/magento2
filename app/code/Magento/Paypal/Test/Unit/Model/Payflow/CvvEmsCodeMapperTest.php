@@ -49,7 +49,7 @@ class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getAdditionalInformation')
             ->willReturn([Info::PAYPAL_CVV2MATCH => $cvvCode]);
 
-        self::assertEquals($expected, $this->mapper->getCode($orderPayment));
+        self::assertSame($expected, $this->mapper->getCode($orderPayment));
     }
 
     /**

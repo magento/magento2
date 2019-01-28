@@ -72,7 +72,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIndexNameCatalogSearchFullText()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'indexName_product_1',
             $this->model->getIndexName($this->storeId, $this->indexId)
         );
@@ -83,7 +83,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIndexName()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'indexName_else_index_id_1',
             $this->model->getIndexName($this->storeId, 'else_index_id')
         );

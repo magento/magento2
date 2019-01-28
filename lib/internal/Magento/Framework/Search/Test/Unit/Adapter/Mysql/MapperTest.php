@@ -147,7 +147,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->mapper->buildQuery($this->request);
 
-        $this->assertEquals($select, $response);
+        $this->assertSame($select, $response);
     }
 
     public function testBuildFilterQuery()
@@ -171,7 +171,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->mapper->buildQuery($this->request);
 
-        $this->assertEquals($select, $response);
+        $this->assertSame($select, $response);
     }
 
     /**
@@ -221,7 +221,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
         $response = $this->mapper->buildQuery($this->request);
-        $this->assertEquals(end($selects), $response);
+        $this->assertSame(end($selects), $response);
     }
 
     /**

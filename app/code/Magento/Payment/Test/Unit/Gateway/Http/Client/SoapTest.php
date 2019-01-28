@@ -91,7 +91,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
             ->method('debug')
             ->with(['response' => $expectedResult]);
 
-        static::assertEquals(
+        static::assertSame(
             $expectedResult,
             $this->gatewayClient->placeRequest($transferObject)
         );

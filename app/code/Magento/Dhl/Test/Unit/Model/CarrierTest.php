@@ -202,8 +202,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             __DIR__ . '/_files/response_shipping_label.xml'
         );
         $result = $this->_invokePrepareShippingLabelContent($xml);
-        $this->assertEquals(1111, $result->getTrackingNumber());
-        $this->assertEquals(base64_decode('OutputImageContent'), $result->getShippingLabelContent());
+        $this->assertSame(1111, $result->getTrackingNumber());
+        $this->assertSame(base64_decode('OutputImageContent'), $result->getShippingLabelContent());
     }
 
     /**
@@ -482,7 +482,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDhlProducts(string $docType, array $products)
     {
-        $this->assertEquals($products, $this->model->getDhlProducts($docType));
+        $this->assertSame($products, $this->model->getDhlProducts($docType));
     }
 
     /**

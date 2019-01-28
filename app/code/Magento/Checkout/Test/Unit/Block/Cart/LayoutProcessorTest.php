@@ -139,6 +139,6 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($elements, 'checkoutProvider', 'shippingAddress', $layoutPointer)
             ->willReturn($layoutMergedPointer);
 
-        $this->assertEquals($layoutMerged, $this->layoutProcessor->process($layout));
+        $this->assertSame($layoutMerged, $this->layoutProcessor->process($layout));
     }
 }

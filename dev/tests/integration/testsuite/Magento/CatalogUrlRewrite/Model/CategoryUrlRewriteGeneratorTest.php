@@ -250,7 +250,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertResults($expected, $actual)
     {
-        $this->assertEquals(count($expected), count($actual), 'Number of rewrites does not match');
+        $this->assertSame(count($expected), count($actual), 'Number of rewrites does not match');
         foreach ($expected as $row) {
             $this->assertContains(
                 $row,

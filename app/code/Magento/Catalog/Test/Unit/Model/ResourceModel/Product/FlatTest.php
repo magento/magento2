@@ -56,7 +56,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
     {
         $store = $this->_model->setStoreId(1);
         $storeId = $store->getStoreId();
-        $this->assertEquals(1, $storeId);
+        $this->assertSame(1, $storeId);
     }
 
     public function testSetNotIntStoreId()
@@ -65,6 +65,6 @@ class FlatTest extends \PHPUnit\Framework\TestCase
 
         $store = $this->_model->setStoreId('test');
         $storeId = $store->getStoreId();
-        $this->assertEquals(0, $storeId);
+        $this->assertSame(0, $storeId);
     }
 }

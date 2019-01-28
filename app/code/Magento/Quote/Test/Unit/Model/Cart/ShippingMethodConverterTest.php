@@ -185,7 +185,7 @@ class ShippingMethodConverterTest extends \PHPUnit\Framework\TestCase
             ->with($price, true, $addressMock, $customerTaxClassId)
             ->willReturn($shippingPriceInclTax);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->shippingMethodMock,
             $this->converter->modelToDataObject($this->rateModelMock, 'USD')
         );

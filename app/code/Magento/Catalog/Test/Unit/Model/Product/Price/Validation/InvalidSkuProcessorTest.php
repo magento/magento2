@@ -81,7 +81,7 @@ class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
         $allowedPriceTypeValue = true;
         $this->prepareRetrieveInvalidSkuListMethod($productType, $productSku);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$methodParamSku, $productSku],
             $this->invalidSkuProcessor->retrieveInvalidSkuList($skus, $allowedProductTypes, $allowedPriceTypeValue)
         );

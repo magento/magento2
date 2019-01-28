@@ -85,13 +85,13 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             self::equalTo(['A total of 2 record(s) were updated.']),
             MessageInterface::TYPE_SUCCESS
         );
-        $this->assertEquals(
+        $this->assertSame(
             Subscriber::STATUS_SUBSCRIBED,
             $subscriberFactory->create()
                 ->loadByEmail('customer1@example.com')
                 ->getSubscriberStatus()
         );
-        $this->assertEquals(
+        $this->assertSame(
             Subscriber::STATUS_SUBSCRIBED,
             $subscriberFactory->create()
                 ->loadByEmail('customer2@example.com')

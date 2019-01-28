@@ -87,7 +87,7 @@ class InteractiveCollectorTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($questionMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'some/config/path1' => 'someValue',
                 'some/config/path2' => 'someValue',

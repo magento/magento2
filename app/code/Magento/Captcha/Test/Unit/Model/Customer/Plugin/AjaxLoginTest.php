@@ -126,7 +126,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ->with('user_login')
             ->will($this->returnValue($this->captchaMock));
 
-        $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
+        $this->assertSame('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**
@@ -163,7 +163,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
 
         $closure = function () {
         };
-        $this->assertEquals($this->resultJsonMock, $this->model->aroundExecute($this->loginControllerMock, $closure));
+        $this->assertSame($this->resultJsonMock, $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**
@@ -186,7 +186,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $closure = function () {
             return 'result';
         };
-        $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
+        $this->assertSame('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**

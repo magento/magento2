@@ -26,7 +26,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         );
         $expectedResult = "MATCH (title, description) AGAINST ('some searchable text' IN NATURAL LANGUAGE MODE)";
 
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -61,7 +61,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             Fulltext::FULLTEXT_MODE_NATURAL
         );
 
-        $this->assertEquals($select, $result);
+        $this->assertSame($select, $result);
     }
 
     /**

@@ -46,7 +46,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
 
-        $this->assertEquals([], $this->_webApiCall($this->getListServiceInfo($cartId), ["cartId" => $cartId]));
+        $this->assertSame([], $this->_webApiCall($this->getListServiceInfo($cartId), ["cartId" => $cartId]));
     }
 
     /**
@@ -69,7 +69,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $requestData = ["cartId" => $cartId];
 
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
-        $this->assertEquals($expectedData, $returnedRates);
+        $this->assertSame($expectedData, $returnedRates);
     }
 
     /**
@@ -120,7 +120,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
             ShippingMethodInterface::KEY_PRICE_INCL_TAX => $shippingMethod->getPriceInclTax(),
         ];
 
-        $this->assertEquals($expectedData, $result[0]);
+        $this->assertSame($expectedData, $result[0]);
     }
 
     /**

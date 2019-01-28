@@ -155,7 +155,7 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             ->with($resultExpectation)
             ->willReturnSelf();
 
-        $this->assertEquals($jsonMock, $this->controller->execute());
+        $this->assertSame($jsonMock, $this->controller->execute());
     }
 
     public function testExecuteTokenRequestException()
@@ -195,7 +195,7 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             ->with($resultExpectation)
             ->willReturnSelf();
 
-        $this->assertEquals($jsonMock, $this->controller->execute());
+        $this->assertSame($jsonMock, $this->controller->execute());
     }
 
     public function testExecuteEmptyQuoteError()
@@ -222,6 +222,6 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             ->with($resultExpectation)
             ->willReturnSelf();
 
-        $this->assertEquals($jsonMock, $this->controller->execute());
+        $this->assertSame($jsonMock, $this->controller->execute());
     }
 }

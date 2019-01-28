@@ -160,7 +160,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->oauthDataMock->expects($this->once())->method('getCleanupExpirationPeriod')->willReturn(30);
         $this->resourceMock->expects($this->once())->method('deleteOldEntries')->with(30);
 
-        $this->assertEquals($this->tokenModel, $this->tokenModel->afterSave());
+        $this->assertSame($this->tokenModel, $this->tokenModel->afterSave());
     }
 
     public function testAfterSaveNoCleanupProbability()
@@ -169,7 +169,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->oauthDataMock->expects($this->never())->method('getCleanupExpirationPeriod');
         $this->resourceMock->expects($this->never())->method('deleteOldEntries');
 
-        $this->assertEquals($this->tokenModel, $this->tokenModel->afterSave());
+        $this->assertSame($this->tokenModel, $this->tokenModel->afterSave());
     }
 
     public function testCreateVerifierToken()
@@ -187,7 +187,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->never())->method('isValid');
         $this->keyLengthFactoryMock->expects($this->never())->method('create');
         $this->resourceMock->expects($this->never())->method('save');
-        $this->assertEquals($this->tokenModel, $this->tokenModel->createVerifierToken($consumerId));
+        $this->assertSame($this->tokenModel, $this->tokenModel->createVerifierToken($consumerId));
     }
 
     public function testCreateVerifierTokenIfNoTokenId()
@@ -215,7 +215,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->validatorKeyLengthMock->expects($this->exactly(3))->method('setName');
         $this->validatorKeyLengthMock->expects($this->exactly(3))->method('isValid')->willReturn(true);
         $this->resourceMock->expects($this->once())->method('save');
-        $this->assertEquals($this->tokenModel, $this->tokenModel->createVerifierToken($consumerId));
+        $this->assertSame($this->tokenModel, $this->tokenModel->createVerifierToken($consumerId));
     }
 
     /**
@@ -239,10 +239,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('save');
 
         $result = $this->tokenModel->convertToAccess();
-        $this->assertEquals($this->tokenModel, $result);
-        $this->assertEquals($token, $result->getToken());
-        $this->assertEquals($secret, $result->getSecret());
-        $this->assertEquals(UserContextInterface::USER_TYPE_INTEGRATION, $result->getUserType());
+        $this->assertSame($this->tokenModel, $result);
+        $this->assertSame($token, $result->getToken());
+        $this->assertSame($secret, $result->getSecret());
+        $this->assertSame(UserContextInterface::USER_TYPE_INTEGRATION, $result->getUserType());
     }
 
     public function testCreateAdminToken()
@@ -256,11 +256,11 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('save');
 
         $result = $this->tokenModel->createAdminToken($userId);
-        $this->assertEquals($this->tokenModel, $result);
-        $this->assertEquals($token, $result->getToken());
-        $this->assertEquals($secret, $result->getSecret());
-        $this->assertEquals($userId, $result->getAdminId());
-        $this->assertEquals(UserContextInterface::USER_TYPE_ADMIN, $result->getUserType());
+        $this->assertSame($this->tokenModel, $result);
+        $this->assertSame($token, $result->getToken());
+        $this->assertSame($secret, $result->getSecret());
+        $this->assertSame($userId, $result->getAdminId());
+        $this->assertSame(UserContextInterface::USER_TYPE_ADMIN, $result->getUserType());
     }
 
     public function testCreateCustomerToken()
@@ -274,12 +274,12 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('save');
 
         $result = $this->tokenModel->createCustomerToken($userId);
-        $this->assertEquals($this->tokenModel, $result);
-        $this->assertEquals($token, $result->getToken());
-        $this->assertEquals($secret, $result->getSecret());
-        $this->assertEquals($userId, $result->getCustomerId());
-        $this->assertNotEquals($userId, $result->getAdminId());
-        $this->assertEquals(UserContextInterface::USER_TYPE_CUSTOMER, $result->getUserType());
+        $this->assertSame($this->tokenModel, $result);
+        $this->assertSame($token, $result->getToken());
+        $this->assertSame($secret, $result->getSecret());
+        $this->assertSame($userId, $result->getCustomerId());
+        $this->assertNotSame($userId, $result->getAdminId());
+        $this->assertSame(UserContextInterface::USER_TYPE_CUSTOMER, $result->getUserType());
     }
 
     public function testCreateRequestToken()
@@ -302,9 +302,9 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('save');
 
         $actualToken = $this->tokenModel->createRequestToken($entityId, $callbackUrl);
-        $this->assertEquals($this->tokenModel, $actualToken);
-        $this->assertEquals($this->tokenModel->getSecret(), $actualToken->getSecret());
-        $this->assertEquals($this->tokenModel->getToken(), $actualToken->getToken());
+        $this->assertSame($this->tokenModel, $actualToken);
+        $this->assertSame($this->tokenModel->getSecret(), $actualToken->getSecret());
+        $this->assertSame($this->tokenModel->getToken(), $actualToken->getToken());
     }
 
     public function testToString()
@@ -315,19 +315,19 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
         $this->tokenModel->setToken($token)->setSecret($secret);
 
-        $this->assertEquals($expectedResponse, sprintf($this->tokenModel));
+        $this->assertSame($expectedResponse, sprintf($this->tokenModel));
     }
 
     public function testBeforeSave()
     {
-        $this->assertEquals($this->tokenModel, $this->tokenModel->beforeSave());
+        $this->assertSame($this->tokenModel, $this->tokenModel->beforeSave());
     }
 
     public function testGetVerifier()
     {
         $verifier = 'testVerifier';
         $this->tokenModel->setData('verifier', $verifier);
-        $this->assertEquals($verifier, $this->tokenModel->getVerifier());
+        $this->assertSame($verifier, $this->tokenModel->getVerifier());
     }
 
     public function testLoadByConsumerIdAndUserType()
@@ -339,8 +339,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->once())->method('selectTokenByConsumerIdAndUserType')->willReturn($data);
         $actualToken = $this->tokenModel->loadByConsumerIdAndUserType($consumerId, $userType);
-        $this->assertEquals($this->tokenModel, $actualToken);
-        $this->assertEquals($tokenData, $actualToken->getToken());
+        $this->assertSame($this->tokenModel, $actualToken);
+        $this->assertSame($tokenData, $actualToken->getToken());
     }
 
     public function testLoadByAdminId()
@@ -351,8 +351,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->once())->method('selectTokenByAdminId')->willReturn($data);
         $actualToken = $this->tokenModel->loadByAdminId($adminId);
-        $this->assertEquals($this->tokenModel, $actualToken);
-        $this->assertEquals($tokenData, $actualToken->getToken());
+        $this->assertSame($this->tokenModel, $actualToken);
+        $this->assertSame($tokenData, $actualToken->getToken());
     }
 
     public function testLoadByCustomerId()
@@ -363,8 +363,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->once())->method('selectTokenByCustomerId')->willReturn($data);
         $actualToken = $this->tokenModel->loadByCustomerId($customerId);
-        $this->assertEquals($this->tokenModel, $actualToken);
-        $this->assertEquals($tokenData, $actualToken->getToken());
+        $this->assertSame($this->tokenModel, $actualToken);
+        $this->assertSame($tokenData, $actualToken->getToken());
     }
 
     public function testLoad()
@@ -373,7 +373,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->once())->method('load');
         $actualToken = $this->tokenModel->loadByToken($token);
-        $this->assertEquals($this->tokenModel, $actualToken);
+        $this->assertSame($this->tokenModel, $actualToken);
     }
 
     public function testValidateIfNotCallbackEstablishedAndNotValid()

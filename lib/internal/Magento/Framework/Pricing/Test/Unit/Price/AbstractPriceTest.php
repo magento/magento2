@@ -77,7 +77,7 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getAmount')
             ->with($this->equalTo($priceValue))
             ->will($this->returnValue($amountValue));
-        $this->assertEquals($amountValue, $this->price->getAmount());
+        $this->assertSame($amountValue, $this->price->getAmount());
     }
 
     /**
@@ -85,7 +85,7 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPriceCode()
     {
-        $this->assertEquals(AbstractPrice::PRICE_CODE, $this->price->getPriceCode());
+        $this->assertSame(AbstractPrice::PRICE_CODE, $this->price->getPriceCode());
     }
 
     public function testGetCustomAmount()
@@ -104,7 +104,7 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
             ->with($convertedValue, $this->saleableItemMock, $exclude)
             ->will($this->returnValue($customAmount));
 
-        $this->assertEquals($customAmount, $this->price->getCustomAmount($amount, $exclude));
+        $this->assertSame($customAmount, $this->price->getCustomAmount($amount, $exclude));
     }
 
     public function testGetCustomAmountDefault()
@@ -115,11 +115,11 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
             ->with($this->price->getValue(), $this->saleableItemMock, null)
             ->will($this->returnValue($customAmount));
 
-        $this->assertEquals($customAmount, $this->price->getCustomAmount());
+        $this->assertSame($customAmount, $this->price->getCustomAmount());
     }
 
     public function testGetQuantity()
     {
-        $this->assertEquals(1, $this->price->getQuantity());
+        $this->assertSame(1, $this->price->getQuantity());
     }
 }

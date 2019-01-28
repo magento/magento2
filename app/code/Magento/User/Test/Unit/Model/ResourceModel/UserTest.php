@@ -132,7 +132,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchRow')->willReturn($returnData);
 
-        $this->assertEquals($returnData, $this->model->loadByUsername('user1'));
+        $this->assertSame($returnData, $this->model->loadByUsername('user1'));
     }
 
     public function testHasAssigned2Role()
@@ -145,7 +145,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchAll')->willReturn($returnData);
 
-        $this->assertEquals($returnData, $this->model->hasAssigned2Role($uid));
+        $this->assertSame($returnData, $this->model->hasAssigned2Role($uid));
         $this->assertNull($this->model->hasAssigned2Role(0));
     }
 
@@ -164,7 +164,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchAll')->willReturn($returnData);
 
-        $this->assertEquals($returnData, $this->model->hasAssigned2Role($methodUserMock));
+        $this->assertSame($returnData, $this->model->hasAssigned2Role($methodUserMock));
     }
 
     public function testClearUserRoles()
@@ -189,7 +189,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRolesEmptyId()
     {
-        $this->assertEquals([], $this->model->getRoles($this->userMock));
+        $this->assertSame([], $this->model->getRoles($this->userMock));
     }
 
     public function testGetRolesReturnFilledArray()
@@ -202,7 +202,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn([1, 2, 3]);
-        $this->assertEquals([1, 2, 3], $this->model->getRoles($this->userMock));
+        $this->assertSame([1, 2, 3], $this->model->getRoles($this->userMock));
     }
 
     public function testGetRolesFetchRowFailure()
@@ -215,7 +215,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn(false);
-        $this->assertEquals([], $this->model->getRoles($this->userMock));
+        $this->assertSame([], $this->model->getRoles($this->userMock));
     }
 
     public function testSaveExtraEmptyId()
@@ -245,7 +245,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchOne')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->countAll());
+        $this->assertSame($returnData, $this->model->countAll());
     }
 
     public function testUpdateRoleUsersAclWithUsers()
@@ -278,7 +278,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $returnData = 5;
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->unlock($inputData));
+        $this->assertSame($returnData, $this->model->unlock($inputData));
     }
 
     public function testUnlockWithInteger()
@@ -287,7 +287,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $returnData = 5;
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->unlock($inputData));
+        $this->assertSame($returnData, $this->model->unlock($inputData));
     }
 
     public function testLock()
@@ -296,7 +296,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $returnData = 5;
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->lock($inputData, 1, 1));
+        $this->assertSame($returnData, $this->model->lock($inputData, 1, 1));
     }
 
     public function testLockWithInteger()
@@ -305,7 +305,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $returnData = 5;
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->lock($inputData, 1, 1));
+        $this->assertSame($returnData, $this->model->lock($inputData, 1, 1));
     }
 
     public function testGetOldPassword()
@@ -317,7 +317,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('order')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->atLeastOnce())->method('fetchCol')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->getOldPasswords($this->userMock));
+        $this->assertSame($returnData, $this->model->getOldPasswords($this->userMock));
     }
 
     public function testDeleteFromRole()
@@ -356,8 +356,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn($returnData);
 
-        $this->assertEquals($returnData, $this->model->roleUserExists($methodUserMock));
-        $this->assertEquals([], $this->model->roleUserExists($this->userMock));
+        $this->assertSame($returnData, $this->model->roleUserExists($methodUserMock));
+        $this->assertSame([], $this->model->roleUserExists($this->userMock));
     }
 
     public function testGetValidationBeforeSave()
@@ -391,7 +391,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('order')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('limit')->willReturn($this->selectMock);
-        $this->assertEquals($returnData, $this->model->getLatestPassword($uid));
+        $this->assertSame($returnData, $this->model->getLatestPassword($uid));
     }
 
     public function testInitUniqueFields()

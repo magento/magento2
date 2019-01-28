@@ -196,10 +196,10 @@ class FlatrateTest extends \PHPUnit\Framework\TestCase
 
         $returnResult = $this->model->collectRates($request);
 
-        $this->assertEquals($expectedPrice, $returnPrice);
-        $this->assertEquals($expectedPrice, $returnCost);
-        $this->assertEquals($method, $returnMethod);
-        $this->assertEquals($result, $returnResult);
+        $this->assertSame($expectedPrice, $returnPrice);
+        $this->assertSame($expectedPrice, $returnCost);
+        $this->assertSame($method, $returnMethod);
+        $this->assertSame($result, $returnResult);
     }
 
     /**

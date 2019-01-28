@@ -89,13 +89,13 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with product link is invalid'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 'Product:',
                 $productLinkBlock->getLabel(),
                 'Child block with product link has invalid item label'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expected['product_link']['name'],
                 $productLinkBlock->getItemName(),
                 'Child block with product link has invalid item name'
@@ -120,13 +120,13 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with category link is invalid'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 'Category:',
                 $categoryLinkBlock->getLabel(),
                 'Child block with category link has invalid item label'
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 $expected['category_link']['name'],
                 $categoryLinkBlock->getItemName(),
                 'Child block with category link has invalid item name'
@@ -155,7 +155,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getProduct()->getId()) {
-                    $this->assertEquals(
+                    $this->assertSame(
                         1,
                         \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                             '//button[contains(@class, "back") and contains(@onclick, "/product")]',
@@ -164,7 +164,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                         'Back button is not present in product URL rewrite edit block'
                     );
                 } else {
-                    $this->assertEquals(
+                    $this->assertSame(
                         1,
                         \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                             '//button[contains(@class,"back")]',
@@ -174,7 +174,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                     );
                 }
             } else {
-                $this->assertEquals(
+                $this->assertSame(
                     0,
                     \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                         '//button[contains(@class,"back")]',
@@ -186,7 +186,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['save_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"save")]',
@@ -195,7 +195,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Save button is not present in product URL rewrite edit block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"save")]',
@@ -206,7 +206,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['reset_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[@title="Reset"]',
@@ -215,7 +215,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Reset button is not present in product URL rewrite edit block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[@title="Reset"]',
@@ -226,7 +226,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($expected['delete_button']) {
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"delete")]',
@@ -235,7 +235,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Delete button is not present in product URL rewrite edit block'
             );
         } else {
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                     '//button[contains(@class,"delete")]',

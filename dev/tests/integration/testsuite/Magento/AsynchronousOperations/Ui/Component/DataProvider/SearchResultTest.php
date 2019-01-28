@@ -29,6 +29,6 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
         $searchResult = $objectManager->create(
             \Magento\AsynchronousOperations\Ui\Component\DataProvider\SearchResult::class
         );
-        $this->assertEquals(5, $searchResult->getTotalCount());
+        $this->assertSame(5, $searchResult->getTotalCount());
     }
 }

@@ -43,7 +43,7 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
         );
 
         $link->setPath($path);
-        $this->assertEquals($url, $link->getHref());
+        $this->assertSame($url, $link->getHref());
     }
 
     public function testIsCurrentIfIsset()

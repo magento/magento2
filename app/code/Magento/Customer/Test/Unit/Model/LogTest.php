@@ -50,7 +50,7 @@ class LogTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerId()
     {
-        $this->assertEquals($this->logData['customer_id'], $this->log->getCustomerId());
+        $this->assertSame($this->logData['customer_id'], $this->log->getCustomerId());
     }
 
     /**
@@ -58,7 +58,7 @@ class LogTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLastLoginAt()
     {
-        $this->assertEquals($this->logData['last_login_at'], $this->log->getLastLoginAt());
+        $this->assertSame($this->logData['last_login_at'], $this->log->getLastLoginAt());
     }
 
     /**
@@ -66,7 +66,7 @@ class LogTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLastVisitAt()
     {
-        $this->assertEquals($this->logData['last_visit_at'], $this->log->getLastVisitAt());
+        $this->assertSame($this->logData['last_visit_at'], $this->log->getLastVisitAt());
     }
 
     /**
@@ -74,6 +74,6 @@ class LogTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLastLogoutAt()
     {
-        $this->assertEquals($this->logData['last_logout_at'], $this->log->getLastLogoutAt());
+        $this->assertSame($this->logData['last_logout_at'], $this->log->getLastLogoutAt());
     }
 }

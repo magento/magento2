@@ -155,7 +155,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'not_empty'
         ];
 
-        $this->assertEquals($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
+        $this->assertSame($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
     }
 
     /**
@@ -253,7 +253,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'id' => $newDirectoryName,
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot)
         );
@@ -322,7 +322,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryWrite->expects($this->any())->method('isDirectory')->will($this->returnValue(true));
 
-        $this->assertEquals($dirs, $this->_storageModel->getDirsCollection($this->_storageRoot));
+        $this->assertSame($dirs, $this->_storageModel->getDirsCollection($this->_storageRoot));
     }
 
     /**
@@ -376,8 +376,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $result = $this->_storageModel->getFilesCollection();
 
         $this->assertCount(2, $result);
-        $this->assertEquals('font1.ttf', $result[0]['text']);
-        $this->assertEquals('font2.ttf', $result[1]['text']);
+        $this->assertSame('font1.ttf', $result[0]['text']);
+        $this->assertSame('font2.ttf', $result[1]['text']);
     }
 
     /**
@@ -420,8 +420,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $result = $this->_storageModel->getFilesCollection();
 
         $this->assertCount(1, $result);
-        $this->assertEquals('picture1.jpg', $result[0]['text']);
-        $this->assertEquals('picture1.jpg', $result[0]['thumbnailParams']['file']);
+        $this->assertSame('picture1.jpg', $result[0]['text']);
+        $this->assertSame('picture1.jpg', $result[0]['thumbnailParams']['file']);
     }
 
     /**
@@ -464,7 +464,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_helperStorage->expects($this->any())->method('convertPathToId')->will($this->returnArgument(0));
 
         $result = $this->_storageModel->getTreeArray();
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

@@ -90,13 +90,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStore()
     {
-        $this->assertEquals($this->storeMock, $this->model->getStore());
+        $this->assertSame($this->storeMock, $this->model->getStore());
     }
 
     public function testSetStore()
     {
         $this->model->setStore($this->storeMock);
-        $this->assertEquals($this->storeMock, $this->model->getStore());
+        $this->assertSame($this->storeMock, $this->model->getStore());
     }
 
     public function testGetFormats()
@@ -142,6 +142,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
         $expectedResult = [$firstExpected, $secondExpected];
 
-        $this->assertEquals($expectedResult, $this->model->getFormats());
+        $this->assertSame($expectedResult, $this->model->getFormats());
     }
 }

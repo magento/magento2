@@ -63,7 +63,7 @@ class ElementTest extends \PHPUnit\Framework\TestCase
 </root>
 
 XML;
-        $this->assertEquals($expected, $xml->asNiceXml());
+        $this->assertSame($expected, $xml->asNiceXml());
     }
 
     public function testAppendChild()
@@ -90,7 +90,7 @@ XML;
         $this->assertEmpty($xml->xpath('/root/node1/node2'));
         $xml->setNode($path, $value);
         $this->assertNotEmpty($xml->xpath('/root/node1/node2'));
-        $this->assertEquals($value, (string)$xml->xpath('/root/node1/node2')[0]);
+        $this->assertSame($value, (string)$xml->xpath('/root/node1/node2')[0]);
     }
 
     /**
@@ -102,10 +102,10 @@ XML;
     {
         /** @var \Magento\Framework\Simplexml\Element $xml */
         $xml = simplexml_load_string('<root name="test2" data=""/>', \Magento\Framework\Simplexml\Element::class);
-        $this->assertEquals($xml->getAttribute('name'), 'test2');
+        $this->assertSame($xml->getAttribute('name'), 'test2');
         $this->assertNull($xml->getAttribute('new'));
         $xml->setAttribute($name, $value);
-        $this->assertEquals($xml->getAttribute($name), $value);
+        $this->assertSame($xml->getAttribute($name), $value);
     }
 
     /**

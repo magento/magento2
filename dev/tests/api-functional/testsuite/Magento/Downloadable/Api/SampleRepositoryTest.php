@@ -143,10 +143,10 @@ class SampleRepositoryTest extends WebapiAbstract
         $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
         $this->assertNotNull($sample);
         $this->assertNotNull($sample->getId());
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['title'], $globalScopeSample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
+        $this->assertSame($requestData['sample']['title'], $sample->getTitle());
+        $this->assertSame($requestData['sample']['title'], $globalScopeSample->getTitle());
+        $this->assertSame($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertSame($requestData['sample']['sample_type'], $sample->getSampleType());
         $this->assertStringEndsWith('.jpg', $sample->getSampleFile());
         $this->assertNull($sample->getSampleUrl());
     }
@@ -171,10 +171,10 @@ class SampleRepositoryTest extends WebapiAbstract
         $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
         $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $newSampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
+        $this->assertSame($requestData['sample']['title'], $sample->getTitle());
+        $this->assertSame($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertSame($requestData['sample']['sample_url'], $sample->getSampleUrl());
+        $this->assertSame($requestData['sample']['sample_type'], $sample->getSampleType());
         $this->assertEmpty($globalScopeSample->getTitle());
     }
 
@@ -197,10 +197,10 @@ class SampleRepositoryTest extends WebapiAbstract
         $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
         $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
+        $this->assertSame($requestData['sample']['title'], $sample->getTitle());
+        $this->assertSame($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertSame($requestData['sample']['sample_type'], $sample->getSampleType());
+        $this->assertSame($requestData['sample']['sample_url'], $sample->getSampleUrl());
     }
 
     /**
@@ -383,12 +383,12 @@ class SampleRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertEquals($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertSame($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $sample = $this->getTargetSample($this->getTargetProduct(), $sampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['id'], $sample->getId());
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertSame($requestData['sample']['id'], $sample->getId());
+        $this->assertSame($requestData['sample']['title'], $sample->getTitle());
+        $this->assertSame($requestData['sample']['sort_order'], $sample->getSortOrder());
     }
 
     /**
@@ -411,14 +411,14 @@ class SampleRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertEquals($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertSame($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $sample = $this->getTargetSample($this->getTargetProduct(), $sampleId);
         $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $sampleId);
         $this->assertNotNull($sample);
         // Title was set on store view level in fixture so it must be the same
-        $this->assertEquals($originalSample->getTitle(), $sample->getTitle());
-        $this->assertEquals($requestData['sample']['title'], $globalScopeSample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertSame($originalSample->getTitle(), $sample->getTitle());
+        $this->assertSame($requestData['sample']['title'], $globalScopeSample->getTitle());
+        $this->assertSame($requestData['sample']['sort_order'], $sample->getSortOrder());
     }
 
     /**
@@ -544,11 +544,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
         $list = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(1, count($list));
+        $this->assertSame(1, count($list));
 
         $link = reset($list);
         foreach ($expectations['fields'] as $index => $value) {
-            $this->assertEquals($value, $link[$index]);
+            $this->assertSame($value, $link[$index]);
         }
         $this->assertNotEmpty($link['sample_file']);
     }

@@ -19,6 +19,6 @@ class HttpsTest extends \PHPUnit\Framework\TestCase
 
     public function testFileOpen()
     {
-        $this->assertEquals(self::$fSockOpen, (new Https())->fileOpen('example.com', 'r'));
+        $this->assertSame(self::$fSockOpen, (new Https())->fileOpen('example.com', 'r'));
     }
 }

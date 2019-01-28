@@ -83,7 +83,7 @@ class BatchIndexTest extends \PHPUnit\Framework\TestCase
 
         foreach ([0, 1] as $customerGroupId) {
             foreach ($productIds as $productId) {
-                $this->assertEquals(
+                $this->assertSame(
                     $expectedPrice,
                     $this->resourceRule->getRulePrice(new \DateTime(), 1, $customerGroupId, $productId)
                 );

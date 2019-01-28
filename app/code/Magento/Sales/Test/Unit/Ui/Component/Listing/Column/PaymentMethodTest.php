@@ -64,6 +64,6 @@ class PaymentMethodTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setData('name', $itemName);
         $dataSource = $this->model->prepareDataSource($dataSource);
-        $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+        $this->assertSame($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

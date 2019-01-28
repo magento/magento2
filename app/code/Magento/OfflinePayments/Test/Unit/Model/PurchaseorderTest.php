@@ -56,7 +56,7 @@ class PurchaseorderTest extends \PHPUnit\Framework\TestCase
         $instance = $this->createMock(PaymentInfo::class);
         $this->_object->setData('info_instance', $instance);
         $result = $this->_object->assignData($data);
-        $this->assertEquals($result, $this->_object);
+        $this->assertSame($result, $this->_object);
     }
 
     /**

@@ -28,7 +28,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
     {
         $row = new \Magento\Framework\DataObject();
         $row->setTemplateSenderName('Sender Name');
-        $this->assertEquals('Sender Name ', $this->sender->render($row));
+        $this->assertSame('Sender Name ', $this->sender->render($row));
     }
 
     /**
@@ -38,7 +38,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
     {
         $row = new \Magento\Framework\DataObject();
         $row->setTemplateSenderEmail('Sender Email');
-        $this->assertEquals('[Sender Email]', $this->sender->render($row));
+        $this->assertSame('[Sender Email]', $this->sender->render($row));
     }
 
     /**
@@ -49,7 +49,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
         $row = new \Magento\Framework\DataObject();
         $row->setTemplateSenderName('Sender Name');
         $row->setTemplateSenderEmail('Sender Email');
-        $this->assertEquals('Sender Name [Sender Email]', $this->sender->render($row));
+        $this->assertSame('Sender Name [Sender Email]', $this->sender->render($row));
     }
 
     /**
@@ -58,6 +58,6 @@ class SenderTest extends \PHPUnit\Framework\TestCase
     public function testRenderEmpty()
     {
         $row = new \Magento\Framework\DataObject();
-        $this->assertEquals('---', $this->sender->render($row));
+        $this->assertSame('---', $this->sender->render($row));
     }
 }

@@ -24,7 +24,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $result = $model->isIncludedInBasePrice();
         // Check expectations
         $this->assertInternalType('bool', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -86,7 +86,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $result = $model->isIncludedInDisplayPrice();
         // Check expectations
         $this->assertInternalType('bool', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

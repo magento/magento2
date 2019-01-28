@@ -127,7 +127,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         $this->model->setMethod($methodName);
-        $this->assertEquals($expected, $this->model->isMethodAvailable($methodName));
+        $this->assertSame($expected, $this->model->isMethodAvailable($methodName));
     }
 
     public function testGetMerchantCountryPaypal()
@@ -143,7 +143,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->directoryHelper->expects(static::never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('US', $this->model->getMerchantCountry());
+        static::assertSame('US', $this->model->getMerchantCountry());
     }
 
     public function testGetMerchantCountryGeneral()
@@ -161,7 +161,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with(null)
             ->willReturn('US');
 
-        static::assertEquals('US', $this->model->getMerchantCountry());
+        static::assertSame('US', $this->model->getMerchantCountry());
     }
 
     /**
@@ -194,7 +194,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_EXPRESS . '/allow_ba_signup')
             ->will($this->returnValue(1));
-        $this->assertEquals(1, $this->model->getValue('allow_ba_signup'));
+        $this->assertSame(1, $this->model->getValue('allow_ba_signup'));
     }
 
     public function testGetSpecificConfigPathPayflow()
@@ -205,7 +205,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_PE_EXPRESS . '/allow_ba_signup')
             ->will($this->returnValue(1));
-        $this->assertEquals(1, $this->model->getValue('allow_ba_signup'));
+        $this->assertSame(1, $this->model->getValue('allow_ba_signup'));
     }
 
     public function testGetSpecificConfigPathPayflowAdvancedLink()
@@ -216,7 +216,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/' . Config::METHOD_PAYFLOWADVANCED . '/payment_action')
             ->willReturn('Authorization');
-        $this->assertEquals('Authorization', $this->model->getValue('payment_action'));
+        $this->assertSame('Authorization', $this->model->getValue('payment_action'));
     }
 
     /**
@@ -228,7 +228,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/paypal_express/skip_order_review_step')
             ->will($this->returnValue($value));
-        $this->assertEquals($url, $this->model->getPayPalBasicStartUrl('token'));
+        $this->assertSame($url, $this->model->getPayPalBasicStartUrl('token'));
     }
 
     /**
@@ -245,7 +245,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetExpressCheckoutOrderUrl()
     {
         $url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&order_id=orderId';
-        $this->assertEquals($url, $this->model->getExpressCheckoutOrderUrl('orderId'));
+        $this->assertSame($url, $this->model->getExpressCheckoutOrderUrl('orderId'));
     }
 
     public function testGetBmlPublisherId()
@@ -254,7 +254,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/publisher_id')
             ->will($this->returnValue('12345'));
-        $this->assertEquals('12345', $this->model->getBmlPublisherId());
+        $this->assertSame('12345', $this->model->getBmlPublisherId());
     }
 
     /**
@@ -266,7 +266,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/' . $section . '_position')
             ->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->model->getBmlPosition($section));
+        $this->assertSame($expected, $this->model->getBmlPosition($section));
     }
 
     /**
@@ -289,7 +289,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/' . $section . '_size')
             ->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->model->getBmlSize($section));
+        $this->assertSame($expected, $this->model->getBmlSize($section));
     }
 
     /**
@@ -323,7 +323,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ['payment/' . Config::METHOD_WPP_BML . '/active', 'store', 1, $expectedValue],
                 ['payment/' . Config::METHOD_WPP_PE_BML . '/active', 'store', 1, $expectedValue],
             ]));
-        $this->assertEquals($expected, $this->model->getBmlDisplay($section));
+        $this->assertSame($expected, $this->model->getBmlDisplay($section));
     }
 
     /**
@@ -369,7 +369,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ['paypal/wpp/button_type', ScopeInterface::SCOPE_STORE, 123, $buttonType],
             ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->model->getExpressCheckoutShortcutImageUrl($localeCode, $orderTotal, $pal)
         );
@@ -436,7 +436,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ['paypal/wpp/sandbox_flag', ScopeInterface::SCOPE_STORE, 123, $sandboxFlag],
             ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $result,
             $this->model->getPaymentMarkImageUrl($localeCode, $orderTotal, $pal, $staticSize)
         );

@@ -168,7 +168,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     {
         $this->processAttributeGetter($dbAttributes);
         $actualAttributes = $this->links->getAttributes();
-        $this->assertEquals($returnedAttributes, $actualAttributes);
+        $this->assertSame($returnedAttributes, $actualAttributes);
     }
 
     /**

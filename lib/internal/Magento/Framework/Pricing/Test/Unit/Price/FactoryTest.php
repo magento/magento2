@@ -49,7 +49,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->with($className, $argumentsResult)
             ->will($this->returnValue($priceMock));
 
-        $this->assertEquals($priceMock, $this->model->create($saleableItem, $className, $quantity, $arguments));
+        $this->assertSame($priceMock, $this->model->create($saleableItem, $className, $quantity, $arguments));
     }
 
     /**

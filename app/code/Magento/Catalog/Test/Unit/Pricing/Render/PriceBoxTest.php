@@ -52,7 +52,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->object->jsonEncode($expectedValue);
 
-        $this->assertEquals($expectedValue, $result);
+        $this->assertSame($expectedValue, $result);
     }
 
     public function testGetRandomString()
@@ -67,7 +67,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->object->getRandomString($expectedValue);
 
-        $this->assertEquals($expectedTestValue, $result);
+        $this->assertSame($expectedTestValue, $result);
     }
 
     /**
@@ -85,7 +85,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeId')
             ->will($this->returnValue($typeCode));
 
-        $this->assertEquals($expected, $this->object->getCanDisplayQty($product));
+        $this->assertSame($expected, $this->object->getCanDisplayQty($product));
     }
 
     /**

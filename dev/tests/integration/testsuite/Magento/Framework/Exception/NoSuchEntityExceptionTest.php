@@ -12,9 +12,9 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $exception = new NoSuchEntityException();
-        $this->assertEquals('No such entity.', $exception->getRawMessage());
-        $this->assertEquals('No such entity.', $exception->getMessage());
-        $this->assertEquals('No such entity.', $exception->getLogMessage());
+        $this->assertSame('No such entity.', $exception->getRawMessage());
+        $this->assertSame('No such entity.', $exception->getMessage());
+        $this->assertSame('No such entity.', $exception->getLogMessage());
 
         $exception = new NoSuchEntityException(
             new Phrase(
@@ -22,9 +22,9 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
                 ['fieldName' => 'field', 'fieldValue' => 'value']
             )
         );
-        $this->assertEquals('No such entity with field = value', $exception->getMessage());
-        $this->assertEquals('No such entity with %fieldName = %fieldValue', $exception->getRawMessage());
-        $this->assertEquals('No such entity with field = value', $exception->getLogMessage());
+        $this->assertSame('No such entity with field = value', $exception->getMessage());
+        $this->assertSame('No such entity with %fieldName = %fieldValue', $exception->getRawMessage());
+        $this->assertSame('No such entity with field = value', $exception->getLogMessage());
 
         $exception = new NoSuchEntityException(
             new Phrase(
@@ -37,11 +37,11 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
             $exception->getRawMessage()
         );
-        $this->assertEquals('No such entity with field1 = value1, field2 = value2', $exception->getMessage());
-        $this->assertEquals('No such entity with field1 = value1, field2 = value2', $exception->getLogMessage());
+        $this->assertSame('No such entity with field1 = value1, field2 = value2', $exception->getMessage());
+        $this->assertSame('No such entity with field1 = value1, field2 = value2', $exception->getLogMessage());
     }
 }

@@ -60,7 +60,7 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
             $handlers
         );
 
-        $this->assertEquals($indexerMock, $this->model->create($data));
+        $this->assertSame($indexerMock, $this->model->create($data));
     }
 
     /**

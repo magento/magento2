@@ -218,11 +218,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     {
         $this->_populateSampleStructure();
         $this->assertFalse($this->_structure->getAttribute('two', 'non-existing'));
-        $this->assertEquals('bar', $this->_structure->getAttribute('two', 'foo'));
+        $this->assertSame('bar', $this->_structure->getAttribute('two', 'foo'));
         $value = uniqid();
         $this->_structure->setAttribute('two', 'non-existing', $value)->setAttribute('two', 'foo', $value);
-        $this->assertEquals($value, $this->_structure->getAttribute('two', 'non-existing'));
-        $this->assertEquals($value, $this->_structure->getAttribute('two', 'foo'));
+        $this->assertSame($value, $this->_structure->getAttribute('two', 'non-existing'));
+        $this->assertSame($value, $this->_structure->getAttribute('two', 'foo'));
     }
 
     /**
@@ -280,11 +280,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_structure->getElement('four.5'));
         $this->assertSame($this->_structure, $this->_structure->renameElement('four', 'four.5'));
         $this->assertSame($element, $this->_structure->getElement('four.5'));
-        $this->assertEquals(
+        $this->assertSame(
             'four.5',
             $this->_structure->getAttribute('two', \Magento\Framework\Data\Structure::PARENT)
         );
-        $this->assertEquals(
+        $this->assertSame(
             'four.5',
             $this->_structure->getAttribute('three', \Magento\Framework\Data\Structure::PARENT)
         );
@@ -307,14 +307,14 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
         // default alias
         $this->_structure->setAsChild('two', 'one');
-        $this->assertEquals('one', $this->_structure->getParentId('two'));
-        $this->assertEquals(['two' => 'two'], $this->_structure->getChildren('one'));
-        $this->assertEquals(['three' => 'th'], $this->_structure->getChildren('four'));
+        $this->assertSame('one', $this->_structure->getParentId('two'));
+        $this->assertSame(['two' => 'two'], $this->_structure->getChildren('one'));
+        $this->assertSame(['three' => 'th'], $this->_structure->getChildren('four'));
 
         // specified alias
         $this->_structure->setAsChild('six', 'three', 's');
-        $this->assertEquals('three', $this->_structure->getParentId('six'));
-        $this->assertEquals(['six' => 's'], $this->_structure->getChildren('three'));
+        $this->assertSame('three', $this->_structure->getParentId('six'));
+        $this->assertSame(['six' => 's'], $this->_structure->getChildren('three'));
     }
 
     /**
@@ -534,7 +534,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     {
         $this->_populateSampleStructure();
         $this->assertFalse($this->_structure->getChildId('nonexisting-parent', 'does not matter'));
-        $this->assertEquals('five', $this->_structure->getChildId('six', 'f'));
+        $this->assertSame('five', $this->_structure->getChildId('six', 'f'));
     }
 
     /**
@@ -554,12 +554,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], $this->_structure->getChildren('nonexisting'));
 
         // getParentId()
-        $this->assertEquals('one', $this->_structure->getParentId('two'));
+        $this->assertSame('one', $this->_structure->getParentId('two'));
         $this->assertFalse($this->_structure->getParentId('nonexistent'));
 
         // getChildAlias()
-        $this->assertEquals('two', $this->_structure->getChildAlias('one', 'two'));
-        $this->assertEquals('th', $this->_structure->getChildAlias('one', 'three'));
+        $this->assertSame('two', $this->_structure->getChildAlias('one', 'two'));
+        $this->assertSame('th', $this->_structure->getChildAlias('one', 'three'));
         $this->assertFalse($this->_structure->getChildAlias('nonexistent', 'child'));
         $this->assertFalse($this->_structure->getChildAlias('one', 'nonexistent'));
     }

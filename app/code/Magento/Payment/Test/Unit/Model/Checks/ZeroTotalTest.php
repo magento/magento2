@@ -39,7 +39,7 @@ class ZeroTotalTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($total));
 
         $model = new ZeroTotal();
-        $this->assertEquals($expectation, $model->isApplicable($paymentMethod, $quote));
+        $this->assertSame($expectation, $model->isApplicable($paymentMethod, $quote));
     }
 
     /**

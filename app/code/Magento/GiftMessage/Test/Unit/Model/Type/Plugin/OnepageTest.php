@@ -52,13 +52,13 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->messageMock->expects($this->once())->method('add')->with('giftMessage', $quoteMock);
 
-        $this->assertEquals([], $this->plugin->afterSaveShippingMethod($subjectMock, []));
+        $this->assertSame([], $this->plugin->afterSaveShippingMethod($subjectMock, []));
     }
 
     public function testAfterSaveShippingMethodWithNotEmptyResult()
     {
         $subjectMock = $this->createMock(\Magento\Checkout\Model\Type\Onepage::class);
-        $this->assertEquals(
+        $this->assertSame(
             ['expected result'],
             $this->plugin->afterSaveShippingMethod($subjectMock, ['expected result'])
         );

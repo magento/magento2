@@ -64,6 +64,6 @@ class PasswordResetRequestEventTest extends \PHPUnit\Framework\TestCase
             ->with($this->model->getMainTable(), ['created_at < ?' => $this->dateTimeMock->formatDate($timestamp)])
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->deleteRecordsOlderThen($timestamp));
+        $this->assertSame($this->model, $this->model->deleteRecordsOlderThen($timestamp));
     }
 }

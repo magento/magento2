@@ -54,7 +54,7 @@ class BaseSelectFullTextSearchStrategyTest extends \PHPUnit\Framework\TestCase
         $select = $selectContainer->getSelect();
         $expectedSelect = $this->getExpectedSelect();
 
-        $this->assertEquals((string) $expectedSelect, (string) $select);
+        $this->assertSame((string) $expectedSelect, (string) $select);
     }
 
     private function getExpectedSelect()

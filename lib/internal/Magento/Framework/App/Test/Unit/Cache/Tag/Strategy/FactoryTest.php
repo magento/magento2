@@ -56,20 +56,20 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStrategyWithObject()
     {
-        $this->assertEquals($this->dummyStrategy, $this->model->getStrategy(new \stdClass));
+        $this->assertSame($this->dummyStrategy, $this->model->getStrategy(new \stdClass));
     }
 
     public function testGetStrategyWithIdentityInterface()
     {
         $object = $this->getMockForAbstractClass(\Magento\Framework\DataObject\IdentityInterface::class);
 
-        $this->assertEquals($this->identifierStrategy, $this->model->getStrategy($object));
+        $this->assertSame($this->identifierStrategy, $this->model->getStrategy($object));
     }
 
     public function testGetStrategyForCustomClass()
     {
         $object = $this->getMockForAbstractClass('\PDO', [], '', false, false, false, []);
 
-        $this->assertEquals($this->customStrategy, $this->model->getStrategy($object));
+        $this->assertSame($this->customStrategy, $this->model->getStrategy($object));
     }
 }

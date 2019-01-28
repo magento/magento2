@@ -78,11 +78,11 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
         // Check that the integrations do not exist already
         foreach ($newIntegrations as $integrationName => $integrationData) {
             $integration = $this->integrationService->findByName($integrationName);
-            $this->assertEquals(null, $integration->getId(), 'Integration already exists');
+            $this->assertSame(null, $integration->getId(), 'Integration already exists');
         }
 
         // Create new integrations
-        $this->assertEquals(
+        $this->assertSame(
             $newIntegrations,
             $this->integrationManager->processConfigBasedIntegrations($newIntegrations),
             'Error processing config based integrations.'
@@ -93,7 +93,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
         foreach ($newIntegrations as $integrationName => $integrationData) {
             $integration = $this->integrationService->findByName($integrationName);
             $this->assertNotEmpty($integration->getId(), 'Integration was not created');
-            $this->assertEquals(
+            $this->assertSame(
                 $integration::STATUS_INACTIVE,
                 $integration->getStatus(),
                 'Integration is not created with "inactive" status'
@@ -102,7 +102,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
         }
 
         // Rerun integration creation with the same data (data has not changed)
-        $this->assertEquals(
+        $this->assertSame(
             $newIntegrations,
             $this->integrationManager->processConfigBasedIntegrations($newIntegrations),
             'Error processing config based integrations.'
@@ -111,12 +111,12 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
         // Check that the integrations are not recreated when data has not actually changed
         foreach ($newIntegrations as $integrationName => $integrationData) {
             $integration = $this->integrationService->findByName($integrationName);
-            $this->assertEquals(
+            $this->assertSame(
                 $createdIntegrations[$integrationName]->getId(),
                 $integration->getId(),
                 'Integration ID has changed'
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $createdIntegrations[$integrationName]->getStatus(),
                 $integration->getStatus(),
                 'Integration status has changed'

@@ -56,7 +56,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             $expected = nl2br($expected);
         }
         $result = $this->model->format($storeInfo, $type);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

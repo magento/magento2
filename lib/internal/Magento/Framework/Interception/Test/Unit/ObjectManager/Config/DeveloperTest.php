@@ -30,19 +30,19 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
         $this->interceptionConfig->expects($this->once())->method('hasPlugins')->will($this->returnValue(true));
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
-        $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
+        $this->assertSame('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
     }
 
     public function testGetInstanceTypeReturnsSimpleClassIfNoPluginsAreDeclared()
     {
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
-        $this->assertEquals('SomeClass', $this->model->getInstanceType('SomeClass'));
+        $this->assertSame('SomeClass', $this->model->getInstanceType('SomeClass'));
     }
 
     public function testGetInstanceTypeReturnsSimpleClassIfInterceptionConfigIsNotSet()
     {
-        $this->assertEquals('SomeClass', $this->model->getInstanceType('SomeClass'));
+        $this->assertSame('SomeClass', $this->model->getInstanceType('SomeClass'));
     }
 
     public function testGetOriginalInstanceTypeReturnsInterceptedClass()
@@ -50,7 +50,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
         $this->interceptionConfig->expects($this->once())->method('hasPlugins')->will($this->returnValue(true));
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
-        $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
-        $this->assertEquals('SomeClass', $this->model->getOriginalInstanceType('SomeClass'));
+        $this->assertSame('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
+        $this->assertSame('SomeClass', $this->model->getOriginalInstanceType('SomeClass'));
     }
 }

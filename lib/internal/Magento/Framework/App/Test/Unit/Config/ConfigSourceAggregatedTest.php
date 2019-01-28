@@ -58,7 +58,7 @@ class ConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($path)
             ->willReturn(['key' => 'value2']);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'test' => false,
                 'key' => 'value2'

@@ -20,7 +20,7 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
         $parameter->setString($string);
 
         foreach ($values as $value) {
-            $this->assertEquals($value, $parameter->getValue());
+            $this->assertSame($value, $parameter->getValue());
         }
     }
 
@@ -35,7 +35,7 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Filter\Template\Tokenizer\Parameter $parameter */
         $parameter = $objectManager->create(\Magento\Framework\Filter\Template\Tokenizer\Parameter::class);
         $parameter->setString($string);
-        $this->assertEquals($params, $parameter->tokenize());
+        $this->assertSame($params, $parameter->tokenize());
     }
 
     /**

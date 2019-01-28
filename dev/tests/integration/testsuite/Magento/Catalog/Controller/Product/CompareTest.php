@@ -379,6 +379,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             /** @var $compareItem \Magento\Catalog\Model\Product\Compare\Item */
             $actualProductIds[] = $compareItem->getProductId();
         }
-        $this->assertEquals($expectedProductIds, $actualProductIds, "Products in current visitor's compare list.");
+        $this->assertSame($expectedProductIds, $actualProductIds, "Products in current visitor's compare list.");
     }
 }

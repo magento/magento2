@@ -57,7 +57,7 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         );
         $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/resetPassword');
-        $this->assertEquals('noroute', $this->getRequest()->getControllerName());
+        $this->assertSame('noroute', $this->getRequest()->getControllerName());
     }
 
     /**

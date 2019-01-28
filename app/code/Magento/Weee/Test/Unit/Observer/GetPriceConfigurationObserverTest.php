@@ -99,7 +99,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         );
         $weeeObserverObject->execute($observerObject);
 
-        $this->assertEquals($expectedArray, $configObj->getData('config'));
+        $this->assertSame($expectedArray, $configObj->getData('config'));
     }
 
     /**

@@ -116,7 +116,7 @@ abstract class EntityChildTestAbstract extends \PHPUnit\Framework\TestCase
             ->method('writeResultFile')
             ->with($resultFileName, $generatedCode);
 
-        $this->assertEquals(
+        $this->assertSame(
             $resultFileName,
             $this->generator->generate(),
             implode("\n", $this->generator->getErrors())

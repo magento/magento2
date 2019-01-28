@@ -136,6 +136,6 @@ class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with($backendModelType, ['data' => []])
             ->willReturn($backendModel);
-        $this->assertEquals($backendModel, $this->model->createByPath($path));
+        $this->assertSame($backendModel, $this->model->createByPath($path));
     }
 }

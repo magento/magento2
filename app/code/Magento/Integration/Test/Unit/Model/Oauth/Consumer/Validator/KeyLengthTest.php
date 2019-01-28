@@ -28,9 +28,9 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
 
     public function testSetLength()
     {
-        $this->assertEquals(KeyLengthTest::KEY_LENGTH, $this->keyLengthValidator->getLength());
-        $this->assertEquals(KeyLengthTest::KEY_LENGTH, $this->keyLengthValidator->getMin());
-        $this->assertEquals(KeyLengthTest::KEY_LENGTH, $this->keyLengthValidator->getMax());
+        $this->assertSame(KeyLengthTest::KEY_LENGTH, $this->keyLengthValidator->getLength());
+        $this->assertSame(KeyLengthTest::KEY_LENGTH, $this->keyLengthValidator->getMin());
+        $this->assertSame(KeyLengthTest::KEY_LENGTH, $this->keyLengthValidator->getMax());
     }
 
     public function testIsValidLong()
@@ -38,7 +38,7 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
         $invalidToken = 'asjdkhbcaklsjhlkasjdhlkajhsdljahksdlkafjsljdhskjhksj';
         $this->keyLengthValidator->isValid($invalidToken);
         $expected = ['stringLengthTooLong' => "Key '{$invalidToken}' is more than 32 characters long"];
-        $this->assertEquals($expected, $this->keyLengthValidator->getMessages());
+        $this->assertSame($expected, $this->keyLengthValidator->getMessages());
     }
 
     public function testIsValidShort()
@@ -46,7 +46,7 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
         $invalidToken = 'fajdhkahkjha';
         $this->keyLengthValidator->isValid($invalidToken);
         $expected = ['stringLengthTooShort' => "Key '{$invalidToken}' is less than 32 characters long"];
-        $this->assertEquals($expected, $this->keyLengthValidator->getMessages());
+        $this->assertSame($expected, $this->keyLengthValidator->getMessages());
     }
 
     public function testIsValidShortCustomKeyName()
@@ -55,7 +55,7 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
         $this->keyLengthValidator->setName('Custom Key');
         $this->keyLengthValidator->isValid($invalidToken);
         $expected = ['stringLengthTooShort' => "Custom Key '{$invalidToken}' is less than 32 characters long"];
-        $this->assertEquals($expected, $this->keyLengthValidator->getMessages());
+        $this->assertSame($expected, $this->keyLengthValidator->getMessages());
     }
 
     /**

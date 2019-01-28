@@ -83,6 +83,6 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             $orderId
         )->willReturnSelf();
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($select)->willReturn($taxItems);
-        $this->assertEquals($taxItems, $this->taxItem->getTaxItemsByOrderId($orderId));
+        $this->assertSame($taxItems, $this->taxItem->getTaxItemsByOrderId($orderId));
     }
 }

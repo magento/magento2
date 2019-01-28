@@ -53,8 +53,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     public function testPrepareForm()
     {
         $form = $this->_block->getForm();
-        $this->assertEquals('group_fieldset', $form->getElement('group_fieldset')->getId());
-        $this->assertEquals('group_name', $form->getElement('group_name')->getId());
-        $this->assertEquals('group', $form->getElement('store_type')->getValue());
+        $this->assertSame('group_fieldset', $form->getElement('group_fieldset')->getId());
+        $this->assertSame('group_name', $form->getElement('group_name')->getId());
+        $this->assertSame('group', $form->getElement('store_type')->getValue());
     }
 }

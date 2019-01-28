@@ -23,8 +23,8 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedHtml = '<b>Any text there</b>';
-        $this->assertNotEquals($expectedHtml, $block->getPagerHtml());
+        $this->assertNotSame($expectedHtml, $block->getPagerHtml());
         $childBlock->setText($expectedHtml);
-        $this->assertEquals($expectedHtml, $block->getPagerHtml());
+        $this->assertSame($expectedHtml, $block->getPagerHtml());
     }
 }

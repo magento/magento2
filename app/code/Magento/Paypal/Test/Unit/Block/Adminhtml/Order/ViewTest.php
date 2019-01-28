@@ -105,7 +105,7 @@ class ViewTest extends TestCase
             ->with($this->payment)
             ->willReturn($authAllowed);
 
-        $this->assertEquals($canAuthorize, $this->view->canAuthorize($this->order));
+        $this->assertSame($canAuthorize, $this->view->canAuthorize($this->order));
     }
 
     /**

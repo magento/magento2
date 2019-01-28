@@ -108,7 +108,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($buyRequestData)
             ->willReturn($buyRequestMock);
 
-        $this->assertEquals($buyRequestMock, $this->model->convertToBuyRequest($cartItemMock));
+        $this->assertSame($buyRequestMock, $this->model->convertToBuyRequest($cartItemMock));
     }
 
     public function testConvertToBuyRequestWithoutExtensionAttributes()
@@ -176,7 +176,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($extAttributeMock);
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock);
 
-        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 
     public function testProcessProductOptionsWhenItemDoesNotHaveDownloadableLinks()
@@ -227,6 +227,6 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($extAttributeMock);
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock);
 
-        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 }

@@ -25,7 +25,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testSetGetCategoryIds()
     {
         $this->block->setCategoryIds([1, 4, 7, 56, 2]);
-        $this->assertEquals([1, 4, 7, 56, 2], $this->block->getCategoryIds());
+        $this->assertSame([1, 4, 7, 56, 2], $this->block->getCategoryIds());
     }
 
     /**

@@ -148,7 +148,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             ['DATA_TYPE' => 'bigint'],
             $value
         );
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -267,7 +267,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->rollBack();
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
                 $e->getMessage()
             );
@@ -283,7 +283,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->commit();
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
                 $e->getMessage()
             );
@@ -295,11 +295,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testAsymmetricCommitSuccess()
     {
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
         $this->_adapter->beginTransaction();
-        $this->assertEquals(1, $this->_adapter->getTransactionLevel());
+        $this->assertSame(1, $this->_adapter->getTransactionLevel());
         $this->_adapter->commit();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
     }
 
     /**
@@ -307,11 +307,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testAsymmetricRollBackSuccess()
     {
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
         $this->_adapter->beginTransaction();
-        $this->assertEquals(1, $this->_adapter->getTransactionLevel());
+        $this->assertSame(1, $this->_adapter->getTransactionLevel());
         $this->_adapter->rollBack();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
     }
 
     /**
@@ -329,11 +329,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $this->_adapter->beginTransaction();
         $this->_adapter->beginTransaction();
         $this->_adapter->beginTransaction();
-        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
+        $this->assertSame(3, $this->_adapter->getTransactionLevel());
         $this->_adapter->commit();
         $this->_adapter->commit();
         $this->_adapter->commit();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
     }
 
     /**
@@ -351,11 +351,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $this->_adapter->beginTransaction();
         $this->_adapter->beginTransaction();
         $this->_adapter->beginTransaction();
-        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
+        $this->assertSame(3, $this->_adapter->getTransactionLevel());
         $this->_adapter->rollBack();
         $this->_adapter->rollBack();
         $this->_adapter->rollBack();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
     }
 
     /**
@@ -373,11 +373,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $this->_adapter->beginTransaction();
         $this->_adapter->beginTransaction();
         $this->_adapter->beginTransaction();
-        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
+        $this->assertSame(3, $this->_adapter->getTransactionLevel());
         $this->_adapter->commit();
         $this->_adapter->commit();
         $this->_adapter->rollBack();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->assertSame(0, $this->_adapter->getTransactionLevel());
     }
 
     /**
@@ -395,7 +395,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->commit();
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
@@ -418,7 +418,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->beginTransaction();
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );

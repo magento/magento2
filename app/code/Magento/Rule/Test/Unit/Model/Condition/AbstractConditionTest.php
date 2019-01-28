@@ -29,7 +29,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
     public function testGetjointTables()
     {
         $this->_condition->setAttribute('category_ids');
-        $this->assertEquals([], $this->_condition->getTablesToJoin());
+        $this->assertSame([], $this->_condition->getTablesToJoin());
         $this->_condition->setAttribute('gdsjkfghksldjfg');
         $this->assertEmpty($this->_condition->getTablesToJoin());
     }
@@ -37,7 +37,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
     public function testGetMappedSqlField()
     {
         $this->_condition->setAttribute('category_ids');
-        $this->assertEquals('category_ids', $this->_condition->getMappedSqlField());
+        $this->assertSame('category_ids', $this->_condition->getMappedSqlField());
     }
 
     /**
@@ -100,7 +100,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_condition->setOperator($operator);
         $this->_condition->setData('value_parsed', $existingValue);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->_condition->validateAttribute($valueForValidate),
             "Failed asserting that "
@@ -139,7 +139,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
 
         $this->_condition->setOperator($operator);
         $this->_condition->setData('value_parsed', $existingValue);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->_condition->validate($objectMock),
             "Failed asserting that "
@@ -210,7 +210,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
             ->method('getInputType')
             ->will($this->returnValue($inputType));
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->_condition->validateAttribute($valueForValidate),
             "Failed asserting that "
@@ -225,6 +225,6 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $value = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         $this->_condition->setValue(['1,2,3,4,5,6,7,8,9']);
         $this->_condition->setOperator('()');
-        $this->assertEquals($value, $this->_condition->getValueParsed());
+        $this->assertSame($value, $this->_condition->getValueParsed());
     }
 }

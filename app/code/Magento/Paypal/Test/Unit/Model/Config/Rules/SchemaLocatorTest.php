@@ -48,7 +48,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSchema()
     {
-        $this->assertEquals('magento/path/rules.xsd', $this->schemaLocator->getSchema());
+        $this->assertSame('magento/path/rules.xsd', $this->schemaLocator->getSchema());
     }
 
     /**
@@ -58,6 +58,6 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPerFileSchema()
     {
-        $this->assertEquals('magento/path/rules.xsd', $this->schemaLocator->getPerFileSchema());
+        $this->assertSame('magento/path/rules.xsd', $this->schemaLocator->getPerFileSchema());
     }
 }

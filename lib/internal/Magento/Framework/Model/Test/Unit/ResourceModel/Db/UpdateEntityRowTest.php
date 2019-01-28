@@ -79,6 +79,6 @@ class UpdateEntityRowTest extends \PHPUnit\Framework\TestCase
             ->with($entityType)
             ->willReturn($entityMetadataMock);
         $result = $this->model->execute($entityType, $data);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 }

@@ -85,7 +85,7 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
                 ['', $alternative, null, null, null, null, $resolvedAlternative]
             ]);
 
-        $this->assertEquals($expected, $this->minification->resolve('', $requested));
+        $this->assertSame($expected, $this->minification->resolve('', $requested));
     }
 
     /**

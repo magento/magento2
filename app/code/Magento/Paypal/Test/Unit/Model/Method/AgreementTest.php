@@ -97,6 +97,6 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         $payment->setOrder($order);
 
         $this->_model->authorize($payment, 10.00);
-        $this->assertEquals($order->getBaseCurrencyCode(), $this->_apiNvpMock->getCurrencyCode());
+        $this->assertSame($order->getBaseCurrencyCode(), $this->_apiNvpMock->getCurrencyCode());
     }
 }

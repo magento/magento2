@@ -60,13 +60,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         );
 
         if ($isPasswordChanged) {
-            $this->assertNotEquals($oldPassword, $user->getPassword());
+            $this->assertNotSame($oldPassword, $user->getPassword());
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
             $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($password, $user->getPassword()));
         } else {
-            $this->assertEquals($oldPassword, $user->getPassword());
+            $this->assertSame($oldPassword, $user->getPassword());
         }
     }
 

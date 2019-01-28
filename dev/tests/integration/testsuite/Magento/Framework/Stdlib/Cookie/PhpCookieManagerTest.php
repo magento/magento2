@@ -40,12 +40,12 @@ class PhpCookieManagerTest extends \PHPUnit\Framework\TestCase
         $cookieValue = 'cookie value';
         $defaultCookieValue = 'default';
         $_COOKIE[$cookieName] = $cookieValue;
-        $this->assertEquals(
+        $this->assertSame(
             $defaultCookieValue,
             $this->cookieManager->getCookie('unknown cookieName', $defaultCookieValue)
         );
-        $this->assertEquals($cookieValue, $this->cookieManager->getCookie($cookieName, $defaultCookieValue));
-        $this->assertEquals($defaultCookieValue, $this->cookieManager->getCookie(null, $defaultCookieValue));
+        $this->assertSame($cookieValue, $this->cookieManager->getCookie($cookieName, $defaultCookieValue));
+        $this->assertSame($defaultCookieValue, $this->cookieManager->getCookie(null, $defaultCookieValue));
         $this->assertNull($this->cookieManager->getCookie(null));
         $_COOKIE = $preTestCookies;
     }

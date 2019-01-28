@@ -43,7 +43,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
         $dom->load($this->_fixturePath . 'source.xml');
 
         $actual = $this->_model->convert($dom);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

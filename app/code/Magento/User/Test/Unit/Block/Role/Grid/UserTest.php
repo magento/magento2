@@ -116,7 +116,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->requestInterfaceMock->expects($this->once())->method('getParam')->willReturn($roleId);
         $this->urlInterfaceMock->expects($this->once())->method('getUrl')->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getGridUrl());
+        $this->assertSame($url, $this->model->getGridUrl());
     }
 
     public function testGetUsersPositiveNumberOfRolesAndJsonFalse()
@@ -143,7 +143,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $roleModelMock->expects($this->once())->method('setId')->willReturnSelf();
         $roleModelMock->expects($this->once())->method('getRoleUsers')->willReturn($roles);
 
-        $this->assertEquals($roles, $this->model->getUsers());
+        $this->assertSame($roles, $this->model->getUsers());
     }
 
     public function testGetUsersPositiveNumberOfRolesAndJsonTrue()
@@ -168,7 +168,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->roleFactoryMock->expects($this->never())->method('create')->willReturn($roleModelMock);
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturn($roles);
 
-        $this->assertEquals($roles, $this->model->getUsers(true));
+        $this->assertSame($roles, $this->model->getUsers(true));
     }
 
     public function testGetUsersNoRolesAndJsonFalse()
@@ -194,7 +194,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $roleModelMock->expects($this->once())->method('setId')->willReturnSelf();
         $roleModelMock->expects($this->once())->method('getRoleUsers')->willReturn($roles);
 
-        $this->assertEquals($roles, $this->model->getUsers());
+        $this->assertSame($roles, $this->model->getUsers());
     }
 
     public function testPrepareColumns()

@@ -64,7 +64,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit\Framework\TestC
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
         $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($model);
-        $this->assertEquals($expectedResult, $generatedCode);
+        $this->assertSame($expectedResult, $generatedCode);
     }
 
     public function testValidateException()
@@ -83,7 +83,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit\Framework\TestC
         $reflectionMethod->setAccessible(true);
 
         $expectedValidationResult = false;
-        $this->assertEquals($expectedValidationResult, $reflectionMethod->invoke($model));
+        $this->assertSame($expectedValidationResult, $reflectionMethod->invoke($model));
         $this->assertTrue(
             in_array(
                 'Invalid extension interface name [\Magento\Catalog\Api\Data\ProductInterface].'

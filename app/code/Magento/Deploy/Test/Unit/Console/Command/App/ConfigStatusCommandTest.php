@@ -53,7 +53,7 @@ class ConfigStatusCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([]);
 
-        $this->assertEquals($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedMessage, $tester->getDisplay());
         $this->assertSame($expectedCode, $tester->getStatusCode());
     }
 

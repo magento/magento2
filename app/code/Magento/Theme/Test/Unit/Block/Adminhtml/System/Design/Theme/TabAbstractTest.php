@@ -39,7 +39,7 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
     {
         $label = 'test label';
         $this->_model->expects($this->once())->method('getTabLabel')->will($this->returnValue($label));
-        $this->assertEquals($label, $this->_model->getTabTitle());
+        $this->assertSame($label, $this->_model->getTabTitle());
     }
 
     /**

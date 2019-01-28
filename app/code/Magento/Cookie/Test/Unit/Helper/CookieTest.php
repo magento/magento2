@@ -46,7 +46,7 @@ class CookieTest extends \PHPUnit\Framework\TestCase
     public function testGetAcceptedSaveCookiesWebsiteIds()
     {
         $this->_initMock()->_getCookieStub([1 => 1]);
-        $this->assertEquals($this->_object->getAcceptedSaveCookiesWebsiteIds(), json_encode([1 => 1]));
+        $this->assertSame($this->_object->getAcceptedSaveCookiesWebsiteIds(), json_encode([1 => 1]));
     }
 
     public function testGetCookieRestrictionLifetime()
@@ -76,7 +76,7 @@ class CookieTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Store\Model\StoreManager::class),
             ['current_store' => $storeStub, 'website' => $this->_getWebsiteStub()]
         );
-        $this->assertEquals($this->_object->getCookieRestrictionLifetime(), 60 * 60 * 24 * 365);
+        $this->assertSame($this->_object->getCookieRestrictionLifetime(), 60 * 60 * 24 * 365);
     }
 
     /**

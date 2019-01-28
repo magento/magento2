@@ -69,7 +69,7 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($directory);
         $this->directoryList->expects($this->atLeastOnce())->method('getPath')->with($directoryConfig)
             ->willReturn($rootPath);
-        $this->assertEquals($expectedResult, $this->directoryResolver->validatePath($path, $directoryConfig));
+        $this->assertSame($expectedResult, $this->directoryResolver->validatePath($path, $directoryConfig));
     }
 
     /**

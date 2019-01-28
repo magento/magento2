@@ -76,6 +76,6 @@ class SignUpTest extends \PHPUnit\Framework\TestCase
             ->willReturn('value');
         $this->resultRedirectFactoryMock->expects($this->once())->method('create')->willReturn($this->redirectMock);
         $this->redirectMock->expects($this->once())->method('setUrl')->with('value')->willReturnSelf();
-        $this->assertEquals($this->redirectMock, $this->signUpController->execute());
+        $this->assertSame($this->redirectMock, $this->signUpController->execute());
     }
 }

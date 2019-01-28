@@ -64,7 +64,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($maximumQty)
         );
 
-        $this->assertEquals($maximumQty, $this->helper->getMaximumQty());
+        $this->assertSame($maximumQty, $this->helper->getMaximumQty());
     }
 
     /**
@@ -146,7 +146,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($maximumQty)
         );
 
-        $this->assertEquals($result, $this->helper->isMultishippingCheckoutAvailable());
+        $this->assertSame($result, $this->helper->isMultishippingCheckoutAvailable());
     }
 
     /**

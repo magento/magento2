@@ -73,7 +73,7 @@ class AbstractGridTest extends \PHPUnit\Framework\TestCase
         }
 
         $currencyCode = $this->model->getCurrentCurrencyCode();
-        $this->assertEquals($expectedCurrencyCode, $currencyCode);
+        $this->assertSame($expectedCurrencyCode, $currencyCode);
     }
 
     /**

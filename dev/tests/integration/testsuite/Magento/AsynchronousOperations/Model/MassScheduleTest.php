@@ -203,14 +203,14 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             $errors = $e->getErrors();
             $this->assertInstanceOf(\Magento\Framework\Exception\LocalizedException::class, $errors[0]);
 
-            $this->assertEquals("Error processing 1 element of input data", $errors[0]->getMessage());
+            $this->assertSame("Error processing 1 element of input data", $errors[0]->getMessage());
 
             $reasonException = $errors[0]->getPrevious();
 
             $expectedErrorMessage = "Data item corresponding to \"product\" " .
                 "must be specified in the message with topic " .
                 "\"async.magento.catalog.api.productrepositoryinterface.save.post\".";
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedErrorMessage,
                 $reasonException->getMessage()
             );
@@ -223,12 +223,12 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             $items = $bulkStatus->getRequestItems();
             $this->assertCount(2, $items);
 
-            $this->assertEquals(ItemStatus::STATUS_ACCEPTED, $items[0]->getStatus());
-            $this->assertEquals(0, $items[0]->getId());
+            $this->assertSame(ItemStatus::STATUS_ACCEPTED, $items[0]->getStatus());
+            $this->assertSame(0, $items[0]->getId());
 
-            $this->assertEquals(ItemStatus::STATUS_REJECTED, $items[1]->getStatus());
-            $this->assertEquals(1, $items[1]->getId());
-            $this->assertEquals($expectedErrorMessage, $items[1]->getErrorMessage());
+            $this->assertSame(ItemStatus::STATUS_REJECTED, $items[1]->getStatus());
+            $this->assertSame(1, $items[1]->getId());
+            $this->assertSame($expectedErrorMessage, $items[1]->getErrorMessage());
         }
 
         //assert one products is created

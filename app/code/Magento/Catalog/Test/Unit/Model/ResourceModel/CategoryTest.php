@@ -169,6 +169,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             );
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);
-        $this->assertEquals(['result'], $result);
+        $this->assertSame(['result'], $result);
     }
 }

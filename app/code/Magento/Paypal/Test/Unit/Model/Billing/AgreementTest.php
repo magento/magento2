@@ -154,7 +154,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
 
         $url = 'http://dddd';
         $this->model->setRedirectUrl($url);
-        $this->assertEquals($url, $this->model->initToken());
+        $this->assertSame($url, $this->model->initToken());
     }
 
     public function testVerifyToken()
@@ -166,7 +166,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
             ->with($this->model)
             ->willReturn($this->model);
 
-        $this->assertEquals($this->model, $this->model->verifyToken());
+        $this->assertSame($this->model, $this->model->verifyToken());
     }
 
     private function initGetMethodInstance()

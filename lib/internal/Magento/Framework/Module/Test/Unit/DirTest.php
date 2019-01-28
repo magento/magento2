@@ -33,7 +33,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
             ->will($this->returnValue('/Test/Module'));
 
-        $this->assertEquals('/Test/Module', $this->_model->getDir('Test_Module'));
+        $this->assertSame('/Test/Module', $this->_model->getDir('Test_Module'));
     }
 
     public function testGetDirModuleSubDir()
@@ -43,7 +43,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
             ->will($this->returnValue('/Test/Module'));
 
-        $this->assertEquals('/Test/Module/etc', $this->_model->getDir('Test_Module', 'etc'));
+        $this->assertSame('/Test/Module/etc', $this->_model->getDir('Test_Module', 'etc'));
     }
 
     public function testGetSetupDirModule()
@@ -53,7 +53,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
             ->willReturn('/Test/Module');
 
-        $this->assertEquals('/Test/Module/Setup', $this->_model->getDir('Test_Module', 'Setup'));
+        $this->assertSame('/Test/Module/Setup', $this->_model->getDir('Test_Module', 'Setup'));
     }
 
     /**

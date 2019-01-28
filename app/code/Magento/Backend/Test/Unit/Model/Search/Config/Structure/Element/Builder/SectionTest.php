@@ -37,6 +37,6 @@ class SectionTest extends TestCase
         $this->structureElementMock->expects($this->once())
             ->method('getPath')
             ->willReturn($structureElementPath);
-        $this->assertEquals(['section' => 'path_part_1'], $this->model->build($this->structureElementMock));
+        $this->assertSame(['section' => 'path_part_1'], $this->model->build($this->structureElementMock));
     }
 }

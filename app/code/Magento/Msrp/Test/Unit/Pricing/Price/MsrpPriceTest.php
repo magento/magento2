@@ -126,7 +126,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($this->saleableItem))
             ->will($this->returnValue($expectedMessage));
 
-        $this->assertEquals($expectedMessage, $this->object->getMsrpPriceMessage());
+        $this->assertSame($expectedMessage, $this->object->getMsrpPriceMessage());
     }
 
     public function testIsMsrpEnabled()

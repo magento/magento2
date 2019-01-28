@@ -57,7 +57,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
             ->with($serializeCalledWith)
             ->willReturn($expected);
         $this->abstractResource->_serializeField($dataObject, $field, $defaultValue, $unsetEmpty);
-        $this->assertEquals($expected, $dataObject->getData($field));
+        $this->assertSame($expected, $dataObject->getData($field));
     }
 
     /**
@@ -122,7 +122,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
             ->with($dataObject->getData($field))
             ->willReturn($expected);
         $this->abstractResource->_unserializeField($dataObject, $field, $defaultValue);
-        $this->assertEquals($expected, $dataObject->getData($field));
+        $this->assertSame($expected, $dataObject->getData($field));
     }
 
     /**

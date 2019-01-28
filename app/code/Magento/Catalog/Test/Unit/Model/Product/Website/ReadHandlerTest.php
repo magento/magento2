@@ -59,7 +59,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('setExtensionAttributes')
             ->with($this->extensionAttributes);
 
-        $this->assertEquals($this->readHandler->execute($product, []), $product);
+        $this->assertSame($this->readHandler->execute($product, []), $product);
     }
 
     public function testExecuteWithCachedWebsiteIds()
@@ -77,6 +77,6 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
-        $this->assertEquals($this->readHandler->execute($product, []), $product);
+        $this->assertSame($this->readHandler->execute($product, []), $product);
     }
 }

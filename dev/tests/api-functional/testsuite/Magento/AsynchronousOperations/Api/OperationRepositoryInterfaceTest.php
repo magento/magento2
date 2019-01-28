@@ -56,12 +56,12 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
-        $this->assertEquals(3, $response['total_count']);
-        $this->assertEquals(3, count($response['items']));
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame(3, $response['total_count']);
+        $this->assertSame(3, count($response['items']));
 
         foreach ($response['items'] as $item) {
-            $this->assertEquals('bulk-uuid-searchable-6', $item['bulk_uuid']);
+            $this->assertSame('bulk-uuid-searchable-6', $item['bulk_uuid']);
         }
     }
 
@@ -113,12 +113,12 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
-        $this->assertEquals(1, $response['total_count']);
-        $this->assertEquals(1, count($response['items']));
+        $this->assertSame($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertSame(1, $response['total_count']);
+        $this->assertSame(1, count($response['items']));
 
         foreach ($response['items'] as $item) {
-            $this->assertEquals('bulk-uuid-searchable-6', $item['bulk_uuid']);
+            $this->assertSame('bulk-uuid-searchable-6', $item['bulk_uuid']);
         }
     }
 }

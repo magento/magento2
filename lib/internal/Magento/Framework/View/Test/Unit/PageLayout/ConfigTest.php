@@ -59,30 +59,30 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPageLayouts()
     {
-        $this->assertEquals(['one' => 'One', 'two' => 'Two'], $this->config->getPageLayouts());
+        $this->assertSame(['one' => 'One', 'two' => 'Two'], $this->config->getPageLayouts());
     }
 
     public function testHasPageLayout()
     {
-        $this->assertEquals(true, $this->config->hasPageLayout('one'));
-        $this->assertEquals(false, $this->config->hasPageLayout('three'));
+        $this->assertSame(true, $this->config->hasPageLayout('one'));
+        $this->assertSame(false, $this->config->hasPageLayout('three'));
     }
 
     public function testGetOptions()
     {
-        $this->assertEquals(['one' => 'One', 'two' => 'Two'], $this->config->getPageLayouts());
+        $this->assertSame(['one' => 'One', 'two' => 'Two'], $this->config->getPageLayouts());
     }
 
     public function testToOptionArray()
     {
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['label' => 'One', 'value' => 'one'],
                 ['label' => 'Two', 'value' => 'two'],
             ],
             $this->config->toOptionArray()
         );
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['label' => '-- Please Select --', 'value' => ''],
                 ['label' => 'One', 'value' => 'one'],

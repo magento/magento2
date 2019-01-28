@@ -143,7 +143,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($messageId)
             ->willReturnSelf();
 
-        $this->assertEquals($messageMock, $this->orderItemRepository->get($orderId, $orderItemId));
+        $this->assertSame($messageMock, $this->orderItemRepository->get($orderId, $orderItemId));
     }
 
     /**
@@ -170,7 +170,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->get($orderId, $orderItemId);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No item with the provided ID was found in the Order. Verify the ID and try again.',
                 $exception->getMessage()
             );
@@ -209,7 +209,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->get($orderId, $orderItemId);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals(
+            $this->assertSame(
                 "No item with the provided ID was found in the Order, or a gift message isn't allowed. "
                 . "Verify and try again.",
                 $exception->getMessage()
@@ -253,7 +253,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->get($orderId, $orderItemId);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No item with the provided ID was found in the Order. Verify the ID and try again.',
                 $exception->getMessage()
             );
@@ -344,7 +344,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No item with the provided ID was found in the Order. Verify the ID and try again.',
                 $exception->getMessage()
             );
@@ -386,7 +386,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected InvalidTransitionException not caught');
         } catch (InvalidTransitionException $exception) {
-            $this->assertEquals("Gift messages can't be used for virtual products.", $exception->getMessage());
+            $this->assertSame("Gift messages can't be used for virtual products.", $exception->getMessage());
         }
     }
 
@@ -429,7 +429,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected CouldNotSaveException not caught');
         } catch (CouldNotSaveException $exception) {
-            $this->assertEquals("The gift message isn't available.", $exception->getMessage());
+            $this->assertSame("The gift message isn't available.", $exception->getMessage());
         }
     }
 
@@ -492,7 +492,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected CouldNotSaveException not caught');
         } catch (CouldNotSaveException $exception) {
-            $this->assertEquals(
+            $this->assertSame(
                 'The gift message couldn\'t be added to the "' . $excep->getMessage() . '" order.',
                 $exception->getMessage()
             );

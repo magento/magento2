@@ -42,7 +42,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
         $expect = [$this->item];
 
         $this->model->setFilters($expect);
-        $this->assertEquals($expect, $this->model->getFilters());
+        $this->assertSame($expect, $this->model->getFilters());
     }
 
     public function testAddFilter()
@@ -51,6 +51,6 @@ class StateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->addFilter($this->item);
 
-        $this->assertEquals($expect, $this->model->getFilters());
+        $this->assertSame($expect, $this->model->getFilters());
     }
 }

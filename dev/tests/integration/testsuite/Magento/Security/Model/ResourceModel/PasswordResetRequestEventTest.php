@@ -82,7 +82,7 @@ class PasswordResetRequestEventTest extends \PHPUnit\Framework\TestCase
         foreach (array_keys($testData) as $key) {
             $newModelData[$key] = $newModel->getData($key);
         }
-        $this->assertEquals($testData, $newModelData);
+        $this->assertSame($testData, $newModelData);
     }
 
     /**

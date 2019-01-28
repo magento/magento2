@@ -68,7 +68,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->encryptorInterfaceMock->expects($this->once())->method('decrypt')->with($keyCcEnc)->will(
             $this->returnValue($keyCc)
         );
-        $this->assertEquals($keyCc, $this->info->getData($keyCc));
+        $this->assertSame($keyCc, $this->info->getData($keyCc));
     }
 
     /**
@@ -160,7 +160,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->encryptorInterfaceMock->expects($this->once())->method('encrypt')->with($data)->will(
             $this->returnValue($encryptedData)
         );
-        $this->assertEquals($encryptedData, $this->info->encrypt($data));
+        $this->assertSame($encryptedData, $this->info->encrypt($data));
     }
 
     public function testDecrypt()
@@ -171,7 +171,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->encryptorInterfaceMock->expects($this->once())->method('decrypt')->with($encryptedData)->will(
             $this->returnValue($data)
         );
-        $this->assertEquals($data, $this->info->decrypt($encryptedData));
+        $this->assertSame($data, $this->info->decrypt($encryptedData));
     }
 
     /**
@@ -190,7 +190,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     public function testSetAdditionalInformationMultipleTypes($key, $value = null)
     {
         $this->info->setAdditionalInformation($key, $value);
-        $this->assertEquals($value ? [$key => $value] : $key, $this->info->getAdditionalInformation());
+        $this->assertSame($value ? [$key => $value] : $key, $this->info->getAdditionalInformation());
     }
 
     /**
@@ -211,7 +211,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $key = 'key';
         $value = 'value';
         $this->info->setAdditionalInformation($key, $value);
-        $this->assertEquals($value, $this->info->getAdditionalInformation($key));
+        $this->assertSame($value, $this->info->getAdditionalInformation($key));
     }
 
     public function testUnsAdditionalInformation()
@@ -221,7 +221,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->info->setAdditionalInformation($data);
 
         // unset by key
-        $this->assertEquals(
+        $this->assertSame(
             ['key2' => 'data2'],
             $this->info->unsAdditionalInformation('key1')->getAdditionalInformation()
         );
@@ -247,6 +247,6 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $data = ['key1' => 'data1', 'key2' => 'data2'];
         $this->info->setData('additional_information', $data);
 
-        $this->assertEquals($data, $this->info->getAdditionalInformation());
+        $this->assertSame($data, $this->info->getAdditionalInformation());
     }
 }

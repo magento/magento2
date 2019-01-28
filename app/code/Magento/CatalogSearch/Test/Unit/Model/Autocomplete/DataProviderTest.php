@@ -119,8 +119,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
 
         $result = $this->model->getItems();
-        $this->assertEquals($expected, $result[0]->toArray());
-        $this->assertEquals($this->limit, count($result));
+        $this->assertSame($expected, $result[0]->toArray());
+        $this->assertSame($this->limit, count($result));
     }
 
     /**

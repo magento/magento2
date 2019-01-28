@@ -40,14 +40,14 @@ class CmsPageTest extends GraphQlAbstract
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals($cmsPageData['identifier'], $response['cmsPage']['url_key']);
-        $this->assertEquals($cmsPageData['title'], $response['cmsPage']['title']);
-        $this->assertEquals($cmsPageData['content'], $response['cmsPage']['content']);
-        $this->assertEquals($cmsPageData['content_heading'], $response['cmsPage']['content_heading']);
-        $this->assertEquals($cmsPageData['page_layout'], $response['cmsPage']['page_layout']);
-        $this->assertEquals($cmsPageData['meta_title'], $response['cmsPage']['meta_title']);
-        $this->assertEquals($cmsPageData['meta_description'], $response['cmsPage']['meta_description']);
-        $this->assertEquals($cmsPageData['meta_keywords'], $response['cmsPage']['meta_keywords']);
+        $this->assertSame($cmsPageData['identifier'], $response['cmsPage']['url_key']);
+        $this->assertSame($cmsPageData['title'], $response['cmsPage']['title']);
+        $this->assertSame($cmsPageData['content'], $response['cmsPage']['content']);
+        $this->assertSame($cmsPageData['content_heading'], $response['cmsPage']['content_heading']);
+        $this->assertSame($cmsPageData['page_layout'], $response['cmsPage']['page_layout']);
+        $this->assertSame($cmsPageData['meta_title'], $response['cmsPage']['meta_title']);
+        $this->assertSame($cmsPageData['meta_description'], $response['cmsPage']['meta_description']);
+        $this->assertSame($cmsPageData['meta_keywords'], $response['cmsPage']['meta_keywords']);
     }
 
     /**

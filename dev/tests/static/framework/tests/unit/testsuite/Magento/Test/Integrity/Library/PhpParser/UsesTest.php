@@ -118,7 +118,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetClassNameWithNamespaceForGlobalClass()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '\Magento\Core\Model\Object2',
             $this->uses->getClassNameWithNamespace('\Magento\Core\Model\Object2')
         );
@@ -136,7 +136,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
             $this->uses->parse($token, $k);
         }
 
-        $this->assertEquals('Magento\Core\Model\Object2', $this->uses->getClassNameWithNamespace($className));
+        $this->assertSame('Magento\Core\Model\Object2', $this->uses->getClassNameWithNamespace($className));
     }
 
     /**

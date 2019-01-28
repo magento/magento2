@@ -85,7 +85,7 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
         $resultSelect = $this->visibilityFilter->apply($select, $filter, VisibilityFilter::FILTER_BY_WHERE);
         $expectedSelect = $this->getExpectedSelectForWhereFilter();
 
-        $this->assertEquals(
+        $this->assertSame(
             (string) $expectedSelect,
             (string) $resultSelect,
             'Select queries must be the same'
@@ -110,7 +110,7 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
         $resultSelect = $this->visibilityFilter->apply($select, $filter, VisibilityFilter::FILTER_BY_JOIN);
         $expectedSelect = $this->getExpectedSelectForJoinFilter();
 
-        $this->assertEquals(
+        $this->assertSame(
             (string) $expectedSelect,
             (string) $resultSelect,
             'Select queries must be the same'

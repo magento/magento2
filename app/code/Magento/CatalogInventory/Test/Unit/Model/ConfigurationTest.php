@@ -61,7 +61,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultWebsiteId()
     {
-        $this->assertEquals(0, $this->model->getDefaultScopeId());
+        $this->assertSame(0, $this->model->getDefaultScopeId());
     }
 
     public function testGetIsQtyTypeIds()
@@ -72,7 +72,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->any())
             ->method('getAll')
             ->willReturn($configData);
-        $this->assertEquals([3 => '3'], $this->model->getIsQtyTypeIds($filter));
+        $this->assertSame([3 => '3'], $this->model->getIsQtyTypeIds($filter));
     }
 
     public function testIsQty()
@@ -83,7 +83,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->any())
             ->method('getAll')
             ->willReturn($configData);
-        $this->assertEquals($productTypeId, $this->model->isQty($productTypeId));
+        $this->assertSame($productTypeId, $this->model->isQty($productTypeId));
     }
 
     public function testCanSubtractQty()
@@ -102,7 +102,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Configuration::XML_PATH_MIN_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, 1)
             ->willReturn($qty);
-        $this->assertEquals($qty, $this->model->getMinQty(1));
+        $this->assertSame($qty, $this->model->getMinQty(1));
     }
 
     public function testGetMinSaleQty()
@@ -115,7 +115,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->with($customerGroupId, $store)
             ->willReturn(1);
 
-        $this->assertEquals(1.0, $this->model->getMinSaleQty($store, $customerGroupId));
+        $this->assertSame(1.0, $this->model->getMinSaleQty($store, $customerGroupId));
     }
 
     public function testGetMaxSaleQty()
@@ -125,7 +125,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Configuration::XML_PATH_MAX_SALE_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->getMaxSaleQty($store));
+        $this->assertSame(1, $this->model->getMaxSaleQty($store));
     }
 
     public function testGetNotifyStockQty()
@@ -136,7 +136,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Configuration::XML_PATH_NOTIFY_STOCK_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->getNotifyStockQty($store));
+        $this->assertSame(1, $this->model->getNotifyStockQty($store));
     }
 
     public function testGetEnableQtyIncrements()
@@ -150,7 +150,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )->willReturn(1);
-        $this->assertEquals(1, $this->model->getEnableQtyIncrements($store));
+        $this->assertSame(1, $this->model->getEnableQtyIncrements($store));
     }
 
     public function testGetQtyIncrements()
@@ -161,7 +161,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Configuration::XML_PATH_QTY_INCREMENTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->getQtyIncrements($store));
+        $this->assertSame(1, $this->model->getQtyIncrements($store));
     }
 
     public function testGetBackorders()
@@ -181,7 +181,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(Configuration::XML_PATH_CAN_BACK_IN_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->getCanBackInStock($store));
+        $this->assertSame(1, $this->model->getCanBackInStock($store));
     }
 
     public function testIsShowOutOfStock()
@@ -191,7 +191,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->isShowOutOfStock($store));
+        $this->assertSame(1, $this->model->isShowOutOfStock($store));
     }
 
     public function testIsAutoReturnEnabled()
@@ -201,7 +201,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(Configuration::XML_PATH_ITEM_AUTO_RETURN, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->isAutoReturnEnabled($store));
+        $this->assertSame(1, $this->model->isAutoReturnEnabled($store));
     }
 
     public function testIsDisplayProductStockStatus()
@@ -215,7 +215,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
                 $store
             )
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->isDisplayProductStockStatus($store));
+        $this->assertSame(1, $this->model->isDisplayProductStockStatus($store));
     }
 
     public function testGetDefaultConfigValue()
@@ -231,7 +231,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
                 $store
             )
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->getDefaultConfigValue($field, $store));
+        $this->assertSame(1, $this->model->getDefaultConfigValue($field, $store));
     }
 
     public function testGetConfigItemOptions()
@@ -247,7 +247,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             'qty_increments',
             'is_decimal_divided',
         ];
-        $this->assertEquals($fields, $this->model->getConfigItemOptions());
+        $this->assertSame($fields, $this->model->getConfigItemOptions());
     }
 
     public function testGetManageStock()
@@ -257,6 +257,6 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(Configuration::XML_PATH_MANAGE_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
-        $this->assertEquals(1, $this->model->getManageStock($store));
+        $this->assertSame(1, $this->model->getManageStock($store));
     }
 }

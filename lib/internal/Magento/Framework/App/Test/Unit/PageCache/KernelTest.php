@@ -130,7 +130,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
         $this->httpResponseMock->expects($this->once())->method('setContent')->with($cache['content']);
         $this->httpResponseMock->expects($this->once())->method('setHeader')->with(0, 'header', true);
         $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
-        $this->assertEquals($this->httpResponseMock, $this->kernel->load());
+        $this->assertSame($this->httpResponseMock, $this->kernel->load());
     }
 
     /**
@@ -175,7 +175,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(json_encode($cache))
         );
         $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
-        $this->assertEquals(false, $this->kernel->load());
+        $this->assertSame(false, $this->kernel->load());
     }
 
     /**

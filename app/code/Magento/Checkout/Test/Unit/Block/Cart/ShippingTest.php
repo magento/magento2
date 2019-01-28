@@ -85,7 +85,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     {
         $config = ['param' => 'value'];
         $this->configProvider->expects($this->once())->method('getConfig')->willReturn($config);
-        $this->assertEquals($config, $this->model->getCheckoutConfig());
+        $this->assertSame($config, $this->model->getCheckoutConfig());
     }
 
     public function testGetJsLayout()
@@ -99,7 +99,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->with($this->layout)
             ->willReturn($layoutProcessed);
 
-        $this->assertEquals(
+        $this->assertSame(
             $jsonLayoutProcessed,
             $this->model->getJsLayout()
         );
@@ -111,7 +111,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getBaseUrl']);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $this->assertEquals($baseUrl, $this->model->getBaseUrl());
+        $this->assertSame($baseUrl, $this->model->getBaseUrl());
     }
 
     public function testGetSerializedCheckoutConfig()
@@ -119,6 +119,6 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $checkoutConfig = ['checkout', 'config'];
         $this->configProvider->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
 
-        $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
+        $this->assertSame(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }
 }

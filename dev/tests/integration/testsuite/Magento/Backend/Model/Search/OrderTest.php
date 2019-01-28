@@ -54,7 +54,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
             /** Validate other item data */
             foreach ($expectedItem as $field => $value) {
-                $this->assertEquals(
+                $this->assertSame(
                     $value,
                     (string)$searchResults[$itemIndex][$field],
                     "Data of item #$itemIndex is invalid."

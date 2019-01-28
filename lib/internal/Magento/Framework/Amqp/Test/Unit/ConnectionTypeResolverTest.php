@@ -42,7 +42,7 @@ class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
             ));
 
         $model = new ConnectionTypeResolver($config);
-        $this->assertEquals('amqp', $model->getConnectionType('connection-01'));
-        $this->assertEquals('amqp', $model->getConnectionType('amqp'));
+        $this->assertSame('amqp', $model->getConnectionType('connection-01'));
+        $this->assertSame('amqp', $model->getConnectionType('amqp'));
     }
 }

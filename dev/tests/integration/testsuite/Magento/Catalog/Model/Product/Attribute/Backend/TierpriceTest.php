@@ -155,7 +155,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         ];
 
         $newData = $this->_model->preparePriceData($data, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 1);
-        $this->assertEquals(4, count($newData));
+        $this->assertSame(4, count($newData));
         $this->assertArrayHasKey('1-2', $newData);
         $this->assertArrayHasKey('1-5', $newData);
         $this->assertArrayHasKey('1-5.3', $newData);
@@ -175,7 +175,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $this->_model->afterLoad($product);
         $price = $product->getTierPrice();
         $this->assertNotEmpty($price);
-        $this->assertEquals(5, count($price));
+        $this->assertSame(5, count($price));
     }
 
     /**
@@ -199,8 +199,8 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         }
         $product->setTierPrices($tierPrices);
         $product = $this->productRepository->save($product);
-        $this->assertEquals($tierPriceCount, count($product->getTierPrice()));
-        $this->assertEquals(0, $product->getData('tier_price_changed'));
+        $this->assertSame($tierPriceCount, count($product->getTierPrice()));
+        $this->assertSame(0, $product->getData('tier_price_changed'));
     }
 
     /**
@@ -306,8 +306,8 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         }
         $product->setTierPrices($tierPrices);
         $product = $this->productRepository->save($product);
-        $this->assertEquals($tierPriceCount, count($product->getTierPrice()));
-        $this->assertEquals(0, $product->getData('tier_price_changed'));
+        $this->assertSame($tierPriceCount, count($product->getTierPrice()));
+        $this->assertSame(0, $product->getData('tier_price_changed'));
     }
 
     /**

@@ -94,7 +94,7 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
         $this->queryMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('limit')->with(0);
         $this->connectionMock->expects($this->once())->method('query')->with($this->selectMock)->will($queryReturnStub);
-        $this->assertEquals($result, $this->reportValidator->validate($reportName));
+        $this->assertSame($result, $this->reportValidator->validate($reportName));
     }
 
     /**

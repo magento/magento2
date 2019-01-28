@@ -77,7 +77,7 @@ class DismissTest extends \PHPUnit\Framework\TestCase
             ->with(ResultFactory::TYPE_JSON, [])
             ->willReturn($this->jsonResultMock);
 
-        $this->assertEquals($this->jsonResultMock, $this->model->execute());
+        $this->assertSame($this->jsonResultMock, $this->model->execute());
     }
 
     public function testExecuteSetsBadRequestResponseStatusIfBulkWasNotAcknowledgedCorrectly()
@@ -103,6 +103,6 @@ class DismissTest extends \PHPUnit\Framework\TestCase
             ->method('setHttpResponseCode')
             ->with(400);
 
-        $this->assertEquals($this->jsonResultMock, $this->model->execute());
+        $this->assertSame($this->jsonResultMock, $this->model->execute());
     }
 }

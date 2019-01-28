@@ -118,7 +118,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testRenderValueWithCommentBlock()

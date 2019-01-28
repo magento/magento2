@@ -123,7 +123,7 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
                 ->with($column)
                 ->willReturn('ON UPDATE CURRENT_TIMESTAMP');
         }
-        $this->assertEquals(
+        $this->assertSame(
             $expectedStatement,
             $this->timestamp->toDefinition($column)
         );

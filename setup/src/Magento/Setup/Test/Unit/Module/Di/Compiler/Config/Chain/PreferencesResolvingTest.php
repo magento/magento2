@@ -32,7 +32,7 @@ class PreferencesResolvingTest extends \PHPUnit\Framework\TestCase
         ];
 
         $modification = new PreferencesResolving();
-        $this->assertEquals($outputConfig, $modification->modify($inputConfig));
+        $this->assertSame($outputConfig, $modification->modify($inputConfig));
     }
 
     /**

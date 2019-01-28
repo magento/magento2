@@ -42,8 +42,8 @@ class SubmitTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('submit', $this->_model->getType());
-        $this->assertEquals('submit', $this->_model->getExtType());
+        $this->assertSame('submit', $this->_model->getType());
+        $this->assertSame('submit', $this->_model->getExtType());
     }
 
     /**

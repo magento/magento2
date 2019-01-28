@@ -127,7 +127,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
 
-        $this->assertEquals(
+        $this->assertSame(
             $orderId,
             $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock)
         );

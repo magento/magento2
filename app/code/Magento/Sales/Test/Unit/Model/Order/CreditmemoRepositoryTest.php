@@ -74,9 +74,9 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $this->assertEquals($entity, $this->creditmemo->get($id));
+        $this->assertSame($entity, $this->creditmemo->get($id));
         //retrieve entity from registry
-        $this->assertEquals($entity, $this->creditmemo->get($id));
+        $this->assertSame($entity, $this->creditmemo->get($id));
     }
 
     /**
@@ -121,7 +121,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->metadataMock->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
-        $this->assertEquals($entity, $this->creditmemo->create());
+        $this->assertSame($entity, $this->creditmemo->create());
     }
 
     public function testGetList()
@@ -139,7 +139,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->creditmemo->getList($searchCriteria));
+        $this->assertSame($collection, $this->creditmemo->getList($searchCriteria));
     }
 
     public function testDelete()
@@ -211,7 +211,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($entity, $this->creditmemo->save($entity));
+        $this->assertSame($entity, $this->creditmemo->save($entity));
     }
 
     /**
@@ -237,6 +237,6 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getMapper')
             ->willReturn($mapper);
 
-        $this->assertEquals($entity, $this->creditmemo->save($entity));
+        $this->assertSame($entity, $this->creditmemo->save($entity));
     }
 }

@@ -173,7 +173,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
         $this->createBlockObject();
         $this->assertSame($this->block, $this->block->setOrders([$order]));
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertSame($productTags, $this->block->getIdentities());
     }
 
     public function testInitOrders()
@@ -219,7 +219,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->orderCollection));
         $this->createBlockObject();
-        $this->assertEquals($this->orderCollection, $this->block->getOrders());
+        $this->assertSame($this->orderCollection, $this->block->getOrders());
     }
 
     public function testIsItemAvailableForReorder()

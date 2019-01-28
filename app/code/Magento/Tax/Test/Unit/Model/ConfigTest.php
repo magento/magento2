@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);
         $model->{$setterMethod}($value);
-        $this->assertEquals($value, $model->{$getterMethod}());
+        $this->assertSame($value, $model->{$getterMethod}());
     }
 
     /**
@@ -69,7 +69,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);
-        $this->assertEquals($expectedValue, $model->getCalculationSequence());
+        $this->assertSame($expectedValue, $model->getCalculationSequence());
     }
 
     /**
@@ -104,7 +104,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);
-        $this->assertEquals($expectedValue, $model->{$method}());
+        $this->assertSame($expectedValue, $model->{$method}());
     }
 
     /**

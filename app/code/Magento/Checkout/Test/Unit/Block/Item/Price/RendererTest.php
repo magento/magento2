@@ -30,6 +30,6 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer->setItem($item);
-        $this->assertEquals($item, $this->renderer->getItem());
+        $this->assertSame($item, $this->renderer->getItem());
     }
 }

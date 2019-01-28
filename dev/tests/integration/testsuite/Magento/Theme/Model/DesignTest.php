@@ -46,7 +46,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             \Magento\Theme\Model\Design::class
         );
         $designChange->loadChange($storeId)->changeDesign($design);
-        $this->assertEquals('Magento/luma', $design->getDesignTheme()->getThemePath());
+        $this->assertSame('Magento/luma', $design->getDesignTheme()->getThemePath());
     }
 
     public function testCRUD()
@@ -67,7 +67,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
                 \Magento\Theme\Model\Design::class
             );
             $model->loadChange(1);
-            $this->assertEquals($this->_model->getId(), $model->getId());
+            $this->assertSame($this->_model->getId(), $model->getId());
 
             /* Design change that intersects with existing ones should not be saved, so exception is expected */
             try {
@@ -129,7 +129,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInternalType('array', $cachedDesign);
         $this->assertArrayHasKey('design', $cachedDesign);
-        $this->assertEquals($cachedDesign['design'], $design->getDesign());
+        $this->assertSame($cachedDesign['design'], $design->getDesign());
 
         $design->setDesign('Magento/blank')->save();
 
@@ -147,7 +147,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $cachedDesign = $serializer->unserialize($cachedDesign);
 
         $this->assertTrue(is_array($cachedDesign));
-        $this->assertEquals($cachedDesign['design'], $design->getDesign());
+        $this->assertSame($cachedDesign['design'], $design->getDesign());
     }
 
     /**
@@ -205,7 +205,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $design->loadChange($storeId);
         $actualDesign = $design->getDesign();
 
-        $this->assertEquals($expectedDesign, $actualDesign);
+        $this->assertSame($expectedDesign, $actualDesign);
     }
 
     public function loadChangeTimezoneDataProvider()

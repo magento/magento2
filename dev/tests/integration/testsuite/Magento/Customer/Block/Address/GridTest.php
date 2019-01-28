@@ -57,7 +57,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $gridBlock = $this->createBlockForCustomer(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://localhost/index.php/customer/address/edit/id/1/',
             $gridBlock->getAddressEditUrl(1)
         );
@@ -77,7 +77,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\AddressInterface::class,
             $gridBlock->getAdditionalAddresses()[0]
         );
-        $this->assertEquals(2, $gridBlock->getAdditionalAddresses()[0]->getId());
+        $this->assertSame(2, $gridBlock->getAdditionalAddresses()[0]->getId());
     }
 
     /**
@@ -89,7 +89,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $gridBlock = $this->createBlockForCustomer($customerId);
         $this->currentCustomer->setCustomerId($customerId);
-        $this->assertEquals($expected, $gridBlock->getAdditionalAddresses());
+        $this->assertSame($expected, $gridBlock->getAdditionalAddresses());
     }
 
     public function getAdditionalAddressesDataProvider()
@@ -104,7 +104,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function testGetAddressHtmlWithoutAddress()
     {
         $gridBlock = $this->createBlockForCustomer(5);
-        $this->assertEquals('', $gridBlock->getAddressHtml(null));
+        $this->assertSame('', $gridBlock->getAddressHtml(null));
     }
 
     /**
@@ -120,7 +120,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         );
         $customer = $customerRepository->getById(1);
         $object = $gridBlock->getCustomer();
-        $this->assertEquals($customer, $object);
+        $this->assertSame($customer, $object);
     }
 
     /**

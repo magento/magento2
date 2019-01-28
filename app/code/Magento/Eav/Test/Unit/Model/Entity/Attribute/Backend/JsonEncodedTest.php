@@ -79,7 +79,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->model->beforeSave($product);
-        $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
+        $this->assertSame(json_encode([1, 2, 3]), $product->getData('json_encoded'));
     }
 
     /**
@@ -98,7 +98,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
         $this->model->beforeSave($product);
         
         // check it is encoded only once
-        $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
+        $this->assertSame(json_encode([1, 2, 3]), $product->getData('json_encoded'));
     }
 
     /**
@@ -112,7 +112,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->model->afterLoad($product);
-        $this->assertEquals([1, 2, 3], $product->getData('json_encoded'));
+        $this->assertSame([1, 2, 3], $product->getData('json_encoded'));
     }
 
     /**
@@ -126,6 +126,6 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->model->afterLoad($product);
-        $this->assertEquals([], $product->getData('json_encoded'));
+        $this->assertSame([], $product->getData('json_encoded'));
     }
 }

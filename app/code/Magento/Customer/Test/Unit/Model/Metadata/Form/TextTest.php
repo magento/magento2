@@ -54,7 +54,7 @@ class TextTest extends AbstractFormTestCase
     {
         $sut = $this->getClass($value);
         $actual = $sut->validateValue($value);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -86,7 +86,7 @@ class TextTest extends AbstractFormTestCase
         $actual = $sut->validateValue($value);
 
         if (is_bool($actual)) {
-            $this->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         } else {
             $this->assertContains($expected, $actual);
         }
@@ -167,7 +167,7 @@ class TextTest extends AbstractFormTestCase
         $actual = $sut->validateValue($value);
 
         if (is_bool($actual)) {
-            $this->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         } else {
             $this->assertContains($expected, $actual);
         }

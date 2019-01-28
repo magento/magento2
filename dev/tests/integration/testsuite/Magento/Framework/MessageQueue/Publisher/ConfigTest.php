@@ -37,14 +37,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals($publisher, $itemFromList, 'Inconsistent publisher object');
+        $this->assertSame($publisher, $itemFromList, 'Inconsistent publisher object');
 
-        $this->assertEquals('topic.message.queue.config.01', $publisher->getTopic(), 'Incorrect topic name');
+        $this->assertSame('topic.message.queue.config.01', $publisher->getTopic(), 'Incorrect topic name');
         $this->assertFalse($publisher->isDisabled(), 'Incorrect publisher state');
         /** @var \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface $connection */
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName(), 'Incorrect connection name');
-        $this->assertEquals('magento2', $connection->getExchange(), 'Incorrect exchange name');
+        $this->assertSame('amqp', $connection->getName(), 'Incorrect connection name');
+        $this->assertSame('magento2', $connection->getExchange(), 'Incorrect exchange name');
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }
 
@@ -55,7 +55,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $publisher = $config->getPublisher('topic.message.queue.config.04');
         $connection = $publisher->getConnection();
-        $this->assertEquals('magento', $connection->getExchange(), 'Incorrect exchange name');
+        $this->assertSame('magento', $connection->getExchange(), 'Incorrect exchange name');
     }
 
     public function testGetPublishersWithoutEnabledConnection()
@@ -65,13 +65,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $publisher = $config->getPublisher('topic.message.queue.config.02');
 
-        $this->assertEquals('topic.message.queue.config.02', $publisher->getTopic(), 'Incorrect topic name');
+        $this->assertSame('topic.message.queue.config.02', $publisher->getTopic(), 'Incorrect topic name');
         $this->assertFalse($publisher->isDisabled(), 'Incorrect publisher state');
 
         /** @var \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface $connection */
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName(), 'Incorrect default connection name');
-        $this->assertEquals('magento', $connection->getExchange(), 'Incorrect default exchange name');
+        $this->assertSame('amqp', $connection->getName(), 'Incorrect default connection name');
+        $this->assertSame('magento', $connection->getExchange(), 'Incorrect default exchange name');
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }
 

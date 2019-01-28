@@ -66,6 +66,6 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->with($entityId, explode(',', (string)$customerGroupIds), 'customer_group')
             ->willReturnSelf();
 
-        $this->assertEquals($entityData, $this->subject->execute($entityType, $entityData));
+        $this->assertSame($entityData, $this->subject->execute($entityType, $entityData));
     }
 }

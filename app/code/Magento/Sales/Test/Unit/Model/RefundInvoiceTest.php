@@ -312,7 +312,7 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityId')
             ->willReturn(2);
 
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $this->refundInvoice->execute(
                 $invoiceId,
@@ -375,7 +375,7 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
         $this->validationMessagesMock->expects($this->once())
             ->method('getMessages')->willReturn($errorMessages);
 
-        $this->assertEquals(
+        $this->assertSame(
             $errorMessages,
             $this->refundInvoice->execute(
                 $invoiceId,

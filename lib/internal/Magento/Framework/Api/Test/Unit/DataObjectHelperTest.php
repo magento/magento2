@@ -146,12 +146,12 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\AddressInterface::class
         );
 
-        $this->assertEquals($id, $addressDataObject->getId());
-        $this->assertEquals($countryId, $addressDataObject->getCountryId());
-        $this->assertEquals($street, $addressDataObject->getStreet());
-        $this->assertEquals($isDefaultShipping, $addressDataObject->isDefaultShipping());
-        $this->assertEquals($region, $addressDataObject->getRegion()->getRegion());
-        $this->assertEquals($regionId, $addressDataObject->getRegion()->getRegionId());
+        $this->assertSame($id, $addressDataObject->getId());
+        $this->assertSame($countryId, $addressDataObject->getCountryId());
+        $this->assertSame($street, $addressDataObject->getStreet());
+        $this->assertSame($isDefaultShipping, $addressDataObject->isDefaultShipping());
+        $this->assertSame($region, $addressDataObject->getRegion()->getRegion());
+        $this->assertSame($regionId, $addressDataObject->getRegion()->getRegionId());
     }
 
     public function testPopulateWithArrayWithCustomAttribute()
@@ -201,12 +201,12 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\AddressInterface::class
         );
 
-        $this->assertEquals($id, $addressDataObject->getId());
-        $this->assertEquals(
+        $this->assertSame($id, $addressDataObject->getId());
+        $this->assertSame(
             $customAttributeValue,
             $addressDataObject->getCustomAttribute($customAttributeCode)->getValue()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributeCode,
             $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode()
         );
@@ -264,12 +264,12 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\AddressInterface::class
         );
 
-        $this->assertEquals($id, $addressDataObject->getId());
-        $this->assertEquals(
+        $this->assertSame($id, $addressDataObject->getId());
+        $this->assertSame(
             $customAttributeValue,
             $addressDataObject->getCustomAttribute($customAttributeCode)->getValue()
         );
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributeCode,
             $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode()
         );

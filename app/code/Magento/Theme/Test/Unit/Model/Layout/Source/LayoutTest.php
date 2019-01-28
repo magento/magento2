@@ -48,7 +48,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->method('getPageLayouts')
             ->willReturn([new DataObject($data)]);
 
-        $this->assertEquals($expectedResult, $this->_model->toOptionArray(true));
-        $this->assertEquals('testCode', $this->_model->getDefaultValue());
+        $this->assertSame($expectedResult, $this->_model->toOptionArray(true));
+        $this->assertSame('testCode', $this->_model->getDefaultValue());
     }
 }

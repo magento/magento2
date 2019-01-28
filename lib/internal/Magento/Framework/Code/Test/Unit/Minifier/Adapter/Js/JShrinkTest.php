@@ -13,6 +13,6 @@ class JShrinkTest extends \PHPUnit\Framework\TestCase
         $minifier = new \Magento\Framework\Code\Minifier\Adapter\Js\JShrink();
         $actual = $minifier->minify($content);
         $expected = "var one='one';var two='two';";
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

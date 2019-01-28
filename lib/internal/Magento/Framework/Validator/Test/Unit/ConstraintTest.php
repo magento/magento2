@@ -42,7 +42,7 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_constraint->getAlias());
         $alias = 'foo';
         $constraint = new \Magento\Framework\Validator\Constraint($this->_validatorMock, $alias);
-        $this->assertEquals($alias, $constraint->getAlias());
+        $this->assertSame($alias, $constraint->getAlias());
     }
 
     /**
@@ -78,8 +78,8 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
             );
         }
 
-        $this->assertEquals($expectedResult, $this->_constraint->isValid($value));
-        $this->assertEquals($expectedMessages, $this->_constraint->getMessages());
+        $this->assertSame($expectedResult, $this->_constraint->isValid($value));
+        $this->assertSame($expectedMessages, $this->_constraint->getMessages());
     }
 
     /**
@@ -102,7 +102,7 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Translate\AdapterInterface::class
         )->getMockForAbstractClass();
         $this->_constraint->setTranslator($translator);
-        $this->assertEquals($translator, $this->_validatorMock->getTranslator());
-        $this->assertEquals($translator, $this->_constraint->getTranslator());
+        $this->assertSame($translator, $this->_validatorMock->getTranslator());
+        $this->assertSame($translator, $this->_constraint->getTranslator());
     }
 }

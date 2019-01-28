@@ -232,7 +232,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
             ->with($preparedTemplateText)
             ->will($this->returnValue($expectedResult));
 
-        $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
+        $this->assertSame($expectedResult, $model->getProcessedTemplate($variables));
     }
 
     /**
@@ -357,7 +357,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         $this->assetRepo->method('getUrlWithParams')
             ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_LOGO_FILE_ID, $designParams)
             ->will($this->returnValue($value));
-        $this->assertEquals($value, $model->getDefaultEmailLogo());
+        $this->assertSame($value, $model->getDefaultEmailLogo());
     }
 
     /**
@@ -375,7 +375,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         $config = ['area' => 'some_area', 'store' => 1];
         $model = $this->getModelMock();
         $model->setDesignConfig($config);
-        $this->assertEquals($config, $model->getDesignConfig()->getData());
+        $this->assertSame($config, $model->getDesignConfig()->getData());
     }
 
     /**
@@ -402,11 +402,11 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedConfigs as $set) {
             $model->emulateDesign($set['in']['store'], $set['in']['area']);
             // assert config data has been emulated
-            $this->assertEquals($set['out'], $model->getDesignConfig()->getData());
+            $this->assertSame($set['out'], $model->getDesignConfig()->getData());
 
             $model->revertDesign();
             // assert config data has been reverted to the original state
-            $this->assertEquals($originalConfig, $model->getDesignConfig()->getData());
+            $this->assertSame($originalConfig, $model->getDesignConfig()->getData());
         }
     }
 
@@ -434,7 +434,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedConfig = ['area' => 'test_area', 'store' => 2];
-        $this->assertEquals($expectedConfig, $model->getDesignConfig()->getData());
+        $this->assertSame($expectedConfig, $model->getDesignConfig()->getData());
     }
 
     /**

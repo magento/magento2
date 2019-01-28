@@ -69,7 +69,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testIsRssAllowed($isAllowed)
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue($isAllowed));
-        $this->assertEquals($isAllowed, $this->link->isRssAllowed());
+        $this->assertSame($isAllowed, $this->link->isRssAllowed());
     }
 
     /**
@@ -85,7 +85,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLabel()
     {
-        $this->assertEquals('Subscribe to RSS Feed', $this->link->getLabel());
+        $this->assertSame('Subscribe to RSS Feed', $this->link->getLabel());
     }
 
     /**
@@ -98,7 +98,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $categoryModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getLevel']);
         $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
         $categoryModel->expects($this->any())->method('getLevel')->will($this->returnValue($categoryLevel));
-        $this->assertEquals($isTop, $this->link->isTopCategory());
+        $this->assertSame($isTop, $this->link->isTopCategory());
     }
 
     /**
@@ -125,6 +125,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerInterface->expects($this->any())->method('getStore')->will($this->returnValue($storeModel));
         $storeModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
 
-        $this->assertEquals($rssUrl, $this->link->getLink());
+        $this->assertSame($rssUrl, $this->link->getLink());
     }
 }

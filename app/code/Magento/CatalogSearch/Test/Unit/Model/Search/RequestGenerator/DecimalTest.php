@@ -44,7 +44,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
         $actual = $this->decimal->getFilterData($this->attribute, $filterName);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetAggregationData()
@@ -62,6 +62,6 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
         $actual = $this->decimal->getAggregationData($this->attribute, $bucketName);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

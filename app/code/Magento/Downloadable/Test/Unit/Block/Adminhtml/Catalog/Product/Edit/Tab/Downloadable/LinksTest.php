@@ -182,8 +182,8 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         foreach ($linkData as $link) {
             $fileSave = $link->getFileSave(0);
             $sampleFileSave = $link->getSampleFileSave(0);
-            $this->assertEquals($expectingFileData['file'], $fileSave);
-            $this->assertEquals($expectingFileData['sample_file'], $sampleFileSave);
+            $this->assertSame($expectingFileData['file'], $fileSave);
+            $this->assertSame($expectingFileData['sample_file'], $sampleFileSave);
         }
     }
 }

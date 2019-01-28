@@ -65,7 +65,7 @@ class ConfigurableTest extends TestCase
     public function testGetProductFinalPriceIfOneOfChildIsDisabled(): void
     {
         $configurableProduct = $this->getConfigurableProductFromCollection();
-        $this->assertEquals(10, $configurableProduct->getMinimalPrice());
+        $this->assertSame(10, $configurableProduct->getMinimalPrice());
 
         $childProduct = $this->productRepository->getById(10, false, null, true);
         $childProduct->setStatus(Status::STATUS_DISABLED);
@@ -76,7 +76,7 @@ class ConfigurableTest extends TestCase
         $this->storeManager->setCurrentStore($currentStoreId);
 
         $configurableProduct = $this->getConfigurableProductFromCollection();
-        $this->assertEquals(20, $configurableProduct->getMinimalPrice());
+        $this->assertSame(20, $configurableProduct->getMinimalPrice());
     }
 
     /**
@@ -94,7 +94,7 @@ class ConfigurableTest extends TestCase
     public function testGetProductFinalPriceIfOneOfChildIsDisabledPerStore(): void
     {
         $configurableProduct = $this->getConfigurableProductFromCollection();
-        $this->assertEquals(10, $configurableProduct->getMinimalPrice());
+        $this->assertSame(10, $configurableProduct->getMinimalPrice());
 
         $childProduct = $this->productRepository->get('simple_10', false, null, true);
         $childProduct->setStatus(Status::STATUS_DISABLED);
@@ -107,7 +107,7 @@ class ConfigurableTest extends TestCase
         $this->storeManager->setCurrentStore($currentStoreId);
 
         $configurableProduct = $this->getConfigurableProductFromCollection();
-        $this->assertEquals(20, $configurableProduct->getMinimalPrice());
+        $this->assertSame(20, $configurableProduct->getMinimalPrice());
     }
 
     /**
@@ -123,7 +123,7 @@ class ConfigurableTest extends TestCase
     public function testGetProductMinimalPriceIfOneOfChildIsOutOfStock(): void
     {
         $configurableProduct = $this->getConfigurableProductFromCollection();
-        $this->assertEquals(10, $configurableProduct->getMinimalPrice());
+        $this->assertSame(10, $configurableProduct->getMinimalPrice());
 
         $childProduct = $this->productRepository->getById(10, false, null, true);
         $stockItem = $childProduct->getExtensionAttributes()->getStockItem();
@@ -131,7 +131,7 @@ class ConfigurableTest extends TestCase
         $this->stockRepository->save($stockItem);
 
         $configurableProduct = $this->getConfigurableProductFromCollection();
-        $this->assertEquals(20, $configurableProduct->getMinimalPrice());
+        $this->assertSame(20, $configurableProduct->getMinimalPrice());
     }
 
     /**

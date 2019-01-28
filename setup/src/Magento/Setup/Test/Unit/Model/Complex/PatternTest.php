@@ -92,9 +92,9 @@ class PatternTest extends \PHPUnit\Framework\TestCase
     public function testPattern($patternData, $expectedRowsCount, $expectedRowsResult)
     {
         $pattern = $this->getPattern($patternData);
-        $this->assertEquals($pattern->getRowsCount(), $expectedRowsCount);
+        $this->assertSame($pattern->getRowsCount(), $expectedRowsCount);
         foreach ($expectedRowsResult as $key => $expectedRow) {
-            $this->assertEquals($expectedRow, $pattern->getRow(floor($key / $pattern->getRowsCount()) + 1, $key));
+            $this->assertSame($expectedRow, $pattern->getRow(floor($key / $pattern->getRowsCount()) + 1, $key));
         }
     }
 }

@@ -117,7 +117,7 @@ class CouponRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
 
         $this->resource->expects($this->once())->method('save')->with($coupon);
-        $this->assertEquals($coupon, $this->model->save($coupon));
+        $this->assertSame($coupon, $this->model->save($coupon));
     }
 
     /**
@@ -188,7 +188,7 @@ class CouponRepositoryTest extends \PHPUnit\Framework\TestCase
         $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
         $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
         $this->couponFactory->expects($this->once())->method('create')->willReturn($coupon);
-        $this->assertEquals($coupon, $this->model->getById($id));
+        $this->assertSame($coupon, $this->model->getById($id));
     }
 
     public function testDeleteById()
@@ -201,7 +201,7 @@ class CouponRepositoryTest extends \PHPUnit\Framework\TestCase
         $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
         $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
         $this->couponFactory->expects($this->any())->method('create')->willReturn($coupon);
-        $this->assertEquals($coupon, $this->model->getById($id));
+        $this->assertSame($coupon, $this->model->getById($id));
 
         $this->resource->expects($this->once())->method('delete')->with($coupon);
         $this->assertTrue($this->model->deleteById($id));
@@ -230,6 +230,6 @@ class CouponRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchResultsMock->expects($this->once())->method('setItems')->with([$couponMock]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
 
-        $this->assertEquals($this->searchResultsMock, $this->model->getList($searchCriteriaMock));
+        $this->assertSame($this->searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 }

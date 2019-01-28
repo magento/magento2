@@ -59,8 +59,8 @@ class AbstractExtensibleObjectTest extends \PHPUnit\Framework\TestCase
 
         $extensionAttributes = $region->getExtensionAttributes();
         $this->assertInstanceOf(FakeRegionExtension::class, $extensionAttributes);
-        $this->assertEquals($expectedDataBefore, $extensionAttributes->__toArray());
-        $this->assertEquals($regionCode, $region->getRegionCode());
+        $this->assertSame($expectedDataBefore, $extensionAttributes->__toArray());
+        $this->assertSame($regionCode, $region->getRegionCode());
 
         $regionCode = 'changed_test_code';
         $region->setExtensionAttributes(
@@ -70,8 +70,8 @@ class AbstractExtensibleObjectTest extends \PHPUnit\Framework\TestCase
             )
         )->setRegionCode($regionCode); // change $regionCode to test AbstractExtensibleObject::setData
         $extensionAttributes = $region->getExtensionAttributes();
-        $this->assertEquals($expectedDataAfter, $extensionAttributes->__toArray());
-        $this->assertEquals($regionCode, $region->getRegionCode());
+        $this->assertSame($expectedDataAfter, $extensionAttributes->__toArray());
+        $this->assertSame($regionCode, $region->getRegionCode());
     }
 
     public function extensionAttributesDataProvider()

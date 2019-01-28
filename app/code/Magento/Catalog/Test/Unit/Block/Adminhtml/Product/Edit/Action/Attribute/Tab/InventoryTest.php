@@ -86,7 +86,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         $this->backordersMock->expects($this->once())
             ->method('toOptionArray')
             ->will($this->returnValue('return-value'));
-        $this->assertEquals('return-value', $this->inventory->getBackordersOption());
+        $this->assertSame('return-value', $this->inventory->getBackordersOption());
     }
 
     /**
@@ -96,7 +96,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFieldSuffix()
     {
-        $this->assertEquals('inventory', $this->inventory->getFieldSuffix());
+        $this->assertSame('inventory', $this->inventory->getFieldSuffix());
     }
 
     /**
@@ -126,7 +126,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->with('field-name')
             ->will($this->returnValue('return-value'));
 
-        $this->assertEquals('return-value', $this->inventory->getDefaultConfigValue('field-name'));
+        $this->assertSame('return-value', $this->inventory->getDefaultConfigValue('field-name'));
     }
 
     /**
@@ -137,7 +137,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
     public function testGetDefaultMinSaleQty($expected, $default)
     {
         $this->stockConfigurationMock->method('getDefaultConfigValue')->willReturn($default);
-        $this->assertEquals($expected, $this->inventory->getDefaultMinSaleQty());
+        $this->assertSame($expected, $this->inventory->getDefaultMinSaleQty());
     }
 
     public function getDefaultMinSaleQtyDataProvider()
@@ -162,7 +162,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTabLabel()
     {
-        $this->assertEquals('Advanced Inventory', $this->inventory->getTabLabel());
+        $this->assertSame('Advanced Inventory', $this->inventory->getTabLabel());
     }
 
     /**
@@ -172,7 +172,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTabTitle()
     {
-        $this->assertEquals('Advanced Inventory', $this->inventory->getTabLabel());
+        $this->assertSame('Advanced Inventory', $this->inventory->getTabLabel());
     }
 
     /**
@@ -202,6 +202,6 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled()
     {
-        $this->assertEquals(true, $this->inventory->isAvailable('field'));
+        $this->assertSame(true, $this->inventory->isAvailable('field'));
     }
 }

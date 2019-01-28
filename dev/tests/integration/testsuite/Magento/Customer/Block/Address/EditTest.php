@@ -70,7 +70,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSaveUrl()
     {
-        $this->assertEquals('http://localhost/index.php/customer/address/formPost/', $this->_block->getSaveUrl());
+        $this->assertSame('http://localhost/index.php/customer/address/formPost/', $this->_block->getSaveUrl());
     }
 
     /**
@@ -79,7 +79,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRegionId()
     {
-        $this->assertEquals(1, $this->_block->getRegionId());
+        $this->assertSame(1, $this->_block->getRegionId());
     }
 
     /**
@@ -88,7 +88,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCountryId()
     {
-        $this->assertEquals('US', $this->_block->getCountryId());
+        $this->assertSame('US', $this->_block->getCountryId());
     }
 
     /**
@@ -97,7 +97,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerAddressCount()
     {
-        $this->assertEquals(2, $this->_block->getCustomerAddressCount());
+        $this->assertSame(2, $this->_block->getCustomerAddressCount());
     }
 
     /**
@@ -105,7 +105,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanSetAsDefaultShipping()
     {
-        $this->assertEquals(0, $this->_block->canSetAsDefaultShipping());
+        $this->assertSame(0, $this->_block->canSetAsDefaultShipping());
     }
 
     /**
@@ -122,7 +122,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStreetLine()
     {
-        $this->assertEquals('Green str, 67', $this->_block->getStreetLine(1));
-        $this->assertEquals('', $this->_block->getStreetLine(2));
+        $this->assertSame('Green str, 67', $this->_block->getStreetLine(1));
+        $this->assertSame('', $this->_block->getStreetLine(2));
     }
 }

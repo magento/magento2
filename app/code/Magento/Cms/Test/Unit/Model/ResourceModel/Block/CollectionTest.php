@@ -61,7 +61,7 @@ class CollectionTest extends AbstractCollectionTest
 
         $this->assertSame($this->collection, $this->collection->addFieldToFilter('store_id', $storeId));
         // addition call to make sure that correct value was set to filter
-        $this->assertEquals($expectedFilter, $this->collection->getFilter('store'));
+        $this->assertSame($expectedFilter, $this->collection->getFilter('store'));
     }
 
     public function testAddFieldToFilter()
@@ -116,7 +116,7 @@ class CollectionTest extends AbstractCollectionTest
 
         $this->assertEmpty($item->getStoreId());
         $this->collection->load();
-        $this->assertEquals($expectedResult[$item->getId()], $item->getStoreId());
+        $this->assertSame($expectedResult[$item->getId()], $item->getStoreId());
     }
 
     /**

@@ -21,6 +21,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['some/config/path1' => 'value1', 'some/config/path2' => 'value2'];
         $expectedResult = ['some' => ['config' => ['path1' => 'value1', 'path2' => 'value2']]];
-        $this->assertEquals($expectedResult, $this->_model->convert($data));
+        $this->assertSame($expectedResult, $this->_model->convert($data));
     }
 }

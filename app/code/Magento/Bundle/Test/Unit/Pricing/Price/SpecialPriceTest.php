@@ -109,11 +109,11 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue($regularPrice));
         }
 
-        $this->assertEquals($value, $this->model->getValue());
+        $this->assertSame($value, $this->model->getValue());
 
         //check that the second call will get data from cache the same as in first call
-        $this->assertEquals($value, $this->model->getValue());
-        $this->assertEquals($percent, $this->model->getDiscountPercent());
+        $this->assertSame($value, $this->model->getValue());
+        $this->assertSame($percent, $this->model->getDiscountPercent());
     }
 
     /**

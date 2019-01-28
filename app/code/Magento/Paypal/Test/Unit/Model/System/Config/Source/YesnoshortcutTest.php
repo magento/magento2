@@ -25,6 +25,6 @@ class YesnoshortcutTest extends \PHPUnit\Framework\TestCase
             ['value' => 1, 'label' => __('Yes (PayPal recommends this option)')],
             ['value' => 0, 'label' => __('No')]
         ];
-        $this->assertEquals($expectedResult, $this->_model->toOptionArray());
+        $this->assertSame($expectedResult, $this->_model->toOptionArray());
     }
 }

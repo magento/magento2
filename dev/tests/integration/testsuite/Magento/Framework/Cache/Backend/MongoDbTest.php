@@ -57,7 +57,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->getIds());
         $this->_model->save('test data 1', 'test1');
         $this->_model->save('test data 2', 'test2');
-        $this->assertEquals(['test1', 'test2'], $this->_model->getIds());
+        $this->assertSame(['test1', 'test2'], $this->_model->getIds());
     }
 
     public function testGetTags()
@@ -67,7 +67,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->_model->save('test data 2', 'test2', ['tag1', 'tag3']);
         $actual = $this->_model->getTags();
         $expected = ['tag1', 'tag2', 'tag3'];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -77,7 +77,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     {
         $this->_prepareCollection();
         $actualIds = $this->_model->getIdsMatchingTags($searchTags);
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     public function getIdsMatchingTagsDataProvider()
@@ -95,7 +95,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     {
         $this->_prepareCollection();
         $actualIds = $this->_model->getIdsNotMatchingTags($searchTags);
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     public function getIdsNotMatchingTagsDataProvider()
@@ -113,7 +113,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     {
         $this->_prepareCollection();
         $actualIds = $this->_model->getIdsMatchingAnyTags($searchTags);
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     public function getIdsMatchingAnyTagsDataProvider()
@@ -200,10 +200,10 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->_model->save($data, $cacheId, $tags));
         $actualData = $this->_model->load($cacheId);
-        $this->assertEquals($data, $actualData);
+        $this->assertSame($data, $actualData);
         $actualMetadata = $this->_model->getMetadatas($cacheId);
         $this->arrayHasKey('tags', $actualMetadata);
-        $this->assertEquals($tags, $actualMetadata['tags']);
+        $this->assertSame($tags, $actualMetadata['tags']);
     }
 
     public function testRemove()
@@ -224,7 +224,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->clean($mode, $tags);
         $actualIds = $this->_model->getIds();
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     public function cleanDataProvider()

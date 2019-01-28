@@ -28,7 +28,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShipAcceptUrl()
     {
-        $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
+        $this->assertSame('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
     }
 
     /**
@@ -38,7 +38,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShipAcceptUrlLive()
     {
-        $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
+        $this->assertSame('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
     }
 
     /**
@@ -46,7 +46,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShipConfirmUrl()
     {
-        $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
+        $this->assertSame('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
     }
 
     /**
@@ -56,7 +56,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShipConfirmUrlLive()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'https://onlinetools.ups.com/ups.app/xml/ShipConfirm',
             $this->carrier->getShipConfirmUrl()
         );
@@ -82,7 +82,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rateResult = $this->carrier->collectRates($rateRequest);
         $result = $rateResult->asArray();
         $methods = $result[$this->carrier::CODE]['methods'];
-        $this->assertEquals(0, $methods['GND']['price']);
-        $this->assertNotEquals(0, $methods['1DA']['price']);
+        $this->assertSame(0, $methods['GND']['price']);
+        $this->assertNotSame(0, $methods['1DA']['price']);
     }
 }

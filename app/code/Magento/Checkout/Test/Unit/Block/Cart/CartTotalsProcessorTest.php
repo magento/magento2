@@ -60,6 +60,6 @@ class CartTotalsProcessorTest extends \PHPUnit\Framework\TestCase
             ->with('sales/totals_sort')
             ->willReturn($configData);
 
-        $this->assertEquals($expected, $this->model->process($jsLayout));
+        $this->assertSame($expected, $this->model->process($jsLayout));
     }
 }

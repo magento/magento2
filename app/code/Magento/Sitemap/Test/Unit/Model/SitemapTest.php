@@ -653,7 +653,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->method('_getBaseDir')
             ->willReturn($baseDir);
 
-        $this->assertEquals($result, $model->getSitemapUrl($sitemapPath, $sitemapFileName));
+        $this->assertSame($result, $model->getSitemapUrl($sitemapPath, $sitemapFileName));
     }
 
     /**

@@ -71,12 +71,12 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertNotEmpty($requestToken->getRequestToken(), "Request token value is not set");
         $this->assertNotEmpty($requestToken->getRequestTokenSecret(), "Request token secret is not set");
 
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN,
             strlen($requestToken->getRequestToken()),
             "Request token value length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET,
             strlen($requestToken->getRequestTokenSecret()),
             "Request token secret length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET
@@ -129,12 +129,12 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertNotEmpty($accessToken->getAccessToken(), "Access token value is not set.");
         $this->assertNotEmpty($accessToken->getAccessTokenSecret(), "Access token secret is not set.");
 
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN,
             strlen($accessToken->getAccessToken()),
             "Access token value length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET,
             strlen($accessToken->getAccessTokenSecret()),
             "Access token secret length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET

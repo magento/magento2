@@ -37,8 +37,8 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
         $basePath = "rest/{$storeCode}";
         $path = $basePath . '/V1/customerAccounts/createCustomer';
         $resultPath = $this->pathProcessor->process($path);
-        $this->assertEquals(str_replace($basePath, "", $path), $resultPath);
-        $this->assertEquals($storeCode, $this->storeManager->getStore()->getCode());
+        $this->assertSame(str_replace($basePath, "", $path), $resultPath);
+        $this->assertSame($storeCode, $this->storeManager->getStore()->getCode());
     }
 
     public function testProcessWithAllStoreCode()
@@ -47,8 +47,8 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
         $path = '/V1/customerAccounts/createCustomer';
         $uri = 'rest/' . $storeCode . $path;
         $result = $this->pathProcessor->process($uri);
-        $this->assertEquals($path, $result);
-        $this->assertEquals(Store::ADMIN_CODE, $this->storeManager->getStore()->getCode());
+        $this->assertSame($path, $result);
+        $this->assertSame(Store::ADMIN_CODE, $this->storeManager->getStore()->getCode());
     }
 
     public function testProcessWithoutStoreCode()
@@ -56,7 +56,7 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
         $path = '/V1/customerAccounts/createCustomer';
         $uri = 'rest' . $path;
         $result = $this->pathProcessor->process($uri);
-        $this->assertEquals($path, $result);
-        $this->assertEquals('default', $this->storeManager->getStore()->getCode());
+        $this->assertSame($path, $result);
+        $this->assertSame('default', $this->storeManager->getStore()->getCode());
     }
 }

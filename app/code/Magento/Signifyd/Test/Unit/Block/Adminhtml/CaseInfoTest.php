@@ -107,7 +107,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
             ->method('getGuaranteeDisposition')
             ->willReturn($guaranteeDisposition);
 
-        self::assertEquals(
+        self::assertSame(
             $expectedLabel,
             $this->caseInfo->getCaseGuaranteeDisposition()
         );
@@ -142,7 +142,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
             ->method('getByOrderId')
             ->willReturn(null);
 
-        self::assertEquals(
+        self::assertSame(
             '',
             $this->caseInfo->getCaseGuaranteeDisposition()
         );

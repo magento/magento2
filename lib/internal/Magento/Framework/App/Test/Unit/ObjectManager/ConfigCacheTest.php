@@ -63,7 +63,7 @@ class ConfigCacheTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with($data)
             ->willReturn($expectedResult);
-        $this->assertEquals($expectedResult, $this->configCache->get($key));
+        $this->assertSame($expectedResult, $this->configCache->get($key));
     }
 
     /**

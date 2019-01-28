@@ -26,6 +26,6 @@ class SelectRendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn('render1');
 
         $model = new \Magento\Framework\DB\Select\SelectRenderer($renders);
-        $this->assertEquals('render1', $model->render($selectMock));
+        $this->assertSame('render1', $model->render($selectMock));
     }
 }

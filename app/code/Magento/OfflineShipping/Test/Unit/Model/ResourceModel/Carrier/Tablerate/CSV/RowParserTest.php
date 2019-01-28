@@ -92,7 +92,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
             $conditionShortName,
             $columnValueMap
         );
-        $this->assertEquals([$expectedResult], $result);
+        $this->assertSame([$expectedResult], $result);
     }
 
     /**
@@ -124,7 +124,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
             $actualMessage = $e->getMessage();
             $exception = $e;
         }
-        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertSame($expectedMessage, $actualMessage);
         throw $exception;
     }
 

@@ -52,7 +52,7 @@ class StatusTest extends AbstractColumnTest
             ->method('getReviewStatusesOptionArray')
             ->willReturn($expected);
 
-        $this->assertEquals($expected, $this->getModel()->toOptionArray());
+        $this->assertSame($expected, $this->getModel()->toOptionArray());
     }
 
     public function testPrepareDataSource()
@@ -82,6 +82,6 @@ class StatusTest extends AbstractColumnTest
                 \Magento\Review\Model\Review::STATUS_APPROVED => __('Approved'),
             ]);
 
-        $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
+        $this->assertSame($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
     }
 }

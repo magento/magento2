@@ -293,7 +293,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
             $foundNamespace = str_replace('\\', '/', $foundNamespace);
             $foundNamespace .= '/' . $className;
             if ($namespaceFolders != null && $foundNamespace != null) {
-                $this->assertEquals(
+                $this->assertSame(
                     $namespaceFolders,
                     $foundNamespace,
                     "Location of {$file} does not match formal namespace: {$expectedNamespace}\n"

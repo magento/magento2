@@ -152,10 +152,10 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
 
         $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
 
-        $this->assertEquals($expectedPrice, $quoteItem->getPrice());
-        $this->assertEquals($expectedOriginalPrice, $quoteItem->getBaseOriginalPrice());
-        $this->assertEquals($convertedPrice, $quoteItem->getCalculationPrice());
-        $this->assertEquals($convertedPrice, $quoteItem->getConvertedPrice());
+        $this->assertSame($expectedPrice, $quoteItem->getPrice());
+        $this->assertSame($expectedOriginalPrice, $quoteItem->getBaseOriginalPrice());
+        $this->assertSame($convertedPrice, $quoteItem->getCalculationPrice());
+        $this->assertSame($convertedPrice, $quoteItem->getConvertedPrice());
     }
 
     public function testFetch()
@@ -170,6 +170,6 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
         $totalMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Total::class, ['getSubtotal']);
         $totalMock->expects($this->once())->method('getSubtotal')->willReturn(100);
 
-        $this->assertEquals($expectedResult, $this->subtotalModel->fetch($quoteMock, $totalMock));
+        $this->assertSame($expectedResult, $this->subtotalModel->fetch($quoteMock, $totalMock));
     }
 }

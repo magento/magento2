@@ -31,6 +31,6 @@ class AbstractInstructionTest extends \PHPUnit\Framework\TestCase
             ->willReturn('instructions');
         $this->_model->setData('method', $method);
 
-        $this->assertEquals('instructions', $this->_model->getInstructions());
+        $this->assertSame('instructions', $this->_model->getInstructions());
     }
 }

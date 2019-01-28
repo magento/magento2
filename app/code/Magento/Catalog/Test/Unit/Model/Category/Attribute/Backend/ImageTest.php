@@ -101,7 +101,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals(null, $object->getTestAttribute());
+        $this->assertSame(null, $object->getTestAttribute());
     }
 
     /**
@@ -138,7 +138,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('', $object->getTestAttribute());
+        $this->assertSame('', $object->getTestAttribute());
     }
 
     /**
@@ -157,7 +157,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('test123.jpg', $object->getTestAttribute());
+        $this->assertSame('test123.jpg', $object->getTestAttribute());
     }
 
     /**
@@ -188,8 +188,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
-        $this->assertEquals(
+        $this->assertSame('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
+        $this->assertSame(
             [['name' => '/pub/media/wysiwyg/test123.jpg', 'url' => '/pub/media/wysiwyg/test123.jpg']],
             $object->getData('_additional_data_test_attribute')
         );
@@ -211,7 +211,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals([
+        $this->assertSame([
             ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
         ], $object->getData('_additional_data_test_attribute'));
     }
@@ -230,7 +230,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('test123.jpg', $object->getTestAttribute());
+        $this->assertSame('test123.jpg', $object->getTestAttribute());
         $this->assertNull($object->getData('_additional_data_test_attribute'));
     }
 

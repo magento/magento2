@@ -100,7 +100,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerName')
             ->willReturn(' customer name ');
 
-        $this->assertEquals('customer name', $this->helper->getUserName());
+        $this->assertSame('customer name', $this->helper->getUserName());
     }
 
     public function testGetUserEmailNotLoggedIn()
@@ -127,7 +127,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerDataObject')
             ->willReturn($customerDataObject);
 
-        $this->assertEquals('customer@email.com', $this->helper->getUserEmail());
+        $this->assertSame('customer@email.com', $this->helper->getUserEmail());
     }
 
     public function testGetPostValue()

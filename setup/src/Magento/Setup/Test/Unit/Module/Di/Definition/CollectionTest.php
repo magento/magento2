@@ -62,13 +62,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddDefinition()
     {
         $this->model->addDefinition(self::INSTANCE_1, $this->getArgument());
-        $this->assertEquals($this->getExpectedDefinition(), $this->model->getCollection());
+        $this->assertSame($this->getExpectedDefinition(), $this->model->getCollection());
     }
 
     public function testInitialize()
     {
         $this->model->initialize([self::INSTANCE_1 => $this->getArgument()]);
-        $this->assertEquals($this->getExpectedDefinition(), $this->model->getCollection());
+        $this->assertSame($this->getExpectedDefinition(), $this->model->getCollection());
     }
 
     public function testHasInstance()
@@ -80,13 +80,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetInstancesNamesList()
     {
         $this->model->addDefinition(self::INSTANCE_1, $this->getArgument());
-        $this->assertEquals([self::INSTANCE_1], $this->model->getInstancesNamesList());
+        $this->assertSame([self::INSTANCE_1], $this->model->getInstancesNamesList());
     }
 
     public function testGetInstanceArguments()
     {
         $this->model->addDefinition(self::INSTANCE_1, $this->getArgument());
-        $this->assertEquals($this->getArgument(), $this->model->getInstanceArguments(self::INSTANCE_1));
+        $this->assertSame($this->getArgument(), $this->model->getInstanceArguments(self::INSTANCE_1));
     }
 
     public function testAddCollection()
@@ -95,7 +95,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock->expects($this->any())->method('getCollection')
             ->willReturn([self::INSTANCE_2 => $this->getArgument()]);
         $this->model->addCollection($this->collectionMock);
-        $this->assertEquals(
+        $this->assertSame(
             [self::INSTANCE_1 => $this->getArgument(), self::INSTANCE_2 => $this->getArgument()],
             $this->model->getCollection()
         );

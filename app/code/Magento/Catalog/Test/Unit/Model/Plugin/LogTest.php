@@ -42,7 +42,7 @@ class LogTest extends \PHPUnit\Framework\TestCase
     {
         $this->compareItemMock->expects($this->once())->method('clean');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->logResourceMock,
             $this->model->afterClean($this->subjectMock, $this->logResourceMock)
         );

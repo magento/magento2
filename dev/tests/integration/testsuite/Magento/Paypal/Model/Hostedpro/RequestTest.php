@@ -45,7 +45,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setOrder($order);
         $addressData = require(__DIR__ . '/../../_files/address_data.php');
-        static::assertEquals($incrementId, $this->model->getInvoice());
+        static::assertSame($incrementId, $this->model->getInvoice());
 
         $this->assertAddress($addressData, 'billing');
         $this->assertAddress($addressData);
@@ -61,12 +61,12 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $type = !empty($type) ? $type . '_' : '';
 
-        static::assertEquals($address['firstname'], $this->model->getData($type.'first_name'));
-        static::assertEquals($address['lastname'], $this->model->getData($type.'last_name'));
-        static::assertEquals($address['city'], $this->model->getData($type.'city'));
-        static::assertEquals($address['region'], $this->model->getData($type.'state'));
-        static::assertEquals($address['country_id'], $this->model->getData($type.'country'));
-        static::assertEquals($address['postcode'], $this->model->getData($type.'zip'));
-        static::assertEquals($address['street'], $this->model->getData($type.'address1'));
+        static::assertSame($address['firstname'], $this->model->getData($type.'first_name'));
+        static::assertSame($address['lastname'], $this->model->getData($type.'last_name'));
+        static::assertSame($address['city'], $this->model->getData($type.'city'));
+        static::assertSame($address['region'], $this->model->getData($type.'state'));
+        static::assertSame($address['country_id'], $this->model->getData($type.'country'));
+        static::assertSame($address['postcode'], $this->model->getData($type.'zip'));
+        static::assertSame($address['street'], $this->model->getData($type.'address1'));
     }
 }

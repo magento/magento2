@@ -125,13 +125,13 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
         );
         $this->indexerCommand->execute([]);
 
-        static::assertEquals(
+        static::assertSame(
             Cli::RETURN_SUCCESS,
             $this->indexerCommand->getStatusCode(),
             $this->indexerCommand->getDisplay(true)
         );
 
-        static::assertEquals(
+        static::assertSame(
             Cli::RETURN_SUCCESS,
             $this->commandTester->getStatusCode(),
             $this->commandTester->getDisplay(true)

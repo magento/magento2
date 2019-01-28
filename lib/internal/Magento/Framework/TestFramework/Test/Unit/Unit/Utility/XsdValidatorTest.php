@@ -32,7 +32,7 @@ class XsdValidatorTest extends \PHPUnit\Framework\TestCase
         $xmlFile = realpath(__DIR__ . '/_files/valid.xml');
         $xmlString = file_get_contents($xmlFile);
 
-        $this->assertEquals([], $this->_validator->validate($this->_xsdSchema, $xmlString));
+        $this->assertSame([], $this->_validator->validate($this->_xsdSchema, $xmlString));
     }
 
     public function testInvalidXml()
@@ -44,6 +44,6 @@ class XsdValidatorTest extends \PHPUnit\Framework\TestCase
         ];
         $xmlString = file_get_contents($xmlFile);
 
-        $this->assertEquals($expected, $this->_validator->validate($this->_xsdSchema, $xmlString));
+        $this->assertSame($expected, $this->_validator->validate($this->_xsdSchema, $xmlString));
     }
 }

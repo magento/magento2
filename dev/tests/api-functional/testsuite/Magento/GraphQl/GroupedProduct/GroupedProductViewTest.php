@@ -62,7 +62,7 @@ QUERY;
             $actualResponse['items'],
             "Precondition failed: 'grouped product items' must not be empty"
         );
-        $this->assertEquals(2, count($actualResponse['items']));
+        $this->assertSame(2, count($actualResponse['items']));
         $groupedProductLinks = $product->getProductLinks();
         foreach ($actualResponse['items'] as $itemIndex => $bundleItems) {
             $this->assertNotEmpty($bundleItems);
@@ -72,11 +72,11 @@ QUERY;
             /** @var \Magento\Catalog\Model\Product $associatedProduct */
             $associatedProduct = $productsRepository->get($associatedProductSku);
 
-            $this->assertEquals(
+            $this->assertSame(
                 $groupedProductLinks[$itemIndex]->getExtensionAttributes()->getQty(),
                 $actualResponse['items'][$itemIndex]['qty']
             );
-            $this->assertEquals(
+            $this->assertSame(
                 $groupedProductLinks[$itemIndex]->getPosition(),
                 $actualResponse['items'][$itemIndex]['position']
             );

@@ -260,7 +260,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('repo1');
         $this->createPackagesData();
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(2, count($packages));
+        $this->assertSame(2, count($packages));
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
         $firstPackage = array_values($packages)[0];
@@ -271,7 +271,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetPackagesForUpdate()
     {
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(3, count($packages));
+        $this->assertSame(3, count($packages));
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('magento/package-2', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
@@ -283,7 +283,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetInstalledPackages()
     {
         $installedPackages = $this->packagesData->getInstalledPackages();
-        $this->assertEquals(3, count($installedPackages));
+        $this->assertSame(3, count($installedPackages));
         $this->assertArrayHasKey('magento/package-1', $installedPackages);
         $this->assertArrayHasKey('magento/package-2', $installedPackages);
         $this->assertArrayHasKey('partner/package-3', $installedPackages);
@@ -291,7 +291,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMetaPackagesMap()
     {
-        static::assertEquals(
+        static::assertSame(
             ['magento/package-3' => 'magento/package-1'],
             $this->packagesData->getMetaPackagesMap()
         );
@@ -299,7 +299,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
 
     public function testAddPackageExtraInfo()
     {
-        static::assertEquals(
+        static::assertSame(
             [
                 'package_title' => 'Package 3 title',
                 'package_type' => 'Extension',

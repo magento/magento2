@@ -80,7 +80,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
 
         $this->compiled->extend($configuration);
         foreach ($expectedArguments as $type => $arguments) {
-            $this->assertEquals($arguments, $this->compiled->getArguments($type));
+            $this->assertSame($arguments, $this->compiled->getArguments($type));
         }
     }
 
@@ -101,7 +101,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
             'instanceType3' => 'newInstanceTypeValue3'
         ];
         $this->compiled->extend($configuration);
-        $this->assertEquals($expectedTypes, $this->compiled->getVirtualTypes());
+        $this->assertSame($expectedTypes, $this->compiled->getVirtualTypes());
     }
 
     /**
@@ -119,7 +119,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
             'preference2' => 'preferenceValue2'
         ];
         $this->compiled->extend($configuration);
-        $this->assertEquals($expectedPreferences, $this->compiled->getPreferences());
+        $this->assertSame($expectedPreferences, $this->compiled->getPreferences());
     }
 
     /**
@@ -188,9 +188,9 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         $arguments = $reflection->getProperty('arguments');
         $arguments->setAccessible(true);
 
-        $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
-        $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
-        $this->assertEquals($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
+        $this->assertSame($expectedResult['arguments'], $arguments->getValue($compiled));
+        $this->assertSame($expectedResult['preferences'], $compiled->getPreferences());
+        $this->assertSame($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
     }
 
     /**
@@ -248,9 +248,9 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         $arguments = $reflection->getProperty('arguments');
         $arguments->setAccessible(true);
 
-        $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
-        $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
-        $this->assertEquals($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
+        $this->assertSame($expectedResult['arguments'], $arguments->getValue($compiled));
+        $this->assertSame($expectedResult['preferences'], $compiled->getPreferences());
+        $this->assertSame($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
     }
 
     /**

@@ -76,6 +76,6 @@ class MetadataProcessorTest extends \PHPUnit\Framework\TestCase
         $data = ['some' => ['config' => ['path' => 'value']], 'active' => 1];
         $expectedResult = $data;
         $expectedResult['some']['config']['path'] = 'processed_value';
-        $this->assertEquals($expectedResult, $this->_model->process($data));
+        $this->assertSame($expectedResult, $this->_model->process($data));
     }
 }

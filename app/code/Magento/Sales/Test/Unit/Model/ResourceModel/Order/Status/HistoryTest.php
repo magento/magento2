@@ -109,6 +109,6 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
             ->method('validate')
             ->with($historyMock)
             ->will($this->returnValue(['Some warnings']));
-        $this->assertEquals($this->historyResource, $this->historyResource->save($historyMock));
+        $this->assertSame($this->historyResource, $this->historyResource->save($historyMock));
     }
 }

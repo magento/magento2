@@ -237,7 +237,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResizeWidth()
     {
-        $this->assertEquals(100, $this->imagesStorage->getResizeWidth());
+        $this->assertSame(100, $this->imagesStorage->getResizeWidth());
     }
 
     /**
@@ -245,7 +245,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResizeHeight()
     {
-        $this->assertEquals(50, $this->imagesStorage->getResizeHeight());
+        $this->assertSame(50, $this->imagesStorage->getResizeHeight());
     }
 
     /**
@@ -500,6 +500,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
 
-        $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
+        $this->assertSame($result, $this->imagesStorage->uploadFile($targetPath, $type));
     }
 }

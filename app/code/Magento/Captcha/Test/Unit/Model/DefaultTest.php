@@ -137,7 +137,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBlockName()
     {
-        $this->assertEquals($this->_object->getBlockName(), \Magento\Captcha\Block\Captcha\DefaultCaptcha::class);
+        $this->assertSame($this->_object->getBlockName(), \Magento\Captcha\Block\Captcha\DefaultCaptcha::class);
     }
 
     /**
@@ -154,9 +154,9 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
     public function testIsCaseSensitive()
     {
         self::$_defaultConfig['case_sensitive'] = '1';
-        $this->assertEquals($this->_object->isCaseSensitive(), '1');
+        $this->assertSame($this->_object->isCaseSensitive(), '1');
         self::$_defaultConfig['case_sensitive'] = '0';
-        $this->assertEquals($this->_object->isCaseSensitive(), '0');
+        $this->assertSame($this->_object->isCaseSensitive(), '0');
     }
 
     /**
@@ -164,7 +164,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFont()
     {
-        $this->assertEquals($this->_object->getFont(), $this->_fontPath['LinLibertine']['path']);
+        $this->assertSame($this->_object->getFont(), $this->_fontPath['LinLibertine']['path']);
     }
 
     /**
@@ -173,7 +173,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTimeout()
     {
-        $this->assertEquals($this->_object->getTimeout(), self::$_defaultConfig['timeout'] * 60);
+        $this->assertSame($this->_object->getTimeout(), self::$_defaultConfig['timeout'] * 60);
     }
 
     /**
@@ -200,7 +200,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetImgSrc()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->_object->getImgSrc(),
             'http://localhost/pub/media/captcha/base/' . $this->_object->getId() . '.png'
         );
@@ -220,7 +220,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
 
         $captcha->logAttempt('admin');
 
-        $this->assertEquals($captcha->getSession()->getData('user_create_show_captcha'), 1);
+        $this->assertSame($captcha->getSession()->getData('user_create_show_captcha'), 1);
     }
 
     /**
@@ -228,7 +228,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWord()
     {
-        $this->assertEquals($this->_object->getWord(), 'AbCdEf5');
+        $this->assertSame($this->_object->getWord(), 'AbCdEf5');
         $this->_object->getSession()->setData(
             ['user_create_word' => ['data' => 'AbCdEf5', 'words' => 'AbCdEf5','expires' => time() - 360]]
         );
@@ -361,7 +361,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
             $this->_resLogFactory,
             $formId
         );
-        $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
+        $this->assertSame($expectedResult, $captcha->isShownToLoggedInUser());
     }
 
     /**

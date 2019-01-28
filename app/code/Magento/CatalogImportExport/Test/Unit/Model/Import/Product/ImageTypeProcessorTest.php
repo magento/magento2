@@ -51,7 +51,7 @@ class ImageTypeProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($selectMock);
 
         $typeProcessor = new ImageTypeProcessor($resourceFactory);
-        $this->assertEquals(
+        $this->assertSame(
             ['image', 'small_image', 'thumbnail', 'swatch_image', '_media_image'],
             $typeProcessor->getImageTypes()
         );

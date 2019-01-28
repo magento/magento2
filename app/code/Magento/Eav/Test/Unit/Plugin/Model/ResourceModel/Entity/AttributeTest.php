@@ -107,7 +107,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $isProceedCalled = true;
         };
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->attributeResourcePlugin->aroundGetStoreLabelsByAttributeId(
                 $this->attributeResourceMock,
@@ -156,7 +156,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             return $attributes;
         };
 
-        $this->assertEquals(
+        $this->assertSame(
             $attributes,
             $this->attributeResourcePlugin->aroundGetStoreLabelsByAttributeId(
                 $this->attributeResourceMock,

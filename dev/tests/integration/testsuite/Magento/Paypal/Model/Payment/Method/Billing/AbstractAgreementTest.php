@@ -81,7 +81,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
             ]
         );
         $this->_model->assignData($data);
-        $this->assertEquals(
+        $this->assertSame(
             'REF-ID-TEST-678',
             $info->getAdditionalInformation(AbstractAgreement::PAYMENT_INFO_REFERENCE_ID)
         );

@@ -34,6 +34,6 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             ['label' => __('No'), 'value' => BooleanSource::VALUE_NO],
             ['label' => __('Use config'), 'value' => BooleanSource::VALUE_USE_CONFIG],
         ];
-        $this->assertEquals($expectedResult, $this->model->getAllOptions());
+        $this->assertSame($expectedResult, $this->model->getAllOptions());
     }
 }

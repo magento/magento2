@@ -31,7 +31,7 @@ class CategoryLinkManagementTest extends WebapiAbstract
         ];
         $result = $this->getAssignedProducts($this->modelId);
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testInfoNoSuchEntityException()

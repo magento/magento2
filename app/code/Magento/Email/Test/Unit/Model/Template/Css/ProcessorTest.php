@@ -54,6 +54,6 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->fallbackContext->expects($this->once())
             ->method('getLocale')
             ->willReturn($locale);
-        $this->assertEquals($expectedCss, $this->processor->process($css));
+        $this->assertSame($expectedCss, $this->processor->process($css));
     }
 }

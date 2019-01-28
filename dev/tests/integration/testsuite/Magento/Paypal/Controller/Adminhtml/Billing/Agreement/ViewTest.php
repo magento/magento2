@@ -34,7 +34,7 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         parent::testAclHasAccess();
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//a[@name="billing_agreement_info"]',
@@ -43,7 +43,7 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             "Response for billing agreement info doesn't contain billing agreement info tab"
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//a[contains(text(), "customer@example.com")]',

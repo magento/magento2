@@ -33,7 +33,7 @@ class PartialResponseTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $filter = 'email';
         $expected = ['email' => $this->customerData['email']];
         $result = $this->_getCustomerWithFilter($filter, $this->customerData['id']);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testCustomerWithEmailAndAddressFilter()
@@ -47,7 +47,7 @@ class PartialResponseTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             ],
         ];
         $result = $this->_getCustomerWithFilter($filter, $this->customerData['id']);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testCustomerWithNestedAddressFilter()
@@ -60,7 +60,7 @@ class PartialResponseTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             ],
         ];
         $result = $this->_getCustomerWithFilter($filter, $this->customerData['id']);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testCustomerInvalidFilter()

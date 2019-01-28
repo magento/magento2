@@ -229,7 +229,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->activate($customerModel->getEmail(), $key . $key);
             $this->fail('Expected exception was not thrown');
         } catch (InputException $ie) {
-            $this->assertEquals('', $ie->getMessage());
+            $this->assertSame('', $ie->getMessage());
         }
     }
 
@@ -246,7 +246,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->activate('1234' . $customerModel->getEmail(), $key);
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with email = 1234customer@needAconfirmation.com, websiteId = 1',
                 $nsee->getMessage()
             );
@@ -301,9 +301,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->validateResetPasswordLinkToken(1, $invalidToken);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
-            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
-            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
+            $this->assertSame('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
+            $this->assertSame('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
+            $this->assertSame('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
         }
     }
@@ -320,7 +320,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->validateResetPasswordLinkToken(4200, $resetToken);
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals('No such entity with customerId = 4200', $nsee->getMessage());
+            $this->assertSame('No such entity with customerId = 4200', $nsee->getMessage());
         }
     }
 
@@ -350,9 +350,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->validateResetPasswordLinkToken(1, null);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
-            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
-            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
+            $this->assertSame('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
+            $this->assertSame('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
+            $this->assertSame('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
         }
     }
@@ -424,7 +424,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'field2Name' => 'websiteId',
                 'field2Value' => 0,
             ];
-            $this->assertEquals($expectedParams, $e->getParameters());
+            $this->assertSame($expectedParams, $e->getParameters());
         }
     }
 
@@ -443,7 +443,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $nsee) {
             // App area is frontend, so we expect websiteId of 1.
-            $this->assertEquals('No such entity with email = foo@example.com, websiteId = 1', $nsee->getMessage());
+            $this->assertSame('No such entity with email = foo@example.com, websiteId = 1', $nsee->getMessage());
         }
     }
 
@@ -472,7 +472,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resetPassword('customer@example.com', $resetToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (ExpiredException $e) {
-            $this->assertEquals('The password token is expired. Reset and try again.', $e->getMessage());
+            $this->assertSame('The password token is expired. Reset and try again.', $e->getMessage());
         }
     }
 
@@ -491,9 +491,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resetPassword('customer@example.com', $invalidToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
-            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
-            $this->assertEquals('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
+            $this->assertSame('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
+            $this->assertSame('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getMessage());
+            $this->assertSame('"resetPasswordLinkToken" is required. Enter and try again.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
         }
     }
@@ -510,7 +510,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resetPassword('invalid-customer@example.com', $resetToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with email = invalid-customer@example.com, websiteId = 1',
                 $nsee->getMessage()
             );
@@ -531,7 +531,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resetPassword('invalid', $resetToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals('No such entity with email = invalid, websiteId = 1', $e->getMessage());
+            $this->assertSame('No such entity with email = invalid, websiteId = 1', $e->getMessage());
         }
     }
 
@@ -581,7 +581,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         try {
             $this->accountManagement->resendConfirmation('customer@needAconfirmation.com', 'notAWebsiteId');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with email = customer@needAconfirmation.com, websiteId = notAWebsiteId',
                 $nsee->getMessage()
             );
@@ -597,7 +597,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->resendConfirmation('wrongemail@example.com', 1);
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $nsee) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with email = wrongemail@example.com, websiteId = 1',
                 $nsee->getMessage()
             );
@@ -624,7 +624,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->accountManagement->createAccount($customerEntity);
             $this->fail('Expected exception not thrown');
         } catch (InputException $ie) {
-            $this->assertEquals('The customer email is missing. Enter and try again.', $ie->getMessage());
+            $this->assertSame('The customer email is missing. Enter and try again.', $ie->getMessage());
         }
     }
 
@@ -659,9 +659,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $customerAfter = $this->accountManagement->createAccount($customerEntity, '_aPassword1');
         $this->assertGreaterThan(0, $customerAfter->getId());
-        $this->assertEquals($email, $customerAfter->getEmail());
-        $this->assertEquals($firstName, $customerAfter->getFirstname());
-        $this->assertEquals($lastName, $customerAfter->getLastname());
+        $this->assertSame($email, $customerAfter->getEmail());
+        $this->assertSame($firstName, $customerAfter->getFirstname());
+        $this->assertSame($lastName, $customerAfter->getLastname());
         $this->accountManagement->authenticate(
             $customerAfter->getEmail(),
             '_aPassword1'
@@ -690,7 +690,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         sort($expectedInBefore);
         $actualInBeforeOnly = array_keys($inBeforeOnly);
         sort($actualInBeforeOnly);
-        $this->assertEquals($expectedInBefore, $actualInBeforeOnly);
+        $this->assertSame($expectedInBefore, $actualInBeforeOnly);
         $expectedInAfter = [
             'created_in',
             'email',
@@ -768,12 +768,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                     $this->assertArrayNotHasKey($key, $dataInService);
                 } else {
                     if (isset($dataInService[$key])) {
-                        $this->assertEquals($value, $dataInService[$key], 'Failed asserting value for ' . $key);
+                        $this->assertSame($value, $dataInService[$key], 'Failed asserting value for ' . $key);
                     }
                 }
             }
         }
-        $this->assertEquals($email2, $dataInService['email']);
+        $this->assertSame($email2, $dataInService['email']);
         $this->assertArrayNotHasKey('is_active', $dataInService);
         $this->assertArrayNotHasKey('password_hash', $dataInService);
     }
@@ -797,11 +797,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->setGroupId($groupId);
         $savedCustomer = $this->accountManagement->createAccount($newCustomerEntity, '_aPassword1');
         $this->assertNotNull($savedCustomer->getId());
-        $this->assertEquals($email, $savedCustomer->getEmail());
-        $this->assertEquals($storeId, $savedCustomer->getStoreId());
-        $this->assertEquals($firstname, $savedCustomer->getFirstname());
-        $this->assertEquals($lastname, $savedCustomer->getLastname());
-        $this->assertEquals($groupId, $savedCustomer->getGroupId());
+        $this->assertSame($email, $savedCustomer->getEmail());
+        $this->assertSame($storeId, $savedCustomer->getStoreId());
+        $this->assertSame($firstname, $savedCustomer->getFirstname());
+        $this->assertSame($lastname, $savedCustomer->getLastname());
+        $this->assertSame($groupId, $savedCustomer->getGroupId());
         $this->assertTrue(!$savedCustomer->getSuffix());
     }
 
@@ -832,13 +832,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $passwordHash
         );
         $this->assertNotNull($savedCustomer->getId());
-        $this->assertEquals($email, $savedCustomer->getEmail());
-        $this->assertEquals($storeId, $savedCustomer->getStoreId());
-        $this->assertEquals($firstname, $savedCustomer->getFirstname());
-        $this->assertEquals($lastname, $savedCustomer->getLastname());
-        $this->assertEquals($groupId, $savedCustomer->getGroupId());
+        $this->assertSame($email, $savedCustomer->getEmail());
+        $this->assertSame($storeId, $savedCustomer->getStoreId());
+        $this->assertSame($firstname, $savedCustomer->getFirstname());
+        $this->assertSame($lastname, $savedCustomer->getLastname());
+        $this->assertSame($groupId, $savedCustomer->getGroupId());
         $this->assertTrue(!$savedCustomer->getSuffix());
-        $this->assertEquals(
+        $this->assertSame(
             $savedCustomer->getId(),
             $this->accountManagement->authenticate($email, $password)->getId()
         );
@@ -869,9 +869,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $customer = $this->accountManagement->createAccount($customerEntity, '_aPassword1');
         $this->assertNotEmpty($customer->getId());
-        $this->assertEquals($email, $customer->getEmail());
-        $this->assertEquals($firstName, $customer->getFirstname());
-        $this->assertEquals($lastname, $customer->getLastname());
+        $this->assertSame($email, $customer->getEmail());
+        $this->assertSame($firstName, $customer->getFirstname());
+        $this->assertSame($lastname, $customer->getLastname());
         $this->accountManagement->authenticate(
             $customer->getEmail(),
             '_aPassword1',
@@ -932,7 +932,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
          */
         unset($expected[AddressInterface::STREET]);
         unset($result[AddressInterface::STREET]);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -975,7 +975,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         // Response should have this set since we save as default shipping
         $addressShippingExpected[AddressInterface::DEFAULT_SHIPPING] = true;
-        $this->assertEquals($addressShippingExpected, $shippingResponse);
+        $this->assertSame($addressShippingExpected, $shippingResponse);
 
         // Verify if the new Billing address created is same as returned by the api under test :
         // \Magento\Customer\Api\AccountManagementInterface::getDefaultShippingAddress
@@ -990,7 +990,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         // Response should have this set since we save as default billing
         $addressBillingExpected[AddressInterface::DEFAULT_BILLING] = true;
-        $this->assertEquals($addressBillingExpected, $billingResponse);
+        $this->assertSame($addressBillingExpected, $billingResponse);
     }
 
     /**

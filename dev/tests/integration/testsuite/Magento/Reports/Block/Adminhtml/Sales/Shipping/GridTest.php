@@ -55,6 +55,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $filteredCollection = $block->getResourceCollectionName();
         $this->assertTrue(class_exists($filteredCollection));
 
-        $this->assertNotEquals($normalCollection, $filteredCollection);
+        $this->assertNotSame($normalCollection, $filteredCollection);
     }
 }

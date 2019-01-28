@@ -99,6 +99,6 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         );
 
         $products = $this->newProducts->getProductsCollection($storeId);
-        $this->assertEquals($productCollection, $products);
+        $this->assertSame($productCollection, $products);
     }
 }

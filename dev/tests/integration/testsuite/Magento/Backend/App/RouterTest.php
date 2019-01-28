@@ -44,7 +44,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetControllerClassName($module, $controller, $className)
     {
-        $this->assertEquals($className, $this->model->getActionClassName($module, $controller));
+        $this->assertSame($className, $this->model->getActionClassName($module, $controller));
     }
 
     public function getControllerClassNameDataProvider()
@@ -94,6 +94,6 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo('backend/testfixture/test_controller');
         $controller = $defaultRouter->match($request);
         $this->assertInstanceOf(\Magento\TestFixture\Controller\Adminhtml\Noroute::class, $controller);
-        $this->assertEquals('noroute', $request->getActionName());
+        $this->assertSame('noroute', $request->getActionName());
     }
 }

@@ -30,7 +30,7 @@ class ConvertArrayTest extends \PHPUnit\Framework\TestCase
 
 XML;
         $this->assertInstanceOf('SimpleXMLElement', $result);
-        $this->assertEquals($expectedResult, $result->asXML());
+        $this->assertSame($expectedResult, $result->asXML());
     }
 
     /**
@@ -77,7 +77,7 @@ XML;
             'key4' => 'value4',
         ];
         $output = ConvertArray::toFlatArray($input);
-        $this->assertEquals($expectedOutput, $output, 'Array is converted to flat structure incorrectly.');
+        $this->assertSame($expectedOutput, $output, 'Array is converted to flat structure incorrectly.');
     }
 
     /**

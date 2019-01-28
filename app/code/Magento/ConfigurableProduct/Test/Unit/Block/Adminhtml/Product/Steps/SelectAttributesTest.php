@@ -111,7 +111,7 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
             ->with('Magento_Catalog::attributes_attributes')
             ->willReturn($isAllowed);
 
-        $this->assertEquals($result, $this->selectAttributes->getAddNewAttributeButton());
+        $this->assertSame($result, $this->selectAttributes->getAddNewAttributeButton());
     }
 
     /**

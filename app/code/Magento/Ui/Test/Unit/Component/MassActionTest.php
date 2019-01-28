@@ -90,7 +90,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         );
         $massAction->addComponent('action', $action);
         $massAction->prepare();
-        $this->assertEquals(['actions' => [$action->getConfiguration()]], $massAction->getConfiguration());
+        $this->assertSame(['actions' => [$action->getConfiguration()]], $massAction->getConfiguration());
     }
 
     /**

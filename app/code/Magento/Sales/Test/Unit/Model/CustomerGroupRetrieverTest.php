@@ -63,7 +63,7 @@ class CustomerGroupRetrieverTest extends \PHPUnit\Framework\TestCase
         $this->quoteSession->expects($this->atLeastOnce())->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getCustomerGroupId')->willReturn(2);
 
-        $this->assertEquals(2, $this->retriever->getCustomerGroupId());
+        $this->assertSame(2, $this->retriever->getCustomerGroupId());
     }
 
     /**
@@ -79,6 +79,6 @@ class CustomerGroupRetrieverTest extends \PHPUnit\Framework\TestCase
         $this->groupManagement->expects($this->once())->method('getNotLoggedInGroup')->willReturn($group);
         $group->expects($this->once())->method('getId')->willReturn(2);
 
-        $this->assertEquals(2, $this->retriever->getCustomerGroupId());
+        $this->assertSame(2, $this->retriever->getCustomerGroupId());
     }
 }

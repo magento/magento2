@@ -99,7 +99,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
         $afterKey = $dataFormKey->getFormKey();
-        $this->assertNotEquals($beforeKey, $afterKey);
+        $this->assertNotSame($beforeKey, $afterKey);
     }
 
     /**

@@ -44,7 +44,7 @@ class IAVSResponseTest extends \PHPUnit\Framework\TestCase
             ->willReturn($configValue);
 
         $validator = new IAVSResponse();
-        self::assertEquals($expected, $validator->validate($response, $model));
+        self::assertSame($expected, $validator->validate($response, $model));
     }
 
     /**

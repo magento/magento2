@@ -64,7 +64,7 @@ class DashboardTest extends \PHPUnit\Framework\TestCase
         $customer = $this->customerRepository->getById(1);
         $this->customerSession->setCustomerId(1);
         $object = $this->block->getCustomer();
-        $this->assertEquals($customer, $object);
+        $this->assertSame($customer, $object);
         $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $object);
     }
 
@@ -93,8 +93,8 @@ class DashboardTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $addresses);
         $address = $addresses[0];
         $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $address);
-        $this->assertEquals((int)$customer->getDefaultBilling(), $address->getId());
-        $this->assertEquals((int)$customer->getDefaultShipping(), $address->getId());
+        $this->assertSame((int)$customer->getDefaultBilling(), $address->getId());
+        $this->assertSame((int)$customer->getDefaultShipping(), $address->getId());
     }
 
     /**
@@ -108,7 +108,7 @@ class DashboardTest extends \PHPUnit\Framework\TestCase
         $this->customerSession->setCustomerId(1);
         $addresses = $this->block->getPrimaryAddresses();
         $this->assertCount(2, $addresses);
-        $this->assertNotEquals($addresses[0], $addresses[1]);
+        $this->assertNotSame($addresses[0], $addresses[1]);
         $this->assertTrue($addresses[0]->isDefaultBilling());
         $this->assertTrue($addresses[1]->isDefaultShipping());
     }

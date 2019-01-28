@@ -104,7 +104,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('region_id', 1);
         $this->model->setData('region', '');
         $this->model->setData('country_id', $countryId);
-        $this->assertEquals('RegionName', $this->model->getRegion());
+        $this->assertSame('RegionName', $this->model->getRegion());
     }
 
     public function testGetRegionWithRegion()
@@ -115,7 +115,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('region_id', '');
         $this->model->setData('region', 2);
         $this->model->setData('country_id', $countryId);
-        $this->assertEquals('RegionName', $this->model->getRegion());
+        $this->assertSame('RegionName', $this->model->getRegion());
     }
 
     public function testGetRegionWithRegionName()
@@ -124,7 +124,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setData('region_id', '');
         $this->model->setData('region', 'RegionName');
-        $this->assertEquals('RegionName', $this->model->getRegion());
+        $this->assertSame('RegionName', $this->model->getRegion());
     }
 
     public function testGetRegionWithoutRegion()
@@ -142,7 +142,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('region_id', 3);
         $this->model->setData('region', '');
         $this->model->setData('country_id', $countryId);
-        $this->assertEquals('UK', $this->model->getRegionCode());
+        $this->assertSame('UK', $this->model->getRegionCode());
     }
 
     public function testGetRegionCodeWithRegion()
@@ -153,7 +153,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('region_id', '');
         $this->model->setData('region', 4);
         $this->model->setData('country_id', $countryId);
-        $this->assertEquals('UK', $this->model->getRegionCode());
+        $this->assertSame('UK', $this->model->getRegionCode());
     }
 
     public function testGetRegionCodeWithRegionName()
@@ -162,7 +162,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setData('region_id', '');
         $this->model->setData('region', 'UK');
-        $this->assertEquals('UK', $this->model->getRegionCode());
+        $this->assertSame('UK', $this->model->getRegionCode());
     }
 
     public function testGetRegionCodeWithoutRegion()
@@ -224,7 +224,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->model->setData($key);
-        $this->assertEquals($key, $this->model->getData());
+        $this->assertSame($key, $this->model->getData());
     }
 
     /**
@@ -247,7 +247,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->model->setData($key);
-        $this->assertEquals($expected, $this->model->getData());
+        $this->assertSame($expected, $this->model->getData());
     }
 
     /**
@@ -262,7 +262,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->model->setData('street', $value);
-        $this->assertEquals($value, $this->model->getData());
+        $this->assertSame($value, $this->model->getData());
     }
 
     /**
@@ -281,7 +281,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $this->model->setData('key', $value);
-        $this->assertEquals($expected, $this->model->getData());
+        $this->assertSame($expected, $this->model->getData());
     }
 
     /**
@@ -300,7 +300,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         }
 
         $actual = $this->model->validate();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -364,7 +364,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     public function testGetStreetFullAlwaysReturnsString($expectedResult, $street)
     {
         $this->model->setData('street', $street);
-        $this->assertEquals($expectedResult, $this->model->getStreetFull());
+        $this->assertSame($expectedResult, $this->model->getStreetFull());
     }
 
     /**
@@ -373,7 +373,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     public function testSetDataStreetAlwaysConvertedToString($expectedResult, $street)
     {
         $this->model->setData('street', $street);
-        $this->assertEquals($expectedResult, $this->model->getData('street'));
+        $this->assertSame($expectedResult, $this->model->getData('street'));
     }
 
     /**

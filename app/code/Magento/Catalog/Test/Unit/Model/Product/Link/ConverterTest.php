@@ -80,6 +80,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             ->method('__toArray')
             ->willReturn(['qty' => 33]);
         
-        $this->assertEquals($linksAsArray, $this->converter->convertLinksToGroupedArray($productMock));
+        $this->assertSame($linksAsArray, $this->converter->convertLinksToGroupedArray($productMock));
     }
 }

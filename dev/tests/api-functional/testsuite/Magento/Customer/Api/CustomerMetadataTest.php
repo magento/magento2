@@ -62,7 +62,7 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $validationResult = $this->checkValidationRules($expectedMetadata, $attributeMetadata);
         list($expectedMetadata, $attributeMetadata) = $validationResult;
-        $this->assertEquals($expectedMetadata, $attributeMetadata);
+        $this->assertSame($expectedMetadata, $attributeMetadata);
     }
 
     /**
@@ -248,7 +248,7 @@ class CustomerMetadataTest extends WebapiAbstract
                 && $attributeMetadata['attribute_code'] == $expectedMetadata['attribute_code']) {
                 $validationResult = $this->checkValidationRules($expectedMetadata, $attributeMetadata);
                 list($expectedMetadata, $attributeMetadata) = $validationResult;
-                $this->assertEquals($expectedMetadata, $attributeMetadata);
+                $this->assertSame($expectedMetadata, $attributeMetadata);
                 break;
             }
         }

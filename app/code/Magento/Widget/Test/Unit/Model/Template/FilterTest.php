@@ -268,7 +268,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->storeMock);
 
         $result = $this->filter->mediaDirective($construction);
-        $this->assertEquals($baseUrl . $image, $result);
+        $this->assertSame($baseUrl . $image, $result);
     }
 
     public function testMediaDirectiveWithEncodedQuotes()
@@ -286,6 +286,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->storeMock);
 
         $result = $this->filter->mediaDirective($construction);
-        $this->assertEquals($baseUrl . $image, $result);
+        $this->assertSame($baseUrl . $image, $result);
     }
 }

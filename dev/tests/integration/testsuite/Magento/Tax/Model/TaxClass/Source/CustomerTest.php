@@ -26,7 +26,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         }
         /** @var \Magento\Tax\Model\TaxClass\Source\Product $source */
         $source = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Customer::class);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $source->getAllOptions(),
             'Tax Class options are invalid.'
@@ -49,7 +49,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         }
         /** @var \Magento\Tax\Model\TaxClass\Source\Product $source */
         $source = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Customer::class);
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $source->getAllOptions(true),
             'Tax Class options are invalid.'

@@ -53,7 +53,7 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($prices as $key => $price) {
             $roundedPrice = $this->model->round($price, 'test');
-            $this->assertEquals($roundedPrices[$key], $roundedPrice);
+            $this->assertSame($roundedPrices[$key], $roundedPrice);
         }
 
         $this->model->reset('test');
@@ -81,9 +81,9 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
      */
     public function testReset(): void
     {
-        $this->assertEquals(1.44, $this->model->round(1.444, 'test'));
+        $this->assertSame(1.44, $this->model->round(1.444, 'test'));
         $this->model->reset('test');
-        $this->assertEquals(1.44, $this->model->round(1.444, 'test'));
+        $this->assertSame(1.44, $this->model->round(1.444, 'test'));
     }
 
     /**
@@ -91,12 +91,12 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
      */
     public function testResetAll(): void
     {
-        $this->assertEquals(1.44, $this->model->round(1.444, 'test1'));
-        $this->assertEquals(1.44, $this->model->round(1.444, 'test2'));
+        $this->assertSame(1.44, $this->model->round(1.444, 'test1'));
+        $this->assertSame(1.44, $this->model->round(1.444, 'test2'));
 
         $this->model->resetAll();
 
-        $this->assertEquals(1.44, $this->model->round(1.444, 'test1'));
-        $this->assertEquals(1.44, $this->model->round(1.444, 'test2'));
+        $this->assertSame(1.44, $this->model->round(1.444, 'test1'));
+        $this->assertSame(1.44, $this->model->round(1.444, 'test2'));
     }
 }

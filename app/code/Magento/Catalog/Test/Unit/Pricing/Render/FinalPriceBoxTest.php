@@ -245,7 +245,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
         $result = $this->object->toHtml();
 
         //assert price wrapper
-        $this->assertEquals(
+        $this->assertSame(
             '<div class="price-box price-final_price" data-role="priceBox" data-product-id="" ' .
             'data-price-box="product-id-">test</div>',
             $result
@@ -305,7 +305,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->with($amount, $this->product, $this->price, $arguments)
             ->willReturn($amountRender);
 
-        $this->assertEquals($html, $this->object->renderAmountMinimal());
+        $this->assertSame($html, $this->object->renderAmountMinimal());
     }
 
     /**
@@ -344,7 +344,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
             ->will($this->returnValue($finalPriceType));
 
-        $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
+        $this->assertSame($expectedResult, $this->object->hasSpecialPrice());
     }
 
     /**
@@ -428,7 +428,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
         $this->object->setData('is_product_list', $flag);
         $cacheInfo = $this->object->getCacheKeyInfo();
         self::assertArrayHasKey('is_product_list', $cacheInfo);
-        self::assertEquals($flag, $cacheInfo['is_product_list']);
+        self::assertSame($flag, $cacheInfo['is_product_list']);
     }
 
     /**
@@ -448,7 +448,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     public function testIsProductList($flag)
     {
         $this->object->setData('is_product_list', $flag);
-        self::assertEquals($flag, $this->object->isProductList());
+        self::assertSame($flag, $this->object->isProductList());
     }
 
     /**

@@ -72,9 +72,9 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $block->setLayout($layoutMock);
-        $this->assertEquals($allowCurrencies, $block->getAllowedCurrencies());
-        $this->assertEquals($baseCurrencies, $block->getDefaultCurrencies());
-        $this->assertEquals($expectedCurrencyRates, $block->getOldRates());
-        $this->assertEquals($expectedNewRates, $block->getNewRates());
+        $this->assertSame($allowCurrencies, $block->getAllowedCurrencies());
+        $this->assertSame($baseCurrencies, $block->getDefaultCurrencies());
+        $this->assertSame($expectedCurrencyRates, $block->getOldRates());
+        $this->assertSame($expectedNewRates, $block->getNewRates());
     }
 }

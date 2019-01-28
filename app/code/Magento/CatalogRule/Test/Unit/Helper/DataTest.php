@@ -34,7 +34,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalcPriceRule($actionOperator, $ruleAmount, $price, $expectedAmount)
     {
-        $this->assertEquals($expectedAmount, $this->helper->calcPriceRule($actionOperator, $ruleAmount, $price));
+        $this->assertSame($expectedAmount, $this->helper->calcPriceRule($actionOperator, $ruleAmount, $price));
     }
 
     /**

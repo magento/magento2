@@ -74,7 +74,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->method('getNextValue')
             ->willReturn($reservedOrderId);
 
-        $this->assertEquals($reservedOrderId, $this->model->getReservedOrderId($this->quoteMock));
+        $this->assertSame($reservedOrderId, $this->model->getReservedOrderId($this->quoteMock));
     }
 
     /**

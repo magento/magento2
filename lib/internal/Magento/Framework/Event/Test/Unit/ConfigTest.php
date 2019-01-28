@@ -43,6 +43,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($observers));
 
         $result = $this->config->getObservers($eventName);
-        $this->assertEquals($observers, $result);
+        $this->assertSame($observers, $result);
     }
 }

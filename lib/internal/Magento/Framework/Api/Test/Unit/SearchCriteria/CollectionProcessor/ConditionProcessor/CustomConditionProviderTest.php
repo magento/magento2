@@ -56,7 +56,7 @@ class CustomConditionProviderTest extends \PHPUnit\Framework\TestCase
     {
         $testField = 'my-valid-field';
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->customConditionMock,
             $this->customConditionProcessorBuilder->getProcessorByField($testField)
         );

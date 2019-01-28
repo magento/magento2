@@ -26,6 +26,6 @@ class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $this->dispatch('backend/admin/user/delete');
         $message = $messageManager->getMessages()->getLastAddedMessage()->getText();
-        $this->assertEquals('You cannot delete your own account.', $message);
+        $this->assertSame('You cannot delete your own account.', $message);
     }
 }

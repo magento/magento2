@@ -95,15 +95,15 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
         $this->regionInformationFactory->expects($this->once())->method('create')->willReturn($regionInfo);
 
         $result = $this->model->getCountriesInfo();
-        $this->assertEquals('US', $result[0]->getId());
-        $this->assertEquals('US', $result[0]->getTwoLetterAbbreviation());
-        $this->assertEquals('USA', $result[0]->getThreeLetterAbbreviation());
-        $this->assertEquals('United States of America', $result[0]->getFullNameLocale());
-        $this->assertEquals('United States of America', $result[0]->getFullNameEnglish());
+        $this->assertSame('US', $result[0]->getId());
+        $this->assertSame('US', $result[0]->getTwoLetterAbbreviation());
+        $this->assertSame('USA', $result[0]->getThreeLetterAbbreviation());
+        $this->assertSame('United States of America', $result[0]->getFullNameLocale());
+        $this->assertSame('United States of America', $result[0]->getFullNameEnglish());
 
         $regionResult = $result[0]->getAvailableRegions();
-        $this->assertEquals('TX', $regionResult[0]->getCode());
-        $this->assertEquals('Texas', $regionResult[0]->getName());
+        $this->assertSame('TX', $regionResult[0]->getCode());
+        $this->assertSame('Texas', $regionResult[0]->getName());
     }
 
     /**
@@ -133,11 +133,11 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
         $this->countryInformationFactory->expects($this->once())->method('create')->willReturn($countryInfo);
 
         $result = $this->model->getCountryInfo('AE');
-        $this->assertEquals('AE', $result->getId());
-        $this->assertEquals('AE', $result->getTwoLetterAbbreviation());
-        $this->assertEquals('ARE', $result->getThreeLetterAbbreviation());
-        $this->assertEquals('United Arab Emirates', $result->getFullNameLocale());
-        $this->assertEquals('United Arab Emirates', $result->getFullNameEnglish());
+        $this->assertSame('AE', $result->getId());
+        $this->assertSame('AE', $result->getTwoLetterAbbreviation());
+        $this->assertSame('ARE', $result->getThreeLetterAbbreviation());
+        $this->assertSame('United Arab Emirates', $result->getFullNameLocale());
+        $this->assertSame('United Arab Emirates', $result->getFullNameEnglish());
     }
 
     /**

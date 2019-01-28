@@ -160,7 +160,7 @@ class StopwordsTest extends \PHPUnit\Framework\TestCase
                 Stopwords::CACHE_ID
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             'test query',
             $this->model->process('the test of a query')
         );
@@ -209,7 +209,7 @@ class StopwordsTest extends \PHPUnit\Framework\TestCase
             ->with($serializedStopWords)
             ->willReturn(['a', 'the', 'of']);
 
-        $this->assertEquals(
+        $this->assertSame(
             'test query',
             $this->model->process('the test of a query')
         );

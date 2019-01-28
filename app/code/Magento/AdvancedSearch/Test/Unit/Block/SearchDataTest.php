@@ -76,7 +76,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
             ->with($this->searchQuery)
             ->will($this->returnValue($value));
         $actualValue = $this->block->getItems();
-        $this->assertEquals($value, $actualValue);
+        $this->assertSame($value, $actualValue);
     }
 
     public function testGetLink()
@@ -84,7 +84,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
         $searchQuery = 'Some test search query';
         $expectedResult = '?q=Some+test+search+query';
         $actualResult = $this->block->getLink($searchQuery);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testIsShowResultsCount()
@@ -93,6 +93,6 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
         $this->dataProvider->expects($this->once())
             ->method('isResultsCountEnabled')
             ->will($this->returnValue($value));
-        $this->assertEquals($value, $this->block->isShowResultsCount());
+        $this->assertSame($value, $this->block->isShowResultsCount());
     }
 }

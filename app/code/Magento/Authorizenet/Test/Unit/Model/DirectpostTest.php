@@ -154,7 +154,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('payment/authorizenet_directpost/' . $field)
             ->willReturn($returnValue);
-        $this->assertEquals($returnValue, $this->directpost->getValue($field));
+        $this->assertSame($returnValue, $this->directpost->getValue($field));
     }
 
     public function testSetDataHelper()
@@ -172,7 +172,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectedResult);
 
         $this->directpost->setDataHelper($helperDataMock);
-        $this->assertEquals($expectedResult, $this->directpost->getRelayUrl($storeId));
+        $this->assertSame($expectedResult, $this->directpost->getRelayUrl($storeId));
     }
 
     public function testAuthorize()
@@ -199,7 +199,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->with('payment/authorizenet_directpost/cgi_url', 'store', null)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->directpost->getCgiUrl());
+        $this->assertSame($url, $this->directpost->getCgiUrl());
     }
 
     public function testGetCgiUrlWithEmptyConfigValue()
@@ -209,7 +209,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->with('payment/authorizenet_directpost/cgi_url', 'store', null)
             ->willReturn(null);
 
-        $this->assertEquals(Directpost::CGI_URL, $this->directpost->getCgiUrl());
+        $this->assertSame(Directpost::CGI_URL, $this->directpost->getCgiUrl());
     }
 
     public function testGetRelayUrl()
@@ -223,8 +223,8 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->directpost->getRelayUrl());
-        $this->assertEquals($url, $this->directpost->getRelayUrl($storeId));
+        $this->assertSame($url, $this->directpost->getRelayUrl());
+        $this->assertSame($url, $this->directpost->getRelayUrl($storeId));
     }
 
     public function testGetResponse()
@@ -249,7 +249,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     public function testValidateResponseSuccess()
     {
         $this->prepareTestValidateResponse('some_md5', 'login', true);
-        $this->assertEquals(true, $this->directpost->validateResponse());
+        $this->assertSame(true, $this->directpost->validateResponse());
     }
 
     /**
@@ -288,7 +288,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->method('getXTransId')
             ->willReturn('111');
 
-        $this->assertEquals(true, $this->directpost->checkTransId());
+        $this->assertSame(true, $this->directpost->checkTransId());
     }
 
     /**
@@ -314,7 +314,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->method('getXResponseCode')
             ->willReturn($responseCode);
 
-        $this->assertEquals(true, $this->directpost->checkResponseCode());
+        $this->assertSame(true, $this->directpost->checkResponseCode());
     }
 
     /**
@@ -393,7 +393,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     public function testSetIsInitializeNeeded($isInitializeNeeded)
     {
         $this->directpost->setIsInitializeNeeded($isInitializeNeeded);
-        $this->assertEquals($isInitializeNeeded, $this->directpost->isInitializeNeeded());
+        $this->assertSame($isInitializeNeeded, $this->directpost->isInitializeNeeded());
     }
 
     /**
@@ -422,7 +422,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->with(Directpost::GATEWAY_ACTIONS_LOCKED_STATE_KEY)
             ->willReturn($isGatewayActionsLocked);
 
-        $this->assertEquals($canCapture, $this->directpost->canCapture());
+        $this->assertSame($canCapture, $this->directpost->canCapture());
     }
 
     /**

@@ -162,7 +162,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCronWasSet()
     {
-        $this->assertEquals('0 * * * *', $this->getSubscribeSchedule());
+        $this->assertSame('0 * * * *', $this->getSubscribeSchedule());
         $this->assertGreaterThan(1, $this->getAttemptFlag());
     }
 

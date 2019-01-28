@@ -46,12 +46,12 @@ class HandlerTest extends AbstractController
         $orderEntityId = $caseEntity->getOrderId();
 
         self::assertNotEmpty($caseEntity);
-        self::assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
-        self::assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
-        self::assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
-        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
-        self::assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
-        self::assertEquals($orderEntityId, $caseEntity->getOrderId());
+        self::assertSame('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
+        self::assertSame('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
+        self::assertSame('Magento', $caseEntity->getAssociatedTeam()['teamName']);
+        self::assertSame(true, $caseEntity->isGuaranteeEligible());
+        self::assertSame(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
+        self::assertSame($orderEntityId, $caseEntity->getOrderId());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
@@ -63,7 +63,7 @@ class HandlerTest extends AbstractController
         $caseComment = array_pop($histories);
         self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseComment);
 
-        self::assertEquals(
+        self::assertSame(
             "Case Update: New score for the order is 384. Previous score was 553.",
             $caseComment->getComment()
         );
@@ -83,7 +83,7 @@ class HandlerTest extends AbstractController
         $webhookRequest = $this->getTestWebhookRequest();
         $this->_objectManager->addSharedInstance($webhookRequest, WebhookRequest::class);
         $this->dispatch(self::$entryPoint);
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
         $this->_objectManager->removeSharedInstance(WebhookRequest::class);
     }
 

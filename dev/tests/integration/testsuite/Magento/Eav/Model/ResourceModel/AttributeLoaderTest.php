@@ -47,14 +47,14 @@ class AttributeLoaderTest extends \Magento\TestFramework\Indexer\TestCase
     public function testGetAttributes($expectedAttributeCodes, $attributeSetId = null)
     {
         $attributes = $this->attributeLoader->getAttributes('Test\Entity\Type', $attributeSetId);
-        $this->assertEquals(count($expectedAttributeCodes), count($attributes));
+        $this->assertSame(count($expectedAttributeCodes), count($attributes));
         $attributeCodes = [];
         foreach ($attributes as $attribute) {
             $attributeCodes[] = $attribute->getAttributeCode();
         }
-        $this->assertEquals($expectedAttributeCodes, $attributeCodes);
+        $this->assertSame($expectedAttributeCodes, $attributeCodes);
         $attributes2 = $this->attributeLoader->getAttributes('Test\Entity\Type', $attributeSetId);
-        $this->assertEquals($attributes, $attributes2);
+        $this->assertSame($attributes, $attributes2);
     }
 
     public function getAttributesDataProvider()

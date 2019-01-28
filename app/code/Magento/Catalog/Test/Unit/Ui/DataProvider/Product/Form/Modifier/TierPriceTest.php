@@ -52,7 +52,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     public function testModifyData()
     {
         $data = [1, 2];
-        $this->assertEquals($data, $this->tierPrice->modifyData($data));
+        $this->assertSame($data, $this->tierPrice->modifyData($data));
     }
 
     /**
@@ -136,6 +136,6 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNotEmpty($children[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_VALUE_TYPE]);
         $this->assertNotEmpty($children[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PERCENTAGE_VALUE]);
-        $this->assertEquals($priceMeta, $children[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
+        $this->assertSame($priceMeta, $children[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
     }
 }

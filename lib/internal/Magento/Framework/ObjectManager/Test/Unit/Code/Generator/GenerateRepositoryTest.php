@@ -70,7 +70,7 @@ class GenerateRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $generated = $repository->generate();
 
-        $this->assertEquals($fileName . '.php', $generated, 'Generated repository is invalid.');
+        $this->assertSame($fileName . '.php', $generated, 'Generated repository is invalid.');
     }
 
     /**

@@ -41,6 +41,6 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $expected = uniqid();
         $this->_layout->getBlock('child')->setJs($expected);
-        $this->assertEquals($expected, $this->_block->getJs());
+        $this->assertSame($expected, $this->_block->getJs());
     }
 }

@@ -149,7 +149,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
             ->with($this->isInstanceOf('DateTime'), $this->isType('string'), $locale)
             ->willReturn($result);
 
-        $this->assertEquals($result, $this->date->render($objectMock));
+        $this->assertSame($result, $this->date->render($objectMock));
     }
 
     /**
@@ -214,6 +214,6 @@ class DateTest extends \PHPUnit\Framework\TestCase
             ->with($this->isInstanceOf('DateTime'), $this->isType('string'), $locale)
             ->willReturn($result);
 
-        $this->assertEquals($result, $this->date->render($objectMock));
+        $this->assertSame($result, $this->date->render($objectMock));
     }
 }

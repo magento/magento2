@@ -104,7 +104,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
             ->with(BasePrice::PRICE_CODE)
             ->willReturn($this->price);
 
-        $this->assertEquals($resultPrice, $this->model->getValue());
+        $this->assertSame($resultPrice, $this->model->getValue());
     }
 
     public function testGetValue()
@@ -198,7 +198,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
             $result += $resultPrice * $qty;
         }
 
-        $this->assertEquals($result, $this->model->getValue());
+        $this->assertSame($result, $this->model->getValue());
     }
 
     public function testGetAmount()
@@ -219,6 +219,6 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
             ->with($resultPrice, $this->saleableItem)
             ->willReturn($resultPrice);
 
-        $this->assertEquals($resultPrice, $this->model->getAmount());
+        $this->assertSame($resultPrice, $this->model->getAmount());
     }
 }

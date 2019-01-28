@@ -147,7 +147,7 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteAddressMock->expects($this->never())->method('save');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->validationResult,
             $this->model->validate($this->quoteAddressMock, $this->storeMock)
         );
@@ -196,7 +196,7 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteAddressMock->expects($this->once())->method('save');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->validationResult,
             $this->model->validate($this->quoteAddressMock, $this->storeMock)
         );
@@ -239,7 +239,7 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteAddressMock->expects($this->once())->method('save');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->validationResult,
             $this->model->validate($this->quoteAddressMock, $this->storeMock)
         );
@@ -282,7 +282,7 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteAddressMock->expects($this->once())->method('save');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->validationResult,
             $this->model->validate($this->quoteAddressMock, $this->storeMock)
         );

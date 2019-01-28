@@ -63,7 +63,7 @@ class EavAbstractTest extends \PHPUnit\Framework\TestCase
             $actualOptions = $this->_model->getAttributeOptions($attribute, [$indexAttributeCode]);
             asort($expectedOptions);
             asort($actualOptions);
-            $this->assertEquals($expectedOptions, $actualOptions);
+            $this->assertSame($expectedOptions, $actualOptions);
         }
     }
 }

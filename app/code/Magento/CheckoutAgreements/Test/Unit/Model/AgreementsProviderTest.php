@@ -81,7 +81,7 @@ class AgreementsProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $agreementCollection->expects($this->once())->method('getAllIds')->willReturn($expectedResult);
 
-        $this->assertEquals($expectedResult, $this->model->getRequiredAgreementIds());
+        $this->assertSame($expectedResult, $this->model->getRequiredAgreementIds());
     }
 
     public function testGetRequiredAgreementIdsIfAgreementsDisabled()
@@ -91,6 +91,6 @@ class AgreementsProviderTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
-        $this->assertEquals($expectedResult, $this->model->getRequiredAgreementIds());
+        $this->assertSame($expectedResult, $this->model->getRequiredAgreementIds());
     }
 }

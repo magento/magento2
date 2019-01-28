@@ -105,7 +105,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('beginTransaction');
         $this->connectionMock->expects($this->once())
             ->method('commit');
-        $this->assertEquals($this->attribute, $this->attribute->saveAttribute($this->modelMock, 'attribute'));
+        $this->assertSame($this->attribute, $this->attribute->saveAttribute($this->modelMock, 'attribute'));
     }
 
     /**

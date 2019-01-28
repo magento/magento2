@@ -22,6 +22,6 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
     {
         $locale = new Locale('de_DE');
 
-        $this->assertEquals('de_DE', (string)$locale);
+        $this->assertSame('de_DE', (string)$locale);
     }
 }

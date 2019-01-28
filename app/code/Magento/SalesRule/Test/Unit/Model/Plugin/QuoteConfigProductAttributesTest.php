@@ -47,6 +47,6 @@ class QuoteConfigProductAttributesTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
-        $this->assertEquals($expected, $this->plugin->afterGetProductAttributes($subject, []));
+        $this->assertSame($expected, $this->plugin->afterGetProductAttributes($subject, []));
     }
 }

@@ -105,7 +105,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->_customer));
 
         $customer = $this->_block->getCustomer();
-        $this->assertEquals($customer, $this->_customer);
+        $this->assertSame($customer, $this->_customer);
     }
 
     public function testGetCustomerException()
@@ -137,12 +137,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
          */
         $this->_helperView->expects($this->any())->method('getCustomerName')->will($this->returnValue($expectedValue));
 
-        $this->assertEquals($expectedValue, $this->_block->getName());
+        $this->assertSame($expectedValue, $this->_block->getName());
     }
 
     public function testGetChangePasswordUrl()
     {
-        $this->assertEquals(self::CHANGE_PASSWORD_URL, $this->_block->getChangePasswordUrl());
+        $this->assertSame(self::CHANGE_PASSWORD_URL, $this->_block->getChangePasswordUrl());
     }
 
     public function testGetSubscriptionObject()
@@ -159,7 +159,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     public function testGetIsSubscribed($isSubscribed, $expectedValue)
     {
         $this->_subscriber->expects($this->once())->method('isSubscribed')->will($this->returnValue($isSubscribed));
-        $this->assertEquals($expectedValue, $this->_block->getIsSubscribed());
+        $this->assertSame($expectedValue, $this->_block->getIsSubscribed());
     }
 
     /**
@@ -181,7 +181,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->_formRegister->expects($this->once())
             ->method('isNewsletterEnabled')
             ->will($this->returnValue($isNewsletterEnabled));
-        $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
+        $this->assertSame($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
     /**

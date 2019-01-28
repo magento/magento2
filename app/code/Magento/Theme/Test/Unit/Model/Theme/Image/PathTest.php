@@ -80,7 +80,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
         $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
+        $this->assertSame('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
     }
 
     public function testGetPreviewImagePath()
@@ -105,7 +105,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getPreviewImagePath($theme);
 
-        $this->assertEquals($expectedPath, $result);
+        $this->assertSame($expectedPath, $result);
     }
 
     /**
@@ -127,7 +127,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->with(\Magento\Framework\View\Design\Theme\Image\PathInterface::PREVIEW_DIRECTORY_PATH)
             ->will($this->returnValue('/theme/preview'));
-        $this->assertEquals(
+        $this->assertSame(
             '/theme/preview',
             $this->model->getImagePreviewDirectory()
         );
@@ -138,7 +138,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
      */
     public function testTemporaryDirectoryGetter()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '/theme/origin',
             $this->model->getTemporaryDirectory()
         );

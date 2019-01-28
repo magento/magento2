@@ -77,7 +77,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
         $this->observer->execute($this->mockEventObserver);
 
         // Check if option set is empty
-        $this->assertEquals($baseData, $sampleCurrencyOptionObject->getData());
+        $this->assertSame($baseData, $sampleCurrencyOptionObject->getData());
     }
 
     public function testCurrencyDisplayOptions()
@@ -107,6 +107,6 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->observer->execute($this->mockEventObserver);
 
-        $this->assertEquals($expectedCurrencyOptions, $sampleCurrencyOptionObject->getData());
+        $this->assertSame($expectedCurrencyOptions, $sampleCurrencyOptionObject->getData());
     }
 }

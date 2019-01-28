@@ -290,7 +290,7 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
     public function testGetItemPrice()
     {
         $price = $this->getItemPrice();
-        $this->assertEquals($price, $this->utility->getItemPrice($this->item));
+        $this->assertSame($price, $this->utility->getItemPrice($this->item));
     }
 
     public function testGetItemPriceNull()
@@ -303,13 +303,13 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
         $this->item->expects($this->once())
             ->method('getCalculationPrice')
             ->will($this->returnValue(null));
-        $this->assertEquals($price, $this->utility->getItemPrice($this->item));
+        $this->assertSame($price, $this->utility->getItemPrice($this->item));
     }
 
     public function testGetItemBasePrice()
     {
         $price = $this->getItemBasePrice();
-        $this->assertEquals($price, $this->utility->getItemBasePrice($this->item));
+        $this->assertSame($price, $this->utility->getItemBasePrice($this->item));
     }
 
     public function testGetBaseItemPriceCalculation()
@@ -321,7 +321,7 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
         $this->item->expects($this->any())
             ->method('getBaseCalculationPrice')
             ->will($this->returnValue($calcPrice));
-        $this->assertEquals($calcPrice, $this->utility->getItemBasePrice($this->item));
+        $this->assertSame($calcPrice, $this->utility->getItemBasePrice($this->item));
     }
 
     public function testGetItemQtyMin()
@@ -334,7 +334,7 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
         $this->rule->expects($this->once())
             ->method('getDiscountQty')
             ->will($this->returnValue($discountQty));
-        $this->assertEquals(min($discountQty, $qty), $this->utility->getItemQty($this->item, $this->rule));
+        $this->assertSame(min($discountQty, $qty), $this->utility->getItemQty($this->item, $this->rule));
     }
 
     public function testGetItemQty()
@@ -346,7 +346,7 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
         $this->rule->expects($this->once())
             ->method('getDiscountQty')
             ->will($this->returnValue(null));
-        $this->assertEquals($qty, $this->utility->getItemQty($this->item, $this->rule));
+        $this->assertSame($qty, $this->utility->getItemQty($this->item, $this->rule));
     }
 
     /**
@@ -359,7 +359,7 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
      */
     public function testMergeIds($a1, $a2, $isSting, $expected)
     {
-        $this->assertEquals($expected, $this->utility->mergeIds($a1, $a2, $isSting));
+        $this->assertSame($expected, $this->utility->mergeIds($a1, $a2, $isSting));
     }
 
     /**
@@ -499,8 +499,8 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
             ->method('setBaseAmount')
             ->with($secondRoundedBaseDiscount);
 
-        $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
-        $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
+        $this->assertSame($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
+        $this->assertSame($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
     }
 
     public function testResetRoundingDeltas()

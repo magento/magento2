@@ -68,7 +68,7 @@ class QtyProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($qty);
 
         $this->qtyProcessor->setItem($itemMock);
-        $this->assertEquals($qty, $this->qtyProcessor->getRowQty($qty));
+        $this->assertSame($qty, $this->qtyProcessor->getRowQty($qty));
     }
 
     /**
@@ -97,7 +97,7 @@ class QtyProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($qty);
 
         $this->qtyProcessor->setItem($itemMock);
-        $this->assertEquals($qty, $this->qtyProcessor->getQtyForCheck($qty));
+        $this->assertSame($qty, $this->qtyProcessor->getQtyForCheck($qty));
     }
 
     public function testGetQtyForCheck()
@@ -127,6 +127,6 @@ class QtyProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($qty);
 
         $this->qtyProcessor->setItem($this->itemMock);
-        $this->assertEquals($qty, $this->qtyProcessor->getQtyForCheck($qty));
+        $this->assertSame($qty, $this->qtyProcessor->getQtyForCheck($qty));
     }
 }

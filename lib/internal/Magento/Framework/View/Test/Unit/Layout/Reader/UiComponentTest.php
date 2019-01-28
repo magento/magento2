@@ -82,7 +82,7 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
     public function testGetSupportedNodes()
     {
         $data[] = UiComponent::TYPE_UI_COMPONENT;
-        $this->assertEquals($data, $this->model->getSupportedNodes());
+        $this->assertSame($data, $this->model->getSupportedNodes());
     }
 
     /**

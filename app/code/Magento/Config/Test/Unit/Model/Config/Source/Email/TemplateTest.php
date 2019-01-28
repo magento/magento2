@@ -81,6 +81,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ['value' => 'template_two', 'label' => 'Template Two'],
         ];
         $this->_model->setPath('template/new');
-        $this->assertEquals($expectedResult, $this->_model->toOptionArray());
+        $this->assertSame($expectedResult, $this->_model->toOptionArray());
     }
 }

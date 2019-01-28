@@ -25,7 +25,7 @@ class AllowedIpsTest extends \PHPUnit\Framework\TestCase
         $model->setPath('path');
         $model->beforeSave();
         $model->save();
-        $this->assertEquals($expected, $model->getValue());
+        $this->assertSame($expected, $model->getValue());
     }
 
     /**

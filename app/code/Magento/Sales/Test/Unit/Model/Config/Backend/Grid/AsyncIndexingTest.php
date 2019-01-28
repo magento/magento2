@@ -76,7 +76,7 @@ class AsyncIndexingTest extends \PHPUnit\Framework\TestCase
         }
 
         $object = $this->object->afterSave();
-        $this->assertEquals($this->object, $object);
+        $this->assertSame($this->object, $object);
     }
 
     /**

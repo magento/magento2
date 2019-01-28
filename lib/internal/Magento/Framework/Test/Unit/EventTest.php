@@ -54,7 +54,7 @@ class EventTest extends \PHPUnit\Framework\TestCase
         $this->event->addObserver($this->observer);
         $expected = $this->observers;
         $result = $this->event->getObservers();
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testAddObservers()
@@ -85,7 +85,7 @@ class EventTest extends \PHPUnit\Framework\TestCase
     public function testGetName()
     {
         $data = 'ObserverName';
-        $this->assertEquals($data, $this->event->getName());
+        $this->assertSame($data, $this->event->getName());
         $this->event = new Event();
         $this->assertNull($this->event->getName());
     }
@@ -93,6 +93,6 @@ class EventTest extends \PHPUnit\Framework\TestCase
     public function testGetBlock()
     {
         $block = 'testBlockName';
-        $this->assertEquals($block, $this->event->getBlock());
+        $this->assertSame($block, $this->event->getBlock());
     }
 }

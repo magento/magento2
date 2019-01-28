@@ -101,6 +101,6 @@ class NoRouteObserverTest extends \PHPUnit\Framework\TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($this->noRouteObserver, $this->noRouteObserver->execute($this->observerMock));
+        $this->assertSame($this->noRouteObserver, $this->noRouteObserver->execute($this->observerMock));
     }
 }

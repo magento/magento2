@@ -85,6 +85,6 @@ class LinkPriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($convertedAmount));
 
         $result = $this->linkPrice->getLinkAmount($this->linkMock);
-        $this->assertEquals($convertedAmount, $result);
+        $this->assertSame($convertedAmount, $result);
     }
 }

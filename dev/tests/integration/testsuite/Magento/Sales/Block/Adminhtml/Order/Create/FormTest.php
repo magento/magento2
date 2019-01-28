@@ -103,7 +103,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'quote_id' => $quote->getId()
         ];
 
-        self::assertEquals($expected, json_decode($this->block->getOrderDataJson(), true));
+        self::assertSame($expected, json_decode($this->block->getOrderDataJson(), true));
     }
 
     /**

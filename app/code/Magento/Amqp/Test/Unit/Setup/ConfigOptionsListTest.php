@@ -122,7 +122,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                 ConfigOptionsList::DEFAULT_AMQP_SSL
             ),
         ];
-        $this->assertEquals($expectedOptions, $this->model->getOptions());
+        $this->assertSame($expectedOptions, $this->model->getOptions());
     }
 
     /**
@@ -138,21 +138,21 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Config\Data\ConfigData $configData */
         $configData = $result[0];
         $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $configData);
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     public function testValidateInvalidConnection()
     {
         $expectedResult = ['Could not connect to the Amqp Server.'];
         $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(false);
-        $this->assertEquals($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
+        $this->assertSame($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
     }
 
     public function testValidateValidConnection()
     {
         $expectedResult = [];
         $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(true);
-        $this->assertEquals($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
+        $this->assertSame($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
     }
 
     public function testValidateNoOptions()
@@ -160,7 +160,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [];
         $options = [];
         $this->connectionValidatorMock->expects($this->never())->method('isConnectionValid');
-        $this->assertEquals($expectedResult, $this->model->validate($options, $this->deploymentConfigMock));
+        $this->assertSame($expectedResult, $this->model->validate($options, $this->deploymentConfigMock));
     }
 
     /**

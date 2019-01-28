@@ -36,8 +36,8 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $result = $truncateFilter->filter($string);
-        $this->assertEquals($expectedValue, $result->getValue());
-        $this->assertEquals($expectedRemainder, $result->getRemainder());
+        $this->assertSame($expectedValue, $result->getValue());
+        $this->assertSame($expectedRemainder, $result->getRemainder());
     }
 
     public function truncateDataProvider() : array

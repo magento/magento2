@@ -70,7 +70,7 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($result)
         );
-        $this->assertEquals($result, $this->_model->processValue($value));
+        $this->assertSame($result, $this->_model->processValue($value));
     }
 
     /**
@@ -92,7 +92,7 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
         $this->_model->setPath('some/path');
         $this->_model->beforeSave();
 
-        $this->assertEquals($expectedValue, $this->_model->getValue());
+        $this->assertSame($expectedValue, $this->_model->getValue());
     }
 
     /**

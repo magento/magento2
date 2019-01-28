@@ -95,11 +95,11 @@ QUERY;
         $this->assertNull($downloadableProduct->getWeight());
         $IsLinksPurchasedSeparately = $downloadableProduct->getLinksPurchasedSeparately();
         $linksTitle = $downloadableProduct->getLinksTitle();
-        $this->assertEquals(
+        $this->assertSame(
             $IsLinksPurchasedSeparately,
             $response['products']['items'][0]['links_purchased_separately']
         );
-        $this->assertEquals($linksTitle, $response['products']['items'][0]['links_title']);
+        $this->assertSame($linksTitle, $response['products']['items'][0]['links_title']);
         $this->assertDownloadableProductLinks($downloadableProduct, $response['products']['items'][0]);
         $this->assertDownloadableProductSamples($downloadableProduct, $response['products']['items'][0]);
     }
@@ -181,11 +181,11 @@ QUERY;
         );
         $IsLinksPurchasedSeparately = $downloadableProduct->getLinksPurchasedSeparately();
         $linksTitle = $downloadableProduct->getLinksTitle();
-        $this->assertEquals(
+        $this->assertSame(
             $IsLinksPurchasedSeparately,
             $response['products']['items'][0]['links_purchased_separately']
         );
-        $this->assertEquals($linksTitle, $response['products']['items'][0]['links_title']);
+        $this->assertSame($linksTitle, $response['products']['items'][0]['links_title']);
         $this->assertEmpty($response['products']['items'][0]['downloadable_product_samples']);
         $this->assertNotEmpty(
             $response['products']['items'][0]['downloadable_product_links'],

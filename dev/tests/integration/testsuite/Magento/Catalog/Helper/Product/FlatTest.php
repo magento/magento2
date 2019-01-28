@@ -37,7 +37,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
 
     public function testIsAddFilterableAttributesDefault()
     {
-        $this->assertEquals(0, $this->_helper->isAddFilterableAttributes());
+        $this->assertSame(0, $this->_helper->isAddFilterableAttributes());
     }
 
     public function testIsAddFilterableAttributes()
@@ -46,12 +46,12 @@ class FlatTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             ['addFilterableAttrs' => 1]
         );
-        $this->assertEquals(1, $helper->isAddFilterableAttributes());
+        $this->assertSame(1, $helper->isAddFilterableAttributes());
     }
 
     public function testIsAddChildDataDefault()
     {
-        $this->assertEquals(0, $this->_helper->isAddChildData());
+        $this->assertSame(0, $this->_helper->isAddChildData());
     }
 
     public function testIsAddChildData()
@@ -60,6 +60,6 @@ class FlatTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             ['addChildData' => 1]
         );
-        $this->assertEquals(1, $helper->isAddChildData());
+        $this->assertSame(1, $helper->isAddChildData());
     }
 }

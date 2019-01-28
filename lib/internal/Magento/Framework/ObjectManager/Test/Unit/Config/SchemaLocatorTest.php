@@ -36,7 +36,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:ObjectManager/etc/config.xsd')
             );
-        $this->assertEquals(
+        $this->assertSame(
             $this->urnResolver->getRealPath('urn:magento:framework:ObjectManager/etc/config.xsd'),
             $this->model->getSchema()
         );
@@ -44,7 +44,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->model->getPerFileSchema()
         );

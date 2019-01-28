@@ -79,7 +79,7 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->title('My Title');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . ' My Title' . PHP_EOL . ' ========' . PHP_EOL . PHP_EOL;
-        $this->assertEquals($expected, $this->testOutput->output, 'Title does not match output');
+        $this->assertSame($expected, $this->testOutput->output, 'Title does not match output');
     }
 
     /**
@@ -91,7 +91,7 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->section('My Section');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . ' My Section' . PHP_EOL . ' ----------' . PHP_EOL . PHP_EOL;
-        $this->assertEquals($expected, $this->testOutput->output, 'Section does not match output');
+        $this->assertSame($expected, $this->testOutput->output, 'Section does not match output');
     }
 
     /**
@@ -103,7 +103,7 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->listing(['test first element', 'test second element']);
         $expected = PHP_EOL . ' * test first element' . PHP_EOL . ' * test second element' . PHP_EOL . PHP_EOL;
-        $this->assertEquals($expected, $this->testOutput->output, 'Listing does not match output');
+        $this->assertSame($expected, $this->testOutput->output, 'Listing does not match output');
     }
 
     /**
@@ -116,7 +116,7 @@ class MagentoStyleTest extends TestCase
         $this->magentoStyle->text('test message');
         $expected = PHP_EOL . ' test message' . PHP_EOL;
 
-        $this->assertEquals($expected, $this->testOutput->output, 'Text does not match output');
+        $this->assertSame($expected, $this->testOutput->output, 'Text does not match output');
     }
 
     /**
@@ -220,7 +220,7 @@ class MagentoStyleTest extends TestCase
             '  testValue4    testValue5                 ' . PHP_EOL .
             ' ------------- ------------- ------------- ' . PHP_EOL . PHP_EOL;
 
-        $this->assertEquals($expected, $this->testOutput->output, 'Table does not match output');
+        $this->assertSame($expected, $this->testOutput->output, 'Table does not match output');
     }
 
     /**
@@ -264,7 +264,7 @@ class MagentoStyleTest extends TestCase
             ->willReturn('test Answer');
         $objectManager->setBackwardCompatibleProperty($magentoStyle, 'questionHelper', $questionHelper);
 
-        $this->assertEquals(
+        $this->assertSame(
             'test Answer',
             $magentoStyle->ask('test question?', 'test default')
         );
@@ -282,6 +282,6 @@ class MagentoStyleTest extends TestCase
         $this->magentoStyle->progressFinish();
         $expected = ' 0/2 [>                           ]   0%' . PHP_EOL .
             ' 3/3 [============================] 100%' . PHP_EOL . PHP_EOL;
-        $this->assertEquals($expected, $this->testOutput->output, 'Progress does not match output');
+        $this->assertSame($expected, $this->testOutput->output, 'Progress does not match output');
     }
 }

@@ -21,7 +21,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     {
         $xmlstr = $this->getXml();
         $result = $this->_model->xmlToAssoc(new \SimpleXMLElement($xmlstr));
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'one' => '1',
                 'two' => ['three' => '3', 'four'  => '4'],

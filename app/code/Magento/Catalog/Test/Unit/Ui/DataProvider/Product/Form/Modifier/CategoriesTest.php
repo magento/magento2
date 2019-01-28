@@ -144,7 +144,7 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturnArgument(2);
 
         $modifyMeta = $this->createModel()->modifyMeta($meta);
-        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+        $this->assertSame($locked, $modifyMeta['arguments']['data']['config']['disabled']);
     }
 
     /**

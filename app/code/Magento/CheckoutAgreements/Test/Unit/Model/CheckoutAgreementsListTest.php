@@ -59,6 +59,6 @@ class CheckoutAgreementsListTest extends \PHPUnit\Framework\TestCase
         $this->attributesJoinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
         $agreementMock = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$agreementMock]);
-        $this->assertEquals([$agreementMock], $this->model->getList($searchCriteriaMock));
+        $this->assertSame([$agreementMock], $this->model->getList($searchCriteriaMock));
     }
 }

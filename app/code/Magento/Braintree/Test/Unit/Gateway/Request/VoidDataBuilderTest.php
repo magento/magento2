@@ -86,7 +86,7 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($lastTransId);
 
         $result = $this->builder->build($buildSubject);
-        self::assertEquals(
+        self::assertSame(
             ['transaction_id' => $expected],
             $result
         );

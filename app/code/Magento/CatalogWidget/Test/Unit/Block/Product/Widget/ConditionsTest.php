@@ -223,6 +223,6 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($this->widgetConditions->render($abstractElementMock), 'html');
+        $this->assertSame($this->widgetConditions->render($abstractElementMock), 'html');
     }
 }

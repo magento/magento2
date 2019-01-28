@@ -31,7 +31,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ['translator' => [$translatorMock, 'translate']]
         );
 
-        $this->assertEquals($translatedStr, $translator->{$method}($strToTranslate));
+        $this->assertSame($translatedStr, $translator->{$method}($strToTranslate));
     }
 
     /**
@@ -48,7 +48,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     public function testTranslateNoProxy()
     {
         $translator = new \Magento\Framework\Translate\Adapter();
-        $this->assertEquals('test string', $translator->translate('test string'));
+        $this->assertSame('test string', $translator->translate('test string'));
     }
 
     /**

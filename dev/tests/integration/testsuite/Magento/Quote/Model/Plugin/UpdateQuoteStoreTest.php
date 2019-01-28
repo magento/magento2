@@ -58,7 +58,7 @@ class UpdateQuoteStoreTest extends \PHPUnit\Framework\TestCase
         $currentStore = $storeManager->getStore();
 
         $quote = $this->getQuote($reservedOrderId);
-        $this->assertEquals(
+        $this->assertSame(
             $currentStore->getId(),
             $quote->getStoreId(),
             'Current store id and quote store id are not match'
@@ -75,7 +75,7 @@ class UpdateQuoteStoreTest extends \PHPUnit\Framework\TestCase
         $storeCookieManager->setStoreCookie($secondStore);
 
         $updatedQuote = $this->getQuote($reservedOrderId);
-        $this->assertEquals(
+        $this->assertSame(
             $secondStore->getId(),
             $updatedQuote->getStoreId(),
             'Active quote store id should be equal second store id'

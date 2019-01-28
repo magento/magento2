@@ -60,7 +60,7 @@ class DumpTest extends \PHPUnit\Framework\TestCase
         $dumpConfig = $this->getMockBuilder(DumpConfigSourceAggregated::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assertEquals($expectedResult, $this->dumpPlugin->afterGet($dumpConfig, $actualResult));
+        $this->assertSame($expectedResult, $this->dumpPlugin->afterGet($dumpConfig, $actualResult));
     }
 
     /**

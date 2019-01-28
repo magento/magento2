@@ -100,7 +100,7 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
             $this->cellParameters
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->object->renderCellTemplate($columnName)
         );

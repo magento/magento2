@@ -59,7 +59,7 @@ class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn(json_decode($themeFileContents, true));
-        $this->assertEquals('package', $this->themePackageInfo->getPackageName('themeA'));
+        $this->assertSame('package', $this->themePackageInfo->getPackageName('themeA'));
     }
 
     public function testGetPackageNameNonExist()
@@ -67,7 +67,7 @@ class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())->method('getPath')->willReturn('path/to/A');
         $this->dirRead->expects($this->once())->method('isExist')->with('composer.json')->willReturn(false);
         $this->dirRead->expects($this->never())->method('readFile')->with('composer.json');
-        $this->assertEquals('', $this->themePackageInfo->getPackageName('themeA'));
+        $this->assertSame('', $this->themePackageInfo->getPackageName('themeA'));
     }
 
     public function testGetFullThemePath()
@@ -79,9 +79,9 @@ class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn(json_decode($themeFileContents, true));
-        $this->assertEquals('themeA', $this->themePackageInfo->getFullThemePath('package'));
+        $this->assertSame('themeA', $this->themePackageInfo->getFullThemePath('package'));
         // call one more time to make sure only initialize once
-        $this->assertEquals('themeA', $this->themePackageInfo->getFullThemePath('package'));
+        $this->assertSame('themeA', $this->themePackageInfo->getFullThemePath('package'));
     }
 
     public function testGetFullThemePathNonExist()
@@ -89,7 +89,7 @@ class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())->method('getPaths')->willReturn(['themeA' => 'path/to/A']);
         $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
         $this->dirRead->expects($this->once())->method('readFile')->willReturn('{"name": "package"}');
-        $this->assertEquals('', $this->themePackageInfo->getFullThemePath('package-other'));
+        $this->assertSame('', $this->themePackageInfo->getFullThemePath('package-other'));
     }
 
     public function testGetPackageNameInvalidJson()
@@ -100,6 +100,6 @@ class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn(null);
-        $this->assertEquals('', $this->themePackageInfo->getPackageName('themeA'));
+        $this->assertSame('', $this->themePackageInfo->getPackageName('themeA'));
     }
 }

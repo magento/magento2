@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($expectedValue)
         );
-        $this->assertEquals($expectedValue, $this->model->getValue($path));
+        $this->assertSame($expectedValue, $this->model->getValue($path));
     }
 
     /**
@@ -67,7 +67,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($configValue)
         );
-        $this->assertEquals($expectedResult, $this->model->isSetFlag($configPath));
+        $this->assertSame($expectedResult, $this->model->isSetFlag($configPath));
     }
 
     /**

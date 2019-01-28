@@ -25,17 +25,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFilename()
     {
-        $this->assertEquals(__FILE__, $this->_model->getFilename());
+        $this->assertSame(__FILE__, $this->_model->getFilename());
     }
 
     public function testGetName()
     {
-        $this->assertEquals('FileTest.php', $this->_model->getName());
+        $this->assertSame('FileTest.php', $this->_model->getName());
     }
 
     public function testGetModule()
     {
-        $this->assertEquals('Fixture_TestModule', $this->_model->getModule());
+        $this->assertSame('Fixture_TestModule', $this->_model->getModule());
     }
 
     public function testGetTheme()

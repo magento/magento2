@@ -203,8 +203,8 @@ class DobTest extends \PHPUnit\Framework\TestCase
     public function testSetDate($date, $expectedTime, $expectedDate)
     {
         $this->assertSame($this->_block, $this->_block->setDate($date));
-        $this->assertEquals($expectedTime, $this->_block->getTime());
-        $this->assertEquals($expectedDate, $this->_block->getValue());
+        $this->assertSame($expectedTime, $this->_block->getTime());
+        $this->assertSame($expectedDate, $this->_block->getValue());
     }
 
     /**
@@ -249,7 +249,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
     public function testGetDay($date, $expectedDay)
     {
         $this->_block->setDate($date);
-        $this->assertEquals($expectedDay, $this->_block->getDay());
+        $this->assertSame($expectedDay, $this->_block->getDay());
     }
 
     /**
@@ -269,7 +269,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
     public function testGetMonth($date, $expectedMonth)
     {
         $this->_block->setDate($date);
-        $this->assertEquals($expectedMonth, $this->_block->getMonth());
+        $this->assertSame($expectedMonth, $this->_block->getMonth());
     }
 
     /**
@@ -289,7 +289,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
     public function testGetYear($date, $expectedYear)
     {
         $this->_block->setDate($date);
-        $this->assertEquals($expectedYear, $this->_block->getYear());
+        $this->assertSame($expectedYear, $this->_block->getYear());
     }
 
     /**
@@ -307,7 +307,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDateFormat()
     {
-        $this->assertEquals(self::DATE_FORMAT, $this->_block->getDateFormat());
+        $this->assertSame(self::DATE_FORMAT, $this->_block->getDateFormat());
     }
 
     /**
@@ -320,7 +320,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->_block->setDateInput('m', self::MONTH_HTML);
         $this->_block->setDateInput('y', self::YEAR_HTML);
 
-        $this->assertEquals(self::MONTH_HTML . self::DAY_HTML . self::YEAR_HTML, $this->_block->getSortedDateInputs());
+        $this->assertSame(self::MONTH_HTML . self::DAY_HTML . self::YEAR_HTML, $this->_block->getSortedDateInputs());
     }
 
     /**
@@ -333,7 +333,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->_block->setDateInput('m', self::MONTH_HTML);
         $this->_block->setDateInput('y', self::YEAR_HTML);
 
-        $this->assertEquals(
+        $this->assertSame(
             self::MONTH_HTML . '/' . self::DAY_HTML . '/' . self::YEAR_HTML,
             $this->_block->getSortedDateInputs(false)
         );
@@ -350,7 +350,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
             ->will($this->returnValue($validationRules));
-        $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
+        $this->assertSame($expectedValue, $this->_block->getMinDateRange());
     }
 
     /**
@@ -416,7 +416,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
             ->will($this->returnValue($validationRules));
-        $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
+        $this->assertSame($expectedValue, $this->_block->getMaxDateRange());
     }
 
     /**
@@ -481,7 +481,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
             ->method("isRequired")
             ->willReturn(false);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_block->getHtmlExtraParams(),
             'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"}}"'
         );
@@ -499,7 +499,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
-        $this->assertEquals(
+        $this->assertSame(
             'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}"',
             $this->_block->getHtmlExtraParams()
         );

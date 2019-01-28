@@ -87,7 +87,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
         $composite = $this->createComposite(['SpecificationFirst', 'SpecificationSecond']);
 
-        $this->assertEquals(
+        $this->assertSame(
             $compositeResult,
             $composite->isSatisfiedBy($method),
             'Composite specification is not satisfied by payment method'

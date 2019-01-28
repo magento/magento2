@@ -70,7 +70,7 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
         ;
 
         $actual = $this->synonymAnalyzer->getSynonymsForPhrase($phrase);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -83,6 +83,6 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
         $phrase = '';
         $expected = [];
         $actual = $this->synonymAnalyzer->getSynonymsForPhrase($phrase);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

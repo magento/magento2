@@ -21,7 +21,7 @@ class InterceptorSubstitutionTest extends \PHPUnit\Framework\TestCase
     public function testModifyArguments()
     {
         $modifier = new InterceptorSubstitution();
-        $this->assertEquals($this->getOutputConfig(), $modifier->modify($this->getInputConfig()));
+        $this->assertSame($this->getOutputConfig(), $modifier->modify($this->getInputConfig()));
     }
 
     public function testModifyPreferences()
@@ -52,7 +52,7 @@ class InterceptorSubstitutionTest extends \PHPUnit\Framework\TestCase
         ];
 
         $modifier = new InterceptorSubstitution();
-        $this->assertEquals($outputConfig, $modifier->modify($inputConfig));
+        $this->assertSame($outputConfig, $modifier->modify($inputConfig));
     }
 
     /**

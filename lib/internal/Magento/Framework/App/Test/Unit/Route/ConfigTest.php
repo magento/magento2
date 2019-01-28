@@ -66,7 +66,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('areaCode::RoutesConfig')
             ->willReturn('["expected"]');
-        $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
+        $this->assertSame('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
 
     public function testGetRouteByFrontName()
@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with('serializedData')
             ->willReturn($data);
-        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
+        $this->assertSame('routerCode', $this->_config->getRouteByFrontName('routerName'));
     }
 
     public function testGetRouteByFrontNameNoRoutes()
@@ -145,7 +145,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($serializedData, 'scope::RoutesConfig');
 
-        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
+        $this->assertSame('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
     }
 
     public function testGetModulesByFrontName()
@@ -160,6 +160,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with('serializedData')
             ->willReturn($data);
-        $this->assertEquals(['Module1'], $this->_config->getModulesByFrontName('routerName'));
+        $this->assertSame(['Module1'], $this->_config->getModulesByFrontName('routerName'));
     }
 }

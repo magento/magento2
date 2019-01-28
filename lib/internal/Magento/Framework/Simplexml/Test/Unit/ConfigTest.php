@@ -85,7 +85,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = new Config(__DIR__ . '/_files/extend_data.xml');
         $config->applyExtends();
-        $this->assertEquals(
+        $this->assertSame(
             $config->getNode('node_1/node_1_1')->asArray(),
             $config->getNode('node_3/node_1_1')->asArray()
         );

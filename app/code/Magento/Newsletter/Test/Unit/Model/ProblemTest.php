@@ -117,8 +117,8 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->problemModel->addSubscriberData($this->subscriberMock);
 
-        self::assertEquals($result, $this->problemModel);
-        self::assertEquals($subscriberId, $this->problemModel->getSubscriberId());
+        self::assertSame($result, $this->problemModel);
+        self::assertSame($subscriberId, $this->problemModel->getSubscriberId());
     }
 
     /**
@@ -136,8 +136,8 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->problemModel->addQueueData($queueMock);
 
-        self::assertEquals($result, $this->problemModel);
-        self::assertEquals($queueId, $this->problemModel->getQueueId());
+        self::assertSame($result, $this->problemModel);
+        self::assertSame($queueId, $this->problemModel->getQueueId());
     }
 
     /**
@@ -151,9 +151,9 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->problemModel->addErrorData($exception);
 
-        self::assertEquals($result, $this->problemModel);
-        self::assertEquals($exceptionMessage, $this->problemModel->getProblemErrorText());
-        self::assertEquals($exceptionCode, $this->problemModel->getProblemErrorCode());
+        self::assertSame($result, $this->problemModel);
+        self::assertSame($exceptionMessage, $this->problemModel->getProblemErrorText());
+        self::assertSame($exceptionCode, $this->problemModel->getProblemErrorCode());
     }
 
     /**
@@ -170,7 +170,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
     public function testGetSubscriber()
     {
         $this->setSubscriber();
-        self::assertEquals($this->subscriberMock, $this->problemModel->getSubscriber());
+        self::assertSame($this->subscriberMock, $this->problemModel->getSubscriber());
     }
 
     /**
@@ -184,7 +184,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->problemModel->unsubscribe();
 
-        self::assertEquals($this->problemModel, $result);
+        self::assertSame($this->problemModel, $result);
     }
 
     /**
@@ -206,7 +206,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->problemModel->unsubscribe();
 
-        self::assertEquals($this->problemModel, $result);
+        self::assertSame($this->problemModel, $result);
     }
 
     /**

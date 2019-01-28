@@ -102,7 +102,7 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             'CONSTRAINT `fk_name` FOREIGN KEY (`col_name`) REFERENCES `ref_table` (`ref_col_name`)  ON DELETE CASCADE',
             $this->foreignKey->toDefinition($constraint)
         );
@@ -118,7 +118,7 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->foreignKey->fromDefinition(['Create Table' => $definition]);
-        $this->assertEquals($expectedDefinition, $result);
+        $this->assertSame($expectedDefinition, $result);
     }
 
     /**

@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $testData = require __DIR__ . '/_files/acl.php';
         $expectedData = require __DIR__ . '/_files/acl-map.php';
-        $this->assertEquals($expectedData, $this->dataHelper->mapResources($testData));
+        $this->assertSame($expectedData, $this->dataHelper->mapResources($testData));
     }
 
     /**
@@ -30,7 +30,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsConfigType($integrationsData, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->dataHelper->isConfigType($integrationsData));
+        $this->assertSame($expectedResult, $this->dataHelper->isConfigType($integrationsData));
     }
 
     /**

@@ -132,7 +132,7 @@ class RoundingErrorsTest extends \PHPUnit\Framework\TestCase
             ->with('tax/tax/ignoreTaxNotification', ['section' => 'price_display'])
             ->willReturn('http://example.com');
         $this->roundingErrorsNotification->isDisplayed();
-        $this->assertEquals(
+        $this->assertSame(
             '<strong>Your current tax configuration may result in rounding errors. '
             . '</strong><p>Store(s) affected: testWebsiteName (testStoreName)</p><p>Click on the link to '
             . '<a href="http://example.com">ignore this notification</a></p>',

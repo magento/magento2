@@ -132,7 +132,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = $this->inventory->getBackordersOption();
-        $this->assertEquals($moduleEnabled, !empty($result));
+        $this->assertSame($moduleEnabled, !empty($result));
     }
 
     /**
@@ -156,7 +156,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = $this->inventory->getStockOption();
-        $this->assertEquals($moduleEnabled, !empty($result));
+        $this->assertSame($moduleEnabled, !empty($result));
     }
 
     /**
@@ -172,7 +172,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $result = $this->inventory->getProduct();
-        $this->assertEquals('return-value', $result);
+        $this->assertSame('return-value', $result);
     }
 
     /**
@@ -205,7 +205,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $resultItem = $this->inventory->getStockItem();
-        $this->assertEquals('return-value', $resultItem);
+        $this->assertSame('return-value', $resultItem);
     }
 
     /**
@@ -268,7 +268,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         }
 
         $resultValue = $this->inventory->getFieldValue($fieldName);
-        $this->assertEquals($result, $resultValue);
+        $this->assertSame($result, $resultValue);
     }
 
     /**
@@ -331,7 +331,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         }
 
         $resultField = $this->inventory->getConfigFieldValue($fieldName);
-        $this->assertEquals($result, $resultField);
+        $this->assertSame($result, $resultField);
     }
 
     /**
@@ -347,7 +347,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $result = $this->inventory->getDefaultConfigValue($field);
-        $this->assertEquals('return-value', $result);
+        $this->assertSame('return-value', $result);
     }
 
     /**
@@ -368,7 +368,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $result = $this->inventory->isReadonly();
-        $this->assertEquals('return-value', $result);
+        $this->assertSame('return-value', $result);
     }
 
     /**
@@ -392,7 +392,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($id));
 
         $methodResult = $this->inventory->isNew();
-        $this->assertEquals($result, $methodResult);
+        $this->assertSame($result, $methodResult);
     }
 
     /**
@@ -403,7 +403,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldSuffix()
     {
         $result = $this->inventory->getFieldSuffix();
-        $this->assertEquals('product', $result);
+        $this->assertSame('product', $result);
     }
 
     /**
@@ -435,7 +435,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $result = $this->inventory->canUseQtyDecimals();
-        $this->assertEquals('return-value', $result);
+        $this->assertSame('return-value', $result);
     }
 
     /**
@@ -455,7 +455,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $result = $this->inventory->isVirtual();
-        $this->assertEquals('return-value', $result);
+        $this->assertSame('return-value', $result);
     }
 
     /**
@@ -470,7 +470,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $result = $this->inventory->isSingleStoreMode();
-        $this->assertEquals('return-value', $result);
+        $this->assertSame('return-value', $result);
     }
 
     /**

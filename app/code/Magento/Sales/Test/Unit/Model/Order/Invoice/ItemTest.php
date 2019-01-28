@@ -71,7 +71,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())->method('getItemById')->with(1)->willReturn($this->orderItemMock);
         $this->item->setInvoice($this->invoiceMock);
         $this->item->setOrderItemId(1);
-        $this->assertEquals($this->orderItemMock, $this->item->getOrderItem());
+        $this->assertSame($this->orderItemMock, $this->item->getOrderItem());
     }
 
     public function testGetOrderItemFromFactory()
@@ -79,14 +79,14 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->orderItemFactoryMock->expects($this->once())->method('create')->willReturn($this->orderItemMock);
         $this->orderItemMock->expects($this->once())->method('load')->with(1)->willReturn($this->orderItemMock);
         $this->item->setOrderItemId(1);
-        $this->assertEquals($this->orderItemMock, $this->item->getOrderItem());
+        $this->assertSame($this->orderItemMock, $this->item->getOrderItem());
     }
 
     public function testSetQty()
     {
         $qty = 3;
-        $this->assertEquals($this->item->setQty($qty), $this->item);
-        $this->assertEquals($this->item->getQty(), $qty);
+        $this->assertSame($this->item->setQty($qty), $this->item);
+        $this->assertSame($this->item->getQty(), $qty);
     }
 
     public function testRegister()
@@ -128,7 +128,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 'base_row_total' => 1
             ]
         );
-        $this->assertEquals($this->item->register(), $this->item);
+        $this->assertSame($this->item->register(), $this->item);
     }
 
     public function testCancel()
@@ -170,7 +170,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 'base_row_total' => 1
             ]
         );
-        $this->assertEquals($this->item->cancel(), $this->item);
+        $this->assertSame($this->item->cancel(), $this->item);
     }
 
     public function testCalcRowTotal()
@@ -197,6 +197,6 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 [2, 'including', false, 2],
                 [2, 'including_base', false, 2],
             ]);
-        $this->assertEquals($this->item->calcRowTotal(), $this->item);
+        $this->assertSame($this->item->calcRowTotal(), $this->item);
     }
 }

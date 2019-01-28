@@ -544,7 +544,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->with($testTable, $tableData, ['value']);
         $this->setPropertyValue($this->importProduct, '_oldSku', [$testSku => ['entity_id' => self::ENTITY_ID]]);
         $object = $this->invokeMethod($this->importProduct, '_saveProductAttributes', [$attributesData]);
-        $this->assertEquals($this->importProduct, $object);
+        $this->assertSame($this->importProduct, $object);
     }
 
     /**
@@ -584,7 +584,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testGetMultipleValueSeparatorDefault()
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
-        $this->assertEquals(
+        $this->assertSame(
             Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
             $this->importProduct->getMultipleValueSeparator()
         );
@@ -597,7 +597,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $expectedSeparator,
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSeparator,
             $this->importProduct->getMultipleValueSeparator()
         );
@@ -606,7 +606,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testGetEmptyAttributeValueConstantDefault()
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
-        $this->assertEquals(
+        $this->assertSame(
             Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
             $this->importProduct->getEmptyAttributeValueConstant()
         );
@@ -619,7 +619,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSeparator,
             $this->importProduct->getEmptyAttributeValueConstant()
         );
@@ -643,7 +643,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $result = $importProduct->deleteProductsForReplacement();
 
-        $this->assertEquals($importProduct, $result);
+        $this->assertSame($importProduct, $result);
     }
 
     public function testGetMediaGalleryAttributeIdIfNotSetYet()
@@ -665,7 +665,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
 
         $result = $this->importProduct->getMediaGalleryAttributeId();
-        $this->assertEquals($expectedId, $result);
+        $this->assertSame($expectedId, $result);
     }
 
     /**
@@ -674,7 +674,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testGetRowScope($rowData, $expectedResult)
     {
         $result = $this->importProduct->getRowScope($rowData);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -712,7 +712,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->setPropertyValue($importProduct, '_oldSku', [$rowData[$skuKey] => $oldSku]);
         $rowNum = 0;
         $result = $importProduct->validateRow($rowData, $rowNum);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testValidateRowDeleteBehaviourAddRowErrorCall()
@@ -763,7 +763,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $actualResult = $this->importProduct->getProductWebsites($productSku);
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -784,7 +784,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $actualResult = $this->importProduct->getProductCategories($productSku);
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -800,7 +800,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->willReturn('getStoreCodeToId value');
 
         $actualResult = $this->importProduct->getStoreIdByCode($storeCode);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -818,7 +818,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->willReturn($expectedResult);
 
         $actualResult = $this->importProduct->getNewSku($expectedSku);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -830,7 +830,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->setPropertyValue($this->importProduct, 'categoryProcessor', $expectedResult);
 
         $actualResult = $this->importProduct->getCategoryProcessor();
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -893,7 +893,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         //suppress validator
         $this->_setValidatorMockInImportProduct($this->importProduct);
         $this->importProduct->validateRow($rowData, $rowNum);
-        $this->assertEquals(++$count, $this->importProduct->getProcessedEntitiesCount());
+        $this->assertSame(++$count, $this->importProduct->getProcessedEntitiesCount());
     }
 
     public function testValidateRowValidateExistingProductTypeAddNewSku()
@@ -1153,7 +1153,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     public function testGetImagesFromRow($rowData, $expectedResult)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->importProduct->getImagesFromRow($rowData),
             $expectedResult
         );
@@ -1169,10 +1169,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
 
         $this->assertArrayHasKey('param1', $preparedAttributes);
-        $this->assertEquals('value1', $preparedAttributes['param1']);
+        $this->assertSame('value1', $preparedAttributes['param1']);
 
         $this->assertArrayHasKey('param2', $preparedAttributes);
-        $this->assertEquals('value2', $preparedAttributes['param2']);
+        $this->assertSame('value2', $preparedAttributes['param2']);
 
         $this->assertArrayNotHasKey('PARAM1', $preparedAttributes);
     }
@@ -1212,10 +1212,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
 
         $this->assertArrayHasKey('param1', $attributes);
-        $this->assertEquals('value1', $attributes['param1']);
+        $this->assertSame('value1', $attributes['param1']);
 
         $this->assertArrayHasKey('param2', $attributes);
-        $this->assertEquals('"value2"', $attributes['param2']);
+        $this->assertSame('"value2"', $attributes['param2']);
 
         $this->assertArrayNotHasKey('PARAM1', $attributes);
         $this->assertArrayNotHasKey('PARAM2', $attributes);
@@ -1261,7 +1261,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'uploadMediaFiles',
             [$fileName]
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedFileName,
             $actualFileName
         );

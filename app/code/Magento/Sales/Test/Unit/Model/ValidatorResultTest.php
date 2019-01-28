@@ -55,7 +55,7 @@ class ValidatorResultTest extends \PHPUnit\Framework\TestCase
         $this->validatorResult->addMessage($messageSecond);
         $this->validatorResult->addMessage($messageThird);
         $actual = $this->validatorResult->getMessages();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

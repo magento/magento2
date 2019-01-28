@@ -68,14 +68,14 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
                 'version' => '123.456.789'
             ]
         ];
-        $this->assertEquals($expected, $this->composerInformation->getSystemPackages());
+        $this->assertSame($expected, $this->composerInformation->getSystemPackages());
     }
 
     public function testGetRootPackage()
     {
         $rootPackageMock = $this->getMockForAbstractClass(\Composer\Package\RootPackageInterface::class);
         $this->composerMock->expects($this->once())->method('getPackage')->willReturn($rootPackageMock);
-        $this->assertEquals($rootPackageMock, $this->composerInformation->getRootPackage());
+        $this->assertSame($rootPackageMock, $this->composerInformation->getRootPackage());
     }
 
     /**
@@ -88,7 +88,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
         $rootPackageMock = $this->getMockForAbstractClass(\Composer\Package\RootPackageInterface::class);
         $this->composerMock->expects($this->once())->method('getPackage')->willReturn($rootPackageMock);
         $rootPackageMock->method('getName')->willReturn($packageName);
-        $this->assertEquals($expected, $this->composerInformation->isMagentoRoot());
+        $this->assertSame($expected, $this->composerInformation->isMagentoRoot());
     }
 
     /**

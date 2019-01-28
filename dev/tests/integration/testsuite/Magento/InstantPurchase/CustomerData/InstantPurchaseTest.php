@@ -39,7 +39,7 @@ class InstantPurchaseTest extends TestCase
         /** @var InstantPurchase $customerDataSectionSource */
         $customerDataSectionSource = $this->objectManager->get(InstantPurchase::class);
         $data = $customerDataSectionSource->getSectionData();
-        $this->assertEquals(
+        $this->assertSame(
             'Fake Payment Method Vault',
             $data['paymentToken']['summary'],
             'Basic implementation returns provider title.'
@@ -66,7 +66,7 @@ class InstantPurchaseTest extends TestCase
         /** @var InstantPurchase $customerDataSectionSource */
         $customerDataSectionSource = $this->objectManager->get(InstantPurchase::class);
         $data = $customerDataSectionSource->getSectionData();
-        $this->assertEquals(
+        $this->assertSame(
             StubPaymentTokenFormatter::VALUE,
             $data['paymentToken']['summary'],
             'Complex implementation returns custom string.'

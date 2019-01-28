@@ -32,7 +32,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLinkAttributes($link, $expected)
     {
-        $this->assertEquals($expected, $link->getLinkAttributes());
+        $this->assertSame($expected, $link->getLinkAttributes());
     }
 
     /**

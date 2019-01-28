@@ -59,7 +59,7 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue($outputStockData['manage_stock']));
         }
 
-        $this->assertEquals($outputStockData, $this->stockDataFilter->filter($inputStockData));
+        $this->assertSame($outputStockData, $this->stockDataFilter->filter($inputStockData));
     }
 
     /**

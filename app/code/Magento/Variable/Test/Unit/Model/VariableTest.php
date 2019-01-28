@@ -100,7 +100,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     public function testValidateMissingInfo($code, $name)
     {
         $this->model->setCode($code)->setName($name);
-        $this->assertEquals($this->validationFailedPhrase, $this->model->validate());
+        $this->assertSame($this->validationFailedPhrase, $this->model->validate());
     }
 
     /**
@@ -115,7 +115,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             ->with($code)
             ->willReturn($variableArray);
         $this->model->setId($objectId);
-        $this->assertEquals($expectedResult, $this->model->validate($variableArray));
+        $this->assertSame($expectedResult, $this->model->validate($variableArray));
     }
 
     public function testGetVariablesOptionArrayNoGroup()
@@ -135,7 +135,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->with($origOptions[0]['label'])
             ->willReturn($origOptions[0]['label']);
-        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray());
+        $this->assertSame($transformedOptions, $this->model->getVariablesOptionArray());
     }
 
     public function testGetVariablesOptionArrayWithGroup()
@@ -160,7 +160,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->with($origOptions[0]['label'])
             ->willReturn($origOptions[0]['label']);
-        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray(true));
+        $this->assertSame($transformedOptions, $this->model->getVariablesOptionArray(true));
     }
 
     /**

@@ -107,6 +107,6 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->magentoObject->expects($this->once())->method('getId')->will($this->returnValue($attrSetId));
 
         $result = $this->model->aroundMap($attributeMapper, $proceed, $attribute);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

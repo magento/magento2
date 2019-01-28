@@ -76,7 +76,7 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($paymentData);
 
         $actual = $this->builder->build($subject);
-        static::assertEquals($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**

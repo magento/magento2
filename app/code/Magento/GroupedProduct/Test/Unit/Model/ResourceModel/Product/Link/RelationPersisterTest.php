@@ -77,7 +77,7 @@ class RelationPersisterTest extends \PHPUnit\Framework\TestCase
     public function testAfterSaveProductLinks()
     {
         $this->relationProcessor->expects($this->once())->method('addRelation')->with(2, 10);
-        $this->assertEquals($this->subject, $this->object->afterSaveProductLinks(
+        $this->assertSame($this->subject, $this->object->afterSaveProductLinks(
             $this->subject,
             $this->subject,
             2,
@@ -105,7 +105,7 @@ class RelationPersisterTest extends \PHPUnit\Framework\TestCase
             ->willReturn(13);
 
         $this->relationProcessor->expects($this->once())->method('removeRelations')->with(12, 13);
-        $this->assertEquals(
+        $this->assertSame(
             $subject,
             $this->object->aroundDeleteProductLink(
                 $subject,

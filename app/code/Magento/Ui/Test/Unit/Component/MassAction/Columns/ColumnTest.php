@@ -79,7 +79,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $testItems = ['item1','item2', 'item3'];
 
-        $this->assertEquals($testItems, $this->column->prepareItems($testItems));
+        $this->assertSame($testItems, $this->column->prepareItems($testItems));
     }
 
     /**

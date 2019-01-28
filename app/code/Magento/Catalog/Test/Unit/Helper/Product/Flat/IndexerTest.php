@@ -102,7 +102,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     public function testGetFlatTableName()
     {
         $storeId = 1;
-        $this->assertEquals('catalog_product_flat_1', $this->_model->getFlatTableName($storeId));
+        $this->assertSame('catalog_product_flat_1', $this->_model->getFlatTableName($storeId));
     }
 
     /**

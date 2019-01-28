@@ -61,7 +61,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $productRepository->get($sku, false, null, true);
         $this->assertNull($product->getOptionById($optionId));
-        $this->assertEquals(9, count($product->getOptions()));
+        $this->assertSame(9, count($product->getOptions()));
     }
 
     /**
@@ -92,7 +92,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         unset($option['product_sku']);
         unset($option['option_id']);
         $excepted = include '_files/product_options.php';
-        $this->assertEquals($excepted[0], $option);
+        $this->assertSame($excepted[0], $option);
     }
 
     /**
@@ -129,11 +129,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         }
 
         $excepted = include '_files/product_options.php';
-        $this->assertEquals(count($excepted), count($options));
+        $this->assertSame(count($excepted), count($options));
 
         //in order to make assertion result readable we need to check each element separately
         foreach ($excepted as $index => $value) {
-            $this->assertEquals($value, $options[$index]);
+            $this->assertSame($value, $options[$index]);
         }
     }
 
@@ -169,7 +169,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 unset($result['values'][$key]['option_type_id']);
             }
         }
-        $this->assertEquals($optionData, $result);
+        $this->assertSame($optionData, $result);
     }
 
     public function optionDataProvider()
@@ -286,7 +286,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         unset($updatedOption['values']);
         unset($updatedOption['option_id']);//update change option id now
-        $this->assertEquals($optionDataPost, $updatedOption);
+        $this->assertSame($optionDataPost, $updatedOption);
     }
 
     /**
@@ -366,11 +366,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         }
 
         $values = end($valueObject['values']);
-        $this->assertEquals($valueData['price'], $values['price']);
-        $this->assertEquals($valueData['price_type'], $values['price_type']);
-        $this->assertEquals($valueData['sku'], $values['sku']);
-        $this->assertEquals('New Option Title', $values['title']);
-        $this->assertEquals(100, $values['sort_order']);
+        $this->assertSame($valueData['price'], $values['price']);
+        $this->assertSame($valueData['price_type'], $values['price_type']);
+        $this->assertSame($valueData['sku'], $values['sku']);
+        $this->assertSame('New Option Title', $values['title']);
+        $this->assertSame(100, $values['sort_order']);
     }
 
     public function validOptionDataProvider()

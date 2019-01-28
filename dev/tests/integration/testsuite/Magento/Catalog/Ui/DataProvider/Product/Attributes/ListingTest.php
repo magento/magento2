@@ -37,17 +37,17 @@ class ListingTest extends \PHPUnit\Framework\TestCase
     {
         $this->dataProvider->addOrder('attribute_code', 'asc');
         $data = $this->dataProvider->getData();
-        $this->assertEquals(2, $data['totalRecords']);
-        $this->assertEquals('color', $data['items'][0]['attribute_code']);
-        $this->assertEquals('manufacturer', $data['items'][1]['attribute_code']);
+        $this->assertSame(2, $data['totalRecords']);
+        $this->assertSame('color', $data['items'][0]['attribute_code']);
+        $this->assertSame('manufacturer', $data['items'][1]['attribute_code']);
     }
 
     public function testGetDataSortedDesc()
     {
         $this->dataProvider->addOrder('attribute_code', 'desc');
         $data = $this->dataProvider->getData();
-        $this->assertEquals(2, $data['totalRecords']);
-        $this->assertEquals('manufacturer', $data['items'][0]['attribute_code']);
-        $this->assertEquals('color', $data['items'][1]['attribute_code']);
+        $this->assertSame(2, $data['totalRecords']);
+        $this->assertSame('manufacturer', $data['items'][0]['attribute_code']);
+        $this->assertSame('color', $data['items'][1]['attribute_code']);
     }
 }

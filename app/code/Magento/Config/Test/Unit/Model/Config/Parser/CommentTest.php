@@ -72,7 +72,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
                 'some/payment/token'
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->execute($fileName),
             [
                 'CONFIG__DEFAULT__SOME__PAYMENT__PASSWORD' => 'some/payment/password',

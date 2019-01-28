@@ -46,6 +46,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($category)
         );
-        $this->assertEquals($categoryTags, $this->block->getIdentities());
+        $this->assertSame($categoryTags, $this->block->getIdentities());
     }
 }

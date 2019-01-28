@@ -85,10 +85,10 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->_model->switchBackendInterfaceLocale($locale);
 
         $userInterfaceLocale = $this->_authSession->getUser()->getInterfaceLocale();
-        $this->assertEquals($userInterfaceLocale, $locale);
+        $this->assertSame($userInterfaceLocale, $locale);
 
         $sessionLocale = $this->_session->getSessionLocale();
-        $this->assertEquals($sessionLocale, null);
+        $this->assertSame($sessionLocale, null);
     }
 
     /**
@@ -98,7 +98,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     {
         $locale = $this->_model->getUserInterfaceLocale();
 
-        $this->assertEquals($locale, Resolver::DEFAULT_LOCALE);
+        $this->assertSame($locale, Resolver::DEFAULT_LOCALE);
     }
 
     /**
@@ -109,7 +109,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->_model->switchBackendInterfaceLocale('de_DE');
         $locale = $this->_model->getUserInterfaceLocale();
 
-        $this->assertEquals($locale, 'de_DE');
+        $this->assertSame($locale, 'de_DE');
     }
 
     /**
@@ -122,6 +122,6 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->with('general/locale/code')
             ->willReturn('test_locale');
         $locale = $this->_model->getUserInterfaceLocale();
-        $this->assertEquals($locale, 'test_locale');
+        $this->assertSame($locale, 'test_locale');
     }
 }

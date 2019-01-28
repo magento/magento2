@@ -81,8 +81,8 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             ->with($this->asset, $foundPath)
             ->will($this->returnValue($resolvedPath));
         $this->object->process($chain);
-        $this->assertEquals($expectedContent, $chain->getContent());
-        $this->assertEquals('less', $chain->getContentType());
+        $this->assertSame($expectedContent, $chain->getContent());
+        $this->assertSame('less', $chain->getContentType());
     }
 
     /**
@@ -173,8 +173,8 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->notationResolver->expects($this->never())
             ->method('convertModuleNotationToPath');
         $this->object->process($chain);
-        $this->assertEquals($expectedContent, $chain->getContent());
-        $this->assertEquals('css', $chain->getContentType());
+        $this->assertSame($expectedContent, $chain->getContent());
+        $this->assertSame('css', $chain->getContentType());
     }
 
     /**

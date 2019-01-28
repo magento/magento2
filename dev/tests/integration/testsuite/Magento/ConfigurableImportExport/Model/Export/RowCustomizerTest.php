@@ -36,15 +36,15 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, [1, 2, 3, 4]);
-        $this->assertEquals($select, (string)$collection->getSelect());
+        $this->assertSame($select, (string)$collection->getSelect());
         $result = $this->model->addData([], 1);
         $this->assertArrayHasKey('configurable_variations', $result);
         $this->assertArrayHasKey('configurable_variation_labels', $result);
-        $this->assertEquals(
+        $this->assertSame(
             'sku=simple_10,test_configurable=Option 1|sku=simple_20,test_configurable=Option 2',
             $result['configurable_variations']
         );
-        $this->assertEquals(
+        $this->assertSame(
             'test_configurable=Test Configurable',
             $result['configurable_variation_labels']
         );

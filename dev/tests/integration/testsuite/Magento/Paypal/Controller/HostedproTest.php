@@ -27,8 +27,8 @@ class HostedproTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('paypal/hostedpro/cancel');
 
         $order->load('100000002', 'increment_id');
-        $this->assertEquals('canceled', $order->getState());
-        $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
-        $this->assertEquals($session->getQuote()->getItemsCount(), $quote->getItemsCount());
+        $this->assertSame('canceled', $order->getState());
+        $this->assertSame($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
+        $this->assertSame($session->getQuote()->getItemsCount(), $quote->getItemsCount());
     }
 }

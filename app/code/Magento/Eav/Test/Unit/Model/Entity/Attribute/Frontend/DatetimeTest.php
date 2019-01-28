@@ -60,7 +60,7 @@ class DatetimeTest extends \PHPUnit\Framework\TestCase
             ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE, null, null, null)
             ->willReturn($attributeValue);
 
-        $this->assertEquals($attributeValue, $this->model->getValue($object));
+        $this->assertSame($attributeValue, $this->model->getValue($object));
     }
 
     /**

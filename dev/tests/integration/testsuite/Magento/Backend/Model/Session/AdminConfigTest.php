@@ -31,7 +31,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $model = $this->objectManager->create(\Magento\Backend\Model\Session\AdminConfig::class);
-        $this->assertEquals('/index.php/backend', $model->getCookiePath());
+        $this->assertSame('/index.php/backend', $model->getCookiePath());
     }
 
     /**

@@ -51,6 +51,6 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $object = new Composite([$ruleOne, $ruleTwo]);
 
         $expectedResult = ['rule_one/path/one', 'rule_one/path/two', 'rule_two/path/one', 'rule_two/path/two'];
-        $this->assertEquals($expectedResult, $object->getPatternDirs($inputParams));
+        $this->assertSame($expectedResult, $object->getPatternDirs($inputParams));
     }
 }

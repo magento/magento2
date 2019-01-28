@@ -28,7 +28,7 @@ class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetParentTab()
     {
-        $this->assertEquals('product-details', $this->block->getParentTab());
+        $this->assertSame('product-details', $this->block->getParentTab());
     }
 
     /**
@@ -36,6 +36,6 @@ class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTabLabel()
     {
-        $this->assertEquals('Grouped Products', $this->block->getTabLabel());
+        $this->assertSame('Grouped Products', $this->block->getTabLabel());
     }
 }

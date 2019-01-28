@@ -53,6 +53,6 @@ class GenerateSearchResultsTest extends \PHPUnit\Framework\TestCase
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertEquals('SampleSearchResults.php', $model->generate());
+        $this->assertSame('SampleSearchResults.php', $model->generate());
     }
 }

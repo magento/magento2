@@ -71,9 +71,9 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('paypal/express/cancel');
 
         $order->load('100000002', 'increment_id');
-        $this->assertEquals('canceled', $order->getState());
-        $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
-        $this->assertEquals($session->getQuote()->getItemsCount(), $quote->getItemsCount());
+        $this->assertSame('canceled', $order->getState());
+        $this->assertSame($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
+        $this->assertSame($session->getQuote()->getItemsCount(), $quote->getItemsCount());
     }
 
     /**
@@ -108,12 +108,12 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $checkoutSession->setQuoteId($quote->getId());
 
         /** Preconditions check */
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $fixtureCustomerEmail,
             $quote->getCustomerEmail(),
             "Precondition failed: customer email in quote is invalid."
         );
-        $this->assertNotEquals(
+        $this->assertNotSame(
             $fixtureCustomerFirstname,
             $quote->getCustomerFirstname(),
             "Precondition failed: customer first name in quote is invalid."
@@ -126,12 +126,12 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var Quote $updatedQuote */
         $updatedQuote = $this->_objectManager->create(Quote::class);
         $updatedQuote->load($fixtureQuoteReserveId, 'reserved_order_id');
-        $this->assertEquals(
+        $this->assertSame(
             $fixtureCustomerEmail,
             $updatedQuote->getCustomer()->getEmail(),
             "Customer email in quote is invalid."
         );
-        $this->assertEquals(
+        $this->assertSame(
             $fixtureCustomerFirstname,
             $updatedQuote->getCustomer()->getFirstname(),
             "Customer first name in quote is invalid."

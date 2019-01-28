@@ -69,11 +69,11 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     public function testSortColumnsByOrder()
     {
         $columnNames = $this->_block->getLayout()->getChildNames($this->_block->getColumnSet()->getNameInLayout());
-        $this->assertEquals($this->_block->getColumn('column1')->getNameInLayout(), $columnNames[0]);
+        $this->assertSame($this->_block->getColumn('column1')->getNameInLayout(), $columnNames[0]);
         $this->_block->addColumnsOrder('column1', 'column2');
         $this->_block->sortColumnsByOrder();
         $columnNames = $this->_block->getLayout()->getChildNames($this->_block->getColumnSet()->getNameInLayout());
-        $this->assertEquals($this->_block->getColumn('column2')->getNameInLayout(), $columnNames[0]);
+        $this->assertSame($this->_block->getColumn('column2')->getNameInLayout(), $columnNames[0]);
     }
 
     /**
@@ -82,6 +82,6 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     public function testGetMainButtonsHtmlReturnsEmptyStringIfFiltersArentVisible()
     {
         $this->_block->setFilterVisibility(false);
-        $this->assertEquals('', $this->_block->getMainButtonsHtml());
+        $this->assertSame('', $this->_block->getMainButtonsHtml());
     }
 }

@@ -42,7 +42,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $this->assertEquals('link', $this->_link->getType());
+        $this->assertSame('link', $this->_link->getType());
     }
 
     /**
@@ -56,7 +56,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->_link->setData('ui_id', 'ui_id');
         $this->_link->setValue('Link Text');
         $html = $this->_link->getElementHtml();
-        $this->assertEquals(
+        $this->assertSame(
             "link_before<a id=\"link_id\"  data-ui-id=\"form-element-\">Link Text</a>\nlink_after",
             $html
         );

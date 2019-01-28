@@ -60,7 +60,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
 
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals($expectedResult[$product->getName()], $product->getQty());
+            $this->assertSame($expectedResult[$product->getName()], $product->getQty());
         }
     }
 }

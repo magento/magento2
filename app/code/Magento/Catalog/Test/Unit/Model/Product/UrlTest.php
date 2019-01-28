@@ -98,7 +98,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($resultString)
         );
 
-        $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
+        $this->assertSame($resultString, $this->model->formatUrlKey($strIn));
     }
 
     /**
@@ -153,18 +153,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         switch ($getUrlMethod) {
             case 'getUrl':
-                $this->assertEquals($requestPathProduct, $this->model->getUrl($product, $routeParams));
+                $this->assertSame($requestPathProduct, $this->model->getUrl($product, $routeParams));
                 break;
             case 'getUrlInStore':
-                $this->assertEquals($requestPathProduct, $this->model->getUrlInStore($product, $routeParams));
+                $this->assertSame($requestPathProduct, $this->model->getUrlInStore($product, $routeParams));
                 break;
             case 'getProductUrl':
-                $this->assertEquals($requestPathProduct, $this->model->getProductUrl($product, true));
+                $this->assertSame($requestPathProduct, $this->model->getProductUrl($product, true));
                 $this->sidResolver
                     ->expects($this->once())
                     ->method('getUseSessionInUrl')
                     ->will($this->returnValue(true));
-                $this->assertEquals($requestPathProduct, $this->model->getProductUrl($product, null));
+                $this->assertSame($requestPathProduct, $this->model->getProductUrl($product, null));
                 break;
         }
     }

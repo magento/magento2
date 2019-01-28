@@ -42,16 +42,16 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     public function testGetSchema()
     {
         $file = $this->_xsdDir . '/pdf.xsd';
-        $this->assertEquals($file, $this->_model->getSchema());
+        $this->assertSame($file, $this->_model->getSchema());
         // Make sure the value is calculated only once
-        $this->assertEquals($file, $this->_model->getSchema());
+        $this->assertSame($file, $this->_model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
         $file = $this->_xsdDir . '/pdf_file.xsd';
-        $this->assertEquals($file, $this->_model->getPerFileSchema());
+        $this->assertSame($file, $this->_model->getPerFileSchema());
         // Make sure the value is calculated only once
-        $this->assertEquals($file, $this->_model->getPerFileSchema());
+        $this->assertSame($file, $this->_model->getPerFileSchema());
     }
 }

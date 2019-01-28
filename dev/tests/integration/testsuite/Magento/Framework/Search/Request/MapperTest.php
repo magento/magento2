@@ -40,19 +40,19 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     public function testGetBuckets()
     {
         $buckets = $this->mapper->getBuckets();
-        $this->assertEquals(2, count($buckets));
+        $this->assertSame(2, count($buckets));
 
         $this->assertInstanceOf(\Magento\Framework\Search\Request\Aggregation\TermBucket::class, $buckets[0]);
-        $this->assertEquals('category_bucket', $buckets[0]->getName());
-        $this->assertEquals('category', $buckets[0]->getField());
-        $this->assertEquals(\Magento\Framework\Search\Request\BucketInterface::TYPE_TERM, $buckets[0]->getType());
+        $this->assertSame('category_bucket', $buckets[0]->getName());
+        $this->assertSame('category', $buckets[0]->getField());
+        $this->assertSame(\Magento\Framework\Search\Request\BucketInterface::TYPE_TERM, $buckets[0]->getType());
         $metrics = $buckets[0]->getMetrics();
         $this->assertInstanceOf(\Magento\Framework\Search\Request\Aggregation\Metric::class, $metrics[0]);
 
         $this->assertInstanceOf(\Magento\Framework\Search\Request\Aggregation\RangeBucket::class, $buckets[1]);
-        $this->assertEquals('price_bucket', $buckets[1]->getName());
-        $this->assertEquals('price', $buckets[1]->getField());
-        $this->assertEquals(\Magento\Framework\Search\Request\BucketInterface::TYPE_RANGE, $buckets[1]->getType());
+        $this->assertSame('price_bucket', $buckets[1]->getName());
+        $this->assertSame('price', $buckets[1]->getField());
+        $this->assertSame(\Magento\Framework\Search\Request\BucketInterface::TYPE_RANGE, $buckets[1]->getType());
         $metrics = $buckets[1]->getMetrics();
         $ranges = $buckets[1]->getRanges();
         $this->assertInstanceOf(\Magento\Framework\Search\Request\Aggregation\Metric::class, $metrics[0]);

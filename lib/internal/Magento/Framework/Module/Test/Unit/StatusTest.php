@@ -70,7 +70,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ['Module_Foo' => '', 'Module_Bar' => ''],
             ['Module_baz', 'Module_quz']
         );
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     public function testCheckConstraintsEnableNotAllowed()
@@ -97,7 +97,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             'Cannot enable Module_Bar because it conflicts with other modules:',
             "Module_Foo",
         ];
-        $this->assertEquals($expect, $result);
+        $this->assertSame($expect, $result);
     }
 
     public function testCheckConstraintsEnableNotAllowedWithPrettyMsg()
@@ -122,7 +122,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             'Cannot enable Module_Bar because it conflicts with other modules:',
             "Module_Foo",
         ];
-        $this->assertEquals($expect, $result);
+        $this->assertSame($expect, $result);
     }
 
     public function testCheckConstraintsDisableAllowed()
@@ -131,7 +131,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ->method('checkDependenciesWhenDisableModules')
             ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     public function testCheckConstraintsDisableNotAllowed()
@@ -151,7 +151,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             'Cannot disable Module_Bar because modules depend on it:',
             "Module_Baz: Module_Baz->Module_Bar",
         ];
-        $this->assertEquals($expect, $result);
+        $this->assertSame($expect, $result);
     }
 
     public function testSetIsEnabled()
@@ -194,7 +194,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn($secondEnabled);
         $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn($thirdEnabled);
         $result = $this->object->getModulesToChange($isEnabled, ['Module_Foo', 'Module_Bar', 'Module_Baz']);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

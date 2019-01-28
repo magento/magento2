@@ -83,7 +83,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
 
         asort($data);
         asort($response);
-        $this->assertEquals($data, $response);
+        $this->assertSame($data, $response);
     }
 
     /**
@@ -139,31 +139,31 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
         $address->getRegionCode();
         $savedData  = $address->getData();
-        $this->assertEquals($addressId, $savedData['address_id']);
+        $this->assertSame($addressId, $savedData['address_id']);
         //custom checks for street, region and address_type
         foreach ($addressData['street'] as $streetLine) {
             $this->assertContains($streetLine, $quote->getBillingAddress()->getStreet());
         }
         unset($addressData['street']);
         unset($addressData['email']);
-        $this->assertEquals('billing', $savedData['address_type']);
+        $this->assertSame('billing', $savedData['address_type']);
         //check the rest of fields
         foreach ($addressData as $key => $value) {
-            $this->assertEquals($value, $savedData[$key]);
+            $this->assertSame($value, $savedData[$key]);
         }
         $address = $quote->getShippingAddress();
         $address->getRegionCode();
         $savedData = $address->getData();
         if ($useForShipping) {
             //check that shipping address set
-            $this->assertEquals('shipping', $savedData['address_type']);
-            $this->assertEquals(1, $savedData['same_as_billing']);
+            $this->assertSame('shipping', $savedData['address_type']);
+            $this->assertSame(1, $savedData['same_as_billing']);
             //check the rest of fields
             foreach ($addressData as $key => $value) {
-                $this->assertEquals($value, $savedData[$key]);
+                $this->assertSame($value, $savedData[$key]);
             }
         } else {
-            $this->assertEquals(0, $savedData['same_as_billing']);
+            $this->assertSame(0, $savedData['same_as_billing']);
         }
     }
 

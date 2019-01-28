@@ -41,7 +41,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
 
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->extractValue($requestMock));
+        $this->assertSame($expectedResult, $this->model->extractValue($requestMock));
     }
 
     /**
@@ -85,7 +85,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
-        $this->assertEquals($expectedResult, $this->model->outputValue($format));
+        $this->assertSame($expectedResult, $this->model->outputValue($format));
     }
 
     /**

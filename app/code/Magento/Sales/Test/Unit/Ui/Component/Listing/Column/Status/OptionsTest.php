@@ -49,7 +49,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
-        $this->assertEquals($options, $this->model->toOptionArray());
-        $this->assertEquals($options, $this->model->toOptionArray());
+        $this->assertSame($options, $this->model->toOptionArray());
+        $this->assertSame($options, $this->model->toOptionArray());
     }
 }

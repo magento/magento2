@@ -50,7 +50,7 @@ class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
             ->method('getFrontendClass')
             ->willReturn($frontendClass);
 
-        $this->assertEquals($expectedResult, $this->catalogEavValidationRules->build($attribute, $eavConfig));
+        $this->assertSame($expectedResult, $this->catalogEavValidationRules->build($attribute, $eavConfig));
     }
 
     /**

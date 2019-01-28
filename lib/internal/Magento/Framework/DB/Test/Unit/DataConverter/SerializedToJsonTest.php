@@ -33,7 +33,7 @@ class SerializedToJsonTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert($serializedData, $expectedJson)
     {
-        $this->assertEquals($expectedJson, $this->serializedToJson->convert($serializedData));
+        $this->assertSame($expectedJson, $this->serializedToJson->convert($serializedData));
     }
 
     /**

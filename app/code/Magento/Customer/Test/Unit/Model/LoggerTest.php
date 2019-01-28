@@ -88,7 +88,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
             ->method('insertOnDuplicate')
             ->with($tableName, array_merge(['customer_id' => $customerId], $data), array_keys($data));
 
-        $this->assertEquals($this->logger, $this->logger->log($customerId, $data));
+        $this->assertSame($this->logger, $this->logger->log($customerId, $data));
     }
 
     /**
@@ -146,7 +146,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
             ->with($logArguments)
             ->willReturn($log);
 
-        $this->assertEquals($log, $this->logger->get($customerId));
+        $this->assertSame($log, $this->logger->get($customerId));
     }
 
     /**

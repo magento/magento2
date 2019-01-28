@@ -33,7 +33,7 @@ class FullModuleListTest extends \PHPUnit\Framework\TestCase
             'Vendor_B' => ['data' => 'b'],
             'Vendor_C' => ['data' => 'c'],
         ];
-        $this->assertEquals($expect, $this->moduleList->getAll());
+        $this->assertSame($expect, $this->moduleList->getAll());
         // call once more to make sure it's cached
         $this->moduleList->getAll();
     }
@@ -41,13 +41,13 @@ class FullModuleListTest extends \PHPUnit\Framework\TestCase
     public function testGetOne()
     {
         $expect = ['data' => 'b'];
-        $this->assertEquals($expect, $this->moduleList->getOne('Vendor_B'));
+        $this->assertSame($expect, $this->moduleList->getOne('Vendor_B'));
     }
 
     public function testGetNames()
     {
         $expect = ['Vendor_A', 'Vendor_B', 'Vendor_C'];
-        $this->assertEquals($expect, $this->moduleList->getNames());
+        $this->assertSame($expect, $this->moduleList->getNames());
     }
 
     public function testHasTrue()

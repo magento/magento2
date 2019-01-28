@@ -54,18 +54,18 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     public function testGetRelativePath()
     {
         $dir = $this->getDirectoryInstance('foo');
-        $this->assertEquals(
+        $this->assertSame(
             'file_three.txt',
             $dir->getRelativePath('file_three.txt')
         );
-        $this->assertEquals('', $dir->getRelativePath());
-        $this->assertEquals('bar', $dir->getRelativePath(__DIR__ . '/../_files/foo/bar'));
+        $this->assertSame('', $dir->getRelativePath());
+        $this->assertSame('bar', $dir->getRelativePath(__DIR__ . '/../_files/foo/bar'));
     }
 
     public function testGetRelativePathOutside()
@@ -92,7 +92,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(4, $exceptions);
+        $this->assertSame(4, $exceptions);
     }
 
     /**
@@ -145,7 +145,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -198,7 +198,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -212,7 +212,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testIsExist($dirPath, $path, $exists)
     {
         $dir = $this->getDirectoryInstance($dirPath);
-        $this->assertEquals($exists, $dir->isExist($path));
+        $this->assertSame($exists, $dir->isExist($path));
     }
 
     /**
@@ -244,7 +244,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -307,7 +307,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -321,7 +321,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testIsReadable($dirPath, $path, $readable)
     {
         $dir = $this->getDirectoryInstance($dirPath);
-        $this->assertEquals($readable, $dir->isReadable($path));
+        $this->assertSame($readable, $dir->isReadable($path));
     }
 
     public function testIsReadableOutside()
@@ -343,7 +343,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -355,7 +355,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsFile($path, $isFile)
     {
-        $this->assertEquals($isFile, $this->getDirectoryInstance('foo')->isFile($path));
+        $this->assertSame($isFile, $this->getDirectoryInstance('foo')->isFile($path));
     }
 
     public function testIsFileOutside()
@@ -377,7 +377,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -389,7 +389,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDirectory($path, $isDirectory)
     {
-        $this->assertEquals($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
+        $this->assertSame($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
     }
 
     public function testIsDirectoryOutside()
@@ -411,7 +411,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -473,7 +473,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -486,7 +486,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testReadFile($path, $content)
     {
         $directory = $this->getDirectoryInstance('');
-        $this->assertEquals($content, $directory->readFile($path));
+        $this->assertSame($content, $directory->readFile($path));
     }
 
     /**
@@ -524,7 +524,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 
     /**
@@ -552,9 +552,9 @@ class ReadTest extends \PHPUnit\Framework\TestCase
 
         $dir = $this->getDirectoryInstance('foo');
         $actual = $dir->readRecursively('');
-        $this->assertNotEquals($expected, $actual);
+        $this->assertNotSame($expected, $actual);
         sort($expected);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testReadRecursivelyOutside()
@@ -576,6 +576,6 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
-        $this->assertEquals(3, $exceptions);
+        $this->assertSame(3, $exceptions);
     }
 }

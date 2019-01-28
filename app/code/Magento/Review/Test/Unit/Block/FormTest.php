@@ -133,7 +133,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('isSecure')
             ->willReturn($isSecure);
 
-        $this->assertEquals($actionUrl . '/id/' . $productId, $this->object->getAction());
+        $this->assertSame($actionUrl . '/id/' . $productId, $this->object->getAction());
     }
 
     /**
@@ -155,6 +155,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock->expects($this->once())->method('serialize')
             ->will($this->returnValue(json_encode($jsLayout)));
-        $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
+        $this->assertSame('{"some-layout":"layout information"}', $this->object->getJsLayout());
     }
 }

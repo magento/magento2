@@ -77,7 +77,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
             ->with($scope)
             ->willReturn($scopeResolver);
 
-        $this->assertEquals(__('%1', $scopeTypeName), $this->block->getScopeTitle());
+        $this->assertSame(__('%1', $scopeTypeName), $this->block->getScopeTitle());
     }
 
     public function testGetScopeTitleDefault()
@@ -93,7 +93,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $this->assertEquals($scopeTypeName, $this->block->getScopeTitle()->render());
+        $this->assertSame($scopeTypeName, $this->block->getScopeTitle()->render());
     }
 
     protected function initContext()

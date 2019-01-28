@@ -34,6 +34,6 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
             ['value' => 'multiselect', 'label' => 'Multiple Select'],
             ['value' => 'select', 'label' => 'Dropdown'],
         ];
-        $this->assertEquals($expects, $this->_model->toOptionArray());
+        $this->assertSame($expects, $this->_model->toOptionArray());
     }
 }

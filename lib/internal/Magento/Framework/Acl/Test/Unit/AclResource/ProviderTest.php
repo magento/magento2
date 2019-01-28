@@ -79,7 +79,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             json_encode('ExpectedResult'),
             \Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY
         );
-        $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
+        $this->assertSame('ExpectedResult', $this->_model->getAclResources());
     }
 
     public function testGetIfAclResourcesExistInCache()
@@ -90,13 +90,13 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with(\Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY)
             ->will($this->returnValue(json_encode('ExpectedResult')));
-        $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
+        $this->assertSame('ExpectedResult', $this->_model->getAclResources());
     }
 
     public function testGetIfAclResourcesEmpty()
     {
         $this->_configReaderMock->expects($this->once())->method('read')->will($this->returnValue([]));
         $this->_treeBuilderMock->expects($this->never())->method('build');
-        $this->assertEquals([], $this->_model->getAclResources());
+        $this->assertSame([], $this->_model->getAclResources());
     }
 }

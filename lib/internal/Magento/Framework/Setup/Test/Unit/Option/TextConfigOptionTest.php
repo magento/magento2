@@ -22,7 +22,7 @@ class TextConfigOptionTest extends \PHPUnit\Framework\TestCase
     public function testGetFrontendType()
     {
         $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, 'path/to/value');
-        $this->assertEquals(TextConfigOption::FRONTEND_WIZARD_TEXT, $option->getFrontendType());
+        $this->assertSame(TextConfigOption::FRONTEND_WIZARD_TEXT, $option->getFrontendType());
     }
 
     /**

@@ -22,7 +22,7 @@ class HeaderMixinTest extends \PHPUnit\Framework\TestCase
      */
     public function testApply($subject, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->mixin->apply($subject));
+        $this->assertSame($expectedResult, $this->mixin->apply($subject));
     }
 
     /**

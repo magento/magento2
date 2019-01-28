@@ -47,7 +47,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
                 'code' => '1column',
             ],
         ];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testMergeCompleteAndPartial()
@@ -73,6 +73,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
                 'code' => '2columns-left',
             ],
         ];
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

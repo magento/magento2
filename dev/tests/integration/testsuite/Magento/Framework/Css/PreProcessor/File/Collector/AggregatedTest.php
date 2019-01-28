@@ -92,7 +92,7 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
         foreach ($files as $file) {
             $actualFiles[] = $file->getFilename();
         }
-        $this->assertEquals($expectedFiles, $actualFiles);
+        $this->assertSame($expectedFiles, $actualFiles);
 
         /** @var $file \Magento\Framework\View\File */
         foreach ($files as $file) {

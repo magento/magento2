@@ -58,11 +58,11 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
             $cause
         );
 
-        $this->assertEquals(0, $localizeException->getCode());
+        $this->assertSame(0, $localizeException->getCode());
 
-        $this->assertEquals($message, $localizeException->getRawMessage());
-        $this->assertEquals($this->renderedMessage, $localizeException->getMessage());
-        $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
+        $this->assertSame($message, $localizeException->getRawMessage());
+        $this->assertSame($this->renderedMessage, $localizeException->getMessage());
+        $this->assertSame($expectedLogMessage, $localizeException->getLogMessage());
 
         $this->assertSame($cause, $localizeException->getPrevious());
     }
@@ -109,7 +109,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
             new Phrase($message, $params),
             $cause
         );
-        $this->assertEquals($message, $localizeException->getRawMessage());
+        $this->assertSame($message, $localizeException->getRawMessage());
     }
 
     /**
@@ -128,7 +128,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
             $cause
         );
 
-        $this->assertEquals($params, $localizeException->getParameters());
+        $this->assertSame($params, $localizeException->getParameters());
     }
 
     /**
@@ -148,7 +148,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
             $cause
         );
         $expectedLogMessage = 'message parameter1 parameter2';
-        $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
+        $this->assertSame($expectedLogMessage, $localizeException->getLogMessage());
     }
 
     public function testGetCode()
@@ -160,6 +160,6 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
             $expectedCode
         );
 
-        $this->assertEquals($expectedCode, $localizedException->getCode());
+        $this->assertSame($expectedCode, $localizedException->getCode());
     }
 }

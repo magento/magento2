@@ -131,7 +131,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
         $this->groupManagement->expects($this->any())->method('getAllCustomersGroup')->will($this->returnValue($group));
-        $this->assertEquals($convertedExpectedValue, $this->model->getValue());
+        $this->assertSame($convertedExpectedValue, $this->model->getValue());
     }
 
     /**
@@ -278,11 +278,11 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
         $this->groupManagement->expects($this->any())->method('getAllCustomersGroup')
             ->will($this->returnValue($group));
-        $this->assertEquals($expectedResult, $this->model->getTierPriceList());
-        $this->assertEquals(count($expectedResult), $this->model->getTierPriceCount());
+        $this->assertSame($expectedResult, $this->model->getTierPriceList());
+        $this->assertSame(count($expectedResult), $this->model->getTierPriceCount());
         //Second call will get the cached value
-        $this->assertEquals($expectedResult, $this->model->getTierPriceList());
-        $this->assertEquals(count($expectedResult), $this->model->getTierPriceCount());
+        $this->assertSame($expectedResult, $this->model->getTierPriceList());
+        $this->assertSame(count($expectedResult), $this->model->getTierPriceCount());
     }
 
     /**
@@ -378,7 +378,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->with(FinalPrice::PRICE_CODE)
             ->willReturn($price);
 
-        $this->assertEquals($savedPercent, $this->model->getSavePercent($amount));
+        $this->assertSame($savedPercent, $this->model->getSavePercent($amount));
     }
 
     /**

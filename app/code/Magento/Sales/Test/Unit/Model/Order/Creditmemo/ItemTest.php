@@ -96,7 +96,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $qty = 10;
         $this->item->setQty($qty);
-        $this->assertEquals($qty, $this->item->getQty());
+        $this->assertSame($qty, $this->item->getQty());
     }
 
     public function testRegister()
@@ -280,8 +280,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $result = $this->item->calcRowTotal();
 
         $this->assertInstanceOf(\Magento\Sales\Model\Order\Creditmemo\Item::class, $result);
-        $this->assertEquals($expectedRowTotal, $this->item->getData('row_total'));
-        $this->assertEquals($expectedRowTotal, $this->item->getData('base_row_total'));
+        $this->assertSame($expectedRowTotal, $this->item->getData('row_total'));
+        $this->assertSame($expectedRowTotal, $this->item->getData('base_row_total'));
     }
 
     /**

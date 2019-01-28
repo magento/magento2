@@ -124,19 +124,19 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
     public function testCustomAttributesWithEmptyCustomAttributes()
     {
         $this->model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
         );
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->model->getCustomAttribute('not_existing_custom_attribute'),
             "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
         );
         $attributesAsArray = ['attribute1' => true, 'attribute2' => 'Attribute Value', 'attribute3' => 333];
         $this->addCustomAttributesToModel($attributesAsArray, $this->model);
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->model->getCustomAttributes(),
             'Custom attributes retrieved from the model using getCustomAttributes() are invalid.'
@@ -149,7 +149,7 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
         $customAttributeValue = 'attribute_value';
         $this->model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([$customAttributeCode]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
@@ -159,20 +159,20 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->customAttribute);
         $this->customAttribute->setAttributeCode($customAttributeCode)->setValue($customAttributeValue);
         $this->model->setData($customAttributeCode, $customAttributeValue);
-        $this->assertEquals(
+        $this->assertSame(
             [$this->customAttribute],
             $this->model->getCustomAttributes(),
             "One custom attribute expected"
         );
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode), 'customer attribute expected');
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributeValue,
             $this->model->getCustomAttribute($customAttributeCode)->getValue(),
             "Custom attribute value is incorrect"
         );
         //unset the data
         $this->model->unsetData($customAttributeCode);
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
@@ -196,13 +196,13 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
             $this->model->setData($key, $value);
         }
         $this->addCustomAttributesToModel($attributesAsArray, $this->model);
-        $this->assertEquals(
+        $this->assertSame(
             $modelData,
             $this->model->getData(),
             'All model data should be represented as a flat array, including custom attributes.'
         );
         foreach ($modelData as $field => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value,
                 $this->model->getData($field),
                 "Model data item '{$field}' was retrieved incorrectly."

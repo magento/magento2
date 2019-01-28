@@ -57,7 +57,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $result = $codeSniffer->run($this->filterFiles($fileList));
 
         $report = file_exists($reportFile) ? file_get_contents($reportFile) : "";
-        $this->assertEquals(
+        $this->assertSame(
             0,
             $result,
             "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $report

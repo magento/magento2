@@ -27,7 +27,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Filesystem::class
         );
-        $this->assertEquals(
+        $this->assertSame(
             $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath(),
             $config['media_directory']
         );
@@ -36,6 +36,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('css_secure', $config['allowed_resources']);
         $this->assertContains('js', $config['allowed_resources']);
         $this->assertContains('theme', $config['allowed_resources']);
-        $this->assertEquals(1000, $config['update_time']);
+        $this->assertSame(1000, $config['update_time']);
     }
 }

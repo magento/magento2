@@ -65,7 +65,7 @@ class CanInvoiceTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getStatus')
             ->willReturn('status');
-        $this->assertEquals(
+        $this->assertSame(
             [__('An invoice cannot be created when an order has a status of %1', 'status')],
             $this->model->validate($this->orderMock)
         );
@@ -125,7 +125,7 @@ class CanInvoiceTest extends \PHPUnit\Framework\TestCase
             ->method('getLockedDoInvoice')
             ->willReturn($itemLockedDoInvoice);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedResult,
             $this->model->validate($this->orderMock)
         );

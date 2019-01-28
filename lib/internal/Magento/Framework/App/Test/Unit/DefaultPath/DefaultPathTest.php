@@ -16,7 +16,7 @@ class DefaultPathTest extends \PHPUnit\Framework\TestCase
     public function testGetPart($parts, $code, $result)
     {
         $model = new \Magento\Framework\App\DefaultPath\DefaultPath($parts);
-        $this->assertEquals($result, $model->getPart($code));
+        $this->assertSame($result, $model->getPart($code));
     }
 
     /**

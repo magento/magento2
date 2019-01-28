@@ -66,7 +66,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         );
         $methodDecompress->setAccessible(true);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_testString,
             $methodDecompress->invoke(
                 $this->_decorator,
@@ -126,7 +126,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
 
         $loadedValue = $decorator->load($cacheId);
 
-        $this->assertEquals($this->_testString, $loadedValue);
+        $this->assertSame($this->_testString, $loadedValue);
     }
 
     /**

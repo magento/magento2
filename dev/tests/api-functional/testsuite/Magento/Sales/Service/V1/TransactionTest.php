@@ -83,7 +83,7 @@ class TransactionTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, ['id' => $transaction->getId()]);
         ksort($expectedData);
         ksort($result);
-        $this->assertEquals($expectedData, $result);
+        $this->assertSame($expectedData, $result);
     }
 
     /**
@@ -168,9 +168,9 @@ class TransactionTest extends WebapiAbstract
         $childTransactionData = $this->getPreparedTransactionData($childTransaction);
         $transactionData['child_transactions'][] = $childTransactionData;
         $expectedData = [$transactionData, $childTransactionData];
-        $this->assertEquals($expectedData, $result['items']);
+        $this->assertSame($expectedData, $result['items']);
         $this->assertArrayHasKey('search_criteria', $result);
-        $this->assertEquals($searchData, $result['search_criteria']);
+        $this->assertSame($searchData, $result['search_criteria']);
     }
 
     /**

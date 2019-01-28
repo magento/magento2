@@ -13,8 +13,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Store\Model\ResourceModel\Store::class
         );
-        $this->assertEquals(1, $model->countAll());
-        $this->assertEquals(1, $model->countAll(false));
-        $this->assertEquals(2, $model->countAll(true));
+        $this->assertSame(1, $model->countAll());
+        $this->assertSame(1, $model->countAll(false));
+        $this->assertSame(2, $model->countAll(true));
     }
 }

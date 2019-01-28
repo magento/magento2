@@ -234,12 +234,12 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $result = $session->restoreQuote();
         if ($hasOrderId && $hasQuoteId) {
             $this->assertNull($session->getLastRealOrderId());
-            $this->assertEquals($anotherQuoteId, $session->getQuoteId());
+            $this->assertSame($anotherQuoteId, $session->getQuoteId());
         } else {
-            $this->assertEquals($lastOrderId, $session->getLastRealOrderId());
-            $this->assertEquals($quoteId, $session->getQuoteId());
+            $this->assertSame($lastOrderId, $session->getLastRealOrderId());
+            $this->assertSame($quoteId, $session->getQuoteId());
         }
-        $this->assertEquals($result, $hasOrderId && $hasQuoteId);
+        $this->assertSame($result, $hasOrderId && $hasQuoteId);
     }
 
     /**
@@ -319,7 +319,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $session->replaceQuote($quote);
 
         $this->assertSame($quote, $session->getQuote());
-        $this->assertEquals($replaceQuoteId, $session->getQuoteId());
+        $this->assertSame($replaceQuoteId, $session->getQuoteId());
     }
 
     public function testClearStorage()
@@ -350,7 +350,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ['storage' => new \Magento\Framework\Session\Storage()]
         );
         $session->resetCheckout();
-        $this->assertEquals(\Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN, $session->getCheckoutState());
+        $this->assertSame(\Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN, $session->getCheckoutState());
     }
 
     public function testGetStepData()
@@ -367,11 +367,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ['storage' => new \Magento\Framework\Session\Storage()]
         );
         $session->setSteps($stepData);
-        $this->assertEquals($stepData, $session->getStepData());
+        $this->assertSame($stepData, $session->getStepData());
         $this->assertFalse($session->getStepData('invalid_key'));
-        $this->assertEquals($stepData['complex'], $session->getStepData('complex'));
+        $this->assertSame($stepData['complex'], $session->getStepData('complex'));
         $this->assertFalse($session->getStepData('simple', 'invalid_sub_key'));
-        $this->assertEquals($stepData['complex']['key'], $session->getStepData('complex', 'key'));
+        $this->assertSame($stepData['complex']['key'], $session->getStepData('complex', 'key'));
     }
 
     public function testSetStepData()
@@ -401,6 +401,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                 'key2' => 'value2',
             ],
         ];
-        $this->assertEquals($expectedResult, $session->getSteps());
+        $this->assertSame($expectedResult, $session->getSteps());
     }
 }

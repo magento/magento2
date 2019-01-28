@@ -55,7 +55,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->markTestSkipped(
             'Input data not realistic with actual request payload from admin UI. See MAGETWO-59810'
         );
-        $this->assertEquals($expectedDate, $this->dateFilter->filter($inputData));
+        $this->assertSame($expectedDate, $this->dateFilter->filter($inputData));
     }
 
     /**
@@ -81,7 +81,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     public function testLocaleDateFilter($locale, $inputData, $expectedDate)
     {
         $this->localeResolver->setLocale($locale);
-        $this->assertEquals($expectedDate, $this->dateFilter->filter($inputData));
+        $this->assertSame($expectedDate, $this->dateFilter->filter($inputData));
     }
 
     /**

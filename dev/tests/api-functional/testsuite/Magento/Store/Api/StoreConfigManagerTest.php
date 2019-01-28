@@ -39,7 +39,7 @@ class StoreConfigManagerTest extends WebapiAbstract
         ];
         $storeConfigs = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($storeConfigs);
-        $this->assertEquals(1, count($storeConfigs));
+        $this->assertSame(1, count($storeConfigs));
         $expectedKeys = [
             'id',
             'code',
@@ -58,6 +58,6 @@ class StoreConfigManagerTest extends WebapiAbstract
             'secure_base_static_url',
             'secure_base_media_url'
         ];
-        $this->assertEquals($expectedKeys, array_keys($storeConfigs[0]));
+        $this->assertSame($expectedKeys, array_keys($storeConfigs[0]));
     }
 }

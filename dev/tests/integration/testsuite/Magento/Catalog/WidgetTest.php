@@ -36,6 +36,6 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
 
         // Verify that the correct id (code) is found for this widget instance type.
         $code = $model->setType($type)->getWidgetReference('type', $type, 'code');
-        $this->assertEquals('new_products', $code);
+        $this->assertSame('new_products', $code);
     }
 }

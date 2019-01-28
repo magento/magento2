@@ -114,7 +114,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($testData['id']);
 
         $expectedResult = $this->dataProvider->getData();
-        $this->assertEquals($resultData, $expectedResult);
+        $this->assertSame($resultData, $expectedResult);
     }
 
     public function testPrepareMeta()
@@ -138,6 +138,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($testData);
 
         $expectedResult = $this->dataProvider->prepareMeta([]);
-        $this->assertEquals($resultData, $expectedResult);
+        $this->assertSame($resultData, $expectedResult);
     }
 }

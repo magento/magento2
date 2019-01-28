@@ -142,7 +142,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         foreach ($components as $component) {
             $this->context->addComponentDefinition($component['name'], $component['config']);
         }
-        $this->assertEquals($expected, $this->context->getComponentsDefinitions());
+        $this->assertSame($expected, $this->context->getComponentsDefinitions());
     }
 
     /**

@@ -28,7 +28,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
         $data = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertArrayHasKey('getMethodsMap', $data);
         $cachedData = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
-        $this->assertEquals($data, $cachedData);
+        $this->assertSame($data, $cachedData);
     }
 
     public function testGetMethodParams()
@@ -43,6 +43,6 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Reflection\MethodsMap::class,
             'getMethodParams'
         );
-        $this->assertEquals($data, $cachedData);
+        $this->assertSame($data, $cachedData);
     }
 }

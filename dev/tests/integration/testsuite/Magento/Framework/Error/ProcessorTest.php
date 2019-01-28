@@ -38,11 +38,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             $this->fail("Failed to generate report id");
         }
         $this->assertFileExists($this->processor->_reportDir . '/' . $this->processor->reportId);
-        $this->assertEquals($expectedReportData, $this->processor->reportData);
+        $this->assertSame($expectedReportData, $this->processor->reportData);
 
         $loadProcessor = $this->createProcessor();
         $loadProcessor->loadReport($this->processor->reportId);
-        $this->assertEquals($expectedReportData, $loadProcessor->reportData, "File contents of report don't match");
+        $this->assertSame($expectedReportData, $loadProcessor->reportData, "File contents of report don't match");
     }
 
     /**

@@ -26,7 +26,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         );
 
         $result = $infoBlock->getCustomerAccountData();
-        $this->assertEquals([], $result, 'Customer has additional account data.');
+        $this->assertSame([], $result, 'Customer has additional account data.');
     }
 
     /**
@@ -43,7 +43,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         );
 
         $result = $customerGroupBlock->getCustomerGroupName();
-        $this->assertEquals('NOT LOGGED IN', $result);
+        $this->assertSame('NOT LOGGED IN', $result);
     }
 
     /**
@@ -64,7 +64,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ['registry' => $this->_putOrderIntoRegistry($orderData)]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 200 => [
                     'label' => FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL,

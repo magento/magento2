@@ -69,7 +69,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAvailableServices()
     {
-        $this->assertEquals(['service_one', 'service_two'], $this->_model->getAvailableServices());
+        $this->assertSame(['service_one', 'service_two'], $this->_model->getAvailableServices());
     }
 
     /**
@@ -79,7 +79,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetServiceClass($serviceName, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->_model->getServiceClass($serviceName));
+        $this->assertSame($expectedResult, $this->_model->getServiceClass($serviceName));
     }
 
     /**
@@ -97,7 +97,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetServiceLabel($serviceName, $expectedResult)
     {
-        $this->assertEquals($expectedResult, $this->_model->getServiceLabel($serviceName));
+        $this->assertSame($expectedResult, $this->_model->getServiceLabel($serviceName));
     }
 
     /**

@@ -160,7 +160,7 @@ class CartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         $totalsMock->expects($this->once())->method('setBaseCurrencyCode')->with($currencyCode)->willReturnSelf();
         $totalsMock->expects($this->once())->method('setQuoteCurrencyCode')->with($currencyCode)->willReturnSelf();
 
-        $this->assertEquals($totalsMock, $this->model->get($cartId));
+        $this->assertSame($totalsMock, $this->model->get($cartId));
     }
 
     /**

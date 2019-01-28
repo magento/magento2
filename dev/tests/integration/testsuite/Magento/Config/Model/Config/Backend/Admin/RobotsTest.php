@@ -57,7 +57,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterLoadRobotsTxtExists()
     {
-        $this->assertEquals('Sitemap: http://store.com/sitemap.xml', $this->model->getValue());
+        $this->assertSame('Sitemap: http://store.com/sitemap.xml', $this->model->getValue());
     }
 
     /**

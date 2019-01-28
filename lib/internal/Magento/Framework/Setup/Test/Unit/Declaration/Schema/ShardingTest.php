@@ -51,6 +51,6 @@ class ShardingTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('db/connection')
             ->willReturn(['default' => 1, 'sales' => 2, 'index' => 3]);
-        self::assertEquals(['default', 'sales'], $this->model->getResources());
+        self::assertSame(['default', 'sales'], $this->model->getResources());
     }
 }

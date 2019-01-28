@@ -70,7 +70,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $item */
         foreach ($items as $item) {
-            $this->assertEquals($attributeSetId, $item->getAttributeSetId());
+            $this->assertSame($attributeSetId, $item->getAttributeSetId());
         }
     }
 }

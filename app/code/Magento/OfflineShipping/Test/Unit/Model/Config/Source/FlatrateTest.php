@@ -25,6 +25,6 @@ class FlatrateTest extends \PHPUnit\Framework\TestCase
             ['value' => 'I', 'label' => __('Per Item')]
         ];
 
-        $this->assertEquals($expected, $this->model->toOptionArray());
+        $this->assertSame($expected, $this->model->toOptionArray());
     }
 }

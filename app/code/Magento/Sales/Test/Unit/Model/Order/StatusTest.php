@@ -80,7 +80,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('unassignState')
             ->with($this->equalTo($params['status']), $this->equalTo($params['state']));
-        $this->assertEquals($this->model, $this->model->unassignState($params['state']));
+        $this->assertSame($this->model, $this->model->unassignState($params['state']));
     }
 
     /**
@@ -99,7 +99,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ->method('checkIsStateLast')
             ->with($this->equalTo($params['state']))
             ->will($this->returnValue(true));
-        $this->assertEquals($this->model, $this->model->unassignState($params['state']));
+        $this->assertSame($this->model, $this->model->unassignState($params['state']));
     }
 
     /**
@@ -122,7 +122,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ->method('checkIsStatusUsed')
             ->with($this->equalTo($params['status']))
             ->will($this->returnValue(true));
-        $this->assertEquals($this->model, $this->model->unassignState($params['state']));
+        $this->assertSame($this->model, $this->model->unassignState($params['state']));
     }
 
     /**

@@ -89,7 +89,7 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
         $this->_scopeConfigMock->expects($this->never())->method('getValue')->with('web/url/redirect_to_base');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
         $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(false);
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
         );
@@ -108,7 +108,7 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
         $this->_storeMock->expects($this->once())->method('getBaseUrl');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
         $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
         );
@@ -127,7 +127,7 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
         $this->_storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue(false));
         $this->_requestMock->expects($this->never())->method('getRequestUri');
         $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
         );

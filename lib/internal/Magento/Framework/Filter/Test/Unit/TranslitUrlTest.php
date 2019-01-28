@@ -28,9 +28,9 @@ class TranslitUrlTest extends \PHPUnit\Framework\TestCase
     public function testFilter($testString, $result, $resultIconv, $isIconv)
     {
         if ($isIconv) {
-            $this->assertEquals($resultIconv, $this->model->filter($testString));
+            $this->assertSame($resultIconv, $this->model->filter($testString));
         } else {
-            $this->assertEquals($result, $this->model->filter($testString));
+            $this->assertSame($result, $this->model->filter($testString));
         }
     }
 

@@ -63,7 +63,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             ->with($this->model->getMainTable(), ['updated_at < ?' => $this->dateTimeMock->formatDate($timestamp)])
             ->willReturnSelf();
 
-        $this->assertEquals($this->model, $this->model->deleteSessionsOlderThen($timestamp));
+        $this->assertSame($this->model, $this->model->deleteSessionsOlderThen($timestamp));
     }
 
     /**

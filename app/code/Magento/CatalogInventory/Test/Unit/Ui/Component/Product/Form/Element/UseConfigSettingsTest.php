@@ -64,7 +64,7 @@ class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
         $config = ['valueFromConfig' => 123];
         $this->useConfigSettings->setData('config', $config);
         $this->useConfigSettings->prepare();
-        $this->assertEquals($config, $this->useConfigSettings->getData('config'));
+        $this->assertSame($config, $this->useConfigSettings->getData('config'));
     }
 
     /**
@@ -103,7 +103,7 @@ class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
         $this->useConfigSettings->setData('config', $config);
         $this->useConfigSettings->prepare();
 
-        $this->assertEquals($expectedResult, $this->useConfigSettings->getData('config'));
+        $this->assertSame($expectedResult, $this->useConfigSettings->getData('config'));
     }
 
     /**

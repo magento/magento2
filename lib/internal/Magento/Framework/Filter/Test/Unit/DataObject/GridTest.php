@@ -60,12 +60,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT and ensure that data of grid items was filtered correctly */
         $filteredGrid = $gridFilter->filter($grid);
         $this->assertCount(2, $filteredGrid, 'Quantity of filtered items is invalid.');
-        $this->assertEquals(
+        $this->assertSame(
             ['field1' => '(value11)', 'field2' => '[(value12)]'],
             $filteredGrid[0]->getData(),
             'First grid item was filtered incorrectly.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['field3' => '(value23)', 'field2' => '[(value22)]'],
             $filteredGrid[1]->getData(),
             'Second grid item was filtered incorrectly.'

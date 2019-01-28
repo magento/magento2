@@ -108,6 +108,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($expectedResult)
             ->willReturnArgument(0);
-        $this->assertEquals($expectedResult, $this->websiteSource->get($scopeCode));
+        $this->assertSame($expectedResult, $this->websiteSource->get($scopeCode));
     }
 }

@@ -24,7 +24,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $themeModel = $this->_getThemeModel();
         $themeModel->setData($this->_getThemeValidData());
 
-        $this->assertEquals(true, $validator->validate($themeModel));
+        $this->assertSame(true, $validator->validate($themeModel));
     }
 
     /**
@@ -40,7 +40,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $themeModel = $this->_getThemeModel();
         $themeModel->setData($this->_getThemeInvalidData());
 
-        $this->assertEquals(false, $validator->validate($themeModel));
+        $this->assertSame(false, $validator->validate($themeModel));
     }
 
     /**

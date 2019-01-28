@@ -241,7 +241,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         }
         $this->_storageMock->expects($this->any())->method('getIsCustomerEmulated')
             ->will($this->returnValue($isCustomerEmulated));
-        $this->assertEquals($expectedResult, $this->_model->isLoggedIn());
+        $this->assertSame($expectedResult, $this->_model->isLoggedIn());
     }
 
     /**

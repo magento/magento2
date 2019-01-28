@@ -102,7 +102,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $products = $this->search('Apple');
         $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
+        $this->assertSame($this->productApple->getId(), $products[0]->getId());
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
@@ -123,7 +123,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $products = $this->search('Cucumber');
         $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
+        $this->assertSame($this->productApple->getId(), $products[0]->getId());
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);

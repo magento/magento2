@@ -54,7 +54,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareEntityIndex($expected, array $data)
     {
-        $this->assertEquals($expected, $this->target->prepareEntityIndex($data['index'], $data['separator']));
+        $this->assertSame($expected, $this->target->prepareEntityIndex($data['index'], $data['separator']));
     }
 
     /**

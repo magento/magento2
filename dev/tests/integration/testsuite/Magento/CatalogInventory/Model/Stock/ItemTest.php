@@ -46,16 +46,16 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $savedStockItem->setQty(2);
         $savedStockItem->save();
-        $this->assertEquals('2.0000', $savedStockItem->load($savedStockItemId)->getQty());
+        $this->assertSame('2.0000', $savedStockItem->load($savedStockItemId)->getQty());
 
         $savedStockItem->setQty(0);
         $savedStockItem->save();
-        $this->assertEquals('0.0000', $savedStockItem->load($savedStockItemId)->getQty());
+        $this->assertSame('0.0000', $savedStockItem->load($savedStockItemId)->getQty());
 
         $savedStockItem->setQty(null);
         $savedStockItem->save();
 
-        $this->assertEquals(null, $savedStockItem->load($savedStockItemId)->getQty());
+        $this->assertSame(null, $savedStockItem->load($savedStockItemId)->getQty());
     }
 
     /**
@@ -76,11 +76,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $savedStockItem->setQty(1);
         $savedStockItem->save();
 
-        $this->assertEquals(0, $savedStockItem->getStockStatusChangedAuto());
+        $this->assertSame(0, $savedStockItem->getStockStatusChangedAuto());
 
         $savedStockItem->setStockStatusChangedAutomaticallyFlag(1);
         $savedStockItem->save();
-        $this->assertEquals(1, $savedStockItem->getStockStatusChangedAuto());
+        $this->assertSame(1, $savedStockItem->getStockStatusChangedAuto());
     }
 
     /**

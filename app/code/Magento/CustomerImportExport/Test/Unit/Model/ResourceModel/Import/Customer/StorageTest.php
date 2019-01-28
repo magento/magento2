@@ -114,7 +114,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     }
                 }
             );
-        $this->assertEquals(
+        $this->assertSame(
             $existingId,
             $this->model->getCustomerId($existingEmail, $existingWebsiteId)
         );

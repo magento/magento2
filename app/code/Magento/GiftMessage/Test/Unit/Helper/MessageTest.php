@@ -53,6 +53,6 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $inlineMock->expects($this->once())->method('setCheckoutType')->will($this->returnSelf());
         $inlineMock->expects($this->once())->method('toHtml')->will($this->returnValue($expectedHtml));
 
-        $this->assertEquals($expectedHtml, $this->helper->getInline('onepage_checkout', $entityMock));
+        $this->assertSame($expectedHtml, $this->helper->getInline('onepage_checkout', $entityMock));
     }
 }

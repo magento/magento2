@@ -112,6 +112,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals($expectedOptions, $this->options->toOptionArray());
+        $this->assertSame($expectedOptions, $this->options->toOptionArray());
     }
 }

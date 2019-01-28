@@ -66,10 +66,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->addProduct($product);
         $quote->collectTotals();
 
-        $this->assertEquals(2, $quote->getItemsQty());
-        $this->assertEquals(1, $quote->getVirtualItemsQty());
-        $this->assertEquals(20, $quote->getGrandTotal());
-        $this->assertEquals(20, $quote->getBaseGrandTotal());
+        $this->assertSame(2, $quote->getItemsQty());
+        $this->assertSame(1, $quote->getVirtualItemsQty());
+        $this->assertSame(20, $quote->getGrandTotal());
+        $this->assertSame(20, $quote->getBaseGrandTotal());
     }
 
     /**
@@ -93,11 +93,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
-        $this->assertEquals($expected, $this->convertToArray($customer));
+        $this->assertSame($expected, $this->convertToArray($customer));
         $quote->setCustomer($customer);
         $customer = $quote->getCustomer();
-        $this->assertEquals($expected, $this->convertToArray($customer));
-        $this->assertEquals('qa@example.com', $quote->getCustomerEmail());
+        $this->assertSame($expected, $this->convertToArray($customer));
+        $this->assertSame('qa@example.com', $quote->getCustomerEmail());
     }
 
     /**
@@ -121,7 +121,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             $expected,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $this->assertEquals($expected, $this->convertToArray($customerDataSet));
+        $this->assertSame($expected, $this->convertToArray($customerDataSet));
         /**
          * @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
          */
@@ -144,7 +144,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         foreach ($expected as $item) {
             $this->assertContains($item, $actual);
         }
-        $this->assertEquals('test@example.com', $quote->getCustomerEmail());
+        $this->assertSame('test@example.com', $quote->getCustomerEmail());
     }
 
     /**
@@ -167,7 +167,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->unsetData('customer_group_id');
 
         /** Execute SUT */
-        $this->assertEquals($customerGroupId, $quote->getCustomerGroupId(), "Customer group ID is invalid");
+        $this->assertSame($customerGroupId, $quote->getCustomerGroupId(), "Customer group ID is invalid");
     }
 
     /**
@@ -189,7 +189,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->setCustomerGroupId($fixtureGroupId);
 
         /** Execute SUT */
-        $this->assertEquals($fixtureTaxClassId, $quote->getCustomerTaxClassId(), 'Customer tax class ID is invalid.');
+        $this->assertSame($fixtureTaxClassId, $quote->getCustomerTaxClassId(), 'Customer tax class ID is invalid.');
     }
 
     /**
@@ -215,7 +215,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         /** Check if SUT caused expected effects */
         $fixtureCustomerId = 1;
-        $this->assertEquals($fixtureCustomerId, $quote->getCustomerId(), 'Customer ID in quote is invalid.');
+        $this->assertSame($fixtureCustomerId, $quote->getCustomerId(), 'Customer ID in quote is invalid.');
         $expectedBillingAddressData = [
             'street' => 'Green str, 67',
             'telephone' => 3468676,
@@ -230,7 +230,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         ];
         $billingAddress = $quote->getBillingAddress();
         foreach ($expectedBillingAddressData as $field => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value,
                 $billingAddress->getData($field),
                 "'{$field}' value in quote billing address is invalid."
@@ -250,7 +250,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         ];
         $shippingAddress = $quote->getShippingAddress();
         foreach ($expectedShippingAddressData as $field => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value,
                 $shippingAddress->getData($field),
                 "'{$field}' value in quote shipping address is invalid."
@@ -307,11 +307,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         /** Check if SUT caused expected effects */
         $fixtureCustomerId = 1;
-        $this->assertEquals($fixtureCustomerId, $quote->getCustomerId(), 'Customer ID in quote is invalid.');
+        $this->assertSame($fixtureCustomerId, $quote->getCustomerId(), 'Customer ID in quote is invalid.');
 
         $billingAddress = $quote->getBillingAddress();
         foreach ($expectedBillingAddressData as $field => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value,
                 $billingAddress->getData($field),
                 "'{$field}' value in quote billing address is invalid."
@@ -319,7 +319,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         }
         $shippingAddress = $quote->getShippingAddress();
         foreach ($expectedShippingAddressData as $field => $value) {
-            $this->assertEquals(
+            $this->assertSame(
                 $value,
                 $shippingAddress->getData($field),
                 "'{$field}' value in quote shipping address is invalid."
@@ -346,10 +346,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         $quote->addProduct($product, 50);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
-        $this->assertEquals(50, $quote->getItemsQty());
+        $this->assertSame(50, $quote->getItemsQty());
         $quote->addProduct($product, 50);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
-        $this->assertEquals(100, $quote->getItemsQty());
+        $this->assertSame(100, $quote->getItemsQty());
         $params = [
             'related_product' => '',
             'product' => $product->getId(),
@@ -359,7 +359,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $updateParams = new \Magento\Framework\DataObject($params);
         $quote->updateItem($updateParams['id'], $updateParams);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
-        $this->assertEquals(1, $quote->getItemsQty());
+        $this->assertSame(1, $quote->getItemsQty());
 
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         // TODO: fix test or implementation as described in https://github.com/magento-engcom/msi/issues/1037
@@ -459,10 +459,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote = $this->objectManager->create(Quote::class);
         $quote->load('reserved_order_id', 'reserved_order_id');
         $quote->reserveOrderId();
-        $this->assertEquals('reserved_order_id', $quote->getReservedOrderId());
+        $this->assertSame('reserved_order_id', $quote->getReservedOrderId());
         $quote->setReservedOrderId('100000001');
         $quote->reserveOrderId();
-        $this->assertNotEquals('100000001', $quote->getReservedOrderId());
+        $this->assertNotSame('100000001', $quote->getReservedOrderId());
     }
 
     /**
@@ -507,7 +507,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->save();
 
         $this->assertInstanceOf(\Magento\Quote\Model\Quote\Item::class, $quote->getItemById($quoteItem->getId()));
-        $this->assertEquals($quoteItem->getId(), $quote->getItemById($quoteItem->getId())->getId());
+        $this->assertSame($quoteItem->getId(), $quote->getItemById($quoteItem->getId())->getId());
     }
 
     /**
@@ -556,8 +556,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $customerQuote->merge($guestQuote);
         $mergedItemItem = $customerQuote->getItemByProduct($product);
 
-        self::assertEquals($expectedOrderGiftMessageId, $customerQuote->getGiftMessageId());
-        self::assertEquals($expectedItemGiftMessageId, $mergedItemItem->getGiftMessageId());
+        self::assertSame($expectedOrderGiftMessageId, $customerQuote->getGiftMessageId());
+        self::assertSame($expectedItemGiftMessageId, $mergedItemItem->getGiftMessageId());
     }
 
     /**

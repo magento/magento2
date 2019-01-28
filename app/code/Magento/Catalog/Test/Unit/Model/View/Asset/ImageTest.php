@@ -78,21 +78,21 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testModuleAndContentAndContentType()
     {
         $contentType = 'image';
-        $this->assertEquals($contentType, $this->model->getContentType());
-        $this->assertEquals($contentType, $this->model->getSourceContentType());
+        $this->assertSame($contentType, $this->model->getContentType());
+        $this->assertSame($contentType, $this->model->getSourceContentType());
         $this->assertNull($this->model->getContent());
-        $this->assertEquals('cache', $this->model->getModule());
+        $this->assertSame('cache', $this->model->getModule());
     }
 
     public function testGetFilePath()
     {
-        $this->assertEquals('/somefile.png', $this->model->getFilePath());
+        $this->assertSame('/somefile.png', $this->model->getFilePath());
     }
 
     public function testGetSoureFile()
     {
         $this->mediaConfig->expects($this->once())->method('getBaseMediaPath')->willReturn('catalog/product');
-        $this->assertEquals('catalog/product/somefile.png', $this->model->getSourceFile());
+        $this->assertSame('catalog/product/somefile.png', $this->model->getSourceFile());
     }
 
     public function testGetContext()
@@ -123,7 +123,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $hashPath = md5(implode('_', $miscParams));
         $this->context->method('getPath')->willReturn($absolutePath);
         $this->encryptor->method('hash')->willReturn($hashPath);
-        static::assertEquals(
+        static::assertSame(
             $absolutePath . '/cache/'. $hashPath . $filePath,
             $imageModel->getPath()
         );
@@ -152,7 +152,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $hashPath = md5(implode('_', $miscParams));
         $this->context->expects(static::once())->method('getBaseUrl')->willReturn($absolutePath);
         $this->encryptor->expects(static::once())->method('hash')->willReturn($hashPath);
-        static::assertEquals(
+        static::assertSame(
             $absolutePath . '/cache/' . $hashPath . $filePath,
             $imageModel->getUrl()
         );

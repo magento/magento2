@@ -432,7 +432,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('setStoreId')
             ->will($this->returnValue(1));
-        $this->assertEquals('result-execute', $this->save->execute());
+        $this->assertSame('result-execute', $this->save->execute());
     }
 
     /**
@@ -523,6 +523,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $result = $model->imagePreprocessing($data);
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

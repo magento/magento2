@@ -150,6 +150,6 @@ class AttributesTest extends TestCase
         $attributes = $this->attributesBlock->getAdditionalData();
         $this->assertNotTrue(empty($attributes['phrase']));
         $this->assertNotTrue(empty($attributes['phrase']['value']));
-        $this->assertEquals('Yes', $attributes['phrase']['value']);
+        $this->assertSame('Yes', $attributes['phrase']['value']);
     }
 }

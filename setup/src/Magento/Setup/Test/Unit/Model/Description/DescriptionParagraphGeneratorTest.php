@@ -61,7 +61,7 @@ class DescriptionParagraphGeneratorTest extends \PHPUnit\Framework\TestCase
                 $consecutiveSentences[3]
             ));
 
-        $this->assertEquals(
+        $this->assertSame(
             implode(' ', $consecutiveSentences),
             $this->paragraphGenerator->generate()
         );

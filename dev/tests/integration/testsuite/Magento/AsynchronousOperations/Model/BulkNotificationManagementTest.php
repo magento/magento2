@@ -41,7 +41,7 @@ class BulkNotificationManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $acknowledgedBulks);
         /** @var BulkSummaryInterface $acknowledgedBulk */
         $acknowledgedBulk = array_pop($acknowledgedBulks);
-        $this->assertEquals('bulk-uuid-5', $acknowledgedBulk->getBulkId());
+        $this->assertSame('bulk-uuid-5', $acknowledgedBulk->getBulkId());
     }
 
     /**
@@ -56,7 +56,7 @@ class BulkNotificationManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $acknowledgedBulks);
         /** @var BulkSummaryInterface $acknowledgedBulk */
         $acknowledgedBulk = array_pop($acknowledgedBulks);
-        $this->assertEquals('bulk-uuid-4', $acknowledgedBulk->getBulkId());
+        $this->assertSame('bulk-uuid-4', $acknowledgedBulk->getBulkId());
     }
 
     /**

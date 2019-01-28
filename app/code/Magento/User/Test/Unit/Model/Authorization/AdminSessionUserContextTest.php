@@ -49,7 +49,7 @@ class AdminSessionUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($userId);
 
-        $this->assertEquals($userId, $this->adminSessionUserContext->getUserId());
+        $this->assertSame($userId, $this->adminSessionUserContext->getUserId());
     }
 
     public function testGetUserIdDoesNotExist()
@@ -58,12 +58,12 @@ class AdminSessionUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($userId);
 
-        $this->assertEquals($userId, $this->adminSessionUserContext->getUserId());
+        $this->assertSame($userId, $this->adminSessionUserContext->getUserId());
     }
 
     public function testGetUserType()
     {
-        $this->assertEquals(UserContextInterface::USER_TYPE_ADMIN, $this->adminSessionUserContext->getUserType());
+        $this->assertSame(UserContextInterface::USER_TYPE_ADMIN, $this->adminSessionUserContext->getUserType());
     }
 
     /**

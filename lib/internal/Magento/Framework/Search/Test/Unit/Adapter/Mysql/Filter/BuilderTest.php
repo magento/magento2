@@ -166,7 +166,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuildFilter($filter, $conditionType, $expectedResult)
     {
         $actualResult = $this->builder->build($filter, $conditionType);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

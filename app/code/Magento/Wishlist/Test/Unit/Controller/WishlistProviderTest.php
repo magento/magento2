@@ -68,7 +68,7 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($wishlist));
 
-        $this->assertEquals($wishlist, $this->wishlistProvider->getWishlist());
+        $this->assertSame($wishlist, $this->wishlistProvider->getWishlist());
     }
 
     public function testGetWishlistWithCustomer()
@@ -95,7 +95,7 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerId')
             ->will($this->returnValue(1));
 
-        $this->assertEquals($wishlist, $this->wishlistProvider->getWishlist());
+        $this->assertSame($wishlist, $this->wishlistProvider->getWishlist());
     }
 
     public function testGetWishlistWithIdAndCustomer()
@@ -127,7 +127,7 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerId')
             ->will($this->returnValue(1));
 
-        $this->assertEquals($wishlist, $this->wishlistProvider->getWishlist());
+        $this->assertSame($wishlist, $this->wishlistProvider->getWishlist());
     }
 
     public function testGetWishlistWithIdWithoutCustomer()
@@ -155,6 +155,6 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->will($this->returnValue(1));
 
-        $this->assertEquals(false, $this->wishlistProvider->getWishlist());
+        $this->assertSame(false, $this->wishlistProvider->getWishlist());
     }
 }

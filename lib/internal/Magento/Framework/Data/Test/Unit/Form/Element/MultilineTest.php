@@ -60,7 +60,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
         $this->element->setValue($value);
 
         $result = $this->element->getEscapedValue($index);
-        $this->assertEquals($resultValue, $result);
+        $this->assertSame($resultValue, $result);
     }
 
     /**

@@ -12,6 +12,6 @@ class StdoTest extends \PHPUnit\Framework\TestCase
     public function testThatHandlerIsRight()
     {
         $writer = new Stdo();
-        $this->assertAttributeEquals(STDOUT, '_fileHandler', $writer);
+        $this->assertAttributeSame(STDOUT, '_fileHandler', $writer);
     }
 }

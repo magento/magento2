@@ -280,7 +280,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $result = $this->saveDownloadableOrderItemObserver->execute($observer);
-        $this->assertEquals($this->saveDownloadableOrderItemObserver, $result);
+        $this->assertSame($this->saveDownloadableOrderItemObserver, $result);
     }
 
     public function testSaveDownloadableOrderItemSavedPurchasedLink()

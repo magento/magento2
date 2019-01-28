@@ -59,6 +59,6 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
         $expectedResult['web']['unsecure']['base_link_url'] = 'http://localhost/website/de';
         $expectedResult['web']['secure']['base_link_url'] = 'https://localhost/website/de';
         $expectedResult['some_url'] = 'http://localhost/some';
-        $this->assertEquals($expectedResult, $this->_model->process($data));
+        $this->assertSame($expectedResult, $this->_model->process($data));
     }
 }

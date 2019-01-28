@@ -148,8 +148,8 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             $data
         );
         $this->assertNotNull($result);
-        $this->assertEquals(15, $result[0]);
-        $this->assertEquals('Test', $result[1]);
+        $this->assertSame(15, $result[0]);
+        $this->assertSame('Test', $result[1]);
     }
 
     public function testNonExistentPropertiesWithDefaultArgumentValue()
@@ -161,7 +161,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             $data
         );
         $this->assertNotNull($result);
-        $this->assertEquals(TestService::DEFAULT_VALUE, $result[0]);
+        $this->assertSame(TestService::DEFAULT_VALUE, $result[0]);
     }
 
     /**
@@ -190,7 +190,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($result);
         $this->assertTrue($result[0] instanceof Nested);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         $this->assertNotEmpty($result[0]);
         /** @var NestedData $arg */
         $arg = $result[0];
@@ -199,8 +199,8 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $details = $arg->getDetails();
         $this->assertNotNull($details);
         $this->assertTrue($details instanceof Simple);
-        $this->assertEquals(15, $details->getEntityId());
-        $this->assertEquals('Test', $details->getName());
+        $this->assertSame(15, $details->getEntityId());
+        $this->assertSame('Test', $details->getName());
     }
 
     public function testSimpleConstructorProperties()
@@ -215,8 +215,8 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $arg = $result[0];
 
         $this->assertTrue($arg instanceof SimpleConstructor);
-        $this->assertEquals(15, $arg->getEntityId());
-        $this->assertEquals('Test', $arg->getName());
+        $this->assertSame(15, $arg->getEntityId());
+        $this->assertSame('Test', $arg->getName());
     }
 
     public function testSimpleArrayProperties()
@@ -229,12 +229,12 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var array $ids */
         $ids = $result[0];
         $this->assertNotNull($ids);
-        $this->assertEquals(4, count($ids));
-        $this->assertEquals($data['ids'], $ids);
+        $this->assertSame(4, count($ids));
+        $this->assertSame($data['ids'], $ids);
     }
 
     public function testAssociativeArrayProperties()
@@ -247,12 +247,12 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var array $associativeArray */
         $associativeArray = $result[0];
         $this->assertNotNull($associativeArray);
-        $this->assertEquals('value', $associativeArray['key']);
-        $this->assertEquals('value_two', $associativeArray['key_two']);
+        $this->assertSame('value', $associativeArray['key']);
+        $this->assertSame('value_two', $associativeArray['key_two']);
     }
 
     public function testAssociativeArrayPropertiesWithItem()
@@ -265,11 +265,11 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var array $associativeArray */
         $associativeArray = $result[0];
         $this->assertNotNull($associativeArray);
-        $this->assertEquals('value', $associativeArray[0]);
+        $this->assertSame('value', $associativeArray[0]);
     }
 
     public function testAssociativeArrayPropertiesWithItemArray()
@@ -282,12 +282,12 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var array $associativeArray */
         $array = $result[0];
         $this->assertNotNull($array);
-        $this->assertEquals('value1', $array[0]);
-        $this->assertEquals('value2', $array[1]);
+        $this->assertSame('value1', $array[0]);
+        $this->assertSame('value2', $array[1]);
     }
 
     public function testArrayOfDataObjectProperties()
@@ -305,20 +305,20 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var array $dataObjects */
         $dataObjects = $result[0];
-        $this->assertEquals(2, count($dataObjects));
+        $this->assertSame(2, count($dataObjects));
         /** @var SimpleData $first */
         $first = $dataObjects[0];
         /** @var SimpleData $second */
         $second = $dataObjects[1];
         $this->assertTrue($first instanceof Simple);
-        $this->assertEquals(14, $first->getEntityId());
-        $this->assertEquals('First', $first->getName());
+        $this->assertSame(14, $first->getEntityId());
+        $this->assertSame('First', $first->getName());
         $this->assertTrue($second instanceof Simple);
-        $this->assertEquals(15, $second->getEntityId());
-        $this->assertEquals('Second', $second->getName());
+        $this->assertSame(15, $second->getEntityId());
+        $this->assertSame('Second', $second->getName());
     }
 
     public function testNestedSimpleArrayProperties()
@@ -331,15 +331,15 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var SimpleArrayData $dataObject */
         $dataObject = $result[0];
         $this->assertTrue($dataObject instanceof SimpleArray);
         /** @var array $ids */
         $ids = $dataObject->getIds();
         $this->assertNotNull($ids);
-        $this->assertEquals(4, count($ids));
-        $this->assertEquals($data['arrayData']['ids'], $ids);
+        $this->assertSame(4, count($ids));
+        $this->assertSame($data['arrayData']['ids'], $ids);
     }
 
     public function testNestedAssociativeArrayProperties()
@@ -354,15 +354,15 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray $dataObject */
         $dataObject = $result[0];
         $this->assertTrue($dataObject instanceof AssociativeArray);
         /** @var array $associativeArray */
         $associativeArray = $dataObject->getAssociativeArray();
         $this->assertNotNull($associativeArray);
-        $this->assertEquals('value', $associativeArray['key']);
-        $this->assertEquals('value2', $associativeArray['key2']);
+        $this->assertSame('value', $associativeArray['key']);
+        $this->assertSame('value2', $associativeArray['key2']);
     }
 
     public function testNestedArrayOfDataObjectProperties()
@@ -379,23 +379,23 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertSame(1, count($result));
         /** @var DataArrayData $dataObjects */
         $dataObjects = $result[0];
         $this->assertTrue($dataObjects instanceof DataArray);
         /** @var array $items */
         $items = $dataObjects->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertSame(2, count($items));
         /** @var SimpleData $first */
         $first = $items[0];
         /** @var SimpleData $second */
         $second = $items[1];
         $this->assertTrue($first instanceof Simple);
-        $this->assertEquals(1, $first->getEntityId());
-        $this->assertEquals('First', $first->getName());
+        $this->assertSame(1, $first->getEntityId());
+        $this->assertSame('First', $first->getName());
         $this->assertTrue($second instanceof Simple);
-        $this->assertEquals(2, $second->getEntityId());
-        $this->assertEquals('Second', $second->getName());
+        $this->assertSame(2, $second->getEntityId());
+        $this->assertSame('Second', $second->getName());
     }
 
     /**
@@ -418,7 +418,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertTrue($result[0] instanceof ObjectWithCustomAttributes);
-        $this->assertEquals($expectedObject, $result[0]);
+        $this->assertSame($expectedObject, $result[0]);
     }
 
     /**

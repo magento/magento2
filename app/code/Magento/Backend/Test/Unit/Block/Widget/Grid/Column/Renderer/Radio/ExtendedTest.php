@@ -51,7 +51,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $this->_column->expects($this->once())->method('getIndex')->will($this->returnValue('label'));
         $this->_column->expects($this->once())->method('getHtmlName')->will($this->returnValue('test[]'));
         $this->_converter->expects($this->never())->method('toFlatArray');
-        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
+        $this->assertSame($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
     }
 
     /**

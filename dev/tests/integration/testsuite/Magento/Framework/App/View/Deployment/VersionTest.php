@@ -100,6 +100,6 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         $versionModel = $this->getVersionModel(State::MODE_DEVELOPER);
         $version = $versionModel->getValue();
         $this->assertTrue($this->directoryWrite->isExist($this->fileName));
-        $this->assertEquals($version, $versionModel->getValue());
+        $this->assertSame($version, $versionModel->getValue());
     }
 }

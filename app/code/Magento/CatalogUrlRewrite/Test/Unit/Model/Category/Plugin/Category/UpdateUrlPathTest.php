@@ -121,7 +121,7 @@ class UpdateUrlPathTest extends \PHPUnit\Framework\TestCase
         $this->category->expects($this->atLeastOnce())->method('isInRootCategoryList')->willReturn(false);
         $this->category->expects($this->never())->method('getStoreIds');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->categoryResource,
             $this->updateUrlPathPlugin->afterSave($this->categoryResource, $this->categoryResource, $this->category)
         );
@@ -164,7 +164,7 @@ class UpdateUrlPathTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$generatedUrlRewrite]);
         $this->urlPersist->expects($this->once())->method('replace')->with([$generatedUrlRewrite])->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->categoryResource,
             $this->updateUrlPathPlugin->afterSave($this->categoryResource, $this->categoryResource, $this->category)
         );

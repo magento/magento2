@@ -47,18 +47,18 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
         $response = $this->_webApiCall($serviceInfo, ['cartId' => $quoteId]);
-        $this->assertEquals(1, count($response));
+        $this->assertSame(1, count($response));
         $response = $response[0];
         $bundleOption = $quote->getItemById($response['item_id'])->getBuyRequest()->getBundleOption();
         $bundleOptionQty = $quote->getItemById($response['item_id'])->getBuyRequest()->getBundleOptionQty();
         $actualOptions = $response['product_option']['extension_attributes']['bundle_options'];
 
-        $this->assertEquals(array_keys($bundleOption), array_column($actualOptions, 'option_id'));
-        $this->assertEquals($bundleOptionQty, array_column($actualOptions, 'option_qty', 'option_id'));
+        $this->assertSame(array_keys($bundleOption), array_column($actualOptions, 'option_id'));
+        $this->assertSame($bundleOptionQty, array_column($actualOptions, 'option_qty', 'option_id'));
         foreach ($actualOptions as $option) {
             $id = $option['option_id'];
             $expectedSelections = is_array($bundleOption[$id]) ? $bundleOption[$id] : [$bundleOption[$id]];
-            $this->assertEquals($expectedSelections, $option['option_selections']);
+            $this->assertSame($expectedSelections, $option['option_selections']);
         }
     }
 
@@ -124,7 +124,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($quote->hasProductId($productId));
-        $this->assertEquals($buyRequest, $quote->getItemById($response['item_id'])->getBuyRequest()->getData());
+        $this->assertSame($buyRequest, $quote->getItemById($response['item_id'])->getBuyRequest()->getData());
     }
 
     /**
@@ -192,15 +192,15 @@ class CartItemRepositoryTest extends WebapiAbstract
         $cartItems = $quoteUpdated->getAllVisibleItems();
         $buyRequest = $cartItems[0]->getBuyRequest()->toArray();
 
-        $this->assertEquals(1, count($cartItems));
-        $this->assertEquals(count($buyRequest['bundle_option']), count($bundleOptions));
+        $this->assertSame(1, count($cartItems));
+        $this->assertSame(count($buyRequest['bundle_option']), count($bundleOptions));
         foreach ($bundleOptions as $option) {
             $optionId = $option['option_id'];
             $optionQty = $option['option_qty'];
             $optionSelections = $option['option_selections'];
             $this->assertArrayHasKey($optionId, $buyRequest['bundle_option']);
-            $this->assertEquals($optionQty, $buyRequest['bundle_option_qty'][$optionId]);
-            $this->assertEquals($optionSelections, $buyRequest['bundle_option'][$optionId]);
+            $this->assertSame($optionQty, $buyRequest['bundle_option_qty'][$optionId]);
+            $this->assertSame($optionSelections, $buyRequest['bundle_option'][$optionId]);
         }
     }
 }

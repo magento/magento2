@@ -49,8 +49,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'code' => '1column',
         ];
         $result = $this->_model->getPageLayouts();
-        $this->assertEquals($empty, $result['empty']->getData());
-        $this->assertEquals($oneColumn, $result['1column']->getData());
+        $this->assertSame($empty, $result['empty']->getData());
+        $this->assertSame($oneColumn, $result['1column']->getData());
     }
 
     public function testGetPageLayout()
@@ -59,13 +59,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'label' => 'Empty',
             'code' => 'empty',
         ];
-        $this->assertEquals($empty, $this->_model->getPageLayout('empty')->getData());
+        $this->assertSame($empty, $this->_model->getPageLayout('empty')->getData());
         $this->assertFalse($this->_model->getPageLayout('unknownLayoutCode'));
     }
 
     public function testGetPageLayoutHandles()
     {
         $expected = ['empty' => 'empty', '1column' => '1column'];
-        $this->assertEquals($expected, $this->_model->getPageLayoutHandles());
+        $this->assertSame($expected, $this->_model->getPageLayoutHandles());
     }
 }

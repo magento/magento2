@@ -104,7 +104,7 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             $classes[1] => $parents[1][1]
         ];
 
-        $this->assertEquals($result, $expected);
+        $this->assertSame($result, $expected);
     }
 
     public function testGetListNoValidation()
@@ -143,7 +143,7 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             $classes[1] => $parents[1][1]
         ];
 
-        $this->assertEquals($result, $expected);
+        $this->assertSame($result, $expected);
     }
 
     /**
@@ -176,7 +176,7 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getRelations();
 
-        $this->assertEquals($result, []);
+        $this->assertSame($result, []);
     }
 
     /**

@@ -58,8 +58,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         /** @var Product $productOnWishlist */
         $productOnWishlist = $this->itemCollection->getFirstItem()->getProduct();
-        $this->assertEquals('Simple Product', $productOnWishlist->getName());
-        $this->assertEquals('Short description', $productOnWishlist->getData('short_description'));
+        $this->assertSame('Simple Product', $productOnWishlist->getName());
+        $this->assertSame('Short description', $productOnWishlist->getData('short_description'));
     }
 
     /**

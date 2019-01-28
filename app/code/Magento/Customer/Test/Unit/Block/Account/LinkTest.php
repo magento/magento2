@@ -27,6 +27,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         );
         $helper->expects($this->any())->method('getAccountUrl')->will($this->returnValue('account url'));
 
-        $this->assertEquals('account url', $block->getHref());
+        $this->assertSame('account url', $block->getHref());
     }
 }

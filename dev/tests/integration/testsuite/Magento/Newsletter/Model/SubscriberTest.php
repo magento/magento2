@@ -37,7 +37,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
             $transportBuilder->getSentMessage()->getRawMessage()
         );
-        $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->model->getSubscriberStatus());
+        $this->assertSame(Subscriber::STATUS_NOT_ACTIVE, $this->model->getSubscriberStatus());
     }
 
     /**
@@ -46,7 +46,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
     public function testLoadByCustomerId()
     {
         $this->assertSame($this->model, $this->model->loadByCustomerId(1));
-        $this->assertEquals('customer@example.com', $this->model->getSubscriberEmail());
+        $this->assertSame('customer@example.com', $this->model->getSubscriberEmail());
     }
 
     /**
@@ -57,12 +57,12 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
     {
         // Unsubscribe and verify
         $this->assertSame($this->model, $this->model->loadByCustomerId(1));
-        $this->assertEquals($this->model, $this->model->unsubscribe());
-        $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $this->model->getSubscriberStatus());
+        $this->assertSame($this->model, $this->model->unsubscribe());
+        $this->assertSame(Subscriber::STATUS_UNSUBSCRIBED, $this->model->getSubscriberStatus());
 
         // Subscribe and verify
-        $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $this->model->subscribe('customer@example.com'));
-        $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $this->model->getSubscriberStatus());
+        $this->assertSame(Subscriber::STATUS_SUBSCRIBED, $this->model->subscribe('customer@example.com'));
+        $this->assertSame(Subscriber::STATUS_SUBSCRIBED, $this->model->getSubscriberStatus());
     }
 
     /**
@@ -73,11 +73,11 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
     {
         // Unsubscribe and verify
         $this->assertSame($this->model, $this->model->unsubscribeCustomerById(1));
-        $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $this->model->getSubscriberStatus());
+        $this->assertSame(Subscriber::STATUS_UNSUBSCRIBED, $this->model->getSubscriberStatus());
 
         // Subscribe and verify
         $this->assertSame($this->model, $this->model->subscribeCustomerById(1));
-        $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $this->model->getSubscriberStatus());
+        $this->assertSame(Subscriber::STATUS_SUBSCRIBED, $this->model->getSubscriberStatus());
     }
 
     /**

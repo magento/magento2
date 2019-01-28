@@ -28,7 +28,7 @@ class ScheduledTest extends \PHPUnit\Framework\TestCase
         $model->setColumn($column);
 
         $result = $model->render($row);
-        $this->assertEquals($result, $html);
+        $this->assertSame($result, $html);
     }
 
     /**

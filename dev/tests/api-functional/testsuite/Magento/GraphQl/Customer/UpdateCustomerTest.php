@@ -71,9 +71,9 @@ mutation {
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
 
-        $this->assertEquals($newFirstname, $response['updateCustomer']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['updateCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
+        $this->assertSame($newFirstname, $response['updateCustomer']['customer']['firstname']);
+        $this->assertSame($newLastname, $response['updateCustomer']['customer']['lastname']);
+        $this->assertSame($newEmail, $response['updateCustomer']['customer']['email']);
     }
 
     /**

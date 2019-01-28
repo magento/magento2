@@ -81,7 +81,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($pendingReason)
         );
 
-        $this->assertEquals($expected, $this->pro->canReviewPayment($payment));
+        $this->assertSame($expected, $this->pro->canReviewPayment($payment));
     }
 
     /**

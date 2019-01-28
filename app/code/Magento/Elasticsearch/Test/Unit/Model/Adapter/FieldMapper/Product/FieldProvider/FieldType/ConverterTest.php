@@ -41,7 +41,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert($internalType, $expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->converter->convert($internalType)
         );

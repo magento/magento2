@@ -100,12 +100,12 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($order));
 
-        $this->assertEquals($order, $this->creditmemo->getOrder());
+        $this->assertSame($order, $this->creditmemo->getOrder());
     }
 
     public function testGetEntityType()
     {
-        $this->assertEquals('creditmemo', $this->creditmemo->getEntityType());
+        $this->assertSame('creditmemo', $this->creditmemo->getEntityType());
     }
 
     public function testIsValidGrandTotalGrandTotalEmpty()
@@ -135,7 +135,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
                 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn($isAllowed);
-        $this->assertEquals($isAllowed, $this->creditmemo->isAllowZeroGrandTotal());
+        $this->assertSame($isAllowed, $this->creditmemo->isAllowZeroGrandTotal());
     }
 
     public function testIsValidGrandTotal()
@@ -147,7 +147,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     public function testGetIncrementId()
     {
         $this->creditmemo->setIncrementId('test_increment_id');
-        $this->assertEquals('test_increment_id', $this->creditmemo->getIncrementId());
+        $this->assertSame('test_increment_id', $this->creditmemo->getIncrementId());
     }
 
     public function testGetItemsCollectionWithId()
@@ -180,7 +180,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($itemCollectionMock));
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
-        $this->assertEquals($items, $itemsCollection);
+        $this->assertSame($items, $itemsCollection);
     }
 
     public function testGetItemsCollectionWithoutId()
@@ -209,6 +209,6 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($itemCollectionMock));
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
-        $this->assertEquals($items, $itemsCollection);
+        $this->assertSame($items, $itemsCollection);
     }
 }

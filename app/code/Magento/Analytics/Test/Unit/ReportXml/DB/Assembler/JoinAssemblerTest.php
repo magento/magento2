@@ -122,7 +122,7 @@ class JoinAssemblerTest extends \PHPUnit\Framework\TestCase
         $this->selectBuilderMock->expects($this->never())
             ->method('setJoins');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->selectBuilderMock,
             $this->subject->assemble($this->selectBuilderMock, $queryConfigMock)
         );
@@ -207,7 +207,7 @@ class JoinAssemblerTest extends \PHPUnit\Framework\TestCase
             ->method('setJoins')
             ->with($joinsMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->selectBuilderMock,
             $this->subject->assemble($this->selectBuilderMock, $queryConfigMock)
         );

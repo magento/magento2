@@ -43,6 +43,6 @@ class ReaderPluginTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $this->assertEquals(['test' => ['b', 'a'], 'd' => 'e'], $result);
+        $this->assertSame(['test' => ['b', 'a'], 'd' => 'e'], $result);
     }
 }

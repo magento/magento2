@@ -133,8 +133,8 @@ class TaxRateRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['Code'], $errorObj['parameters']);
+            $this->assertSame($expectedMessage, $errorObj['message']);
+            $this->assertSame(['Code'], $errorObj['parameters']);
         }
     }
 
@@ -171,8 +171,8 @@ class TaxRateRepositoryTest extends WebapiAbstract
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals('"%fieldName" is required. Enter and try again.', $errorObj['message']);
-            $this->assertEquals(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
+            $this->assertSame('"%fieldName" is required. Enter and try again.', $errorObj['message']);
+            $this->assertSame(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
         }
     }
 
@@ -205,7 +205,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         /** Ensure that tax rate was actually created in DB */
         /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
         $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
-        $this->assertEquals($taxRateId, $taxRate->load($taxRateId)->getId(), 'Tax rate was not created in  DB.');
+        $this->assertSame($taxRateId, $taxRate->load($taxRateId)->getId(), 'Tax rate was not created in  DB.');
         $taxRate->delete();
     }
 
@@ -240,8 +240,8 @@ class TaxRateRepositoryTest extends WebapiAbstract
         /** Ensure that tax rate was actually created in DB */
         /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
         $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
-        $this->assertEquals($taxRateId, $taxRate->load($taxRateId)->getId(), 'Tax rate was not created in  DB.');
-        $this->assertEquals('17-25', $taxRate->getTaxPostcode(), 'Zip range is not saved in DB.');
+        $this->assertSame($taxRateId, $taxRate->load($taxRateId)->getId(), 'Tax rate was not created in  DB.');
+        $this->assertSame('17-25', $taxRate->getTaxPostcode(), 'Zip range is not saved in DB.');
         $taxRate->delete();
     }
 
@@ -275,8 +275,8 @@ class TaxRateRepositoryTest extends WebapiAbstract
         /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
         $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
         $taxModel = $taxRate->load($taxRateId);
-        $this->assertEquals($taxRateId, $taxModel->getId(), 'Tax rate was not created in DB.');
-        $this->assertEquals(0, $taxModel->getRate(), 'Tax rate value is wrong.');
+        $this->assertSame($taxRateId, $taxModel->getId(), 'Tax rate was not created in DB.');
+        $this->assertSame(0, $taxModel->getRate(), 'Tax rate value is wrong.');
         $taxRate->delete();
     }
 
@@ -315,24 +315,24 @@ class TaxRateRepositoryTest extends WebapiAbstract
         /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
         $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
         $taxRateModel = $taxRate->load($fixtureRate->getId());
-        $this->assertEquals($expectedRateData['id'], $taxRateModel->getId(), 'Tax rate was not updated in  DB.');
-        $this->assertEquals(
+        $this->assertSame($expectedRateData['id'], $taxRateModel->getId(), 'Tax rate was not updated in  DB.');
+        $this->assertSame(
             $expectedRateData['tax_region_id'],
             $taxRateModel->getTaxRegionId(),
             'Tax rate was not updated in  DB.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRateData['tax_country_id'],
             $taxRateModel->getTaxCountryId(),
             'Tax rate was not updated in  DB.'
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expectedRateData['tax_postcode'],
             $taxRateModel->getTaxPostcode(),
             'Tax rate was not updated in  DB.'
         );
-        $this->assertEquals($expectedRateData['code'], $taxRateModel->getCode(), 'Tax rate was not updated in  DB.');
-        $this->assertEquals(
+        $this->assertSame($expectedRateData['code'], $taxRateModel->getCode(), 'Tax rate was not updated in  DB.');
+        $this->assertSame(
             $expectedRateData['rate'],
             $taxRateModel->getRate(),
             'Tax rate was not updated in  DB.'
@@ -403,7 +403,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             'titles' => [],
             'region_name' => 'NY',
         ];
-        $this->assertEquals($expectedRateData, $result);
+        $this->assertSame($expectedRateData, $result);
     }
 
     public function testGetTaxRateNotExist()
@@ -529,7 +529,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(1, $searchResults['total_count']);
+        $this->assertSame(1, $searchResults['total_count']);
 
         $expectedRuleData = [
             [
@@ -543,7 +543,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 'titles' => [],
             ],
         ];
-        $this->assertEquals($expectedRuleData, $searchResults['items']);
+        $this->assertSame($expectedRuleData, $searchResults['items']);
     }
 
     public function testSearchTaxRatesCz()
@@ -590,7 +590,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(2, $searchResults['total_count']);
+        $this->assertSame(2, $searchResults['total_count']);
 
         $expectedRuleData = [
             [
@@ -612,7 +612,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 'titles' => [],
             ],
         ];
-        $this->assertEquals($expectedRuleData, $searchResults['items']);
+        $this->assertSame($expectedRuleData, $searchResults['items']);
     }
 
     /**

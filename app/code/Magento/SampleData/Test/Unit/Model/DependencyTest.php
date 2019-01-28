@@ -79,7 +79,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $componentRegistrar,
             $directoryReadFactory
         );
-        $this->assertEquals($expectedPackages, $dependency->getSampleDataPackages());
+        $this->assertSame($expectedPackages, $dependency->getSampleDataPackages());
     }
 
     /**

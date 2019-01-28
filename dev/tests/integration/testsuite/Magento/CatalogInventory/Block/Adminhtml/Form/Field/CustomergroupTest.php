@@ -30,6 +30,6 @@ class CustomergroupTest extends \PHPUnit\Framework\TestCase
             . 'title="Customer Group" ><option value="32000" >ALL GROUPS</option><option value="0" >NOT LOGGED IN'
             . '</option><option value="1" >General</option><option value="2" >Wholesale</option><option value="3" >'
             . 'Retailer</option></select>';
-        $this->assertEquals($expectedResult, $this->_block->_toHtml());
+        $this->assertSame($expectedResult, $this->_block->_toHtml());
     }
 }

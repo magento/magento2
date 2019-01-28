@@ -68,7 +68,7 @@ class MixinManagerTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             $description . 'xyz',
             $this->mixinManager->apply($description, $mixinList)
         );

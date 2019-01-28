@@ -49,7 +49,7 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->willReturn($unserializedValue);
         $this->serializedConfig->afterLoad();
-        $this->assertEquals($expected, $this->serializedConfig->getValue());
+        $this->assertSame($expected, $this->serializedConfig->getValue());
     }
 
     /**
@@ -87,7 +87,7 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->willReturn($serializedValue);
         $this->serializedConfig->beforeSave();
-        $this->assertEquals($expected, $this->serializedConfig->getValue());
+        $this->assertSame($expected, $this->serializedConfig->getValue());
     }
 
     /**

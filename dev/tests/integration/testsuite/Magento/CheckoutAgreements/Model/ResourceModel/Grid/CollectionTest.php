@@ -39,6 +39,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $collectionSize = $this->collection->addStoreFilter(1)
             ->load(false, false)
             ->getSize();
-        $this->assertEquals(2, $collectionSize);
+        $this->assertSame(2, $collectionSize);
     }
 }

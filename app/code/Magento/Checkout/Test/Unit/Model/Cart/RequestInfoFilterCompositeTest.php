@@ -62,6 +62,6 @@ class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
             ['data' => ['abc' => 1, 'efg' => 1, 'xyz' => 1]]
         );
         $result = $this->model->filter($params);
-        $this->assertEquals($this->model, $result);
+        $this->assertSame($this->model, $result);
     }
 }

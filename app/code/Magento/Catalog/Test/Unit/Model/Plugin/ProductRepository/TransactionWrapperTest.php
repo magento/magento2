@@ -65,7 +65,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('commit');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->model->aroundSave($this->subjectMock, $this->closureMock, $this->productMock, $this->saveOption)
         );
@@ -88,7 +88,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('commit');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->model->aroundDelete($this->subjectMock, $this->closureMock, $this->productMock, $this->saveOption)
         );
@@ -116,7 +116,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('commit');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->productMock,
             $this->model->aroundDelete($this->subjectMock, $this->closureMock, $this->productMock, $this->saveOption)
         );

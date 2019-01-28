@@ -34,7 +34,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(new \ArrayIterator([]));
 
         $builder = new BuilderComposite($tMapFactory, []);
-        static::assertEquals([], $builder->build([]));
+        static::assertSame([], $builder->build([]));
     }
 
     /**
@@ -112,7 +112,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals($expected, $builder->build([]));
+        static::assertSame($expected, $builder->build([]));
     }
 
     /**

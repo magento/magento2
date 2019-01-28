@@ -32,6 +32,6 @@ class TabsTest extends \PHPUnit\Framework\TestCase
         $layout->addBlock(\Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main::class, 'child_tab', 'block');
         $block->addTab('tab_id', 'child_tab');
 
-        $this->assertEquals(['tab_id'], $block->getTabsIds());
+        $this->assertSame(['tab_id'], $block->getTabsIds());
     }
 }

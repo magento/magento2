@@ -39,7 +39,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPriceRangeAuto()
     {
-        $this->assertEquals(10, $this->_model->getPriceRange());
+        $this->assertSame(10, $this->_model->getPriceRange());
     }
 
     /**
@@ -52,7 +52,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testGetPriceRangeManual()
     {
         // what you set is what you get
-        $this->assertEquals(1.5, $this->_model->getPriceRange());
+        $this->assertSame(1.5, $this->_model->getPriceRange());
     }
 
     /**
@@ -62,7 +62,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMaxPriceInt()
     {
-        $this->assertEquals(45.00, $this->_model->getMaxPrice());
+        $this->assertSame(45.00, $this->_model->getMaxPrice());
     }
 
     /**
@@ -86,6 +86,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testGetRangeItemCounts($inputRange, $expectedItemCounts)
     {
         $actualItemCounts = $this->_model->getRangeItemCounts($inputRange);
-        $this->assertEquals($expectedItemCounts, $actualItemCounts);
+        $this->assertSame($expectedItemCounts, $actualItemCounts);
     }
 }

@@ -84,7 +84,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('attribute_code')
         );
         $result = $this->_model->getLockedFields($this->_attribute);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     public function testGetLockedFields()
@@ -112,7 +112,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_model->merge($data);
         $result = $this->_model->getLockedFields($this->_attribute);
-        $this->assertEquals(['test_code1' => 'test_code1'], $result);
+        $this->assertSame(['test_code1' => 'test_code1'], $result);
     }
 
     public function testGetEntityAttributesLockedFields()
@@ -128,6 +128,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_model->merge($data);
         $result = $this->_model->getEntityAttributesLockedFields('entity_code');
-        $this->assertEquals(['attribute_code' => ['code_test']], $result);
+        $this->assertSame(['attribute_code' => ['code_test']], $result);
     }
 }

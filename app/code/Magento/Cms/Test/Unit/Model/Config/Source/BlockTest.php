@@ -61,6 +61,6 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             ->method('toOptionIdArray')
             ->will($this->returnValue('return-value'));
 
-        $this->assertEquals('return-value', $this->block->toOptionArray());
+        $this->assertSame('return-value', $this->block->toOptionArray());
     }
 }

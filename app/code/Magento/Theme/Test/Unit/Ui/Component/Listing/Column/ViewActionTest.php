@@ -88,7 +88,7 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $dataSource = $this->model->prepareDataSource($dataSource);
-        $this->assertEquals($expectedDataSourceItems, $dataSource['data']['items']);
+        $this->assertSame($expectedDataSourceItems, $dataSource['data']['items']);
     }
 
     /**

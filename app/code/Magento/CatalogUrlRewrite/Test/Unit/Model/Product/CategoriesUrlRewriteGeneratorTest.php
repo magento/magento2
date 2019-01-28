@@ -56,7 +56,7 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->categoryRegistry->expects($this->any())->method('getList')->will($this->returnValue([]));
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->categoriesUrlRewriteGenerator->generate(1, $this->product, $this->categoryRegistry)
         );
@@ -94,7 +94,7 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(['category_id' => $categoryId])->will($this->returnSelf());
         $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $this->urlRewrite,
             ],

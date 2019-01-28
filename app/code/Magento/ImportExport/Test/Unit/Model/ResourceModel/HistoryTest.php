@@ -56,6 +56,6 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     public function testGetLastInsertedId()
     {
         $id = 1;
-        $this->assertEquals($this->historyResourceModel->getLastInsertedId($id), 'result');
+        $this->assertSame($this->historyResourceModel->getLastInsertedId($id), 'result');
     }
 }

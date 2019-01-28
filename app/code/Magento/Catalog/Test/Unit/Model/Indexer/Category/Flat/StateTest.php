@@ -65,7 +65,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
             $this->scopeConfigMock,
             $this->indexerRegistryMock
         );
-        $this->assertEquals(true, $this->model->isFlatEnabled());
+        $this->assertSame(true, $this->model->isFlatEnabled());
     }
 
     /**
@@ -99,7 +99,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
             $this->indexerRegistryMock,
             $isAvailable
         );
-        $this->assertEquals($result, $this->model->isAvailable());
+        $this->assertSame($result, $this->model->isAvailable());
     }
 
     /**

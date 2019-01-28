@@ -124,7 +124,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->with($this->saleableItem)
             ->willReturn([$productMock]);
 
-        $this->assertEquals($expected, $this->model->hasSpecialPrice());
+        $this->assertSame($expected, $this->model->hasSpecialPrice());
     }
 
     /**

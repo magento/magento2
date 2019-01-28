@@ -43,8 +43,8 @@ class CaseManagementTest extends \PHPUnit\Framework\TestCase
         $case = $this->caseManagement->create($order->getEntityId());
 
         self::assertNotEmpty($case->getEntityId());
-        self::assertEquals(CaseInterface::STATUS_PENDING, $case->getStatus());
-        self::assertEquals(CaseInterface::GUARANTEE_PENDING, $case->getGuaranteeDisposition());
+        self::assertSame(CaseInterface::STATUS_PENDING, $case->getStatus());
+        self::assertSame(CaseInterface::GUARANTEE_PENDING, $case->getGuaranteeDisposition());
     }
 
     /**
@@ -56,10 +56,10 @@ class CaseManagementTest extends \PHPUnit\Framework\TestCase
         $order = $this->getOrder();
         $case = $this->caseManagement->getByOrderId($order->getEntityId());
 
-        self::assertEquals(CaseInterface::STATUS_PROCESSING, $case->getStatus());
-        self::assertEquals(CaseInterface::DISPOSITION_GOOD, $case->getReviewDisposition());
-        self::assertEquals('2016-12-12 15:17:17', $case->getCreatedAt());
-        self::assertEquals('2016-12-12 19:23:16', $case->getUpdatedAt());
+        self::assertSame(CaseInterface::STATUS_PROCESSING, $case->getStatus());
+        self::assertSame(CaseInterface::DISPOSITION_GOOD, $case->getReviewDisposition());
+        self::assertSame('2016-12-12 15:17:17', $case->getCreatedAt());
+        self::assertSame('2016-12-12 19:23:16', $case->getUpdatedAt());
     }
 
     /**

@@ -191,11 +191,11 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
             ->method('getBlock')
             ->will($this->returnValue($this->toolbarMock));
 
-        $this->assertEquals(
+        $this->assertSame(
             [$categoryTag, $productTag],
             $this->block->getIdentities()
         );
-        $this->assertEquals(
+        $this->assertSame(
             '1',
             $this->block->getCategoryId()
         );
@@ -230,7 +230,7 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($url))
             ->will($this->returnValue($uenc));
         $result = $this->block->getAddToCartPostParams($this->productMock);
-        $this->assertEquals($expectedPostData, $result);
+        $this->assertSame($expectedPostData, $result);
     }
 
     public function testSetIsProductListFlagOnGetProductPrice()

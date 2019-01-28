@@ -107,7 +107,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$productId => $additionalFields]);
 
         $documents = $this->model->map([$productId => []], $storeId, []);
-        $this->assertEquals([$productId], array_keys($documents));
+        $this->assertSame([$productId], array_keys($documents));
     }
 
     /**
@@ -125,7 +125,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $documents = $this->model->map([], $storeId, []);
-        $this->assertEquals([], $documents);
+        $this->assertSame([], $documents);
     }
 
     /**
@@ -157,7 +157,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         ];
         $documents = $this->model->map($documentData, $storeId, $context);
         $returnAttributeData['store_id'] = $storeId;
-        $this->assertEquals($returnAttributeData, $documents[$productId]);
+        $this->assertSame($returnAttributeData, $documents[$productId]);
     }
 
     /**
@@ -186,7 +186,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             $productId => ['options' => $attributeValue],
         ];
         $documents = $this->model->map($documentData, $storeId, $context);
-        $this->assertEquals($returnAttributeData, $documents[$productId]);
+        $this->assertSame($returnAttributeData, $documents[$productId]);
     }
 
     /**

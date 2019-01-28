@@ -91,8 +91,8 @@ class InvoiceListTest extends WebapiAbstract
         $this->assertArrayHasKey('items', $result);
         $this->assertCount(2, $result['items']);
         $this->assertArrayHasKey('search_criteria', $result);
-        $this->assertEquals('789', $result['items'][0]['increment_id']);
-        $this->assertEquals('456', $result['items'][1]['increment_id']);
-        $this->assertEquals($searchData, $result['search_criteria']);
+        $this->assertSame('789', $result['items'][0]['increment_id']);
+        $this->assertSame('456', $result['items'][1]['increment_id']);
+        $this->assertSame($searchData, $result['search_criteria']);
     }
 }

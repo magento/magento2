@@ -42,7 +42,7 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
     {
         $someResult = 'some result';
 
-        $this->assertEquals($someResult, $this->plugin->afterGetConfigPath($this->subjectMock, $someResult));
+        $this->assertSame($someResult, $this->plugin->afterGetConfigPath($this->subjectMock, $someResult));
     }
 
     public function testAroundGetConfigPathNonPaymentSection()
@@ -66,7 +66,7 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->willReturn($subjectPath);
 
-        $this->assertEquals($expectedConfigPath, $this->plugin->afterGetConfigPath($this->subjectMock, null));
+        $this->assertSame($expectedConfigPath, $this->plugin->afterGetConfigPath($this->subjectMock, null));
     }
 
     /**

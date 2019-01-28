@@ -76,7 +76,7 @@ class TabsTest extends \PHPUnit\Framework\TestCase
         $sectionMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Section::class);
         $sectionMock->expects($this->once())->method('getId')->will($this->returnValue('testSectionId'));
 
-        $this->assertEquals('testSectionUrl', $this->_object->getSectionUrl($sectionMock));
+        $this->assertSame('testSectionUrl', $this->_object->getSectionUrl($sectionMock));
     }
 
     public function testIsSectionActiveReturnsTrueForActiveSection()

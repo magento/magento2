@@ -20,6 +20,6 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
 
     public function testGetServerAddress()
     {
-        $this->assertEquals(false, $this->_helper->getServerAddress());
+        $this->assertSame(false, $this->_helper->getServerAddress());
     }
 }

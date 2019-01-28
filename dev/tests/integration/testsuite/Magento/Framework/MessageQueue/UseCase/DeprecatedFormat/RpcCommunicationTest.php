@@ -23,6 +23,6 @@ class RpcCommunicationTest extends QueueTestCaseAbstract
     {
         $input = 'Input value';
         $response = $this->publisher->publish('synchronous.rpc.test.deprecated', $input);
-        $this->assertEquals($input . ' processed by RPC handler', $response);
+        $this->assertSame($input . ' processed by RPC handler', $response);
     }
 }

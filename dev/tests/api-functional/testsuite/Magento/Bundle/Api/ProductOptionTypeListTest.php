@@ -22,7 +22,7 @@ class ProductOptionTypeListTest extends \Magento\TestFramework\TestCase\WebapiAb
         ];
         $result = $this->getTypes();
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

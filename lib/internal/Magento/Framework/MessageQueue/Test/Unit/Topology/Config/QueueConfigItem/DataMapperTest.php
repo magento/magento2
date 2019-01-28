@@ -120,7 +120,7 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
                 'arguments' => [],
             ],
         ];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
@@ -260,6 +260,6 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
                 'arguments' => [],
             ]
         ];
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

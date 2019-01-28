@@ -117,7 +117,7 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['fields' =>
                 [
                     $existentName => $existentField,
@@ -209,7 +209,7 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attribute->expects($this->never())
             ->method('canBeFilterableInGrid');
 
-        $this->assertEquals(
+        $this->assertSame(
             ['fields' =>
                 [
                     $attrName => [
@@ -319,7 +319,7 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['fields' =>
                 [
                     $attrName => [

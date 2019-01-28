@@ -50,13 +50,13 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testGetProduct()
     {
         $this->assertNotEmpty($this->_block->getProduct()->getId());
-        $this->assertEquals($this->_product->getId(), $this->_block->getProduct()->getId());
+        $this->assertSame($this->_product->getId(), $this->_block->getProduct()->getId());
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\Registry::class)->unregister('product');
         $this->_block->setProductId($this->_product->getId());
-        $this->assertEquals($this->_product->getId(), $this->_block->getProduct()->getId());
+        $this->assertSame($this->_product->getId(), $this->_block->getProduct()->getId());
     }
 
     public function testCanEmailToFriend()
@@ -75,7 +75,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $config = (array)json_decode($this->_block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
-        $this->assertEquals($this->_product->getId(), $config['productId']);
+        $this->assertSame($this->_product->getId(), $config['productId']);
     }
 
     public function testHasOptions()

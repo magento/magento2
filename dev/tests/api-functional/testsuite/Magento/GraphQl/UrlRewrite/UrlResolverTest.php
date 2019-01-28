@@ -67,9 +67,9 @@ class UrlResolverTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertSame($product->getEntityId(), $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
     /**
@@ -111,9 +111,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertSame($product->getEntityId(), $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
     /**
@@ -154,9 +154,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($categoryId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertSame($categoryId, $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
     /**
@@ -189,9 +189,9 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
+        $this->assertSame($cmsPageId, $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
     }
 
     /**
@@ -208,7 +208,7 @@ QUERY;
         $storeId = $product->getStoreId();
         $product->setUrlKey('p002-new')->save();
         $urlPath = $product->getUrlKey() . '.html';
-        $this->assertEquals($urlPath, 'p002-new.html');
+        $this->assertSame($urlPath, 'p002-new.html');
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
@@ -233,9 +233,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertSame($product->getEntityId(), $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
     /**
@@ -314,9 +314,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($categoryId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertSame($categoryId, $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 
     /**
@@ -351,8 +351,8 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($homePageId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
-        $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
+        $this->assertSame($homePageId, $response['urlResolver']['id']);
+        $this->assertSame($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertSame('CMS_PAGE', $response['urlResolver']['type']);
     }
 }

@@ -32,7 +32,7 @@ class AddressDataGeneratorTest extends \PHPUnit\Framework\TestCase
         mt_srand(66);
         $address2 = $this->addressGenerator->generateAddress();
 
-        $this->assertNotEquals($address1['postcode'], $address2['postcode']);
+        $this->assertNotSame($address1['postcode'], $address2['postcode']);
     }
 
     public function testAddressStructure()

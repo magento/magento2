@@ -129,7 +129,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($data);
 
-        $this->assertEquals($data, $this->model->getData());
+        $this->assertSame($data, $this->model->getData());
     }
 
     /**

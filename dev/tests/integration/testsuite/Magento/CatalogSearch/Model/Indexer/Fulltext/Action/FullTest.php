@@ -60,7 +60,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $expectedData = $this->getExpectedIndexData();
         foreach ($expectedData as $sku => $expectedIndexData) {
             $product = $productRepository->get($sku);
-            $this->assertEquals($expectedIndexData, $result[$product->getId()]);
+            $this->assertSame($expectedIndexData, $result[$product->getId()]);
         }
     }
 
@@ -136,7 +136,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $storeIndexDataSimple = $this->actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
         $storeIndexDataExpected = $this->actionFull->rebuildStoreIndex($storeId, $expected);
 
-        $this->assertEquals($storeIndexDataSimple, $storeIndexDataExpected);
+        $this->assertSame($storeIndexDataSimple, $storeIndexDataExpected);
     }
 
     /**

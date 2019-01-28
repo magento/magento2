@@ -79,7 +79,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileRead')
             ->with($this->resource, $length)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->read($length));
+        $this->assertSame($result, $this->file->read($length));
     }
 
     public function testReadAll()
@@ -91,7 +91,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileGetContents')
             ->with($this->path, $flag, $context)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->readAll($flag, $context));
+        $this->assertSame($result, $this->file->readAll($flag, $context));
     }
 
     public function testReadLine()
@@ -103,7 +103,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileReadLine')
             ->with($this->resource, $length, $ending)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->readLine($length, $ending));
+        $this->assertSame($result, $this->file->readLine($length, $ending));
     }
 
     public function testReadCsv()
@@ -117,7 +117,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileGetCsv')
             ->with($this->resource, $length, $delimiter, $enclosure, $escape)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->readCsv($length, $delimiter, $enclosure, $escape));
+        $this->assertSame($result, $this->file->readCsv($length, $delimiter, $enclosure, $escape));
     }
 
     public function testTell()
@@ -127,7 +127,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileTell')
             ->with($this->resource)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->tell());
+        $this->assertSame($result, $this->file->tell());
     }
 
     public function testEof()
@@ -137,7 +137,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('endOfFile')
             ->with($this->resource)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->eof());
+        $this->assertSame($result, $this->file->eof());
     }
 
     public function testClose()
@@ -147,7 +147,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileClose')
             ->with($this->resource)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->close());
+        $this->assertSame($result, $this->file->close());
     }
 
     public function testStat()
@@ -157,7 +157,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('stat')
             ->with($this->path)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->stat());
+        $this->assertSame($result, $this->file->stat());
     }
 
     public function testSeek()
@@ -169,6 +169,6 @@ class ReadTest extends \PHPUnit\Framework\TestCase
             ->method('fileSeek')
             ->with($this->resource, $offset, $whence)
             ->will($this->returnValue($result));
-        $this->assertEquals($result, $this->file->seek($offset, $whence));
+        $this->assertSame($result, $this->file->seek($offset, $whence));
     }
 }

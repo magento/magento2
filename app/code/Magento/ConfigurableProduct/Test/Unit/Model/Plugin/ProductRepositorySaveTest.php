@@ -115,7 +115,7 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
         $this->product->expects(static::never())
             ->method('getExtensionAttributes');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->result,
             $this->plugin->afterSave($this->productRepository, $this->result, $this->product)
         );
@@ -141,7 +141,7 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
         $this->productAttributeRepository->expects(static::never())
             ->method('get');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->result,
             $this->plugin->afterSave($this->productRepository, $this->result, $this->product)
         );

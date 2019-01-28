@@ -35,6 +35,6 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $taxCalculation = $objectManager->get(\Magento\Tax\Model\ResourceModel\Calculation::class);
-        $this->assertEquals($taxRate->getRateIds(), $taxCalculation->getRate($data));
+        $this->assertSame($taxRate->getRateIds(), $taxCalculation->getRate($data));
     }
 }

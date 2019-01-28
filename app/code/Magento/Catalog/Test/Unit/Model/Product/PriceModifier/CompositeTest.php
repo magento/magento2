@@ -59,7 +59,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(150)
         );
-        $this->assertEquals(150, $this->compositeModel->modifyPrice(100, $this->productMock));
+        $this->assertSame(150, $this->compositeModel->modifyPrice(100, $this->productMock));
     }
 
     public function testModifyPriceIfModifierNotExists()
@@ -69,6 +69,6 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->objectManagerMock->expects($this->never())->method('get');
-        $this->assertEquals(100, $this->compositeModel->modifyPrice(100, $this->productMock));
+        $this->assertSame(100, $this->compositeModel->modifyPrice(100, $this->productMock));
     }
 }

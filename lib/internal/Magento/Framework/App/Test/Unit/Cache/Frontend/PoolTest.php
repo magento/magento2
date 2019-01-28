@@ -141,19 +141,19 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 
     public function testKey()
     {
-        $this->assertEquals(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
+        $this->assertSame(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
     }
 
     public function testNext()
     {
-        $this->assertEquals(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
+        $this->assertSame(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
 
         $this->_model->next();
-        $this->assertEquals('resource1', $this->_model->key());
+        $this->assertSame('resource1', $this->_model->key());
         $this->assertSame($this->_frontendInstances['resource1'], $this->_model->current());
 
         $this->_model->next();
-        $this->assertEquals('resource2', $this->_model->key());
+        $this->assertSame('resource2', $this->_model->key());
         $this->assertSame($this->_frontendInstances['resource2'], $this->_model->current());
 
         $this->_model->next();
@@ -164,10 +164,10 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     public function testRewind()
     {
         $this->_model->next();
-        $this->assertNotEquals(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
+        $this->assertNotSame(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
 
         $this->_model->rewind();
-        $this->assertEquals(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
+        $this->assertSame(Pool::DEFAULT_FRONTEND_ID, $this->_model->key());
     }
 
     public function testValid()

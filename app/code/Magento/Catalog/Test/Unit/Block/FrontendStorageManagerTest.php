@@ -62,7 +62,7 @@ class FrontendStorageManagerTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn(['second' => 'data']);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'first_key' => [
                     'first' => 'data_before',

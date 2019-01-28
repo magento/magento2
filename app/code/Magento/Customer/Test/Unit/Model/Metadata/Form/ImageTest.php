@@ -136,7 +136,7 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"realFileName" is not a valid file.'], $model->validateValue($value));
+        $this->assertSame(['"realFileName" is not a valid file.'], $model->validateValue($value));
     }
 
     public function testValidate()
@@ -202,7 +202,7 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"logo.gif" exceeds the allowed file size.'], $model->validateValue($value));
+        $this->assertSame(['"logo.gif" exceeds the allowed file size.'], $model->validateValue($value));
     }
 
     public function testValidateMaxImageWidth()
@@ -242,7 +242,7 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"logo.gif" width exceeds allowed value of 1 px.'], $model->validateValue($value));
+        $this->assertSame(['"logo.gif" width exceeds allowed value of 1 px.'], $model->validateValue($value));
     }
 
     public function testValidateMaxImageHeight()
@@ -282,7 +282,7 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"logo.gif" height exceeds allowed value of 1 px.'], $model->validateValue($value));
+        $this->assertSame(['"logo.gif" height exceeds allowed value of 1 px.'], $model->validateValue($value));
     }
 
     public function testCompactValueNoChanges()
@@ -299,7 +299,7 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals($originValue, $model->compactValue($value));
+        $this->assertSame($originValue, $model->compactValue($value));
     }
 
     public function testCompactValueUiComponentAddress()
@@ -375,7 +375,7 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals($imageContentMock, $model->compactValue($value));
+        $this->assertSame($imageContentMock, $model->compactValue($value));
     }
 
     public function testCompactValueUiComponentCustomerNotExists()
@@ -399,6 +399,6 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals($originValue, $model->compactValue($value));
+        $this->assertSame($originValue, $model->compactValue($value));
     }
 }

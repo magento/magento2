@@ -70,8 +70,8 @@ class PaymentReviewTest extends AbstractBackendController
         );
 
         $order = $this->orderRepository->get($orderId);
-        static::assertEquals(Order::STATE_COMPLETE, $order->getState());
-        static::assertEquals(Order::STATE_COMPLETE, $order->getStatus());
+        static::assertSame(Order::STATE_COMPLETE, $order->getState());
+        static::assertSame(Order::STATE_COMPLETE, $order->getStatus());
     }
 
     /**
@@ -106,7 +106,7 @@ class PaymentReviewTest extends AbstractBackendController
         );
 
         $order = $this->orderRepository->get($orderId);
-        static::assertEquals(Order::STATE_CANCELED, $order->getState());
-        static::assertEquals(Order::STATE_CANCELED, $order->getStatus());
+        static::assertSame(Order::STATE_CANCELED, $order->getState());
+        static::assertSame(Order::STATE_CANCELED, $order->getStatus());
     }
 }

@@ -76,7 +76,7 @@ class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->repository->getList($searchCriteria);
 
         $items = array_values($searchResult->getItems());
-        $this->assertEquals(1, count($items));
-        $this->assertEquals('title 2', $items[0][ShipmentTrackInterface::TITLE]);
+        $this->assertSame(1, count($items));
+        $this->assertSame('title 2', $items[0][ShipmentTrackInterface::TITLE]);
     }
 }

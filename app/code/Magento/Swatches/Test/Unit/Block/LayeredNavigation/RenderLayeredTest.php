@@ -87,7 +87,7 @@ class RenderLayeredTest extends \PHPUnit\Framework\TestCase
         $this->filterMock->expects($this->once())->method('getAttributeModel')->willReturn($eavAttribute);
         $this->block->method('eavAttribute')->willReturn($eavAttribute);
         $result = $this->block->setSwatchFilter($this->filterMock);
-        $this->assertEquals($result, $this->block);
+        $this->assertSame($result, $this->block);
     }
 
     public function testGetSwatchData()
@@ -196,6 +196,6 @@ class RenderLayeredTest extends \PHPUnit\Framework\TestCase
             ->with('swatch_image', '/m/a/magento.jpg')
             ->willReturn('http://domain.com/path_to_swatch_image/m/a/magento.jpg');
         $result = $this->block->getSwatchPath('swatch_image', '/m/a/magento.jpg');
-        $this->assertEquals($result, 'http://domain.com/path_to_swatch_image/m/a/magento.jpg');
+        $this->assertSame($result, 'http://domain.com/path_to_swatch_image/m/a/magento.jpg');
     }
 }

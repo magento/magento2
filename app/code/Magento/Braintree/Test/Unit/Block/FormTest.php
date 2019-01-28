@@ -110,7 +110,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->willReturn($availableTypes);
 
         $result = $this->block->getCcAvailableTypes();
-        static::assertEquals($expected, array_values($result));
+        static::assertSame($expected, array_values($result));
     }
 
     /**

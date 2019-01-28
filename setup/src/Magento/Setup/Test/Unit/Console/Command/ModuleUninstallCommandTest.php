@@ -191,7 +191,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->tester->execute(['module' => ['Magento_A']]);
-        $this->assertEquals(
+        $this->assertSame(
             'You cannot run this command because the Magento application is not installed.' . PHP_EOL,
             $this->tester->getDisplay()
         );
@@ -456,7 +456,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->patchApplierMock->expects(self::once())
             ->method('revertDataPatches')
             ->with('Magento_A');
-        self::assertEquals(0, $this->tester->execute($input));
+        self::assertSame(0, $this->tester->execute($input));
     }
 
     public function testExecuteAll()

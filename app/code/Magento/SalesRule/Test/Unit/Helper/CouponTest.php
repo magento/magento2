@@ -82,7 +82,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
             ->with($helper::XML_PATH_SALES_RULE_COUPON_LENGTH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultLength));
 
-        $this->assertEquals($defaultLength, $helper->getDefaultLength());
+        $this->assertSame($defaultLength, $helper->getDefaultLength());
     }
 
     public function testGetDefaultFormat()
@@ -94,7 +94,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
             ->with($helper::XML_PATH_SALES_RULE_COUPON_FORMAT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultFormat));
 
-        $this->assertEquals($defaultFormat, $helper->getDefaultFormat());
+        $this->assertSame($defaultFormat, $helper->getDefaultFormat());
     }
 
     public function testGetDefaultPrefix()
@@ -106,7 +106,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
             ->with($helper::XML_PATH_SALES_RULE_COUPON_PREFIX, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultPrefix));
 
-        $this->assertEquals($defaultPrefix, $helper->getDefaultPrefix());
+        $this->assertSame($defaultPrefix, $helper->getDefaultPrefix());
     }
 
     public function testGetDefaultSuffix()
@@ -118,7 +118,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
             ->with($helper::XML_PATH_SALES_RULE_COUPON_SUFFIX, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultSuffix));
 
-        $this->assertEquals($defaultSuffix, $helper->getDefaultSuffix());
+        $this->assertSame($defaultSuffix, $helper->getDefaultSuffix());
     }
 
     public function testGetDefaultDashInterval()
@@ -130,7 +130,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
             ->with($helper::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultDashInterval));
 
-        $this->assertEquals($defaultDashInterval, $helper->getDefaultDashInterval());
+        $this->assertSame($defaultDashInterval, $helper->getDefaultDashInterval());
     }
 
     public function testGetCharset()
@@ -138,11 +138,11 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $format = 'format';
         $expected = ['a', 'b', 'c'];
 
-        $this->assertEquals($expected, $this->helper->getCharset($format));
+        $this->assertSame($expected, $this->helper->getCharset($format));
     }
 
     public function testGetSeparator()
     {
-        $this->assertEquals($this->separator, $this->helper->getCodeSeparator());
+        $this->assertSame($this->separator, $this->helper->getCodeSeparator());
     }
 }

@@ -18,6 +18,6 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ['value' => \Magento\Integration\Model\Integration::STATUS_RECREATED, 'label' => __('Reset')],
         ];
         $statusArr = $statusSource->toOptionArray();
-        $this->assertEquals($expectedStatusArr, $statusArr, "Status source arrays don't match");
+        $this->assertSame($expectedStatusArr, $statusArr, "Status source arrays don't match");
     }
 }

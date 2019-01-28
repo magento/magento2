@@ -38,10 +38,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->setPostcode('77777');
         $addressData = $this->addressModel->updateData($addressData)->getDataModel();
 
-        $this->assertEquals(1, $addressData->getId());
-        $this->assertEquals('CityX', $addressData->getCity());
-        $this->assertEquals('CompanyX', $addressData->getCompany());
-        $this->assertEquals('77777', $addressData->getPostcode());
+        $this->assertSame(1, $addressData->getId());
+        $this->assertSame('CityX', $addressData->getCity());
+        $this->assertSame('CompanyX', $addressData->getCompany());
+        $this->assertSame('77777', $addressData->getPostcode());
     }
 
     public function testUpdateDataOverrideExistingData()
@@ -62,10 +62,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->setPostcode('99999');
         $updatedAddressData = $this->addressModel->updateData($updatedAddressData)->getDataModel();
 
-        $this->assertEquals(3, $updatedAddressData->getId());
-        $this->assertEquals('CityZ', $updatedAddressData->getCity());
-        $this->assertEquals('CompanyZ', $updatedAddressData->getCompany());
-        $this->assertEquals('99999', $updatedAddressData->getPostcode());
+        $this->assertSame(3, $updatedAddressData->getId());
+        $this->assertSame('CityZ', $updatedAddressData->getCity());
+        $this->assertSame('CompanyZ', $updatedAddressData->getCompany());
+        $this->assertSame('99999', $updatedAddressData->getPostcode());
     }
 
     /**
@@ -84,11 +84,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->setPostcode('99999');
         $updatedAddressData = $this->addressModel->updateData($updatedAddressData)->getDataModel();
 
-        $this->assertEquals(1, $updatedAddressData->getId());
-        $this->assertEquals('CityZ', $updatedAddressData->getCity());
-        $this->assertEquals('CompanyZ', $updatedAddressData->getCompany());
-        $this->assertEquals('99999', $updatedAddressData->getPostcode());
-        $this->assertEquals(true, $updatedAddressData->isDefaultBilling());
-        $this->assertEquals(true, $updatedAddressData->isDefaultShipping());
+        $this->assertSame(1, $updatedAddressData->getId());
+        $this->assertSame('CityZ', $updatedAddressData->getCity());
+        $this->assertSame('CompanyZ', $updatedAddressData->getCompany());
+        $this->assertSame('99999', $updatedAddressData->getPostcode());
+        $this->assertSame(true, $updatedAddressData->isDefaultBilling());
+        $this->assertSame(true, $updatedAddressData->isDefaultShipping());
     }
 }

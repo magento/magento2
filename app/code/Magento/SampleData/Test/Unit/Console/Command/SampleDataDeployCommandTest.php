@@ -47,7 +47,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
         $commandTester = $this->createCommandTester();
         $commandTester->execute([]);
 
-        $this->assertEquals($expectedMsg, $commandTester->getDisplay());
+        $this->assertSame($expectedMsg, $commandTester->getDisplay());
     }
 
     /**
@@ -73,7 +73,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
         $commandTester = $this->createCommandTester();
         $commandTester->execute($commandInput);
 
-        $this->assertEquals($expectedMsg, $commandTester->getDisplay());
+        $this->assertSame($expectedMsg, $commandTester->getDisplay());
     }
 
     /**

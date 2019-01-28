@@ -104,6 +104,6 @@ class DirectoryDataProcessorTest extends \PHPUnit\Framework\TestCase
         $this->regionCollectionMock->expects($this->once())->method('addAllowedCountriesFilter')->willReturnSelf();
         $this->regionCollectionMock->expects($this->once())->method('toOptionArray')->willReturn([]);
 
-        $this->assertEquals($expectedResult, $this->model->process([]));
+        $this->assertSame($expectedResult, $this->model->process([]));
     }
 }

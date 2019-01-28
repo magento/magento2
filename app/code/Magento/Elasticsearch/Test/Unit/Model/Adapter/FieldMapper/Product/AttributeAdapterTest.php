@@ -74,7 +74,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getIsFilterableInSearch')
             ->willReturn($isFilterableInSearch);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isFilterable()
         );
@@ -108,7 +108,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getIsFilterableInSearch')
             ->willReturn($isFilterableInSearch);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isSearchable()
         );
@@ -121,7 +121,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAlwaysIndexable($expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isAlwaysIndexable()
         );
@@ -138,7 +138,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isDateTimeType()
         );
@@ -155,7 +155,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isFloatType()
         );
@@ -172,7 +172,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isIntegerType()
         );
@@ -193,7 +193,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isBooleanType()
         );
@@ -214,7 +214,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $this->attribute
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isComplexType()
         );
@@ -227,7 +227,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEavAttribute($expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->adapter->isEavAttribute()
         );

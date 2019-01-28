@@ -16,7 +16,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUrl()
     {
-        $this->assertEquals('testResult', $this->model->getUrl('router', []));
+        $this->assertSame('testResult', $this->model->getUrl('router', []));
     }
 
     protected function setUp()

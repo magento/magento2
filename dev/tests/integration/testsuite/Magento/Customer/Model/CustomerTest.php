@@ -38,10 +38,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->setDefaultBilling(1);
         $customerData = $this->customerModel->updateData($customerData)->getDataModel();
 
-        $this->assertEquals(1, $customerData->getId());
-        $this->assertEquals('John', $customerData->getFirstname());
-        $this->assertEquals('Doe', $customerData->getLastname());
-        $this->assertEquals(1, $customerData->getDefaultBilling());
+        $this->assertSame(1, $customerData->getId());
+        $this->assertSame('John', $customerData->getFirstname());
+        $this->assertSame('Doe', $customerData->getLastname());
+        $this->assertSame(1, $customerData->getDefaultBilling());
     }
 
     public function testUpdateDataOverrideExistingData()
@@ -62,9 +62,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->setDefaultBilling(0);
         $updatedCustomerData = $this->customerModel->updateData($updatedCustomerData)->getDataModel();
 
-        $this->assertEquals(3, $updatedCustomerData->getId());
-        $this->assertEquals('Jane', $updatedCustomerData->getFirstname());
-        $this->assertEquals('Smith', $updatedCustomerData->getLastname());
-        $this->assertEquals(0, $updatedCustomerData->getDefaultBilling());
+        $this->assertSame(3, $updatedCustomerData->getId());
+        $this->assertSame('Jane', $updatedCustomerData->getFirstname());
+        $this->assertSame('Smith', $updatedCustomerData->getLastname());
+        $this->assertSame(0, $updatedCustomerData->getDefaultBilling());
     }
 }

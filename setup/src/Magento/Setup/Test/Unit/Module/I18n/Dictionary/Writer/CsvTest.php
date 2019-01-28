@@ -125,7 +125,7 @@ phrase2_quote',translation2_quote',"context_type2_quote\'","content_value2_quote
 
 EXPECTED;
 
-        $this->assertEquals($expected, file_get_contents($this->_testFile));
+        $this->assertSame($expected, file_get_contents($this->_testFile));
     }
 
     public function testWriteWithoutContext()
@@ -161,6 +161,6 @@ EXPECTED;
         $writer->write($this->_phraseSecondMock);
 
         $expected = "phrase1,translation1\nphrase2,translation2\n";
-        $this->assertEquals($expected, file_get_contents($this->_testFile));
+        $this->assertSame($expected, file_get_contents($this->_testFile));
     }
 }

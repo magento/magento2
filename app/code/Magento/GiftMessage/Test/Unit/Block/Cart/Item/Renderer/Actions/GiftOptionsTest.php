@@ -76,6 +76,6 @@ class GiftOptionsTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
 
         $this->model->setItem($itemMock);
-        $this->assertEquals($this->jsLayout, $this->model->getJsLayout());
+        $this->assertSame($this->jsLayout, $this->model->getJsLayout());
     }
 }

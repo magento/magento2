@@ -42,7 +42,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             ->willReturn('');
         $this->action->setColumn($this->columnMock);
         $row = new \Magento\Framework\DataObject();
-        $this->assertEquals('&nbsp;', $this->action->render($row));
+        $this->assertSame('&nbsp;', $this->action->render($row));
     }
 
     /**

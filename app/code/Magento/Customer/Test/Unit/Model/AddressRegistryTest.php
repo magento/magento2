@@ -46,9 +46,9 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($address));
         $actual = $this->unit->retrieve($addressId);
-        $this->assertEquals($address, $actual);
+        $this->assertSame($address, $actual);
         $actualCached = $this->unit->retrieve($addressId);
-        $this->assertEquals($address, $actualCached);
+        $this->assertSame($address, $actualCached);
     }
 
     /**
@@ -92,9 +92,9 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($address));
         $actual = $this->unit->retrieve($addressId);
-        $this->assertEquals($address, $actual);
+        $this->assertSame($address, $actual);
         $this->unit->remove($addressId);
         $actual = $this->unit->retrieve($addressId);
-        $this->assertEquals($address, $actual);
+        $this->assertSame($address, $actual);
     }
 }

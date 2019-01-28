@@ -63,6 +63,6 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())->method('getId')->willReturn('id');
         $column->expects($this->once())->method('getHtmlId')->willReturn('htmlId');
 
-        $this->assertEquals($resultHtml, $this->block->getHtml());
+        $this->assertSame($resultHtml, $this->block->getHtml());
     }
 }

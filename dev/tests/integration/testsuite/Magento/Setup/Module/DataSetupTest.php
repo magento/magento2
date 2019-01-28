@@ -25,7 +25,7 @@ class DataSetupTest extends \PHPUnit\Framework\TestCase
     {
         $original = $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version');
         $this->_model->updateTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version', 'test');
-        $this->assertEquals(
+        $this->assertSame(
             'test',
             $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version')
         );

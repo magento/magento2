@@ -62,6 +62,6 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ]
         ));
 
-        $this->assertEquals($additionalOptionResult, $this->helper->getCustomOptions($itemMock));
+        $this->assertSame($additionalOptionResult, $this->helper->getCustomOptions($itemMock));
     }
 }

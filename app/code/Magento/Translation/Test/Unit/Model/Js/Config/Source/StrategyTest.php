@@ -38,6 +38,6 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
             ['label' => 'Dictionary (Translation on Storefront side)', 'value' => Config::DICTIONARY_STRATEGY],
             ['label' => 'Embedded (Translation on Admin side)', 'value' => Config::EMBEDDED_STRATEGY]
         ];
-        $this->assertEquals($expected, $this->model->toOptionArray());
+        $this->assertSame($expected, $this->model->toOptionArray());
     }
 }

@@ -90,7 +90,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->method('getStore')
             ->willReturn($store);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->resolver->getFieldName($attributeMock, $context)
         );

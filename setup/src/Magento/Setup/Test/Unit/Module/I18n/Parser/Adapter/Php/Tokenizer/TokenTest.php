@@ -34,7 +34,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     public function testIsNew($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
-        $this->assertEquals($result, $token->isNew());
+        $this->assertSame($result, $token->isNew());
     }
 
     /**
@@ -48,7 +48,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     public function testIsNamespaceSeparator($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
-        $this->assertEquals($result, $token->isNamespaceSeparator());
+        $this->assertSame($result, $token->isNamespaceSeparator());
     }
 
     /**
@@ -62,7 +62,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     public function testIsIdentifier($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
-        $this->assertEquals($result, $token->isIdentifier());
+        $this->assertSame($result, $token->isIdentifier());
     }
 
     /**

@@ -90,20 +90,20 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetOldValue()
     {
         $this->_model->setPath(self::SAMPLE_CONFIG_PATH);
-        $this->assertEquals(self::SAMPLE_VALUE, $this->_model->getOldValue());
+        $this->assertSame(self::SAMPLE_VALUE, $this->_model->getOldValue());
 
         $this->_model->setWebsiteCode('base');
-        $this->assertEquals(self::SAMPLE_VALUE, $this->_model->getOldValue());
+        $this->assertSame(self::SAMPLE_VALUE, $this->_model->getOldValue());
 
         $this->_model->setStoreCode('default');
-        $this->assertEquals(self::SAMPLE_VALUE, $this->_model->getOldValue());
+        $this->assertSame(self::SAMPLE_VALUE, $this->_model->getOldValue());
     }
 
     public function testGetFieldsetDataValue()
     {
         $this->assertNull($this->_model->getFieldsetDataValue('key'));
         $this->_model->setFieldsetData(['key' => 'value']);
-        $this->assertEquals('value', $this->_model->getFieldsetDataValue('key'));
+        $this->assertSame('value', $this->_model->getFieldsetDataValue('key'));
     }
 
     public function testCRUD()

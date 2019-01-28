@@ -167,7 +167,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     public function testBeforeSave()
     {
         $result = $this->target->beforeSave($this->product);
-        $this->assertEquals($result, $this->target);
+        $this->assertSame($result, $this->target);
     }
 
     public function testHasLinks()

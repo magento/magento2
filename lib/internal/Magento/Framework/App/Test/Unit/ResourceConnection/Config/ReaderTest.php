@@ -85,6 +85,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
         $this->_converterMock->expects($this->once())->method('convert')->will($this->returnValue($modulesConfig));
 
-        $this->assertEquals($expectedResult, $this->_model->read());
+        $this->assertSame($expectedResult, $this->_model->read());
     }
 }

@@ -67,7 +67,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         } elseif (!empty($from) && is_array($from)) {
             $this->assertArrayHasKey($dbTableName, $from);
             $actualTable = $from[$dbTableName]['tableName'];
-            $this->assertEquals($dbTableName, $actualTable);
+            $this->assertSame($dbTableName, $actualTable);
             $this->assertArrayHasKey('tableName', $from[$dbTableName]);
         } else {
             $union = $this->_collection->getSelect()->getPart('union');
@@ -75,16 +75,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $count = count($union);
                 if ($period == 'year') {
                     if ($dbTableName == "report_viewed_product_aggregated_daily") {
-                        $this->assertEquals($count, 2);
+                        $this->assertSame($count, 2);
                     }
                     if ($dbTableName == "report_viewed_product_aggregated_yearly") {
-                        $this->assertEquals($count, 3);
+                        $this->assertSame($count, 3);
                     }
                 } else {
-                    $this->assertEquals($count, 3);
+                    $this->assertSame($count, 3);
                 }
             } else {
-                $this->assertEquals(count($union), 2);
+                $this->assertSame(count($union), 2);
             }
         }
     }

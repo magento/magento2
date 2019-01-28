@@ -52,7 +52,7 @@ class RouteTest extends \PHPUnit\Framework\TestCase
         $resourceName = 'Resource name';
         $model->setServiceClass($resourceName);
         /** Assert that Resource name was set. */
-        $this->assertEquals($resourceName, $model->getServiceClass(), 'Resource name is wrong.');
+        $this->assertSame($resourceName, $model->getServiceClass(), 'Resource name is wrong.');
     }
 
     /**
@@ -75,7 +75,7 @@ class RouteTest extends \PHPUnit\Framework\TestCase
             ->willReturn($path);
 
         $match = $model->match($this->request);
-        $this->assertEquals($params, $match);
+        $this->assertSame($params, $match);
     }
 
     /**

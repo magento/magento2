@@ -65,7 +65,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getHttpHost')
             ->will($this->returnValue('httpHost'));
 
-        $this->assertEquals($expected, $this->helper->isDevAllowed($storeId));
+        $this->assertSame($expected, $this->helper->isDevAllowed($storeId));
     }
 
     /**

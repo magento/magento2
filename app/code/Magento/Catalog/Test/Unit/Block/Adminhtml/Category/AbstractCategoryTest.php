@@ -113,7 +113,7 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/*/save', $params)
             ->willReturn($saveUrl);
 
-        $this->assertEquals($saveUrl, $this->category->getSaveUrl());
+        $this->assertSame($saveUrl, $this->category->getSaveUrl());
     }
 
     public function testGetRootIdsFromCache()
@@ -121,7 +121,7 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->setData('root_ids', ['ids']);
         $this->storeManagerMock->expects($this->never())->method('getGroups');
 
-        $this->assertEquals(['ids'], $this->category->getRootIds());
+        $this->assertSame(['ids'], $this->category->getRootIds());
     }
 
     public function testGetRootIds()
@@ -129,6 +129,6 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getGroups')->willReturn([$this->storeMock]);
         $this->storeMock->expects($this->once())->method('getRootCategoryId')->willReturn('storeId');
 
-        $this->assertEquals([\Magento\Catalog\Model\Category::TREE_ROOT_ID, 'storeId'], $this->category->getRootIds());
+        $this->assertSame([\Magento\Catalog\Model\Category::TREE_ROOT_ID, 'storeId'], $this->category->getRootIds());
     }
 }

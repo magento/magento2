@@ -139,7 +139,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
         $quoteMock->expects($this->once())->method('getLastAddedItem')->willReturn($itemId);
 
-        $this->assertEquals($itemId, $this->repository->save($this->itemMock));
+        $this->assertSame($itemId, $this->repository->save($this->itemMock));
     }
 
     /**
@@ -214,7 +214,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($itemMock)
             ->willReturn($itemMock);
 
-        $this->assertEquals([$itemMock], $this->repository->getList(33));
+        $this->assertSame([$itemMock], $this->repository->getList(33));
     }
 
     /**

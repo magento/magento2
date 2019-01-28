@@ -147,7 +147,7 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->component);
 
         $result = $this->model->getRowData($document);
-        $this->assertEquals($data, $result);
+        $this->assertSame($data, $result);
     }
 
     public function testGetXmlFile()

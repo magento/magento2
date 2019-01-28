@@ -125,7 +125,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $payment->method('getAmountPaid')->willReturn($amountPaid);
         $this->payflowpro->setInfoInstance($payment);
 
-        $this->assertEquals($expected, $this->payflowpro->canVoid(), $message);
+        $this->assertSame($expected, $this->payflowpro->canVoid(), $message);
     }
 
     /**
@@ -176,7 +176,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     {
         $payment = $this->helper->getObject(\Magento\Payment\Model\Info::class);
         $this->payflowpro->setTransStatus($payment, $response);
-        $this->assertEquals($paymentExpected->getData(), $payment->getData());
+        $this->assertSame($paymentExpected->getData(), $payment->getData());
     }
 
     /**
@@ -239,7 +239,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
                 )->willReturn($isActive);
         }
 
-        $this->assertEquals($result, $this->payflowpro->isActive($storeId));
+        $this->assertSame($result, $this->payflowpro->isActive($storeId));
     }
 
     /**
@@ -266,7 +266,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $response = $this->execGatewayRequest();
         $amount = 23.03;
         $this->payflowpro->capture($paymentMock, $amount);
-        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        static::assertSame($response['pnref'], $paymentMock->getTransactionId());
         static::assertFalse((bool)$paymentMock->getIsTransactionPending());
     }
 
@@ -357,7 +357,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
 
         $this->payflowpro->capture($paymentMock, $amount);
 
-        $this->assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        $this->assertSame($response['pnref'], $paymentMock->getTransactionId());
         $this->assertFalse((bool)$paymentMock->getIsTransactionPending());
     }
 
@@ -376,7 +376,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $response = $this->execGatewayRequest();
         $amount = 43.20;
         $this->payflowpro->authorize($paymentMock, $amount);
-        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        static::assertSame($response['pnref'], $paymentMock->getTransactionId());
         static::assertFalse((bool)$paymentMock->getIsTransactionPending());
     }
 
@@ -421,7 +421,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
 
         $amount = 213.04;
         $this->payflowpro->refund($paymentMock, $amount);
-        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        static::assertSame($response['pnref'], $paymentMock->getTransactionId());
         static::assertTrue($paymentMock->getIsTransactionClosed());
     }
 
@@ -611,7 +611,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     public function testMapGatewayResponse($postData, $expectedResponse)
     {
-        self::assertEquals(
+        self::assertSame(
             $this->payflowpro->mapGatewayResponse($postData, new DataObject()),
             $expectedResponse
         );

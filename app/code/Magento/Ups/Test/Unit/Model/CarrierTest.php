@@ -206,7 +206,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $request->setBaseSubtotalInclTax($requestSubtotal);
         $this->model->setRawRequest($request);
         $price = $this->model->getMethodPrice($cost, $shippingMethod);
-        $this->assertEquals($expectedPrice, $price);
+        $this->assertSame($expectedPrice, $price);
     }
 
     /**
@@ -289,7 +289,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $result = $refMethod->invoke($this->model, $data);
         $expectedXml = new \SimpleXMLElement($expected);
         $resultXml = new \SimpleXMLElement($result);
-        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
+        $this->assertSame($expectedXml->asXML(), $resultXml->asXML());
     }
 
     /**
@@ -407,7 +407,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($result->getErrors());
 
         $info = $result->getInfo()[0];
-        $this->assertEquals($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
+        $this->assertSame($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
     }
 
     /**

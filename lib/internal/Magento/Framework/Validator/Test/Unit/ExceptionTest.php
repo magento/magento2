@@ -24,6 +24,6 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
             null,
             $messages
         );
-        $this->assertEquals($expectedMessage, $exception->getMessage());
+        $this->assertSame($expectedMessage, $exception->getMessage());
     }
 }

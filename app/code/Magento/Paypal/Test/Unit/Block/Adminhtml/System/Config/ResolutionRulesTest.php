@@ -64,7 +64,7 @@ class ResolutionRulesTest extends \PHPUnit\Framework\TestCase
             ->method('read')
             ->willReturn($incoming);
 
-        $this->assertEquals(
+        $this->assertSame(
             $outgoing,
             $this->resolutionRules->getJson()
         );

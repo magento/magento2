@@ -86,7 +86,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $result = $this->gateway->createCase($dummyOrderId);
-        $this->assertEquals(42, $result);
+        $this->assertSame(42, $result);
     }
 
     public function testCreateCaseCallsValidApiMethod()
@@ -114,7 +114,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $result = $this->gateway->createCase($dummyOrderId);
-        $this->assertEquals(42, $result);
+        $this->assertSame(42, $result);
     }
 
     public function testCreateCaseNormalFlow()
@@ -134,7 +134,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $returnedInvestigationId = $this->gateway->createCase($dummyOrderId);
-        $this->assertEquals(
+        $this->assertSame(
             $dummySignifydInvestigationId,
             $returnedInvestigationId,
             'Method must return value specified in "investigationId" response parameter'
@@ -197,7 +197,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $returnedInvestigationId = $this->gateway->createCase($dummyOrderId);
-        $this->assertEquals(
+        $this->assertSame(
             $dummySignifydInvestigationId,
             $returnedInvestigationId,
             'Method must return value specified in "investigationId" response parameter and ignore any other parameters'
@@ -226,7 +226,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-        $this->assertEquals('APPROVED', $result);
+        $this->assertSame('APPROVED', $result);
     }
 
     public function testSubmitCaseForGuaranteeWithFailedApiCall()
@@ -243,7 +243,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->expectException(GatewayException::class);
         $this->expectExceptionMessage($apiCallFailureMessage);
         $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-        $this->assertEquals('Api call failed', $result);
+        $this->assertSame('Api call failed', $result);
     }
 
     public function testSubmitCaseForGuaranteeReturnsDisposition()
@@ -264,7 +264,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $actualDisposition = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-        $this->assertEquals(
+        $this->assertSame(
             $dummyDisposition,
             $actualDisposition,
             'Method must return guarantee disposition retrieved in Signifyd API response as a result'
@@ -305,7 +305,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(GatewayException::class);
         $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-        $this->assertEquals('UNEXPECTED', $result);
+        $this->assertSame('UNEXPECTED', $result);
     }
 
     /**
@@ -325,7 +325,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
 
         try {
             $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-            $this->assertEquals($dummyExpectedDisposition, $result);
+            $this->assertSame($dummyExpectedDisposition, $result);
         } catch (GatewayException $e) {
             $this->fail(sprintf(
                 'Expected disposition "%s" was not accepted with message "%s"',
@@ -359,7 +359,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             );
 
         $result = $this->gateway->cancelGuarantee($caseId);
-        self::assertEquals(Gateway::GUARANTEE_CANCELED, $result);
+        self::assertSame(Gateway::GUARANTEE_CANCELED, $result);
     }
 
     /**
@@ -386,7 +386,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['disposition' => Gateway::GUARANTEE_DECLINED]);
 
         $result = $this->gateway->cancelGuarantee($caseId);
-        $this->assertEquals(Gateway::GUARANTEE_CANCELED, $result);
+        $this->assertSame(Gateway::GUARANTEE_CANCELED, $result);
     }
 
     /**

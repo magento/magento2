@@ -124,7 +124,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                     [1, 'base', true, 1]
                 ]
             );
-        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+        $this->assertSame($this->total, $this->total->collect($this->creditmemoMock));
     }
 
     public function testCollectNoBaseShippingAmount()
@@ -200,7 +200,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                     [1, 'base', true, 1]
                 ]
             );
-        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+        $this->assertSame($this->total, $this->total->collect($this->creditmemoMock));
     }
 
     public function testCollectZeroShipping()
@@ -267,7 +267,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                     [1, 'base', true, 1]
                 ]
             );
-        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+        $this->assertSame($this->total, $this->total->collect($this->creditmemoMock));
     }
 
     /**
@@ -293,6 +293,6 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getBaseShippingAmount')
             ->willReturn('0.0000');
-        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+        $this->assertSame($this->total, $this->total->collect($this->creditmemoMock));
     }
 }

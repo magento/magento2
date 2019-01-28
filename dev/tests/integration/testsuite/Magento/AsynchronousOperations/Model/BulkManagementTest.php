@@ -100,7 +100,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $this->publisherMock->expects($this->once())
             ->method('publish')
             ->with($topicName, array_values($operations));
-        $this->assertEquals(2, $this->model->retryBulk($bulkUuid, $errorCodes));
+        $this->assertSame(2, $this->model->retryBulk($bulkUuid, $errorCodes));
 
         $operations = $this->objectManager->get(CollectionFactory::class)
             ->create()

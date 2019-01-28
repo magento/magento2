@@ -63,7 +63,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
         ];
         $this->initCountryCollectionMock($countries);
 
-        $this->assertEquals($countries, $this->model->toOptionArray(true));
+        $this->assertSame($countries, $this->model->toOptionArray(true));
     }
 
     /**
@@ -86,7 +86,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
         $header = ['value' => '', 'label' => new Phrase('--Please Select--')];
         array_unshift($countries, $header);
 
-        $this->assertEquals($countries, $this->model->toOptionArray());
+        $this->assertSame($countries, $this->model->toOptionArray());
     }
 
     /**

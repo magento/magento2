@@ -86,6 +86,6 @@ class AddTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects($this->once())->method('addErrorMessage');
         $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($redirect);
         $redirect->expects($this->once())->method('setPath')->with($path)->willReturnSelf();
-        $this->assertEquals($redirect, $this->cartAdd->execute());
+        $this->assertSame($redirect, $this->cartAdd->execute());
     }
 }

@@ -50,6 +50,6 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
             'sort_order' => 30,
         ];
 
-        $this->assertEquals($data, $this->model->getButtonData());
+        $this->assertSame($data, $this->model->getButtonData());
     }
 }

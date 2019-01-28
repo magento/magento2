@@ -107,26 +107,26 @@ class CartRepositoryTest extends WebapiAbstract
 
         $requestData = ['cartId' => $cartId];
         $cartData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($cart->getId(), $cartData['id']);
-        $this->assertEquals($cart->getCreatedAt(), $cartData['created_at']);
-        $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
-        $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
-        $this->assertEquals($cart->getIsVirtual(), $cartData['is_virtual']);
-        $this->assertEquals($cart->getOrigOrderId(), $cartData['orig_order_id']);
-        $this->assertEquals($cart->getItemsCount(), $cartData['items_count']);
-        $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
+        $this->assertSame($cart->getId(), $cartData['id']);
+        $this->assertSame($cart->getCreatedAt(), $cartData['created_at']);
+        $this->assertSame($cart->getUpdatedAt(), $cartData['updated_at']);
+        $this->assertSame($cart->getIsActive(), $cartData['is_active']);
+        $this->assertSame($cart->getIsVirtual(), $cartData['is_virtual']);
+        $this->assertSame($cart->getOrigOrderId(), $cartData['orig_order_id']);
+        $this->assertSame($cart->getItemsCount(), $cartData['items_count']);
+        $this->assertSame($cart->getItemsQty(), $cartData['items_qty']);
         //following checks will be uncommented when all cart related services are ready
         $this->assertContains('customer', $cartData);
-        $this->assertEquals(true, $cartData['customer_is_guest']);
+        $this->assertSame(true, $cartData['customer_is_guest']);
         $this->assertContains('currency', $cartData);
-        $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
-        $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
-        $this->assertEquals($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
-        $this->assertEquals($cart->getStoreCurrencyCode(), $cartData['currency']['store_currency_code']);
-        $this->assertEquals($cart->getBaseToGlobalRate(), $cartData['currency']['base_to_global_rate']);
-        $this->assertEquals($cart->getBaseToQuoteRate(), $cartData['currency']['base_to_quote_rate']);
-        $this->assertEquals($cart->getStoreToBaseRate(), $cartData['currency']['store_to_base_rate']);
-        $this->assertEquals($cart->getStoreToQuoteRate(), $cartData['currency']['store_to_quote_rate']);
+        $this->assertSame($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
+        $this->assertSame($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
+        $this->assertSame($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
+        $this->assertSame($cart->getStoreCurrencyCode(), $cartData['currency']['store_currency_code']);
+        $this->assertSame($cart->getBaseToGlobalRate(), $cartData['currency']['base_to_global_rate']);
+        $this->assertSame($cart->getBaseToQuoteRate(), $cartData['currency']['base_to_quote_rate']);
+        $this->assertSame($cart->getStoreToBaseRate(), $cartData['currency']['store_to_base_rate']);
+        $this->assertSame($cart->getStoreToQuoteRate(), $cartData['currency']['store_to_quote_rate']);
     }
 
     /**
@@ -203,18 +203,18 @@ class CartRepositoryTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('total_count', $searchResult);
-        $this->assertEquals(1, $searchResult['total_count']);
+        $this->assertSame(1, $searchResult['total_count']);
         $this->assertArrayHasKey('items', $searchResult);
         $this->assertCount(1, $searchResult['items']);
 
         $cartData = $searchResult['items'][0];
-        $this->assertEquals($cart->getId(), $cartData['id']);
-        $this->assertEquals($cart->getCreatedAt(), $cartData['created_at']);
-        $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
-        $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
+        $this->assertSame($cart->getId(), $cartData['id']);
+        $this->assertSame($cart->getCreatedAt(), $cartData['created_at']);
+        $this->assertSame($cart->getUpdatedAt(), $cartData['updated_at']);
+        $this->assertSame($cart->getIsActive(), $cartData['is_active']);
 
         $this->assertContains('customer_is_guest', $cartData);
-        $this->assertEquals(1, $cartData['customer_is_guest']);
+        $this->assertSame(1, $cartData['customer_is_guest']);
     }
 
     /**
@@ -312,10 +312,10 @@ class CartRepositoryTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, $requestData);
 
         $quote->loadActive($requestData["quote"]["id"]);
-        $this->assertEquals($requestData["quote"]["customer"]["firstname"], $quote->getCustomerFirstname());
-        $this->assertEquals($requestData["quote"]["customer"]["middlename"], $quote->getCustomerMiddlename());
-        $this->assertEquals($requestData["quote"]["customer"]["lastname"], $quote->getCustomerLastname());
-        $this->assertEquals($requestData["quote"]["customer"]["email"], $quote->getCustomerEmail());
+        $this->assertSame($requestData["quote"]["customer"]["firstname"], $quote->getCustomerFirstname());
+        $this->assertSame($requestData["quote"]["customer"]["middlename"], $quote->getCustomerMiddlename());
+        $this->assertSame($requestData["quote"]["customer"]["lastname"], $quote->getCustomerLastname());
+        $this->assertSame($requestData["quote"]["customer"]["email"], $quote->getCustomerEmail());
     }
 
     /**

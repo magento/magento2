@@ -92,7 +92,7 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
             ->with($this->selectMock)
             ->willReturn($identifier);
         
-        $this->assertEquals($result, $this->model->entityToDatabase($entityType, $data));
+        $this->assertSame($result, $this->model->entityToDatabase($entityType, $data));
     }
 
     /**

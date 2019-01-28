@@ -41,11 +41,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection::class,
             $this->model
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Indexer\Model\Indexer\State::class,
             $this->model->getModelName()
         );
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Indexer\Model\ResourceModel\Indexer\State::class,
             $this->model->getResourceModelName()
         );

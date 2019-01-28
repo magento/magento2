@@ -56,13 +56,13 @@ class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSpecificGenerator()
     {
-        $this->assertEquals($this->rangeGenerator, $this->resolver->getGeneratorForType('range'));
-        $this->assertEquals($this->datetimeGenerator, $this->resolver->getGeneratorForType('datetime'));
+        $this->assertSame($this->rangeGenerator, $this->resolver->getGeneratorForType('range'));
+        $this->assertSame($this->datetimeGenerator, $this->resolver->getGeneratorForType('datetime'));
     }
 
     public function testGetFallbackGenerator()
     {
-        $this->assertEquals($this->defaultGenerator, $this->resolver->getGeneratorForType('unknown_type'));
+        $this->assertSame($this->defaultGenerator, $this->resolver->getGeneratorForType('unknown_type'));
     }
 
     /**

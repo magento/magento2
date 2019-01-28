@@ -28,9 +28,9 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $form = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'form', 'block');
 
         $expectedHtml = '<b>html</b>';
-        $this->assertNotEquals($expectedHtml, $block->getFormHtml());
+        $this->assertNotSame($expectedHtml, $block->getFormHtml());
         $form->setText($expectedHtml);
-        $this->assertEquals($expectedHtml, $block->getFormHtml());
+        $this->assertSame($expectedHtml, $block->getFormHtml());
     }
 
     public function testPseudoConstruct()

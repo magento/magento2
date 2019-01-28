@@ -44,7 +44,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->_randomGenerator->expects($this->never())->method('getRandomString');
         $expected = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
         $actual = $this->_model->getHash('password');
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetHashSpecifiedSalt()
@@ -52,7 +52,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->_randomGenerator->expects($this->never())->method('getRandomString');
         $expected = '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1';
         $actual = $this->_model->getHash('password', 'salt');
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetHashRandomSaltDefaultLength()
@@ -65,7 +65,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($salt));
         $expected = 'a1c7fc88037b70c9be84d3ad12522c7888f647915db78f42eb572008422ba2fa:' . $salt . ':1';
         $actual = $this->_model->getHash('password', true);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetHashRandomSaltSpecifiedLength()
@@ -77,7 +77,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('random_salt'));
         $expected = '4c5cab8dd00137d11258f8f87b93fd17bd94c5026fc52d3c5af911dd177a2611:random_salt:1';
         $actual = $this->_model->getHash('password', 11);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -90,7 +90,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function testValidateHash($password, $hash, $expected)
     {
         $actual = $this->_model->validateHash($password, $hash);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -120,7 +120,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($key));
         $model = new Encryptor($this->_randomGenerator, $deploymentConfigMock);
         $value = 'arbitrary_string';
-        $this->assertEquals($value, $model->encrypt($value));
+        $this->assertSame($value, $model->encrypt($value));
     }
 
     /**
@@ -145,7 +145,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($key));
         $model = new Encryptor($this->_randomGenerator, $deploymentConfigMock);
         $value = 'arbitrary_string';
-        $this->assertEquals('', $model->decrypt($value));
+        $this->assertSame('', $model->decrypt($value));
     }
 
     /**
@@ -169,7 +169,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
         $crypt = new SodiumChachaIetf(self::CRYPT_KEY_1);
         // Verify decrypted matches original data
-        $this->assertEquals($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
+        $this->assertSame($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
     }
 
     public function testDecrypt()
@@ -177,7 +177,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $message = 'Mares eat oats and does eat oats, but little lambs eat ivy.';
         $encrypted = $this->_model->encrypt($message);
 
-        $this->assertEquals($message, $this->_model->decrypt($encrypted));
+        $this->assertSame($message, $this->_model->decrypt($encrypted));
     }
 
     public function testLegacyDecrypt()
@@ -195,7 +195,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
         $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC, $iv);
         // Verify decrypted matches original data
-        $this->assertEquals($encrypted, base64_encode($crypt->encrypt($actual)));
+        $this->assertSame($encrypted, base64_encode($crypt->encrypt($actual)));
     }
 
     public function testEncryptDecryptNewKeyAdded()
@@ -263,6 +263,6 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $expected)
     {
         $hash = $this->_model->getHash($password, $salt, $hashAlgo);
-        $this->assertEquals($expected, $hash);
+        $this->assertSame($expected, $hash);
     }
 }

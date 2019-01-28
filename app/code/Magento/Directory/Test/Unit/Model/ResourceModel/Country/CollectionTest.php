@@ -102,7 +102,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel) && !empty($foregroundCountries)) +
             (int)(!empty($emptyLabel)), $result);
         foreach ($expectedResults as $index => $expectedResult) {
-            $this->assertEquals($expectedResult, $result[$index]['label']);
+            $this->assertSame($expectedResult, $result[$index]['label']);
         }
     }
 

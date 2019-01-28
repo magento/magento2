@@ -102,7 +102,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
             ->with($absoluteFilePath)
             ->willReturn($expected);
 
-        $this->assertEquals($expected, $this->model->getMimeType($fileName));
+        $this->assertSame($expected, $this->model->getMimeType($fileName));
     }
 
     public function testGetStat()
@@ -127,7 +127,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('size', $result);
-        $this->assertEquals(1, $result['size']);
+        $this->assertSame(1, $result['size']);
     }
 
     public function testIsExist()

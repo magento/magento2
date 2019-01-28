@@ -225,7 +225,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $status = $state->getStatus();
 
         $this->assertFalse($indexerShouldBeValid);
-        $this->assertEquals(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID, $status);
+        $this->assertSame(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID, $status);
     }
 
     /**

@@ -153,7 +153,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->willReturn($mime);
 
         $this->fileBackend->afterLoad();
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [
                     'url' => 'http://magento2.com/pub/media/design/file/' . $value,
@@ -205,7 +205,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->with($expectedTmpMediaPath);
 
         $this->fileBackend->beforeSave();
-        $this->assertEquals($expectedFileName, $this->fileBackend->getValue());
+        $this->assertSame($expectedFileName, $this->fileBackend->getValue());
     }
 
     /**
@@ -252,7 +252,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->fileBackend->beforeSave();
-        $this->assertEquals(
+        $this->assertSame(
             $value,
             $this->fileBackend->getValue()
         );

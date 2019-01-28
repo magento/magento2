@@ -88,7 +88,7 @@ class OrderItemGetListTest extends WebapiAbstract
             $rowTotals[] = $item['row_total'];
         }
 
-        $this->assertEquals($expectedRowTotals, $rowTotals);
+        $this->assertSame($expectedRowTotals, $rowTotals);
     }
 
     /**
@@ -98,11 +98,11 @@ class OrderItemGetListTest extends WebapiAbstract
      */
     protected function assertOrderItem(\Magento\Sales\Model\Order\Item $orderItem, array $response)
     {
-        $this->assertEquals($orderItem->getId(), $response['item_id']);
-        $this->assertEquals($orderItem->getOrderId(), $response['order_id']);
-        $this->assertEquals($orderItem->getProductId(), $response['product_id']);
-        $this->assertEquals($orderItem->getProductType(), $response['product_type']);
-        $this->assertEquals($orderItem->getBasePrice(), $response['base_price']);
-        $this->assertEquals($orderItem->getRowTotal(), $response['row_total']);
+        $this->assertSame($orderItem->getId(), $response['item_id']);
+        $this->assertSame($orderItem->getOrderId(), $response['order_id']);
+        $this->assertSame($orderItem->getProductId(), $response['product_id']);
+        $this->assertSame($orderItem->getProductType(), $response['product_type']);
+        $this->assertSame($orderItem->getBasePrice(), $response['base_price']);
+        $this->assertSame($orderItem->getRowTotal(), $response['row_total']);
     }
 }

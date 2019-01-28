@@ -67,7 +67,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $customerData = $customerSession->getCustomerData();
 
-        $this->assertEquals($fixtureCustomerId, $customerData->getId(), "Customer data was loaded incorrectly");
+        $this->assertSame($fixtureCustomerId, $customerData->getId(), "Customer data was loaded incorrectly");
     }
 
     /**
@@ -79,7 +79,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->_customerSession->loginById(1);
         $afterKey = $this->formKey->get();
 
-        $this->assertNotEquals($beforeKey, $afterKey);
+        $this->assertNotSame($beforeKey, $afterKey);
     }
 
     /**
@@ -98,6 +98,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->_customerSession->logout();
         $afterKey = $this->formKey->get();
 
-        $this->assertNotEquals($beforeKey, $afterKey);
+        $this->assertNotSame($beforeKey, $afterKey);
     }
 }

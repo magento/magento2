@@ -149,7 +149,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             ->with($massActionIdField)
             ->willReturn($items);
 
-        $this->assertEquals($result, $this->_block->getGridIdsJson());
+        $this->assertSame($result, $this->_block->getGridIdsJson());
     }
 
     /**

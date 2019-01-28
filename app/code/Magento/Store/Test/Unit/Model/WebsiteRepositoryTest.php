@@ -89,7 +89,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $website = $this->model->getDefault();
         $this->assertInstanceOf(\Magento\Store\Api\Data\WebsiteInterface::class, $website);
-        $this->assertEquals($websiteMock, $website);
+        $this->assertSame($websiteMock, $website);
     }
 
     /**

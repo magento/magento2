@@ -42,7 +42,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
                 $sortOrder
             )->willReturn(1);
 
-        $this->assertEquals(1, $this->model->assign($attributeSetId, $attributeGroupId, $attributeCode, $sortOrder));
+        $this->assertSame(1, $this->model->assign($attributeSetId, $attributeGroupId, $attributeCode, $sortOrder));
     }
 
     public function testUnassign()
@@ -54,7 +54,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             ->with($attributeSetId, $attributeCode)
             ->willReturn(1);
 
-        $this->assertEquals(1, $this->model->unassign($attributeSetId, $attributeCode));
+        $this->assertSame(1, $this->model->unassign($attributeSetId, $attributeCode));
     }
 
     public function testGetAttributes()
@@ -68,6 +68,6 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
                 \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
                 $attributeSetId
             )->willReturn([$attributeMock]);
-        $this->assertEquals([$attributeMock], $this->model->getAttributes($attributeSetId));
+        $this->assertSame([$attributeMock], $this->model->getAttributes($attributeSetId));
     }
 }

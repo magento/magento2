@@ -79,7 +79,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->willReturn($baseUrl);
 
         $this->model->setData('custom_attributes', [$attributeKey => $attributeValue]);
-        $this->assertEquals($this->model, $this->model->setForm($this->dataForm));
+        $this->assertSame($this->model, $this->model->setForm($this->dataForm));
     }
 
     public function testSetFormNoCustomAttributes()
@@ -99,6 +99,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseUrl')
             ->willReturn($baseUrl);
 
-        $this->assertEquals($this->model, $this->model->setForm($this->dataForm));
+        $this->assertSame($this->model, $this->model->setForm($this->dataForm));
     }
 }

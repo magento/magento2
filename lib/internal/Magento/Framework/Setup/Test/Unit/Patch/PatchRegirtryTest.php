@@ -60,7 +60,7 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
             ->with(\SomeDataPatch::class)
             ->willReturn(false);
 
-        $this->assertEquals(\SomeDataPatch::class, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
+        $this->assertSame(\SomeDataPatch::class, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testRegisterNonAplliedPatch()
@@ -70,7 +70,7 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
             ->with(\SomeDataPatch::class)
             ->willReturn(true);
 
-        $this->assertEquals(false, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
+        $this->assertSame(false, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testGetIterator()
@@ -84,14 +84,14 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(\SomeDataPatch::class, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
+        $this->assertSame(\SomeDataPatch::class, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
 
         $actualPatches = [];
         foreach ($this->patchRegistry->getIterator() as $patch) {
             $actualPatches[] = $patch;
         }
         // assert that all dependencies are present and placed in valid sequence
-        $this->assertEquals(
+        $this->assertSame(
             [\OtherDataPatch::class, \SomeDataPatch::class],
             $actualPatches,
             'Failed to assert that actual non-apllied patches sequence is valid.'

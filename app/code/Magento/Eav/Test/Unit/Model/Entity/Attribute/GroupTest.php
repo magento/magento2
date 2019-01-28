@@ -57,7 +57,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setAttributeGroupName($groupName);
         $this->model->beforeSave();
-        $this->assertEquals($groupCode, $this->model->getAttributeGroupCode());
+        $this->assertSame($groupCode, $this->model->getAttributeGroupCode());
     }
 
     /**

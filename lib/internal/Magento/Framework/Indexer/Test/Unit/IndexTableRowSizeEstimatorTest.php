@@ -15,6 +15,6 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
     {
         $rowMemorySize = 100;
         $model = new \Magento\Framework\Indexer\IndexTableRowSizeEstimator($rowMemorySize);
-        $this->assertEquals($model->estimateRowSize(), $rowMemorySize);
+        $this->assertSame($model->estimateRowSize(), $rowMemorySize);
     }
 }

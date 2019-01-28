@@ -31,12 +31,12 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFormKey()
     {
-        $this->assertEquals('form_key', $this->formKeyElement->getFormKey());
+        $this->assertSame('form_key', $this->formKeyElement->getFormKey());
     }
 
     public function testToHtml()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '<input name="form_key" type="hidden" value="form_key" />',
             $this->formKeyElement->toHtml()
         );

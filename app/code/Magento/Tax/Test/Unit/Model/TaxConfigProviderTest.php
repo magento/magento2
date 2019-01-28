@@ -112,7 +112,7 @@ class TaxConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturnMap($valueMap);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn($isQuoteVirtual);
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        $this->assertSame($expectedResult, $this->model->getConfig());
     }
 
     /**

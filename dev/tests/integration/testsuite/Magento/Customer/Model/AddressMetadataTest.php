@@ -56,14 +56,14 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
         // Verify the consistency of getCustomAttributeMetadata() function from the 2nd call of the same service
         $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributesMetadata,
             $customAttributesMetadata1,
             'Different custom attribute metadata returned from the 2nd call of the same service'
         );
         // Verify the consistency of getCustomAttributesMetadata() function from the 2nd service
         $customAttributesMetadata2 = $this->serviceTwo->getCustomAttributesMetadata();
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributesMetadata,
             $customAttributesMetadata2,
             'Different custom attribute metadata returned from the 2nd service'
@@ -94,7 +94,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         foreach ($customAttributesMetadata1 as $attribute1) {
             $attribute1->getAttributeCode();
         }
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributesMetadata,
             $customAttributesMetadata1,
             'Custom attribute metadata from the same service became different after getAttributeCode was called'
@@ -105,7 +105,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         foreach ($customAttributesMetadata2 as $attribute2) {
             $attribute2->getAttributeCode();
         }
-        $this->assertEquals(
+        $this->assertSame(
             $customAttributesMetadata,
             $customAttributesMetadata2,
             'Custom attribute metadata from two services are different after getAttributeCode was called'
@@ -121,7 +121,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
         // Verify the consistency of getAllAttributesMetadata() function from the 2nd call of the same service
         $allAttributesMetadata2 = $this->service->getAllAttributesMetadata();
-        $this->assertEquals(
+        $this->assertSame(
             $allAttributesMetadata,
             $allAttributesMetadata2,
             'Different attribute metadata returned from the 2nd call of the same service'
@@ -129,7 +129,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
         // Verify the consistency of getAllAttributesMetadata() function from the 2nd service
         $allAttributesMetadata3 = $this->serviceTwo->getAllAttributesMetadata();
-        $this->assertEquals(
+        $this->assertSame(
             $allAttributesMetadata,
             $allAttributesMetadata3,
             'Different attribute metadata returned from the 2nd service'
@@ -140,13 +140,13 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
     {
         $vatValidMetadata = $this->service->getAttributeMetadata('vat_is_valid');
         $this->assertNotNull($vatValidMetadata);
-        $this->assertEquals('vat_is_valid', $vatValidMetadata->getAttributeCode());
-        $this->assertEquals('text', $vatValidMetadata->getFrontendInput());
-        $this->assertEquals('VAT number validity', $vatValidMetadata->getStoreLabel());
+        $this->assertSame('vat_is_valid', $vatValidMetadata->getAttributeCode());
+        $this->assertSame('text', $vatValidMetadata->getFrontendInput());
+        $this->assertSame('VAT number validity', $vatValidMetadata->getStoreLabel());
 
         // Verify the consistency of attribute metadata from two calls of the same service
         $vatValidMetadata2 = $this->service->getAttributeMetadata('vat_is_valid');
-        $this->assertEquals(
+        $this->assertSame(
             $vatValidMetadata,
             $vatValidMetadata2,
             'Different attribute metadata returned from the 2nd call of the same service'
@@ -154,8 +154,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
         // Verify the consistency of attribute metadata from two services
         $vatValidMetadata3 = $this->serviceTwo->getAttributeMetadata('vat_is_valid');
-        $this->assertEquals('vat_is_valid', $vatValidMetadata3->getAttributeCode());
-        $this->assertEquals(
+        $this->assertSame('vat_is_valid', $vatValidMetadata3->getAttributeCode());
+        $this->assertSame(
             $vatValidMetadata,
             $vatValidMetadata3,
             'Different attribute metadata returned from the 2nd service'
@@ -168,7 +168,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             $this->service->getAttributeMetadata('1');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with entityType = customer_address, attributeCode = 1',
                 $e->getMessage()
             );
@@ -179,7 +179,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             $this->service->getAttributeMetadata('1');
             $this->fail('Expected exception not thrown when called the 2nd time.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with entityType = customer_address, attributeCode = 1',
                 $e->getMessage()
             );
@@ -190,7 +190,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             $this->serviceTwo->getAttributeMetadata('1');
             $this->fail('Expected exception not thrown when called with the 2nd service.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 'No such entity with entityType = customer_address, attributeCode = 1',
                 $e->getMessage()
             );
@@ -212,7 +212,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         $formAttributesMetadata = $this->service->getAttributes('customer_address_edit');
         $this->assertCount(15, $formAttributesMetadata, "Invalid number of attributes for the specified form.");
         $formAttributesMetadata1 = $this->service->getAttributes('customer_address_edit');
-        $this->assertEquals(
+        $this->assertSame(
             $formAttributesMetadata,
             $formAttributesMetadata1,
             'Different form attribute metadata returned from the 2nd call of the same service'
@@ -220,7 +220,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
         // Verify the consistency of getAttributes() function from the 2nd service
         $formAttributesMetadata2 = $this->serviceTwo->getAttributes('customer_address_edit');
-        $this->assertEquals(
+        $this->assertSame(
             $formAttributesMetadata,
             $formAttributesMetadata2,
             'Different form attribute metadata returned from the 2nd service'
@@ -229,24 +229,24 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         /** Check some fields of one attribute metadata */
         $attributeMetadata = $formAttributesMetadata['company'];
         $this->assertInstanceOf(\Magento\Customer\Model\Data\AttributeMetadata::class, $attributeMetadata);
-        $this->assertEquals('company', $attributeMetadata->getAttributeCode(), 'Attribute code is invalid');
+        $this->assertSame('company', $attributeMetadata->getAttributeCode(), 'Attribute code is invalid');
         $validationRules = $attributeMetadata->getValidationRules();
-        $this->assertEquals($expectedValidationRules, $validationRules);
-        $this->assertEquals('static', $attributeMetadata->getBackendType(), 'Backend type is invalid');
-        $this->assertEquals('Company', $attributeMetadata->getFrontendLabel(), 'Frontend label is invalid');
+        $this->assertSame($expectedValidationRules, $validationRules);
+        $this->assertSame('static', $attributeMetadata->getBackendType(), 'Backend type is invalid');
+        $this->assertSame('Company', $attributeMetadata->getFrontendLabel(), 'Frontend label is invalid');
         $vatIdAttributeMetadata = $formAttributesMetadata['vat_id'];
-        $this->assertEquals([], $vatIdAttributeMetadata->getOptions());
-        $this->assertEquals([], $vatIdAttributeMetadata->getValidationRules());
+        $this->assertSame([], $vatIdAttributeMetadata->getOptions());
+        $this->assertSame([], $vatIdAttributeMetadata->getValidationRules());
 
         // Verify the consistency of form attribute metadata from two calls of the same service
         // after some getters were called
         $attributeMetadata1 = $formAttributesMetadata1['company'];
-        $this->assertEquals('company', $attributeMetadata1->getAttributeCode(), 'Attribute code is invalid');
-        $this->assertEquals($expectedValidationRules, $attributeMetadata1->getValidationRules());
+        $this->assertSame('company', $attributeMetadata1->getAttributeCode(), 'Attribute code is invalid');
+        $this->assertSame($expectedValidationRules, $attributeMetadata1->getValidationRules());
         $vatIdAttributeMetadata1 = $formAttributesMetadata1['vat_id'];
-        $this->assertEquals([], $vatIdAttributeMetadata1->getOptions());
-        $this->assertEquals([], $vatIdAttributeMetadata1->getValidationRules());
-        $this->assertEquals(
+        $this->assertSame([], $vatIdAttributeMetadata1->getOptions());
+        $this->assertSame([], $vatIdAttributeMetadata1->getValidationRules());
+        $this->assertSame(
             $formAttributesMetadata,
             $formAttributesMetadata1,
             'Form attribute metadata from the same service became different after some getters were called'
@@ -255,12 +255,12 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         // Verify the consistency of form attribute metadata from two services
         // after some getters were called
         $attributeMetadata2 = $formAttributesMetadata2['company'];
-        $this->assertEquals('company', $attributeMetadata2->getAttributeCode(), 'Attribute code is invalid');
-        $this->assertEquals($expectedValidationRules, $attributeMetadata2->getValidationRules());
+        $this->assertSame('company', $attributeMetadata2->getAttributeCode(), 'Attribute code is invalid');
+        $this->assertSame($expectedValidationRules, $attributeMetadata2->getValidationRules());
         $vatIdAttributeMetadata2 = $formAttributesMetadata2['vat_id'];
-        $this->assertEquals([], $vatIdAttributeMetadata2->getOptions());
-        $this->assertEquals([], $vatIdAttributeMetadata2->getValidationRules());
-        $this->assertEquals(
+        $this->assertSame([], $vatIdAttributeMetadata2->getOptions());
+        $this->assertSame([], $vatIdAttributeMetadata2->getValidationRules());
+        $this->assertSame(
             $formAttributesMetadata,
             $formAttributesMetadata2,
             'Form attribute metadata from two services are different after some getters were called'

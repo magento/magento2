@@ -27,6 +27,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $convertedFile = __DIR__ . '/_files/fieldset_config.php';
         $expectedResult = include $convertedFile;
-        $this->assertEquals($expectedResult, $this->_model->convert($dom));
+        $this->assertSame($expectedResult, $this->_model->convert($dom));
     }
 }

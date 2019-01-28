@@ -22,6 +22,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expected = ['US' => ['pattern_01' => 'pattern_01', 'pattern_02' => 'pattern_02']];
         $this->dataStorageMock->expects($this->once())->method('get')->willReturn($expected);
         $configData = new \Magento\Directory\Model\Country\Postcode\Config($this->dataStorageMock);
-        $this->assertEquals($expected, $configData->getPostCodes());
+        $this->assertSame($expected, $configData->getPostCodes());
     }
 }

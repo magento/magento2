@@ -328,7 +328,7 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
             ->method('retrieveProductIdsBySkus')
             ->willReturn($skus);
 
-        $this->assertEquals($expectedResult, $this->model->retrieveSkuById($id, $skus));
+        $this->assertSame($expectedResult, $this->model->retrieveSkuById($id, $skus));
     }
 
     /**

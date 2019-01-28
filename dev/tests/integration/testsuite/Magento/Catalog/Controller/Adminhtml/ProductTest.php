@@ -89,7 +89,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product');
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_new_product"]',
@@ -97,7 +97,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             ),
             '"Add Product" button container should be present on Manage Products page, if the limit is not  reached'
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_new_product-button"]',
@@ -105,7 +105,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             ),
             '"Add Product" button should be present on Manage Products page, if the limit is not reached'
         );
-        $this->assertEquals(
+        $this->assertSame(
             0,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_new_product-button" and contains(@class,"disabled")]',
@@ -113,7 +113,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             ),
             '"Add Product" button should be enabled on Manage Products page, if the limit is not reached'
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="add_new_product"]/*[contains(@class,"action-toggle")]',
@@ -135,7 +135,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="save-button"]',
@@ -144,7 +144,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             '"Save" button isn\'t present on Edit Product page'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="save_and_new"]',
@@ -153,7 +153,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             '"Save & New" button isn\'t present on Edit Product page'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//*[@id="save_and_duplicate"]',

@@ -54,7 +54,7 @@ class GroupRendererTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->any())
             ->method('getPart')
             ->willReturnMap($mapValues);
-        $this->assertEquals($sql, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($sql, $this->model->render($this->selectMock, $sql));
     }
 
     /**
@@ -84,6 +84,6 @@ class GroupRendererTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->exactly(2))
             ->method('quoteIdentifier')
             ->willReturnArgument(0);
-        $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
+        $this->assertSame($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 }

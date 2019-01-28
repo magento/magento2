@@ -52,7 +52,7 @@ class AlertsTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValueMap($valueMap));
-        $this->assertEquals($canShowTab, $this->alerts->canShowTab());
+        $this->assertSame($canShowTab, $this->alerts->canShowTab());
     }
 
     /**

@@ -43,7 +43,7 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
         $actual = $this->general->getFilterData($this->attribute, $filterName);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testGetAggregationData()
@@ -60,6 +60,6 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
         $actual = $this->general->getAggregationData($this->attribute, $bucketName);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

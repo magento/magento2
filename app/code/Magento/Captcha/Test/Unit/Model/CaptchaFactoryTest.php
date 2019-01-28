@@ -35,7 +35,7 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($defaultCaptchaMock)
         );
 
-        $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
+        $this->assertSame($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
     }
 
     public function testCreateNegative()
@@ -58,6 +58,6 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Magento\Captcha\Model\\' . ucfirst($captchaType) .
             ' does not implement \Magento\Captcha\Model\CaptchaInterface');
 
-        $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
+        $this->assertSame($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
     }
 }

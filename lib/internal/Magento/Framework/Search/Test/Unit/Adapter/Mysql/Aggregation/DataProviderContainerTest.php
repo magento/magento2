@@ -28,6 +28,6 @@ class DataProviderContainerTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer::class,
             ['dataProviders' => [$bucketName => $bucketValue]]
         );
-        $this->assertEquals($bucketValue, $provider->get($bucketName));
+        $this->assertSame($bucketValue, $provider->get($bucketName));
     }
 }

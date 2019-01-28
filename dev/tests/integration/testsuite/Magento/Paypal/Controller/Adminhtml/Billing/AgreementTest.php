@@ -21,7 +21,7 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     public function testCustomerGrid()
     {
         $this->dispatch('backend/paypal/billing_agreement/customergrid/id/1');
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//th[contains(@class,"col-reference_id")]',
@@ -29,7 +29,7 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             ),
             "Response for billing agreement orders doesn't contain billing agreement customers grid"
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//td[contains(text(), "REF-ID-TEST-678")]',

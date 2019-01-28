@@ -29,7 +29,7 @@ class MaintenanceModeEnablerTest extends TestCase
             true
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $maintenanceModeEnabledInitially,
             $maintenanceMode->isOn(),
             'Initial state is not restored'
@@ -54,7 +54,7 @@ class MaintenanceModeEnablerTest extends TestCase
                 true
             );
         } catch (\Exception $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 true,
                 $maintenanceMode->isOn(),
                 'Maintenance mode is not active after failure'
@@ -80,7 +80,7 @@ class MaintenanceModeEnablerTest extends TestCase
                 false
             );
         } catch (\Exception $e) {
-            $this->assertEquals(
+            $this->assertSame(
                 $maintenanceModeEnabledInitially,
                 $maintenanceMode->isOn(),
                 'Initial state is not restored'

@@ -41,6 +41,6 @@ class ConfigPluginTest extends \PHPUnit\Framework\TestCase
         $sidebarMock = $this->createMock(\Magento\Checkout\Block\Cart\Sidebar::class);
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($configMock);
 
-        $this->assertEquals($expectedResult, $this->model->afterGetConfig($sidebarMock, $resultMock));
+        $this->assertSame($expectedResult, $this->model->afterGetConfig($sidebarMock, $resultMock));
     }
 }

@@ -78,9 +78,9 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
             ->method('convertAndRound')
             ->with($price)
             ->will($this->returnValue($convertedPrice));
-        $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
+        $this->assertSame($convertedPrice, $this->regularPrice->getValue());
         //The second call will use cached value
-        $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
+        $this->assertSame($convertedPrice, $this->regularPrice->getValue());
     }
 
     /**
@@ -116,7 +116,7 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getAmount')
             ->with($this->equalTo($convertedPrice))
             ->will($this->returnValue($amountValue));
-        $this->assertEquals($amountValue, $this->regularPrice->getAmount());
+        $this->assertSame($amountValue, $this->regularPrice->getAmount());
     }
 
     /**
@@ -124,6 +124,6 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPriceCode()
     {
-        $this->assertEquals(RegularPrice::PRICE_CODE, $this->regularPrice->getPriceCode());
+        $this->assertSame(RegularPrice::PRICE_CODE, $this->regularPrice->getPriceCode());
     }
 }

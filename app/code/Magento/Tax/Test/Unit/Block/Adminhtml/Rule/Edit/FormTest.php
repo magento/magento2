@@ -140,7 +140,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with('tax/rule/ajaxLoadRates/')
             ->will($this->returnValue('some_url'));
 
-        $this->assertEquals('some_url', $this->form->getTaxRatesPageUrl());
+        $this->assertSame('some_url', $this->form->getTaxRatesPageUrl());
     }
 
     /**
@@ -157,7 +157,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('is_entity_editable', $config);
         $this->assertArrayHasKey('selected_values', $config);
-        $this->assertEquals($expected, $config['selected_values']);
+        $this->assertSame($expected, $config['selected_values']);
     }
 
     /**

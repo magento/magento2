@@ -45,7 +45,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $collection = $this->_model->getResourceCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
-        $this->assertEquals($this->_model->getStoreId(), $collection->getStoreId());
+        $this->assertSame($this->_model->getStoreId(), $collection->getStoreId());
     }
 
     public function testGetUrlModel()
@@ -59,26 +59,26 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEmpty($this->_model->getName());
         $this->_model->setName('test');
-        $this->assertEquals('test', $this->_model->getName());
+        $this->assertSame('test', $this->_model->getName());
     }
 
     public function testGetTypeId()
     {
         $this->assertEmpty($this->_model->getTypeId());
         $this->_model->setTypeId('simple');
-        $this->assertEquals('simple', $this->_model->getTypeId());
+        $this->assertSame('simple', $this->_model->getTypeId());
     }
 
     public function testGetStatus()
     {
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
             $this->_model->getStatus()
         );
 
         $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
 
-        $this->assertEquals(
+        $this->assertSame(
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
             $this->_model->getStatus()
         );
@@ -138,7 +138,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $value = uniqid();
         $this->assertEmpty($this->_model->{$method}());
         $this->_model->setData($key, $value);
-        $this->assertEquals($value, $this->_model->{$method}());
+        $this->assertSame($value, $this->_model->{$method}());
     }
 
     public function getObsoleteGettersDataProvider()
@@ -160,7 +160,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['data' => ['media_attributes' => 'test']]
         );
-        $this->assertEquals('test', $model->getMediaAttributes());
+        $this->assertSame('test', $model->getMediaAttributes());
 
         $attributes = $this->_model->getMediaAttributes();
         $this->assertArrayHasKey('image', $attributes);
@@ -204,7 +204,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->_model->getAttributeText('status'));
         $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-        $this->assertEquals('Enabled', $this->_model->getAttributeText('status'));
+        $this->assertSame('Enabled', $this->_model->getAttributeText('status'));
     }
 
     /**
@@ -219,7 +219,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
             'Option 3',
             'Option 4 "!@#$%^&*'
         ];
-        self::assertEquals(
+        self::assertSame(
             $expected,
             $product->getAttributeText('multiselect_attribute')
         );
@@ -227,9 +227,9 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomDesignDate()
     {
-        $this->assertEquals(['from' => null, 'to' => null], $this->_model->getCustomDesignDate());
+        $this->assertSame(['from' => null, 'to' => null], $this->_model->getCustomDesignDate());
         $this->_model->setCustomDesignFrom(1)->setCustomDesignTo(2);
-        $this->assertEquals(['from' => 1, 'to' => 2], $this->_model->getCustomDesignDate());
+        $this->assertSame(['from' => 1, 'to' => 2], $this->_model->getCustomDesignDate());
     }
 
     /**
@@ -239,14 +239,14 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEmpty($this->_model->getSku());
         $this->_model->setSku('sku');
-        $this->assertEquals('sku', $this->_model->getSku());
+        $this->assertSame('sku', $this->_model->getSku());
     }
 
     public function testGetWeight()
     {
         $this->assertEmpty($this->_model->getWeight());
         $this->_model->setWeight(10.22);
-        $this->assertEquals(10.22, $this->_model->getWeight());
+        $this->assertSame(10.22, $this->_model->getWeight());
     }
 
     public function testGetOptionInstance()
@@ -267,7 +267,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $this->_model->getPreconfiguredValues());
         $this->_model->setPreconfiguredValues('test');
-        $this->assertEquals('test', $this->_model->getPreconfiguredValues());
+        $this->assertSame('test', $this->_model->getPreconfiguredValues());
     }
 
     public static function tearDownAfterClass()

@@ -73,6 +73,6 @@ class DecimalRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn($maxRowsPerStore);
         $this->storeManagementMock->expects($this->any())->method('getCount')->willReturn($storeCount);
 
-        $this->assertEquals($maxRowsPerStore * $storeCount * 500, $this->model->estimateRowSize());
+        $this->assertSame($maxRowsPerStore * $storeCount * 500, $this->model->estimateRowSize());
     }
 }

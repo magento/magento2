@@ -32,7 +32,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testSetValue($path, $value)
     {
         $this->_model->setValue($path, $value);
-        $this->assertEquals($value, $this->_model->getValue($path));
+        $this->assertSame($value, $this->_model->getValue($path));
     }
 
     /**
@@ -52,6 +52,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->_metaDataProcessor,
             ['test' => ['path' => 'value']]
         );
-        $this->assertEquals('value', $model->getValue('test/path'));
+        $this->assertSame('value', $model->getValue('test/path'));
     }
 }

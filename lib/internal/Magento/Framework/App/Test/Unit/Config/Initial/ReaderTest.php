@@ -83,7 +83,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->with('config.xml', 'global')
             ->will($this->returnValue([]));
 
-        $this->assertEquals([], $this->model->read());
+        $this->assertSame([], $this->model->read());
     }
 
     /**
@@ -109,7 +109,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->with($this->anything())
             ->will($this->returnValue($expectedConfig));
 
-        $this->assertEquals($expectedConfig, $this->model->read());
+        $this->assertSame($expectedConfig, $this->model->read());
     }
 
     private function prepareDomFactoryMock()

@@ -170,7 +170,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             );
             $productAfterImport->load($productBeforeImport->getId());
 
-            $this->assertEquals($productBeforeImport->getVisibility(), $productAfterImport->getVisibility());
+            $this->assertSame($productBeforeImport->getVisibility(), $productAfterImport->getVisibility());
             unset($productAfterImport);
         }
 
@@ -233,8 +233,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
             $stockItemAfterImport = $stockRegistry->getStockItem($productId, 1);
 
-            $this->assertEquals($stockItmBeforeImport->getQty(), $stockItemAfterImport->getQty());
-            $this->assertEquals(1, $stockItemAfterImport->getIsInStock());
+            $this->assertSame($stockItmBeforeImport->getQty(), $stockItemAfterImport->getQty());
+            $this->assertSame(1, $stockItemAfterImport->getIsInStock());
             unset($stockItemAfterImport);
         }
 
@@ -310,7 +310,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $actualOptions = $actualData['options'];
         sort($expectedOptions);
         sort($actualOptions);
-        $this->assertEquals($expectedOptions, $actualOptions);
+        $this->assertSame($expectedOptions, $actualOptions);
 
         // assert of options data
         $this->assertCount(count($expectedData['data']), $actualData['data']);
@@ -322,9 +322,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             foreach ($actualData['options'] as $actualId => $actualOption) {
                 if ($actualOption == $expectedOption) {
                     $elementExist = true;
-                    $this->assertEquals($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
+                    $this->assertSame($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
                     if (array_key_exists($expectedId, $expectedData['values'])) {
-                        $this->assertEquals($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
+                        $this->assertSame($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
                     }
                     unset($actualData['options'][$actualId]);
                     // remove value in case of duplicating key values
@@ -337,7 +337,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // Make sure that after importing existing options again, option IDs and option value IDs are not changed
         $customOptionValues = $this->getCustomOptionValues($sku);
         $this->createImportModel($pathToFile)->importData();
-        $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+        $this->assertSame($customOptionValues, $this->getCustomOptionValues($sku));
     }
 
     /**
@@ -382,7 +382,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $actualOptions = $actualData['options'];
             sort($expectedOptions);
             sort($actualOptions);
-            $this->assertEquals($expectedOptions, $actualOptions);
+            $this->assertSame($expectedOptions, $actualOptions);
 
             // assert of options data
             $this->assertCount(count($expectedData['data']), $actualData['data']);
@@ -393,9 +393,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 foreach ($actualData['options'] as $actualId => $actualOption) {
                     if ($actualOption == $expectedOption) {
                         $elementExist = true;
-                        $this->assertEquals($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
+                        $this->assertSame($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
                         if (array_key_exists($expectedId, $expectedData['values'])) {
-                            $this->assertEquals($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
+                            $this->assertSame($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
                         }
                         unset($actualData['options'][$actualId]);
                         // remove value in case of duplicating key values
@@ -408,7 +408,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             // Make sure that after importing existing options again, option IDs and option value IDs are not changed
             $customOptionValues = $this->getCustomOptionValues($sku);
             $this->createImportModel($pathToFile)->importData();
-            $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+            $this->assertSame($customOptionValues, $this->getCustomOptionValues($sku));
         }
     }
 
@@ -543,11 +543,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 \Magento\Catalog\Model\Product::class
             );
             $productAfterImport->load($productBeforeImport->getId());
-            $this->assertEquals(
+            $this->assertSame(
                 @strtotime(date('m/d/Y', @strtotime($row['news_from_date']))),
                 @strtotime($productAfterImport->getNewsFromDate())
             );
-            $this->assertEquals(
+            $this->assertSame(
                 @strtotime($row['news_to_date']),
                 @strtotime($productAfterImport->getNewsToDate())
             );
@@ -772,10 +772,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $product = $this->getProductBySku('simple_new');
 
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
-        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
-        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+        $this->assertSame('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertSame('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertSame('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertSame('/m/a/magento_image.jpg', $product->getData('swatch_image'));
 
         $gallery = $product->getMediaGalleryImages();
         $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $gallery);
@@ -785,28 +785,28 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $imageItem = array_shift($items);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $imageItem);
-        $this->assertEquals('/m/a/magento_image.jpg', $imageItem->getFile());
-        $this->assertEquals('Image Label', $imageItem->getLabel());
+        $this->assertSame('/m/a/magento_image.jpg', $imageItem->getFile());
+        $this->assertSame('Image Label', $imageItem->getLabel());
 
         $smallImageItem = array_shift($items);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $smallImageItem);
-        $this->assertEquals('/m/a/magento_small_image.jpg', $smallImageItem->getFile());
-        $this->assertEquals('Small Image Label', $smallImageItem->getLabel());
+        $this->assertSame('/m/a/magento_small_image.jpg', $smallImageItem->getFile());
+        $this->assertSame('Small Image Label', $smallImageItem->getLabel());
 
         $thumbnailItem = array_shift($items);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $thumbnailItem);
-        $this->assertEquals('/m/a/magento_thumbnail.jpg', $thumbnailItem->getFile());
-        $this->assertEquals('Thumbnail Label', $thumbnailItem->getLabel());
+        $this->assertSame('/m/a/magento_thumbnail.jpg', $thumbnailItem->getFile());
+        $this->assertSame('Thumbnail Label', $thumbnailItem->getLabel());
 
         $additionalImageOneItem = array_shift($items);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $additionalImageOneItem);
-        $this->assertEquals('/m/a/magento_additional_image_one.jpg', $additionalImageOneItem->getFile());
-        $this->assertEquals('Additional Image Label One', $additionalImageOneItem->getLabel());
+        $this->assertSame('/m/a/magento_additional_image_one.jpg', $additionalImageOneItem->getFile());
+        $this->assertSame('Additional Image Label One', $additionalImageOneItem->getLabel());
 
         $additionalImageTwoItem = array_shift($items);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $additionalImageTwoItem);
-        $this->assertEquals('/m/a/magento_additional_image_two.jpg', $additionalImageTwoItem->getFile());
-        $this->assertEquals('Additional Image Label Two', $additionalImageTwoItem->getLabel());
+        $this->assertSame('/m/a/magento_additional_image_two.jpg', $additionalImageTwoItem->getFile());
+        $this->assertSame('Additional Image Label Two', $additionalImageTwoItem->getLabel());
     }
 
     /**
@@ -964,7 +964,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 1);
-        $this->assertEquals(
+        $this->assertSame(
             'Invalid value for Attribute Set column (set doesn\'t exist?)',
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
@@ -1009,7 +1009,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 1);
-        $this->assertEquals(
+        $this->assertSame(
             "Value for 'multiselect_attribute' attribute contains incorrect value, "
             . "see acceptable values on settings specified for Admin",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
@@ -1052,7 +1052,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
         $id = $product->getIdBySku('Configurable 03');
         $product->load($id);
-        $this->assertEquals('1', $product->getHasOptions());
+        $this->assertSame('1', $product->getHasOptions());
 
         $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->setCurrentStore('fixturestore');
 
@@ -1061,7 +1061,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $id = $simpleProduct->getIdBySku('Configurable 03-Option 1');
         $simpleProduct->load($id);
         $this->assertTrue(count($simpleProduct->getWebsiteIds()) == 2);
-        $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
+        $this->assertSame('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
     }
 
     /**
@@ -1127,7 +1127,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product->setStoreId($storeId);
         $product->load($id);
         $product->getProductUrl();
-        self::assertEquals($expected, $product->getRequestPath());
+        self::assertSame($expected, $product->getRequestPath());
         $registry->unregister('current_category');
     }
 
@@ -1157,7 +1157,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 1);
-        $this->assertEquals(
+        $this->assertSame(
             "Value for 'weight' attribute contains incorrect value",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
@@ -1378,7 +1378,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->setSource(
             $source
         )->validateData();
-        $this->assertEquals(
+        $this->assertSame(
             $expectedErrors[RowValidatorInterface::ERROR_DUPLICATE_URL_KEY],
             count($errors->getErrorsByCode([RowValidatorInterface::ERROR_DUPLICATE_URL_KEY]))
         );
@@ -1507,7 +1507,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 $importedProductLinks[$linkType][$linkedProductData->getSku()] = $linkedProductData->getPosition();
             }
         }
-        $this->assertEquals($linksData, $importedProductLinks);
+        $this->assertSame($linksData, $importedProductLinks);
     }
 
     /**
@@ -1546,7 +1546,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
-            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+            $this->assertSame($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }
 
@@ -1586,7 +1586,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
-            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+            $this->assertSame($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }
 
@@ -1623,7 +1623,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
-            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+            $this->assertSame($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }
 
@@ -1662,7 +1662,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
-            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+            $this->assertSame($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }
 
@@ -1702,7 +1702,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 \Magento\CatalogInventory\Model\StockRegistry::class
             );
             $stockItem = $stockRegistry->getStockItemBySku($sku);
-            $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
+            $this->assertSame($manageStockUseConfig, $stockItem->getUseConfigManageStock());
         }
     }
 
@@ -1761,7 +1761,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         sort($products);
         $result = array_values($actualProductSkus);
         sort($result);
-        $this->assertEquals(
+        $this->assertSame(
             $products,
             $result
         );
@@ -1831,15 +1831,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->getItems(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
 
         $product1 = $productRepository->get('simple1');
-        $this->assertEquals('\'", =|', $product1->getData('text_attribute'));
-        $this->assertEquals(
+        $this->assertSame('\'", =|', $product1->getData('text_attribute'));
+        $this->assertSame(
             implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
             $product1->getData('multiselect_attribute')
         );
 
         $product2 = $productRepository->get('simple2');
-        $this->assertEquals('', $product2->getData('text_attribute'));
-        $this->assertEquals(
+        $this->assertSame('', $product2->getData('text_attribute'));
+        $this->assertSame(
             implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
             $product2->getData('multiselect_attribute')
         );
@@ -2116,7 +2116,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         foreach ($products as $product) {
             $attributeSetName = $catalogConfig->getAttributeSetName($entityTypeId, $product->getAttributeSetId());
-            $this->assertEquals('attribute_set_test', $attributeSetName);
+            $this->assertSame('attribute_set_test', $attributeSetName);
         }
     }
 
@@ -2167,12 +2167,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $this->assertEquals(
+        $this->assertSame(
             3,
             count($productRepository->getList($searchCriteria)->getItems())
         );
         foreach ($importedPrices as $sku => $expectedPrice) {
-            $this->assertEquals($expectedPrice, $productRepository->get($sku)->getPrice());
+            $this->assertSame($expectedPrice, $productRepository->get($sku)->getPrice());
         }
 
         $source = $this->objectManager->create(
@@ -2193,13 +2193,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $this->assertEquals(
+        $this->assertSame(
             3,
             count($productRepository->getList($searchCriteria)->getItems()),
             'Ensures that new products were not created'
         );
         foreach ($updatedPrices as $sku => $expectedPrice) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedPrice,
                 $productRepository->get($sku, false, null, true)->getPrice(),
                 'Check that all products were updated'

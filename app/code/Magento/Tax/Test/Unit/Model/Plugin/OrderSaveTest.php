@@ -213,7 +213,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         $this->verifyOrderTaxes($expectedTaxes);
         $this->verifyItemTaxes($expectedItemTaxes);
 
-        $this->assertEquals($orderMock, $this->model->afterSave($this->subjectMock, $orderMock));
+        $this->assertSame($orderMock, $this->model->afterSave($this->subjectMock, $orderMock));
     }
 
     /**

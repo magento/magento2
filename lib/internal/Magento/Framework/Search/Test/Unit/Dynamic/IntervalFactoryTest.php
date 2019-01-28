@@ -56,7 +56,7 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
             $dataProviders
         );
 
-        $this->assertEquals($dataProviderMock, $this->model->create($data));
+        $this->assertSame($dataProviderMock, $this->model->create($data));
     }
 
     /**

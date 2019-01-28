@@ -133,6 +133,6 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals($expected, $row, 'Attributes were not added to result row');
+        $this->assertSame($expected, $row, 'Attributes were not added to result row');
     }
 }

@@ -47,7 +47,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
         );
-        $this->assertEquals(
+        $this->assertSame(
             true,
             $this->model->aroundIsProductConfigured(
                 $this->subjectMock,
@@ -68,7 +68,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('custom_product_type')
         );
-        $this->assertEquals(
+        $this->assertSame(
             'Expected',
             $this->model->aroundIsProductConfigured(
                 $this->subjectMock,

@@ -84,12 +84,12 @@ class RssTest extends \PHPUnit\Framework\TestCase
                 '_secure' => true,
                 '_query' => ['data' => $data],
             ])->will($this->returnValue($link));
-        $this->assertEquals($link, $this->rss->getLink());
+        $this->assertSame($link, $this->rss->getLink());
     }
 
     public function testGetLabel()
     {
-        $this->assertEquals('Subscribe to Order Status', $this->rss->getLabel());
+        $this->assertSame('Subscribe to Order Status', $this->rss->getLabel());
     }
 
     public function testIsRssAllowed()

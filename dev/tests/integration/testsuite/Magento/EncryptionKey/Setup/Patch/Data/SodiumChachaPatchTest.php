@@ -74,9 +74,9 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
 
         $rawConfigValue = array_pop($values);
 
-        $this->assertNotEquals($testValue, $rawConfigValue);
+        $this->assertNotSame($testValue, $rawConfigValue);
         $this->assertStringStartsWith('0:' . Encryptor::CIPHER_LATEST . ':', $rawConfigValue);
-        $this->assertEquals($testValue, $encyptor->decrypt($rawConfigValue));
+        $this->assertSame($testValue, $encyptor->decrypt($rawConfigValue));
     }
 
     private function legacyEncrypt(string $data): string

@@ -101,7 +101,7 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->any())
             ->method('getPart')
             ->willReturn("Part");
-        $this->assertEquals($this->selectHydrator->extract($this->selectMock), $result);
+        $this->assertSame($this->selectHydrator->extract($this->selectMock), $result);
     }
 
     /**

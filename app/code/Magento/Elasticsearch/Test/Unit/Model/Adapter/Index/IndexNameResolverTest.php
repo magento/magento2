@@ -153,7 +153,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getIndexPrefix')
             ->willReturn('indexName');
 
-        $this->assertEquals(
+        $this->assertSame(
             'indexName_product_1',
             $this->model->getIndexNameForAlias($this->storeId, $this->entityType)
         );
@@ -166,7 +166,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
     {
         $preparedIndex = ['1' => 'product'];
 
-        $this->assertEquals(
+        $this->assertSame(
             'product',
             $this->model->getIndexName($this->storeId, $this->entityType, $preparedIndex)
         );
@@ -179,7 +179,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
     {
         $preparedIndex = [];
 
-        $this->assertEquals(
+        $this->assertSame(
             'indexName_product_1_v1',
             $this->model->getIndexName($this->storeId, $this->entityType, $preparedIndex)
         );
@@ -190,7 +190,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIndexPattern()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'indexName_product_1_v',
             $this->model->getIndexPattern($this->storeId, $this->entityType)
         );
@@ -219,7 +219,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
             ->with('indexName_product_1')
             ->willReturn(true);
 
-        $this->assertEquals(
+        $this->assertSame(
             'indexName_product_1_v2',
             $this->model->getIndexFromAlias($this->storeId, $this->entityType)
         );
@@ -257,7 +257,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIndexNameCatalogSearchFullText()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'product',
             $this->model->getIndexMapping('catalogsearch_fulltext')
         );
@@ -268,7 +268,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIndexName()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'else_index_id',
             $this->model->getIndexMapping('else_index_id')
         );

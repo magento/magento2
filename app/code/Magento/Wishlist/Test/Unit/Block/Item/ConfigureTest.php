@@ -72,7 +72,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('product'))
             ->willReturn($product);
 
-        $this->assertEquals(['productType' => 'escapeHtml' . $typeId], $this->model->getWishlistOptions());
+        $this->assertSame(['productType' => 'escapeHtml' . $typeId], $this->model->getWishlistOptions());
     }
 
     public function testGetProduct()
@@ -88,7 +88,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
             $product
         );
 
-        $this->assertEquals($product, $this->model->getProduct());
+        $this->assertSame($product, $this->model->getProduct());
     }
 
     public function testSetLayout()
@@ -120,8 +120,8 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomAddToCartUrl')
             ->with('some_url');
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 
     public function testSetLayoutWithNoItem()
@@ -148,8 +148,8 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
         $blockMock->expects($this->never())
             ->method('setCustomAddToCartUrl');
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 
     public function testSetLayoutWithNoBlockAndItem()
@@ -167,7 +167,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
         $this->wishlistDataMock->expects($this->never())
             ->method('getAddToCartUrl');
 
-        $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
-        $this->assertEquals($layoutMock, $this->model->getLayout());
+        $this->assertSame($this->model, $this->model->setLayout($layoutMock));
+        $this->assertSame($layoutMock, $this->model->getLayout());
     }
 }

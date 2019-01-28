@@ -115,7 +115,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
 XML;
 
         $actualXml = $this->_soapFault->toXml();
-        $this->assertEquals(
+        $this->assertSame(
             $this->_sanitizeXML($expectedResult),
             $this->_sanitizeXML($actualXml),
             'Wrong SOAP fault message with default parameters.'
@@ -143,7 +143,7 @@ XML;
     ) {
         $actualResult = $this->_soapFault->getSoapFaultMessage($faultReason, $faultCode, $additionalParameters);
         $wsdlUrl = urlencode(self::WSDL_URL);
-        $this->assertEquals(
+        $this->assertSame(
             $this->_sanitizeXML(str_replace('{wsdl_url}', $wsdlUrl, $expectedResult)),
             $this->_sanitizeXML($actualResult),
             $assertMessage
@@ -254,7 +254,7 @@ XML;
 </env:Envelope>
 FAULT_XML;
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_sanitizeXML($expectedXml),
             $this->_sanitizeXML($actualXml),
             "Soap fault is invalid."

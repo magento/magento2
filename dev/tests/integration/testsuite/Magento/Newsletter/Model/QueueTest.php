@@ -98,6 +98,6 @@ class QueueTest extends \PHPUnit\Framework\TestCase
 
         $problem->load($queue->getId(), 'queue_id');
         $this->assertNotEmpty($problem->getId());
-        $this->assertEquals($errorMsg, $problem->getProblemErrorText());
+        $this->assertSame($errorMsg, $problem->getProblemErrorText());
     }
 }

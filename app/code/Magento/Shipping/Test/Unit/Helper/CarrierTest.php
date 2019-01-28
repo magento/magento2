@@ -50,7 +50,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($carriers)
         );
-        $this->assertEquals($result, $this->helper->getOnlineCarrierCodes());
+        $this->assertSame($result, $this->helper->getOnlineCarrierCodes());
     }
 
     /**
@@ -85,7 +85,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($configValue)
         );
-        $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
+        $this->assertSame($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
     }
 
     public function testIsCountryInEU()
@@ -101,7 +101,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             $this->returnValue("GB")
         );
 
-        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
-        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
+        $this->assertSame(true, $this->helper->isCountryInEU("GB"));
+        $this->assertSame(false, $this->helper->isCountryInEU("US"));
     }
 }

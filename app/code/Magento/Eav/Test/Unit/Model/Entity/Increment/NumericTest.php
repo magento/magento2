@@ -29,7 +29,7 @@ class NumericTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setLastId($lastId);
         $this->model->setPrefix($prefix);
-        $this->assertEquals($expectedResult, $this->model->getNextId());
+        $this->assertSame($expectedResult, $this->model->getNextId());
     }
 
     /**
@@ -53,16 +53,16 @@ class NumericTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPadLength()
     {
-        $this->assertEquals(8, $this->model->getPadLength());
+        $this->assertSame(8, $this->model->getPadLength());
         $this->model->setPadLength(10);
-        $this->assertEquals(10, $this->model->getPadLength());
+        $this->assertSame(10, $this->model->getPadLength());
     }
 
     public function getPadChar()
     {
-        $this->assertEquals('0', $this->model->getPadChar());
+        $this->assertSame('0', $this->model->getPadChar());
         $this->model->setPadChar('z');
-        $this->assertEquals('z', $this->model->getPadChar());
+        $this->assertSame('z', $this->model->getPadChar());
     }
 
     public function testFormat()
@@ -70,11 +70,11 @@ class NumericTest extends \PHPUnit\Framework\TestCase
         $this->model->setPrefix('prefix');
         $this->model->setPadLength(3);
         $this->model->setPadChar('z');
-        $this->assertEquals('prefixzz1', $this->model->format(1));
+        $this->assertSame('prefixzz1', $this->model->format(1));
     }
 
     public function testFrontendFormat()
     {
-        $this->assertEquals('value', $this->model->frontendFormat('value'));
+        $this->assertSame('value', $this->model->frontendFormat('value'));
     }
 }

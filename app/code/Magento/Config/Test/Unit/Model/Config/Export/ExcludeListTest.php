@@ -27,7 +27,7 @@ class ExcludeListTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertEquals(['web/test/test_sensitive'], $this->model->get());
+        $this->assertSame(['web/test/test_sensitive'], $this->model->get());
     }
 
     public function testIsPresent()

@@ -147,7 +147,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
         // assert plain string data
         foreach ($expectedDocBlock as $propertyName => $propertyData) {
             if (is_string($propertyData)) {
-                $this->assertAttributeEquals($propertyData, $propertyName, $actualDocBlock);
+                $this->assertAttributeSame($propertyData, $propertyName, $actualDocBlock);
             }
         }
 
@@ -160,8 +160,8 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             foreach ($actualTags as $actualTag) {
                 $tagName = $actualTag->getName();
                 $this->assertArrayHasKey($tagName, $expectedTagsData);
-                $this->assertEquals($expectedTagsData[$tagName]['name'], $tagName);
-                $this->assertEquals($expectedTagsData[$tagName]['description'], $actualTag->getDescription());
+                $this->assertSame($expectedTagsData[$tagName]['name'], $tagName);
+                $this->assertSame($expectedTagsData[$tagName]['description'], $actualTag->getDescription());
             }
         }
     }
@@ -178,8 +178,8 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey($methodName, $this->_methodData);
             $expectedMethodData = $this->_methodData[$methodName];
 
-            $this->assertEquals($expectedMethodData['name'], $method->getName());
-            $this->assertEquals($expectedMethodData['body'], $method->getBody());
+            $this->assertSame($expectedMethodData['name'], $method->getName());
+            $this->assertSame($expectedMethodData['body'], $method->getBody());
 
             // assert flags
             $this->_assertFlag(self::FLAG_STATIC, $expectedMethodData, $method);
@@ -198,21 +198,21 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
                     $this->assertArrayHasKey($parameterName, $actualParameters);
                     /** @var $actualParameter \Zend\Code\Generator\ParameterGenerator */
                     $actualParameter = $actualParameters[$parameterName];
-                    $this->assertEquals($parameterName, $actualParameter->getName());
+                    $this->assertSame($parameterName, $actualParameter->getName());
 
                     // assert reference flag
                     $this->_assertFlag(self::FLAG_REFERENCE, $parameterData, $actualParameter);
 
                     // assert parameter type
                     if (isset($parameterData['type'])) {
-                        $this->assertEquals($parameterData['type'], $actualParameter->getType());
+                        $this->assertSame($parameterData['type'], $actualParameter->getType());
                     }
 
                     // assert default value
                     if (isset($parameterData['defaultValue'])) {
                         /** @var $actualDefaultValue \Zend\Code\Generator\ValueGenerator */
                         $actualDefaultValue = $actualParameter->getDefaultValue();
-                        $this->assertEquals($parameterData['defaultValue'], $actualDefaultValue->getValue());
+                        $this->assertSame($parameterData['defaultValue'], $actualDefaultValue->getValue());
                     }
 
                     // assert variadic flag
@@ -237,7 +237,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $expectedFlagValue = isset($expectedData[$flagType]) && $expectedData[$flagType];
         $flagGetter = $this->_flagVerification[$flagType];
-        $this->assertEquals($expectedFlagValue, $actualObject->{$flagGetter}());
+        $this->assertSame($expectedFlagValue, $actualObject->{$flagGetter}());
     }
 
     /**
@@ -249,7 +249,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
         \Zend\Code\Generator\AbstractMemberGenerator $actualObject
     ) {
         $expectedVisibility = isset($expectedData['visibility']) ? $expectedData['visibility'] : 'public';
-        $this->assertEquals($expectedVisibility, $actualObject->getVisibility());
+        $this->assertSame($expectedVisibility, $actualObject->getVisibility());
     }
 
     /**
@@ -276,7 +276,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey($propertyName, $this->_propertyData);
             $expectedPropertyData = $this->_propertyData[$propertyName];
 
-            $this->assertEquals($expectedPropertyData['name'], $property->getName());
+            $this->assertSame($expectedPropertyData['name'], $property->getName());
 
             // assert flags
             $this->_assertFlag(self::FLAG_CONST, $expectedPropertyData, $property);
@@ -289,7 +289,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             if (isset($expectedPropertyData['defaultValue'])) {
                 /** @var $actualDefaultValue \Zend\Code\Generator\ValueGenerator */
                 $actualDefaultValue = $property->getDefaultValue();
-                $this->assertEquals($expectedPropertyData['defaultValue'], $actualDefaultValue->getValue());
+                $this->assertSame($expectedPropertyData['defaultValue'], $actualDefaultValue->getValue());
             }
 
             // assert docblock
@@ -319,7 +319,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testNamespaceName($actualNamespace, $expectedNamespace)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expectedNamespace,
             $this->_model->setNamespaceName($actualNamespace)
                 ->getNamespaceName()

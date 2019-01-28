@@ -73,11 +73,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testCreatedOnUpdate()
     {
         $this->_model->loadByUsername('user_created_date');
-        $this->assertEquals('2010-01-06 00:00:00', $this->_model->getCreated());
+        $this->assertSame('2010-01-06 00:00:00', $this->_model->getCreated());
         //reload to update lognum record
         $this->_model->getResource()->recordLogin($this->_model);
         $this->_model->reload();
-        $this->assertEquals('2010-01-06 00:00:00', $this->_model->getCreated());
+        $this->assertSame('2010-01-06 00:00:00', $this->_model->getCreated());
     }
 
     /**
@@ -99,9 +99,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testUpdateRoleOnSave()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
+        $this->assertSame(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
-        $this->assertEquals('admin_role', $this->_model->getRole()->getRoleName());
+        $this->assertSame('admin_role', $this->_model->getRole()->getRoleName());
     }
 
     public static function roleDataFixture()
@@ -122,7 +122,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_model->saveExtra(['test' => 'val']);
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $extra = $this->serializer->unserialize($this->_model->getExtra());
-        $this->assertEquals($extra['test'], 'val');
+        $this->assertSame($extra['test'], 'val');
     }
 
     /**
@@ -132,12 +132,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
-        $this->assertEquals(1, count($roles));
-        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
+        $this->assertSame(1, count($roles));
+        $this->assertSame(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $roles = $this->_model->getRoles();
-        $this->assertEquals(1, count($roles));
-        $this->assertEquals(self::$_newRole->getId(), $roles[0]);
+        $this->assertSame(1, count($roles));
+        $this->assertSame(self::$_newRole->getId(), $roles[0]);
     }
 
     /**
@@ -148,10 +148,10 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->getRole();
         $this->assertInstanceOf(\Magento\Authorization\Model\Role::class, $role);
-        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
+        $this->assertSame(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $role = $this->_model->getRole();
-        $this->assertEquals(self::$_newRole->getId(), $role->getId());
+        $this->assertSame(self::$_newRole->getId(), $role->getId());
     }
 
     /**
@@ -189,8 +189,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $firstname = \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME;
         $lastname = \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME;
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->assertEquals("$firstname $lastname", $this->_model->getName());
-        $this->assertEquals("$firstname///$lastname", $this->_model->getName('///'));
+        $this->assertSame("$firstname $lastname", $this->_model->getName());
+        $this->assertSame("$firstname///$lastname", $this->_model->getName('///'));
     }
 
     public function testGetUninitializedAclRole()
@@ -279,7 +279,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $loginTime = strtotime($this->_model->getLogdate());
 
         $this->assertTrue($beforeLogin <= $loginTime && $loginTime <= time());
-        $this->assertEquals(++$lognum, $this->_model->getLognum());
+        $this->assertSame(++$lognum, $this->_model->getLognum());
 
         $beforeLogin = time();
         $this->_model->login(
@@ -288,16 +288,16 @@ class UserTest extends \PHPUnit\Framework\TestCase
         )->reload();
         $loginTime = strtotime($this->_model->getLogdate());
         $this->assertTrue($beforeLogin <= $loginTime && $loginTime <= time());
-        $this->assertEquals(++$lognum, $this->_model->getLognum());
+        $this->assertSame(++$lognum, $this->_model->getLognum());
     }
 
     public function testReload()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_model->setFirstname('NewFirstName');
-        $this->assertEquals('NewFirstName', $this->_model->getFirstname());
+        $this->assertSame('NewFirstName', $this->_model->getFirstname());
         $this->_model->reload();
-        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME, $this->_model->getFirstname());
+        $this->assertSame(\Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME, $this->_model->getFirstname());
     }
 
     /**
@@ -307,7 +307,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->hasAssigned2Role($this->_model);
-        $this->assertEquals(1, count($role));
+        $this->assertSame(1, count($role));
         $this->assertArrayHasKey('role_id', $role[0]);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
@@ -357,7 +357,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\User\Model\User $model */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $model->load($this->_model->getId());
-        $this->assertEquals(
+        $this->assertSame(
             $this->_model->getPassword(),
             $model->getPassword(),
             'Password data has been corrupted during saving'
@@ -448,8 +448,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($date);
         $this->_model->save();
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->assertEquals('test', $this->_model->getRpToken());
-        $this->assertEquals(strtotime($date), strtotime($this->_model->getRpTokenCreatedAt()));
+        $this->assertSame('test', $this->_model->getRpToken());
+        $this->assertSame(strtotime($date), strtotime($this->_model->getRpTokenCreatedAt()));
     }
 
     /**

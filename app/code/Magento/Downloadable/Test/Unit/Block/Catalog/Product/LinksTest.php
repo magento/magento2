@@ -101,7 +101,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedHtml));
 
         $result = $this->linksBlock->getLinkPrice($linkMock);
-        $this->assertEquals($expectedHtml, $result);
+        $this->assertSame($expectedHtml, $result);
     }
 
     public function testGetJsonConfig()
@@ -153,7 +153,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($json));
 
         $encodedJsonConfig = $this->linksBlock->getJsonConfig();
-        $this->assertEquals(json_encode($config), $encodedJsonConfig);
+        $this->assertSame(json_encode($config), $encodedJsonConfig);
     }
 
     /**

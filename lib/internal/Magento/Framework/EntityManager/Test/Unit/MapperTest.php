@@ -37,7 +37,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             $inputData
         );
 
-        $this->assertEquals($expectedOutput, $actualOutput);
+        $this->assertSame($expectedOutput, $actualOutput);
     }
 
     /**
@@ -69,7 +69,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             $inputData
         );
 
-        $this->assertEquals($expectedOutput, $actualOutput);
+        $this->assertSame($expectedOutput, $actualOutput);
     }
 
     /**

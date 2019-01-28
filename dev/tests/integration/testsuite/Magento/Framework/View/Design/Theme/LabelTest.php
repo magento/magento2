@@ -32,9 +32,9 @@ class LabelTest extends \PHPUnit\Framework\TestCase
         $expectedItemsCount = count($expectedCollection->getLabels());
 
         $labelsCollection = $this->_model->getLabelsCollection();
-        $this->assertEquals($expectedItemsCount, count($labelsCollection));
+        $this->assertSame($expectedItemsCount, count($labelsCollection));
 
         $labelsCollection = $this->_model->getLabelsCollection('-- Please Select --');
-        $this->assertEquals(++$expectedItemsCount, count($labelsCollection));
+        $this->assertSame(++$expectedItemsCount, count($labelsCollection));
     }
 }

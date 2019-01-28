@@ -51,7 +51,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->once())
             ->method('isSetFlag')
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->urlBuilder->getUrl($version, $edition, $locale)
         );

@@ -21,7 +21,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testSendResponseDefaultBehaviour()
     {
-        $this->assertEquals(0, $this->model->sendResponse());
+        $this->assertSame(0, $this->model->sendResponse());
     }
 
     /**
@@ -31,7 +31,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setCode($code);
         $result = $this->model->sendResponse();
-        $this->assertEquals($expectedCode, $result);
+        $this->assertSame($expectedCode, $result);
     }
 
     /**

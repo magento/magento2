@@ -205,7 +205,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getLastname')
             ->willReturn('Doe');
 
-        $this->assertEquals($expectedData, $this->model->getData());
+        $this->assertSame($expectedData, $this->model->getData());
     }
 
     public function testGetData(): void
@@ -259,7 +259,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('overrideFileUploaderData')
             ->willReturnSelf();
 
-        $this->assertEquals($expectedData, $this->model->getData());
+        $this->assertSame($expectedData, $this->model->getData());
     }
 
     /**

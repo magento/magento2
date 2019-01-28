@@ -104,7 +104,7 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
 
         $actualResult = $this->model->getCollection($this->productMock, 'crosssell');
 
-        $this->assertEquals($expectedResult, $actualResult, 'Sort order of linked products in incorrect');
+        $this->assertSame($expectedResult, $actualResult, 'Sort order of linked products in incorrect');
     }
 
     /**

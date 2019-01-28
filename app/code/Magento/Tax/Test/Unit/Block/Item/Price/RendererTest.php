@@ -93,7 +93,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->will($this->returnValue($flag));
 
-        $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
+        $this->assertSame($flag, $this->renderer->displayPriceInclTax());
     }
 
     /**
@@ -143,7 +143,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->will($this->returnValue($flag));
 
-        $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
+        $this->assertSame($flag, $this->renderer->displayPriceExclTax());
     }
 
     /**
@@ -193,7 +193,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->will($this->returnValue($flag));
 
-        $this->assertEquals($flag, $this->renderer->displayBothPrices());
+        $this->assertSame($flag, $this->renderer->displayBothPrices());
     }
 
     /**
@@ -248,7 +248,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($storeMock));
 
         $this->renderer->setItem($itemMock);
-        $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
+        $this->assertSame($formattedPrice, $this->renderer->formatPrice($price));
     }
 
     public function testFormatPriceOrderItem()
@@ -275,7 +275,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($orderMock));
 
         $this->renderer->setItem($itemMock);
-        $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
+        $this->assertSame($formattedPrice, $this->renderer->formatPrice($price));
     }
 
     public function testFormatPriceInvoiceItem()
@@ -312,12 +312,12 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($orderItemMock));
 
         $this->renderer->setItem($invoiceItemMock);
-        $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
+        $this->assertSame($formattedPrice, $this->renderer->formatPrice($price));
     }
 
     public function testGetZone()
     {
-        $this->assertEquals(Render::ZONE_CART, $this->renderer->getZone());
+        $this->assertSame(Render::ZONE_CART, $this->renderer->getZone());
     }
 
     public function testGetStoreId()
@@ -334,7 +334,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($storeId));
 
         $this->renderer->setItem($itemMock);
-        $this->assertEquals($storeId, $this->renderer->getStoreId());
+        $this->assertSame($storeId, $this->renderer->getStoreId());
     }
 
     public function testGetItemDisplayPriceExclTaxQuoteItem()
@@ -352,7 +352,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($price));
 
         $this->renderer->setItem($quoteItemMock);
-        $this->assertEquals($price, $this->renderer->getItemDisplayPriceExclTax());
+        $this->assertSame($price, $this->renderer->getItemDisplayPriceExclTax());
     }
 
     public function testGetItemDisplayPriceExclTaxOrderItem()
@@ -370,7 +370,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($price));
 
         $this->renderer->setItem($orderItemMock);
-        $this->assertEquals($price, $this->renderer->getItemDisplayPriceExclTax());
+        $this->assertSame($price, $this->renderer->getItemDisplayPriceExclTax());
     }
 
     public function testGetTotalAmount()
@@ -411,7 +411,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getDiscountAmount')
             ->will($this->returnValue($discountAmount));
 
-        $this->assertEquals($expectedValue, $this->renderer->getTotalAmount($itemMock));
+        $this->assertSame($expectedValue, $this->renderer->getTotalAmount($itemMock));
     }
 
     public function testGetBaseTotalAmount()
@@ -452,6 +452,6 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseDiscountAmount')
             ->will($this->returnValue($baseDiscountAmount));
 
-        $this->assertEquals($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
+        $this->assertSame($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
     }
 }

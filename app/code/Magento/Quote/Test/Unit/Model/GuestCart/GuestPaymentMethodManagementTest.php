@@ -71,20 +71,20 @@ class GuestPaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $this->paymentMethodManagementMock->expects($this->once())->method('get')->willReturn($this->paymentMock);
-        $this->assertEquals($this->paymentMock, $this->model->get($this->maskedCartId));
+        $this->assertSame($this->paymentMock, $this->model->get($this->maskedCartId));
     }
 
     public function testGetList()
     {
         $paymentMethod = $this->createMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class);
         $this->paymentMethodManagementMock->expects($this->once())->method('getList')->willReturn([$paymentMethod]);
-        $this->assertEquals([$paymentMethod], $this->model->getList($this->maskedCartId));
+        $this->assertSame([$paymentMethod], $this->model->getList($this->maskedCartId));
     }
 
     public function testSetSimpleProduct()
     {
         $paymentId = 20;
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->willReturn($paymentId);
-        $this->assertEquals($paymentId, $this->model->set($this->maskedCartId, $this->paymentMock));
+        $this->assertSame($paymentId, $this->model->set($this->maskedCartId, $this->paymentMock));
     }
 }

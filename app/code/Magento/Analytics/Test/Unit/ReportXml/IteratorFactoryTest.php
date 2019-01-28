@@ -51,6 +51,6 @@ class IteratorFactoryTest extends \PHPUnit\Framework\TestCase
             ->with(\IteratorIterator::class, ['iterator' => $arrayObject])
             ->willReturn($this->iteratorIteratorMock);
 
-        $this->assertEquals($this->iteratorFactory->create($arrayObject), $this->iteratorIteratorMock);
+        $this->assertSame($this->iteratorFactory->create($arrayObject), $this->iteratorIteratorMock);
     }
 }

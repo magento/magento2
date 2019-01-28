@@ -275,7 +275,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->with($redirectUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -329,7 +329,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->with($productUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     public function testExecuteProductException()
@@ -360,7 +360,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->with($refererUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
     public function testExecuteException()
@@ -391,6 +391,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->with($refererUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 }

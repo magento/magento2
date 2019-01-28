@@ -147,6 +147,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->returnSelf()
         );
 
-        $this->assertEquals($this->model, $this->model->setIdFilter(1));
+        $this->assertSame($this->model, $this->model->setIdFilter(1));
     }
 }

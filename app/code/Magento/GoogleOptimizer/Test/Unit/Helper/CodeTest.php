@@ -47,7 +47,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
             $storeId
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_codeModelMock,
             $this->_helper->getCodeObjectByEntity(
                 $categoryMock,
@@ -75,7 +75,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
             $storeId
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_codeModelMock,
             $this->_helper->getCodeObjectByEntity(
                 $productMock,
@@ -100,7 +100,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
             \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_codeModelMock,
             $this->_helper->getCodeObjectByEntity($pageMock, \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE)
         );
@@ -119,7 +119,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         $entity->expects($this->exactly(2))->method('getId')->will($this->returnValue($entityId));
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_codeModelMock,
             $this->_helper->getCodeObjectByEntity($entity, \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE)
         );
@@ -138,7 +138,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         $entity->expects($this->exactly(1))->method('getId')->will($this->returnValue($entityId));
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->_codeModelMock,
             $this->_helper->getCodeObjectByEntity($entity, \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE)
         );

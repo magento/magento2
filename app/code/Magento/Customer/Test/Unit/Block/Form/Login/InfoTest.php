@@ -61,7 +61,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $this->block->setCreateAccountUrl($expectedUrl);
         $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
-        $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
+        $this->assertSame($expectedUrl, $this->block->getCreateAccountUrl());
     }
 
     public function testGetCreateAccountUrlWithContext()
@@ -81,7 +81,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($expectedUrl)
         );
-        $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
+        $this->assertSame($expectedUrl, $this->block->getCreateAccountUrl());
     }
 
     public function testGetCreateAccountUrl()
@@ -90,6 +90,6 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $this->customerUrl->expects($this->any())->method('getRegisterUrl')->will($this->returnValue($expectedUrl));
         $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
-        $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
+        $this->assertSame($expectedUrl, $this->block->getCreateAccountUrl());
     }
 }

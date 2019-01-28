@@ -70,7 +70,7 @@ class SearchTermManagerTest extends \PHPUnit\Framework\TestCase
         }
 
         foreach ($this->searchTermConfiguration as $searchTerm) {
-            $this->assertEquals($searchTerm['count'], $this->searchTermsUsage[$searchTerm['term']]['used']);
+            $this->assertSame($searchTerm['count'], $this->searchTermsUsage[$searchTerm['term']]['used']);
         }
     }
 }

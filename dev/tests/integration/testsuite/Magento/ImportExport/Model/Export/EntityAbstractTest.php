@@ -44,8 +44,8 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $this->_model->addMessageTemplate($errorCode, $errorMessage);
         $this->_model->addRowError($errorCode, $errorNum);
 
-        $this->assertEquals(1, $this->_model->getErrorsCount());
-        $this->assertEquals(1, $this->_model->getInvalidRowsCount());
+        $this->assertSame(1, $this->_model->getErrorsCount());
+        $this->assertSame(1, $this->_model->getInvalidRowsCount());
         $this->assertArrayHasKey($errorMessage, $this->_model->getErrorMessages());
     }
 

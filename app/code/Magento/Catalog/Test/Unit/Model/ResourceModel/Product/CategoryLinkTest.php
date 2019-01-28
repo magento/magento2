@@ -93,7 +93,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['category_id' => 3, 'position' => 10],
                 ['category_id' => 4, 'position' => 20],
@@ -143,7 +143,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
         sort($actualResult);
         sort($expectedResult);
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**

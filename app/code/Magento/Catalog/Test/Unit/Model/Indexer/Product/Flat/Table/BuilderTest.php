@@ -42,6 +42,6 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                 'tableName' => $tableName
             ]
         );
-        $this->assertEquals($builder, $builder->addColumn('test', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER));
+        $this->assertSame($builder, $builder->addColumn('test', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER));
     }
 }

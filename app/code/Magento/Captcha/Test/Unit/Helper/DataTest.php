@@ -135,8 +135,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         // fixture
         $this->assertArrayHasKey('label', $fonts['font_code']);
         $this->assertArrayHasKey('path', $fonts['font_code']);
-        $this->assertEquals('Label', $fonts['font_code']['label']);
-        $this->assertEquals($expectedFontPath, $fonts['font_code']['path']);
+        $this->assertSame('Label', $fonts['font_code']['label']);
+        $this->assertSame($expectedFontPath, $fonts['font_code']['path']);
     }
 
     /**
@@ -182,7 +182,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetImgUrl()
     {
-        $this->assertEquals($this->helper->getImgUrl(), 'http://localhost/pub/media/captcha/base/');
+        $this->assertSame($this->helper->getImgUrl(), 'http://localhost/pub/media/captcha/base/');
     }
 
     /**

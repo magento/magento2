@@ -78,7 +78,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('getAddressType')
             ->will($this->returnValue($addressType));
         $actualWarnings = $this->validator->validate($this->addressMock);
-        $this->assertEquals($expectedWarnings, $actualWarnings);
+        $this->assertSame($expectedWarnings, $actualWarnings);
     }
 
     /**

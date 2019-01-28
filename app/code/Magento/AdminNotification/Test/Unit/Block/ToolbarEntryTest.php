@@ -39,7 +39,7 @@ class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
     {
         $notificationsCount = 100;
         $block = $this->_getBlockInstance($notificationsCount);
-        $this->assertEquals($notificationsCount, $block->getUnreadNotificationCount());
+        $this->assertSame($notificationsCount, $block->getUnreadNotificationCount());
     }
 
     public function testGetLatestUnreadNotifications()
@@ -69,6 +69,6 @@ class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
         $result = $model->getLatestUnreadNotifications();
 
         // 4. Compare actual result with expected result
-        $this->assertEquals($notificationList, $result);
+        $this->assertSame($notificationList, $result);
     }
 }

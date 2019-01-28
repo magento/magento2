@@ -61,7 +61,7 @@ class SwitcherPluginTest extends \PHPUnit\Framework\TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
 
-        $this->assertEquals(['', $getUrlParams], $this->plugin->beforeGetUrl($this->subjectMock, '', []));
+        $this->assertSame(['', $getUrlParams], $this->plugin->beforeGetUrl($this->subjectMock, '', []));
     }
 
     /**

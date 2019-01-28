@@ -106,7 +106,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE)
             ->willReturn(1);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'customerLoginUrl' => $loginUrl,
                 'isRedirectRequired' => true,
@@ -134,7 +134,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE)
             ->willReturn(0);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'customerLoginUrl' => $loginUrl,
                 'isRedirectRequired' => false,

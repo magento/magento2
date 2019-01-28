@@ -62,7 +62,7 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
             ->method('getServer')
             ->will($this->returnValueMap($serverValueMap));
 
-        $this->assertEquals($expected, $remoteAddress->getRemoteAddress($ipToLong));
+        $this->assertSame($expected, $remoteAddress->getRemoteAddress($ipToLong));
     }
 
     /**

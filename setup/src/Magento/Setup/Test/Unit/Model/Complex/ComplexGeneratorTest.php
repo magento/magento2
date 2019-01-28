@@ -64,7 +64,7 @@ class ComplexGeneratorTest extends \PHPUnit\Framework\TestCase
         foreach ($model as $row) {
             $rows[] = $row;
         }
-        $this->assertEquals(
+        $this->assertSame(
             [
                 ['id' => '1', 'name' => 'Static', 'calculated' => 10],
                 ['id' => '', 'name' => 'xxx 1', 'calculated' => ''],
@@ -86,7 +86,7 @@ class ComplexGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $model = new Generator($this->getPattern(), 4);
         for ($i = 0; $i < 32; $i++) {
-            $this->assertEquals($model->getIndex($i), floor($i / $this->getPattern()->getRowsCount()) + 1);
+            $this->assertSame($model->getIndex($i), floor($i / $this->getPattern()->getRowsCount()) + 1);
         }
     }
 }

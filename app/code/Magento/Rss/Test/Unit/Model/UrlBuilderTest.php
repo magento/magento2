@@ -49,7 +49,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
             ->with('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(false));
-        $this->assertEquals('', $this->urlBuilder->getUrl());
+        $this->assertSame('', $this->urlBuilder->getUrl());
     }
 
     public function testGetUrl()
@@ -60,7 +60,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
         $this->urlInterface->expects($this->once())->method('getUrl')
             ->with('rss/feed/index', ['type' => 'rss_feed'])
             ->will($this->returnValue('http://magento.com/rss/feed/index/type/rss_feed'));
-        $this->assertEquals(
+        $this->assertSame(
             'http://magento.com/rss/feed/index/type/rss_feed',
             $this->urlBuilder->getUrl(['type' => 'rss_feed'])
         );

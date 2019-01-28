@@ -148,7 +148,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
             $dataObjectType
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $value,
             $expectedValue
         );

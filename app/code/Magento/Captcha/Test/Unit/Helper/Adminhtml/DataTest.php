@@ -43,7 +43,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConfig()
     {
-        $this->assertEquals('1', $this->_model->getConfig('qwe'));
+        $this->assertSame('1', $this->_model->getConfig('qwe'));
     }
 
     /**

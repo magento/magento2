@@ -60,6 +60,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $this->productOptionConfig->expects($this->any())->method('getAll')->will($this->returnValue($allOptions));
 
-        $this->assertEquals($expect, $this->model->toOptionArray());
+        $this->assertSame($expect, $this->model->toOptionArray());
     }
 }

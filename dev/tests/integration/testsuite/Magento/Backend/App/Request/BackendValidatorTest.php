@@ -334,7 +334,7 @@ class BackendValidatorTest extends TestCase
         /** @var Response $response */
         $response = $caught->getReplaceResult();
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals(
+        $this->assertSame(
             self::AWARE_LOCATION_VALUE,
             $response->getHeader('Location')->getFieldValue()
         );
@@ -387,7 +387,7 @@ class BackendValidatorTest extends TestCase
         //valid request.
         $this->assertNotNull($caught);
         $this->assertCount(1, $caught->getMessages());
-        $this->assertEquals(
+        $this->assertSame(
             self::CSRF_AWARE_MESSAGE,
             $caught->getMessages()[0]->getText()
         );
@@ -428,6 +428,6 @@ class BackendValidatorTest extends TestCase
         $response = $this->httpResponseFactory->create();
         $result->renderResult($response);
         $this->assertEmpty($response->getBody());
-        $this->assertEquals(401, $response->getHttpResponseCode());
+        $this->assertSame(401, $response->getHttpResponseCode());
     }
 }

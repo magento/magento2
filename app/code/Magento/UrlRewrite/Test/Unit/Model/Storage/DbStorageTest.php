@@ -111,7 +111,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite2']));
 
-        $this->assertEquals([['urlRewrite1'], ['urlRewrite2']], $this->storage->findAllByData($data));
+        $this->assertSame([['urlRewrite1'], ['urlRewrite2']], $this->storage->findAllByData($data));
     }
 
     public function testFindOneByData()
@@ -146,7 +146,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+        $this->assertSame(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
     public function testFindOneByDataWithRequestPath()
@@ -196,7 +196,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+        $this->assertSame(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
     public function testFindOneByDataWithRequestPathIsDifferent()
@@ -259,7 +259,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+        $this->assertSame(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
     public function testFindOneByDataWithRequestPathIsDifferent2()
@@ -322,7 +322,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+        $this->assertSame(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
     public function testFindOneByDataWithRequestPathIsRedirect()
@@ -374,7 +374,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+        $this->assertSame(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
     public function testFindOneByDataWithRequestPathTwoResults()
@@ -433,7 +433,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+        $this->assertSame(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
     /**

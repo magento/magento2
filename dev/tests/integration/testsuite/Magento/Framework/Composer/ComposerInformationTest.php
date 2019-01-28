@@ -81,7 +81,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~5.5.0|~5.6.0|~7.0.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertSame("~5.5.0|~5.6.0|~7.0.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**
@@ -140,7 +140,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
         $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypesByName();
 
         $this->assertArrayHasKey('composer/composer', $requiredPackagesAndTypes);
-        $this->assertEquals('library', $requiredPackagesAndTypes['composer/composer']);
+        $this->assertSame('library', $requiredPackagesAndTypes['composer/composer']);
     }
 
     /**
@@ -188,9 +188,9 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
         if ($composerDir === 'testFromCreateProject') {
-            $this->assertEquals(['https://repo.magento.com/'], $composerInfo->getRootRepositories());
+            $this->assertSame(['https://repo.magento.com/'], $composerInfo->getRootRepositories());
         } else {
-            $this->assertEquals([], $composerInfo->getRootRepositories());
+            $this->assertSame([], $composerInfo->getRootRepositories());
         }
     }
 

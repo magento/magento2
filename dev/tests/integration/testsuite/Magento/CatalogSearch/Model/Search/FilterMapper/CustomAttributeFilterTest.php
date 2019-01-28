@@ -60,7 +60,7 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
 
         $resultSelect = $this->customAttributeFilter->apply($select, ...$filters);
 
-        $this->assertEquals(
+        $this->assertSame(
             (string) $select,
             (string) $resultSelect,
             'Select queries must be the same in case when we have no filters to apply.'
@@ -108,7 +108,7 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
 
         $expectedSelect = $this->getSqlForOneAttributeSearch();
 
-        $this->assertEquals(
+        $this->assertSame(
             (string) $expectedSelect,
             (string) $resultSelect,
             'Select queries must be the same in case when we have one filter to apply.'
@@ -139,7 +139,7 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
 
         $expectedSelect = $this->getSqlForTwoAttributeSearch();
 
-        $this->assertEquals(
+        $this->assertSame(
             (string) $expectedSelect,
             (string) $resultSelect,
             'Select queries must be the same in case when we have two filters to apply.'

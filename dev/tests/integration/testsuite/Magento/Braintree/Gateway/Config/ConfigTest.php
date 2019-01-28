@@ -43,11 +43,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->systemConfig->save();
 
         $countrySpecificCardTypeConfig = $this->config->getCountrySpecificCardTypeConfig();
-        $this->assertEquals($expected, $countrySpecificCardTypeConfig);
+        $this->assertSame($expected, $countrySpecificCardTypeConfig);
 
         foreach ($expected as $country => $expectedCreditCardTypes) {
             $countryAvailableCardTypes = $this->config->getCountryAvailableCardTypes($country);
-            $this->assertEquals($expectedCreditCardTypes, $countryAvailableCardTypes);
+            $this->assertSame($expectedCreditCardTypes, $countryAvailableCardTypes);
         }
     }
 

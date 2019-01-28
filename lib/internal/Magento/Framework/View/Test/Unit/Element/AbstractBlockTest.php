@@ -102,7 +102,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     public function testGetUiId($expectedResult, $nameInLayout, $methodArguments)
     {
         $this->block->setNameInLayout($nameInLayout);
-        $this->assertEquals($expectedResult, call_user_func_array([$this->block, 'getUiId'], $methodArguments));
+        $this->assertSame($expectedResult, call_user_func_array([$this->block, 'getUiId'], $methodArguments));
     }
 
     /**
@@ -164,8 +164,8 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         );
         $block->setData('module_name', 'Magento_Theme');
 
-        $this->assertEquals('one', $block->getVar('v1'));
-        $this->assertEquals('two', $block->getVar('v2', $module));
+        $this->assertSame('one', $block->getVar('v1'));
+        $this->assertSame('two', $block->getVar('v2', $module));
     }
 
     /**
@@ -183,7 +183,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     {
         $cacheKey = 'testKey';
         $this->block->setData('cache_key', $cacheKey);
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+        $this->assertSame(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
     }
 
     /**
@@ -194,7 +194,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $nameInLayout = 'testBlock';
         $this->block->setNameInLayout($nameInLayout);
         $cacheKey = sha1($nameInLayout);
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+        $this->assertSame(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
     }
 
     /**

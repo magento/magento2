@@ -45,6 +45,6 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
             ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $this->assertEquals($subjectMock, $this->model->afterDelete($subjectMock, $subjectMock));
+        $this->assertSame($subjectMock, $this->model->afterDelete($subjectMock, $subjectMock));
     }
 }

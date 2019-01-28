@@ -42,11 +42,11 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir/webapi_async.xsd', $this->model->getSchema());
+        $this->assertSame('schema_dir/webapi_async.xsd', $this->model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals(null, $this->model->getPerFileSchema());
+        $this->assertSame(null, $this->model->getPerFileSchema());
     }
 }

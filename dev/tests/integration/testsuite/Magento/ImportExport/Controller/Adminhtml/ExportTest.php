@@ -84,14 +84,14 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals(
+        $this->assertSame(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//fieldset[@id="base_fieldset"]',
                 $body
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             3,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//fieldset[@id="base_fieldset"]/div[contains(@class,"field")]',

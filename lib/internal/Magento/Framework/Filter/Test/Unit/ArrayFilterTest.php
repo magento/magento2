@@ -41,6 +41,6 @@ class ArrayFilterTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT and ensure that array items were filtered correctly */
         $inputArray = ['field1' => 'value1', 'field2' => 'value2', 'field3' => 'value3'];
         $expectedOutput = ['field1' => '(value1)', 'field2' => '[(value2)]', 'field3' => '(value3)'];
-        $this->assertEquals($expectedOutput, $arrayFilter->filter($inputArray), 'Array was filtered incorrectly.');
+        $this->assertSame($expectedOutput, $arrayFilter->filter($inputArray), 'Array was filtered incorrectly.');
     }
 }

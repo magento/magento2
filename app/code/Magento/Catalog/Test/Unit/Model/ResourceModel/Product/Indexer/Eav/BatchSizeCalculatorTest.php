@@ -31,7 +31,7 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
         $batchManagerMock->expects($this->once())
             ->method('ensureBatchSize')
             ->with($connectionMock, $batchSizes[$indexerId]);
-        $this->assertEquals($batchSizes[$indexerId], $model->estimateBatchSize($connectionMock, $indexerId));
+        $this->assertSame($batchSizes[$indexerId], $model->estimateBatchSize($connectionMock, $indexerId));
     }
 
     /**

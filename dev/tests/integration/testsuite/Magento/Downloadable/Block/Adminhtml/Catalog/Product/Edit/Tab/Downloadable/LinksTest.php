@@ -49,7 +49,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         );
         $block->unsetChild('upload_button');
         $layout->addBlock($text, 'upload_button', 'links');
-        self::assertEquals($expected, $block->getUploadButtonHtml());
+        self::assertSame($expected, $block->getUploadButtonHtml());
     }
 
     /**
@@ -101,7 +101,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         )->createBlock(
             \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links::class
         );
-        $this->assertEquals($expectedResult, $block->getLinksTitle());
+        $this->assertSame($expectedResult, $block->getLinksTitle());
     }
 
     /**

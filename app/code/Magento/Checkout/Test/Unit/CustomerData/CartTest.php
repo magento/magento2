@@ -163,7 +163,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             'website_id' => $websiteId,
             'subtotalAmount' => 200,
         ];
-        $this->assertEquals($expectedResult, $this->model->getSectionData());
+        $this->assertSame($expectedResult, $this->model->getSectionData());
     }
 
     /**
@@ -266,6 +266,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
             'website_id' => $websiteId,
             'subtotalAmount' => 200,
         ];
-        $this->assertEquals($expectedResult, $this->model->getSectionData());
+        $this->assertSame($expectedResult, $this->model->getSectionData());
     }
 }

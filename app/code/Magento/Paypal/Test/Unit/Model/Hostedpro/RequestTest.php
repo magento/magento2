@@ -75,10 +75,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->method('getShippingAddress')
             ->will($this->returnValue($shipping));
         $this->_model->setOrder($order);
-        static::assertEquals($billingState, $this->_model->getData('billing_state'));
-        static::assertEquals($state, $this->_model->getData('state'));
-        static::assertEquals($countryId, $this->_model->getData('billing_country'));
-        static::assertEquals($countryId, $this->_model->getData('country'));
+        static::assertSame($billingState, $this->_model->getData('billing_state'));
+        static::assertSame($state, $this->_model->getData('state'));
+        static::assertSame($countryId, $this->_model->getData('billing_country'));
+        static::assertSame($countryId, $this->_model->getData('country'));
     }
 
     /**
@@ -154,9 +154,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $paymentMethodMock->expects($this->once())->method('getCancelUrl')->willReturn('https://test.com/cancelurl');
         $paymentMethodMock->expects($this->once())->method('getReturnUrl')->willReturn('https://test.com/returnurl');
         $this->localeResolverMock->expects($this->once())->method('getLocale')->willReturn('en_US');
-        $this->assertEquals($this->_model, $this->_model->setPaymentMethod($paymentMethodMock));
-        $this->assertEquals('US', $this->_model->getData('lc'));
-        $this->assertEquals($expectedData, $this->_model->getData());
+        $this->assertSame($this->_model, $this->_model->setPaymentMethod($paymentMethodMock));
+        $this->assertSame('US', $this->_model->getData('lc'));
+        $this->assertSame($expectedData, $this->_model->getData());
     }
 
     /**
@@ -188,7 +188,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectation['buyer_email']);
 
         $this->_model->setOrder($order);
-        static::assertEquals($expectation, $this->_model->getData());
+        static::assertSame($expectation, $this->_model->getData());
     }
 
     /**
@@ -245,7 +245,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->willReturn($subtotal);
         $this->_model->setAmount($order);
 
-        static::assertEquals($expectation, $this->_model->getData());
+        static::assertSame($expectation, $this->_model->getData());
     }
 
     /**
@@ -302,7 +302,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->willReturn($subtotal);
         $this->_model->setAmount($order);
 
-        static::assertEquals($expectation, $this->_model->getData());
+        static::assertSame($expectation, $this->_model->getData());
     }
 
     /**
@@ -356,7 +356,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setAmount($order);
 
-        static::assertEquals($expectation, $this->_model->getData());
+        static::assertSame($expectation, $this->_model->getData());
     }
 
     /**

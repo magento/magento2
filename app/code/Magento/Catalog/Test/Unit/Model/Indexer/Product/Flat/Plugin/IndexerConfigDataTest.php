@@ -63,7 +63,7 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlat);
 
-        $this->assertEquals($outputData, $this->plugin->afterGet($this->subjectMock, $inputData, $path, $default));
+        $this->assertSame($outputData, $this->plugin->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 
     /**

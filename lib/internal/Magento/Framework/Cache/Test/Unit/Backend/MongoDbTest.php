@@ -42,7 +42,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $result = new \ArrayIterator($ids);
         $this->_collection->expects($this->once())->method('find')->will($this->returnValue($result));
         $actual = $this->_model->getIds();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -64,7 +64,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     {
         $this->_collection->expects($this->once())->method('distinct')->with('tags')->will($this->returnValue($tags));
         $actual = $this->_model->getTags();
-        $this->assertEquals($tags, $actual);
+        $this->assertSame($tags, $actual);
     }
 
     /**
@@ -95,7 +95,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($expectedOutput)
         );
         $actualIds = $this->_model->{$method}($tags);
-        $this->assertEquals($expectedIds, $actualIds);
+        $this->assertSame($expectedIds, $actualIds);
     }
 
     /**
@@ -145,9 +145,9 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     public function testGetIdsMatchingTagsNoInputTags()
     {
         $this->_collection->expects($this->never())->method('find');
-        $this->assertEquals([], $this->_model->getIdsMatchingTags([]));
-        $this->assertEquals([], $this->_model->getIdsNotMatchingTags([]));
-        $this->assertEquals([], $this->_model->getIdsMatchingAnyTags([]));
+        $this->assertSame([], $this->_model->getIdsMatchingTags([]));
+        $this->assertSame([], $this->_model->getIdsNotMatchingTags([]));
+        $this->assertSame([], $this->_model->getIdsMatchingAnyTags([]));
     }
 
     public function testGetFillingPercentage()
@@ -176,7 +176,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($mongoOutput)
         );
         $actual = $this->_model->getMetadatas($cacheId);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**

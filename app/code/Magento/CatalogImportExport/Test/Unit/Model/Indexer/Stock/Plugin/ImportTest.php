@@ -25,6 +25,6 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $someData = [1, 2, 3];
 
         $model = new \Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import($processorMock);
-        $this->assertEquals($someData, $model->afterImportSource($subjectMock, $someData));
+        $this->assertSame($someData, $model->afterImportSource($subjectMock, $someData));
     }
 }

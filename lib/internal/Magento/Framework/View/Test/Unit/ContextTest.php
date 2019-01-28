@@ -149,7 +149,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getAreaCode')
             ->will($this->returnValue($area));
 
-        $this->assertEquals($area, $this->context->getArea());
+        $this->assertSame($area, $this->context->getArea());
     }
 
     public function testGetModuleName()
@@ -160,7 +160,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getModuleName')
             ->will($this->returnValue($moduleName));
 
-        $this->assertEquals($moduleName, $this->context->getModuleName());
+        $this->assertSame($moduleName, $this->context->getModuleName());
     }
 
     public function testGetFrontName()
@@ -171,7 +171,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getModuleName')
             ->will($this->returnValue($frontName));
 
-        $this->assertEquals($frontName, $this->context->getFrontName());
+        $this->assertSame($frontName, $this->context->getFrontName());
     }
 
     public function testGetControllerName()
@@ -182,7 +182,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getControllerName')
             ->will($this->returnValue($controllerName));
 
-        $this->assertEquals($controllerName, $this->context->getControllerName());
+        $this->assertSame($controllerName, $this->context->getControllerName());
     }
 
     public function testGetActionName()
@@ -193,7 +193,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getActionName')
             ->will($this->returnValue($actionName));
 
-        $this->assertEquals($actionName, $this->context->getActionName());
+        $this->assertSame($actionName, $this->context->getActionName());
     }
 
     public function testGetFullActionName()
@@ -215,7 +215,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getActionName')
             ->will($this->returnValue($actionName));
 
-        $this->assertEquals($fullActionName, $this->context->getFullActionName());
+        $this->assertSame($fullActionName, $this->context->getFullActionName());
     }
 
     /**
@@ -231,7 +231,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with('Accept')
             ->will($this->returnValue($headerAccept));
 
-        $this->assertEquals($acceptType, $this->context->getAcceptType());
+        $this->assertSame($acceptType, $this->context->getAcceptType());
     }
 
     /**
@@ -262,7 +262,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with($key, $default)
             ->will($this->returnValue($postValue));
 
-        $this->assertEquals($postValue, $this->context->getPost($key, $default));
+        $this->assertSame($postValue, $this->context->getPost($key, $default));
     }
 
     public function testGetQuery()
@@ -276,7 +276,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with($key, $default)
             ->will($this->returnValue($queryValue));
 
-        $this->assertEquals($queryValue, $this->context->getQuery($key, $default));
+        $this->assertSame($queryValue, $this->context->getQuery($key, $default));
     }
 
     public function testGetParam()
@@ -290,7 +290,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with($key, $default)
             ->will($this->returnValue($paramValue));
 
-        $this->assertEquals($paramValue, $this->context->getParam($key, $default));
+        $this->assertSame($paramValue, $this->context->getParam($key, $default));
     }
 
     public function testGetParams()
@@ -301,7 +301,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getParams')
             ->will($this->returnValue($params));
 
-        $this->assertEquals($params, $this->context->getParams());
+        $this->assertSame($params, $this->context->getParams());
     }
 
     public function testGetHeader()
@@ -314,7 +314,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with($headerName)
             ->will($this->returnValue($headerValue));
 
-        $this->assertEquals($headerValue, $this->context->getHeader($headerName));
+        $this->assertSame($headerValue, $this->context->getHeader($headerName));
     }
 
     public function testContent()
@@ -325,6 +325,6 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getContent')
             ->will($this->returnValue($content));
 
-        $this->assertEquals($content, $this->context->getContent());
+        $this->assertSame($content, $this->context->getContent());
     }
 }

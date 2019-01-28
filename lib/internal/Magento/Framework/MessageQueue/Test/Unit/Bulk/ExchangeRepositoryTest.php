@@ -55,6 +55,6 @@ class ExchangeRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMockBuilder(\Magento\Framework\Amqp\Bulk\Exchange::class)
             ->disableOriginalConstructor()->getMock();
         $this->exchangeFactory->expects($this->once())->method('create')->with($connectionName)->willReturn($exchange);
-        $this->assertEquals($exchange, $this->exchangeRepository->getByConnectionName($connectionName));
+        $this->assertSame($exchange, $this->exchangeRepository->getByConnectionName($connectionName));
     }
 }

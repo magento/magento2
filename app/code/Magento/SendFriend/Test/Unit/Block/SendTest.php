@@ -70,7 +70,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->with('sendfriend/product/sendmail', ['id' => 1, 'cat_id' => 2])
             ->willReturn('url');
 
-        $this->assertEquals('url', $this->model->getSendUrl());
+        $this->assertSame('url', $this->model->getSendUrl());
     }
 
     /**
@@ -85,7 +85,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->method('isExceedLimit')
             ->willReturn($isExceedLimit);
 
-        $this->assertEquals($result, $this->model->canSend());
+        $this->assertSame($result, $this->model->canSend());
     }
 
     /**

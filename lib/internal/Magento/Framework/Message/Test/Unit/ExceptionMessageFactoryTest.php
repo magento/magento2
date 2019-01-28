@@ -47,7 +47,7 @@ class ExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
             ->with(MessageInterface::TYPE_ERROR)
             ->willReturn($message);
 
-        $this->assertEquals(
+        $this->assertSame(
             $message,
             $this->exceptionMessageFactory->createMessage($exception)
         );

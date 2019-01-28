@@ -124,7 +124,7 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn(count($items));
 
-        $this->assertEquals($expectedData, $this->getModel()->getData());
+        $this->assertSame($expectedData, $this->getModel()->getData());
     }
 
     public function testGetCollection()

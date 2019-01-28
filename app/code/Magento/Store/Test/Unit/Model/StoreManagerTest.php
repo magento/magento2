@@ -58,7 +58,7 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->willReturn($storeMock);
         $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $this->model->getStore());
-        $this->assertEquals($storeMock, $this->model->getStore());
+        $this->assertSame($storeMock, $this->model->getStore());
     }
 
     public function testGetStoreStringParameter()
@@ -74,7 +74,7 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeMock);
         $actualStore = $this->model->getStore($storeId);
         $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $actualStore);
-        $this->assertEquals($storeMock, $actualStore);
+        $this->assertSame($storeMock, $actualStore);
     }
 
     public function testGetStoreObjectStoreParameter()
@@ -85,7 +85,7 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $actualStore = $this->model->getStore($storeMock);
         $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $actualStore);
-        $this->assertEquals($storeMock, $actualStore);
+        $this->assertSame($storeMock, $actualStore);
     }
 
     /**
@@ -94,7 +94,7 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetStores($storesList, $withDefault, $codeKey, $expectedStores)
     {
         $this->storeRepositoryMock->expects($this->any())->method('getList')->willReturn($storesList);
-        $this->assertEquals($expectedStores, $this->model->getStores($withDefault, $codeKey));
+        $this->assertSame($expectedStores, $this->model->getStores($withDefault, $codeKey));
     }
 
     /**

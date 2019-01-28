@@ -75,6 +75,6 @@ class UpsellTest extends \PHPUnit\Framework\TestCase
     {
         $expectedTags = ['cat_p_' . $this->upsellProduct->getId(), 'cat_p'];
         $tags = $this->block->getIdentities();
-        $this->assertEquals($expectedTags, $tags);
+        $this->assertSame($expectedTags, $tags);
     }
 }

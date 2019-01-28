@@ -204,7 +204,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $this->categoryCollectionFactoryMock);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->model->getCategories(self::PARENT, self::RECURSION_LEVEL, self::SORTED, true),
             $this->categoryCollectionMock
         );

@@ -63,7 +63,7 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
     public function testDefaultCustomerTaxClass()
     {
         $defaultCustomerTaxClass = 3;
-        $this->assertEquals($defaultCustomerTaxClass, $this->_model->getDefaultCustomerTaxClass(null));
+        $this->assertSame($defaultCustomerTaxClass, $this->_model->getDefaultCustomerTaxClass(null));
     }
 
     public function testGetDefaultRateRequest()
@@ -74,11 +74,11 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
         $rateRequest = $this->_model->getRateRequest(null, null, null, null, $customerDataSet->getId());
 
         $this->assertNotNull($rateRequest);
-        $this->assertEquals($address->getCountryId(), $rateRequest->getCountryId());
-        $this->assertEquals($address->getRegion()->getRegionId(), $rateRequest->getRegionId());
-        $this->assertEquals($address->getPostcode(), $rateRequest->getPostcode());
+        $this->assertSame($address->getCountryId(), $rateRequest->getCountryId());
+        $this->assertSame($address->getRegion()->getRegionId(), $rateRequest->getRegionId());
+        $this->assertSame($address->getPostcode(), $rateRequest->getPostcode());
 
         $customerTaxClassId = $this->groupRepository->getById($customerDataSet->getGroupId())->getTaxClassId();
-        $this->assertEquals($customerTaxClassId, $rateRequest->getCustomerClassId());
+        $this->assertSame($customerTaxClassId, $rateRequest->getCustomerClassId());
     }
 }

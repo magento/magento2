@@ -56,7 +56,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
     public function testCopyFieldsetToTargetWhenFieldsetInputInvalid()
     {
         $this->fieldsetConfigMock->expects($this->never())->method('getFieldset');
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', [], 'target')
         );
@@ -70,7 +70,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             ->with('fieldset', 'global')
             ->will($this->returnValue(null));
         $this->eventManagerMock->expects($this->never())->method('dispatch');
-        $this->assertEquals(
+        $this->assertSame(
             [$this->targetMock],
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, [$this->targetMock])
         );
@@ -92,7 +92,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             'root'   => 'global',
         ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
-        $this->assertEquals(
+        $this->assertSame(
             [$this->targetMock],
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, [$this->targetMock])
         );
@@ -125,7 +125,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             'root'   => 'global',
         ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
-        $this->assertEquals(
+        $this->assertSame(
             $this->targetMock,
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $this->targetMock)
         );
@@ -161,7 +161,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             'root'   => 'global',
         ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
-        $this->assertEquals(
+        $this->assertSame(
             $newTarget,
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $target)
         );
@@ -209,7 +209,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);
-        $this->assertEquals($result, $targetMock);
+        $this->assertSame($result, $targetMock);
     }
 
     public function testGetCopyFieldsetToTargetWhenTargetIsAbstractSimpleObject()
@@ -241,7 +241,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);
-        $this->assertEquals($result, $targetMock);
+        $this->assertSame($result, $targetMock);
     }
 
     public function testGetDataFromFieldsetWhenSourceIsInvalid()
@@ -277,7 +277,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             ->with('code')
             ->will($this->returnValue('value'));
 
-        $this->assertEquals(
+        $this->assertSame(
             ['value' => 'value'],
             $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
         );
@@ -295,7 +295,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             ->expects($this->never())
             ->method('getDataUsingMethod');
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
         );

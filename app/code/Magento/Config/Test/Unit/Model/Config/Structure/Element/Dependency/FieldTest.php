@@ -75,7 +75,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $fieldId = self::PREFIX . array_pop($data['dependPath']);
         $data['dependPath'][] = $fieldId;
         $expected = implode('_', $data['dependPath']);
-        $this->assertEquals($expected, $fieldObject->getId());
+        $this->assertSame($expected, $fieldObject->getId());
     }
 
     /**
@@ -85,7 +85,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsNegative($data, $isNegative)
     {
-        $this->assertEquals($isNegative, $this->_getFieldObject($data, $isNegative)->isNegative());
+        $this->assertSame($isNegative, $this->_getFieldObject($data, $isNegative)->isNegative());
     }
 
     /**
@@ -110,7 +110,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValueSatisfy($data, $isNegative, $value, $expected)
     {
-        $this->assertEquals($expected, $this->_getFieldObject($data, $isNegative)->isValueSatisfy($value));
+        $this->assertSame($expected, $this->_getFieldObject($data, $isNegative)->isValueSatisfy($value));
     }
 
     /**
@@ -138,7 +138,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetValues($data, $isNegative, $expected)
     {
-        $this->assertEquals($expected, $this->_getFieldObject($data, $isNegative)->getValues());
+        $this->assertSame($expected, $this->_getFieldObject($data, $isNegative)->getValues());
     }
 
     /**

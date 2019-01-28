@@ -87,7 +87,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        static::assertEquals([], $this->builder->build($buildSubject));
+        static::assertSame([], $this->builder->build($buildSubject));
     }
 
     /**
@@ -120,7 +120,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        self::assertEquals($expectedResult, $this->builder->build($buildSubject));
+        self::assertSame($expectedResult, $this->builder->build($buildSubject));
     }
 
     /**

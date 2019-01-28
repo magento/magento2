@@ -46,7 +46,7 @@ class ProfilerDisableCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
-        self::assertEquals(
+        self::assertSame(
             $expectedOutput,
             trim(str_replace(PHP_EOL, ' ', $commandTester->getDisplay()))
         );

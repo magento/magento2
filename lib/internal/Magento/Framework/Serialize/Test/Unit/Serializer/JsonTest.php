@@ -28,7 +28,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize($value, $expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->json->serialize($value)
         );
@@ -59,7 +59,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnserialize($value, $expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->json->unserialize($value)
         );

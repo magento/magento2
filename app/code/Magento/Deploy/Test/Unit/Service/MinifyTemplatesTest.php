@@ -67,6 +67,6 @@ class MinifyTemplatesTest extends \PHPUnit\Framework\TestCase
 
         $this->htmlMinifier->expects($this->once())->method('minify')->with($templateMock);
 
-        $this->assertEquals(1, $this->service->minifyTemplates());
+        $this->assertSame(1, $this->service->minifyTemplates());
     }
 }

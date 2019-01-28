@@ -131,7 +131,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([$this->mediaGalleryEntryMock]);
 
-        $this->assertEquals(42, $this->model->create($productSku, $this->mediaGalleryEntryMock));
+        $this->assertSame(42, $this->model->create($productSku, $this->mediaGalleryEntryMock));
     }
 
     /**
@@ -295,7 +295,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(42);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
-        $this->assertEquals($existingEntryMock, $this->model->get($productSku, $imageId));
+        $this->assertSame($existingEntryMock, $this->model->get($productSku, $imageId));
     }
 
     public function testGetList()
@@ -306,6 +306,6 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$entryMock]);
-        $this->assertEquals([$entryMock], $this->model->getList($productSku));
+        $this->assertSame([$entryMock], $this->model->getList($productSku));
     }
 }

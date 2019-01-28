@@ -92,7 +92,7 @@ class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($webhookMessage);
 
-        $this->assertEquals(
+        $this->assertSame(
             $webhookMessage,
             $this->model->read($this->webhookRequest)
         );

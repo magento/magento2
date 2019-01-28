@@ -155,7 +155,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($classId)
             ->willReturn($taxClass);
 
-        $this->assertEquals($taxClass, $this->model->get($classId));
+        $this->assertSame($taxClass, $this->model->get($classId));
     }
 
     /**
@@ -207,7 +207,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
         $this->taxClassCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
 
-        $this->assertEquals($this->searchResultMock, $this->model->getList($searchCriteria));
+        $this->assertSame($this->searchResultMock, $this->model->getList($searchCriteria));
     }
 
     /**
@@ -231,7 +231,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass);
-        $this->assertEquals(10, $this->model->save($taxClass));
+        $this->assertSame(10, $this->model->save($taxClass));
     }
 
     /**

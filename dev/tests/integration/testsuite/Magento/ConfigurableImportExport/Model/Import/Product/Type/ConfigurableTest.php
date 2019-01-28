@@ -102,8 +102,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
 
         $this->assertFalse($product->isObjectNew());
-        $this->assertEquals($productName, $product->getName());
-        $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
+        $this->assertSame($productName, $product->getName());
+        $this->assertSame(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
         $optionCollection = $product->getTypeInstance()->getConfigurableOptions($product);
         foreach ($optionCollection as $option) {
@@ -118,12 +118,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         }
 
         $configurableOptionCollection = $product->getExtensionAttributes()->getConfigurableProductOptions();
-        $this->assertEquals(1, count($configurableOptionCollection));
+        $this->assertSame(1, count($configurableOptionCollection));
         foreach ($configurableOptionCollection as $option) {
             $optionData = $option->getData();
             $this->assertArrayHasKey('product_super_attribute_id', $optionData);
             $this->assertArrayHasKey('product_id', $optionData);
-            $this->assertEquals($product->getData($this->productMetadata->getLinkField()), $optionData['product_id']);
+            $this->assertSame($product->getData($this->productMetadata->getLinkField()), $optionData['product_id']);
             $this->assertArrayHasKey('attribute_id', $optionData);
             $this->assertArrayHasKey('position', $optionData);
             $this->assertArrayHasKey('extension_attributes', $optionData);
@@ -132,22 +132,22 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('attribute_id', $productAttributeData);
             $this->assertArrayHasKey('entity_type_id', $productAttributeData);
             $this->assertArrayHasKey('attribute_code', $productAttributeData);
-            $this->assertEquals('test_configurable', $productAttributeData['attribute_code']);
+            $this->assertSame('test_configurable', $productAttributeData['attribute_code']);
             $this->assertArrayHasKey('frontend_label', $productAttributeData);
-            $this->assertEquals('Test Configurable', $productAttributeData['frontend_label']);
+            $this->assertSame('Test Configurable', $productAttributeData['frontend_label']);
             $this->assertArrayHasKey('label', $optionData);
-            $this->assertEquals('test_configurable_custom_label', $optionData['label']);
+            $this->assertSame('test_configurable_custom_label', $optionData['label']);
             $this->assertArrayHasKey('use_default', $optionData);
             $this->assertArrayHasKey('options', $optionData);
-            $this->assertEquals('Option 1', $optionData['options'][0]['label']);
-            $this->assertEquals('Option 1', $optionData['options'][0]['default_label']);
-            $this->assertEquals('Option 1', $optionData['options'][0]['store_label']);
-            $this->assertEquals('Option 2', $optionData['options'][1]['label']);
-            $this->assertEquals('Option 2', $optionData['options'][1]['default_label']);
-            $this->assertEquals('Option 2', $optionData['options'][1]['store_label']);
+            $this->assertSame('Option 1', $optionData['options'][0]['label']);
+            $this->assertSame('Option 1', $optionData['options'][0]['default_label']);
+            $this->assertSame('Option 1', $optionData['options'][0]['store_label']);
+            $this->assertSame('Option 2', $optionData['options'][1]['label']);
+            $this->assertSame('Option 2', $optionData['options'][1]['default_label']);
+            $this->assertSame('Option 2', $optionData['options'][1]['store_label']);
             $this->assertArrayHasKey('values', $optionData);
             $valuesData = $optionData['values'];
-            $this->assertEquals(2, count($valuesData));
+            $this->assertSame(2, count($valuesData));
         }
     }
 
@@ -198,8 +198,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
             $product = $productRepository->get($productSku, 0, $store->getId());
             $this->assertFalse($product->isObjectNew());
-            $this->assertEquals($productName, $product->getName());
-            $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
+            $this->assertSame($productName, $product->getName());
+            $this->assertSame(self::TEST_PRODUCT_TYPE, $product->getTypeId());
         }
     }
 
@@ -237,7 +237,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             )->validateData();
 
             $this->assertTrue($errors->getErrorsCount() == 1);
-            $this->assertEquals($expectedErrorMessage, $errors->getAllErrors()[0]->getErrorMessage());
+            $this->assertSame($expectedErrorMessage, $errors->getAllErrors()[0]->getErrorMessage());
         }
     }
 }

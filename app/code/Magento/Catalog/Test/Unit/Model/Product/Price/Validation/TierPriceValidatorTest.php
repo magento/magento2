@@ -171,7 +171,7 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
             ->with($skus, [])
             ->willReturn($skus);
 
-        $this->assertEquals($skus, $this->tierPriceValidator->validateSkus($skus));
+        $this->assertSame($skus, $this->tierPriceValidator->validateSkus($skus));
     }
 
     /**
@@ -192,7 +192,7 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
         $this->websiteRepository->expects($this->atLeastOnce())->method('getById')->willReturn($website);
         $this->prepareCustomerGroupRepositoryMock($returned);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->validationResult,
             $this->tierPriceValidator->retrieveValidationResult($prices, $existingPrices)
         );
@@ -252,7 +252,7 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
         $this->websiteRepository->expects($this->atLeastOnce())->method('getById')->willThrowException($exception);
         $this->prepareCustomerGroupRepositoryMock($returned);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->validationResult,
             $this->tierPriceValidator->retrieveValidationResult($prices, $existingPrices)
         );

@@ -162,7 +162,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
         $this->assertObjectHasAttribute('require', $json);
-        $this->assertEquals($packageType, $json->type);
+        $this->assertSame($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
             $this->assertAutoloadRegistrar($json, $dir);
@@ -285,7 +285,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         if (!in_array($packageName, self::$moduleNameBlacklist)) {
             $moduleName = (string)$xml->module->attributes()->name;
             $expectedPackageName = $this->convertModuleToPackageName($moduleName);
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedPackageName,
                 $packageName,
                 "For the module '{$moduleName}', the expected package name is '{$expectedPackageName}'"
@@ -327,7 +327,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         if (isset(self::$rootJson['require']['php'])) {
             if ($this->isVendorMagento($name)) {
-                $this->assertEquals(
+                $this->assertSame(
                     self::$rootJson['require']['php'],
                     $phpVersion,
                     "PHP version {$phpVersion} in component {$name} is inconsistent with version "

@@ -46,10 +46,10 @@ class BlockPoolTest extends \PHPUnit\Framework\TestCase
             ->with($blockClass, $arguments)
             ->will($this->returnValue($block));
 
-        $this->assertEquals($this->blockPool, $this->blockPool->add($blockName, $blockClass, $arguments));
+        $this->assertSame($this->blockPool, $this->blockPool->add($blockName, $blockClass, $arguments));
 
-        $this->assertEquals([$blockName => $block], $this->blockPool->get());
-        $this->assertEquals($block, $this->blockPool->get($blockName));
+        $this->assertSame([$blockName => $block], $this->blockPool->get());
+        $this->assertSame($block, $this->blockPool->get($blockName));
         $this->assertNull($this->blockPool->get('someWrongName'));
     }
 

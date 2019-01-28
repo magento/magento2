@@ -107,6 +107,6 @@ class CsvTest extends \PHPUnit\Framework\TestCase
 
         $name = $this->csvModel->createReport('some_file_name', $errorAggregatorMock, true);
 
-        $this->assertEquals($name, 'some_file_name_error_report.csv');
+        $this->assertSame($name, 'some_file_name_error_report.csv');
     }
 }

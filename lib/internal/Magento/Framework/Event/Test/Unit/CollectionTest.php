@@ -49,18 +49,18 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllEvents()
     {
-        $this->assertEquals($this->events, $this->collection->getAllEvents());
+        $this->assertSame($this->events, $this->collection->getAllEvents());
     }
 
     public function testGetGlobalObservers()
     {
-        $this->assertEquals($this->observers, $this->collection->getGlobalObservers());
+        $this->assertSame($this->observers, $this->collection->getGlobalObservers());
     }
 
     public function testGetEventByName()
     {
         $eventName = 'eventName1';
-        $this->assertEquals($this->events[$eventName], $this->collection->getEventByName($eventName));
+        $this->assertSame($this->events[$eventName], $this->collection->getEventByName($eventName));
     }
 
     public function testGetEventByNameNotSet()
@@ -69,7 +69,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->setData('name', $eventName);
         $eventObj = $this->collection->getEventByName($eventName);
-        $this->assertEquals($eventMock->getData('name'), $eventObj->getName());
+        $this->assertSame($eventMock->getData('name'), $eventObj->getName());
     }
 
     public function testAddEvent()

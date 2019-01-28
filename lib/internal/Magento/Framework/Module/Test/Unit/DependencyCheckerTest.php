@@ -74,7 +74,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->checker->checkDependenciesWhenDisableModules(['B', 'D']);
         $expected = ['B' => ['A' => ['A', 'B']], 'D' => ['A' => ['A', 'B', 'D']]];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testCheckDependenciesWhenDisableModulesWithCurEnabledModules()
@@ -86,7 +86,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->checker->checkDependenciesWhenDisableModules(['B', 'D'], ['C', 'D', 'E']);
         $expected = ['B' => [], 'D' => []];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testCheckDependenciesWhenEnableModules()
@@ -103,7 +103,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             'B' => ['A' => ['B', 'D', 'A'], 'E' => ['B', 'E']],
             'D' => ['A' => ['D', 'A'], 'E' => ['D', 'A', 'B', 'E']],
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testCheckDependenciesWhenEnableModulesWithCurEnabledModules()
@@ -117,6 +117,6 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             'B' => ['A' => ['B', 'D', 'A'], 'E' => ['B', 'E']],
             'D' => ['A' => ['D', 'A'], 'E' => ['D', 'A', 'B', 'E']],
         ];
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

@@ -110,7 +110,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultGroup()
     {
-        $this->assertEquals(Manager::DEFAULT_GROUP, $this->model->getDefaultGroup());
+        $this->assertSame(Manager::DEFAULT_GROUP, $this->model->getDefaultGroup());
     }
 
     public function testGetMessages()
@@ -160,7 +160,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManager->expects($this->never())->method('dispatch');
 
-        $this->assertEquals($messageCollection, $this->model->getMessages());
+        $this->assertSame($messageCollection, $this->model->getMessages());
     }
 
     public function testGetMessagesWithClear()
@@ -185,7 +185,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManager->expects($this->once())->method('dispatch')->with('session_abstract_clear_messages');
 
-        $this->assertEquals($messageCollection, $this->model->getMessages(true));
+        $this->assertSame($messageCollection, $this->model->getMessages(true));
     }
 
     public function testAddExceptionWithAlternativeText()
@@ -234,7 +234,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
 
         $exception = new \Exception($exceptionMessage);
-        $this->assertEquals($this->model, $this->model->addException($exception, $alternativeText));
+        $this->assertSame($this->model, $this->model->addException($exception, $alternativeText));
     }
 
     public function testAddExceptionRenderable()
@@ -283,7 +283,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($messageCollection)
         );
 
-        $this->assertEquals($this->model, $this->model->addExceptionMessage($exception));
+        $this->assertSame($this->model, $this->model->addExceptionMessage($exception));
     }
 
     /**

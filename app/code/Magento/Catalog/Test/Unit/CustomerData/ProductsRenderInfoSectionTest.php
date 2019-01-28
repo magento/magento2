@@ -166,7 +166,7 @@ class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 1 => [
                     'name' => 'One',

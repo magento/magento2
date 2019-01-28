@@ -135,7 +135,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
         $method->setAccessible(true);
-        $this->assertEquals(
+        $this->assertSame(
             Cli::RETURN_SUCCESS,
             $method->invokeArgs(
                 $this->command,

@@ -58,7 +58,7 @@ XML;
         $args = ['one' => 'test'];
 
         $this->_object->translateActionParameters($this->_xmlDocument->action_one, $args);
-        $this->assertEquals('test', $args['one']);
+        $this->assertSame('test', $args['one']);
     }
 
     /**
@@ -70,7 +70,7 @@ XML;
         $expected = ['one' => new Phrase('test'), 'two' => new Phrase('test'), 'three' => 'test'];
 
         $this->_object->translateActionParameters($this->_xmlDocument->action_two, $args);
-        $this->assertEquals($expected, $args);
+        $this->assertSame($expected, $args);
     }
 
     /**
@@ -82,7 +82,7 @@ XML;
         $expected = ['one' => ['some', 'data'], 'two' => ['value' => new Phrase('test')], 'three' => 'test'];
 
         $this->_object->translateActionParameters($this->_xmlDocument->action_three, $args);
-        $this->assertEquals($expected, $args);
+        $this->assertSame($expected, $args);
     }
 
     /**
@@ -94,7 +94,7 @@ XML;
         $expected = ['two' => new Phrase('test'), 'three' => new Phrase('test')];
 
         $this->_object->translateActionParameters($this->_xmlDocument->action_four, $args);
-        $this->assertEquals($expected, $args);
+        $this->assertSame($expected, $args);
     }
 
     /**
@@ -103,7 +103,7 @@ XML;
     public function testTranslateArgumentWithDefaultModuleAndSelfTranslatedMode()
     {
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments->node_self_translated);
-        $this->assertEquals(new Phrase('test'), $actual);
+        $this->assertSame(new Phrase('test'), $actual);
     }
 
     /**
@@ -112,7 +112,7 @@ XML;
     public function testTranslateArgumentWithoutModuleAndNoSelfTranslatedMode()
     {
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments->node_no_self_translated);
-        $this->assertEquals('test', $actual);
+        $this->assertSame('test', $actual);
     }
 
     /**
@@ -121,7 +121,7 @@ XML;
     public function testTranslateArgumentViaParentNodeWithParentModule()
     {
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments_parent->node);
-        $this->assertEquals(new Phrase('test'), $actual);
+        $this->assertSame(new Phrase('test'), $actual);
     }
 
     /**
@@ -130,7 +130,7 @@ XML;
     public function testTranslateArgumentViaParentNodeWithOwnModule()
     {
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments_parent->node_other);
-        $this->assertEquals(new Phrase('test'), $actual);
+        $this->assertSame(new Phrase('test'), $actual);
     }
 
     /**
@@ -139,6 +139,6 @@ XML;
     public function testTranslateArgumentViaParentWithNodeThatIsNotInTranslateList()
     {
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments_parent->node_no_translated);
-        $this->assertEquals('no translated', $actual);
+        $this->assertSame('no translated', $actual);
     }
 }

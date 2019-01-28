@@ -46,8 +46,8 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
-        $this->assertEquals('sectionObject', $this->_model->create('section'));
-        $this->assertEquals('groupObject', $this->_model->create('group'));
-        $this->assertEquals('fieldObject', $this->_model->create('field'));
+        $this->assertSame('sectionObject', $this->_model->create('section'));
+        $this->assertSame('groupObject', $this->_model->create('group'));
+        $this->assertSame('fieldObject', $this->_model->create('field'));
     }
 }
