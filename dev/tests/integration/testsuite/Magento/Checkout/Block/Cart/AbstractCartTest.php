@@ -47,7 +47,7 @@ class AbstractCartTest extends \PHPUnit\Framework\TestCase
 
         $items = array_filter(
             $abstractCart->getItems(),
-            function (\Magento\Quote\Model\Quote\Item $item) use ($productSku) {
+            static function (\Magento\Quote\Model\Quote\Item $item) use ($productSku) {
                 return $item->getSku() === $productSku;
             }
         );

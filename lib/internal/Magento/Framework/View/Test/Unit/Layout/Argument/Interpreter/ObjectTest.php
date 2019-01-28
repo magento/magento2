@@ -53,7 +53,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
         $self = $this;
         $this->_objectManager->expects($this->any())->method('create')->willReturnCallback(
-            function ($className) use ($self) {
+            static function ($className) use ($self) {
                 return $self->createMock($className);
             }
         );

@@ -52,7 +52,7 @@ class Sidebar extends ListCompare
             $rootElement = $this->_rootElement;
             $selector = $this->productName;
             $this->_rootElement->waitUntil(
-                function () use ($rootElement, $selector) {
+                static function () use ($rootElement, $selector) {
                     return $rootElement->find($selector)->isVisible() ? true : null;
                 }
             );
@@ -81,7 +81,7 @@ class Sidebar extends ListCompare
         $rootElement = $this->_rootElement;
         $selector = $this->clearAll;
         $this->_rootElement->waitUntil(
-            function () use ($rootElement, $selector) {
+            static function () use ($rootElement, $selector) {
                 return $rootElement->find($selector)->isVisible() ? true : null;
             }
         );

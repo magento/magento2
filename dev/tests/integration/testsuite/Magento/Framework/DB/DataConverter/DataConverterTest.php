@@ -83,7 +83,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
         $this->iteratorMock->expects($this->any())
             ->method('valid')
             ->willReturnCallback(
-                function () use (&$iterationComplete) {
+                static function () use (&$iterationComplete) {
                     if (!$iterationComplete) {
                         $iterationComplete = true;
                         return true;

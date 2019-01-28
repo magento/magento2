@@ -123,7 +123,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $emptyView->method('load')
             ->withConsecutive(
                 ...array_map(
-                    function ($elem) {
+                    static function ($elem) {
                         return [$elem];
                     },
                     array_keys($orderedViews)

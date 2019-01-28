@@ -257,7 +257,7 @@ class Converter implements ConverterInterface
      */
     protected function sorting($data)
     {
-        usort($data['fieldsets'], function ($current, $parent) use ($data) {
+        usort($data['fieldsets'], static function ($current, $parent) use ($data) {
             if (!isset($current['references']) && $data['primary'] == $current['name']
                 || isset($parent['references'][$current['name']])
             ) {
@@ -304,7 +304,7 @@ class Converter implements ConverterInterface
         }
 
         $orderedIndexerIds = array_map(
-            function ($item) {
+            static function ($item) {
                 return $item['indexerId'];
             },
             $expanded

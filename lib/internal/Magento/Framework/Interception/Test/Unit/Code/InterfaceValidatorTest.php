@@ -30,7 +30,7 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
         $this->argumentsReaderMock = $this->createMock(\Magento\Framework\Code\Reader\ArgumentsReader::class);
 
         $this->argumentsReaderMock->expects($this->any())->method('isCompatibleType')
-            ->will($this->returnCallback(function ($arg1, $arg2) {
+            ->will($this->returnCallback(static function ($arg1, $arg2) {
                 return ltrim($arg1, '\\') == ltrim($arg2, '\\');
             }));
 

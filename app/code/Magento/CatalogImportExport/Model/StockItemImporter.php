@@ -50,7 +50,7 @@ class StockItemImporter implements StockItemImporterInterface
         $entityTable = $stockItemResource->getMainTable();
         try {
             $stockImportData = array_map(
-                function ($stockItemData) {
+                static function ($stockItemData) {
                     unset($stockItemData['sku']);
                     return $stockItemData;
                 },

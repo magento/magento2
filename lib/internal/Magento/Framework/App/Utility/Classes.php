@@ -39,7 +39,7 @@ class Classes
         }
         $result = array_filter(
             array_unique($result),
-            function ($value) {
+            static function ($value) {
                 return !empty($value);
             }
         );
@@ -146,7 +146,7 @@ class Classes
         $classes = array_unique($classes);
         $classes = array_filter(
             $classes,
-            function ($value) {
+            static function ($value) {
                 return !empty($value);
             }
         );

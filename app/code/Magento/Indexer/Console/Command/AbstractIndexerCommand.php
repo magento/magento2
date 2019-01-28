@@ -56,7 +56,7 @@ abstract class AbstractIndexerCommand extends Command
         $indexers = $this->getCollectionFactory()->create()->getItems();
         return array_combine(
             array_map(
-                function ($item) {
+                static function ($item) {
                     /** @var IndexerInterface $item */
                     return $item->getId();
                 },

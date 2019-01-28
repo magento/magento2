@@ -185,7 +185,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
             $this->_customerCollection = $this->_customerEntity->filterEntityCollection($this->_customerCollection);
 
             $customers = [];
-            $addCustomer = function (\Magento\Customer\Model\Customer $customer) use (&$customers) {
+            $addCustomer = static function (\Magento\Customer\Model\Customer $customer) use (&$customers) {
                 $customers[$customer->getId()] = $customer->getData();
             };
 

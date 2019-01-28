@@ -58,7 +58,7 @@ class Index implements DbDefinitionProcessorInterface
             implode(
                 ',',
                 array_map(
-                    function ($columnName) use ($adapter) {
+                    static function ($columnName) use ($adapter) {
                         return $adapter->quoteIdentifier($columnName);
                     },
                     $index->getColumnNames()

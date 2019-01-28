@@ -97,7 +97,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->shellMock->expects($this->any())
             ->method('execute')
-            ->willReturnCallback(function ($command, $arguments) {
+            ->willReturnCallback(static function ($command, $arguments) {
                 $command = vsprintf($command, $arguments);
                 $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
                 $params['MAGE_DIRS']['base']['path'] = BP;

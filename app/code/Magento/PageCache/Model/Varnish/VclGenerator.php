@@ -156,7 +156,7 @@ class VclGenerator implements VclGeneratorInterface
         $tpl = "    \"%s\";";
         $result = array_reduce(
             $this->getAccessList(),
-            function ($ips, $ip) use ($tpl) {
+            static function ($ips, $ip) use ($tpl) {
                 return $ips.sprintf($tpl, trim($ip)) . "\n";
             },
             ''

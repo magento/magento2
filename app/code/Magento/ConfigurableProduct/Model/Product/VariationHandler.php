@@ -286,7 +286,7 @@ class VariationHandler
         }
         if ($product->getMediaGallery('images') && !empty($productData['media_gallery']['images'])) {
             $gallery = array_map(
-                function ($image) {
+                static function ($image) {
                     $image['removed'] = 1;
                     return $image;
                 },

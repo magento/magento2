@@ -63,7 +63,7 @@ class ResourcesPopup extends Form
         $context = $this->_rootElement;
         $selector = $this->content;
         $context->waitUntil(
-            function () use ($context, $selector) {
+            static function () use ($context, $selector) {
                 return $context->find($selector)->isVisible() ? true : null;
             }
         );

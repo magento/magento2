@@ -40,7 +40,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
         $this->configParserMock->expects($this->any())->method('parseServiceMethod')->willReturnCallback(
-            function ($handler) {
+            static function ($handler) {
                 $parsedHandler = explode('::', $handler);
                 return ['typeName' => $parsedHandler[0], 'methodName' => $parsedHandler[1]];
             }

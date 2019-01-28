@@ -79,7 +79,7 @@ class Form extends \Magento\Mtf\Block\Form
         $rootElement = $this->_rootElement;
         $selector = $this->loadsForm;
         $this->browser->waitUntil(
-            function () use ($rootElement, $selector) {
+            static function () use ($rootElement, $selector) {
                 $inputs = $rootElement->getElements($selector);
                 $i = 0;
                 foreach ($inputs as $input) {

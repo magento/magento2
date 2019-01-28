@@ -130,7 +130,7 @@ QUERY;
                 'field' => [
                     'type' => \GraphQL\Type\Definition\Type::string(),
                     'args' => ['complex' => ['type' => $testInputObject]],
-                    'resolve' => function ($args) {
+                    'resolve' => static function ($args) {
                         return json_encode($args['complex']);
                     }
                 ]

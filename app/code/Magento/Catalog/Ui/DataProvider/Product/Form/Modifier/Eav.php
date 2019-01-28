@@ -760,7 +760,7 @@ class Eav extends AbstractModifier
      */
     private function convertOptionsValueToString(array $options) : array
     {
-        array_walk($options, function (&$value) {
+        array_walk($options, static function (&$value) {
             if (isset($value['value']) && is_scalar($value['value'])) {
                 $value['value'] = (string)$value['value'];
             }

@@ -66,7 +66,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlEncoder->expects($this->any())
             ->method('encode')
             ->willReturnCallback(
-                function ($url) {
+                static function ($url) {
                     return strtr(base64_encode($url), '+/=', '-_,');
                 }
             );

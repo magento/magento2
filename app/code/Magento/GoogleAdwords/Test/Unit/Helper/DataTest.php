@@ -66,7 +66,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $this->_scopeConfigMock->expects($this->any())->method('getValue')->with($this->isType('string'))->will(
             $this->returnCallback(
-                function () use ($returnConfigValue) {
+                static function () use ($returnConfigValue) {
                     return $returnConfigValue;
                 }
             )

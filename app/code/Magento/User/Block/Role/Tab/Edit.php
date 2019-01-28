@@ -216,7 +216,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         $resources = $this->_aclResourceProvider->getAclResources();
         $configResource = array_filter(
             $resources,
-            function ($node) {
+            static function ($node) {
                 return isset($node['id'])
                     && $node['id'] == 'Magento_Backend::admin';
             }

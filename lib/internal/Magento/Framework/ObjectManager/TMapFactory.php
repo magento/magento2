@@ -46,7 +46,7 @@ class TMapFactory
             array_merge(
                 $args,
                 [
-                    'objectCreationStrategy' => function (ObjectManagerInterface $om, $objectName) {
+                    'objectCreationStrategy' => static function (ObjectManagerInterface $om, $objectName) {
                         return $om->get($objectName);
                     }
                 ]

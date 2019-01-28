@@ -195,7 +195,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         $resources = $this->_resourceProvider->getAclResources();
         $configResource = array_filter(
             $resources,
-            function ($node) {
+            static function ($node) {
                 return $node['id'] == 'Magento_Backend::admin';
             }
         );

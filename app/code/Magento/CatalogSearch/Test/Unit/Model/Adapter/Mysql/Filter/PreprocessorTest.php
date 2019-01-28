@@ -154,7 +154,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
             ->with($this->select)
             ->will(
                 $this->returnCallback(
-                    function ($select) {
+                    static function ($select) {
                         return '(' . $select . ')';
                     }
                 )

@@ -126,7 +126,7 @@ class ConvertSerializedDataToJson
                 ->getConnection()
                 ->fetchCol($selectByRange);
             $codes = array_map(
-                function ($id) {
+                static function ($id) {
                     return 'option_' . $id;
                 },
                 $codes

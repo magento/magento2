@@ -62,7 +62,7 @@ class Security
          * error disabled with @ for PHP-FPM scenario
          */
         set_error_handler(
-            function ($errno, $errstr) {
+            static function ($errno, $errstr) {
                 if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
                     return true;
                 }

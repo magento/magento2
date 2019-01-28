@@ -95,7 +95,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $this->invoice->expects($this->any())
             ->method('roundPrice')
             ->will($this->returnCallback(
-                function ($price, $type) use (&$roundingDelta) {
+                static function ($price, $type) use (&$roundingDelta) {
                     if (!isset($roundingDelta[$type])) {
                         $roundingDelta[$type] = 0;
                     }

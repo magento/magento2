@@ -1596,7 +1596,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->atLeastOnce())->method('getResetPasswordLinkExpirationPeriod')
             ->willReturn(100000);
         $this->string->expects($this->any())->method('strlen')->willReturnCallback(
-            function ($string) {
+            static function ($string) {
                 return strlen($string);
             }
         );

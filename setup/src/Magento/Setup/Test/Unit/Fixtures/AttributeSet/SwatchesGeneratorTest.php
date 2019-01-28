@@ -71,7 +71,7 @@ class SwatchesGeneratorTest extends \PHPUnit\Framework\TestCase
         $attributeColorType['swatch_input_type'] = Swatch::SWATCH_INPUT_TYPE_VISUAL;
         $attributeColorType['swatchvisual']['value'] = array_reduce(
             range(1, 3),
-            function ($values, $index) {
+            static function ($values, $index) {
                 $values['option_' . $index] = '#' . str_repeat(dechex(255 * $index / 3), 3);
                 return $values;
             },
@@ -80,7 +80,7 @@ class SwatchesGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $attributeColorType['optionvisual']['value'] = array_reduce(
             range(1, 3),
-            function ($values, $index) {
+            static function ($values, $index) {
                 $values['option_' . $index] = ['option ' . $index];
                 return $values;
             },
@@ -89,7 +89,7 @@ class SwatchesGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $attributeImageType = $attributeColorType;
         $attributeImageType['swatchvisual']['value'] = array_map(
-            function ($item) {
+            static function ($item) {
                 return ltrim($item, '/');
             },
             $this->imagePathFixture

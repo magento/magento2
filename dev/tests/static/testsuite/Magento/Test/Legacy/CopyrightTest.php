@@ -35,13 +35,13 @@ class CopyrightTest extends \PHPUnit\Framework\TestCase
         }
         array_walk(
             $changedFiles,
-            function (&$file) {
+            static function (&$file) {
                 $file = [BP . '/' . $file];
             }
         );
         $changedFiles = array_filter(
             $changedFiles,
-            function ($path) use ($blackList) {
+            static function ($path) use ($blackList) {
                 if (!file_exists($path[0]) || !is_readable($path[0])) {
                     return false;
                 }

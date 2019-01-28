@@ -255,7 +255,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         );
         $actionMock->expects($this->once())->method('executeFull')->will(
             $this->returnCallback(
-                function () {
+                static function () {
                     throw new \Exception('Test exception');
                 }
             )
@@ -305,7 +305,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         );
         $actionMock->expects($this->once())->method('executeFull')->will(
             $this->returnCallback(
-                function () {
+                static function () {
                      throw new \Error('Test Engine Error');
                 }
             )

@@ -288,7 +288,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnCallback(
-                function ($path, $scope, $scopeCode) use ($secure, $expectedPath) {
+                static function ($path, $scope, $scopeCode) use ($secure, $expectedPath) {
                     $url = $secure ? '{{base_url}}' : 'http://domain.com/';
                     return $expectedPath == $path ? $url . $path . '/' : null;
                 }
@@ -378,7 +378,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnCallback(
-                function ($path, $scope, $scopeCode) use ($expectedPath) {
+                static function ($path, $scope, $scopeCode) use ($expectedPath) {
                     return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
                 }
             ));

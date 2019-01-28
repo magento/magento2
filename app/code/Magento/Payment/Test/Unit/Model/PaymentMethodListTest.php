@@ -105,7 +105,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
         $this->setUpGetList($paymentMethodConfig, $methodInstancesMap);
 
         $codes = array_map(
-            function ($method) {
+            static function ($method) {
                 return $method->getCode();
             },
             $this->paymentMethodList->getList($storeId)
@@ -150,7 +150,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
         $this->setUpGetList($paymentMethodConfig, $methodInstancesMap);
 
         $codes = array_map(
-            function ($method) {
+            static function ($method) {
                 return $method->getCode();
             },
             $this->paymentMethodList->getActiveList($storeId)

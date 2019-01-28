@@ -40,7 +40,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         );
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['setTypeId', '__wakeup']);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\TypeTransitionManager::class);
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return 'Expected';
         };
     }

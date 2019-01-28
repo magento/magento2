@@ -132,7 +132,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
     {
         $this->parameterReflection->expects($this->once())->method('getClass')->will(
             $this->returnCallback(
-                function () {
+                static function () {
                     throw new \ReflectionException('Class Magento\Core\Model\Object does not exist');
                 }
             )
@@ -154,7 +154,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
     {
         $this->parameterReflection->expects($this->once())->method('getClass')->will(
             $this->returnCallback(
-                function () {
+                static function () {
                     throw new \ReflectionException('Some message');
                 }
             )

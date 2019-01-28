@@ -89,22 +89,22 @@ class ProductGeneratorTest extends \PHPUnit\Framework\TestCase
         $secondWebsiteId = $this->websiteRepository->get('test')->getId();
 
         $fixtureMap = [
-            'name' => function () use ($name) {
+            'name' => static function () use ($name) {
                 return $name;
             },
-            'sku' => function () use ($sku) {
+            'sku' => static function () use ($sku) {
                 return $sku;
             },
-            'price' => function () use ($price) {
+            'price' => static function () use ($price) {
                 return $price;
             },
-            'url_key' => function () use ($url) {
+            'url_key' => static function () use ($url) {
                 return $url;
             },
-            'category_ids' => function () use ($categoryId) {
+            'category_ids' => static function () use ($categoryId) {
                 return $categoryId;
             },
-            'website_ids' => function () use ($secondWebsiteId) {
+            'website_ids' => static function () use ($secondWebsiteId) {
                 return [1, $secondWebsiteId];
             }
         ];

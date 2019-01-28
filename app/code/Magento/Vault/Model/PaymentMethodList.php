@@ -69,7 +69,7 @@ class PaymentMethodList implements VaultPaymentMethodListInterface
 
         $availableMethods = array_filter(
             $paymentMethods,
-            function (MethodInterface $methodInstance) {
+            static function (MethodInterface $methodInstance) {
                 return $methodInstance instanceof VaultPaymentInterface;
             }
         );

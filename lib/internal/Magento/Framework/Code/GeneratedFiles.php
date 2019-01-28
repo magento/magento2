@@ -125,7 +125,7 @@ class GeneratedFiles
             $envData = include $envPath;
             if (isset($envData['cache_types'])) {
                 $cacheStatus = $envData['cache_types'];
-                $enabledCacheTypes = array_filter($cacheStatus, function ($value) {
+                $enabledCacheTypes = array_filter($cacheStatus, static function ($value) {
                     return $value;
                 });
                 $enabledCacheTypes = array_keys($enabledCacheTypes);

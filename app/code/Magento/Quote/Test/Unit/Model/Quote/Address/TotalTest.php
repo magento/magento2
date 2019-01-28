@@ -21,7 +21,7 @@ class TotalTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
             ->method('unserialize')
-            ->willReturnCallback(function ($value) {
+            ->willReturnCallback(static function ($value) {
                 return json_decode($value, true);
             });
 

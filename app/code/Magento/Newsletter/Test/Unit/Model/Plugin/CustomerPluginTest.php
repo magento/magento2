@@ -188,7 +188,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     public function testAroundDeleteById()
     {
         $customerId = 1;
-        $deleteCustomerById = function () {
+        $deleteCustomerById = static function () {
             return true;
         };
         $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);

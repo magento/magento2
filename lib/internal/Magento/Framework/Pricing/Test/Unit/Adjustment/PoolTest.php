@@ -31,7 +31,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $adjustmentFactory->expects($this->any())->method('create')->will(
             $this->returnCallback(
-                function ($className, $data) {
+                static function ($className, $data) {
                     return $className . '|' . $data['sortOrder'];
                 }
             )

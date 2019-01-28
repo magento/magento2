@@ -153,7 +153,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
             $actualProductId,
             $this->configureController,
             $this->callback(
-                function ($subject) use ($buyRequestMock) {
+                static function ($subject) use ($buyRequestMock) {
                     return $subject->getBuyRequest() === $buyRequestMock;
                 }
             )

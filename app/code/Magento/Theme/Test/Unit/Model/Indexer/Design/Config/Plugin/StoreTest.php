@@ -39,7 +39,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($subjectId);
 
-        $closureMock = function () use ($subjectMock) {
+        $closureMock = static function () use ($subjectMock) {
             return $subjectMock;
         };
 
@@ -69,7 +69,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($subjectId);
 
-        $closureMock = function () use ($subjectMock) {
+        $closureMock = static function () use ($subjectMock) {
             return $subjectMock;
         };
 

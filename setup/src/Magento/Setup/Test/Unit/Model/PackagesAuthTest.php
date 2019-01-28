@@ -50,7 +50,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                function ($serializedData) {
+                static function ($serializedData) {
                     return json_encode($serializedData);
                 }
             );

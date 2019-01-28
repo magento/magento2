@@ -77,7 +77,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('isSecure')->will($this->returnValue($isSecure));
         $this->assetRepo->expects($this->once())
             ->method('getUrlWithParams')
-            ->with('some file', $this->callback(function ($value) use ($isSecure) {
+            ->with('some file', $this->callback(static function ($value) use ($isSecure) {
                 return isset($value['_secure']) && $value['_secure'] === $isSecure;
             }))
             ->will($this->returnValue('result url'));

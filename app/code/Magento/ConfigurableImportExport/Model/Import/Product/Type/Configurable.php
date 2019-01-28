@@ -368,7 +368,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (is_array(self::$commonAttributesCache)) {
             $filteredAttribute = array_filter(
                 self::$commonAttributesCache,
-                function ($element) use ($superAttrCode) {
+                static function ($element) use ($superAttrCode) {
                     return $element['code'] == $superAttrCode;
                 }
             );

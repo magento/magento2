@@ -141,7 +141,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      */
     private function addNotEmptyValidator(Question $question)
     {
-        $question->setValidator(function ($value) {
+        $question->setValidator(static function ($value) {
             if (trim($value) == '') {
                 throw new \Exception('The value cannot be empty');
             }

@@ -183,7 +183,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      */
     private function packageVersionStrings(array $sampleDataPackages): array
     {
-        array_walk($sampleDataPackages, function (&$v, $k) {
+        array_walk($sampleDataPackages, static function (&$v, $k) {
             $v = "$k:$v";
         });
 

@@ -166,13 +166,13 @@ class Form extends FormInterface
         $taxRateMultiSelectList = $this->taxRateMultiSelectList;
         $taxRateDefaultMultiSelect = $this->taxRateDefaultMultiSelect;
         $this->browser->waitUntil(
-            function () use ($rootForm, $taxRateDefaultMultiSelect) {
+            static function () use ($rootForm, $taxRateDefaultMultiSelect) {
                 $element = $rootForm->browser->find($taxRateDefaultMultiSelect);
                 return $element->isVisible() ? null : true;
             }
         );
         $this->browser->waitUntil(
-            function () use ($rootForm, $taxRateMultiSelectList) {
+            static function () use ($rootForm, $taxRateMultiSelectList) {
                 $element = $rootForm->browser->find($taxRateMultiSelectList);
                 return $element->isVisible() ? true : null;
             }
@@ -309,7 +309,7 @@ class Form extends FormInterface
         $browser = $this->browser;
         $taxRateMultiSelectList = $this->taxRateMultiSelectList;
         $browser->waitUntil(
-            function () use ($browser, $taxRateMultiSelectList) {
+            static function () use ($browser, $taxRateMultiSelectList) {
                 $element = $browser->find($taxRateMultiSelectList);
                 return $element->isVisible() ? true : null;
             }

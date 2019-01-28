@@ -80,7 +80,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->dataHashGeneratorMock->expects($this->any())
             ->method('getHash')
             ->willReturnCallback(
-                function (array $data) {
+                static function (array $data) {
                     return implode('_', $data);
                 }
             );

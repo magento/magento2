@@ -15,7 +15,7 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var EncryptorInterface $encryptor */
 $encryptor = $objectManager->get(EncryptorInterface::class);
 
-$processConfigData = function (Config $config, array $data) {
+$processConfigData = static function (Config $config, array $data) {
     foreach ($data as $key => $value) {
         $config->setDataByPath($key, $value);
         $config->save();

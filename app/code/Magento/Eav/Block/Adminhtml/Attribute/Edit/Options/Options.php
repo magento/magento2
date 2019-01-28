@@ -96,7 +96,7 @@ class Options extends \Magento\Backend\Block\Template
     {
         $stores = $this->getStores();
         if (is_array($stores)) {
-            usort($stores, function ($storeA, $storeB) {
+            usort($stores, static function ($storeA, $storeB) {
                 if ($storeA->getSortOrder() == $storeB->getSortOrder()) {
                     return $storeA->getId() < $storeB->getId() ? -1 : 1;
                 }

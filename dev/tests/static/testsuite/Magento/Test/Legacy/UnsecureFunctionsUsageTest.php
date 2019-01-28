@@ -166,13 +166,13 @@ class UnsecureFunctionsUsageTest extends \PHPUnit\Framework\TestCase
         }
         array_walk(
             $filesToVerify,
-            function (&$file) {
+            static function (&$file) {
                 $file = [BP . '/' . $file];
             }
         );
         $filesToVerify = array_filter(
             $filesToVerify,
-            function ($path) use ($directoriesToScan, $fileExtensions) {
+            static function ($path) use ($directoriesToScan, $fileExtensions) {
                 if (!file_exists($path[0])) {
                     return false;
                 }

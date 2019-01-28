@@ -160,7 +160,7 @@ class FileUploader
         foreach ($validationRules as $validationRule) {
             if ($validationRule->getName() == 'file_extensions') {
                 $allowedExtensions = explode(',', $validationRule->getValue());
-                array_walk($allowedExtensions, function (&$value) {
+                array_walk($allowedExtensions, static function (&$value) {
                     $value = strtolower(trim($value));
                 });
                 break;

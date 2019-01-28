@@ -87,11 +87,11 @@ class PaypalIframe extends Method
     {
         $loaderElement = $iframeRootElement->find($this->loader);
 
-        $loaderElement->waitUntil(function () use ($loaderElement) {
+        $loaderElement->waitUntil(static function () use ($loaderElement) {
             return $loaderElement->isVisible() ? true : null;
         });
 
-        $loaderElement->waitUntil(function () use ($loaderElement) {
+        $loaderElement->waitUntil(static function () use ($loaderElement) {
             return !$loaderElement->isVisible() ? true : null;
         });
     }

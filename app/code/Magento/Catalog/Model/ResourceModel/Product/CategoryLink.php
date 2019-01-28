@@ -227,7 +227,7 @@ class CategoryLink
         $select->where('entity_id IN(?)', array_column($links, 'category_id'));
 
         $result = $connection->fetchCol($select);
-        $validLinks = array_map(function ($categoryId) use ($links) {
+        $validLinks = array_map(static function ($categoryId) use ($links) {
             $key = array_search($categoryId, array_column($links, 'category_id'));
             if ($key !== false) {
                 return $links[$key];

@@ -52,7 +52,7 @@ class FulltextFilter implements FilterApplierInterface
         }
         if ($alias) {
             $columns = array_map(
-                function ($column) use ($alias) {
+                static function ($column) use ($alias) {
                     return '`' . $alias . '`.' . $column;
                 },
                 $columns

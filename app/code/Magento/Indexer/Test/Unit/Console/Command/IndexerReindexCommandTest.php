@@ -189,7 +189,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ->method('getIndexer')
             ->willReturnMap(
                 array_map(
-                    function ($elem) {
+                    static function ($elem) {
                         return [$elem['indexer_id'], $elem];
                     },
                     $indexers
@@ -446,7 +446,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             . join("', '", $inputIndexers)
             . "'." . PHP_EOL . 'Supported types: '
             . join(", ", array_map(
-                function ($item) {
+                static function ($item) {
                     /** @var IndexerInterface $item */
                     $item->getId();
                 },

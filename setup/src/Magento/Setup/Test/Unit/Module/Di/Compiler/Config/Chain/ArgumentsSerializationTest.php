@@ -29,7 +29,7 @@ class ArgumentsSerializationTest extends \PHPUnit\Framework\TestCase
     {
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->getMock();
-        $this->serializer->expects($this->any())->method('serialize')->willReturnCallback(function ($param) {
+        $this->serializer->expects($this->any())->method('serialize')->willReturnCallback(static function ($param) {
             return json_encode($param);
         });
     }

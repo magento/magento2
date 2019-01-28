@@ -110,7 +110,7 @@ class Links extends Block
         $browser = $this->_rootElement;
         $selector = sprintf($this->link, $linkTitle);
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector, Locator::SELECTOR_XPATH);
                 return $element->isVisible() ? true : null;
             }

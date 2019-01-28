@@ -44,7 +44,7 @@ class ConstructorArgumentTypes implements ValidatorInterface
         $class = new \ReflectionClass($className);
         $expectedArguments = $this->argumentsReader->getConstructorArguments($class);
         $actualArguments = array_filter($this->sourceArgumentsReader->getConstructorArgumentTypes($class));
-        $expectedArguments = array_map(function ($element) {
+        $expectedArguments = array_map(static function ($element) {
             return $element['type'];
         }, $expectedArguments);
 

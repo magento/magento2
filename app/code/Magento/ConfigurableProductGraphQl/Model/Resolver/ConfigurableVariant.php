@@ -79,7 +79,7 @@ class ConfigurableVariant implements ResolverInterface
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE || !isset($value[$linkField])) {
-            $result = function () {
+            $result = static function () {
                 return null;
             };
             return $this->valueFactory->create($result);

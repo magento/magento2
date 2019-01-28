@@ -62,10 +62,10 @@ class PaymentVaultConfigurationProcess
         $storeId = $this->storeManager->getStore()->getId();
         $activePaymentMethodList = $this->paymentMethodList->getActiveList($storeId);
         $activeVaultList = $this->vaultPaymentList->getActiveList($storeId);
-        $getCodeFunc = function ($method) {
+        $getCodeFunc = static function ($method) {
             return $method->getCode();
         };
-        $getProviderCodeFunc = function ($method) {
+        $getProviderCodeFunc = static function ($method) {
             return $method->getProviderCode();
         };
         $activePaymentMethodCodes = array_map($getCodeFunc, $activePaymentMethodList);

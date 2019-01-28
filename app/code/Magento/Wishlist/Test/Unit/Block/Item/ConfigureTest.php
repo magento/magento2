@@ -45,7 +45,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $escaperMock->method('escapeHtml')
             ->willReturnCallback(
-                function ($string) {
+                static function ($string) {
                     return 'escapeHtml' . $string;
                 }
             );

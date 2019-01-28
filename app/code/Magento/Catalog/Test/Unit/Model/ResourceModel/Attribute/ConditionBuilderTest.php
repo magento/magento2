@@ -325,7 +325,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
         $dbAdapater->expects($this->exactly(3))
             ->method('quoteIdentifier')
             ->will(
-                $this->returnCallback(function ($input) {
+                $this->returnCallback(static function ($input) {
                     return sprintf('`%s`', $input);
                 })
             );

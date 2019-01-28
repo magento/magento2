@@ -212,7 +212,7 @@ class ExclusionStrategy implements FilterStrategyInterface
     {
         $fromArr = array_filter(
             $select->getPart(\Magento\Framework\DB\Select::FROM),
-            function ($fromPart) {
+            static function ($fromPart) {
                 return $fromPart['joinType'] === \Magento\Framework\DB\Select::FROM;
             }
         );

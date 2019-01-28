@@ -114,14 +114,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_encode($value);
                 }
             );
         $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );
@@ -173,7 +173,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->aggregatedFileCollector);
         $this->argumentInterpreter->expects($this->any())
             ->method('evaluate')
-            ->willReturnCallback(function ($argument) {
+            ->willReturnCallback(static function ($argument) {
                 return ['argument' => $argument['value']];
             });
         $this->arrayObjectFactory->expects($this->any())
@@ -287,7 +287,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         if ($needEvaluate === true) {
             $this->argumentInterpreter->expects($this->once())
                 ->method('evaluate')
-                ->willReturnCallback(function ($argument) {
+                ->willReturnCallback(static function ($argument) {
                     return ['argument' => $argument['value']];
                 });
         } else {

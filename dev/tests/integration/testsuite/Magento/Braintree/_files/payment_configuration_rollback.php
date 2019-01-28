@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
-$deleteConfigData = function (WriterInterface $writer, $scope, $scopeId) {
+$deleteConfigData = static function (WriterInterface $writer, $scope, $scopeId) {
     $configData = [
         'payment/braintree/merchant_id',
         'payment/braintree/public_key',

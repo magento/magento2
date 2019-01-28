@@ -151,7 +151,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $configMock->method('getPreference')
             ->willReturnCallback(
-                function ($className) {
+                static function ($className) {
                     return $className;
                 }
             );

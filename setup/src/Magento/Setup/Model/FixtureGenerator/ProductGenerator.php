@@ -190,7 +190,7 @@ class ProductGenerator
             $generator->generate(
                 $this->productTemplateGeneratorFactory->create($fixtureMap),
                 $productsAmount,
-                function ($productNumber, $entityNumber) use ($attributeSetId, $fixtureMap) {
+                static function ($productNumber, $entityNumber) use ($attributeSetId, $fixtureMap) {
                     // add additional attributes to fixture for fulfill it during product generation
                     return array_merge(
                         $fixtureMap,
@@ -211,10 +211,10 @@ class ProductGenerator
             'attribute_set_id' => function () {
                 return $this->productFactory->create()->getDefaultAttributeSetId();
             },
-            'additional_attributes' => function () {
+            'additional_attributes' => static function () {
                 return [];
             },
-            'url_key' => function ($productId, $entityNumber) use ($fixture) {
+            'url_key' => static function ($productId, $entityNumber) use ($fixture) {
                 return strtolower(str_replace(' ', '-', $fixture['sku']($productId, $entityNumber)));
             },
             'website_ids' => function () {

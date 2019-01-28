@@ -109,7 +109,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function invalidValueDataProvider()
     {
-        $closure = function () {
+        $closure = static function () {
             return false;
         };
 

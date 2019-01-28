@@ -113,7 +113,7 @@ class Section extends DataSource
     private function replacePlaceholders(array $data)
     {
         foreach ($data as &$params) {
-            $params = array_map(function ($value) {
+            $params = array_map(static function ($value) {
                 if (is_string($value)) {
                     $value = str_replace(
                         '{{basic_url_to_secure}}',

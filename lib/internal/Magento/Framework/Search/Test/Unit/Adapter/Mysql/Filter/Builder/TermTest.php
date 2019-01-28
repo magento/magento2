@@ -44,7 +44,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
             ->method('generateCondition')
             ->will(
                 $this->returnCallback(
-                    function ($field, $operator, $value) {
+                    static function ($field, $operator, $value) {
                         return sprintf(
                             is_array($value) ? '%s %s (%s)' : '%s %s %s',
                             $field,

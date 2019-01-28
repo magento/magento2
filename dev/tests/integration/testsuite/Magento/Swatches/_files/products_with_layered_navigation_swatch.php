@@ -41,7 +41,7 @@ $optionsPerAttribute = 3;
 $data['swatch_input_type'] = 'visual';
 $data['swatchvisual']['value'] = array_reduce(
     range(1, $optionsPerAttribute),
-    function ($values, $index) use ($optionsPerAttribute) {
+    static function ($values, $index) use ($optionsPerAttribute) {
         $values['option_' . $index] = '#'
             . str_repeat(
                 dechex(255 * $index / $optionsPerAttribute),
@@ -53,7 +53,7 @@ $data['swatchvisual']['value'] = array_reduce(
 );
 $data['optionvisual']['value'] = array_reduce(
     range(1, $optionsPerAttribute),
-    function ($values, $index) use ($optionsPerAttribute) {
+    static function ($values, $index) use ($optionsPerAttribute) {
         $values['option_' . $index] = ['option ' . $index];
         return $values;
     },
@@ -62,7 +62,7 @@ $data['optionvisual']['value'] = array_reduce(
 
 $data['options']['option'] = array_reduce(
     range(1, $optionsPerAttribute),
-    function ($values, $index) use ($optionsPerAttribute) {
+    static function ($values, $index) use ($optionsPerAttribute) {
         $values[] = [
             'label' => 'option ' . $index,
             'value' => 'option_' . $index,

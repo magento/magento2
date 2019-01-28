@@ -66,7 +66,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return json_encode($value);
                     }
                 )

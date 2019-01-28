@@ -93,7 +93,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
     public function testAroundGetElementByPathPartsNonPayment($pathParts, $returnResult)
     {
         $result = $returnResult ? $this->elementConfigStructureMock : null;
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 
@@ -124,7 +124,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundGetElementByPathPartsNoResult($pathParts, $countryCode)
     {
-        $proceed = function () {
+        $proceed = static function () {
             return null;
         };
 
@@ -147,7 +147,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
     public function testAroundGetElementByPathParts($pathParts, $countryCode)
     {
         $result = $this->elementConfigStructureMock;
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 

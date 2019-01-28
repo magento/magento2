@@ -474,11 +474,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $isCalledWithRightPrefix = 0;
         $isObjectNameRight = 0;
         $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
-            $this->callback(function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
+            $this->callback(static function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
                 $isCalledWithRightPrefix |= ($arg === $eventName);
                 return true;
             }),
-            $this->callback(function ($data) use (&$isObjectNameRight, $objectName) {
+            $this->callback(static function ($data) use (&$isObjectNameRight, $objectName) {
                 $isObjectNameRight |= isset($data[$objectName]);
                 return true;
             })

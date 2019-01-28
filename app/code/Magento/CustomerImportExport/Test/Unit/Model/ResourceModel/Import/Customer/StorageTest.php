@@ -97,7 +97,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->iteratorMock->expects($this->at(0))
             ->method('iterate')
             ->willReturnCallback(
-                function (...$args) use (
+                static function (...$args) use (
                     $existingId,
                     $existingEmail,
                     $existingWebsiteId

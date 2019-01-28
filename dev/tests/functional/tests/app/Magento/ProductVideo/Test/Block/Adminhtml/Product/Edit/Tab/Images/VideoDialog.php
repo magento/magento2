@@ -141,7 +141,7 @@ class VideoDialog extends Form
     {
         $browser = $this->browser;
         return $browser->waitUntil(
-            function () use ($browser, $selector, $strategy) {
+            static function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
                 return $element->isDisabled() == false ? true : null;
             }

@@ -48,13 +48,13 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
             $methodsCodes
         );
 
-        $methodsInstances = array_filter($methodsInstances, function (MethodInterface $method) {
+        $methodsInstances = array_filter($methodsInstances, static function (MethodInterface $method) {
             return !($method instanceof \Magento\Payment\Model\Method\Substitution);
         });
 
         @uasort(
             $methodsInstances,
-            function (MethodInterface $a, MethodInterface $b) use ($storeId) {
+            static function (MethodInterface $a, MethodInterface $b) use ($storeId) {
                 return (int)$a->getConfigData('sort_order', $storeId) - (int)$b->getConfigData('sort_order', $storeId);
             }
         );
@@ -82,7 +82,7 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
     {
         $methodList = array_filter(
             $this->getList($storeId),
-            function (PaymentMethodInterface $method) {
+            static function (PaymentMethodInterface $method) {
                 return $method->getIsActive();
             }
         );

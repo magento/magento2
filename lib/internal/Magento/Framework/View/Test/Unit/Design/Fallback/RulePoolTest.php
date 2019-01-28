@@ -25,7 +25,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
                 $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
                 $dirMock->expects($this->any())
                     ->method('getAbsolutePath')
-                    ->will($this->returnCallback(function ($path) use ($code) {
+                    ->will($this->returnCallback(static function ($path) use ($code) {
                         $path = empty($path) ? $path : '/' . $path;
                         return rtrim($code, '/') . $path;
                     }));

@@ -140,7 +140,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
 
         $this->libraryDirectoryMock->expects($this->any())->method('search')->will($this->returnValue($libraryFiles));
         $this->libraryDirectoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnCallback(
-            function ($file) {
+            static function ($file) {
                 return '/opt/Magento/lib/' . $file;
             }
         ));

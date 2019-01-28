@@ -198,7 +198,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTranslatedString()
     {
-        $callback = function ($params) {
+        $callback = static function ($params) {
             return json_encode($params);
         };
 

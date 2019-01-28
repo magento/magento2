@@ -78,7 +78,7 @@ class AssertProductDuplicateForm extends AssertProductForm
 
         array_walk_recursive(
             $compareData,
-            function (&$item, $key, $formattingOptions) {
+            static function (&$item, $key, $formattingOptions) {
                 if (isset($formattingOptions[$key])) {
                     $item = number_format(
                         $item,

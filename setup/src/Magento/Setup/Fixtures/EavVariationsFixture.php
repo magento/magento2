@@ -157,7 +157,7 @@ class EavVariationsFixture extends Fixture
         $data['swatch_input_type'] = Swatch::SWATCH_INPUT_TYPE_VISUAL;
         $data['swatchvisual']['value'] = array_reduce(
             range(1, $optionCount),
-            function ($values, $index) use ($optionCount) {
+            static function ($values, $index) use ($optionCount) {
                 $values['option_' . $index] = '#'
                     . str_repeat(
                         dechex(255 * $index / $optionCount),
@@ -169,7 +169,7 @@ class EavVariationsFixture extends Fixture
         );
         $data['optionvisual']['value'] = array_reduce(
             range(1, $optionCount),
-            function ($values, $index) use ($optionCount) {
+            static function ($values, $index) use ($optionCount) {
                 $values['option_' . $index] = ['option ' . $index];
                 return $values;
             },

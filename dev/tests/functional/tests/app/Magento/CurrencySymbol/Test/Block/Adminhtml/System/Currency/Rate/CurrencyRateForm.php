@@ -50,7 +50,7 @@ class CurrencyRateForm extends Form
         $browser = $this->browser;
         $selector = $this->message;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $message = $browser->find($selector);
                 return $message->isVisible() ? true : null;
             }
@@ -71,7 +71,7 @@ class CurrencyRateForm extends Form
         $browser = $this->browser;
         $selector = $this->message;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $message = $browser->find($selector);
                 return $message->isVisible() ? true : null;
             }

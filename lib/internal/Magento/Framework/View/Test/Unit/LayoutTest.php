@@ -183,11 +183,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->serializer->expects($this->any())->method('serialize')
-            ->willReturnCallback(function ($value) {
+            ->willReturnCallback(static function ($value) {
                 return json_encode($value);
             });
         $this->serializer->expects($this->any())->method('unserialize')
-            ->willReturnCallback(function ($value) {
+            ->willReturnCallback(static function ($value) {
                 return json_decode($value, true);
             });
 

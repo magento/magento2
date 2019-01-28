@@ -18,7 +18,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
 
         $composerApp->expects($this->at(2))->method('run')->willReturnCallback(
-            function ($input, $buffer) {
+            static function ($input, $buffer) {
                 $output = 'magento/package-b requires magento/package-a (1.0)' . PHP_EOL .
                     'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                     'magento/package-c requires magento/package-a (1.0)' . PHP_EOL;
@@ -26,7 +26,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             }
         );
         $composerApp->expects($this->at(4))->method('run')->willReturnCallback(
-            function ($input, $buffer) {
+            static function ($input, $buffer) {
                 $output = 'magento/package-c requires magento/package-b (1.0)' . PHP_EOL .
                     'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                     'magento/package-d requires magento/package-b (1.0)' . PHP_EOL;
@@ -54,7 +54,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
 
         $composerApp->expects($this->at(2))->method('run')->willReturnCallback(
-            function ($input, $buffer) {
+            static function ($input, $buffer) {
                 $output = 'magento/package-b requires magento/package-a (1.0)' . PHP_EOL .
                     'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                     'magento/package-c requires magento/package-a (1.0)' . PHP_EOL;
@@ -62,7 +62,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             }
         );
         $composerApp->expects($this->at(4))->method('run')->willReturnCallback(
-            function ($input, $buffer) {
+            static function ($input, $buffer) {
                 $output = 'magento/package-c requires magento/package-b (1.0)' . PHP_EOL .
                     'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                     'magento/package-d requires magento/package-b (1.0)' . PHP_EOL;
@@ -70,7 +70,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             }
         );
         $composerApp->expects($this->at(6))->method('run')->willReturnCallback(
-            function ($input, $buffer) {
+            static function ($input, $buffer) {
                 $output = 'magento/package-d requires magento/package-c (1.0)' . PHP_EOL .
                     'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL;
                 $buffer->writeln($output);

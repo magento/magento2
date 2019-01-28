@@ -140,7 +140,7 @@ class Search extends Block
 
         $rootElement = $this->_rootElement;
         return (bool)$this->_rootElement->waitUntil(
-            function () use ($rootElement, $searchAutocomplete) {
+            static function () use ($rootElement, $searchAutocomplete) {
                 return $rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
@@ -170,7 +170,7 @@ class Search extends Block
         $browser = $this->browser;
 
         return $browser->waitUntil(
-            function () use ($browser, $selector, $strategy) {
+            static function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
 
                 return !$element->isDisabled() ? true : null;

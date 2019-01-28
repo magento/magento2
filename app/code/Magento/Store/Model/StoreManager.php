@@ -278,7 +278,7 @@ class StoreManager implements
 
         return $withDefault ? $groups : array_filter(
             $groups,
-            function ($item) {
+            static function ($item) {
                 return $item->getId() != 0;
             }
         );

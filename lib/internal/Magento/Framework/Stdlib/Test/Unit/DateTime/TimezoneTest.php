@@ -187,42 +187,42 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'now_datetime_utc' => [
-                function () {
+                static function () {
                     return new \DateTime('now', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 null
             ],
             'fixed_datetime_utc' => [
-                function () {
+                static function () {
                     return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 new \DateTime('2017-01-01 10:00:00')
             ],
             'now_datetime_vancouver' => [
-                function () {
+                static function () {
                     return new \DateTime('now', new \DateTimeZone('America/Vancouver'));
                 },
                 'America/Vancouver',
                 null
             ],
             'now_datetimeimmutable_utc' => [
-                function () {
+                static function () {
                     return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 null
             ],
             'fixed_datetimeimmutable_utc' => [
-                function () {
+                static function () {
                     return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 new \DateTimeImmutable('2017-01-01 10:00:00')
             ],
             'now_datetimeimmutable_vancouver' => [
-                function () {
+                static function () {
                     return new \DateTimeImmutable('now', new \DateTimeZone('America/Vancouver'));
                 },
                 'America/Vancouver',

@@ -47,7 +47,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     {
         $this->resolverMock->expects($this->any())->method('getLocale')->willReturn($locale);
         $this->localeDate->expects($this->any())->method('getDateFormat')->willReturnCallback(
-            function ($value) use ($locale) {
+            static function ($value) use ($locale) {
                 return (new \IntlDateFormatter(
                     $locale,
                     $value,

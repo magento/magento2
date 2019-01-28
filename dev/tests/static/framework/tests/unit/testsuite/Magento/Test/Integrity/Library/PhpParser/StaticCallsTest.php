@@ -47,7 +47,7 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
 
         $this->tokens->expects($this->any())->method('getPreviousToken')->will(
             $this->returnCallback(
-                function ($k) use ($tokens) {
+                static function ($k) use ($tokens) {
                     return $tokens[$k - 1];
                 }
             )
@@ -55,7 +55,7 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
 
         $this->tokens->expects($this->any())->method('getTokenCodeByKey')->will(
             $this->returnCallback(
-                function ($k) use ($tokens) {
+                static function ($k) use ($tokens) {
                     return $tokens[$k][0];
                 }
             )
@@ -63,7 +63,7 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
 
         $this->tokens->expects($this->any())->method('getTokenValueByKey')->will(
             $this->returnCallback(
-                function ($k) use ($tokens) {
+                static function ($k) use ($tokens) {
                     return $tokens[$k][1];
                 }
             )

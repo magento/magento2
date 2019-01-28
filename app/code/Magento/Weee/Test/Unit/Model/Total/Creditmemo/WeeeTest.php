@@ -114,7 +114,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
             ->will($this->returnCallback(
-                function ($price, $type) use (&$roundingDelta) {
+                static function ($price, $type) use (&$roundingDelta) {
                     if (!isset($roundingDelta[$type])) {
                         $roundingDelta[$type] = 0;
                     }
@@ -556,7 +556,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->weeeData->expects($this->any())
             ->method('getApplied')
             ->will($this->returnCallback(
-                function ($item) {
+                static function ($item) {
                     return $item->getAppliedWeee();
                 }
             ));
@@ -564,7 +564,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->weeeData->expects($this->any())
             ->method('setApplied')
             ->will($this->returnCallback(
-                function ($item, $weee) {
+                static function ($item, $weee) {
                     return $item->setAppliedWeee($weee);
                 }
             ));

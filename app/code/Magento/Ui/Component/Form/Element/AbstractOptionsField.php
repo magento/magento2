@@ -84,7 +84,7 @@ abstract class AbstractOptionsField extends AbstractElement
      */
     protected function convertOptionsValueToString(array $options)
     {
-        array_walk($options, function (&$value) {
+        array_walk($options, static function (&$value) {
             if (isset($value['value']) && is_scalar($value['value'])) {
                 $value['value'] = (string)$value['value'];
             }

@@ -125,7 +125,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function _buildModelForCreate($enforcedOptions = [], $decorators = [])
     {
-        $processFrontendFunc = function ($class, $params) {
+        $processFrontendFunc = static function ($class, $params) {
             switch ($class) {
                 case \Magento\Framework\Cache\Frontend\Adapter\Zend::class:
                     return new $class($params['frontendFactory']);

@@ -197,7 +197,7 @@ class SimpleProductsFixture extends Fixture
             }
         };
 
-        $additionalAttributes = function (
+        $additionalAttributes = static function (
             $attributeSetId,
             $index
         ) use (
@@ -216,7 +216,7 @@ class SimpleProductsFixture extends Fixture
         };
 
         $fixtureMap = [
-            'name' => function ($productId) {
+            'name' => static function ($productId) {
                 return sprintf('Simple Product %s', $productId);
             },
             'sku' => function ($productId) {
@@ -225,13 +225,13 @@ class SimpleProductsFixture extends Fixture
             'price' => function ($index, $entityNumber) {
                 return $this->priceProvider->getPrice($entityNumber);
             },
-            'url_key' => function ($productId) {
+            'url_key' => static function ($productId) {
                 return sprintf('simple-product-%s', $productId);
             },
-            'description' => function ($index) use ($descriptionGenerator) {
+            'description' => static function ($index) use ($descriptionGenerator) {
                 return $descriptionGenerator->generate($index);
             },
-            'short_description' => function ($index) use ($shortDescriptionGenerator) {
+            'short_description' => static function ($index) use ($shortDescriptionGenerator) {
                 return $shortDescriptionGenerator->generate($index);
             },
             'website_ids' => function ($index, $entityNumber) {
@@ -242,7 +242,7 @@ class SimpleProductsFixture extends Fixture
             },
             'attribute_set_id' => $attributeSet,
             'additional_attributes' => $additionalAttributes,
-            'status' => function () {
+            'status' => static function () {
                 return Status::STATUS_ENABLED;
             }
         ];

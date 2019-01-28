@@ -107,7 +107,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
 
         $returnValue = [['label' => 'productName', 'value' => 2]];
-        $this->closureMock = function () use ($returnValue) {
+        $this->closureMock = static function () use ($returnValue) {
             return $returnValue;
         };
 
@@ -148,7 +148,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $chainCallResult = [['label' => 'label', 'value' => 'value']];
 
-        $this->closureMock = function () use ($chainCallResult) {
+        $this->closureMock = static function () use ($chainCallResult) {
             return $chainCallResult;
         };
 
@@ -175,7 +175,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('other_product_type')
         );
 
-        $this->closureMock = function () use ($chainCallResult) {
+        $this->closureMock = static function () use ($chainCallResult) {
             return $chainCallResult;
         };
         $this->productMock->expects($this->never())->method('getTypeInstance');

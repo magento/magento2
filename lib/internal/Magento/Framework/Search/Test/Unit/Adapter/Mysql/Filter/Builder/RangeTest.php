@@ -44,7 +44,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             ->method('generateCondition')
             ->will(
                 $this->returnCallback(
-                    function ($field, $operator, $value) {
+                    static function ($field, $operator, $value) {
                         return sprintf('%s %s \'%s\'', $field, $operator, $value);
                     }
                 )

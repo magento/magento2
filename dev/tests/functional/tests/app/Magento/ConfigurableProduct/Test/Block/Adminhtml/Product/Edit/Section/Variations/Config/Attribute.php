@@ -266,7 +266,7 @@ class Attribute extends Form
         $browser = $this->browser;
         $createSetSelector = $this->createNewVariationSet;
         $browser->waitUntil(
-            function () use ($browser, $createSetSelector) {
+            static function () use ($browser, $createSetSelector) {
                 return $browser->find($createSetSelector)->isVisible() ? true : null;
             }
         );
@@ -290,7 +290,7 @@ class Attribute extends Form
     {
         $browser = ($browser != null) ? $browser : $this->browser;
         return $browser->waitUntil(
-            function () use ($browser, $selector, $strategy) {
+            static function () use ($browser, $selector, $strategy) {
                 return $browser->find($selector, $strategy)->isVisible() == false ? true : null;
             }
         );
@@ -463,7 +463,7 @@ class Attribute extends Form
             $browser = $attribute;
             $selector = $this->attributeContent;
             $browser->waitUntil(
-                function () use ($browser, $selector) {
+                static function () use ($browser, $selector) {
                     return $browser->find($selector)->isVisible() ? true : null;
                 }
             );

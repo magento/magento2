@@ -132,7 +132,7 @@ class ArgumentsReader
             return null;
         }
 
-        $trimFunction = function (&$value) {
+        $trimFunction = static function (&$value) {
             $value = trim($value, PHP_EOL . ' $');
         };
 

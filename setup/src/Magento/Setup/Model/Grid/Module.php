@@ -108,7 +108,7 @@ class Module
     {
         return array_filter(
             $this->composerInformation->getInstalledMagentoPackages(),
-            function ($item) {
+            static function ($item) {
                 return $item['type'] === ComposerInformation::MODULE_PACKAGE_TYPE;
             }
         );

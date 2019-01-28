@@ -161,7 +161,7 @@ class SaveTest extends AbstractBackendController
         $items = $repository->getList($searchCriteria)
             ->getItems();
 
-        $idList = array_map(function (ProductInterface $item) {
+        $idList = array_map(static function (ProductInterface $item) {
             return $item->getId();
         }, $items);
 

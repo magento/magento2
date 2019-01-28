@@ -398,13 +398,13 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
-            function (DataObject $row) {
+            static function (DataObject $row) {
                 return $row->getData('title');
             }
         );
 
         $rendererMock->expects($this->any())->method('render')->willReturnCallback(
-            function (DataObject $row) {
+            static function (DataObject $row) {
                 return $row->getData('title');
             }
         );
@@ -417,7 +417,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $frameCallbackHostObject->expects($this->any())
             ->method('decorate')
             ->willReturnCallback(
-                function ($renderValue) {
+                static function ($renderValue) {
                     return '__callback_decorated_' . $renderValue;
                 }
             );
@@ -444,7 +444,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
-            function (DataObject $row) {
+            static function (DataObject $row) {
                 return $row->getData('title');
             }
         );
@@ -468,7 +468,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $rendererMock->expects($this->any())->method('render')->willReturnCallback(
-            function (DataObject $row) {
+            static function (DataObject $row) {
                 return $row->getData('title');
             }
         );

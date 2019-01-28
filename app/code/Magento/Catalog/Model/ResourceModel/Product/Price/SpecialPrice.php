@@ -192,7 +192,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
     public function delete(array $prices)
     {
         $skus = array_unique(
-            array_map(function ($price) {
+            array_map(static function ($price) {
                 return $price->getSku();
             }, $prices)
         );

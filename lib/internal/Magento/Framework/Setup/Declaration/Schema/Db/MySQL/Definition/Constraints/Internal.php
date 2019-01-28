@@ -60,7 +60,7 @@ class Internal implements DbDefinitionProcessorInterface
             $constraint->getTable()->getResource()
         );
         $columnsList = array_map(
-            function ($columnName) use ($adapter) {
+            static function ($columnName) use ($adapter) {
                 return $adapter->quoteIdentifier($columnName);
             },
             $constraint->getColumnNames()

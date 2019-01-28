@@ -118,7 +118,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(
-                function ($arguments) use ($validationStateMock) {
+                static function ($arguments) use ($validationStateMock) {
                     return new \Magento\Framework\Config\Dom(
                         $arguments['xml'],
                         $validationStateMock,

@@ -151,8 +151,8 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
         $bundleProduct->setExtensionAttributes($extension);
         // Need for set "has_options" field
         $bundleProduct->setBundleOptionsData($bundleProductOptions);
-        $bundleSelections = array_map(function ($option) {
-            return array_map(function ($link) {
+        $bundleSelections = array_map(static function ($option) {
+            return array_map(static function ($link) {
                 return $link->getData();
             }, $option->getProductLinks());
         }, $bundleProductOptions);

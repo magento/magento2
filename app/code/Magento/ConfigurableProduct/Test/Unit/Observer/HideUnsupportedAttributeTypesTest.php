@@ -71,7 +71,7 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $request->method('getParam')
             ->willReturnCallback(
-                function ($name) use ($popup, $productTab) {
+                static function ($name) use ($popup, $productTab) {
                     switch ($name) {
                         case 'popup':
                             return $popup;

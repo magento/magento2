@@ -69,7 +69,7 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                 ->applyConditionsToCollection($condition, $productCollection);
 
             $resultSkuList = array_map(
-                function (Product $product) {
+                static function (Product $product) {
                     return $product->getSku();
                 },
                 array_values($resultCollection->getItems())

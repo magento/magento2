@@ -438,7 +438,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock
             ->method('get')
-            ->willReturnCallback(function ($configPath) {
+            ->willReturnCallback(static function ($configPath) {
                 switch ($configPath) {
                     case Config::PARAM_SESSION_SAVE_METHOD:
                         return 'files';

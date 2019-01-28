@@ -137,7 +137,7 @@ class Log implements DebuggerInterface
     private function addIndent($content, $indent = '    ')
     {
         $contentLines = explode("\n", $content);
-        $contentLinesWithIndent = array_map(function ($line) use ($indent) {
+        $contentLinesWithIndent = array_map(static function ($line) use ($indent) {
             return $indent . $line;
         }, $contentLines);
         $content = implode("\n", $contentLinesWithIndent);

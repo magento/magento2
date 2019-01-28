@@ -261,7 +261,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
         $serializerMock->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($serializedData) {
+                static function ($serializedData) {
                     return json_decode($serializedData, true);
                 }
             );

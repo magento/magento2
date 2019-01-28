@@ -24,7 +24,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         )->getMock();
         $this->priceCurrency->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(function ($argument) {
+            ->will($this->returnCallback(static function ($argument) {
                 return round($argument, 2);
             }));
 

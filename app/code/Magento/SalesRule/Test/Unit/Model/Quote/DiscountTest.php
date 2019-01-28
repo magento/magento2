@@ -73,7 +73,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->will($this->returnCallback(
-                function ($argument) {
+                static function ($argument) {
                     return round($argument, 2);
                 }
             ));

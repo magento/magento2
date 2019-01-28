@@ -71,7 +71,7 @@ class SaveHandler
         // Set array position as a fallback position if necessary
         foreach ($linksByType as $linkType => $links) {
             if (!$this->hasPosition($links)) {
-                array_walk($linksByType[$linkType], function ($productLink, $position) {
+                array_walk($linksByType[$linkType], static function ($productLink, $position) {
                     $productLink->setPosition(++$position);
                 });
             }

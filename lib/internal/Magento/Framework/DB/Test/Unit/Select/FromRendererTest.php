@@ -69,7 +69,7 @@ class FromRendererTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->any())
             ->method('quoteTableAs')
             ->willReturnCallback(
-                function ($tableName, $correlationName) {
+                static function ($tableName, $correlationName) {
                     return $tableName.' AS '.$correlationName;
                 }
             );

@@ -141,7 +141,7 @@ class History extends Block
         $browser = $this->browser;
         $selector = $this->formSelector;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector);
                 return $element->isVisible() ? true : null;
             }

@@ -49,7 +49,7 @@ class CustomerDataTest extends \PHPUnit\Framework\TestCase
     public function testAroundGetSectionDataForPersistentSession()
     {
         $result = 'result';
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 
@@ -63,7 +63,7 @@ class CustomerDataTest extends \PHPUnit\Framework\TestCase
     public function testAroundGetSectionData()
     {
         $result = 'result';
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 

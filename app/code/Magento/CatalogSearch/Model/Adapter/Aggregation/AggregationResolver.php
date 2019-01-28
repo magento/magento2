@@ -93,7 +93,7 @@ class AggregationResolver implements AggregationResolverInterface
 
         $resolvedAggregation = array_filter(
             $request->getAggregation(),
-            function ($bucket) use ($attributeCodes, $bucketKeys) {
+            static function ($bucket) use ($attributeCodes, $bucketKeys) {
                 /** @var BucketInterface $bucket */
                 return in_array($bucket->getField(), $attributeCodes, true) ||
                     in_array($bucket->getName(), $bucketKeys, true);

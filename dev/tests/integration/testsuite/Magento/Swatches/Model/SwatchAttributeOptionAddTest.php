@@ -40,7 +40,7 @@ class SwatchAttributeOptionAddTest extends \PHPUnit\Framework\TestCase
 
         $data['options']['option'] = array_reduce(
             range(10, $optionsPerAttribute),
-            function ($values, $index) use ($optionsPerAttribute) {
+            static function ($values, $index) use ($optionsPerAttribute) {
                 $values[] = [
                     'label' => 'option ' . $index,
                     'value' => 'option_' . $index
@@ -70,7 +70,7 @@ class SwatchAttributeOptionAddTest extends \PHPUnit\Framework\TestCase
         $items = $optionManagement->getItems($attribute->getAttributeCode());
         array_walk(
             $items,
-            function (&$item) {
+            static function (&$item) {
                 /** @var  AttributeOptionInterface $item */
                 $item = $item->getLabel();
             }

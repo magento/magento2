@@ -37,7 +37,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $filterManager->expects($this->once())
             ->method('template')
-            ->willReturnCallback(function ($format, $data) {
+            ->willReturnCallback(static function ($format, $data) {
                 return implode("\n", $data['variables']);
             });
 

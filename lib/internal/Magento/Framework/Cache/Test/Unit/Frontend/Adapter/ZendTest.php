@@ -17,7 +17,7 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     public function testProxyMethod($method, $params, $expectedParams, $expectedResult)
     {
         $frontendMock = $this->createMock(\Zend_Cache_Core::class);
-        $frontendFactory = function () use ($frontendMock) {
+        $frontendFactory = static function () use ($frontendMock) {
             return $frontendMock;
         };
         $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendFactory);
@@ -86,7 +86,7 @@ class ZendTest extends \PHPUnit\Framework\TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage($expectedErrorMessage);
         $frontendMock = $this->createMock(\Zend_Cache_Core::class);
-        $frontendFactory = function () use ($frontendMock) {
+        $frontendFactory = static function () use ($frontendMock) {
             return $frontendMock;
         };
         $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendFactory);
@@ -117,7 +117,7 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     public function testGetLowLevelFrontend()
     {
         $frontendMock = $this->createMock(\Zend_Cache_Core::class);
-        $frontendFactory = function () use ($frontendMock) {
+        $frontendFactory = static function () use ($frontendMock) {
             return $frontendMock;
         };
         $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendFactory);

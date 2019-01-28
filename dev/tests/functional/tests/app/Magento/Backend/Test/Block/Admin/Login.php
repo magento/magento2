@@ -38,7 +38,7 @@ class Login extends Form
     {
         $form = $this->_rootElement;
         $this->browser->waitUntil(
-            function () use ($form) {
+            static function () use ($form) {
                 return $form->isVisible() ? null : true;
             }
         );

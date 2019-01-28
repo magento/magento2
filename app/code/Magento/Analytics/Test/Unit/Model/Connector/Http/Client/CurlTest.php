@@ -203,7 +203,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
             ->setMethodsExcept(['getContentTypeHeader'])
             ->disableOriginalConstructor()
             ->getMock();
-        $converterMock->expects($this->any())->method('toBody')->willReturnCallback(function ($value) {
+        $converterMock->expects($this->any())->method('toBody')->willReturnCallback(static function ($value) {
             return json_encode($value);
         });
         return $converterMock;

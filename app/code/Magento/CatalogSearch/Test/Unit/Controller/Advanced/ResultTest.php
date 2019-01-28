@@ -44,7 +44,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         );
         $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
             $this->returnCallback(
-                function ($added) use (&$filters) {
+                static function ($added) use (&$filters) {
                     $filters = $added;
                 }
             )

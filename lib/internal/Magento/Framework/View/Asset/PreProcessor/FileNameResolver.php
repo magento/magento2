@@ -20,7 +20,7 @@ class FileNameResolver
     public function __construct(array $alternativeSources = [])
     {
         $this->alternativeSources = array_map(
-            function (AlternativeSourceInterface $alternativeSource) {
+            static function (AlternativeSourceInterface $alternativeSource) {
                 return $alternativeSource;
             },
             $alternativeSources

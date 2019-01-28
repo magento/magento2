@@ -187,7 +187,7 @@ class Content extends \Magento\Backend\Block\Widget
     private function sortImagesByPosition($images)
     {
         if (is_array($images)) {
-            usort($images, function ($imageA, $imageB) {
+            usort($images, static function ($imageA, $imageB) {
                 return ($imageA['position'] < $imageB['position']) ? -1 : 1;
             });
         }

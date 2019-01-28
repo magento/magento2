@@ -188,7 +188,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->will($this->returnCallback(
-                function ($attribute) use ($categoryId) {
+                static function ($attribute) use ($categoryId) {
                     static $callCount = [];
                     $attributeCode = $attribute->getAttributeCode();
                     $callCount[$attributeCode] = !isset($callCount[$attributeCode]) ? 1 : ++$callCount[$attributeCode];
@@ -219,7 +219,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->method('getByAttributeCode')
             ->with($this->anything())
             ->will($this->returnCallback(
-                function ($code) use (
+                static function ($code) use (
                     $categoryAttributeMock,
                     $positionAttributeMock,
                     $priceAttributeMock
@@ -240,7 +240,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($this->anything())
             ->will($this->returnCallback(
-                function ($type) use ($complexType) {
+                static function ($type) use ($complexType) {
                     static $callCount = [];
                     $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 

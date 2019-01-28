@@ -138,7 +138,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return json_encode($value);
                     }
                 )
@@ -148,7 +148,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return json_decode($value, true);
                     }
                 )

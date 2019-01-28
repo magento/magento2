@@ -75,7 +75,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
+            ->will($this->returnCallback(static function ($param) use ($requestCountry, $requestDefaultCountry) {
                 if ($param == \Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY) {
                     return $requestCountry;
                 }

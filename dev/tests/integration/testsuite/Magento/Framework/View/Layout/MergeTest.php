@@ -119,7 +119,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         $fileReader->expects($this->any())->method('readAll')->will(
             $this->returnCallback(
-                function ($filename) use ($fileDriver) {
+                static function ($filename) use ($fileDriver) {
                     return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/' . $filename);
                 }
             )

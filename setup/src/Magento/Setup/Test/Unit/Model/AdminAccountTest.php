@@ -39,7 +39,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
 
         $this->dbAdapter
             ->method('getTableName')
-            ->willReturnCallback(function ($table) {
+            ->willReturnCallback(static function ($table) {
                 return $table;
             });
 

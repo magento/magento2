@@ -138,7 +138,7 @@ class Install extends Block
         $launchAdmin = $this->launchAdmin;
 
         $root->waitUntil(
-            function () use ($root, $successInstallText, $launchAdmin) {
+            static function () use ($root, $successInstallText, $launchAdmin) {
                 $isInstallText = $root->find($successInstallText, Locator::SELECTOR_XPATH)->isVisible();
                 $isLaunchAdmin = $root->find($launchAdmin, Locator::SELECTOR_CSS)->isVisible();
                 return $isInstallText == true || $isLaunchAdmin == true ? true : null;

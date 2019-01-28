@@ -150,11 +150,11 @@ class FeedTest extends \PHPUnit\Framework\TestCase
                 ->method('parse')
                 ->with(
                     $this->callback(
-                        function ($data) {
+                        static function ($data) {
                             $fieldsToCheck = ['title', 'description', 'url'];
                             return array_reduce(
                                 $fieldsToCheck,
-                                function ($initialValue, $item) use ($data) {
+                                static function ($initialValue, $item) use ($data) {
                                     $haystack = $data[0][$item] ?? false;
                                     return $haystack
                                         ? $initialValue && !strpos($haystack, '<') && !strpos($haystack, '>')

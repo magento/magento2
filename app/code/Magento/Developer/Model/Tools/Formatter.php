@@ -51,7 +51,7 @@ class Formatter
         $indent = $this->_indent;
         $result = \preg_replace_callback(
             '/^(?:\s{2})+/m',
-            function (array $matches) use ($indent) {
+            static function (array $matches) use ($indent) {
                 $indentCount = \strlen($matches[0]) >> 1;
                 return \str_repeat($indent, $indentCount);
             },

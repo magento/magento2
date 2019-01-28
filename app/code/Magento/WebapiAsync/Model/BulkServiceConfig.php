@@ -86,7 +86,7 @@ class BulkServiceConfig implements \Magento\Webapi\Model\ConfigInterface
                 if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
                     $routePath = preg_replace_callback(
                         '/\/:(\w+)/',
-                        function ($matches) {
+                        static function ($matches) {
                             return '/' . self::URL_PARAM_PREFIX_PLACEHOLDER . ucfirst($matches[1]);
                         },
                         $routePath

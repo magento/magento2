@@ -273,7 +273,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->abstractDbMock->expects($this->once())
             ->method('addCommitCallback')
-            ->willReturnCallback(function ($function) {
+            ->willReturnCallback(static function ($function) {
                 return $function();
             });
 
@@ -337,7 +337,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->abstractDbMock->expects($this->exactly(2))
             ->method('addCommitCallback')
-            ->willReturnCallback(function ($function) {
+            ->willReturnCallback(static function ($function) {
                 return $function();
             });
 
@@ -390,7 +390,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->abstractDbMock->expects($this->once())
             ->method('addCommitCallback')
-            ->willReturnCallback(function ($function) {
+            ->willReturnCallback(static function ($function) {
                 return $function();
             });
 

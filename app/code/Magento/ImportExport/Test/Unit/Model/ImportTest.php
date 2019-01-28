@@ -834,7 +834,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')
-            ->willReturnCallback(function () use ($phrase) {
+            ->willReturnCallback(static function () use ($phrase) {
                 throw new \Magento\Framework\Exception\FileSystemException($phrase);
             });
         $this->dateTime

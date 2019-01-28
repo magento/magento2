@@ -36,7 +36,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(
             $this->_model->aroundIsSecure(
                 $this->createMock(\Magento\Framework\Url\SecurityInfo::class),
-                function () {
+                static function () {
                 },
                 'http://example.com/account'
             )
@@ -56,7 +56,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(
             $this->_model->aroundIsSecure(
                 $this->createMock(\Magento\Framework\Url\SecurityInfo::class),
-                function () {
+                static function () {
                     return true;
                 },
                 'https://example.com/account'

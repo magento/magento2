@@ -215,7 +215,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             return false;
         }
 
-        $toStringCallback = function (&$item) {
+        $toStringCallback = static function (&$item) {
             $item = $item->toString();
         };
 

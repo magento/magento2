@@ -58,7 +58,7 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
     {
         $this->_itemInterpreter->expects($this->any())
             ->method('evaluate')
-            ->will($this->returnCallback(function ($input) {
+            ->will($this->returnCallback(static function ($input) {
                 return '-' . $input['value'] . '-';
             }));
         $actual = $this->_model->evaluate($input);

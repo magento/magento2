@@ -2729,7 +2729,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return explode($delimiter, $values);
         }
         if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
-            return $values = array_map(function ($value) {
+            return $values = array_map(static function ($value) {
                 return str_replace('""', '"', $value);
             }, $matches[1]);
         }

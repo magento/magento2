@@ -151,7 +151,7 @@ METHOD_BODY
         return implode(
             ', ',
             array_map(
-                function ($item) {
+                static function ($item) {
                     $output = '';
                     if ($item['variadic']) {
                         $output .= '... ';

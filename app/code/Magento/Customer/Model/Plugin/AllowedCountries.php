@@ -54,7 +54,7 @@ class AllowedCountries
     ) {
         if ($this->shareConfig->isGlobalScope()) {
             //Check if we have shared accounts - than merge all website allowed countries
-            $scopeCode = array_map(function (WebsiteInterface $website) {
+            $scopeCode = array_map(static function (WebsiteInterface $website) {
                 return $website->getId();
             }, $this->storeManager->getWebsites());
             $scope = ScopeInterface::SCOPE_WEBSITES;

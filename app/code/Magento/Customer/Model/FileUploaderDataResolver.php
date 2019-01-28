@@ -138,7 +138,7 @@ class FileUploaderDataResolver
 
             if (isset($config['validation']['file_extensions'])) {
                 $allowedExtensions = explode(',', $config['validation']['file_extensions']);
-                array_walk($allowedExtensions, function (&$value) {
+                array_walk($allowedExtensions, static function (&$value) {
                     $value = strtolower(trim($value));
                 });
             }

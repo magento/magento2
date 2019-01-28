@@ -523,7 +523,7 @@ class EavTest extends AbstractModifierTest
                 $this->anything(),
                 $this->anything(),
                 $this->callback(
-                    function ($value) use ($attributeOptionsExpected) {
+                    static function ($value) use ($attributeOptionsExpected) {
                         return isset($value['options']) ? $value['options'] === $attributeOptionsExpected : true;
                     }
                 )

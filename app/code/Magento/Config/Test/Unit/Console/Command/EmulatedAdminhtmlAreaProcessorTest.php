@@ -52,7 +52,7 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcess()
     {
         $currentScope = 'currentScope';
-        $callback = function () {
+        $callback = static function () {
         };
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
@@ -89,7 +89,7 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('emulateAreaCode')
             ->willThrowException(new \Exception('Some Message'));
 
-        $this->emulatedAdminhtmlProcessorArea->process(function () {
+        $this->emulatedAdminhtmlProcessorArea->process(static function () {
         });
     }
 }

@@ -54,7 +54,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $expected = $this->getExpectedSaveHandler($deploymentConfigHandler, ini_get('session.save_handler'));
 
         $this->deploymentConfigMock->method('get')
-            ->willReturnCallback(function ($configPath) use ($deploymentConfigHandler) {
+            ->willReturnCallback(static function ($configPath) use ($deploymentConfigHandler) {
                 switch ($configPath) {
                     case Config::PARAM_SESSION_SAVE_METHOD:
                         return $deploymentConfigHandler;
@@ -111,7 +111,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     public function testConstructorWithException()
     {
         $this->deploymentConfigMock->method('get')
-            ->willReturnCallback(function ($configPath) {
+            ->willReturnCallback(static function ($configPath) {
                 switch ($configPath) {
                     case Config::PARAM_SESSION_SAVE_METHOD:
                         return 'db';

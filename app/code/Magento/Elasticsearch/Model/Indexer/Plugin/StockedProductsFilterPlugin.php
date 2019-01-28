@@ -79,7 +79,7 @@ class StockedProductsFilterPlugin
             $stockStatusCriteria->setProductsFilter($productIds);
             $stockStatusCollection = $this->stockStatusRepository->getList($stockStatusCriteria);
             $stockStatuses = $stockStatusCollection->getItems();
-            $stockStatuses = array_filter($stockStatuses, function (StockStatusInterface $stockStatus) {
+            $stockStatuses = array_filter($stockStatuses, static function (StockStatusInterface $stockStatus) {
                 return StockStatusInterface::STATUS_IN_STOCK == $stockStatus->getStockStatus();
             });
             $indexData = array_intersect_key($indexData, $stockStatuses);

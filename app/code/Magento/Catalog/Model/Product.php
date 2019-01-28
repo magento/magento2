@@ -2200,7 +2200,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (is_array($customOptions)) {
             array_filter(
                 $customOptions,
-                function ($value) {
+                static function ($value) {
                     return $value !== '';
                 }
             );
@@ -2406,7 +2406,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function __toArray()
     {
         $data = $this->_data;
-        $hasToArray = function ($model) {
+        $hasToArray = static function ($model) {
             return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);
         };
         foreach ($data as $key => $value) {

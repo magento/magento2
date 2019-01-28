@@ -169,7 +169,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     private function retrieveValidPrices(array $prices)
     {
         $skus = array_unique(
-            array_map(function ($price) {
+            array_map(static function ($price) {
                 return $price->getSku();
             }, $prices)
         );

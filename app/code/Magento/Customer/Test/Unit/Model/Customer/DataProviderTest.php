@@ -482,7 +482,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private function attributeGetUsingMethodCallback()
     {
-        return function ($origName) {
+        return static function ($origName) {
             return $origName;
         };
     }
@@ -521,7 +521,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $countryAttrMock->expects($this->any())
             ->method('getDataUsingMethod')
             ->willReturnCallback(
-                function ($origName) {
+                static function ($origName) {
                     return $origName;
                 }
             );
@@ -858,7 +858,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())
             ->method('getDataUsingMethod')
             ->willReturnCallback(
-                function ($origName) {
+                static function ($origName) {
                     return $origName;
                 }
             );

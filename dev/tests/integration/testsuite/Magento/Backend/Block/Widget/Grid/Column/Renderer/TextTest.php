@@ -33,7 +33,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $rendererMock->expects($this->any())
             ->method('render')
             ->willReturnCallback(
-                function ($input) {
+                static function ($input) {
                     return end($input) . ' translated';
                 }
             );

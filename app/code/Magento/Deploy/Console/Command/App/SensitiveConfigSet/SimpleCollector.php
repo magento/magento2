@@ -102,7 +102,7 @@ class SimpleCollector implements CollectorInterface
         $configValueQuestion = $this->questionFactory->create([
             'question' => 'Please enter value: '
         ]);
-        $configValueQuestion->setValidator(function ($interviewer) {
+        $configValueQuestion->setValidator(static function ($interviewer) {
             if (empty($interviewer)) {
                 throw new LocalizedException(new Phrase("The value can't be empty. Enter the value and try again."));
             }

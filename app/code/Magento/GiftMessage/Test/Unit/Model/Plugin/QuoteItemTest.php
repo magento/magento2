@@ -48,7 +48,7 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
             ['getGiftMessageId', 'getStoreId', '__wakeup']
         );
         $orderItems = $this->orderItemMock;
-        $this->closureMock = function () use ($orderItems) {
+        $this->closureMock = static function () use ($orderItems) {
             return $orderItems;
         };
         $this->subjectMock = $this->createMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class);

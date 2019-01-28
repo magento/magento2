@@ -29,7 +29,7 @@ class DesignAbstractionTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $processorMock->expects($this->exactly(2))->method('isPageLayoutDesignAbstraction')->will(
             $this->returnCallback(
-                function ($abstraction) {
+                static function ($abstraction) {
                     return $abstraction['design_abstraction'] === 'page_layout';
                 }
             )
@@ -38,7 +38,7 @@ class DesignAbstractionTest extends \PHPUnit\Framework\TestCase
             $this->createPartialMock(\Magento\Framework\View\Layout\ProcessorFactory::class, ['create']);
         $processorFactoryMock->expects($this->exactly(2))->method('create')->will(
             $this->returnCallback(
-                function ($data) use ($processorMock, $layoutUtility) {
+                static function ($data) use ($processorMock, $layoutUtility) {
                     return $data === [] ? $processorMock : $layoutUtility->getLayoutUpdateFromFixture(
                         glob(__DIR__ . '/_files/layout/*.xml')
                     );

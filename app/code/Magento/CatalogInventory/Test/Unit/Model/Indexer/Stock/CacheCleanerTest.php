@@ -119,7 +119,7 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->metadataPoolMock->expects($this->exactly(2))->method('getLinkField')
             ->willReturn('row_id');
-        $callback = function () {
+        $callback = static function () {
         };
         $this->unit->clean([], $callback);
     }
@@ -168,7 +168,7 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
         $this->metadataPoolMock->expects($this->exactly(2))->method('getLinkField')
             ->willReturn('row_id');
 
-        $callback = function () {
+        $callback = static function () {
         };
         $this->unit->clean([], $callback);
     }

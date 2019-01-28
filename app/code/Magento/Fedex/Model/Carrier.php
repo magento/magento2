@@ -1447,7 +1447,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private function getTrackingNumber($trackingIds)
     {
         return is_array($trackingIds) ? array_map(
-            function ($val) {
+            static function ($val) {
                 return $val->TrackingNumber;
             },
             $trackingIds

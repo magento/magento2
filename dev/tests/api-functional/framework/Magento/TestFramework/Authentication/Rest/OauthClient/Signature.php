@@ -22,7 +22,7 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
     {
         $queryStringData = !$uri->getQuery() ? [] : array_reduce(
             explode('&', $uri->getQuery()),
-            function ($carry, $item) {
+            static function ($carry, $item) {
                 list($key, $value) = explode('=', $item, 2);
                 $carry[rawurldecode($key)] = rawurldecode($value);
                 return $carry;

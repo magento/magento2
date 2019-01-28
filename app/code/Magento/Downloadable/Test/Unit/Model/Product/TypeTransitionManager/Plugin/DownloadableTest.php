@@ -46,7 +46,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         );
         $this->weightResolver = $this->createMock(\Magento\Catalog\Model\Product\Edit\WeightResolver::class);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\TypeTransitionManager::class);
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
         };
         $this->model = new \Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable(
             $this->requestMock,

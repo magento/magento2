@@ -34,7 +34,7 @@ class ComplexGeneratorTest extends \PHPUnit\Framework\TestCase
                 [
                     'id' => '%s',
                     'name' => 'Static',
-                    'calculated' => function ($index) {
+                    'calculated' => static function ($index) {
                         return $index * 10;
                     },
                 ],

@@ -20,7 +20,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $childBlockA = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template::class);
         $childBlockB = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template::class);
 
-        $func = function ($blockName) use ($childBlockA, $childBlockB) {
+        $func = static function ($blockName) use ($childBlockA, $childBlockB) {
             switch ($blockName) {
                 case 'payment.method.a':
                     return $childBlockA;

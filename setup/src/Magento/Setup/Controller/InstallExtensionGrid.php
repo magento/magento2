@@ -70,7 +70,7 @@ class InstallExtensionGrid extends AbstractActionController
      */
     private function formatPackageList(array $packages)
     {
-        array_walk($packages, function (&$package) {
+        array_walk($packages, static function (&$package) {
             $package['vendor'] = ucfirst($package['vendor']);
         });
 

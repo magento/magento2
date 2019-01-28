@@ -117,7 +117,7 @@ class AdvancedInventory extends AbstractModifier
                 $unserializedMinSaleQty = $this->serializer->unserialize($minSaleQtyData);
                 if (is_array($unserializedMinSaleQty)) {
                     $minSaleQtyData = array_map(
-                        function ($group, $qty) {
+                        static function ($group, $qty) {
                             return [
                                 StockItemInterface::CUSTOMER_GROUP_ID => $group,
                                 StockItemInterface::MIN_SALE_QTY => $qty

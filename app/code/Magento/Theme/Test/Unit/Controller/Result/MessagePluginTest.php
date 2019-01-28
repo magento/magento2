@@ -131,14 +131,14 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_decode($data, true);
                 }
             );
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_encode($data);
                 }
             );
@@ -188,7 +188,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_decode($data, true);
                 }
             );
@@ -257,14 +257,14 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_decode($data, true);
                 }
             );
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_encode($data);
                 }
             );
@@ -342,7 +342,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_encode($data);
                 }
             );
@@ -417,14 +417,14 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_decode($data, true);
                 }
             );
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_encode($data);
                 }
             );
@@ -502,14 +502,14 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_decode($data, true);
                 }
             );
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
-                function ($data) {
+                static function ($data) {
                     return json_encode($data);
                 }
             );

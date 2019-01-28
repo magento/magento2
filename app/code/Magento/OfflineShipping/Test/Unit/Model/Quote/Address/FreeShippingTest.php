@@ -77,7 +77,7 @@ class FreeShippingTest extends \PHPUnit\Framework\TestCase
                 [$fItem],
                 [$sItem]
             )
-            ->willReturnCallback(function () use ($fItem, $sItem, $addressFree, $fItemFree, $sItemFree) {
+            ->willReturnCallback(static function () use ($fItem, $sItem, $addressFree, $fItemFree, $sItemFree) {
                 // emulate behavior of cart rule calculator
                 $fItem->getAddress()->setFreeShipping($addressFree);
                 $fItem->setFreeShipping($fItemFree);

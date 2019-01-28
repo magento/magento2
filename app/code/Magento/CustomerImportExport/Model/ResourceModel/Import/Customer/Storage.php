@@ -93,7 +93,7 @@ class Storage
         $select->where(
             $customerTableId .'.email in (?)',
             array_map(
-                function (array $customer) {
+                static function (array $customer) {
                     return $customer['email'];
                 },
                 $customerIdentifiers

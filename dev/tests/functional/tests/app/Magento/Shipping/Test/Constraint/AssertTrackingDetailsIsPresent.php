@@ -56,7 +56,7 @@ class AssertTrackingDetailsIsPresent extends AbstractConstraint
         $browser->selectWindow();
 
         $selector = '.close';
-        $browser->waitUntil(function () use ($browser, $selector) {
+        $browser->waitUntil(static function () use ($browser, $selector) {
             $element = $browser->find($selector);
             return $element->isVisible() ? true : null;
         });

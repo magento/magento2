@@ -154,7 +154,7 @@ class StaticProperties
                 | Files::INCLUDE_LIBS
                 | Files::INCLUDE_TESTS
             ),
-            function ($classFile) {
+            static function ($classFile) {
                 return StaticProperties::_isClassInCleanableFolders($classFile)
                 && strpos(file_get_contents($classFile), ' static ')  > 0;
             }

@@ -19,7 +19,7 @@ class ArrayFilterTest extends \PHPUnit\Framework\TestCase
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
         $filterMock->expects($this->exactly(3))->method('filter')->will(
             $this->returnCallback(
-                function ($input) {
+                static function ($input) {
                     return '(' . $input . ')';
                 }
             )
@@ -31,7 +31,7 @@ class ArrayFilterTest extends \PHPUnit\Framework\TestCase
         $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
         $fieldFilterMock->expects($this->exactly(1))->method('filter')->will(
             $this->returnCallback(
-                function ($input) {
+                static function ($input) {
                     return '[' . $input . ']';
                 }
             )

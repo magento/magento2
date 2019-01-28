@@ -52,7 +52,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                 'attribute set name',
                 1,
                 2,
-                function ($index, $attributeData) {
+                static function ($index, $attributeData) {
                     $attributeData['backend_type'] = $index;
                     return $attributeData;
                 }

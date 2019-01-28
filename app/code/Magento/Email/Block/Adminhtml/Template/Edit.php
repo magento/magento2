@@ -268,7 +268,7 @@ class Edit extends Widget implements ContainerInterface
         );
         uasort(
             $options,
-            function (array $firstElement, array $secondElement) {
+            static function (array $firstElement, array $secondElement) {
                 return strcmp($firstElement['label'], $secondElement['label']);
             }
         );

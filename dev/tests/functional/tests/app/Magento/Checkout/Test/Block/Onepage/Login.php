@@ -116,7 +116,7 @@ class Login extends Form
         $browser = $this->browser;
         $selector = $this->loadingMask;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector);
                 return $element->isVisible() == false ? true : null;
             }

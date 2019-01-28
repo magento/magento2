@@ -52,7 +52,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $packageFactory->method('create')
-            ->willReturnCallback(function ($args) {
+            ->willReturnCallback(static function ($args) {
                 return new Package($args['json']);
             });
 
@@ -95,7 +95,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     'vendor/company/module',
                     'vendor/company2/module/src'
                 ],
-                'composerJsonGenerator' => function (DependencyTest $test) {
+                'composerJsonGenerator' => static function (DependencyTest $test) {
                     return [
                         [
                             'app/code/LocalModule',

@@ -50,7 +50,7 @@ class ExcludeList
         return array_keys(
             array_filter(
                 $this->configs,
-                function ($value) {
+                static function ($value) {
                     return filter_var($value, FILTER_VALIDATE_BOOLEAN);
                 }
             )

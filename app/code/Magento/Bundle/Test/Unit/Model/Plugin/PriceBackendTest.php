@@ -33,7 +33,7 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
         $this->priceBackendPlugin = $objectManager->getObject(\Magento\Bundle\Model\Plugin\PriceBackend::class);
 
-        $this->closure = function () {
+        $this->closure = static function () {
             return static::CLOSURE_VALUE;
         };
         $this->priceAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class)

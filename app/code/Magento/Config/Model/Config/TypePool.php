@@ -136,7 +136,7 @@ class TypePool
 
         return array_keys(array_filter(
             $paths,
-            function ($value) {
+            static function ($value) {
                 return filter_var($value, FILTER_VALIDATE_BOOLEAN);
             }
         ));

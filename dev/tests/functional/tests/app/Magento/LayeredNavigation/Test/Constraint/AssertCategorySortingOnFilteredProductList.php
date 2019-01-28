@@ -53,7 +53,7 @@ class AssertCategorySortingOnFilteredProductList extends AbstractConstraint
                 $filteredIndexes = array_intersect(
                     $filteredIndexes,
                     array_map(
-                        function ($productKey) {
+                        static function ($productKey) {
                             return str_replace('product_', '', trim($productKey));
                         },
                         explode(',', $filter['products'])

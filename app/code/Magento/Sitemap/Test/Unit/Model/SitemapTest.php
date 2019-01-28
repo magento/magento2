@@ -400,7 +400,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         // Check that all $expectedWrites lines were written
         $actualData = [];
         $currentFile = '';
-        $streamWriteCallback = function ($str) use (&$actualData, &$currentFile) {
+        $streamWriteCallback = static function ($str) use (&$actualData, &$currentFile) {
             if (!array_key_exists($currentFile, $actualData)) {
                 $actualData[$currentFile] = '';
             }
@@ -416,7 +416,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $this->returnCallback($streamWriteCallback)
         );
 
-        $checkFileCallback = function ($file) use (&$currentFile) {
+        $checkFileCallback = static function ($file) use (&$currentFile) {
             $currentFile = $file;
         };// Check that all expected file descriptors were created
         $this->directoryMock->expects($this->exactly(count($expectedFile)))->method('openFile')
@@ -429,7 +429,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         if (count($expectedFile) == 1) {
             $this->directoryMock->expects($this->once())
                 ->method('renameFile')
-                ->willReturnCallback(function ($from, $to) {
+                ->willReturnCallback(static function ($from, $to) {
                     \PHPUnit\Framework\Assert::assertEquals('/sitemap-1-1.xml', $from);
                     \PHPUnit\Framework\Assert::assertEquals('/sitemap.xml', $to);
                 });

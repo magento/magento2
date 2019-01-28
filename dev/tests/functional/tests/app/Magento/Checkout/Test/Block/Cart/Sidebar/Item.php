@@ -104,7 +104,7 @@ class Item extends Sidebar
         $rootElement = $this->_rootElement;
         $qtySelector = $this->qty;
         $this->browser->waitUntil(
-            function () use ($rootElement, $qtySelector) {
+            static function () use ($rootElement, $qtySelector) {
                 return $rootElement->find($qtySelector)->isVisible() ? true : null;
             }
         );

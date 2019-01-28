@@ -55,7 +55,7 @@ class Topmenu extends Block
         $category = $this->waitLoadTopMenu($categoryName);
         if ($category[1]) {
             $rootElement->waitUntil(
-                function () use ($category) {
+                static function () use ($category) {
                     return $category[0]->isVisible() ? true : null;
                 }
             );
@@ -75,7 +75,7 @@ class Topmenu extends Block
         $category = $this->waitLoadTopMenu($categoryName);
         if ($category[1]) {
             $rootElement->waitUntil(
-                function () use ($category) {
+                static function () use ($category) {
                     return $category[0]->isVisible() ? true : null;
                 }
             );
@@ -109,7 +109,7 @@ class Topmenu extends Block
         $notFindCategory = !$category->isVisible() && $moreCategoriesLink->isVisible();
         if (!$category->isVisible() && $moreCategoriesLink->isVisible()) {
             $rootElement->waitUntil(
-                function () use ($rootElement, $moreCategoriesLink, $submenu) {
+                static function () use ($rootElement, $moreCategoriesLink, $submenu) {
                     $rootElement->click();
                     $moreCategoriesLink->click();
                     return $submenu->isVisible() ? true : null;

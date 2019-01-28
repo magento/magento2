@@ -67,7 +67,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->urlEncoder = $context->getUrlEncoder();
         $this->urlEncoder->expects($this->any())
             ->method('encode')
-            ->willReturnCallback(function ($url) {
+            ->willReturnCallback(static function ($url) {
                 return strtr(base64_encode($url), '+/=', '-_,');
             });
         $this->scopeConfigMock = $context->getScopeConfig();

@@ -163,7 +163,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->packagesDataMock->expects(static::exactly(2))
             ->method('addPackageExtraInfo')
             ->will(
-                $this->returnCallback(function ($package) {
+                $this->returnCallback(static function ($package) {
                     $package['package_title'] = 'packageTitle';
                     $package['package_type'] = 'packageType';
                     return $package;

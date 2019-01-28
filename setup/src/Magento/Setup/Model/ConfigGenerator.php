@@ -244,7 +244,7 @@ class ConfigGenerator
             $hosts = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
 
             $hosts = array_map(
-                function ($hostData) {
+                static function ($hostData) {
                     $hostDataParts = explode(':', trim($hostData));
 
                     $tmp = ['host' => $hostDataParts[0]];

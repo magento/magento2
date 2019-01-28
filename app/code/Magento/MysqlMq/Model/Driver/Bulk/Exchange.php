@@ -43,7 +43,7 @@ class Exchange implements ExchangeInterface
     {
         $queueNames = $this->messageQueueConfig->getQueuesByTopic($topic);
         $messages = array_map(
-            function ($envelope) {
+            static function ($envelope) {
                 return $envelope->getBody();
             },
             $envelopes

@@ -78,7 +78,7 @@ class GlobalsearchElement extends SimpleElement
 
         $browser = $this->driver;
         $this->driver->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 return $browser->find($selector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
@@ -95,7 +95,7 @@ class GlobalsearchElement extends SimpleElement
         $browser = $this->driver;
 
         $this->driver->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 return $browser->find($selector)->isVisible() ? true : null;
             }
         );

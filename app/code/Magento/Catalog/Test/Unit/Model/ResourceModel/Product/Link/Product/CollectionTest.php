@@ -106,7 +106,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getStore')
             ->will($this->returnCallback(
-                function ($store) {
+                static function ($store) {
                     return is_object($store) ? $store : new \Magento\Framework\DataObject(['id' => 42]);
                 }
             ));

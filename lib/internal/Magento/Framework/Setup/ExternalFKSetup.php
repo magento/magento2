@@ -110,7 +110,7 @@ class ExternalFKSetup
         );
         $foreignKeys = array_filter(
             $foreignKeys,
-            function ($key) use ($targetColumn, $refTable, $refColumn) {
+            static function ($key) use ($targetColumn, $refTable, $refColumn) {
                 return $key['COLUMN_NAME'] == $targetColumn
                 && $key['REF_TABLE_NAME'] == $refTable;
             }

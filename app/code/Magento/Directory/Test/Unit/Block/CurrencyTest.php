@@ -40,7 +40,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $escaperMock->method('escapeUrl')
             ->willReturnCallback(
-                function ($string) {
+                static function ($string) {
                     return 'escapeUrl' . $string;
                 }
             );

@@ -64,7 +64,7 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     public function getColumnNames()
     {
         return array_map(
-            function (Column $column) {
+            static function (Column $column) {
                 return $column->getName();
             },
             $this->getColumns()

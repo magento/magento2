@@ -40,7 +40,7 @@ class Attribute implements AttributeInterface
         foreach ($this->directivePool as $directive) {
             $node->value = preg_replace_callback(
                 $directive->getPattern(),
-                function ($match) use ($directive, $processedObject) {
+                static function ($match) use ($directive, $processedObject) {
                     return $directive->execute($match, $processedObject);
                 },
                 $node->value

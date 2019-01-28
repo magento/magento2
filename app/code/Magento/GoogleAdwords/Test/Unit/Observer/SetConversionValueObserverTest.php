@@ -83,7 +83,7 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->_helperMock->expects($this->any())->method('isDynamicConversionValue')->will(
             $this->returnCallback(
-                function () use ($isDynamic) {
+                static function () use ($isDynamic) {
                     return $isDynamic;
                 }
             )

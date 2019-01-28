@@ -40,7 +40,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializerMock->expects($this->any())->method('unserialize')->willReturnCallback(
-            function ($serializedData) {
+            static function ($serializedData) {
                 return json_decode($serializedData, true);
             }
         );
@@ -48,7 +48,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $this->interpretationStrategyMock->expects($this->any())
             ->method('interpret')
             ->willReturnCallback(
-                function (MessageInterface $message) {
+                static function (MessageInterface $message) {
                     return $message->getText();
                 }
             );

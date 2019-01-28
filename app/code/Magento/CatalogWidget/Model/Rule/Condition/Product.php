@@ -85,7 +85,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $productAttributes = $this->_productResource->loadAllAttributes()->getAttributesByCode();
         $productAttributes = array_filter(
             $productAttributes,
-            function ($attribute) {
+            static function ($attribute) {
                 return $attribute->getFrontendLabel() &&
                     $attribute->getFrontendInput() !== 'text' &&
                     $attribute->getAttributeCode() !== ProductInterface::STATUS;

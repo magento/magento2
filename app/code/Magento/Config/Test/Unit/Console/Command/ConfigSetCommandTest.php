@@ -99,7 +99,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Some message');
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
-            ->willReturnCallback(function ($function) {
+            ->willReturnCallback(static function ($function) {
                 return $function();
             });
 

@@ -122,7 +122,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->method('convertAndRound')
             ->will(
                 $this->returnCallback(
-                    function ($arg) {
+                    static function ($arg) {
                         return $arg -1;
                     }
                 )
@@ -268,7 +268,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->method('convertAndRound')
             ->will(
                 $this->returnCallback(
-                    function ($arg) {
+                    static function ($arg) {
                         return round(0.5 * $arg, 2);
                     }
                 )

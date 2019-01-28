@@ -1064,7 +1064,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private function wrapValue($value)
     {
         if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE])) {
-            $wrap = function ($value) {
+            $wrap = static function ($value) {
                 return sprintf('"%s"', str_replace('"', '""', $value));
             };
 

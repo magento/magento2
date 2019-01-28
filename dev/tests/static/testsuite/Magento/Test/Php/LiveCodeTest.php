@@ -114,7 +114,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         return self::getFilesFromListFile(
             $changedFilesBaseDir,
             'changed_files*',
-            function () {
+            static function () {
                 // if no list files, probably, this is the dev environment
                 @exec('git diff --name-only', $changedFiles);
                 @exec('git diff --cached --name-only', $addedFiles);
@@ -135,7 +135,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         return self::getFilesFromListFile(
             $changedFilesBaseDir,
             'changed_files*.added.*',
-            function () {
+            static function () {
                 // if no list files, probably, this is the dev environment
                 @exec('git diff --cached --name-only', $addedFiles);
                 return $addedFiles;
@@ -171,7 +171,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         array_walk(
             $filesDefinedInList,
-            function (&$file) {
+            static function (&$file) {
                 $file = BP . '/' . $file;
             }
         );
@@ -199,25 +199,25 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     private static function filterFiles(array $files, array $allowedFileTypes, array $allowedDirectories)
     {
         if (empty($allowedFileTypes)) {
-            $fileHasAllowedType = function () {
+            $fileHasAllowedType = static function () {
                 return true;
             };
         } else {
-            $fileHasAllowedType = function ($file) use ($allowedFileTypes) {
+            $fileHasAllowedType = static function ($file) use ($allowedFileTypes) {
                 return in_array(pathinfo($file, PATHINFO_EXTENSION), $allowedFileTypes);
             };
         }
 
         if (empty($allowedDirectories)) {
-            $fileIsInAllowedDirectory = function () {
+            $fileIsInAllowedDirectory = static function () {
                 return true;
             };
         } else {
             $allowedDirectories = array_map('realpath', $allowedDirectories);
-            usort($allowedDirectories, function ($dir1, $dir2) {
+            usort($allowedDirectories, static function ($dir1, $dir2) {
                 return strlen($dir1) - strlen($dir2);
             });
-            $fileIsInAllowedDirectory = function ($file) use ($allowedDirectories) {
+            $fileIsInAllowedDirectory = static function ($file) use ($allowedDirectories) {
                 foreach ($allowedDirectories as $directory) {
                     if (strpos($file, $directory) === 0) {
                         return true;
@@ -229,7 +229,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $filtered = array_filter(
             $files,
-            function ($file) use ($fileHasAllowedType, $fileIsInAllowedDirectory) {
+            static function ($file) use ($fileHasAllowedType, $fileIsInAllowedDirectory) {
                 $file = realpath($file);
                 if (false === $file) {
                     return false;

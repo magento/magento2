@@ -29,7 +29,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return 'Expected';
         };
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);

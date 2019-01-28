@@ -141,7 +141,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function listing(array $elements)
     {
         $this->autoPrependText();
-        $elements = array_map(function ($element) {
+        $elements = array_map(static function ($element) {
             return sprintf(' * %s', $element);
         }, $elements);
 
@@ -526,7 +526,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     {
         // We need to know if the two last chars are PHP_EOL
         // Preserve the last 4 chars inserted (PHP_EOL on windows is two chars) in the history buffer
-        return array_map(function ($value) {
+        return array_map(static function ($value) {
             return substr($value, -4);
         }, array_merge([$this->bufferedOutput->fetch()], (array)$messages));
     }

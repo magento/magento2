@@ -42,7 +42,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->carrier = $this->createMock(\Magento\Shipping\Model\Carrier\AbstractCarrier::class);
-        $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(function ($key) {
+        $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(static function ($key) {
             $configData = [
                 'max_package_weight' => 10,
             ];

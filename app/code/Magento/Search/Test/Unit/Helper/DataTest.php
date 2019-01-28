@@ -115,7 +115,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->stringMock
             ->expects($this->any())
             ->method('strlen')
-            ->will($this->returnCallback(function ($queryText) {
+            ->will($this->returnCallback(static function ($queryText) {
                 return strlen($queryText);
             }));
         $this->stringMock

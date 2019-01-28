@@ -10,7 +10,7 @@
 function setCustomErrorHandler()
 {
     set_error_handler(
-        function ($errNo, $errStr, $errFile, $errLine) {
+        static function ($errNo, $errStr, $errFile, $errLine) {
             if (error_reporting()) {
                 $errorNames = [
                     E_ERROR => 'Error',

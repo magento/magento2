@@ -416,7 +416,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
+                static function ($key) use ($optionCollection, $selectionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -651,7 +651,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
+                static function ($key) use ($optionCollection, $selectionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -876,7 +876,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
+                static function ($key) use ($optionCollection, $selectionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -1061,7 +1061,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection) {
+                static function ($key) use ($optionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -1169,7 +1169,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
+                static function ($key) use ($optionCollection, $selectionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -1296,7 +1296,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
+                static function ($key) use ($optionCollection, $selectionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -1450,7 +1450,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection) {
+                static function ($key) use ($optionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':

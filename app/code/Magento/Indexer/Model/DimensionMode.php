@@ -28,7 +28,7 @@ class DimensionMode
      */
     public function __construct(string $name, array $dimensions)
     {
-        $this->dimensions = (function (string ...$dimensions) {
+        $this->dimensions = (static function (string ...$dimensions) {
             return $dimensions;
         })(...$dimensions);
         $this->name = $name;

@@ -292,7 +292,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->urlDecoder->expects($this->once())
             ->method('decode')
             ->with($node)
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return base64_decode($path);
             });
         $this->directoryWrite->expects($this->once())
@@ -320,13 +320,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->urlEncoder->expects($this->once())
             ->method('encode')
             ->with('/path/to')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return base64_encode($path);
             });
         $this->urlDecoder->expects($this->once())
             ->method('decode')
             ->with(base64_encode('/path/to'))
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return base64_decode($path);
             });
 
@@ -365,7 +365,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             );
-        $decode = function ($value) {
+        $decode = static function ($value) {
             return base64_decode($value);
         };
         $this->urlDecoder->expects($this->at(0))

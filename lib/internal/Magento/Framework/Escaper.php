@@ -87,7 +87,7 @@ class Escaper
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
-                    function ($errorNumber, $errorString) {
+                    static function ($errorNumber, $errorString) {
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
@@ -272,7 +272,7 @@ class Escaper
 
         return preg_replace_callback(
             '/[^a-z0-9,\._]/iSu',
-            function ($matches) {
+            static function ($matches) {
                 $chr = $matches[0];
                 if (strlen($chr) != 1) {
                     $chr = mb_convert_encoding($chr, 'UTF-16BE', 'UTF-8');

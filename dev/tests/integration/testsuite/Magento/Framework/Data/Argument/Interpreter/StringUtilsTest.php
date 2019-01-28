@@ -46,7 +46,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
           ->getMockForAbstractClass();
         $translateRenderer->expects($this->any())->method('render')->will(
             $this->returnCallback(
-                function ($input) {
+                static function ($input) {
                     return end($input) . ' (translated)';
                 }
             )

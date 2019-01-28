@@ -175,7 +175,7 @@ abstract class Tree extends SimpleElement
     {
         $selector = $this->childLoader;
         $this->waitUntil(
-            function () use ($element, $selector) {
+            static function () use ($element, $selector) {
                 return $element->find($selector)->isVisible() ? true : null;
             }
         );

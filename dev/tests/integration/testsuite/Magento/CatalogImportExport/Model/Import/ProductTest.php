@@ -586,7 +586,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             foreach (explode('|', $productData['data'][$storeRowId]['custom_options']) as $optionData) {
                 $option = array_values(
                     array_map(
-                        function ($input) {
+                        static function ($input) {
                             $data = explode('=', $input);
                             return [$data[0] => $data[1]];
                         },
@@ -1753,7 +1753,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $this->assertCount(3, $productCollection->getItems());
         $actualProductSkus = array_map(
-            function (ProductInterface $item) {
+            static function (ProductInterface $item) {
                 return $item->getSku();
             },
             $productCollection->getItems()

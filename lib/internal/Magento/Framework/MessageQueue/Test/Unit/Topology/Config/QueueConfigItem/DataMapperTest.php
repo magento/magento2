@@ -204,7 +204,7 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
         $this->configData->expects($this->once())->method('get')->willReturn($data);
         $this->queueNameBuilder->expects($this->any())
             ->method('getQueueName')
-            ->willReturnCallback(function ($value) {
+            ->willReturnCallback(static function ($value) {
                 return 'responseQueue.' . $value;
             });
 

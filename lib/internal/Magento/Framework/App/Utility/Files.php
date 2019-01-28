@@ -421,7 +421,7 @@ class Files
             $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
                 $files,
-                function ($file) use ($excludedFileNames) {
+                static function ($file) use ($excludedFileNames) {
                     return !in_array(basename($file), $excludedFileNames);
                 }
             );
@@ -486,7 +486,7 @@ class Files
             );
             $files = array_filter(
                 $files,
-                function ($file) use ($excludedFileNames) {
+                static function ($file) use ($excludedFileNames) {
                     return !in_array(basename($file), $excludedFileNames);
                 }
             );
@@ -1149,7 +1149,7 @@ class Files
             $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
                 $files,
-                function ($file) use ($excludedFileNames) {
+                static function ($file) use ($excludedFileNames) {
                     return !in_array(basename($file), $excludedFileNames);
                 }
             );
@@ -1283,7 +1283,7 @@ class Files
         $rootFiles = glob(BP . '/*', GLOB_NOSORT);
         $rootFiles = array_filter(
             $rootFiles,
-            function ($file) {
+            static function ($file) {
                 return is_file($file);
             }
         );

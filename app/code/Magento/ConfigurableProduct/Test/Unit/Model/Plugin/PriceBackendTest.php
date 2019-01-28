@@ -46,7 +46,7 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
         $this->priceBackendPlugin = $objectManager->getObject(PriceBackend::class);
 
-        $this->closure = function () {
+        $this->closure = static function () {
             return static::CLOSURE_VALUE;
         };
         $this->priceAttribute = $this->getMockBuilder(Price::class)

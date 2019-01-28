@@ -121,7 +121,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         /* Determine whether header-related functions can be in fact called with no error */
         $expectedCanTest = true;
         set_error_handler(
-            function () use (&$expectedCanTest) {
+            static function () use (&$expectedCanTest) {
                 $expectedCanTest = false;
             }
         );

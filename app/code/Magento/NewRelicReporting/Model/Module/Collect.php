@@ -128,7 +128,7 @@ class Collect
         /** @var Module[] $finalDbModuleArray */
         $finalDbModuleArray = $this->moduleCollectionFactory->create()->getItems();
 
-        $stateCallback = function (Module $value) {
+        $stateCallback = static function (Module $value) {
             return $value->getState();
         };
 
@@ -251,7 +251,7 @@ class Collect
      */
     public function getModuleData($refresh = true)
     {
-        $callback = function (Module $value) {
+        $callback = static function (Module $value) {
             return $value->getName();
         };
 

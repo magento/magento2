@@ -133,7 +133,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $httpRequestMock->expects($this->any())
             ->method('getHeader')
-            ->willReturnCallback(function ($header) use ($authHeaderValue) {
+            ->willReturnCallback(static function ($header) use ($authHeaderValue) {
                 switch ($header) {
                     case 'Authorization':
                         return $authHeaderValue;

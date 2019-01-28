@@ -63,7 +63,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
      */
     public function testComposePackages()
     {
-        $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(function ($key) {
+        $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(static function ($key) {
             $configData = [
                 'max_package_weight' => 10,
                 'showmethod'         => 1,

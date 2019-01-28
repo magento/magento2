@@ -46,7 +46,7 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
         $selector = $this->submit . '.disabled';
         $strategy = Locator::SELECTOR_CSS;
         $browser->waitUntil(
-            function () use ($browser, $selector, $strategy) {
+            static function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
                 return $element->isVisible() == false ? true : null;
             }

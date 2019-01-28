@@ -52,7 +52,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('convertAndRound')
             ->will(
                 $this->returnCallback(
-                    function ($arg) {
+                    static function ($arg) {
                         return round(2 * $arg, 2);
                     }
                 )

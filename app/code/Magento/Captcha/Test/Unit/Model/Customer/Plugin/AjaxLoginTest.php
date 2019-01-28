@@ -116,7 +116,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
         $this->serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($requestData));
 
-        $closure = function () {
+        $closure = static function () {
             return 'result';
         };
 
@@ -161,7 +161,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])
             ->will($this->returnSelf());
 
-        $closure = function () {
+        $closure = static function () {
         };
         $this->assertEquals($this->resultJsonMock, $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
@@ -183,7 +183,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $this->captchaMock->expects($this->never())->method('logAttempt')->with($username);
         $this->captchaMock->expects($this->never())->method('isCorrect');
 
-        $closure = function () {
+        $closure = static function () {
             return 'result';
         };
         $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));

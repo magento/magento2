@@ -193,7 +193,7 @@ class SwaggerUiPage
     {
         $browser = $this->browser;
         return $browser->waitUntil(
-            function () use ($browser, $selector, $strategy) {
+            static function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
                 return $element->isVisible() ? true : null;
             }
@@ -213,7 +213,7 @@ class SwaggerUiPage
         $browser = $this->browser;
         $pattern = self::MCA;
         return $browser->waitUntil(
-            function () use ($browser, $pattern) {
+            static function () use ($browser, $pattern) {
                 try {
                     $url = $_ENV['app_frontend_url'] . $pattern;
                     $browser->open($url);

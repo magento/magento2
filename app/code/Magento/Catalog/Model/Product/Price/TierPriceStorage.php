@@ -113,7 +113,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     {
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $skus = array_unique(
-            array_map(function ($price) {
+            array_map(static function ($price) {
                 return $price->getSku();
             }, $prices)
         );
@@ -218,7 +218,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     private function retrieveAffectedProductIdsForPrices(array $prices)
     {
         $skus = array_unique(
-            array_map(function ($price) {
+            array_map(static function ($price) {
                 return $price->getSku();
             }, $prices)
         );

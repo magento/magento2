@@ -32,7 +32,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
      */
     public function testRead($response)
     {
-        self::$curlExectClosure = function () use ($response) {
+        self::$curlExectClosure = static function () use ($response) {
             return $response;
         };
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/curl_response_expected.txt'), $this->model->read());

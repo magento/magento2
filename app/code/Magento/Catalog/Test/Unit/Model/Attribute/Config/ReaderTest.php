@@ -85,7 +85,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     public function testRead()
     {
         $expectedResult = new \stdClass();
-        $constraint = function (\DOMDocument $actual) {
+        $constraint = static function (\DOMDocument $actual) {
             try {
                 $expected = __DIR__ . '/_files/attributes_config_merged.xml';
                 \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlFile($expected, $actual->saveXML());

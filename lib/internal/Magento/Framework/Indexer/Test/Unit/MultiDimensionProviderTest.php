@@ -224,7 +224,7 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getIterator')
             ->will(
                 $this->returnCallback(
-                    function () use ($dimensions) {
+                    static function () use ($dimensions) {
                         return \SplFixedArray::fromArray($dimensions);
                     }
                 )

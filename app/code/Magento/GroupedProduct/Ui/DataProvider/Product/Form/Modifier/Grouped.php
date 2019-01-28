@@ -144,7 +144,7 @@ class Grouped extends AbstractModifier
             $storeId = $this->locator->getStore()->getId();
             $data[$product->getId()]['links'][self::LINK_TYPE] = [];
             $linkedItems = $this->productLinkRepository->getList($product);
-            usort($linkedItems, function ($a, $b) {
+            usort($linkedItems, static function ($a, $b) {
                 return $a->getPosition() <=> $b->getPosition();
             });
             foreach ($linkedItems as $index => $linkItem) {

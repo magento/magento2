@@ -37,7 +37,7 @@ class ChangedFiles
             }
             array_walk(
                 $phpFiles,
-                function (&$file) {
+                static function (&$file) {
                     $file = BP . '/' . $file;
                 }
             );

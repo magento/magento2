@@ -43,7 +43,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Item::class,
             ['getProductType', 'getProductOptions', '__wakeup']
         );
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return 'Expected';
         };
         $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);

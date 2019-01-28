@@ -112,7 +112,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->method('strToTime')
             ->will(
                 $this->returnCallback(
-                    function ($str) {
+                    static function ($str) {
                         return strtotime($str);
                     }
                 )

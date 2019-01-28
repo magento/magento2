@@ -12,7 +12,7 @@ $filters = $block->getConfig()->getFilters() ?? [];
 $allowedExtensions = [];
 
 foreach ($filters as $media_type) {
-    $allowedExtensions = array_merge($allowedExtensions, array_map(function ($fileExt) {
+    $allowedExtensions = array_merge($allowedExtensions, array_map(static function ($fileExt) {
         return ltrim($fileExt, '.*');
     }, $media_type['files']));
 }

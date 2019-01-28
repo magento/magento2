@@ -53,7 +53,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );

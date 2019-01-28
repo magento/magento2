@@ -22,7 +22,7 @@ class HandlerComposite implements HandlerInterface
     {
         array_walk(
             $handlers,
-            function ($handler, $code) {
+            static function ($handler, $code) {
                 if (!$handler instanceof HandlerInterface) {
                     $message = 'Type mismatch. Expected type: %s. Actual: %s, Code: %s';
 

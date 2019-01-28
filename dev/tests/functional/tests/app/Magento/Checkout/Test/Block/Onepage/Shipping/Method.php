@@ -109,7 +109,7 @@ class Method extends Block
         $browser = $this->browser;
         $selector = $this->waitElement;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector);
                 return $element->isVisible() == false ? true : null;
             }

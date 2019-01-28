@@ -154,7 +154,7 @@ class AttributeSetFixture
         foreach ($attributesData as $attributeData) {
             $optionsData = array_key_exists(0, $attributeData['options']['option'])
                 ? $attributeData['options']['option'] : [$attributeData['options']['option']];
-            $optionsData = array_map(function ($option) {
+            $optionsData = array_map(static function ($option) {
                 return $option['label'];
             }, $optionsData);
             $attributes[] = [

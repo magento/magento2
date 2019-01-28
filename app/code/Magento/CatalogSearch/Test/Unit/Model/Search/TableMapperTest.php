@@ -141,7 +141,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($filters);
 
         $consecutiveFilters = array_map(
-            function ($filter) {
+            static function ($filter) {
                 return [$filter];
             },
             $filters
@@ -152,13 +152,13 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getAlias')
             ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
-                function (FilterInterface $filter) {
+                static function (FilterInterface $filter) {
                     return $filter->getField() . '_alias';
                 }
             );
 
         $consecutiveFilters = array_map(
-            function ($filter) use ($select) {
+            static function ($filter) use ($select) {
                 return [$filter, $select];
             },
             $filters
@@ -191,7 +191,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($filters);
 
         $consecutiveFilters = array_map(
-            function ($filter) {
+            static function ($filter) {
                 return [$filter];
             },
             $filters
@@ -202,13 +202,13 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getAlias')
             ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
-                function (FilterInterface $filter) {
+                static function (FilterInterface $filter) {
                     return $filter->getField() . '_alias';
                 }
             );
 
         $consecutiveUniqueFilters = array_map(
-            function ($filter) use ($select) {
+            static function ($filter) use ($select) {
                 return [$filter, $select];
             },
             $uniqueFilters
@@ -240,7 +240,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($filters);
 
         $consecutiveFilters = array_map(
-            function ($filter) {
+            static function ($filter) {
                 return [$filter];
             },
             $filters
@@ -251,13 +251,13 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getAlias')
             ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
-                function (FilterInterface $filter) {
+                static function (FilterInterface $filter) {
                     return $filter->getField() . '_alias';
                 }
             );
 
         $consecutiveFilters = array_map(
-            function ($filter) use ($select) {
+            static function ($filter) use ($select) {
                 return [$filter, $select];
             },
             $filters
@@ -268,7 +268,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->method('apply')
             ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
-                function (FilterInterface $filter) {
+                static function (FilterInterface $filter) {
                     return !($filter->getName() === 'name1' || $filter->getName() === 'name3')
                         ? true
                         : false;

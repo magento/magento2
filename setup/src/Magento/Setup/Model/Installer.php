@@ -1485,7 +1485,7 @@ class Installer
      */
     private function isAdminDataSet($request)
     {
-        $adminData = array_filter($request, function ($value, $key) {
+        $adminData = array_filter($request, static function ($value, $key) {
             return in_array(
                 $key,
                 [

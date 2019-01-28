@@ -35,7 +35,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->method('quote')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return sprintf('\'%s\'', $value);
                     }
                 )
@@ -44,7 +44,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->method('quoteIdentifier')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return sprintf('`%s`', $value);
                     }
                 )

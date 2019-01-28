@@ -98,7 +98,7 @@ class CustomlayoutupdateTest extends \PHPUnit\Framework\TestCase
                  * $return bool
                  */
                 $this->returnCallback(
-                    function ($xml) {
+                    static function ($xml) {
                         if ($xml == 'exception') {
                             return false;
                         } else {

@@ -63,7 +63,7 @@ class BundleItems implements ResolverInterface
             || !isset($value[$linkField])
             || !isset($value[ProductInterface::SKU])
         ) {
-            $result = function () {
+            $result = static function () {
                 return null;
             };
             return $this->valueFactory->create($result);

@@ -128,7 +128,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
         foreach ($iterator as $selectByRange) {
             $codes = $connection->fetchCol($selectByRange);
             $codes = array_map(
-                function ($id) {
+                static function ($id) {
                     return 'option_' . $id;
                 },
                 $codes

@@ -195,7 +195,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $this->requestStub->method('getPostValue')->willReturn($post);
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(
-            function ($key) use ($post) {
+            static function ($key) use ($post) {
                 return $post[$key];
             }
         );

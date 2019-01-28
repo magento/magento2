@@ -31,7 +31,7 @@ class RouterList implements RouterListInterface
         $this->objectManager = $objectManager;
         $this->routerList = array_filter(
             $routerList,
-            function ($item) {
+            static function ($item) {
                 return (!isset($item['disable']) || !$item['disable']) && $item['class'];
             }
         );

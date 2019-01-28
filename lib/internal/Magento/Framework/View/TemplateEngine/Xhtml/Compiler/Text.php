@@ -41,7 +41,7 @@ class Text implements TextInterface
         foreach ($this->directivePool as $directive) {
             $result = preg_replace_callback(
                 $directive->getPattern(),
-                function ($match) use ($directive, $processedObject) {
+                static function ($match) use ($directive, $processedObject) {
                     return $directive->execute($match, $processedObject);
                 },
                 $result

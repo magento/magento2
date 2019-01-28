@@ -83,7 +83,7 @@ class FormTest extends TestCase
         /** @var EncoderInterface|MockObject $encoder */
         $encoder = $this->getMockForAbstractClass(EncoderInterface::class);
         $encoder->method('encode')
-            ->willReturnCallback(function ($param) {
+            ->willReturnCallback(static function ($param) {
                 return json_encode($param);
             });
         /** @var FormFactory|MockObject $formFactory */

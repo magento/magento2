@@ -104,7 +104,7 @@ class ConfigSetCommand extends AbstractSetupCommand
 
         $inputOptions = array_filter(
             $inputOptions,
-            function ($value) {
+            static function ($value) {
                 return $value !== null;
             }
         );

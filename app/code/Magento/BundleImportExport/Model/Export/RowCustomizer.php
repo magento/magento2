@@ -276,7 +276,7 @@ class RowCustomizer implements RowCustomizerInterface
                 . implode(
                     ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                     array_map(
-                        function ($value, $key) {
+                        static function ($value, $key) {
                             return $key . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
                         },
                         $selectionData,
@@ -301,7 +301,7 @@ class RowCustomizer implements RowCustomizerInterface
         array $optionTitles = []
     ): string {
         $names = implode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_map(
-            function ($title, $storeName) {
+            static function ($title, $storeName) {
                 return $storeName . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $title;
             },
             $optionTitles[$option->getOptionId()],

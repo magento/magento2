@@ -18,7 +18,7 @@ class PaymentNonceResponseValidator extends GeneralResponseValidator
         return array_merge(
             parent::getResponseValidators(),
             [
-                function ($response) {
+                static function ($response) {
                     return [
                         !empty($response->paymentMethodNonce) && !empty($response->paymentMethodNonce->nonce),
                         [__('Payment method nonce can\'t be retrieved.')]

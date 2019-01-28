@@ -165,7 +165,7 @@ class SecureTokenTest extends TestCase
         $self = $this;
         $this->gateway->method('postRequest')
             /** @var DataObject $request */
-            ->with(self::callback(function ($request) use ($self, $expPartner, $expVendor, $expUser, $expPwd) {
+            ->with(self::callback(static function ($request) use ($self, $expPartner, $expVendor, $expUser, $expPwd) {
                 $self->performAssertion($expPartner, $request->getPartner(), '{Partner}');
                 $self->performAssertion($expVendor, $request->getVendor(), '{Vendor}');
                 $self->performAssertion($expUser, $request->getUser(), '{User}');

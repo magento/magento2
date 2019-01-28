@@ -20,7 +20,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $pattern = [
             'id' => '%s',
             'name' => 'Static',
-            'calculated' => function ($index) {
+            'calculated' => static function ($index) {
                 return $index * 10;
             },
         ];

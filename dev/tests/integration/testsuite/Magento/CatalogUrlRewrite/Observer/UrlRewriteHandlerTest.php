@@ -60,7 +60,7 @@ class UrlRewriteHandlerTest extends TestCase
             ->setAnchorsAbove(false);
 
         $generatedUrls = $this->handler->generateProductUrlRewrites($category);
-        $actual = array_values(array_map(function (UrlRewrite $urlRewrite) {
+        $actual = array_values(array_map(static function (UrlRewrite $urlRewrite) {
             return $urlRewrite->getRequestPath();
         }, $generatedUrls));
 

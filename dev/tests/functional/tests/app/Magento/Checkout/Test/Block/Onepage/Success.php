@@ -47,7 +47,7 @@ class Success extends Block
     {
         $continueShopping = $this->_rootElement->find($this->continueShopping);
         $this->_rootElement->waitUntil(
-            function () use ($continueShopping) {
+            static function () use ($continueShopping) {
                 return $continueShopping->isVisible() ? true : null;
             }
         );

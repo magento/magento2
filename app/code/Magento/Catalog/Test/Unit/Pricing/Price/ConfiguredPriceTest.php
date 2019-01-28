@@ -101,7 +101,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
             'option_3' => $itemOption,
             'option_ids' => $optionCollection,
         ];
-        $optionsGetterByCode = $this->returnCallback(function ($code) use ($optionsList) {
+        $optionsGetterByCode = $this->returnCallback(static function ($code) use ($optionsList) {
             return $optionsList[$code];
         });
         $this->item->expects($this->atLeastOnce())->method('getOptionByCode')->will($optionsGetterByCode);

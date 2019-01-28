@@ -112,11 +112,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ['serialize', 'unserialize']
         );
         $serializer->expects($this->any())
-            ->method('serialize')->willReturnCallback(function ($parameter) {
+            ->method('serialize')->willReturnCallback(static function ($parameter) {
                 return json_encode($parameter);
             });
         $serializer->expects($this->any())
-            ->method('unserialize')->willReturnCallback(function ($parameter) {
+            ->method('unserialize')->willReturnCallback(static function ($parameter) {
                 return json_decode($parameter, true);
             });
 

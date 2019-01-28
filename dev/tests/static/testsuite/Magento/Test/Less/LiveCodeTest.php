@@ -75,7 +75,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     {
         $blackListFiles = Files::init()->readLists(__DIR__ . '/_files/blacklist/*.txt');
 
-        $filter = function ($value) use ($blackListFiles) {
+        $filter = static function ($value) use ($blackListFiles) {
             return !in_array($value, $blackListFiles);
         };
 

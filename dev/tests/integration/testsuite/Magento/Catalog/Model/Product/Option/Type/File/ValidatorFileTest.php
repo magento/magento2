@@ -96,7 +96,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->prepareEnv();
         $_SERVER['CONTENT_LENGTH'] = $this->maxFileSize + 1;
         $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['getFileInfo']);
-        $exception = function () {
+        $exception = static function () {
             throw new \Exception();
         };
         $httpAdapterMock->expects($this->once())->method('getFileInfo')->will($this->returnCallback($exception));
@@ -119,7 +119,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepareEnv();
         $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['getFileInfo']);
-        $exception = function () {
+        $exception = static function () {
             throw new \Exception();
         };
         $httpAdapterMock->expects($this->once())->method('getFileInfo')->will($this->returnCallback($exception));

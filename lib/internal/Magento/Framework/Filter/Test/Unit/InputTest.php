@@ -20,7 +20,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
         $filterMock->expects($this->exactly(1))->method('filter')->will(
             $this->returnCallback(
-                function ($input) {
+                static function ($input) {
                     return '(' . $input . ')';
                 }
             )

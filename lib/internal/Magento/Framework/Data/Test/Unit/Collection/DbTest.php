@@ -341,7 +341,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $statementMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetch']);
         $statementMock->expects($this->exactly(2))
             ->method('fetch')
-            ->will($this->returnCallback(function () use (&$counter, $data) {
+            ->will($this->returnCallback(static function () use (&$counter, $data) {
                 return ++$counter % 2 ? [] : $data;
             }));
 

@@ -73,10 +73,10 @@ class Binder
      */
     private function processData($data, $bindData)
     {
-        array_walk_recursive($bindData, function (&$item) {
+        array_walk_recursive($bindData, static function (&$item) {
             $item = trim($item);
         });
-        $bindData = array_filter($bindData, function ($element) {
+        $bindData = array_filter($bindData, static function ($element) {
             return is_array($element) ? count($element) : strlen($element);
         });
 

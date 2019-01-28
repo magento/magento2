@@ -73,7 +73,7 @@ class CommentParser implements CommentParserInterface
         $fileContent = $dirReader->readFile($fileName);
         $commentBlocks = array_filter(
             token_get_all($fileContent),
-            function ($entry) {
+            static function ($entry) {
                 return T_DOC_COMMENT == $entry[0];
             }
         );

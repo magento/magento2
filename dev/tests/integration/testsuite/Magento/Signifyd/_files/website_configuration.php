@@ -40,7 +40,7 @@ $storeResourceModel->save($store);
 /* Refresh stores memory cache */
 $objectManager->get(StoreManagerInterface::class)->reinitStores();
 
-$processConfigData = function (Config $config, array $data) {
+$processConfigData = static function (Config $config, array $data) {
     foreach ($data as $key => $value) {
         $config->setDataByPath($key, $value);
         $config->save();

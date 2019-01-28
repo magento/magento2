@@ -152,7 +152,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
             $this->om,
             $this->omConfig,
             $testClasses,
-            function (ObjectManagerInterface $om, $objectName) {
+            static function (ObjectManagerInterface $om, $objectName) {
                 return $om->create($objectName);
             }
         );

@@ -32,7 +32,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
         $escaper->expects($this->any())
             ->method('escapeHtml')
             ->willReturnCallback(
-                function ($str) {
+                static function ($str) {
                     return 'ESCAPED:' .$str;
                 }
             );

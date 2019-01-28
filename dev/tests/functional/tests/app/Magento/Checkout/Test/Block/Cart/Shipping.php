@@ -102,12 +102,12 @@ class Shipping extends Form
         $mapping = $this->dataMapping(array_flip(['country_id']));
         $countryField = $this->getElement($this->_rootElement, $mapping['country_id']);
         $this->_rootElement->waitUntil(
-            function () use ($countryField) {
+            static function () use ($countryField) {
                 return $countryField->isVisible() ? true : null;
             }
         );
         return array_map(
-            function ($option) {
+            static function ($option) {
                 return $option->getAttribute('value');
             },
             $countryField->getElements($this->topOptions, Locator::SELECTOR_XPATH)
@@ -227,7 +227,7 @@ class Shipping extends Form
     {
         $shippingMethodForm = $this->_rootElement->find($this->shippingMethodForm);
         $this->_rootElement->waitUntil(
-            function () use ($shippingMethodForm) {
+            static function () use ($shippingMethodForm) {
                 return $shippingMethodForm->isVisible() ? true : null;
             }
         );
@@ -269,7 +269,7 @@ class Shipping extends Form
         $selector = $this->estimateShippingForm;
 
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector);
                 return $element->isPresent() ? true : null;
             }
@@ -287,7 +287,7 @@ class Shipping extends Form
         $selector = $this->shippingMethodForm;
 
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector);
                 return $element->isPresent() ? true : null;
             }

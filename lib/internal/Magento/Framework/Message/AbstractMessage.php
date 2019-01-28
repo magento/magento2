@@ -137,7 +137,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         array_walk_recursive(
             $data,
-            function ($element) {
+            static function ($element) {
                 if (is_object($element) && !$element instanceof \Serializable) {
                     throw new \InvalidArgumentException('Only serializable content is allowed.');
                 }

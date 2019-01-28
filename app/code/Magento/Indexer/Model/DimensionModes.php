@@ -22,7 +22,7 @@ class DimensionModes
      */
     public function __construct(array $dimensions)
     {
-        $this->dimensions = (function (DimensionMode ...$dimensions) {
+        $this->dimensions = (static function (DimensionMode ...$dimensions) {
             $result = [];
             foreach ($dimensions as $dimension) {
                 $result[$dimension->getName()] = $dimension;

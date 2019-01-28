@@ -40,7 +40,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     public function getConfigDataProvider()
     {
-        $closure = function () {
+        $closure = static function () {
             return 'Value from closure';
         };
 
@@ -103,7 +103,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetArguments($value, $expectedValue)
     {
-        $option = new Callback(function () {
+        $option = new Callback(static function () {
         });
         $option->setArguments($value);
         $this->assertAttributeEquals($expectedValue, '_arguments', $option);

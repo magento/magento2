@@ -119,7 +119,7 @@ class CreateHandler extends AbstractHandler
     {
         return array_filter(
             $mediaCollection,
-            function ($item) use ($currentStoreId) {
+            static function ($item) use ($currentStoreId) {
                 return $item['store_id'] == $currentStoreId ? false : true;
             }
         );

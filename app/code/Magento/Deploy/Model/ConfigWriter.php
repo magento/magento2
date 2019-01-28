@@ -66,7 +66,7 @@ class ConfigWriter
 
         $values = array_filter(
             $values,
-            function ($value) {
+            static function ($value) {
                 return $value !== null;
             }
         );

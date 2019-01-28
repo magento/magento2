@@ -61,13 +61,13 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $escaperMock->method('escapeHtml')
             ->willReturnCallback(
-                function ($string) {
+                static function ($string) {
                     return 'escapeHtml' . $string;
                 }
             );
         $escaperMock->method('escapeUrl')
             ->willReturnCallback(
-                function ($string) {
+                static function ($string) {
                     return 'escapeUrl' . $string;
                 }
             );

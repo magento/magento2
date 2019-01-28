@@ -243,7 +243,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     ->with(
                         $this->anything(),
                         $this->anything(),
-                        $this->callback(function ($data) use ($ids) {
+                        $this->callback(static function ($data) use ($ids) {
                             $foundIds = [];
                             foreach ($data as $row) {
                                 $foundIds[] = $row['category_id'];
@@ -258,7 +258,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     ->method('insertOnDuplicate')
                     ->with(
                         $this->anything(),
-                        $this->callback(function ($data) use ($ids) {
+                        $this->callback(static function ($data) use ($ids) {
                             $foundIds = [];
                             foreach ($data as $row) {
                                 $foundIds[] = $row['category_id'];
@@ -274,7 +274,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     // Verify that the correct category ID's are touched:
                     ->with(
                         $this->anything(),
-                        $this->callback(function ($data) use ($ids) {
+                        $this->callback(static function ($data) use ($ids) {
                             return array_values($data)[1] === $ids;
                         })
                     );

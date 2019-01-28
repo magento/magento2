@@ -196,7 +196,7 @@ class SystemPackage
      */
     public function sortVersions($enterpriseVersions)
     {
-        usort($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS], function ($versionOne, $versionTwo) {
+        usort($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS], static function ($versionOne, $versionTwo) {
             if (version_compare($versionOne, $versionTwo, '==')) {
                 return 0;
             }
@@ -231,7 +231,7 @@ class SystemPackage
             }
         }
 
-        usort($versions, function ($versionOne, $versionTwo) {
+        usort($versions, static function ($versionOne, $versionTwo) {
             if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
                 if ($versionOne['package'] === static::EDITION_COMMUNITY) {
                     return 1;

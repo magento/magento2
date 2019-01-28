@@ -33,7 +33,7 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->priceCurrency->method('round')
             ->willReturnCallback(
-                function ($amount) {
+                static function ($amount) {
                     return round($amount, 2);
                 }
             );

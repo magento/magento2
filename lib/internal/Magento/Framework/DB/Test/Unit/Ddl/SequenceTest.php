@@ -20,7 +20,7 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
         $model = new Sequence();
         $actualQuery = $model->getCreateSequenceDdl(...array_values($params));
 
-        $cleanString = function ($string) {
+        $cleanString = static function ($string) {
             return trim(preg_replace('/\s+/', ' ', $string));
         };
 

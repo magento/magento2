@@ -32,7 +32,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
                 $dir->expects($this->any())
                     ->method('getAbsolutePath')
-                    ->will($this->returnCallback(function ($path) use ($code) {
+                    ->will($this->returnCallback(static function ($path) use ($code) {
                         $path = empty($path) ? $path : '/' . $path;
                         return rtrim($code, '/') . $path;
                     }));

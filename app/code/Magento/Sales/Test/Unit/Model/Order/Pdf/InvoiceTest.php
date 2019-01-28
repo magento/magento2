@@ -25,7 +25,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will(
             $this->returnCallback(
-                function ($argument) {
+                static function ($argument) {
                     return BP . '/' . $argument;
                 }
             )

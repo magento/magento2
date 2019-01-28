@@ -37,7 +37,7 @@ class Fields
                 $queryAst,
                 [
                     'leave' => [
-                        NodeKind::NAME => function (Node $node) use (&$queryFields) {
+                        NodeKind::NAME => static function (Node $node) use (&$queryFields) {
                             $queryFields[$node->value] = $node->value;
                         }
                     ]

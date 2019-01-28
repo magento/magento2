@@ -92,7 +92,7 @@ class AdminAuthLogin extends Page
         $browser = $this->browser;
         $selector = $this->headerBlock;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $item = $browser->find($selector);
                 return $item->isVisible() ? true : null;
             }

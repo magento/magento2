@@ -192,7 +192,7 @@ class ArgumentsResolver
     {
         $configuredArguments = $this->diContainerConfig->getArguments($instanceType);
         return array_map(
-            function ($type) {
+            static function ($type) {
                 if (isset($type['instance'])) {
                     $type['instance'] = ltrim($type['instance'], '\\');
                 }

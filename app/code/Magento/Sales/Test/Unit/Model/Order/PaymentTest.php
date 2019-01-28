@@ -171,7 +171,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return $value;
                 }
             );

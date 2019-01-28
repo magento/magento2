@@ -271,7 +271,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $item->expects($this->once())->method('testCallback')->with();
             $this->_model->addItem($item);
         }
-        $this->_model->each(function ($item) {
+        $this->_model->each(static function ($item) {
             $item->testCallback();
         });
     }
@@ -288,7 +288,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }
-        $this->_model->each(function ($item, ...$args) {
+        $this->_model->each(static function ($item, ...$args) {
             $item->testItemCallback(...$args);
         }, ['a', 'b', 'c']);
     }
@@ -303,7 +303,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
             ->setMethods(['testObjCallback'])
             ->getMock();
-        $mockCallbackObject->method('testObjCallback')->willReturnCallback(function ($item, ...$args) {
+        $mockCallbackObject->method('testObjCallback')->willReturnCallback(static function ($item, ...$args) {
             $item->testItemCallback(...$args);
         });
 
@@ -326,7 +326,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
             ->setMethods(['testObjCallback'])
             ->getMock();
-        $mockCallbackObject->method('testObjCallback')->willReturnCallback(function ($item, ...$args) {
+        $mockCallbackObject->method('testObjCallback')->willReturnCallback(static function ($item, ...$args) {
             $item->testItemCallback(...$args);
         });
 

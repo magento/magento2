@@ -49,7 +49,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnCallback(
-                function ($amount) {
+                static function ($amount) {
                     return round($amount, 2);
                 }
             );

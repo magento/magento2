@@ -179,13 +179,13 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
-            function () use ($closureExpectation) {
+            static function () use ($closureExpectation) {
                 $closureExpectation->setData(1);
             }
         );
 
         $this->abstractResource->addCommitCallback(
-            function () use ($closureExpectation) {
+            static function () use ($closureExpectation) {
                 $closureExpectation->getData();
             }
         );
@@ -211,7 +211,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
-            function () {
+            static function () {
                 throw new \Exception();
             }
         );
@@ -238,7 +238,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
-            function () use ($closureExpectation) {
+            static function () use ($closureExpectation) {
                 $closureExpectation->setData(1);
             }
         );

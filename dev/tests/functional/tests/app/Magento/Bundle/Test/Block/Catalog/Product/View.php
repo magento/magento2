@@ -88,7 +88,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         $browser = $this->browser;
         $selector = $this->newsletterFormSelector;
         $this->browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector);
                 return $element->isVisible() ? true : null;
             }

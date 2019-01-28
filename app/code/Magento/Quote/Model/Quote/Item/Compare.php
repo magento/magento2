@@ -51,7 +51,7 @@ class Compare
             $value = $this->serializer->unserialize($value);
             if (is_array($value)) {
                 unset($value['qty'], $value['uenc']);
-                $value = array_filter($value, function ($optionValue) {
+                $value = array_filter($value, static function ($optionValue) {
                     return !empty($optionValue);
                 });
             }

@@ -157,7 +157,7 @@ class FileRecorderTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with($this->callback(
-                function ($parameters) {
+                static function ($parameters) {
                     return !empty($parameters['path']) && ('init_vector***' === $parameters['initializationVector']);
                 }
             ))

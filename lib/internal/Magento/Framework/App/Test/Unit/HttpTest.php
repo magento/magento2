@@ -173,7 +173,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->setUpLaunch();
         $this->frontControllerMock->expects($this->once())->method('dispatch')->with($this->requestMock)->will(
             $this->returnCallback(
-                function () {
+                static function () {
                     throw new \Exception('Message');
                 }
             )

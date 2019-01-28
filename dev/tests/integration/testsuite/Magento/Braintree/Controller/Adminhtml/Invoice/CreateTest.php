@@ -71,7 +71,7 @@ class CreateTest extends AbstractBackendController
         $order = $this->getOrder('100000002');
 
         $this->adapter->method('sale')
-            ->with(self::callback(function ($request) {
+            ->with(self::callback(static function ($request) {
                 self::assertEquals('USA_Merchant', $request['merchantAccountId']);
                 return true;
             }))

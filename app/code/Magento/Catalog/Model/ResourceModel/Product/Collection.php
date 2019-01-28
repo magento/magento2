@@ -2323,7 +2323,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->where(
                 'entity.' . $linkField . ' IN (?)',
                 array_map(
-                    function ($item) use ($linkField) {
+                    static function ($item) use ($linkField) {
                         return (int) $item->getOrigData($linkField);
                     },
                     $items

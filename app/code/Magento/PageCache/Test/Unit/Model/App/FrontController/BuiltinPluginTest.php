@@ -68,7 +68,7 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $response = $this->responseMock;
-        $this->closure = function () use ($response) {
+        $this->closure = static function () use ($response) {
             return $response;
         };
         $this->plugin = new \Magento\PageCache\Model\App\FrontController\BuiltinPlugin(
@@ -153,7 +153,7 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->createMock(\Magento\Framework\Controller\ResultInterface::class);
         $result->expects($this->never())->method('setHeader');
-        $closure =  function () use ($result) {
+        $closure =  static function () use ($result) {
             return $result;
         };
 

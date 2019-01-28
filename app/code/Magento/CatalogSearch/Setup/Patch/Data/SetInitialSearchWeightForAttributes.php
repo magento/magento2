@@ -59,7 +59,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
         $indexer = $this->indexerFactory->create()->load('catalogsearch_fulltext');
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_CRONTAB,
-            function () use ($indexer) {
+            static function () use ($indexer) {
                 $indexer->reindexAll();
             }
         );

@@ -75,7 +75,7 @@ abstract class AbstractAssertShippingReportResult extends AbstractConstraint
 
         $preparedResult = [$expectedShippingData, $shipmentResult];
         foreach ($preparedResult as &$result) {
-            $result = array_map(function ($rowData) {
+            $result = array_map(static function ($rowData) {
                 return (int)$rowData;
             }, $result);
         }

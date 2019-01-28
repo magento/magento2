@@ -54,7 +54,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     public function testDispatchThrowException()
     {
         $validCounter = 0;
-        $callbackValid = function () use (&$validCounter) {
+        $callbackValid = static function () use (&$validCounter) {
             return $validCounter++%10 ? false : true;
         };
         $this->routerList->expects($this->any())->method('valid')->will($this->returnCallback($callbackValid));

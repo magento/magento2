@@ -138,7 +138,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('strlen')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return strlen($value);
                     }
                 )

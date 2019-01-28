@@ -166,7 +166,7 @@ class BackendModelFactory extends ValueFactory
     {
         if (!$this->metadata) {
             $this->metadata = $this->metadataProvider->get();
-            array_walk($this->metadata, function (&$value) {
+            array_walk($this->metadata, static function (&$value) {
                 $value = $value['path'];
             });
         }

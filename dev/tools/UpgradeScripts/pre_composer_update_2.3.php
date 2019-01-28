@@ -206,7 +206,7 @@ try {
     copy($composerFile, $composerBackup);
 
     // Add the repository to composer.json if needed without overwriting any existing ones
-    $repoUrls = array_map(function ($r) { return $r['url']; }, $composerData['repositories']);
+    $repoUrls = array_map(static function ($r) { return $r['url']; }, $composerData['repositories']);
     if (!in_array($repo, $repoUrls)) {
         $repoLabels = array_map('strtolower',array_keys($composerData['repositories']));
         $newLabel = 'magento';

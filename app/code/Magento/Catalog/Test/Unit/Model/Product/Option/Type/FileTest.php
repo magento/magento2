@@ -101,7 +101,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return json_decode($value, true);
                     }
                 )
@@ -111,7 +111,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('serialize')
             ->will(
                 $this->returnCallback(
-                    function ($value) {
+                    static function ($value) {
                         return json_encode($value);
                     }
                 )
@@ -178,7 +178,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with($quoteValue)
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );
@@ -234,7 +234,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with($quoteValue)
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );

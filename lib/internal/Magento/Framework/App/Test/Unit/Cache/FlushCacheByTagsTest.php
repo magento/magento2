@@ -52,7 +52,7 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $result = $this->plugin->aroundSave(
             $resource,
-            function () use ($resource) {
+            static function () use ($resource) {
                 return $resource;
             },
             $model
@@ -70,7 +70,7 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $result = $this->plugin->aroundDelete(
             $resource,
-            function () use ($resource) {
+            static function () use ($resource) {
                 return $resource;
             },
             $model
@@ -89,7 +89,7 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $result = $this->plugin->aroundSave(
             $resource,
-            function () use ($resource) {
+            static function () use ($resource) {
                 return $resource;
             },
             $model

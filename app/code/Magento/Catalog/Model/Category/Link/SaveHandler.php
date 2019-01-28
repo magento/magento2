@@ -60,7 +60,7 @@ class SaveHandler implements ExtensionInterface
         $dtoCategoryLinks = $extensionAttributes->getCategoryLinks();
         if ($dtoCategoryLinks !== null) {
             $hydrator = $this->hydratorPool->getHydrator(CategoryLinkInterface::class);
-            $dtoCategoryLinks = array_map(function ($categoryLink) use ($hydrator) {
+            $dtoCategoryLinks = array_map(static function ($categoryLink) use ($hydrator) {
                 return $hydrator->extract($categoryLink) ;
             }, $dtoCategoryLinks);
             $processLinks = $this->mergeCategoryLinks($dtoCategoryLinks, $modelCategoryLinks);

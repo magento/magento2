@@ -390,7 +390,7 @@ class InstallCommand extends AbstractSetupCommand
             }
         }
 
-        $question->setValidator(function ($answer) use ($option, $validateInline) {
+        $question->setValidator(static function ($answer) use ($option, $validateInline) {
 
             if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
                 $answer = $option->getSelectOptions()[$answer];

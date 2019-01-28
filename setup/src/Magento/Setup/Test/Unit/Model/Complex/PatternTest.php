@@ -42,7 +42,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                     [
                         'id' => '%s',
                         'name' => 'Static',
-                        'calculated' => function ($index, $generatedKey) {
+                        'calculated' => static function ($index, $generatedKey) {
                             return $index * 10 + $generatedKey;
                         },
                     ],

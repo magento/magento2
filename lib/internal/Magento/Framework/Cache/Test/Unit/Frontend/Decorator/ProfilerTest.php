@@ -63,7 +63,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     {
         $backend = new \Zend_Cache_Backend_BlackHole();
         $adaptee = $this->createMock(\Zend_Cache_Core::class);
-        $frontendFactory = function () use ($adaptee) {
+        $frontendFactory = static function () use ($adaptee) {
             return $adaptee;
         };
         $lowLevelFrontend = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendFactory);

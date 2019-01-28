@@ -58,7 +58,7 @@ class Dictionary
         return array_values(
             array_filter(
                 $this->_phrasesByKey,
-                function ($phrases) {
+                static function ($phrases) {
                     return count($phrases) > 1;
                 }
             )

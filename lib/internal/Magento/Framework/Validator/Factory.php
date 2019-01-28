@@ -98,7 +98,7 @@ class Factory
     {
         if (!$this->isDefaultTranslatorInitialized) {
             // Pass translations to \Magento\Framework\TranslateInterface from validators
-            $translatorCallback = function () {
+            $translatorCallback = static function () {
                 $argc = func_get_args();
                 return (string)new \Magento\Framework\Phrase(array_shift($argc), $argc);
             };

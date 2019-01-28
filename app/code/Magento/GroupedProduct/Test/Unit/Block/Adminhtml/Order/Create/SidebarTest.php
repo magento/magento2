@@ -39,7 +39,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->subjectMock = $this->createMock(
             \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar::class
         );
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return 'Expected';
         };
         $this->sidebarMock = new \Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar();

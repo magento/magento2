@@ -33,7 +33,7 @@ class ProxyTestingTest extends \PHPUnit\Framework\TestCase
         $proxiedObject = $this->createPartialMock('stdClass', [$callProxiedMethod]);
 
         // Create object, which reacts on called $method by calling $callProxiedMethod from proxied object
-        $callProxy = function () use ($proxiedObject, $callProxiedMethod, $passProxiedParams) {
+        $callProxy = static function () use ($proxiedObject, $callProxiedMethod, $passProxiedParams) {
             return call_user_func_array([$proxiedObject, $callProxiedMethod], $passProxiedParams);
         };
 

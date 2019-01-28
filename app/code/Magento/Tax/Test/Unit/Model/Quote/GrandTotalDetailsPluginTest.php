@@ -82,7 +82,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
         $serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_encode($value);
                 }
             );
@@ -90,7 +90,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
         $serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );

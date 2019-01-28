@@ -174,12 +174,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         int $imagesCount,
         int $batchSize
     ): \Closure {
-        $fetchResultsCallback = function () use (&$imagesCount, $batchSize) {
+        $fetchResultsCallback = static function () use (&$imagesCount, $batchSize) {
             $batchSize =
                 ($imagesCount >= $batchSize) ? $batchSize : $imagesCount;
             $imagesCount -= $batchSize;
 
-            $getFetchResults = function ($batchSize): array {
+            $getFetchResults = static function ($batchSize): array {
                 $result = [];
                 $count = $batchSize;
                 while ($count) {
@@ -205,7 +205,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         MockObject $selectMock,
         int $batchCount
     ): \Closure {
-        $iteratorCallback = function () use ($batchCount, $selectMock): array {
+        $iteratorCallback = static function () use ($batchCount, $selectMock): array {
             $result = [];
             $count = $batchCount;
             while ($count) {

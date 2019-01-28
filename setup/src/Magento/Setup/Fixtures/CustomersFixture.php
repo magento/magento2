@@ -102,7 +102,7 @@ class CustomersFixture extends Fixture
         );
 
         $fixtureMap = [
-            'customer_data' => function ($customerId) use ($customerDataGenerator) {
+            'customer_data' => static function ($customerId) use ($customerDataGenerator) {
                 return $customerDataGenerator->generate($customerId);
             },
         ];

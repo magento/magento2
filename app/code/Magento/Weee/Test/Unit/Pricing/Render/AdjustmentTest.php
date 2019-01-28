@@ -161,7 +161,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getAmount')
             ->will($this->returnValue($baseAmount));
 
-        $callback = function ($argument) use ($typeOfDisplay) {
+        $callback = static function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
             } else {
@@ -232,7 +232,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('getAmount')
             ->will($this->returnValue($baseAmount));
 
-        $callback = function ($argument) use ($typeOfDisplay) {
+        $callback = static function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
             } else {
@@ -299,7 +299,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $amountRender->expects($this->any())
             ->method('getAmount')
             ->will($this->returnValue($baseAmount));
-        $callback = function ($argument) use ($typeOfDisplay) {
+        $callback = static function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
             } else {

@@ -1357,7 +1357,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         return $this->getCache()->save(
             $this->serializer->serialize(array_map(
-                function ($item) {
+                static function ($item) {
                     return $item->getData();
                 },
                 $subProducts
@@ -1437,7 +1437,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
 
         $usedAttributes = array_map(
-            function($attr) {
+            static function($attr) {
                 return $attr->getAttributeCode();
             },
             $this->getUsedProductAttributes($product)

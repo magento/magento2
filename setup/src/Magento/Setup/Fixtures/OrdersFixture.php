@@ -282,28 +282,28 @@ class OrdersFixture extends Fixture
             ];
         }
 
-        $productStoreId = function ($index) use ($result) {
+        $productStoreId = static function ($index) use ($result) {
             return $result[$index % count($result)][0];
         };
-        $productStoreName = function ($index) use ($result) {
+        $productStoreName = static function ($index) use ($result) {
             return $result[$index % count($result)][1];
         };
-        $productId = function ($entityId, $index, $type) use ($result) {
+        $productId = static function ($entityId, $index, $type) use ($result) {
             return $result[$entityId % count($result)][2][$type][$index]['id'];
         };
-        $productSku = function ($entityId, $index, $type) use ($result) {
+        $productSku = static function ($entityId, $index, $type) use ($result) {
             return $result[$entityId % count($result)][2][$type][$index]['sku'];
         };
-        $productName = function ($entityId, $index, $type) use ($result) {
+        $productName = static function ($entityId, $index, $type) use ($result) {
             return $result[$entityId % count($result)][2][$type][$index]['name'];
         };
-        $productBuyRequest = function ($entityId, $index, $type) use ($result) {
+        $productBuyRequest = static function ($entityId, $index, $type) use ($result) {
             return $result[$entityId % count($result)][2][$type][$index]['buyRequest'];
         };
-        $productChildBuyRequest = function ($entityId, $index, $type) use ($result) {
+        $productChildBuyRequest = static function ($entityId, $index, $type) use ($result) {
             return $result[$entityId % count($result)][2][$type][$index]['childBuyRequest'];
         };
-        $productChildId = function ($entityId, $index, $type) use ($result) {
+        $productChildId = static function ($entityId, $index, $type) use ($result) {
             return $result[$entityId % count($result)][2][$type][$index]['childId'];
         };
 

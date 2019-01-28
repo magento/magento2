@@ -371,7 +371,7 @@ class EntityGenerator
             foreach ($this->primaryEntityIdTables as $table) {
                 $ddl = array_filter(
                     $this->getConnection()->describeTable($table),
-                    function ($data) {
+                    static function ($data) {
                         return $data['PRIMARY'] === true;
                     }
                 );

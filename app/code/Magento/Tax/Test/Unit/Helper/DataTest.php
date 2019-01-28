@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_encode($value);
                 }
             );
@@ -59,7 +59,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );
@@ -259,7 +259,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('round')
             ->will(
                 $this->returnCallback(
-                    function ($arg) {
+                    static function ($arg) {
                         return round($arg, 2);
                     }
                 )

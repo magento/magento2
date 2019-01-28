@@ -412,7 +412,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             );
 
         return array_map(
-            function ($value) {
+            static function ($value) {
                 return $value['review_id'];
             },
             $data

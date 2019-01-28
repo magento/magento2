@@ -80,7 +80,7 @@ class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
             ['product_attribute_sets_attributes_values', 3, 3],
         ];
 
-        $closure = function () {
+        $closure = static function () {
         };
         $this->patternMock->expects($this->once())
             ->method('generateAttributeSet')

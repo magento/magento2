@@ -54,7 +54,7 @@ class ConfigSourceAggregated implements ConfigSourceInterface
      */
     private function sortSources()
     {
-        uasort($this->sources, function ($firstItem, $secondItem) {
+        uasort($this->sources, static function ($firstItem, $secondItem) {
             return $firstItem['sortOrder'] > $secondItem['sortOrder'];
         });
     }

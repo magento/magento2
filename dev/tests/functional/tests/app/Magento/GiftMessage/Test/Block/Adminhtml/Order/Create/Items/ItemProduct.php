@@ -48,7 +48,7 @@ class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
         $giftMessageFormSelector = $this->giftMessageForm;
         $browser = $this->browser;
         $browser->waitUntil(
-            function () use ($giftMessageFormSelector, $browser) {
+            static function () use ($giftMessageFormSelector, $browser) {
                 return $browser->find($giftMessageFormSelector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );

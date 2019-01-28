@@ -20,7 +20,7 @@ class RenderersPool implements PoolInterface
     ) {
         array_walk(
             $renderers,
-            function (RendererInterface $renderer) {
+            static function (RendererInterface $renderer) {
                 return $renderer;
             }
         );

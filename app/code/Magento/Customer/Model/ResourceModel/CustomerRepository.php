@@ -239,7 +239,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getAddresses() !== null && !$customerModel->getData('ignore_validation_flag')) {
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
-                $getIdFunc = function ($address) {
+                $getIdFunc = static function ($address) {
                     return $address->getId();
                 };
                 $existingAddressIds = array_map($getIdFunc, $existingAddresses);

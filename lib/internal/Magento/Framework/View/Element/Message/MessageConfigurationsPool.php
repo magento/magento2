@@ -23,7 +23,7 @@ class MessageConfigurationsPool
     ) {
         array_walk(
             $configurationsMap,
-            function (array &$configuration) {
+            static function (array &$configuration) {
                 if (!isset($configuration['renderer'])
                     || !is_string($configuration['renderer'])
                 ) {

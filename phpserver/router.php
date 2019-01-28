@@ -19,7 +19,7 @@
  */
 define('DEBUG_ROUTER', false);
 
-$debug = function ($val) {
+$debug = static function ($val) {
     if (!DEBUG_ROUTER) {
         return;
     }

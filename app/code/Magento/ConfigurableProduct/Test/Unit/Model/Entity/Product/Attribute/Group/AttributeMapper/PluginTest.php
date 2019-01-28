@@ -86,7 +86,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $proceed = function (Attribute $attribute) {
+        $proceed = static function (Attribute $attribute) {
             return [];
         };
 

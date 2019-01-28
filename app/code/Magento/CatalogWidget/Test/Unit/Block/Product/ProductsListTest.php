@@ -155,7 +155,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
         $this->serializer->expects($this->any())
             ->method('serialize')
-            ->willReturnCallback(function ($value) {
+            ->willReturnCallback(static function ($value) {
                 return json_encode($value);
             });
 

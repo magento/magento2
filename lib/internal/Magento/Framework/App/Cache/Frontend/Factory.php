@@ -145,7 +145,7 @@ class Factory
         $result = $this->_objectManager->create(
             \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
             [
-                'frontendFactory' => function () use ($frontend, $backend) {
+                'frontendFactory' => static function () use ($frontend, $backend) {
                     return \Zend_Cache::factory(
                         $frontend['type'],
                         $backend['type'],

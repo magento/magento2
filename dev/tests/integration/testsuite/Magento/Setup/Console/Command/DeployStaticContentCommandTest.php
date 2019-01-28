@@ -180,7 +180,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
         $consoleLoggerFactoryMock
             ->method('getLogger')
             ->will($this->returnCallback(
-                function ($output) use ($objectManager) {
+                static function ($output) use ($objectManager) {
                     return $objectManager->create(ConsoleLogger::class, ['output' => $output]);
                 }
             ));

@@ -288,7 +288,7 @@ class Customer extends AbstractCustomer
     {
         $firstCustomer = reset($entitiesToUpdate);
         $columnsToUpdate = array_keys($firstCustomer);
-        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
+        $customerFieldsToUpdate = array_filter($this->customerFields, static function ($field) use ($columnsToUpdate) {
             return in_array($field, $columnsToUpdate);
         });
         return $customerFieldsToUpdate;

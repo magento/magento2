@@ -392,7 +392,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($customOptions as $customOption) {
             $parsedOptions = array_values(
                 array_map(
-                    function ($input) {
+                    static function ($input) {
                         $data = explode('=', $input);
                         return [$data[0] => $data[1]];
                     },

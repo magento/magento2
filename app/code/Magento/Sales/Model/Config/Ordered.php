@@ -163,7 +163,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
                  * @return int
                  */
                 // @codingStandardsIgnoreEnd
-                function ($a, $b) {
+                static function ($a, $b) {
                     if (!isset($a['sort_order']) || !isset($b['sort_order'])) {
                         return 0;
                     }

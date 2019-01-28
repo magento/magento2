@@ -148,7 +148,7 @@ class Sidebar extends Block
         $browser = $this->browser;
         $selector = $this->counterQty;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }
@@ -248,7 +248,7 @@ class Sidebar extends Block
         $browser = $this->browser;
         $selector = $this->counterNumberWrapper;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }

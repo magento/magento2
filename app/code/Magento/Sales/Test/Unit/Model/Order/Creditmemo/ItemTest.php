@@ -222,7 +222,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
             ->will($this->returnCallback(
-                function ($arg) {
+                static function ($arg) {
                     return round($arg, 2);
                 }
             ));

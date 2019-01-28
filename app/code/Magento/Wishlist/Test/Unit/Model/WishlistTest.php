@@ -353,7 +353,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );

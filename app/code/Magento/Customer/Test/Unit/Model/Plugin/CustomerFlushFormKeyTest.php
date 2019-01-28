@@ -82,7 +82,7 @@ class CustomerFlushFormKeyTest extends TestCase
             ->method('setBeforeRequestParams')
             ->with($beforeParams);
 
-        $proceed = function ($observerDto) use ($observer) {
+        $proceed = static function ($observerDto) use ($observer) {
             return $observer->execute($observerDto);
         };
 

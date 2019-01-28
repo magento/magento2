@@ -24,7 +24,7 @@ abstract class AbstractDataObject
     public function toArray()
     {
         $data = $this->data;
-        $hasToArray = function ($model) {
+        $hasToArray = static function ($model) {
             return is_object($model) && method_exists($model, 'toArray') && is_callable([$model, 'toArray']);
         };
         foreach ($data as $key => $value) {

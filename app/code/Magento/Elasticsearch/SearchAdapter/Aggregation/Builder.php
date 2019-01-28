@@ -45,13 +45,13 @@ class Builder
         DataProviderFactory $dataProviderFactory = null
     ) {
         $this->dataProviderContainer = array_map(
-            function (DataProviderInterface $dataProvider) {
+            static function (DataProviderInterface $dataProvider) {
                 return $dataProvider;
             },
             $dataProviderContainer
         );
         $this->aggregationContainer = array_map(
-            function (BucketBuilderInterface $bucketBuilder) {
+            static function (BucketBuilderInterface $bucketBuilder) {
                 return $bucketBuilder;
             },
             $aggregationContainer

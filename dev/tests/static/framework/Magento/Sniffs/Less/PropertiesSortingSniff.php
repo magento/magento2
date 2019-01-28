@@ -103,7 +103,7 @@ class PropertiesSortingSniff implements Sniff
         $symbolsForSkip = ['(', 'block', 'field'];
         $properties = array_filter(
             $properties,
-            function ($var) use ($symbolsForSkip) {
+            static function ($var) use ($symbolsForSkip) {
                 return !in_array($var, $symbolsForSkip);
             }
         );

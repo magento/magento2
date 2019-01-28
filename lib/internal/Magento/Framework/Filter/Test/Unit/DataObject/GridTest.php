@@ -21,7 +21,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\DataObject::class, [])
             ->will(
                 $this->returnCallback(
-                    function () {
+                    static function () {
                         return new DataObject();
                     }
                 )
@@ -38,7 +38,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
         $filterMock->expects($this->exactly(4))->method('filter')->will(
             $this->returnCallback(
-                function ($input) {
+                static function ($input) {
                     return '(' . $input . ')';
                 }
             )
@@ -50,7 +50,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
         $fieldFilterMock->expects($this->exactly(2))->method('filter')->will(
             $this->returnCallback(
-                function ($input) {
+                static function ($input) {
                     return '[' . $input . ']';
                 }
             )

@@ -33,7 +33,7 @@ class Serialize implements SerializerInterface
             throw new \InvalidArgumentException('Unable to unserialize value.');
         }
         set_error_handler(
-            function () {
+            static function () {
                 restore_error_handler();
                 throw new \InvalidArgumentException('Unable to unserialize value, string is corrupted.');
             },

@@ -270,7 +270,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $contentsWithoutHtml = '';
                 preg_replace_callback(
                     '~(<\?php\s+.*\?>)~sU',
-                    function ($matches) use ($contents, &$contentsWithoutHtml) {
+                    static function ($matches) use ($contents, &$contentsWithoutHtml) {
                         $contentsWithoutHtml .= $matches[1];
                         return $contents;
                     },
@@ -768,7 +768,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         string $type,
         array $packageModuleMap
     ): void {
-        $packageNames = array_filter($packageNames, function ($packageName) use ($packageModuleMap) {
+        $packageNames = array_filter($packageNames, static function ($packageName) use ($packageModuleMap) {
             return isset($packageModuleMap[$packageName]) ||
                 0 === strpos($packageName, 'magento/') && 'magento/magento-composer-installer' != $packageName;
         });

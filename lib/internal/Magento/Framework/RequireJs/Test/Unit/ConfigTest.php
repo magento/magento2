@@ -101,7 +101,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileReader->expects($this->any())
             ->method('readAll')
-            ->will($this->returnCallback(function ($file) {
+            ->will($this->returnCallback(static function ($file) {
                 return $file . ' content';
             }));
         $fileOne = $this->createMock(\Magento\Framework\View\File::class);

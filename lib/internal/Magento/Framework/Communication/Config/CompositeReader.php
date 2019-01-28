@@ -26,7 +26,7 @@ class CompositeReader implements ReaderInterface
     {
         usort(
             $readers,
-            function ($firstItem, $secondItem) {
+            static function ($firstItem, $secondItem) {
                 if (!isset($firstItem['sortOrder']) || !isset($secondItem['sortOrder'])) {
                     return 0;
                 }

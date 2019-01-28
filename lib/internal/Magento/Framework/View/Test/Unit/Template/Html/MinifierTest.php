@@ -72,7 +72,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->rootDirectoryMock);
         $this->rootDirectoryMock->expects($this->any())
             ->method('getRelativePath')
-            ->willReturnCallback(function ($value) {
+            ->willReturnCallback(static function ($value) {
                 return ltrim($value, '/');
             });
         $this->readFactoryMock->expects($this->any())

@@ -60,7 +60,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
-                function ($className, $arguments = []) use ($objectManager) {
+                static function ($className, $arguments = []) use ($objectManager) {
                     return $objectManager->getObject($className, $arguments);
                 }
             );
@@ -85,7 +85,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->attributeValueFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
-                function () use ($objectManager) {
+                static function () use ($objectManager) {
                     return $objectManager->getObject(\Magento\Framework\Api\AttributeValue::class);
                 }
             );

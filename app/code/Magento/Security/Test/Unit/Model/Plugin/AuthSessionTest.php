@@ -91,7 +91,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         $result = 'result';
         $errorMessage = 'Error Message';
 
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 
@@ -126,7 +126,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         $result = 'result';
         $status = 1;
 
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 
@@ -160,7 +160,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
     public function testAroundProlongSessionIsActive()
     {
         $result = 'result';
-        $proceed = function () use ($result) {
+        $proceed = static function () use ($result) {
             return $result;
         };
 

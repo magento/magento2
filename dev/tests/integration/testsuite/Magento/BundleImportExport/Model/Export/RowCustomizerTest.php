@@ -100,7 +100,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->model->prepareData($collection, [$product->getId()]);
         $result = $this->model->addData(['additional_attributes' => $allAdditionalAttributes], $product->getId());
         $bundleValues = array_map(
-            function ($input) {
+            static function ($input) {
                 $data = explode('=', $input);
 
                 return [$data[0] => $data[1]];

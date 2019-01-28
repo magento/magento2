@@ -221,7 +221,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $messages = $this->getMessages($messageType, $messageManagerClass);
         /** @var string[] $messages */
         $messagesFiltered = array_map(
-            function ($message) {
+            static function ($message) {
                 /** @var MessageInterface|string $message */
                 return ($message instanceof MessageInterface) ? $message->toString() : $message;
             },

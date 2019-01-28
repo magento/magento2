@@ -128,7 +128,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())->method('getTableName')->will(
             $this->returnCallback(
-                function ($arg) {
+                static function ($arg) {
                     return $arg;
                 }
             )

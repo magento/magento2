@@ -88,7 +88,7 @@ class RemoteAddress
         }
         $ipList = array_filter(
             $ipList,
-            function (string $ip) {
+            static function (string $ip) {
                 return filter_var(trim($ip), FILTER_VALIDATE_IP);
             }
         );

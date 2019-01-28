@@ -46,7 +46,7 @@ class AggregateInvokerTest extends \PHPUnit\Framework\TestCase
             $this->stringStartsWith($expectedMessage)
         );
         $this->_invoker->__invoke(
-            function () use ($exceptionClass) {
+            static function () use ($exceptionClass) {
                 throw new $exceptionClass('Some meaningful message.');
             },
             [[0]]

@@ -40,7 +40,7 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
         $data['swatch_input_type'] = 'visual';
         $data['swatchvisual']['value'] = array_reduce(
             range(1, $optionsPerAttribute),
-            function ($values, $index) use ($optionsPerAttribute) {
+            static function ($values, $index) use ($optionsPerAttribute) {
                 $values['option_' . $index] = '#'
                     . str_repeat(
                         dechex(255 * $index / $optionsPerAttribute),
@@ -52,7 +52,7 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
         );
         $data['optionvisual']['value'] = array_reduce(
             range(1, $optionsPerAttribute),
-            function ($values, $index) use ($optionsPerAttribute) {
+            static function ($values, $index) use ($optionsPerAttribute) {
                 $values['option_' . $index] = ['option ' . $index];
                 return $values;
             },
@@ -61,7 +61,7 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
 
         $data['options']['option'] = array_reduce(
             range(1, $optionsPerAttribute),
-            function ($values, $index) use ($optionsPerAttribute) {
+            static function ($values, $index) use ($optionsPerAttribute) {
                 $values[] = [
                     'label' => 'option ' . $index,
                     'value' => 'option_' . $index

@@ -38,7 +38,7 @@ class Preview extends Block
         $selector = $this->loader;
         $browser = $this->browser;
         $this->browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $element = $browser->find($selector, Locator::SELECTOR_XPATH);
                 return $element->isVisible() == false ? true : null;
             }

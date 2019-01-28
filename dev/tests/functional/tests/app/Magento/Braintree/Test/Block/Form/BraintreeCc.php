@@ -50,7 +50,7 @@ class BraintreeCc extends PaymentCc
         foreach ($this->braintreeForm as $field => $iframe) {
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
-                function () use ($element, $iframe) {
+                static function () use ($element, $iframe) {
                     $fieldElement = $element->find($iframe, Locator::SELECTOR_XPATH);
                     return $fieldElement->isVisible() ? true : null;
                 }
@@ -65,7 +65,7 @@ class BraintreeCc extends PaymentCc
             $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
-                function () use ($element) {
+                static function () use ($element) {
                     $fieldElement = $element->find('input');
                     return $fieldElement->isVisible() ? true : null;
                 }

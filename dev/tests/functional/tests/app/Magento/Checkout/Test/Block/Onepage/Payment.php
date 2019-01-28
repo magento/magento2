@@ -97,7 +97,7 @@ class Payment extends Block
         }
         $browser = $this->browser;
         $browser->waitUntil(
-            function () use ($browser, $paymentSelector) {
+            static function () use ($browser, $paymentSelector) {
                 return $browser->find($paymentSelector);
             }
         );

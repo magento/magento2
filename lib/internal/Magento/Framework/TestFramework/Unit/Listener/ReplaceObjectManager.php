@@ -30,7 +30,7 @@ class ReplaceObjectManager extends \PHPUnit\Framework\BaseTestListener
         if ($test instanceof \PHPUnit\Framework\TestCase) {
             $objectManagerMock = $test->getMockBuilder(ObjectManagerInterface::class)
                 ->getMockForAbstractClass();
-            $createMockCallback = function ($type) use ($test) {
+            $createMockCallback = static function ($type) use ($test) {
                 return $test->getMockBuilder($type)
                     ->disableOriginalConstructor()
                     ->getMockForAbstractClass();

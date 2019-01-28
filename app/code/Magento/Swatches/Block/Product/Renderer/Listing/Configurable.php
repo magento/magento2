@@ -232,7 +232,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 
         $layeredAttributes = [];
 
-        $configurableAttributes = array_map(function ($attribute) {
+        $configurableAttributes = array_map(static function ($attribute) {
             return $attribute->getAttributeCode();
         }, $configurableAttributes);
 

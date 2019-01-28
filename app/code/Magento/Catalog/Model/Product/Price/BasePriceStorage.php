@@ -174,7 +174,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     private function retrieveValidPrices(array $prices)
     {
         $skus = array_unique(
-            array_map(function ($price) {
+            array_map(static function ($price) {
                 return $price->getSku();
             }, $prices)
         );

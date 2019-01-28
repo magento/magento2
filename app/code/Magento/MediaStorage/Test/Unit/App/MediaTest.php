@@ -67,7 +67,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->closure = function () {
+        $this->closure = static function () {
             return true;
         };
         $this->configMock = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Config::class);

@@ -75,7 +75,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $storage->expects($this->at(1))
             ->method('refreshAcl');
 
-        $proceed = function ($request) use ($expectedResult) {
+        $proceed = static function ($request) use ($expectedResult) {
             return $expectedResult;
         };
 
@@ -140,7 +140,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $request->expects($this->exactly($setterCalls))->method('setDispatched')->with(false)->willReturnSelf();
 
         $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
+        $proceed = static function ($request) use ($expectedResult) {
             return $expectedResult;
         };
         $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));

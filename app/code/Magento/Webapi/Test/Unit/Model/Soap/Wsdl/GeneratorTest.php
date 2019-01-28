@@ -94,7 +94,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_encode($value);
                 }
             );

@@ -123,7 +123,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->method('getTriggers')
             ->willReturn(
                 [
-                    function () {
+                    static function () {
                     }
                 ]
             );
@@ -149,7 +149,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->method('getTriggers')
             ->willReturn(
                 [
-                    function () {
+                    static function () {
                     }
                 ]
             );

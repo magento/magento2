@@ -73,7 +73,7 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
 
         $currencyList = $this->listsModel->getOptionCurrencies();
         $currencyCodes = array_map(
-            function ($data) {
+            static function ($data) {
                 return $data['value'];
             },
             $currencyList

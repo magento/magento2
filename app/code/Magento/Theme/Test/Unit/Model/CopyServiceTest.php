@@ -469,7 +469,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             ['source/path/subdir/file_two.png', 'target/path/subdir/file_two.png', null],
         ];
         $actualCopyEvents = [];
-        $recordCopyEvent = function () use (&$actualCopyEvents) {
+        $recordCopyEvent = static function () use (&$actualCopyEvents) {
             $actualCopyEvents[] = func_get_args();
         };
         $this->dirWriteMock->expects($this->any())->method('copyFile')->will($this->returnCallback($recordCopyEvent));

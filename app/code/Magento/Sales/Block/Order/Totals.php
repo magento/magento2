@@ -295,7 +295,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     {
         \uksort(
             $this->_totals,
-            function ($code1, $code2) use ($order) {
+            static function ($code1, $code2) use ($order) {
                 return ($order[$code1] ?? 0) <=> ($order[$code2] ?? 0);
             }
         );

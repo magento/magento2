@@ -79,10 +79,10 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
             return $tokenIndex;
         };
-        $macroTokenLogicalStartIndex = function () use (&$tokenIndex, &$docCommentIndex) {
+        $macroTokenLogicalStartIndex = static function () use (&$tokenIndex, &$docCommentIndex) {
             return ($docCommentIndex === false) ? $tokenIndex : $docCommentIndex;
         };
-        $macroDocCommentStart = function () use (&$tokenIndex, &$docCommentIndex) {
+        $macroDocCommentStart = static function () use (&$tokenIndex, &$docCommentIndex) {
             $docCommentIndex = $tokenIndex;
 
             return $docCommentIndex;
@@ -98,7 +98,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
             return $docCommentIndex;
         };
-        $macroInfoAdvance = function () use (&$infoIndex, &$infos, &$tokenIndex, &$tokenLine) {
+        $macroInfoAdvance = static function () use (&$infoIndex, &$infos, &$tokenIndex, &$tokenLine) {
             $infos[$infoIndex]['tokenEnd'] = $tokenIndex;
             $infos[$infoIndex]['lineEnd'] = $tokenLine;
             $infoIndex++;

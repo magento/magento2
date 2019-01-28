@@ -203,7 +203,7 @@ class PackagesData
             if ($latestProductVersion && version_compare($latestProductVersion, $package['version'], '>')) {
                 $availableVersions = $this->getPackageAvailableVersions($package['name']);
                 $package['latestVersion'] = $latestProductVersion;
-                $package['versions'] = array_filter($availableVersions, function ($version) use ($package) {
+                $package['versions'] = array_filter($availableVersions, static function ($version) use ($package) {
                     return version_compare($version, $package['version'], '>');
                 });
                 $packagesForUpdate[$package['name']] = $package;
@@ -405,7 +405,7 @@ class PackagesData
     {
         return array_filter(
             $packages,
-            function ($item) {
+            static function ($item) {
                 return in_array(
                     $item['package_type'],
                     [

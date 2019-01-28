@@ -204,7 +204,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected function mockPluginProceed($returnValue = null)
     {
-        return function () use ($returnValue) {
+        return static function () use ($returnValue) {
             return $returnValue;
         };
     }

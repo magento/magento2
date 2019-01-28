@@ -177,7 +177,7 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
         $this->serializeMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(
-                function () {
+                static function () {
                     trigger_error('Can not unserialize string message', E_NOTICE);
                 }
             );

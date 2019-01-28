@@ -105,7 +105,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $return = $this->model->aroundDelete(
             $subject,
             /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $prod */
-            function (\Magento\Catalog\Model\Product $prod) use ($subject) {
+            static function (\Magento\Catalog\Model\Product $prod) use ($subject) {
                 $prod->delete();
                 return $subject;
             },

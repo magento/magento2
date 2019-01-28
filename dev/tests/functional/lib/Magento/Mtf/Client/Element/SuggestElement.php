@@ -86,7 +86,7 @@ class SuggestElement extends SimpleElement
         $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
         $searchedCountElements = $this->find($this->searchedCount);
         $this->waitUntil(
-            function () use ($searchedCountElements) {
+            static function () use ($searchedCountElements) {
                 return $searchedCountElements->isVisible() ? true : null;
             }
         );

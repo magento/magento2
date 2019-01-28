@@ -237,7 +237,7 @@ class Calculator implements BundleCalculatorInterface
     {
         $options = array_filter(
             $this->getBundleOptions($bundleProduct),
-            function ($item) {
+            static function ($item) {
                 return $item->getRequired();
             }
         );

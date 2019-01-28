@@ -27,14 +27,14 @@ class Composite
         /** Eliminate misconfigured components */
         $declaredComponents = array_filter(
             $declaredComponents,
-            function ($component) {
+            static function ($component) {
                 return (isset($component['type']) && isset($component['sortOrder']));
             }
         );
         /** Sort all components according to the provided sort order */
         uasort(
             $declaredComponents,
-            function ($firstComponent, $secondComponent) {
+            static function ($firstComponent, $secondComponent) {
                 return (int)$firstComponent['sortOrder'] <=> (int)$secondComponent['sortOrder'];
             }
         );

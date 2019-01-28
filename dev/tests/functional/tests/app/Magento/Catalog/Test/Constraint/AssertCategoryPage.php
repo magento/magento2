@@ -223,7 +223,7 @@ class AssertCategoryPage extends AbstractConstraint
         if (isset($categoryData['available_sort_by'])) {
             $availableSortType = array_filter(
                 $categoryData['available_sort_by'],
-                function (&$value) {
+                static function (&$value) {
                     return $value !== '-' && ucfirst($value);
                 }
             );

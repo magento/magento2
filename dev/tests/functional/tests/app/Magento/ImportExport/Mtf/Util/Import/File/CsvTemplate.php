@@ -92,7 +92,7 @@ class CsvTemplate implements TemplateInterface
         foreach ($placeholders as $entityKey => $entityData) {
             foreach ($entityData as $dataKey => $dataValue) {
                 $row = array_map(
-                    function ($value) use ($placeholders, $entityKey, $dataKey, $dataValue) {
+                    static function ($value) use ($placeholders, $entityKey, $dataKey, $dataValue) {
                         if (is_string($value) && isset($placeholders[$entityKey][$dataKey])) {
                             return strtr($value, $dataValue);
                         }

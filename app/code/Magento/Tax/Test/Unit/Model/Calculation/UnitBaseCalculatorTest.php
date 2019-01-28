@@ -75,7 +75,7 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
             ->method('round')
             ->withAnyParameters()
             ->willReturnCallback(
-                function ($price) {
+                static function ($price) {
                     return round($price, 2);
                 }
             );

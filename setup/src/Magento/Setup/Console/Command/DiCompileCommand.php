@@ -197,11 +197,11 @@ class DiCompileCommand extends Command
             $progressBar->display();
 
             $this->taskManager->process(
-                function (OperationInterface $operation) use ($progressBar) {
+                static function (OperationInterface $operation) use ($progressBar) {
                     $progressBar->setMessage($operation->getName() . '...');
                     $progressBar->display();
                 },
-                function (OperationInterface $operation) use ($progressBar) {
+                static function (OperationInterface $operation) use ($progressBar) {
                     $progressBar->advance();
                 }
             );
@@ -260,7 +260,7 @@ class DiCompileCommand extends Command
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
-        $libraryPaths = array_map(function ($libraryPath) {
+        $libraryPaths = array_map(static function ($libraryPath) {
             return preg_quote($libraryPath, '#');
         }, $libraryPaths);
 

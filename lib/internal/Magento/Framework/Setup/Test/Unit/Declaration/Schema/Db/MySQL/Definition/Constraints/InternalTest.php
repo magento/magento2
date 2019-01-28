@@ -78,7 +78,7 @@ class InternalTest extends \PHPUnit\Framework\TestCase
         $adapterMock->expects($this->any())
             ->method('quoteIdentifier')
             ->willReturnCallback(
-                function ($name) {
+                static function ($name) {
                     return '`' . $name . '`';
                 }
             );

@@ -46,7 +46,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
         );
 
         $bindings = $this->helper->getExchangeBindings($name);
-        $bindings = array_map(function ($value) {
+        $bindings = array_map(static function ($value) {
             unset($value['properties_key']);
             return $value;
         }, $bindings);

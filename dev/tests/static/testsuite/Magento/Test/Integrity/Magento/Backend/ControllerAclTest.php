@@ -150,7 +150,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
         }
         $aclFiles = Files::init()->getConfigFiles('acl.xml', []);
         $xmlResources = [];
-        array_map(function ($file) use (&$xmlResources) {
+        array_map(static function ($file) use (&$xmlResources) {
             $config = simplexml_load_file($file[0]);
             $nodes = $config->xpath('.//resource/@id') ?: [];
             foreach ($nodes as $node) {

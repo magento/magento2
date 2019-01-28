@@ -31,7 +31,7 @@ class CircularDependencyTest extends \PHPUnit\Framework\TestCase
         $domFactoryMock->expects($this->any())
             ->method('createDom')
             ->willReturnCallback(
-                function ($arguments) use ($validationStateMock) {
+                static function ($arguments) use ($validationStateMock) {
                     return new \Magento\Framework\Config\Dom(
                         $arguments['xml'],
                         $validationStateMock,

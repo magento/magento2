@@ -307,7 +307,7 @@ namespace Magento\Framework\Session {
 
             $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
             $deploymentConfigMock->method('get')
-                ->willReturnCallback(function ($configPath) {
+                ->willReturnCallback(static function ($configPath) {
                     switch ($configPath) {
                         case Config::PARAM_SESSION_SAVE_METHOD:
                             return 'db';

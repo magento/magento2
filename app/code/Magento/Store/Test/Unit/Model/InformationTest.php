@@ -62,7 +62,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
 
         $this->store->expects($this->any())
             ->method('getConfig')
-            ->willReturnCallback(function ($path) use ($mockData) {
+            ->willReturnCallback(static function ($path) use ($mockData) {
                 return isset($mockData[$path]) ? $mockData[$path] : null;
             });
 
@@ -73,7 +73,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
 
         $this->renderer->expects($this->once())
             ->method('format')
-            ->willReturnCallback(function ($storeInfo) {
+            ->willReturnCallback(static function ($storeInfo) {
                 return implode("\n", $storeInfo->getData());
             });
 

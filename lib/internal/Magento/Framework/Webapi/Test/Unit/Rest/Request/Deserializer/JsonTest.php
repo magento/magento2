@@ -70,7 +70,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($serializedData) {
+                static function ($serializedData) {
                     return json_decode($serializedData, true);
                 }
             );

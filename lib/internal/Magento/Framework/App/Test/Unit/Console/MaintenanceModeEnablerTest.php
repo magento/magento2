@@ -19,7 +19,7 @@ class MaintenanceModeEnablerTest extends TestCase
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
         $enabler = new MaintenanceModeEnabler($maintenanceMode);
-        $successTask = function () {
+        $successTask = static function () {
             // do nothing
         };
 
@@ -43,7 +43,7 @@ class MaintenanceModeEnablerTest extends TestCase
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
         $enabler = new MaintenanceModeEnabler($maintenanceMode);
-        $failedTask = function () {
+        $failedTask = static function () {
             throw new \Exception('Woops!');
         };
 
@@ -69,7 +69,7 @@ class MaintenanceModeEnablerTest extends TestCase
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
         $enabler = new MaintenanceModeEnabler($maintenanceMode);
-        $failedTask = function () {
+        $failedTask = static function () {
             throw new \Exception('Woops!');
         };
 
@@ -109,10 +109,10 @@ class MaintenanceModeEnablerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $maintenanceMode->method('isOn')->willReturnCallback(function () use (&$isOn) {
+        $maintenanceMode->method('isOn')->willReturnCallback(static function () use (&$isOn) {
             return $isOn;
         });
-        $maintenanceMode->method('set')->willReturnCallback(function ($newValue) use (&$isOn) {
+        $maintenanceMode->method('set')->willReturnCallback(static function ($newValue) use (&$isOn) {
             $isOn = (bool)$newValue;
             return true;
         });

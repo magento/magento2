@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
-$deleteConfigData = function (WriterInterface $writer, $scope, $scopeId) {
+$deleteConfigData = static function (WriterInterface $writer, $scope, $scopeId) {
     $configData = [
         'fraud_protection/signifyd/active',
     ];

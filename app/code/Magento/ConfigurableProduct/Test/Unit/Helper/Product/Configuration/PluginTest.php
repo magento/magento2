@@ -46,7 +46,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ['getSelectedAttributesInfo', '__wakeup']
         );
         $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return ['options'];
         };
         $this->subjectMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);

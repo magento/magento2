@@ -152,7 +152,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
         $dropComplexElement = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $callback = function () {
+        $callback = static function () {
         };
         $column = $this->prepareColumn();
         $elementHistory = new ElementHistory($column);

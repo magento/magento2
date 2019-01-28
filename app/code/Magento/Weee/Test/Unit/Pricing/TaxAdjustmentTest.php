@@ -44,7 +44,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('convertAndRound')
             ->will(
                 $this->returnCallback(
-                    function ($arg) {
+                    static function ($arg) {
                         return round($arg * 0.5, 2);
                     }
                 )
@@ -53,7 +53,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->will(
                 $this->returnCallback(
-                    function ($arg) {
+                    static function ($arg) {
                         return $arg * 0.5;
                     }
                 )

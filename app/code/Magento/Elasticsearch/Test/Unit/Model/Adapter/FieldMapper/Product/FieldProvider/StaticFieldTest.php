@@ -162,7 +162,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($this->anything())
             ->will($this->returnCallback(
-                function ($type) use ($complexType) {
+                static function ($type) use ($complexType) {
                     static $callCount = [];
                     $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 

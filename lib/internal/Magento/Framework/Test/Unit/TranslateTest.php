@@ -111,11 +111,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
-            ->willReturnCallback(function ($data) {
+            ->willReturnCallback(static function ($data) {
                 return json_encode($data);
             });
         $serializerMock->method('unserialize')
-            ->willReturnCallback(function ($string) {
+            ->willReturnCallback(static function ($string) {
                 return json_decode($string, true);
             });
         $objectManager->setBackwardCompatibleProperty(

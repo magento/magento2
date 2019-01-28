@@ -31,7 +31,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\CartConfiguration::class);
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return 'Expected';
         };
         $this->groupedPlugin = new \Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped();

@@ -448,7 +448,7 @@ class Helper
             }
 
             if (isset($customOptionData['values'])) {
-                $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
+                $customOptionData['values'] = array_filter($customOptionData['values'], static function ($valueData) {
                     return empty($valueData['is_delete']);
                 });
             }

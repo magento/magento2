@@ -134,7 +134,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         'options' => [
         'callback' => [
         new \Magento\Framework\Validator\Constraint\Option\Callback(
-            function ($validator) {
+            static function ($validator) {
                 $validator->setMin(20);
                 $validator->setMax(100);
             }

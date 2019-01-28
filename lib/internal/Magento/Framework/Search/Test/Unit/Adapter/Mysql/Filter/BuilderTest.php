@@ -49,7 +49,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('generateCondition')
             ->will(
                 $this->returnCallback(
-                    function ($field, $operator, $value) {
+                    static function ($field, $operator, $value) {
                         return sprintf('%s %s %s', $field, $operator, $value);
                     }
                 )
@@ -58,7 +58,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('combineQueries')
             ->will(
                 $this->returnCallback(
-                    function ($queries, $operator) {
+                    static function ($queries, $operator) {
                         return implode(
                             ' ' . $operator . ' ',
                             array_filter($queries, 'strlen')
@@ -70,7 +70,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('wrapBrackets')
             ->will(
                 $this->returnCallback(
-                    function ($query) {
+                    static function ($query) {
                         return !empty($query) ? sprintf('(%s)', $query) : '';
                     }
                 )

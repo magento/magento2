@@ -198,7 +198,7 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
      */
     private function captureArg(&$captureVar)
     {
-        return $this->callback(function ($argToMock) use (&$captureVar) {
+        return $this->callback(static function ($argToMock) use (&$captureVar) {
             $captureVar = $argToMock;
 
             return true;

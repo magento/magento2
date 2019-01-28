@@ -117,7 +117,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $saved = $this->shipmentRepository->save($shipment);
 
         $comments = $saved->getComments();
-        $actual = array_map(function (CommentInterface $comment) {
+        $actual = array_map(static function (CommentInterface $comment) {
             return $comment->getComment();
         }, $comments);
         self::assertEquals(2, count($actual));

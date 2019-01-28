@@ -56,13 +56,13 @@ class Reader implements \Magento\Framework\App\Config\Scope\ReaderInterface
     {
         $array = array_filter(
             $array,
-            function ($item) {
+            static function ($item) {
                 return (!isset($item['disable']) || !$item['disable']) && $item['class'];
             }
         );
         uasort(
             $array,
-            function ($firstItem, $nexItem) {
+            static function ($firstItem, $nexItem) {
                 return (int)$firstItem['sortOrder'] <=> (int)$nexItem['sortOrder'];
             }
         );

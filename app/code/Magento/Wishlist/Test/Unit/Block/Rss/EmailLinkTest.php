@@ -46,7 +46,7 @@ class EmailLinkTest extends \PHPUnit\Framework\TestCase
         $this->wishlistHelper->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
         $this->urlEncoder->expects($this->any())
             ->method('encode')
-            ->willReturnCallback(function ($url) {
+            ->willReturnCallback(static function ($url) {
                 return strtr(base64_encode($url), '+/=', '-_,');
             });
 

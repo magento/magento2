@@ -530,7 +530,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
         $selection->expects($this->once())->method('save')
             ->will(
                 $this->returnCallback(
-                    function () {
+                    static function () {
                         throw new \Exception('message');
                     }
                 )

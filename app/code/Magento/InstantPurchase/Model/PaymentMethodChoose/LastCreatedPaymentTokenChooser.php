@@ -135,10 +135,10 @@ class LastCreatedPaymentTokenChooser implements PaymentTokenChooserInterface
     private function getSupportedPaymentMethodCodes(int $storeId)
     {
         $integrations = $this->integrationsManager->getList($storeId);
-        $integrations = array_filter($integrations, function (Integration $integration) {
+        $integrations = array_filter($integrations, static function (Integration $integration) {
             return $integration->isAvailable();
         });
-        $paymentMethodCodes = array_map(function (Integration $integration) {
+        $paymentMethodCodes = array_map(static function (Integration $integration) {
             return $integration->getVaultProviderCode();
         }, $integrations);
         return $paymentMethodCodes;

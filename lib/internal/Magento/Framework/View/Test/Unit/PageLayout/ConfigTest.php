@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(
-                function ($arguments) use ($validationStateMock) {
+                static function ($arguments) use ($validationStateMock) {
                     // @codingStandardsIgnoreStart
                     return new \Magento\Framework\Config\Dom(
                         '<?xml version="1.0" encoding="UTF-8"?>'

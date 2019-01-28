@@ -191,7 +191,7 @@ class ShipmentFactory
                 && $shipmentItem->getOrderItem()->isShipSeparately()
             ) {
                 $containerId = $shipmentItem->getOrderItem()->getId();
-                $childItems = array_filter($shipmentItems, function ($item) use ($containerId) {
+                $childItems = array_filter($shipmentItems, static function ($item) use ($containerId) {
                     return $containerId == $item->getOrderItem()->getParentItemId();
                 });
 

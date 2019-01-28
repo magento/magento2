@@ -120,7 +120,7 @@ class QuoteValidator
     private function getQuoteErrors(QuoteEntity $quote): string
     {
         $errors = array_map(
-            function (Error $error) {
+            static function (Error $error) {
                 return $error->getText();
             },
             $quote->getErrors()

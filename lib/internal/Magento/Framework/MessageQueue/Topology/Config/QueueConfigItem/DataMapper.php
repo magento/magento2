@@ -145,7 +145,7 @@ class DataMapper
     {
         $topicDefinitions = array_filter(
             $this->communicationConfig->getTopics(),
-            function ($item) {
+            static function ($item) {
                 return (bool)$item[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
             }
         );

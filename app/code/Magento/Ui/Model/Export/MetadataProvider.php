@@ -119,7 +119,7 @@ class MetadataProvider
             $row[] = $column->getData('config/label');
         }
 
-        array_walk($row, function (&$header) {
+        array_walk($row, static function (&$header) {
             if (mb_strpos($header, 'ID') === 0) {
                 $header = '"' . $header . '"';
             }

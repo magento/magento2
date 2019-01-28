@@ -209,7 +209,7 @@ class VisibilityFilter
     {
         $fromArr = array_filter(
             $select->getPart(Select::FROM),
-            function ($fromPart) {
+            static function ($fromPart) {
                 return $fromPart['joinType'] === Select::FROM;
             }
         );

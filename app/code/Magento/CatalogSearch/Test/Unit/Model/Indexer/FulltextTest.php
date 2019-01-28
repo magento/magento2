@@ -118,7 +118,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
         $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $consecutiveStoreRebuildArguments = array_map(
-            function ($store) use ($ids) {
+            static function ($store) use ($ids) {
                 return [$store, $ids];
             },
             $stores
@@ -161,7 +161,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
         $consecutiveStoreRebuildArguments = array_map(
-            function ($store) {
+            static function ($store) {
                 return [$store];
             },
             $stores

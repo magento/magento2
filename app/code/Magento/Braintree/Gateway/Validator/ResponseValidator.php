@@ -23,7 +23,7 @@ class ResponseValidator extends GeneralResponseValidator
         return array_merge(
             parent::getResponseValidators(),
             [
-                function ($response) {
+                static function ($response) {
                     return [
                         $response instanceof Successful
                         && isset($response->transaction)

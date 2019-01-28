@@ -56,7 +56,7 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->_storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->closureMock = function () {
+        $this->closureMock = static function () {
             return 'Expected';
         };
         $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);

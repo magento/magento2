@@ -39,7 +39,7 @@ class ResolveType implements FormatterInterface
         $config = [];
         if ($configElement instanceof InterfaceType) {
             $typeResolver = $this->objectManager->create($configElement->getTypeResolver());
-            $config['resolveType'] = function ($value) use ($typeResolver) {
+            $config['resolveType'] = static function ($value) use ($typeResolver) {
                 return $typeResolver->resolveType($value);
             };
         }

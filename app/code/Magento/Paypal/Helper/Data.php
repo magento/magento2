@@ -116,7 +116,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $result = array_filter(
             $activeMethods,
-            function (MethodInterface $method) use ($quote) {
+            static function (MethodInterface $method) use ($quote) {
                 return $method instanceof BillingAgreementMethodInterface && $method->isAvailable($quote);
             }
         );

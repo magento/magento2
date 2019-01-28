@@ -468,7 +468,7 @@ class ConfigurableProductsFixture extends Fixture
         $attributeOptions = range(1, $this->getConfigurableProductsVariationsValue());
         array_walk(
             $attributeOptions,
-            function (&$item, $key) {
+            static function (&$item, $key) {
                 $item = 'option ' . ($key + 1);
             }
         );
@@ -497,7 +497,7 @@ class ConfigurableProductsFixture extends Fixture
         $defaultAttributeSets = $this->getDefaultAttributeSetsWithAttributes();
         $configurableProductConfig = $this->prepareConfigurableConfig($defaultAttributeSets);
 
-        $configurableProductConfig = array_map(function ($config) {
+        $configurableProductConfig = array_map(static function ($config) {
             return array_merge(
                 [
                     'attributeSet' => null,
@@ -528,7 +528,7 @@ class ConfigurableProductsFixture extends Fixture
             } elseif ($attributes && $options) {
                 $attributes  = (int)$attributes;
                 // convert attributes and options to array for process custom attribute set creation
-                $attributesData = array_map(function ($options) use ($config) {
+                $attributesData = array_map(static function ($options) use ($config) {
                     return ['options' => $options, 'swatches' => $config['swatches']];
                 }, array_fill(0, $attributes, $options));
 
@@ -748,7 +748,7 @@ class ConfigurableProductsFixture extends Fixture
      */
     private function getAdditionalAttributesClosure(array $attributes, $variationCount)
     {
-        $optionsPerAttribute = array_map(function ($attr) {
+        $optionsPerAttribute = array_map(static function ($attr) {
             return count($attr['values']);
         }, $attributes);
         $variationsMatrix = $this->generateVariationsMatrix(count($attributes), $optionsPerAttribute);

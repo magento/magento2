@@ -167,7 +167,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->with($requestField)
             ->will(
                 $this->returnCallback(
-                    function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    static function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                         switch ($field) {
                             case $requestField:
                                 return $requestValue;

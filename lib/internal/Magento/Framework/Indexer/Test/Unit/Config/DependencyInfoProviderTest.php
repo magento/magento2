@@ -151,7 +151,7 @@ class DependencyInfoProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getIndexer')
             ->willReturnMap(
                 array_map(
-                    function ($elem) {
+                    static function ($elem) {
                         return [$elem['indexer_id'], $elem];
                     },
                     $indexers

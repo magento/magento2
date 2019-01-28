@@ -50,10 +50,10 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         $this->subjectMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productMock = $this->productMock;
-        $this->closureMock = function () use ($productMock) {
+        $this->closureMock = static function () use ($productMock) {
             return $productMock;
         };
-        $this->rollbackClosureMock = function () use ($productMock) {
+        $this->rollbackClosureMock = static function () use ($productMock) {
             throw new \Exception(self::ERROR_MSG);
         };
 

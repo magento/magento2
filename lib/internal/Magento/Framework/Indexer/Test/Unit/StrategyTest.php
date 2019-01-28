@@ -76,7 +76,7 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
         $prefix = 'pre_';
         $this->_resourceMock->expects($this->any())->method('getTableName')->will(
             $this->returnCallback(
-                function ($tableName) use ($prefix) {
+                static function ($tableName) use ($prefix) {
                     return $prefix . $tableName;
                 }
             )

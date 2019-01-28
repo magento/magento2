@@ -39,7 +39,7 @@ class SaveHandler implements ExtensionInterface
         $optionIds = [];
 
         if ($options) {
-            $optionIds = array_map(function ($option) {
+            $optionIds = array_map(static function ($option) {
                 /** @var \Magento\Catalog\Model\Product\Option $option */
                 return $option->getOptionId();
             }, $options);

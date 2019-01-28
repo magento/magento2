@@ -159,7 +159,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
         //filter store groups which have more than 1 store
         $multipleStoresInWebsite = array_values(
             array_reduce(
-                array_filter($this->getGroupedStoreViews(), function ($storeViews) {
+                array_filter($this->getGroupedStoreViews(), static function ($storeViews) {
                     return is_array($storeViews) && count($storeViews) > 1;
                 }),
                 'array_merge',

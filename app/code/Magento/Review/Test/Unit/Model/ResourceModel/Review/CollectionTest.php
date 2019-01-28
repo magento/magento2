@@ -66,7 +66,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn('maintable');
         $this->resourceMock->expects($this->any())
             ->method('getTable')
-            ->willReturnCallback(function ($table) {
+            ->willReturnCallback(static function ($table) {
                 return $table;
             });
         $this->model = $this->objectManager->getObject(

@@ -54,7 +54,7 @@ class SearchWeightTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->closure = function (\Magento\Framework\Model\AbstractModel $model) {
+        $this->closure = static function (\Magento\Framework\Model\AbstractModel $model) {
             return $model;
         };
 

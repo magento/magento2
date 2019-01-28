@@ -90,7 +90,7 @@ class Exchange implements ExchangeInterface
         if ($isSync) {
             $correlationId = $envelope->getProperties()['correlation_id'];
             /** @var AMQPMessage $response */
-            $callback = function ($response) use ($correlationId, &$responseBody, $channel) {
+            $callback = static function ($response) use ($correlationId, &$responseBody, $channel) {
                 if ($response->get('correlation_id') == $correlationId) {
                     $responseBody = $response->body;
                     $channel->basic_ack($response->get('delivery_tag'));

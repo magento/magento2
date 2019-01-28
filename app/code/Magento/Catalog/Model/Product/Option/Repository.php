@@ -162,7 +162,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 $options = $this->getProductOptions($product);
             }
 
-            $persistedOption = array_filter($options, function ($iOption) use ($option) {
+            $persistedOption = array_filter($options, static function ($iOption) use ($option) {
                 return $option->getOptionId() == $iOption->getOptionId();
             });
             $persistedOption = reset($persistedOption);

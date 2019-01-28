@@ -33,7 +33,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('quote')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return "'$value'";
                 }
             );

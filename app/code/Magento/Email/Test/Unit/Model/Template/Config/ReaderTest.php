@@ -131,7 +131,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('Fixture_ModuleTwo')
         );
-        $constraint = function (\DOMDocument $actual) {
+        $constraint = static function (\DOMDocument $actual) {
             try {
                 $expected = file_get_contents(__DIR__ . '/_files/email_templates_merged.xml');
                 $expectedNorm = preg_replace('/xsi:noNamespaceSchemaLocation="[^"]*"/', '', $expected, 1);

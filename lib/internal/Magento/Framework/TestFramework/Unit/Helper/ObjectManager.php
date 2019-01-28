@@ -113,7 +113,7 @@ class ObjectManager
     protected function _getTranslatorMock($className)
     {
         $translator = $this->_testObject->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $translateCallback = function ($arguments) {
+        $translateCallback = static function ($arguments) {
             return is_array($arguments) ? vsprintf(array_shift($arguments), $arguments) : '';
         };
         $translator->expects(

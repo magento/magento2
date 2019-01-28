@@ -50,7 +50,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     protected function _imitateTransactionStartRequest($eventName)
     {
-        $callback = function ($eventName, array $parameters) {
+        $callback = static function ($eventName, array $parameters) {
             /** @var $param \Magento\TestFramework\Event\Param\Transaction */
             $param = $parameters[1];
             $param->requestTransactionStart();
@@ -84,7 +84,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     protected function _imitateTransactionRollbackRequest($eventName)
     {
-        $callback = function ($eventName, array $parameters) {
+        $callback = static function ($eventName, array $parameters) {
             /** @var $param \Magento\TestFramework\Event\Param\Transaction */
             $param = $parameters[1];
             $param->requestTransactionRollback();

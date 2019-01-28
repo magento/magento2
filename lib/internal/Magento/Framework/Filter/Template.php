@@ -205,7 +205,7 @@ class Template implements \Zend_Filter_Interface
         $requiredFields = ['loopBody', 'loopItem', 'loopData'];
         $validFields = array_filter(
             $requiredFields,
-            function ($field) use ($construction) {
+            static function ($field) use ($construction) {
                 return isset($construction[$field]) && strlen(trim($construction[$field]));
             }
         );

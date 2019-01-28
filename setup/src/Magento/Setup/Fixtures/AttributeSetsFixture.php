@@ -76,7 +76,7 @@ class AttributeSetsFixture extends Fixture
                         self::PRODUCT_SET_NAME . $index,
                         $this->fixtureModel->getValue('product_attribute_sets_attributes', 3),
                         $this->fixtureModel->getValue('product_attribute_sets_attributes_values', 3),
-                        function ($attributeIndex, $attribute) use ($index) {
+                        static function ($attributeIndex, $attribute) use ($index) {
                             return array_replace_recursive(
                                 $attribute,
                                 [

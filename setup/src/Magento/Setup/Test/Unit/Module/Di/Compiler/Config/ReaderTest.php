@@ -188,7 +188,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private function getResolvedArguments($arguments)
     {
         return empty($arguments) ? null : array_map(
-            function ($argument) {
+            static function ($argument) {
                 return 'resolved_' . $argument;
             },
             $arguments

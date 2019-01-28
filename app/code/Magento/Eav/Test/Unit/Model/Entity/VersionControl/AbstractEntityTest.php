@@ -133,7 +133,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
 
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
-                function ($entityType, $attributeCode) use ($attributes) {
+                static function ($entityType, $attributeCode) use ($attributes) {
                     return $entityType && isset($attributes[$attributeCode]) ? $attributes[$attributeCode] : null;
                 }
             )

@@ -34,7 +34,7 @@ class AttributeForm extends FormSections
         $browser = $this->browser;
         $selector = $this->saveButton;
         $this->browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 return $browser->find($selector)->isVisible() ? true : null;
             }
         );

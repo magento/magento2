@@ -107,7 +107,7 @@ class Index extends GenericElement implements
     public function getColumnNames()
     {
         return array_map(
-            function (Column $column) {
+            static function (Column $column) {
                 return $column->getName();
             },
             $this->getColumns()

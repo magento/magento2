@@ -112,7 +112,7 @@ class ProductsCountInLayeredNavigationTest extends Injectable
             $this->catalogProductIndex->open();
             $this->catalogProductIndex->getProductGrid()->massaction(
                 array_map(
-                    function ($assignedProduct) {
+                    static function ($assignedProduct) {
                         return ['sku' => $assignedProduct['sku']];
                     },
                     $configurableOptions

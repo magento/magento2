@@ -142,7 +142,7 @@ class BundleProductsFixture extends Fixture
             LinkInterface::PRICE_TYPE_FIXED,
             LinkInterface::PRICE_TYPE_PERCENT,
         ];
-        $priceTypeClosure = function ($index) use ($optionPriceType) {
+        $priceTypeClosure = static function ($index) use ($optionPriceType) {
             return $optionPriceType[$index % count($optionPriceType)];
         };
         $skuClosure = function ($index, $entityNumber) use ($bundleOptionSuffix) {

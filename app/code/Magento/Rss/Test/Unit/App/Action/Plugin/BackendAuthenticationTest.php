@@ -15,7 +15,7 @@ class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject $response */
         $response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
-        $proceed = function () use ($response) {
+        $proceed = static function () use ($response) {
             return $response;
         };
 

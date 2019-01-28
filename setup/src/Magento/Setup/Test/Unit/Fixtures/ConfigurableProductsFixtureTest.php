@@ -118,7 +118,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will(
                 $this->returnCallback(
-                    function ($className) use (
+                    static function ($className) use (
                         $attributeCollectionFactoryMock,
                         $categoryMock,
                         $importMock,

@@ -539,7 +539,7 @@ class ConditionsElement extends SimpleElement
     protected function waitForCondition(ElementInterface $element)
     {
         $this->waitUntil(
-            function () use ($element) {
+            static function () use ($element) {
                 return $element->getAttribute('class') == 'rule-param-wait' ? null : true;
             }
         );

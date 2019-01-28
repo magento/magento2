@@ -1244,7 +1244,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->expects($this->once())
             ->method('move')
             ->willReturnCallback(
-                function ($name) use ($throwException, $exception) {
+                static function ($name) use ($throwException, $exception) {
                     if ($throwException) {
                         throw $exception;
                     }

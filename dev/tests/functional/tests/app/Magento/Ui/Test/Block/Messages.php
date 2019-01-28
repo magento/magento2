@@ -118,7 +118,7 @@ class Messages extends Block
     {
         $browser = $this->browser;
         return $browser->waitUntil(
-            function () use ($browser, $selector, $strategy) {
+            static function () use ($browser, $selector, $strategy) {
                 $message = $browser->find($selector, $strategy);
                 return $message->isVisible() ? true : null;
             }

@@ -171,7 +171,7 @@ class Data extends AbstractHelper
              * @param string $value
              */
             // @codingStandardsIgnoreEnd
-            function (&$value) {
+            static function (&$value) {
                 $value = trim(rawurldecode($value));
             }
         );

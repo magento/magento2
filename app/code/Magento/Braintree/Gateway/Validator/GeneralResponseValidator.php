@@ -70,7 +70,7 @@ class GeneralResponseValidator extends AbstractValidator
     protected function getResponseValidators()
     {
         return [
-            function ($response) {
+            static function ($response) {
                 return [
                     property_exists($response, 'success') && $response->success === true,
                     [$response->message ?? __('Braintree error response.')]

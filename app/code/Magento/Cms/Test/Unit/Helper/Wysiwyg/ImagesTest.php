@@ -317,7 +317,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
             ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
-            ->willReturnCallback(function ($str, $arr) use ($allowedValue) {
+            ->willReturnCallback(static function ($str, $arr) use ($allowedValue) {
                 $arr['result']->isAllowed = $allowedValue;
             });
     }

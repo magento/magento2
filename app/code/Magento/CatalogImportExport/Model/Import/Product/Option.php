@@ -566,7 +566,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $oldCustomOptions = [];
             $optionTitleTable = $this->_tables['catalog_product_option_title'];
             foreach ($this->_storeCodeToId as $storeId) {
-                $addCustomOptions = function (
+                $addCustomOptions = static function (
                     \Magento\Catalog\Model\Product\Option $customOption
                 ) use (
                     &$oldCustomOptions,

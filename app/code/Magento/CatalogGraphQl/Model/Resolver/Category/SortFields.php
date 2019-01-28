@@ -54,7 +54,7 @@ class SortFields implements ResolverInterface
         $sortFieldsOptions = $this->sortbyAttributeSource->getAllOptions();
         array_walk(
             $sortFieldsOptions,
-            function (&$option) {
+            static function (&$option) {
                 $option['label'] = (string)$option['label'];
             }
         );

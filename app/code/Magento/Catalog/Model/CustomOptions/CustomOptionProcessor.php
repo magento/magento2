@@ -179,7 +179,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     {
         if (array_key_exists('date_internal', $optionValue)
         ) {
-            $closure = function ($key) {
+            $closure = static function ($key) {
                 return $key === 'date_internal';
             };
             $optionValue = array_filter($optionValue, $closure, ARRAY_FILTER_USE_KEY);

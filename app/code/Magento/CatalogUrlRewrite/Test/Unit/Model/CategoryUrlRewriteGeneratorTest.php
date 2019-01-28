@@ -51,14 +51,14 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_encode($value);
                 }
             );
         $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                function ($value) {
+                static function ($value) {
                     return json_decode($value, true);
                 }
             );

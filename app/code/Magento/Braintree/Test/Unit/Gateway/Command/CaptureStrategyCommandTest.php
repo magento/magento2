@@ -219,7 +219,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->method('search')
             ->with(
                 static::callback(
-                    function (array $filters) use ($isExpectations) {
+                    static function (array $filters) use ($isExpectations) {
                         foreach ($filters as $filter) {
                             /** @var IsNode $filter */
                             if (!isset($isExpectations[$filter->name])) {

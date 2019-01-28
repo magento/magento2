@@ -36,7 +36,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
             ->method('getCode')
             ->will($this->returnValue('code2'));
 
-        $callable = function ($item) {
+        $callable = static function ($item) {
             return $item->getCode();
         };
 
@@ -68,7 +68,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
             ->method('getSome')
             ->will($this->returnValue('code4'));
 
-        $callable = function ($item) {
+        $callable = static function ($item) {
             return $item->getId();
         };
         $items = [

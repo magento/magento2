@@ -57,7 +57,7 @@ class CollectionProvider
             $sorterItems[$itemId]['position'] = $sorterItems[$itemId]['position'] ?? 0;
         }
 
-        usort($sorterItems, function ($itemA, $itemB) {
+        usort($sorterItems, static function ($itemA, $itemB) {
             $posA = (int)$itemA['position'];
             $posB = (int)$itemB['position'];
 

@@ -71,7 +71,7 @@ class TransactionMapTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeValueFactoryMock->expects($this->exactly($fieldsQty))
             ->method('create')
-            ->willReturnCallback(function () {
+            ->willReturnCallback(static function () {
                 return new AttributeValue();
             });
 

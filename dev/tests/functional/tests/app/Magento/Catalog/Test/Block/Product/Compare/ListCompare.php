@@ -141,7 +141,7 @@ class ListCompare extends Block
         $rootElement = $this->_rootElement;
         $element = $this->nameSelector;
         $this->_rootElement->waitUntil(
-            function () use ($rootElement, $element) {
+            static function () use ($rootElement, $element) {
                 return $rootElement->find($element, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
@@ -165,7 +165,7 @@ class ListCompare extends Block
         $rootElement = $this->_rootElement;
         $element = $this->nameSelector;
         $this->_rootElement->waitUntil(
-            function () use ($rootElement, $element) {
+            static function () use ($rootElement, $element) {
                 return $rootElement->find($element, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
@@ -258,7 +258,7 @@ class ListCompare extends Block
         $rootElement = $this->_rootElement;
         $selector = $this->isEmpty;
         $this->_rootElement->waitUntil(
-            function () use ($rootElement, $selector) {
+            static function () use ($rootElement, $selector) {
                 return $rootElement->find($selector)->isVisible() ? true : null;
             }
         );

@@ -187,7 +187,7 @@ class DataGrid extends Grid
         $browser = $this->_rootElement;
         $selector = $this->filterButton . ', ' . $this->resetButton;
         $browser->waitUntil(
-            function () use ($browser, $selector) {
+            static function () use ($browser, $selector) {
                 $filter = $browser->find($selector);
                 return $filter->isVisible() == true ? true : null;
             }
@@ -209,7 +209,7 @@ class DataGrid extends Grid
             $toggleFilterButton->click();
             $browser = $this->_rootElement;
             $browser->waitUntil(
-                function () use ($searchButton) {
+                static function () use ($searchButton) {
                     return $searchButton->isVisible() ? true : null;
                 }
             );

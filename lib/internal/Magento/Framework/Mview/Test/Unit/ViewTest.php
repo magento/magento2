@@ -183,7 +183,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->changelogMock->expects($this->once())
             ->method('create')
             ->will($this->returnCallback(
-                function () {
+                static function () {
                     throw new \Exception();
                 }
             ));
@@ -246,7 +246,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $subscriptionMock->expects($this->exactly(1))
             ->method('remove')
             ->will($this->returnCallback(
-                function () {
+                static function () {
                     throw new \Exception();
                 }
             ));
@@ -366,7 +366,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $actionMock = $this->createPartialMock(\Magento\Framework\Mview\ActionInterface::class, ['execute']);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will(
             $this->returnCallback(
-                function () {
+                static function () {
                     throw new \Exception('Test exception');
                 }
             )

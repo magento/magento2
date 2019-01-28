@@ -78,7 +78,7 @@ class QuoteAddressValidator
                 );
             }
 
-            $applicableAddressIds = array_map(function ($address) {
+            $applicableAddressIds = array_map(static function ($address) {
                 /** @var \Magento\Customer\Api\Data\AddressInterface $address */
                 return $address->getId();
             }, $this->customerRepository->getById($addressData->getCustomerId())->getAddresses());

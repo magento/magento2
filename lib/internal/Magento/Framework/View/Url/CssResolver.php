@@ -31,7 +31,7 @@ class CssResolver
     public function relocateRelativeUrls($cssContent, $relatedPath, $filePath)
     {
         $offset = FileSystem::offsetPath($relatedPath, $filePath);
-        $callback = function ($path) use ($offset) {
+        $callback = static function ($path) use ($offset) {
             return FileSystem::normalizePath($offset . '/' . $path);
         };
         return $this->replaceRelativeUrls($cssContent, $callback);
