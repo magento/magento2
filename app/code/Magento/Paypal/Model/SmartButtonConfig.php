@@ -88,7 +88,7 @@ class SmartButtonConfig
      * @param string $page
      * @return array
      */
-    private function getAllowedFunding($page): array
+    private function getAllowedFunding(string $page): array
     {
         return array_values(array_diff($this->allowedFunding[$page], $this->getDisallowedFunding()));
     }
