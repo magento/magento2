@@ -99,10 +99,11 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $shared
      * @dataProvider dataProviderForMethodIsNotDefined
-     * @expectedException \LogicException
      */
     public function testWrongInterfaceCallWithEnabledDeveloperMode($shared)
     {
+        $this->setExpectedException(\LogicException::class);
+
         $notObserver = $this->getMockBuilder('NotObserver')->getMock();
         $this->_observerFactoryMock->expects(
             $this->any()

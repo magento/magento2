@@ -119,10 +119,11 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $cartId = 100;
         $email = 'email@example.com';
         $agreements = [1, 2, 3];

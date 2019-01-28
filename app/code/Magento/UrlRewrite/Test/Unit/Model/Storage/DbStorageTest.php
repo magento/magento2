@@ -496,10 +496,11 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
      */
     public function testReplaceIfThrewExceptionOnDuplicateUrl()
     {
+        $this->setExpectedException(\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException::class);
+
         $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
@@ -528,11 +529,11 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
      *
      * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage SQLSTATE[23000]: test: 1062 test
      */
     public function testReplaceIfThrewExceptionOnDuplicateEntry()
     {
+        $this->setExpectedException(\Exception::class, 'SQLSTATE[23000]: test: 1062 test');
+
         $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
@@ -551,10 +552,11 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testReplaceIfThrewCustomException()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())

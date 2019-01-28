@@ -87,11 +87,11 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Document
      */
     public function testReadWithInvalidDom()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid Document');
+
         $this->_schemaLocatorMock->expects(
             $this->once()
         )->method(
@@ -118,11 +118,11 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The XML in file "0" is invalid:
      */
     public function testReadWithInvalidXml()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The XML in file "0" is invalid:');
+
         $this->_schemaLocatorMock->expects(
             $this->any()
         )->method(
@@ -149,11 +149,11 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Instance of the DOM config merger is expected, got StdClass instead.
      */
     public function testReadException()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Instance of the DOM config merger is expected, got StdClass instead.');
+
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
         $model = new Filesystem(
             $this->_fileResolverMock,

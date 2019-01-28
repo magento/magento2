@@ -372,11 +372,11 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This is an invalid subscription confirmation code.
      */
     public function testUnsubscribeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This is an invalid subscription confirmation code.');
+
         $this->subscriber->setCode(111);
         $this->subscriber->setCheckCode(222);
 

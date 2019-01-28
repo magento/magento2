@@ -43,10 +43,11 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
     /**
      * Assert that getModel method throws LocalizedException
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetModelException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->factoryMock->expects($this->once())->method('get')->willThrowException(new \InvalidArgumentException);
 
         $this->sut->getModel();

@@ -241,11 +241,11 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Path is invalid
      */
     public function testConvertIdToPathInvalid()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Path is invalid');
+
         $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
     }
 

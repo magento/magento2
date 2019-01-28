@@ -35,12 +35,12 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Passed option section "parse" is wrong.
      * @dataProvider dataProviderWrongParseOptions
      */
     public function testBuildWithWrongParseOptions($options)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Passed option section "parse" is wrong.');
+
         $this->builder->build($options);
     }
 
@@ -54,12 +54,12 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Passed option section "write" is wrong.
      * @dataProvider dataProviderWrongWriteOptions
      */
     public function testBuildWithWrongWriteOptions($options)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Passed option section "write" is wrong.');
+
         $this->builder->build($options);
     }
 

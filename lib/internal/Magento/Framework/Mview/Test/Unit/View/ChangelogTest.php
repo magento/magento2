@@ -45,11 +45,11 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionException()
     {
+        $this->setExpectedException(\Exception::class, 'The write connection to the database isn\'t available. Please try again later.');
+
         $resourceMock =
             $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(null));
@@ -74,11 +74,11 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage View's identifier is not set
      */
     public function testGetNameWithException()
     {
+        $this->setExpectedException(\Exception::class, 'View\'s identifier is not set');
+
         $this->model->getName();
     }
 

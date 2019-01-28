@@ -271,10 +271,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testCreateAccountWithPasswordHashWithExistingCustomer()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $websiteId = 1;
         $storeId = 1;
         $customerId = 1;
@@ -316,10 +317,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testCreateAccountWithPasswordHashWithCustomerWithoutStoreId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InputMismatchException::class);
+
         $websiteId = 1;
         $storeId = null;
         $defaultStoreId = 1;
@@ -392,10 +394,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $websiteId = 1;
         $storeId = null;
         $defaultStoreId = 1;
@@ -468,10 +471,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithAddressException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $websiteId = 1;
         $storeId = null;
         $defaultStoreId = 1;
@@ -556,10 +560,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithNewCustomerAndLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $storeId = 1;
         $storeName = 'store_name';
         $websiteId = 1;
@@ -1301,29 +1306,29 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "0" provided for the customerId field
      */
     public function testValidateResetPasswordTokenBadCustomerId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Invalid value of "0" provided for the customerId field');
+
         $this->accountManagement->validateResetPasswordLinkToken(0, '');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "resetPasswordLinkToken" is required. Enter and try again.
      */
     public function testValidateResetPasswordTokenBadResetPasswordLinkToken()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"resetPasswordLinkToken" is required. Enter and try again.');
+
         $this->accountManagement->validateResetPasswordLinkToken(22, null);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
-     * @expectedExceptionMessage The password token is mismatched. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenMismatch()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InputMismatchException::class, 'The password token is mismatched. Reset and try again.');
+
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieveSecureData')
             ->willReturn($this->customerSecure);
@@ -1332,11 +1337,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\ExpiredException
-     * @expectedExceptionMessage The password token is expired. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenExpired()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\ExpiredException::class, 'The password token is expired. Reset and try again.');
+
         $this->reInitModel();
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieveSecureData')
@@ -1774,10 +1779,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashForGuest()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $storeId = 1;
         $storeName = 'store_name';
         $websiteId = 1;
@@ -2083,10 +2089,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithStoreNotInWebsite()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $storeId = 1;
         $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';

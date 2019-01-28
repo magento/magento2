@@ -99,11 +99,11 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage File app/etc/config.php can't be read.
-     * @expectedException \Magento\Framework\Exception\RuntimeException
      */
     public function testConfigFileNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'File app/etc/config.php can\'t be read.');
+
         $this->inputMock->expects($this->any())
             ->method('getOption')
             ->with()
@@ -129,11 +129,11 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some exception
      */
     public function testWriterException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Some exception');
+
         $exceptionMessage = 'Some exception';
         $this->inputMock->expects($this->any())
             ->method('getOption')
@@ -171,11 +171,11 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage There are no sensitive configurations to fill
      */
     public function testEmptyConfigPaths()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'There are no sensitive configurations to fill');
+
         $this->inputMock->expects($this->any())
             ->method('getOption')
             ->with()

@@ -101,10 +101,11 @@ class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests reading failure webhook message from request.
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testReadFail()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->decoder->expects($this->once())
             ->method('decode')
             ->willThrowException(new \Exception('Error'));

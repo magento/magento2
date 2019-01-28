@@ -115,11 +115,11 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     * @expectedExceptionMessage Custom storage message
      */
     public function testReplaceIfThrewDuplicateEntryExceptionWithCustomMessage()
     {
+        $this->setExpectedException(\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException::class, 'Custom storage message');
+
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
@@ -131,11 +131,11 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     * @expectedExceptionMessage URL key for specified store already exists
      */
     public function testReplaceIfThrewDuplicateEntryExceptionDefaultMessage()
     {
+        $this->setExpectedException(\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException::class, 'URL key for specified store already exists');
+
         $this->storage
             ->expects($this->once())
             ->method('doReplace')

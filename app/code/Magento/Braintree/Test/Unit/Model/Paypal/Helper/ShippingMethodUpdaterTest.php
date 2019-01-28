@@ -68,11 +68,11 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "shippingMethod" field does not exists.
      */
     public function testExecuteException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "shippingMethod" field does not exists.');
+
         $quoteMock = $this->getQuoteMock();
 
         $this->shippingMethodUpdater->execute('', $quoteMock);

@@ -279,13 +279,13 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $dataPatches
      * @param $moduleVersionInDb
      *
-     * @expectedException \Magento\Framework\Setup\Exception
-     * @expectedExceptionMessage Patch Apply Error
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
      */
     public function testApplyDataPatchRollback($moduleName, $dataPatches, $moduleVersionInDb)
     {
+        $this->setExpectedException(\Magento\Framework\Setup\Exception::class, 'Patch Apply Error');
+
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -328,11 +328,11 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Setup\Exception
-     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"
      */
     public function testNonDataPatchApply()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Setup\Exception::class, '"Patch [a-zA-Z0-9\\_]+ should implement DataPatchInterface"');
+
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with('module1')

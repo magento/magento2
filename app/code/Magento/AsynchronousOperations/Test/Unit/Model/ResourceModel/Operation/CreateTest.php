@@ -97,10 +97,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * Test for execute method with exception.
      *
      * @return void
-     * @expectedException \Exception
      */
     public function testExecuteWithException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';

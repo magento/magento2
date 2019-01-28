@@ -63,11 +63,11 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement::placeRequest
-     * @expectedException \Magento\Payment\Gateway\Http\ClientException
-     * @expectedExceptionMessage Transaction has been declined
      */
     public function testPlaceRequestWithException()
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Http\ClientException::class, 'Transaction has been declined');
+
         $exception = new \Exception('Transaction has been declined');
         $this->adapterMock->expects(static::once())
             ->method('submitForSettlement')

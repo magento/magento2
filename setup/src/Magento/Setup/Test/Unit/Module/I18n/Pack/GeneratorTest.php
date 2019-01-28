@@ -83,11 +83,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage No phrases have been found by the specified path.
-     * @expectedException \UnexpectedValueException
      */
     public function testGenerateEmptyFile()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'No phrases have been found by the specified path.');
+
         $dictionaryPath = 'dictionary_path';
         $localeString = 'locale';
         $mode = 'mode';

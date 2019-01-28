@@ -60,11 +60,11 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $sortOrder
      * @dataProvider getInvalidSortOrder
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Sort order must be a positive integer.
      */
     public function testIsValidThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Sort order must be a positive integer.');
+
         $sampleContentData = [
             'title' => 'Title',
             'sort_order' => $sortOrder,

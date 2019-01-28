@@ -86,11 +86,11 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with formCode = formcode
      */
     public function testGetAttributesWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with formCode = formcode');
+
         $formCode = 'formcode';
         $attributes = [];
 
@@ -172,11 +172,11 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with entityType = customer_address, attributeCode = id
      */
     public function testGetAttributeMetadataWithoutAttribute()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with entityType = customer_address, attributeCode = id');
+
         $attributeCode = 'id';
 
         $this->attributeProviderMock->expects($this->once())

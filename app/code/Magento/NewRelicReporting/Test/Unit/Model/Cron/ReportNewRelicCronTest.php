@@ -180,10 +180,11 @@ class ReportNewRelicCronTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case when module is enabled and request is failed
      *
-     * @expectedException \Exception
      */
     public function testReportNewRelicCronRequestFailed()
     {
+        $this->setExpectedException(\Exception::class);
+
 
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')

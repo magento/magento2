@@ -75,11 +75,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unknown EAV indexer type "unknown_type".
      */
     public function testGetIndexerWithUnknownTypeThrowsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Unknown EAV indexer type "unknown_type".');
+
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue('return_value'));

@@ -110,11 +110,11 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage A configuration with this path does not exist or is not sensitive
      */
     public function testWrongConfigPath()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'A configuration with this path does not exist or is not sensitive');
+
         $configPaths = [
             'some/config/path1',
             'some/config/path2'
@@ -140,10 +140,11 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEmptyValue()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $configPaths = [
             'some/config/path1',
             'some/config/path2'

@@ -181,11 +181,11 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException
-     * @expectedExceptionMessage Temporary table for index catalogsearch_fulltext doesn't exist
      */
     public function testSwitchWhenTemporaryIndexNotExist()
     {
+        $this->setExpectedException(\Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException::class, 'Temporary table for index catalogsearch_fulltext doesn\'t exist');
+
         $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())

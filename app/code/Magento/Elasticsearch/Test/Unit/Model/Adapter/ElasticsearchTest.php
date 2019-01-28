@@ -191,10 +191,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test ping() method
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testPingFailure()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->client->expects($this->once())
             ->method('ping')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -255,10 +256,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test addDocs() method
-     * @expectedException \Exception
      */
     public function testAddDocsFailure()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->client->expects($this->once())
             ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -334,10 +336,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test deleteDocs() method
-     * @expectedException \Exception
      */
     public function testDeleteDocsFailure()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->client->expects($this->once())
             ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -370,10 +373,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testConnectException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods([

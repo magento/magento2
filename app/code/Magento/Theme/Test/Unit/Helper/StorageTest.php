@@ -259,11 +259,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The image not found
      */
     public function testGetThumbnailPathNotFound()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The image not found');
+
         $image = 'notFoundImage.png';
         $root = '/image';
         $sourceNode = '/not/a/root';
@@ -414,22 +414,22 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid type
      */
     public function testGetStorageTypeNameInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid type');
+
         $this->helper->getStorageTypeName();
     }
 
     /**
      * @test
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Theme was not found
      */
     public function testGetThemeNotFound()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Theme was not found');
+
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->willReturn(null);

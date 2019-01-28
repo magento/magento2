@@ -301,10 +301,11 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
      */
     public function testDocumentValidationException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\DocumentValidationExceptionInterface::class);
+
         $orderId = 1;
         $capture = true;
         $items = [1 => 2];
@@ -358,10 +359,11 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface
      */
     public function testCouldNotInvoiceException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface::class);
+
         $orderId = 1;
         $items = [1 => 2];
         $capture = true;

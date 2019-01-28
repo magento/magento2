@@ -43,21 +43,21 @@ class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown template engine type: 'non_existing'
      */
     public function testCreateUnknownEngine()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Unknown template engine type: \'non_existing\'');
+
         $this->_objectManagerMock->expects($this->never())->method('create');
         $this->_factory->create('non_existing');
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Fixture\Module\Model\TemplateEngine has to implement the template engine interface
      */
     public function testCreateInvalidEngine()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Fixture\\Module\\Model\\TemplateEngine has to implement the template engine interface');
+
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

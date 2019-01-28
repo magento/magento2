@@ -233,12 +233,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      * @magentoDbIsolation enabled
      */
     public function testAuthenticateInactiveUser()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_model->load(1);
         $this->_model->setIsActive(0)->save();
         $this->_model->authenticate(
@@ -248,11 +248,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      * @magentoDbIsolation enabled
      */
     public function testAuthenticateUserWithoutRole()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
@@ -315,16 +316,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage "User Name" is required. Enter and try again.
-     * @expectedExceptionMessage "First Name" is required. Enter and try again.
-     * @expectedExceptionMessage "Last Name" is required. Enter and try again.
-     * @expectedExceptionMessage Please enter a valid email.
-     * @expectedExceptionMessage "Password" is required. Enter and try again.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveRequiredFieldsValidation()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, '"Password" is required. Enter and try again.');
+
         $this->_model->setSomething('some_value');
         // force model change
         $this->_model->save();
@@ -365,37 +362,37 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Your password confirmation must match your password.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSavePasswordsDoNotMatch()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Your password confirmation must match your password.');
+
         $this->_model->setPassword('password2');
         $this->_model->setPasswordConfirmation('password1');
         $this->_model->save();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Your password must include both numeric and alphabetic characters.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSavePasswordTooShort()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Your password must include both numeric and alphabetic characters.');
+
         $this->_model->setPassword('123456');
         $this->_model->save();
     }
 
     /**
      * @dataProvider beforeSavePasswordInsecureDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Your password must include both numeric and alphabetic characters.
      * @magentoDbIsolation enabled
      * @param string $password
      */
     public function testBeforeSavePasswordInsecure($password)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Your password must include both numeric and alphabetic characters.');
+
         $this->_model->setPassword($password);
         $this->_model->save();
     }
@@ -406,12 +403,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage A user with the same user name or email already exists.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveUserIdentityViolation()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'A user with the same user name or email already exists.');
+
         $this->_model->setUsername('user');
         $this->_model->save();
     }
@@ -497,10 +494,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
      * Here we check for a wrong password
      *
      * @magentoDataFixture Magento/User/_files/user_with_role.php
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      */
     public function testPerformIdentityCheckWrongPassword()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_model->loadByUsername('adminUser');
         $passwordString = 'wrongPassword';
         $this->_model->performIdentityCheck($passwordString);
@@ -514,10 +512,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
      * Here we check for a locked user
      *
      * @magentoDataFixture Magento/User/_files/locked_users.php
-     * @expectedException \Magento\Framework\Exception\State\UserLockedException
      */
     public function testPerformIdentityCheckLockExpires()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\UserLockedException::class);
+
         $this->_model->loadByUsername('adminUser2');
         $this->_model->performIdentityCheck(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
 

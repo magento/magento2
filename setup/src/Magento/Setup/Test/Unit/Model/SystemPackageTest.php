@@ -208,11 +208,11 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage no components are available because you cloned the Magento 2 GitHub repository
      */
     public function testGetPackageVersionGitCloned()
     {
+        $this->setExpectedException(\RuntimeException::class, 'no components are available because you cloned the Magento 2 GitHub repository');
+
         $package = $this->createMock(\Composer\Package\Package::class);
         $this->repository
             ->expects($this->once())
@@ -237,11 +237,11 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage We cannot retrieve information on magento/product-community-edition.
      */
     public function testGetPackageVersionsFailed()
     {
+        $this->setExpectedException(\RuntimeException::class, 'We cannot retrieve information on magento/product-community-edition.');
+
         $communityPackage = $this->createMock(\Composer\Package\Package::class);
         $enterprisePackage = $this->createMock(\Composer\Package\Package::class);
 

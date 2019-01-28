@@ -354,22 +354,23 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      * @return void
      */
     public function testGetDomainModelWithIncorrectType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->getDomainModel('bla-bla-bla');
     }
 
     /**
      * @test
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage testMessage
      * @return void
      */
     public function testValidate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'testMessage');
+
         $this->validator->expects($this->once())
             ->method('validate')
             ->with($this->_model)

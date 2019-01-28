@@ -122,10 +122,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetItemByNotExistingCode()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $adjustments = ['adj1'];
         $collection = new Collection($this->adjustmentPool, $adjustments);
         $collection->getItemByCode('not_existing_code');

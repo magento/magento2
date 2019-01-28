@@ -127,11 +127,11 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The gift message couldn't be added to the "Test message" order.
      */
     public function testAfterSaveIfGiftMessagesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The gift message couldn\'t be added to the "Test message" order.');
+
         // save Gift Message on order level
         $orderId = 1;
         $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
@@ -154,11 +154,11 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The gift message couldn't be added to the "Test message" order item.
      */
     public function testAfterSaveIfItemGiftMessagesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The gift message couldn\'t be added to the "Test message" order item.');
+
         // save Gift Message on order level
         $orderId = 1;
         $orderItemId = 2;

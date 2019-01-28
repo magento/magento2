@@ -196,13 +196,13 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $items
      * @param array $lockedItems
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Not all of your products are available in the requested quantity.
      *
      * @return void
      */
     public function testRegisterProductsSaleException(array $items, array $lockedItems)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Not all of your products are available in the requested quantity.');
+
         $this->stockResourceMock
             ->expects($this->once())
             ->method('beginTransaction');

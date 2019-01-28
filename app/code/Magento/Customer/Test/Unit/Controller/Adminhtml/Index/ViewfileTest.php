@@ -92,10 +92,11 @@ class ViewfileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\NotFoundException
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteNoParamsShouldThrowException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
         $controller = $this->objectManager->getObject(\Magento\Customer\Controller\Adminhtml\Index\Viewfile::class);
         $controller->execute();
@@ -208,11 +209,11 @@ class ViewfileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Page not found.
      */
     public function testExecuteInvalidFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class, 'Page not found.');
+
         $file = '../../../app/etc/env.php';
         $decodedFile = base64_encode($file);
         $fileName = 'customer/' . $file;

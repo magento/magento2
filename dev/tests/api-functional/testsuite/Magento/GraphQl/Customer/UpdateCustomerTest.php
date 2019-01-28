@@ -78,11 +78,11 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage "input" value should be specified
      */
     public function testUpdateCustomerIfInputDataIsEmpty()
     {
+        $this->setExpectedException(\Exception::class, '"input" value should be specified');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
@@ -103,11 +103,11 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testUpdateCustomerIfUserIsNotAuthorized()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $newFirstname = 'Richard';
 
         $query = <<<QUERY
@@ -128,11 +128,11 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked.
      */
     public function testUpdateCustomerIfAccountIsLocked()
     {
+        $this->setExpectedException(\Exception::class, 'The account is locked.');
+
         $this->lockCustomer(1);
 
         $currentEmail = 'customer@example.com';
@@ -157,11 +157,11 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provide the current "password" to change "email".
      */
     public function testUpdateEmailIfPasswordIsMissed()
     {
+        $this->setExpectedException(\Exception::class, 'Provide the current "password" to change "email".');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $newEmail = 'customer_updated@example.com';
@@ -184,11 +184,11 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
      */
     public function testUpdateEmailIfPasswordIsInvalid()
     {
+        $this->setExpectedException(\Exception::class, 'The password doesn\'t match this account. Verify the password and try again.');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $invalidPassword = 'invalid_password';
@@ -213,11 +213,11 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage A customer with the same email address already exists in an associated website.
      */
     public function testUpdateEmailIfEmailAlreadyExists()
     {
+        $this->setExpectedException(\Exception::class, 'A customer with the same email address already exists in an associated website.');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $existedEmail = 'customer_two@example.com';

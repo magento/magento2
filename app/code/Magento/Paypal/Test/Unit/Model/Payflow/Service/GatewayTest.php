@@ -101,10 +101,11 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException  \Zend_Http_Client_Exception
      */
     public function testPostRequestFail()
     {
+        $this->setExpectedException(\Zend_Http_Client_Exception::class);
+
         /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject $configInterfaceMock */
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();

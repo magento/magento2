@@ -97,20 +97,20 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The array of fields failed to pass. The array must include at one field.
      */
     public function testAddToFilterException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The array of fields failed to pass. The array must include at one field.');
+
         $this->collection->addFieldToFilter([], 'not_array');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The field array failed to pass. The array must have a matching condition array.
      */
     public function testAddToFilterExceptionArrayNotSymmetric()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The field array failed to pass. The array must have a matching condition array.');
+
         $this->collection->addFieldToFilter(['field2', 'field2'], ['condition1']);
     }
 }

@@ -62,11 +62,11 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      *
-     * @expectedException \Magento\Payment\Gateway\Http\ClientException
-     * @expectedExceptionMessage Test messages
      */
     public function testPlaceRequestException()
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Http\ClientException::class, 'Test messages');
+
         $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with(

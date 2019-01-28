@@ -49,12 +49,12 @@ class AbstractWriterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Writing error: Passed option "report_filename" is wrong.
      * @dataProvider dataProviderWrongOptionReportFilename
      */
     public function testWriteWithWrongOptionReportFilename($options)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Writing error: Passed option "report_filename" is wrong.');
+
         $configMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
 
         $this->writer->write($options, $configMock);

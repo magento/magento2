@@ -45,10 +45,11 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \Magento\Paypal\Model\Payflow\Service\Response\Transaction::savePaymentInQuote
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testSavePaymentInQuote()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         /** @var Transaction $transactionService */
         $transactionService = (new ObjectManager($this))->getObject(
             Transaction::class,

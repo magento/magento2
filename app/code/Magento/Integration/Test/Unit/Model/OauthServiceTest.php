@@ -141,11 +141,11 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage A consumer with ID "1" doesn't exist. Verify the ID and try again.
      */
     public function testDeleteException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\IntegrationException::class, 'A consumer with ID "1" doesn\'t exist. Verify the ID and try again.');
+
         $this->_consumerMock->expects($this->any())->method('getId')->will($this->returnValue(null));
         $this->_consumerMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->_consumerMock->expects($this->never())->method('delete');
@@ -288,10 +288,11 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Oauth\Exception
      */
     public function testLoadConsumerException()
     {
+        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class);
+
         $this->_consumerMock->expects(
             $this->once()
         )->method(
@@ -336,10 +337,11 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Oauth\Exception
      */
     public function testLoadConsumerByKeyException()
     {
+        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class);
+
         $this->_consumerMock->expects(
             $this->once()
         )->method(

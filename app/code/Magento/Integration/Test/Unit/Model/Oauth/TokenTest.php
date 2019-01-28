@@ -219,11 +219,11 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionMessage Cannot convert to access token due to token is not request type
      */
     public function testConvertToAccessIfIsNotRequestType()
     {
+        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class, 'Cannot convert to access token due to token is not request type');
+
         $this->tokenModel->setType('isNotRequestType');
         $this->tokenModel->convertToAccess();
     }

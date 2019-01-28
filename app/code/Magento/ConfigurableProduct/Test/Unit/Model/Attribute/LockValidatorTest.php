@@ -100,11 +100,11 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This attribute is used in configurable products.
      */
     public function testValidateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This attribute is used in configurable products.');
+
         $this->validate(true);
     }
 

@@ -137,11 +137,11 @@ class HashTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The hash isn't saved.
      */
     public function testRegenerateWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The hash isn\'t saved.');
+
         $section = 'section';
         $config = 'some config';
         $fullConfig = ['section' => $config];

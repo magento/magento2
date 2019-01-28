@@ -27,10 +27,11 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testConstructException()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->_directoryMock->expects($this->any())
             ->method('openFile')
             ->willThrowException(new \Magento\Framework\Exception\FileSystemException(__('Error message')));
@@ -106,11 +107,11 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage wrongColumnsNumber
      */
     public function testRewind()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'wrongColumnsNumber');
+
         $this->_directoryMock->expects(
             $this->any()
         )->method(

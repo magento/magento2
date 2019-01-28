@@ -194,11 +194,11 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity.
      */
     public function testDeleteTierPriceFromNonExistingProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity.');
+
         $this->repositoryMock->expects($this->once())->method('get')
             ->will($this->throwException(new NoSuchEntityException()));
         $this->priceModifierMock->expects($this->never())->method('removeTierPrice');
@@ -330,11 +330,11 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Values in the attr1, attr2 attributes are invalid. Verify the values and try again.
      */
     public function testSetThrowsExceptionIfDoesntValidate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Values in the attr1, attr2 attributes are invalid. Verify the values and try again.');
+
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->productMock
@@ -354,10 +354,11 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSetThrowsExceptionIfCantSave()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->productMock
@@ -372,10 +373,11 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\TemporaryState\CouldNotSaveException
      */
     public function testAddRethrowsTemporaryStateExceptionIfRecoverableErrorOccurred()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\TemporaryState\CouldNotSaveException::class);
+
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->once())
             ->method('getId')
@@ -398,11 +400,12 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int $price
      * @param string|float $qty
-     * @expectedException \Magento\Framework\Exception\InputException
      * @dataProvider addDataProvider
      */
     public function testAddWithInvalidData($price, $qty)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $this->service->add('product_sku', 1, $price, $qty);
     }
 

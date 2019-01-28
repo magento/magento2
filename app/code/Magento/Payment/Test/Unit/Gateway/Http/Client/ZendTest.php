@@ -94,10 +94,11 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests failing client gateway request
      *
-     * @expectedException  \Magento\Payment\Gateway\Http\ClientException
      */
     public function testPlaceRequestClientFail()
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Http\ClientException::class);
+
         $this->setClientTransferObjects();
 
         $this->clientMock->expects($this->once())
@@ -116,10 +117,11 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests failing response converting
      *
-     * @expectedException  \Magento\Payment\Gateway\Http\ConverterException
      */
     public function testPlaceRequestConvertResponseFail()
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Http\ConverterException::class);
+
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 

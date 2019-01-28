@@ -55,10 +55,11 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testRegisterKeyExists()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 

@@ -2619,11 +2619,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Bundle product without options should not be possible to buy.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify product option
      */
     public function testCheckProductBuyStateEmptyOptionsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please specify product option');
+
         $this->mockBundleCollection();
         $product = $this->getProductMock();
         $this->expectProductEntityMetadata();
@@ -2645,11 +2645,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      *
      * @throws LocalizedException
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider notAvailableOptionProvider
      */
     public function testCheckProductBuyStateMissedOptionException($element, $expectedMessage, $check)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->mockBundleCollection();
         $product = $this->getProductMock();
         $this->expectProductEntityMetadata();
@@ -2676,10 +2677,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * In case of missed selection for required options, bundle product should be not able to buy.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCheckProductBuyStateRequiredOptionException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->mockBundleCollection();
         $product = $this->getProductMock();
         $this->expectProductEntityMetadata();

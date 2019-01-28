@@ -178,11 +178,11 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /Invalid HTTP response code/
      */
     public function testHttpResponseCodeWithException()
     {
+        $this->setExpectedExceptionRegExp(\InvalidArgumentException::class, '/Invalid HTTP response code/');
+
         $this->response->setHttpResponseCode(1);
     }
 

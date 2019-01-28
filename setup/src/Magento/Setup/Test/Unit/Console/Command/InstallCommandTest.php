@@ -292,12 +292,13 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Test install command with invalid sales_order_increment_prefix value
      *
-     * @expectedException \InvalidArgumentException
      * @dataProvider validateWithExceptionDataProvider
      * @param $prefixValue
      */
     public function testValidateWithException($prefixValue)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->adminUserMock
             ->expects($this->never())
             ->method('validate');

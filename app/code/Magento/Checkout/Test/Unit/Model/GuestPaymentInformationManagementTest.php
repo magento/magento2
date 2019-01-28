@@ -134,10 +134,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $cartId = 100;
         $email = 'email@magento.com';
         $paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
@@ -215,11 +216,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage DB exception
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'DB exception');
+
         $cartId = 100;
         $email = 'email@magento.com';
         $paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);

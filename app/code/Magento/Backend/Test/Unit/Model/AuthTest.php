@@ -53,10 +53,11 @@ class AuthTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      */
     public function testLoginFailed()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_modelFactoryMock
             ->expects($this->once())
             ->method('create')

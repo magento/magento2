@@ -117,11 +117,11 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Shell error
      */
     public function testRemoveTasksWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Shell error');
+
         $exception = new \Exception('Shell error');
         $localizedException = new LocalizedException(new Phrase('Some error'), $exception);
 
@@ -192,11 +192,11 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The list of tasks is empty. Add tasks and try again.
      */
     public function testSaveTasksWithEmptyTasksList()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The list of tasks is empty. Add tasks and try again.');
+
         $baseDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $baseDirMock->expects($this->never())
@@ -219,11 +219,11 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The command shouldn't be empty. Enter and try again.
      */
     public function testSaveTasksWithoutCommand()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The command shouldn\'t be empty. Enter and try again.');
+
         $baseDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $baseDirMock->expects($this->once())

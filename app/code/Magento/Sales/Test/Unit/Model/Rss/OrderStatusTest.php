@@ -162,11 +162,11 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Order not found.
      */
     public function testGetRssDataWithError()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Order not found.');
+
         $this->orderFactory->expects($this->once())->method('create')->willReturn($this->order);
 
         $requestData = base64_encode('{"order_id":"1","increment_id":true,"customer_id":true}');

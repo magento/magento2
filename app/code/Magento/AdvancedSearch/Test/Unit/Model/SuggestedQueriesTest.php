@@ -90,12 +90,13 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isResultsCountEnabled() method failure.
-     * @expectedException \InvalidArgumentException
      *
      * @return void
      */
     public function testIsResultsCountEnabledException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

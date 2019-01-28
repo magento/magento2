@@ -65,11 +65,11 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no such engine: current_engine
      */
     public function testGetWithoutEngines()
     {
+        $this->setExpectedException(\LogicException::class, 'There is no such engine: current_engine');
+
         $currentEngine = 'current_engine';
         $engines = [];
 
@@ -90,11 +90,11 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage current_engine doesn't implement
      */
     public function testGetWithWrongEngine()
     {
+        $this->setExpectedException(\LogicException::class, 'current_engine doesn\'t implement');
+
         $currentEngine = 'current_engine';
         $currentEngineClass = \stdClass::class;
         $engines = [
@@ -123,11 +123,11 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Engine is not available: current_engine
      */
     public function testGetWithoutAvailableEngine()
     {
+        $this->setExpectedException(\LogicException::class, 'Engine is not available: current_engine');
+
         $currentEngine = 'current_engine';
         $currentEngineClass = EngineInterface::class;
         $engines = [

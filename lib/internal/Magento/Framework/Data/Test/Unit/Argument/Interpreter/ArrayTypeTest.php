@@ -28,13 +28,13 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Array items are expected
      *
      * @dataProvider evaluateExceptionDataProvider
      */
     public function testEvaluateException($inputData)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Array items are expected');
+
         $this->_model->evaluate($inputData);
     }
 

@@ -63,11 +63,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage URL path is missing
      */
     public function testEvaluateWrongPath()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'URL path is missing');
+
         $input = [];
         $this->_model->evaluate($input);
     }

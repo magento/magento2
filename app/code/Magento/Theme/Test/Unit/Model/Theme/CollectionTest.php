@@ -151,11 +151,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Constraint 'unsupported_type' is not supported
      */
     public function testAddConstraintUnsupportedType()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Constraint \'unsupported_type\' is not supported');
+
         $this->model->addConstraint('unsupported_type', 'value');
     }
 

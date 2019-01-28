@@ -44,11 +44,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage must be a valid JSON
      */
     public function testReadException()
     {
+        $this->setExpectedException(\RuntimeException::class, 'must be a valid JSON');
+
         $this->directoryRead->expects($this->once())->method('isExist')->willReturn(true);
         $this->directoryRead->expects($this->once())->method('readFile')->willReturn('invalid json');
         $this->reader->read();

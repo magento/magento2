@@ -149,11 +149,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We found an invalid quantity to refund item "test".
      */
     public function testRegisterWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We found an invalid quantity to refund item "test".');
+
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQtyRefunded'])

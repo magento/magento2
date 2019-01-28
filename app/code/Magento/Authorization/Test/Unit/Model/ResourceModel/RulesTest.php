@@ -162,11 +162,11 @@ class RulesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test LocalizedException throw case.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage TestException
      */
     public function testLocalizedExceptionOccurance()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'TestException');
+
         $exceptionPhrase = $this->getMockBuilder(\Magento\Framework\Phrase::class)
             ->disableOriginalConstructor()
             ->setMethods(['render'])

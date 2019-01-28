@@ -85,11 +85,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
      */
     public function testAddWithEmptyAttributeCode()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The attribute code is empty. Enter the code and try again.');
+
         $entityType = 42;
         $attributeCode = '';
         $optionMock = $this->getMockForAbstractClass(
@@ -106,11 +106,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "testAttribute" attribute doesn't work with options.
      */
     public function testAddWithWrongOptions()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The "testAttribute" attribute doesn\'t work with options.');
+
         $entityType = 42;
         $attributeCode = 'testAttribute';
         $optionMock = $this->getMockForAbstractClass(
@@ -139,11 +139,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "atrCde" attribute can't be saved.
      */
     public function testAddWithCannotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The "atrCde" attribute can\'t be saved.');
+
         $entityType = 42;
         $attributeCode = 'atrCde';
         $optionMock = $this->getMockForAbstractClass(
@@ -225,11 +225,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "atrCode" attribute can't be saved.
      */
     public function testDeleteWithCannotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The "atrCode" attribute can\'t be saved.');
+
         $entityType = 42;
         $attributeCode = 'atrCode';
         $optionId = 'option';
@@ -261,11 +261,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "atrCode" attribute doesn't include an option with "option" ID.
      */
     public function testDeleteWithWrongOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The "atrCode" attribute doesn\'t include an option with "option" ID.');
+
         $entityType = 42;
         $attributeCode = 'atrCode';
         $optionId = 'option';
@@ -290,11 +290,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "atrCode" attribute has no option.
      */
     public function testDeleteWithAbsentOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The "atrCode" attribute has no option.');
+
         $entityType = 42;
         $attributeCode = 'atrCode';
         $optionId = 'option';
@@ -315,11 +315,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
      */
     public function testDeleteWithEmptyAttributeCode()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The attribute code is empty. Enter the code and try again.');
+
         $entityType = 42;
         $attributeCode = '';
         $optionId = 'option';
@@ -348,11 +348,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The options for "atrCode" attribute can't be loaded.
      */
     public function testGetItemsWithCannotLoadException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The options for "atrCode" attribute can\'t be loaded.');
+
         $entityType = 42;
         $attributeCode = 'atrCode';
         $attributeMock = $this->getMockForAbstractClass(
@@ -371,11 +371,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
      */
     public function testGetItemsWithEmptyAttributeCode()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The attribute code is empty. Enter the code and try again.');
+
         $entityType = 42;
         $attributeCode = '';
         $this->model->getItems($entityType, $attributeCode);

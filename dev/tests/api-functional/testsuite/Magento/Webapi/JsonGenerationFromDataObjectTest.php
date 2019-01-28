@@ -77,11 +77,11 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Specified request cannot be processed.
      */
     public function testInvalidRestUrlNoServices()
     {
+        $this->setExpectedException(\Exception::class, 'Specified request cannot be processed.');
+
         $resourcePath = '';
 
         $serviceInfo = [
@@ -95,11 +95,11 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Incorrect format of request URI or Requested services are missing.
      */
     public function testInvalidRestUrlInvalidServiceName()
     {
+        $this->setExpectedException(\Exception::class, 'Incorrect format of request URI or Requested services are missing.');
+
         $this->isSingleService = false;
 
         $resourcePath = '/schema?services=invalidServiceName';

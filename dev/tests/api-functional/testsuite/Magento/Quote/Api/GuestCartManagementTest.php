@@ -123,10 +123,11 @@ class GuestCartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfThereIsNoCustomerWithGivenId()
     {
+        $this->setExpectedException(\Exception::class);
+
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
@@ -153,10 +154,11 @@ class GuestCartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfThereIsNoCartWithGivenId()
     {
+        $this->setExpectedException(\Exception::class);
+
         $cartId = 9999;
         $customerId = 1;
         $serviceInfo = [
@@ -181,11 +183,11 @@ class GuestCartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
+        $this->setExpectedException(\Exception::class, 'The customer can\'t be assigned to the cart because the cart isn\'t anonymous.');
+
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         $customerId = $customer->getId();
@@ -233,10 +235,11 @@ class GuestCartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
     {
+        $this->setExpectedException(\Exception::class);
+
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         // Customer has a quote with reserved order ID test_order_1 (see fixture)
@@ -332,11 +335,11 @@ class GuestCartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage You don't have the correct permissions to assign the customer to the cart.
      */
     public function testAssignCustomerByGuestUser()
     {
+        $this->setExpectedException(\Exception::class, 'You don\'t have the correct permissions to assign the customer to the cart.');
+
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();

@@ -52,28 +52,31 @@ class DataMapperFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testCreateEmpty()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->model->create('');
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testCreateWrongType()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->model->create('wrong');
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
      */
     public function testCreateFailure()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(new \stdClass());

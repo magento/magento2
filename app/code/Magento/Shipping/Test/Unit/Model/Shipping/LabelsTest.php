@@ -155,11 +155,12 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider requestToShipmentLocalizedExceptionDataProvider
      */
     public function testRequestToShipmentLocalizedException($isShipmentCarrierNotNull)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();

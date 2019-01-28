@@ -112,10 +112,11 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $cartId = 100;
         $agreements = [1, 2, 3];
         $this->scopeConfigMock

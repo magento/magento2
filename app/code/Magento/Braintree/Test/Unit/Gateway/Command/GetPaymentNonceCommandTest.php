@@ -118,11 +118,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "publicHash" field does not exists
      */
     public function testExecuteWithExceptionForPublicHash()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "publicHash" field does not exists');
+
         $exception = new \InvalidArgumentException('The "publicHash" field does not exists');
 
         $this->subjectReaderMock->expects(static::once())
@@ -137,11 +137,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "customerId" field does not exists
      */
     public function testExecuteWithExceptionForCustomerId()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "customerId" field does not exists');
+
         $publicHash = '3wv2m24d2er3';
 
         $this->subjectReaderMock->expects(static::once())
@@ -161,11 +161,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \Exception
-     * @expectedExceptionMessage No available payment tokens
      */
     public function testExecuteWithExceptionForTokenManagement()
     {
+        $this->setExpectedException(\Exception::class, 'No available payment tokens');
+
         $publicHash = '3wv2m24d2er3';
         $customerId = 1;
 
@@ -190,11 +190,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \Exception
-     * @expectedExceptionMessage Payment method nonce can't be retrieved.
      */
     public function testExecuteWithFailedValidation()
     {
+        $this->setExpectedException(\Exception::class, 'Payment method nonce can\'t be retrieved.');
+
         $publicHash = '3wv2m24d2er3';
         $customerId = 1;
         $token = 'jd2vnq';

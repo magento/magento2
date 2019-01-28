@@ -146,10 +146,11 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
      * @param array $structureElements
      *
      * @dataProvider processWithExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testProcessWithException($structureElements)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->scheduledStructureMock->expects($this->once())
             ->method('getElements')
             ->willReturn($structureElements);

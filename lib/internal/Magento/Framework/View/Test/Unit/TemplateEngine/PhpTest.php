@@ -55,10 +55,11 @@ class PhpTest extends \PHPUnit\Framework\TestCase
      * Test the render() function with a nonexistent filename.
      *
      * Expect an exception if the specified file does not exist.
-     * @expectedException \Exception
      */
     public function testRenderException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $blockMock = $this->getMockBuilder(
             \Magento\Framework\View\Element\Template::class
         )->setMethods(
@@ -70,10 +71,11 @@ class PhpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testHelperWithInvalidClass()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $class = \Magento\Framework\DataObject::class;
         $object = $this->createMock($class);
         $this->_helperFactoryMock->expects(

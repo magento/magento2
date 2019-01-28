@@ -82,10 +82,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
      */
     public function testGetMethodInstanceWithException()
     {
+        $this->setExpectedException(\UnexpectedValueException::class);
+
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn(null);

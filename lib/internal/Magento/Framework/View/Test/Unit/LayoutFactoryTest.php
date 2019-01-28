@@ -45,11 +45,11 @@ class LayoutFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass must be an instance of LayoutInterface.
      */
     public function testCreateException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'stdClass must be an instance of LayoutInterface.');
+
         $data = ['some' => 'other_data'];
         $this->objectManagerMock->expects($this->once())
             ->method('create')

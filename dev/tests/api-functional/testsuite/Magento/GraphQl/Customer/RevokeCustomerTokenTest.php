@@ -41,11 +41,11 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testRevokeCustomerTokenForGuestCustomer()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $query = <<<QUERY
             mutation {
                 revokeCustomerToken {

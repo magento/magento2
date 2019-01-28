@@ -206,11 +206,11 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The sample title is empty. Enter the title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The sample title is empty. Enter the title and try again.');
+
         $productSku = 'simple';
         $sampleData = [
             'title' => '',
@@ -341,11 +341,11 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The sample title is empty. Enter the title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The sample title is empty. Enter the title and try again.');
+
         $sampleId = 1;
         $productSku = 'simple';
         $productId = 1;
@@ -388,11 +388,11 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfSampleIdIsNotValid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No downloadable sample with the provided ID was found. Verify the ID and try again.');
+
         $sampleId = 1;
         $sampleMock = $this->createMock(\Magento\Downloadable\Model\Sample::class);
         $this->sampleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($sampleMock));

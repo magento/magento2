@@ -116,12 +116,12 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The default attribute set can't be deleted.
      * @return void
      */
     public function testBeforeDeleteStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The default attribute set can\'t be deleted.');
+
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class));
@@ -140,12 +140,12 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage test exception
      * @return void
      */
     public function testBeforeDelete()
     {
+        $this->setExpectedException(\Exception::class, 'test exception');
+
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class));

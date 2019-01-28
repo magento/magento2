@@ -44,11 +44,11 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The following requested cache types are not supported:
      */
     public function testExecuteInvalidCacheType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The following requested cache types are not supported:');
+
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
         $param = ['types' => ['A', 'D']];
         $commandTester = new CommandTester($this->command);

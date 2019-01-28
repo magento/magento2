@@ -52,10 +52,11 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $addressId = 1;
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->setMethods(['load', 'getId', '__wakeup'])

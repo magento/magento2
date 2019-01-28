@@ -81,12 +81,12 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * Ensure that exception will be thrown if requested magic method does not correspond to any declared consumer.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage "nonDeclaredConsumer" callback method specified in crontab.xml must
      * @return void
      */
     public function testMagicMethodNoRelatedConsumer()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, '"nonDeclaredConsumer" callback method specified in crontab.xml must');
+
         $consumerName = 'nonDeclaredConsumer';
         $this->consumerFactoryMock
             ->expects($this->once())

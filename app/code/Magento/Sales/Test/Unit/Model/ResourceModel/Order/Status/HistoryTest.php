@@ -97,11 +97,11 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * test _beforeSaveMethod via save()
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save comment:
      */
     public function testValidate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Cannot save comment:');
+
         $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));

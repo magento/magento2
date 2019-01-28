@@ -53,10 +53,11 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider passwordNegativeDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveNegative($password)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()

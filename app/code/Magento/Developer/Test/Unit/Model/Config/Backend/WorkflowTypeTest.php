@@ -57,11 +57,11 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Client side compilation doesn't work in production mode
      */
     public function testBeforeSaveSwitchedToClientSideInProductionShouldThrowException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Client side compilation doesn\'t work in production mode');
+
         $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);

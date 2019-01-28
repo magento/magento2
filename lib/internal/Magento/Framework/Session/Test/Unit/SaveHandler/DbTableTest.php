@@ -88,11 +88,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionNoConnection()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\SessionException::class, 'The write connection to the database isn\'t available. Please try again later.');
+
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
         $resource->expects($this->once())->method('getConnection')->will($this->returnValue(null));
@@ -105,11 +105,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage The database storage table doesn't exist. Verify the table and try again.
      */
     public function testCheckConnectionNoTable()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\SessionException::class, 'The database storage table doesn\'t exist. Verify the table and try again.');
+
         $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['isTableExists']);
         $connection->expects(
             $this->once()

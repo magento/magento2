@@ -55,11 +55,11 @@ class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when payment order is not Braintree payment method.
      *
      * @covers \Magento\Braintree\Model\CvvEmsCodeMapper::getCode
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "some_payment" does not supported by Braintree CVV mapper.
      */
     public function testGetCodeWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "some_payment" does not supported by Braintree CVV mapper.');
+
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()

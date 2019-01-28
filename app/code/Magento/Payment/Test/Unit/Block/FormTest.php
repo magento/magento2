@@ -56,10 +56,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetMethodException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $method = new \Magento\Framework\DataObject([]);
         $this->_object->setData('method', $method);
         $this->_object->getMethod();

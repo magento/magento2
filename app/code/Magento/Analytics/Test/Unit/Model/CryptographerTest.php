@@ -170,11 +170,12 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider encodeNotValidSourceDataProvider
      */
     public function testEncodeNotValidSource($source)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->cryptographer->encode($source);
     }
 
@@ -190,10 +191,11 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEncodeNotValidCipherMethod()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $source = 'Some string';
         $cryptographer = $this->objectManagerHelper->getObject(
             Cryptographer::class,
@@ -206,10 +208,11 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEncodeTokenNotValid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $source = 'Some string';
 
         $this->analyticsTokenMock

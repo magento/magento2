@@ -118,11 +118,11 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This backup type \'txt\' is not supported.
      */
     public function testCodeBackupWithInvalidType()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This backup type \\\'txt\\\' is not supported.');
+
         $this->model->codeBackup(time(), 'txt');
     }
 
@@ -138,11 +138,11 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The rollback file doesn't exist. Verify the file and try again.
      */
     public function testCodeRollbackWithInvalidFilePath()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The rollback file doesn\'t exist. Verify the file and try again.');
+
         $this->file->expects($this->once())
             ->method('isExists')
             ->willReturn(false);
@@ -150,11 +150,11 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The rollback file is invalid. Verify the file and try again.
      */
     public function testCodeRollbackWithInvalidFileType()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The rollback file is invalid. Verify the file and try again.');
+
         $this->model->codeRollback('RollbackFile_A.txt');
     }
 

@@ -107,11 +107,11 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $sortOrder
      * @dataProvider getInvalidSortOrder
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Sort order must be a positive integer.
      */
     public function testIsValidThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Sort order must be a positive integer.');
+
         $linkContentData = [
             'title' => 'Title',
             'sort_order' => $sortOrder,
@@ -142,11 +142,11 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $price
      * @dataProvider getInvalidPrice
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Link price must have numeric positive value.
      */
     public function testIsValidThrowsExceptionIfPriceIsInvalid($price)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Link price must have numeric positive value.');
+
         $linkContentData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -176,11 +176,11 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $numberOfDownloads
      * @dataProvider getInvalidNumberOfDownloads
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Number of downloads must be a positive integer.
      */
     public function testIsValidThrowsExceptionIfNumberOfDownloadsIsInvalid($numberOfDownloads)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Number of downloads must be a positive integer.');
+
         $linkContentData = [
             'title' => 'Title',
             'sort_order' => 1,

@@ -115,11 +115,11 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No item with the provided ID was found in the Cart. Verify the ID and try again.
      */
     public function testGetWithNoSuchEntityException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No item with the provided ID was found in the Cart. Verify the ID and try again.');
+
         $itemId = 2;
 
         $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
@@ -163,10 +163,11 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSaveWithNoSuchEntityException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $itemId = 1;
 
         $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
@@ -178,11 +179,11 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift messages can't be used for virtual products.
      */
     public function testSaveWithInvalidTransitionException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InvalidTransitionException::class, 'Gift messages can\'t be used for virtual products.');
+
         $itemId = 1;
 
         $quoteItem = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getIsVirtual', '__wakeup']);

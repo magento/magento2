@@ -132,11 +132,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the XML and try again.
      */
     public function testReadInvalidConfig()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Verify the XML and try again.');
+
         $this->createModelAndVerifyConstructor();
         $this->prepareDomFactoryMock();
         $testXmlFilesList = [

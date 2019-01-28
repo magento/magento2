@@ -113,11 +113,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for the "configurable" configurable product only.
      */
     public function testGetNotConfigurableProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'This is implemented for the "configurable" configurable product only.');
+
         $productSku = "configurable";
         $optionId = 3;
 
@@ -141,11 +141,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for the "3" configurable product only.
      */
     public function testGetNotProductById()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'This is implemented for the "3" configurable product only.');
+
         $entityId = 3;
         /** @var OptionInterface $optionMock */
         $optionMock = $this->createMock(OptionInterface::class);
@@ -168,11 +168,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The variations from the "3" product can't be deleted.
      */
     public function testDeleteCantSaveProducts()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The variations from the "3" product can\'t be deleted.');
+
         $entityId = 3;
         /** @var OptionInterface $optionMock */
         $optionMock = $this->createMock(OptionInterface::class);
@@ -200,11 +200,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The option with "33" ID can't be deleted.
      */
     public function testDeleteCantDeleteOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The option with "33" ID can\'t be deleted.');
+
         $entityId = 3;
         $optionMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
@@ -276,11 +276,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "3" entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEmptyExtensionAttribute()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The "3" entity that was requested doesn\'t exist. Verify the entity and try again.');
+
         $optionId = 3;
         $productSku = "configurable";
 
@@ -329,11 +329,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for the "configurable" configurable product only.
      */
     public function testGetListNotConfigurableProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'This is implemented for the "configurable" configurable product only.');
+
         $productSku = "configurable";
 
         $this->productRepositoryMock->expects($this->once())

@@ -33,11 +33,11 @@ class DriverPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The specified type 'stdClass' does not implement DriverInterface.
      */
     public function testCustomDriverException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The specified type \'stdClass\' does not implement DriverInterface.');
+
         new DriverPool(['custom' => new \StdClass()]);
     }
 }

@@ -146,11 +146,11 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Some error
      */
     public function testImportWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InvalidTransitionException::class, 'Some error');
+
         $this->processorFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->processorMock);

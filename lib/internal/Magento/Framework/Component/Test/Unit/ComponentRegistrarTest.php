@@ -23,11 +23,11 @@ class ComponentRegistrarTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage 'some_type' is not a valid component type
      */
     public function testWithInvalidType()
     {
+        $this->setExpectedException(\LogicException::class, '\'some_type\' is not a valid component type');
+
         ComponentRegistrar::register('some_type', "test_module_one", "some/path/name/one");
     }
 
@@ -44,10 +44,11 @@ class ComponentRegistrarTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegistrarWithExceptionForModules()
     {
+        $this->setExpectedException(\LogicException::class);
+
         ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/onemore");
     }
 

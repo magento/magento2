@@ -148,11 +148,11 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     /**
      * Check not allowed sitemap path validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please define a correct path.
      */
     public function testNotAllowedPath()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please define a correct path.');
+
         $model = $this->getModelMock();
         $model->setSitemapPath('../');
         $model->beforeSave();
@@ -161,11 +161,11 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     /**
      * Check not exists sitemap path validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please create the specified folder "" before saving the sitemap.
      */
     public function testPathNotExists()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please create the specified folder "" before saving the sitemap.');
+
         $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(false);
@@ -177,11 +177,11 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     /**
      * Check not writable sitemap path validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please make sure that "/" is writable by the web-server.
      */
     public function testPathNotWritable()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please make sure that "/" is writable by the web-server.');
+
         $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(true);
@@ -198,13 +198,12 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     /**
      * Check invalid chars in sitemap filename validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.
-     * No spaces or other characters are allowed.
      */
     //@codingStandardsIgnoreEnd
     public function testFilenameInvalidChars()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.');
+
         $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(true);

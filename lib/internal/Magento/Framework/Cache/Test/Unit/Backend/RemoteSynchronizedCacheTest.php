@@ -21,11 +21,12 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $options
      *
-     * @expectedException \Zend_Cache_Exception
      * @dataProvider initializeWithExceptionDataProvider
      */
     public function testInitializeWithException($options)
     {
+        $this->setExpectedException(\Zend_Cache_Exception::class);
+
         $this->objectManager->getObject(
             \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
             [

@@ -15,10 +15,11 @@ class ValueFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFac
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue('somethingElse'));

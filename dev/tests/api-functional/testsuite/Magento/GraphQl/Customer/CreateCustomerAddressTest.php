@@ -130,11 +130,11 @@ MUTATION;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCreateCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $mutation
             = <<<MUTATION
 mutation{
@@ -166,11 +166,11 @@ MUTATION;
      * with missing required Firstname attribute
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testCreateCustomerAddressWithMissingAttribute()
     {
+        $this->setExpectedException(\Exception::class, 'Required parameters are missing: firstname');
+
         $mutation
             = <<<MUTATION
 mutation {

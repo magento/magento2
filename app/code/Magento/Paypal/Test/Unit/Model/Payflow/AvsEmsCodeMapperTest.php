@@ -60,11 +60,11 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when payment order is not Payflow payment method.
      *
      * @covers \Magento\Paypal\Model\Payflow\AvsEmsCodeMapper::getCode
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "some_payment" does not supported by Payflow AVS mapper.
      */
     public function testGetCodeWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "some_payment" does not supported by Payflow AVS mapper.');
+
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()

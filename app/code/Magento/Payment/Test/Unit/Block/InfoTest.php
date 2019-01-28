@@ -125,10 +125,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetInfoThrowException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_object->setData('info', new \Magento\Framework\DataObject([]));
         $this->_object->getInfo();
     }

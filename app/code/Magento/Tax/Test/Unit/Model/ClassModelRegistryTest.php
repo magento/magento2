@@ -50,10 +50,11 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testUpdateTaxClassNotExistingEntity()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $taxClassId = 1;
 
         $this->classModelMock

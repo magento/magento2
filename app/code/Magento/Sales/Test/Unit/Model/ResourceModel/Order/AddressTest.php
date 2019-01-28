@@ -102,11 +102,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't save the address:
      */
     public function testSaveValidationFailed()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We can\'t save the address:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)

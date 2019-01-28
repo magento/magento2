@@ -21,11 +21,11 @@ class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "username" is required. Enter and try again.
      */
     public function testValidateNoUsername()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"username" is required. Enter and try again.');
+
         $username = '';
         $password = 'my_password';
 
@@ -33,11 +33,11 @@ class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "password" is required. Enter and try again.
      */
     public function testValidateNoPassword()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"password" is required. Enter and try again.');
+
         $username = 'my_username';
         $password = '';
 

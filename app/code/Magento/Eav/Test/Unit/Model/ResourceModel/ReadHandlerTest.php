@@ -136,10 +136,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testExecuteWithException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->metadataPoolMock->expects($this->once())
             ->method('getMetadata')
             ->willThrowException(new \Exception('Unknown entity type'));

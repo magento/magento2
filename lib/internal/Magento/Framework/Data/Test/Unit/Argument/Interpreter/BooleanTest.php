@@ -26,11 +26,11 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Boolean value is missing
      */
     public function testEvaluateException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Boolean value is missing');
+
         $this->_model->evaluate([]);
     }
 

@@ -68,10 +68,11 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetOverriddenValueIsCustomerAndCartDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $customerId = 1;
 
         $this->userContext->expects($this->once())

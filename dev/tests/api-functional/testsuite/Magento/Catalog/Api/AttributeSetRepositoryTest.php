@@ -41,10 +41,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetId = 9999;
 
         $serviceInfo = [
@@ -134,10 +135,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testDeleteByIdThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetId = 9999;
 
         $serviceInfo = [

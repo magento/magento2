@@ -111,10 +111,11 @@ class CheckUserLoginBackendObserverTest extends TestCase
      * Test check user login in backend with wrong captcha
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\Plugin\AuthenticationException
      */
     public function testCheckOnBackendLoginWithWrongCaptcha(): void
     {
+        $this->setExpectedException(\Magento\Framework\Exception\Plugin\AuthenticationException::class);
+
         $formId = 'backend_login';
         $login = 'admin';
         $captchaValue = 'captcha-value';

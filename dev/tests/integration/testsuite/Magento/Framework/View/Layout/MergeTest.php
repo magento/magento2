@@ -396,22 +396,22 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException        \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid layout update handle
      */
     public function testLoadWithInvalidArgumentThrowsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid layout update handle');
+
         $this->_model->load(123);
     }
 
     /**
      * Test loading invalid layout
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Layout is invalid.
      */
     public function testLoadWithInvalidLayout()
     {
+        $this->setExpectedException(\Exception::class, 'Layout is invalid.');
+
         $this->_model->addPageHandles(['default']);
 
         $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
@@ -438,11 +438,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationException
-     * @expectedExceptionMessageRegExp /_mergeFiles\/layout\/file_wrong\.xml\' is not valid/
      */
     public function testLayoutUpdateFileIsNotValid()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Config\Dom\ValidationException::class, '/_mergeFiles\\/layout\\/file_wrong\\.xml\\\' is not valid/');
+
         $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
 
         $this->_model->addPageHandles(['default']);

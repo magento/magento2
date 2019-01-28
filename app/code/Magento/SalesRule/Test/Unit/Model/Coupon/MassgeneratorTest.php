@@ -153,11 +153,11 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Run test generatePool method (throw exception)
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We cannot create the requested Coupon Qty. Please check your settings and try again.
      */
     public function testGeneratePoolException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We cannot create the requested Coupon Qty. Please check your settings and try again.');
+
         $data = [
             'qty' => 3,
             'length' => 15,

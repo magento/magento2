@@ -165,11 +165,11 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testNonExistentPropertiesWithoutDefaultArgumentValue()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'One or more input exceptions have occurred.');
+
         $data = [];
         $result = $this->serviceInputProcessor->process(
             \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
@@ -550,10 +550,11 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
      * Cover invalid custom attribute data
      *
      * @dataProvider invalidCustomAttributesDataProvider
-     * @expectedException \Magento\Framework\Webapi\Exception
      */
     public function testCustomAttributesExceptions($inputData)
     {
+        $this->setExpectedException(\Magento\Framework\Webapi\Exception::class);
+
         $this->serviceInputProcessor->process(
             \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
             'ObjectWithCustomAttributesMethod',

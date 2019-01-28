@@ -67,10 +67,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnExecute()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 

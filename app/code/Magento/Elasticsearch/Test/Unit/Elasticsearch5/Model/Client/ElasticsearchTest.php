@@ -85,10 +85,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testConstructorOptionsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $result = $this->objectManager->getObject(
             \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
             [
@@ -315,10 +316,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test createIndexIfNotExists() method, case when operation fails
-     * @expectedException \Exception
      */
     public function testCreateIndexFailure()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->indicesMock->expects($this->once())
             ->method('create')
             ->with([
@@ -397,10 +399,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test testAddFieldsMapping() method
-     * @expectedException \Exception
      */
     public function testAddFieldsMappingFailure()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->indicesMock->expects($this->once())
             ->method('putMapping')
             ->with([
@@ -482,10 +485,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test deleteMapping() method
-     * @expectedException \Exception
      */
     public function testDeleteMappingFailure()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->indicesMock->expects($this->once())
             ->method('deleteMapping')
             ->with([

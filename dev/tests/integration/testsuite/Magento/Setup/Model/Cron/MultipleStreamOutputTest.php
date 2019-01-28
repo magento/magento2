@@ -29,11 +29,11 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The StreamOutput class needs a stream as its first argument
      */
     public function testCreateException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The StreamOutput class needs a stream as its first argument');
+
         $this->multipleStreamOutput = new MultipleStreamOutput(['a', 'b']);
     }
 

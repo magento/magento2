@@ -141,11 +141,11 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save the invoice comment.
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'Could not save the invoice comment.');
+
         $this->commentResource->expects($this->once())
             ->method('save')
             ->with($this->commentMock)

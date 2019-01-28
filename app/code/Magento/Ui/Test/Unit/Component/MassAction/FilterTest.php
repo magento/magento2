@@ -142,10 +142,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Exception
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testApplySelectionOnTargetProviderException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);

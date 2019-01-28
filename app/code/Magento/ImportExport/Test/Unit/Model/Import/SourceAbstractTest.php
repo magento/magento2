@@ -23,10 +23,11 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $argument
      * @dataProvider constructExceptionDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testConstructException($argument)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->getMockForAbstractClass(\Magento\ImportExport\Model\Import\AbstractSource::class, [$argument]);
     }
 
@@ -44,11 +45,11 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage wrongColumnsNumber
      */
     public function testIteratorInterface()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'wrongColumnsNumber');
+
         $this->assertSame(-1, $this->_model->key());
         $this->assertFalse($this->_model->valid());
 
@@ -94,10 +95,11 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
      */
     public function testSeekableInterfaceException()
     {
+        $this->setExpectedException(\OutOfBoundsException::class);
+
         $this->_model->seek(0);
     }
 }

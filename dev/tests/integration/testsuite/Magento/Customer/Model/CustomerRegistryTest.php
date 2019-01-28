@@ -75,11 +75,11 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with customerId = 1
      */
     public function testRetrieveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with customerId = 1');
+
         $this->_model->retrieve(self::CUSTOMER_ID);
     }
 
@@ -101,11 +101,12 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppArea adminhtml
      */
     public function testRemove()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $customer = $this->_model->retrieve(self::CUSTOMER_ID);
         $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
         $customer->delete();
@@ -115,11 +116,12 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppArea adminhtml
      */
     public function testRemoveByEmail()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $customer = $this->_model->retrieve(self::CUSTOMER_ID);
         $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
         $customer->delete();

@@ -62,13 +62,13 @@ class ConfigChangeDetectorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage The configuration file has changed. Run the "app:config:import" or the "setup:upgrade" command to synchronize the configuration.
      * @codingStandardsIgnoreEnd
      */
     public function testBeforeDispatchWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The configuration file has changed. Run the "app:config:import" or the "setup:upgrade" command to synchronize the configuration.');
+
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(true);

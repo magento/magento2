@@ -57,11 +57,11 @@ class AlphanumTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid character encountered in increment ID: ---wrong-id---
      */
     public function testGetNextIdThrowsExceptionIfIdContainsNotAllowedCharacters()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid character encountered in increment ID: ---wrong-id---');
+
         $this->model->setLastId('---wrong-id---');
         $this->model->setPrefix('prefix');
         $this->model->getNextId();

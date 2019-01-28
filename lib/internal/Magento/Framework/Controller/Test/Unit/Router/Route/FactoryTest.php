@@ -62,11 +62,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
      * @return void
      */
     public function testCreateRouteNegative()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->objectManager->expects($this->once())
             ->method('create')
             ->will($this->returnValue(new \StdClass()));

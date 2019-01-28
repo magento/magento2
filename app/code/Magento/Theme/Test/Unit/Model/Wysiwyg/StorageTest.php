@@ -160,10 +160,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $uploader = $this->_prepareUploader();
 
         $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
@@ -261,20 +262,22 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderWithInvalidName()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $newDirectoryName = 'dir2!#$%^&';
         $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
     }
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderDirectoryAlreadyExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $newDirectoryName = 'mew';
         $fullNewPath = $this->_storageRoot . '/' . $newDirectoryName;
 
@@ -327,10 +330,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDirsCollectionWrongDirName()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->directoryWrite->expects(
             $this->once()
         )->method(
@@ -523,10 +527,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testDeleteRootDirectory()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $directoryPath = $this->_storageRoot;
 
         $this->_helperStorage->expects(

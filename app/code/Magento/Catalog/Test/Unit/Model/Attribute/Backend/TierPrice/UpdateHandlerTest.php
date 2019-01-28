@@ -167,11 +167,11 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Tier prices data should be array, but actually other type is received
      */
     public function testExecuteWithException(): void
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Tier prices data should be array, but actually other type is received');
+
         /** @var \PHPUnit_Framework_MockObject_MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
             ->disableOriginalConstructor()

@@ -117,11 +117,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Service interface was expected, "Some\Service\NameInterface" given
      */
     public function testReadInvalidService()
     {
+        $this->setExpectedException(\LogicException::class, 'Service interface was expected, "Some\\Service\\NameInterface" given');
+
         $this->defaultValueProvider->expects($this->any())->method('getConnection')->willReturn('amqp');
         $this->defaultValueProvider->expects($this->any())->method('getExchange')->willReturn('magento');
 

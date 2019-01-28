@@ -89,10 +89,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test buildQuery() method with exception
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildQueryFailure()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

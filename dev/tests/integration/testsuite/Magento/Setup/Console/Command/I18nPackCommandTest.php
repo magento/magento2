@@ -63,11 +63,11 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot open dictionary file:
      */
     public function testExecuteNonExistingPath()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Cannot open dictionary file:');
+
         $nonExistPath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist.csv';
         $this->tester->execute(
             [
@@ -79,11 +79,11 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Possible values for 'mode' option are 'replace' and 'merge'
      */
     public function testExecuteInvalidMode()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Possible values for \'mode\' option are \'replace\' and \'merge\'');
+
         $this->tester->execute(
             [
                 'source' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/i18n.csv',

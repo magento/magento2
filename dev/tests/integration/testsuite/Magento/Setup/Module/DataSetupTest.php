@@ -39,19 +39,21 @@ class DataSetupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Db_Statement_Exception
      */
     public function testDeleteTableRow()
     {
+        $this->setExpectedException(\Zend_Db_Statement_Exception::class);
+
         $this->_model->deleteTableRow('setup/module', 'module', 'integration_test_fixture_setup');
     }
 
     /**
      * @covers \Magento\Setup\Module\DataSetup::updateTableRow
-     * @expectedException \Zend_Db_Statement_Exception
      */
     public function testUpdateTableRowNameConversion()
     {
+        $this->setExpectedException(\Zend_Db_Statement_Exception::class);
+
         $original = $this->_model->getTableRow('setup_module', 'module', 'core_setup', 'schema_version');
         $this->_model->updateTableRow('setup/module', 'module', 'core_setup', 'schema_version', $original);
     }

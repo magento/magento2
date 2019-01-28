@@ -160,13 +160,12 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * Tests indexer exception of method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage
-     *      Invalid value for "<indexer>" argument. Accepted values for "<indexer>" are 'indexer_title'
      * @return void
      */
     public function testExecuteWithIndxerException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, '*      Invalid value for "<indexer>" argument. Accepted values for "<indexer>" are \'indexer_title\'');
+
         $commandTester = new CommandTester($this->command);
         $this->indexerMock->method('getTitle')->willReturn('indexer_title');
         $commandTester->execute(['indexer' => 'non_existing_title']);
@@ -175,12 +174,12 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * Tests indexer exception of method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Missing argument "<mode>". Accepted values for "<mode>" are 'store,website'
      * @return void
      */
     public function testExecuteWithModeException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Missing argument "<mode>". Accepted values for "<mode>" are \'store,website\'');
+
         $commandTester = new CommandTester($this->command);
         $this->dimensionModes->method('getDimensions')->willReturn([
             'store'   => 'dimension1',

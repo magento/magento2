@@ -80,11 +80,11 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Merge for content type 'unknown' is not supported.
      */
     public function testGetMergedAssetsWrongContentType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Merge for content type \'unknown\' is not supported.');
+
         $this->object->getMergedAssets([], 'unknown');
     }
 

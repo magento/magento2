@@ -87,11 +87,11 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetUndefinedProduct()
     {
+        $this->setExpectedException(\Exception::class, 'The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $productSku = 'product_not_exist';
         $this->getList($productSku);
     }

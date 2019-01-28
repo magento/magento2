@@ -208,11 +208,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider prepareShippingLabelContentExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unable to retrieve shipping label
      */
     public function testPrepareShippingLabelContentException(\SimpleXMLElement $xml)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Unable to retrieve shipping label');
+
         $this->_invokePrepareShippingLabelContent($xml);
     }
 

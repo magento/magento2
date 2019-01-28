@@ -64,20 +64,20 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The class for "dummyType" type wasn't declared. Enter the class and try again.
      */
     public function testCreateNonExisted()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The class for "dummyType" type wasn\'t declared. Enter the class and try again.');
+
         $this->model->create('dummyType');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage stdClass should implement
      */
     public function testCreateWrongImplementation()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'stdClass should implement');
+
         $type = 'wrongType';
         $this->objectManagerMock->expects($this->once())
             ->method('create')

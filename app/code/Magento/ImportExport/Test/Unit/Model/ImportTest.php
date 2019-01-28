@@ -286,10 +286,11 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Test importSource with expected exception
      *
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testImportSourceException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $exceptionMock = new \Magento\Framework\Exception\AlreadyExistsException(
             __('URL key for specified store already exists.')
         );
@@ -615,10 +616,11 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * Cover isReportEntityType().
      *
      * @dataProvider isReportEntityTypeExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testIsReportEntityTypeException($entity, $getEntitiesResult, $getEntityResult, $expectedResult)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $importMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -811,11 +813,11 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Cover createHistoryReport().
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Source file coping failed
      */
     public function testCreateHistoryReportThrowException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Source file coping failed');
+
         $sourceFileRelative = null;
         $entity = '';
         $extension = '';

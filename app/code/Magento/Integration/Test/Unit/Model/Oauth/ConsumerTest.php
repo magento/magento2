@@ -135,55 +135,55 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Callback URL
      */
     public function testValidateInvalidData()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid Callback URL');
+
         $this->validDataArray['callback_url'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Callback URL
      */
     public function testValidateInvalidCallback()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid Callback URL');
+
         $this->validDataArray['callback_url'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Rejected Callback URL
      */
     public function testValidateInvalidRejectedCallback()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid Rejected Callback URL');
+
         $this->validDataArray['rejected_callback_url'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Consumer Key 'invalid' is less than 32 characters long
      */
     public function testValidateInvalidConsumerKey()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Consumer Key \'invalid\' is less than 32 characters long');
+
         $this->validDataArray['key'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Consumer Secret 'invalid' is less than 32 characters long
      */
     public function testValidateInvalidConsumerSecret()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Consumer Secret \'invalid\' is less than 32 characters long');
+
         $this->validDataArray['secret'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();

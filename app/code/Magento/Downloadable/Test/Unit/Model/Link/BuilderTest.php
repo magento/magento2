@@ -170,11 +170,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Link file not provided
      */
     public function testBuildFileNotProvided()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Link file not provided');
+
         $data = [
             'type' => 'file',
             'sample' => [

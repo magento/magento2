@@ -98,21 +98,21 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Layout argument updaters are expected to be an array of classes
      */
     public function testEvaluateWrongUpdaterValue()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Layout argument updaters are expected to be an array of classes');
+
         $input = ['value' => 'some text', 'updater' => 'non-array'];
         $this->_model->evaluate($input);
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Instance of layout argument updater is expected
      */
     public function testEvaluateWrongUpdaterClass()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Instance of layout argument updater is expected');
+
         $input = [
             'value' => 'some text',
             'updater' => [

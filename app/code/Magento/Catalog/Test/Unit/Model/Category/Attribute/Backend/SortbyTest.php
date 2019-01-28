@@ -215,10 +215,11 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateUniqueException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue('attribute_name'));
         $this->_attribute->expects($this->at(1))->method('getIsRequired');
         $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
@@ -296,10 +297,11 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
      * @param $attributeCode
      * @param $data
      * @dataProvider validateDefaultSortException
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDefaultSortException($attributeCode, $data)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('another value'));
         $object = new \Magento\Framework\DataObject($data);

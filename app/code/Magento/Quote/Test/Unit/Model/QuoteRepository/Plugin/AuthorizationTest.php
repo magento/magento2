@@ -30,11 +30,11 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity
      */
     public function testAfterGetActiveThrowsExceptionIfQuoteIsNotAllowedForCurrentUserContext()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity');
+
         // Quote without customer ID
         $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCustomerId']);
         $quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
@@ -57,11 +57,11 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity
      */
     public function testAfterGetActiveForCustomerThrowsExceptionIfQuoteIsNotAllowedForCurrentUserContext()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity');
+
         // Quote without customer ID
         $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCustomerId']);
         $quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);

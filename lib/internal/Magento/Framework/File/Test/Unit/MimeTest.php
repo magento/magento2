@@ -18,11 +18,11 @@ class MimeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File 'nonexistent.file' doesn't exist
      */
     public function testGetMimeTypeNonexistentFileException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'File \'nonexistent.file\' doesn\'t exist');
+
         $file = 'nonexistent.file';
         $this->object->getMimeType($file);
     }

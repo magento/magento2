@@ -39,11 +39,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage (a,b,c), (d,e,f)
      */
     public function testSaveCreateMergeConflict()
     {
+        $this->setExpectedException(\Magento\Search\Model\Synonym\MergeConflictException::class, '(a,b,c), (d,e,f)');
+
         /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
         $synonymGroup = $this->objectManager->create(\Magento\Search\Api\Data\SynonymGroupInterface::class);
         $synonymGroup->setSynonymGroup('a,b,c');
@@ -95,11 +95,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage (d,e,f)
      */
     public function testSaveUpdateMergeConflict()
     {
+        $this->setExpectedException(\Magento\Search\Model\Synonym\MergeConflictException::class, '(d,e,f)');
+
         /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
         $synonymGroup = $this->objectManager->create(\Magento\Search\Api\Data\SynonymGroupInterface::class);
         $synonymGroup->setSynonymGroup('a,b,c');

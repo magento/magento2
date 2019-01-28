@@ -127,11 +127,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Some error
      */
     public function testEmulateAreaCodeException()
     {
+        $this->setExpectedException(\Exception::class, 'Some error');
+
         $areaCode = Area::AREA_FRONTEND;
         $emulatedCode = Area::AREA_ADMINHTML;
         $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
@@ -171,11 +171,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Unknown application mode: unknown mode
      */
     public function testConstructorException()
     {
+        $this->setExpectedException(\Exception::class, 'Unknown application mode: unknown mode');
+
         new \Magento\Framework\App\State(
             $this->getMockForAbstractClass(\Magento\Framework\Config\ScopeInterface::class, [], '', false),
             "unknown mode"
@@ -183,11 +183,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Area code "any code" does not exist
      */
     public function testCheckAreaCodeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Area code "any code" does not exist');
+
         $this->model->setAreaCode('any code');
     }
 }

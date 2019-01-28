@@ -58,10 +58,11 @@ class FilterProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
-     * @expectedException \Exception
      */
     public function testGetPageWrongInstance()
     {
+        $this->setExpectedException(\Exception::class);
+
         $someClassMock = $this->createMock('SomeClass');
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($someClassMock));

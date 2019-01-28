@@ -311,11 +311,11 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage An existing user has the given email but different username.
      */
     public function testSaveExceptionUsernameNotMatch()
     {
+        $this->setExpectedException(\Exception::class, 'An existing user has the given email but different username.');
+
         // existing user in db
         $existingUserData = [
             'email' => 'john.doe@test.com',
@@ -332,11 +332,11 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage An existing user has the given username but different email.
      */
     public function testSaveExceptionEmailNotMatch()
     {
+        $this->setExpectedException(\Exception::class, 'An existing user has the given username but different email.');
+
         $existingUserData = [
             'email' => 'another.email@test.com',
             'username' => 'admin',
@@ -352,11 +352,11 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No Administrators role was found, data fixture needs to be run
      */
     public function testSaveExceptionSpecialAdminRoleNotFound()
     {
+        $this->setExpectedException(\Exception::class, 'No Administrators role was found, data fixture needs to be run');
+
         $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
         $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
@@ -364,11 +364,11 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage "Password" is required. Enter and try again.
      */
     public function testSaveExceptionPasswordEmpty()
     {
+        $this->setExpectedException(\Exception::class, '"Password" is required. Enter and try again.');
+
         // alternative data must be used for this test
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',
@@ -412,11 +412,11 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Password cannot be the same as the user name.
      */
     public function testSaveExceptionPasswordAndUsernameEqual()
     {
+        $this->setExpectedException(\Exception::class, 'Password cannot be the same as the user name.');
+
         // alternative data must be used for this test
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',

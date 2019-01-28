@@ -48,10 +48,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InitException
      */
     public function testGetScopeWithInvalidScope()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InitException::class);
+
         $scopeMock = new \StdClass();
         $this->_storeManagerMock
             ->expects($this->once())

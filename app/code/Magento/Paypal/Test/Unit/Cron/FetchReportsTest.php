@@ -54,10 +54,11 @@ class FetchReportsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testExecuteThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $sftpCredentials = [
             'hostname' => ['test_hostname'],
             'username' => ['test_username'],

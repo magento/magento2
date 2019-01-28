@@ -291,10 +291,11 @@ class RefundOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
      */
     public function testDocumentValidationException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\DocumentValidationExceptionInterface::class);
+
         $orderId = 1;
         $items = [$this->creditmemoItemCreationMock];
         $notify = true;
@@ -347,10 +348,11 @@ class RefundOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface
      */
     public function testCouldNotCreditmemoException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface::class);
+
         $orderId = 1;
         $items = [$this->creditmemoItemCreationMock];
         $notify = true;

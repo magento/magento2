@@ -562,11 +562,11 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Payment Gateway is unreachable at the moment. Please use another payment option.
      */
     public function testPostRequestException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Payment Gateway is unreachable at the moment. Please use another payment option.');
+
         $request = new DataObject();
 
         /** @var ConfigInterface $config */

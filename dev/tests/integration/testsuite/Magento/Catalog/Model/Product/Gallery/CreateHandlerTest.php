@@ -66,11 +66,12 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $imageFileName
      * @throws FileSystemException
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      * @dataProvider illegalFilenameDataProvider
      */
     public function testExecuteWithIllegalFilename($imageFileName)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\FileSystemException::class);
+
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class

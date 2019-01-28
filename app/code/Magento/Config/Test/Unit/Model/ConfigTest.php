@@ -349,11 +349,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Path must not be empty
      */
     public function testSetDataByPathEmpty()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Path must not be empty');
+
         $this->model->setDataByPath('', 'value');
     }
 

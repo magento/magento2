@@ -105,11 +105,11 @@ class TrackTest extends \PHPUnit\Framework\TestCase
     /**
      * Test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save track:
      */
     public function testSaveValidationFailed()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Cannot save track:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->trackModelMock)

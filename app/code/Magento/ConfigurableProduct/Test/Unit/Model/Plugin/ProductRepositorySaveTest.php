@@ -148,11 +148,11 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
     public function testAfterSaveWithLinks()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Products "5" and "4" have the same set of attribute values.');
+
         $links = [4, 5];
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -190,11 +190,11 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Product with id "4" does not contain required attribute "color".
      */
     public function testAfterSaveWithLinksWithMissingAttribute()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Product with id "4" does not contain required attribute "color".');
+
         $simpleProductId = 4;
         $links = [$simpleProductId, 5];
         $attributeCode = 'color';
@@ -247,11 +247,11 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
     public function testAfterSaveWithLinksWithDuplicateAttributes()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Products "5" and "4" have the same set of attribute values.');
+
         $links = [4, 5];
         $attributeCode = 'color';
         $attributeId = 23;

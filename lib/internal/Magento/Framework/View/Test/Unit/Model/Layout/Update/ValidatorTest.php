@@ -193,11 +193,11 @@ XML;
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationException
-     * @expectedExceptionMessage Please correct the XML data and try again.
      */
     public function testIsValidThrowsValidationException()
     {
+        $this->setExpectedException(\Magento\Framework\Config\Dom\ValidationException::class, 'Please correct the XML data and try again.');
+
         $this->domConfigFactory->expects($this->once())->method('createDom')->willThrowException(
             new \Magento\Framework\Config\Dom\ValidationException('Please correct the XML data and try again.')
         );
@@ -205,11 +205,11 @@ XML;
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Please correct the XSD data and try again.
      */
     public function testIsValidThrowsValidationSchemaException()
     {
+        $this->setExpectedException(\Magento\Framework\Config\Dom\ValidationSchemaException::class, 'Please correct the XSD data and try again.');
+
         $this->domConfigFactory->expects($this->once())->method('createDom')->willThrowException(
             new \Magento\Framework\Config\Dom\ValidationSchemaException(
                 new Phrase('Please correct the XSD data and try again.')
@@ -219,11 +219,11 @@ XML;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Exception.
      */
     public function testIsValidThrowsException()
     {
+        $this->setExpectedException(\Exception::class, 'Exception.');
+
         $this->domConfigFactory->expects($this->once())->method('createDom')->willThrowException(
             new \Exception('Exception.')
         );

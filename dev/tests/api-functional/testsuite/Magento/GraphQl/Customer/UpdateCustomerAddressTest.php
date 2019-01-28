@@ -141,11 +141,11 @@ MUTATION;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testUpdateCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $addressId = 1;
         $mutation
             = <<<MUTATION
@@ -167,11 +167,11 @@ MUTATION;
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testUpdateCustomerAddressWithMissingAttribute()
     {
+        $this->setExpectedException(\Exception::class, 'Required parameters are missing: firstname');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 1;

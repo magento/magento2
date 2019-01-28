@@ -105,11 +105,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetThrowsExceptionIfProductIsSimple()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'This is implemented for bundle products only.');
+
         $productSku = 'sku';
         $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productMock->expects($this->once())
@@ -123,11 +123,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The option that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetThrowsExceptionIfOptionDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The option that was requested doesn\'t exist. Verify the entity and try again.');
+
         $productSku = 'sku';
         $optionId = 100;
         $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
@@ -214,11 +214,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The option with "1" ID can't be deleted.
      */
     public function testDeleteThrowsExceptionIfCannotDelete()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The option with "1" ID can\'t be deleted.');
+
         $optionMock = $this->createMock(\Magento\Bundle\Model\Option::class);
         $optionMock->expects($this->once())->method('getOptionId')->willReturn(1);
         $this->optionResourceMock->expects($this->once())
@@ -399,11 +399,11 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetListException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'This is implemented for bundle products only.');
+
         $productSku = 'simple';
         $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('simple');

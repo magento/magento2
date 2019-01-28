@@ -78,11 +78,11 @@ class FsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Backup\Exception\NotEnoughPermissions
-     * @expectedExceptionMessage You need write permissions for: test1, test2
      */
     public function testRunNotEnoughPermissions()
     {
+        $this->setExpectedException(\Magento\Framework\Backup\Exception\NotEnoughPermissions::class, 'You need write permissions for: test1, test2');
+
         $fsInfo = [
             'writable' => false,
             'writableMeta' => ['test1', 'test2'],

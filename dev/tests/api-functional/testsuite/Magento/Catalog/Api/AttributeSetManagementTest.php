@@ -61,11 +61,11 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid value
      */
     public function testCreateThrowsExceptionIfGivenAttributeSetAlreadyHasId()
     {
+        $this->setExpectedException(\Exception::class, 'Invalid value');
+
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = 'new_attribute_set';
@@ -82,10 +82,11 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdIsInvalid()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetName = 'new_attribute_set';
         $arguments = [
             'attributeSet' => [
@@ -102,10 +103,11 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdHasWrongEntityType()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetName = 'new_attribute_set';
         $arguments = [
             'attributeSet' => [
@@ -122,10 +124,11 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testCreateThrowsExceptionIfGivenSkeletonAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetName = 'new_attribute_set';
         $arguments = [
             'attributeSet' => [
@@ -142,11 +145,11 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The attribute set name is empty. Enter the name and try again.
      */
     public function testCreateThrowsExceptionIfAttributeSetNameIsEmpty()
     {
+        $this->setExpectedException(\Exception::class, 'The attribute set name is empty. Enter the name and try again.');
+
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = '';

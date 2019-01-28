@@ -403,10 +403,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testUnknownFilterType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         /** @var FilterInterface|\PHPUnit_Framework_MockObject_MockObject $filter */
         $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
             ->setMethods(['getType'])

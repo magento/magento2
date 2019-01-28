@@ -80,10 +80,11 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetThrowsExceptionIfGroupDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $groupId = 42;
         $groupMock = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Group::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
@@ -121,11 +122,11 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group can't be deleted because it contains system attributes.
      */
     public function testDeleteThrowsExceptionIfGroupHasSystemAttributes()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The attribute group can\'t be deleted because it contains system attributes.');
+
         $groupMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Attribute\Group::class,
             ['hasSystemAttributes']

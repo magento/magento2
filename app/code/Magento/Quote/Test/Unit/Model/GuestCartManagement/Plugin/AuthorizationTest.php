@@ -35,11 +35,11 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage You don't have the correct permissions to assign the customer to the cart.
      */
     public function testBeforeAssignCustomer()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'You don\'t have the correct permissions to assign the customer to the cart.');
+
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn('10');
         $this->plugin->beforeAssignCustomer($this->quoteManagementMock, 1, 2, 1);
     }

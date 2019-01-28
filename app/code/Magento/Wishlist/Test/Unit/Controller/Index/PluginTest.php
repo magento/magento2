@@ -89,10 +89,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testBeforeDispatch()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $refererUrl = 'http://referer-url.com';
         $params = [
             'product' => 1,

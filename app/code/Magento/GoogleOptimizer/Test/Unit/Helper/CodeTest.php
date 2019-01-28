@@ -107,11 +107,11 @@ class CodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model class is not valid
      */
     public function testExceptionNotValidEntityType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The model class is not valid');
+
         $entity = $this->createMock(\Magento\Cms\Model\Block::class);
 
         $entityId = 1;
@@ -126,11 +126,11 @@ class CodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model is empty
      */
     public function testExceptionEmptyEntity()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The model is empty');
+
         $entity = $this->createMock(\Magento\Cms\Model\Block::class);
 
         $entityId = 0;

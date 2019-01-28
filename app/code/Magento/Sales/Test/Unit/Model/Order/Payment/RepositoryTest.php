@@ -117,22 +117,24 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $this->repository->get(null);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetNoSuchEntity()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $paymentId = 1;
         $payment = $this->mockPayment(null);
         $payment->expects($this->any())->method('load')->with($paymentId)->willReturn($payment);

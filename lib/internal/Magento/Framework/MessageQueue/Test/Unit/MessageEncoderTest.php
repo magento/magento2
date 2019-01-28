@@ -51,29 +51,29 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Specified topic "customer.created" is not declared.
      */
     public function testEncodeInvalidTopic()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Specified topic "customer.created" is not declared.');
+
         $this->encoder->encode('customer.created', 'Some message');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Specified topic "customer.created" is not declared.
      */
     public function testDecodeInvalidTopic()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Specified topic "customer.created" is not declared.');
+
         $this->encoder->decode('customer.created', 'Some message');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data
      */
     public function testEncodeInvalidMessage()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Message with topic "customer.created" must be an instance of "Magento\\Customer\\Api\\Data');
+
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigData()
@@ -91,11 +91,11 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data
      */
     public function testEncodeInvalidMessageArray()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Message with topic "customer.created" must be an instance of "Magento\\Customer\\Api\\Data');
+
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigData()

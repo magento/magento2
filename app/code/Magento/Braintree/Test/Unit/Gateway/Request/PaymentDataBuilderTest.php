@@ -70,10 +70,11 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadPaymentException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $buildSubject = [];
 
         $this->subjectReaderMock->expects(self::once())
@@ -86,10 +87,11 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadAmountException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $buildSubject = [
             'payment' => $this->paymentDOMock,
             'amount' => null,

@@ -71,11 +71,11 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Some Message
      */
     public function testProcessWithException()
     {
+        $this->setExpectedException(\Exception::class, 'Some Message');
+
         $currentScope = 'currentScope';
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')

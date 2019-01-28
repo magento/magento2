@@ -46,11 +46,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Wrong message type
      */
     public function testCreateWrong()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Wrong message type');
+
         $this->model->create('Wrong', 'some text');
     }
 }

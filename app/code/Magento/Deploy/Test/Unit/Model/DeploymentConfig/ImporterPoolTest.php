@@ -68,11 +68,11 @@ class ImporterPoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @expectedExceptionMessage The parameter "importer_class" is missing. Set the "importer_class" and try again.
      */
     public function testGetImportersEmptyParameterClass()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\ConfigurationMismatchException::class, 'The parameter "importer_class" is missing. Set the "importer_class" and try again.');
+
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
             $this->validatorFactoryMock,

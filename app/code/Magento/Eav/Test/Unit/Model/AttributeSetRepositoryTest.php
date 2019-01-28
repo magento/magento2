@@ -108,11 +108,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 9999
      */
     public function testGetThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with id = 9999');
+
         $attributeSetId = 9999;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
@@ -132,10 +132,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveThrowsExceptionIfGivenEntityCannotBeSaved()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('save')->with($attributeSetMock)->willThrowException(
             new \Exception('Some internal exception message.')
@@ -160,10 +161,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteThrowsExceptionIfGivenEntityCannotBeDeleted()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('delete')->with($attributeSetMock)->willThrowException(
             new \Magento\Framework\Exception\CouldNotDeleteException(__('Some internal exception message.'))
@@ -178,11 +180,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The default attribute set can't be deleted.
      */
     public function testDeleteThrowsExceptionIfGivenAttributeSetIsDefault()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'The default attribute set can\'t be deleted.');
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('delete')->with($attributeSetMock)->willThrowException(
             new \Magento\Framework\Exception\StateException(__('Some internal exception message.'))

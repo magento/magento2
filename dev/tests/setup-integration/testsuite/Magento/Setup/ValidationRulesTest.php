@@ -41,13 +41,12 @@ class ValidationRulesTest extends SetupTestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Setup\Exception
-     * @expectedExceptionMessageRegExp
-     * /Primary key can`t be applied on table "test_table". All columns should be not nullable/
      * @moduleName Magento_TestSetupDeclarationModule8
      */
     public function testFailOnInvalidPrimaryKey()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Setup\Exception::class, '* /Primary key can`t be applied on table "test_table". All columns should be not nullable/');
+
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
         );
@@ -62,14 +61,12 @@ class ValidationRulesTest extends SetupTestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Setup\Exception
-     * @expectedExceptionMessageRegExp
-     * /Column definition "page_id_on" and reference column definition "page_id"
-     * are different in tables "dependent" and "test_table"/
      * @moduleName Magento_TestSetupDeclarationModule8
      */
     public function testFailOnIncosistentReferenceDefinition()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Setup\Exception::class, '* /Column definition "page_id_on" and reference column definition "page_id" are different in tables "dependent" and "test_table"/');
+
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
         );
@@ -83,12 +80,12 @@ class ValidationRulesTest extends SetupTestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Setup\Exception
-     * @expectedExceptionMessageRegExp /Auto Increment column do not have index. Column - "page_id"/
      * @moduleName Magento_TestSetupDeclarationModule8
      */
     public function testFailOnInvalidAutoIncrementField()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Setup\Exception::class, '/Auto Increment column do not have index. Column - "page_id"/');
+
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
         );

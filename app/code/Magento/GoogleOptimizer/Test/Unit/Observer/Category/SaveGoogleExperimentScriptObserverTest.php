@@ -202,11 +202,11 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Code does not exist
      */
     public function testEditingCodeIfCodeModelIsNotFound()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Code does not exist');
+
         $experimentScript = 'some string';
         $codeId = 5;
 

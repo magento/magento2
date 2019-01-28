@@ -114,12 +114,11 @@ class ShellTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Command returned non-zero exit code:
-     * @expectedExceptionCode 0
      */
     public function testExecuteFailure()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Command returned non-zero exit code:', 0);
+
         $shell = new \Magento\Framework\Shell($this->commandRenderer, $this->logger);
         $shell->execute('non_existing_command');
     }

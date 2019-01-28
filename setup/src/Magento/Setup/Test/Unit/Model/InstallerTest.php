@@ -486,11 +486,11 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
-         * @expectedException \Exception
-         * @expectedExceptionMessage Missing write permissions to the following paths:
          */
         public function testCheckInstallationFilePermissionsError()
         {
+            $this->setExpectedException(\Exception::class, 'Missing write permissions to the following paths:');
+
             $this->filePermissions
                 ->expects($this->once())
                 ->method('getMissingWritablePathsForInstallation')
@@ -507,11 +507,11 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
-         * @expectedException \Exception
-         * @expectedExceptionMessage Missing following extensions: 'foo'
          */
         public function testCheckExtensionsError()
         {
+            $this->setExpectedException(\Exception::class, 'Missing following extensions: \'foo\'');
+
             $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
                 [
                     'responseType' => \Magento\Setup\Controller\ResponseTypeInterface::RESPONSE_TYPE_ERROR,

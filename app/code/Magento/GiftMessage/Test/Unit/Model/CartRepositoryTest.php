@@ -134,21 +134,21 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift messages can't be used for an empty cart. Add an item and try again.
      */
     public function testSaveWithInputException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Gift messages can\'t be used for an empty cart. Add an item and try again.');
+
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift messages can't be used for virtual products.
      */
     public function testSaveWithInvalidTransitionException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InvalidTransitionException::class, 'Gift messages can\'t be used for virtual products.');
+
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
         $this->cartRepository->save($this->cartId, $this->messageMock);

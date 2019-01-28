@@ -73,11 +73,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     /**
      * situation: The admin user specified a desired shipping refund that is greater than the amount allowed
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Maximum shipping amount allowed to refund is: 5
      */
     public function testCollectException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Maximum shipping amount allowed to refund is: 5');
+
         $orderShippingAmount = 10;
         $orderShippingRefunded = 5;
         $allowedShippingAmount = $orderShippingAmount - $orderShippingRefunded;

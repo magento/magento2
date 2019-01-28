@@ -11,20 +11,20 @@ use Magento\Framework\Setup\Option\TextConfigOption;
 class SelectConfigOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frontend input type has to be 'select' or 'radio'.
      */
     public function testConstructInvalidFrontendType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Frontend input type has to be \'select\' or \'radio\'.');
+
         new SelectConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, ['a', 'b'], 'path/to/value');
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Select options can't be empty.
      */
     public function testConstructNoOptions()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Select options can\'t be empty.');
+
         new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, [], 'path/to/value');
     }
 
@@ -51,11 +51,11 @@ class SelectConfigOptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Value specified for
      */
     public function testValidateException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Value specified for');
+
         $option = new SelectConfigOption(
             'test',
             SelectConfigOption::FRONTEND_WIZARD_SELECT,

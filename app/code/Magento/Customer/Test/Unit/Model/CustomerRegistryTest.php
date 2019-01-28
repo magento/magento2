@@ -113,10 +113,11 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->customer->expects($this->once())
             ->method('load')
             ->with(self::CUSTOMER_ID)
@@ -131,10 +132,11 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveByEmailException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->customer->expects($this->once())
             ->method('loadByEmail')
             ->with(self::CUSTOMER_EMAIL)

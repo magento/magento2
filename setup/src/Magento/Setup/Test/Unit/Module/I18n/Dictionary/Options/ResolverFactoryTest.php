@@ -23,11 +23,11 @@ class ResolverFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass doesn't implement ResolverInterface
      */
     public function testCreateException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'stdClass doesn\'t implement ResolverInterface');
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper->getObject(

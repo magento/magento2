@@ -76,11 +76,11 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "33" Cart doesn't contain products.
      */
     public function testSetWhenCartDoesNotContainsProducts()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The "33" Cart doesn\'t contain products.');
+
         $cartId = 33;
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -91,11 +91,11 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The coupon code couldn't be applied. Verify the coupon code and try again.
      */
     public function testSetWhenCouldNotApplyCoupon()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The coupon code couldn\'t be applied. Verify the coupon code and try again.');
+
         $cartId = 33;
         $couponCode = '153a-ABC';
 
@@ -121,11 +121,11 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testSetWhenCouponCodeIsInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The coupon code isn\'t valid. Verify the code and try again.');
+
         $cartId = 33;
         $couponCode = '153a-ABC';
 
@@ -169,11 +169,11 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "65" Cart doesn't contain products.
      */
     public function testDeleteWhenCartDoesNotContainsProducts()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The "65" Cart doesn\'t contain products.');
+
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -185,11 +185,11 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The coupon code couldn't be deleted. Verify the coupon code and try again.
      */
     public function testDeleteWhenCouldNotDeleteCoupon()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'The coupon code couldn\'t be deleted. Verify the coupon code and try again.');
+
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -212,11 +212,11 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The coupon code couldn't be deleted. Verify the coupon code and try again.
      */
     public function testDeleteWhenCouponIsNotEmpty()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'The coupon code couldn\'t be deleted. Verify the coupon code and try again.');
+
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())

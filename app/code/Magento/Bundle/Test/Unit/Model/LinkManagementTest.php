@@ -269,10 +269,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testGetChildrenException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $productSku = 'productSku';
 
         $this->productRepository->expects($this->once())->method('get')->with($this->equalTo($productSku))
@@ -284,10 +285,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testAddChildToNotBundleProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
 
@@ -299,10 +301,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testAddChildNonExistingOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
 
@@ -338,11 +341,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The bundle product can't contain another composite product.
      */
     public function testAddChildLinkedProductIsComposite()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The bundle product can\'t contain another composite product.');
+
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $productLink->expects($this->any())->method('getSku')->will($this->returnValue('linked_product_sku'));
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
@@ -394,10 +397,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testAddChildProductAlreadyExistsInOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $productLink = $this->getMockBuilder(\Magento\Bundle\Api\Data\LinkInterface::class)
             ->setMethods(['getSku', 'getOptionId', 'getSelectionId'])
             ->disableOriginalConstructor()
@@ -464,10 +468,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testAddChildCouldNotSave()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $productLink = $this->getMockBuilder(\Magento\Bundle\Api\Data\LinkInterface::class)
             ->setMethods(['getSku', 'getOptionId', 'getSelectionId'])
             ->disableOriginalConstructor()
@@ -697,10 +702,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveChildFailedToSave()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $id = 12;
         $linkProductId = 45;
         $parentProductId = 32;
@@ -764,10 +770,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveChildWithoutId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $bundleProductSku = "bundleSku";
         $linkedProductSku = 'simple';
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
@@ -796,11 +803,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The product link with the "12345" ID field wasn't found. Verify the ID and try again.
      */
     public function testSaveChildWithInvalidId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The product link with the "12345" ID field wasn\'t found. Verify the ID and try again.');
+
         $id = 12345;
         $linkedProductSku = 'simple';
         $bundleProductSku = "bundleProductSku";
@@ -839,10 +846,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveChildWithCompositeProductLink()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $bundleProductSku = "bundleProductSku";
         $id = 12;
         $linkedProductSku = 'simple';
@@ -872,10 +880,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveChildWithSimpleProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $id = 12;
         $linkedProductSku = 'simple';
         $bundleProductSku = "bundleProductSku";
@@ -935,10 +944,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testRemoveChildForbidden()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($this->product));
         $productSku = 'productSku';
         $optionId = 1;
@@ -951,10 +961,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveChildInvalidOptionId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($this->product));
         $productSku = 'productSku';
         $optionId = 1;
@@ -981,10 +992,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveChildInvalidChildSku()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($this->product));
         $productSku = 'productSku';
         $optionId = 1;

@@ -69,11 +69,11 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid wishlist item configuration.
      */
     public function testAddNewItemInvalidWishlistItemConfiguration()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid wishlist item configuration.');
+
         $productSku = 'simple';
         $customerId = 1;
         /** @var ProductRepositoryInterface $productRepository */

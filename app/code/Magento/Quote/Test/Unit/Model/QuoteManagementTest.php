@@ -320,11 +320,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerFromAnotherStore()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The customer can\'t be assigned to the cart. The cart belongs to a different store.');
+
         $cartId = 220;
         $customerId = 455;
         $storeId = 5;
@@ -364,11 +364,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerToNonanonymousCart()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The customer can\'t be assigned to the cart because the cart isn\'t anonymous.');
+
         $cartId = 220;
         $customerId = 455;
         $storeId = 5;
@@ -413,10 +413,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testAssignCustomerNoSuchCustomer()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         $cartId = 220;
         $customerId = 455;
         $storeId = 5;

@@ -115,10 +115,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $type
      * @dataProvider createExceptionReflectionExceptionDataProvider
-     * @expectedException \ReflectionException
      */
     public function testCreateExceptionReflectionException($type)
     {
+        $this->setExpectedException(\ReflectionException::class);
+
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -147,10 +148,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $type
      * @dataProvider createExceptionInvalidArgumentDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionInvalidArgument($type)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $elementMock = $this->createMock($type);
         $this->_objectManagerMock->expects(
             $this->once()

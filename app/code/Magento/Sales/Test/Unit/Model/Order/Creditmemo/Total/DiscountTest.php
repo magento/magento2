@@ -271,11 +271,11 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage You can not refund shipping if there is no shipping amount.
      */
     public function testCollectNonZeroShipping()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'You can not refund shipping if there is no shipping amount.');
+
         $this->creditmemoMock->expects($this->once())
             ->method('setDiscountAmount')
             ->willReturnSelf();

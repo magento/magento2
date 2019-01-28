@@ -151,14 +151,14 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving throws exception if attribute set does not exist
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attributeSetId = -1
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
     public function testSaveThrowExceptionIfAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with attributeSetId = -1');
+
         $attributeSetId = -1;
         $groupMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute\Group::class, ['getAttributeSetId']);
         $groupMock->expects($this->exactly(2))->method('getAttributeSetId')->willReturn($attributeSetId);
@@ -176,14 +176,14 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving throws exception if cannot save group
      *
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attributeGroup can't be saved.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
     public function testSaveThrowExceptionIfCannotSaveGroup()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The attributeGroup can\'t be saved.');
+
         $attributeSetId = 42;
         $groupId = 20;
         $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
@@ -207,14 +207,14 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving throws exception if group does not belong to provided set
      *
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group doesn't belong to the provided attribute set.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
     public function testSaveThrowExceptionIfGroupDoesNotBelongToProvidedSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The attribute group doesn\'t belong to the provided attribute set.');
+
         $attributeSetId = 42;
         $groupId = 20;
         $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
@@ -234,14 +234,14 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving throws exception if provided group does not exist
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attributeGroupId =
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
     public function testSaveThrowExceptionIfProvidedGroupDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with attributeGroupId =');
+
         $attributeSetId = 42;
         $groupId = 20;
         $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
@@ -336,13 +336,13 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get throws exception if provided group does not exist
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The group with the "42" ID doesn't exist. Verify the ID and try again.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return void
      */
     public function testGetThrowExceptionIfProvidedGroupDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The group with the "42" ID doesn\'t exist. Verify the ID and try again.');
+
         $groupId = 42;
         $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
@@ -367,13 +367,13 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test deletion throws exception if provided group does not exist
      *
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group with id "42" can't be deleted.
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
     public function testDeleteThrowExceptionIfProvidedGroupDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The attribute group with id "42" can\'t be deleted.');
+
         $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
         $this->groupResourceMock->expects($this->once())
             ->method('delete')

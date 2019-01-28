@@ -117,11 +117,11 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test insecure request for a secure route
      *
-     * @expectedException \Magento\Framework\Webapi\Exception
-     * @expectedExceptionMessage Operation allowed only in HTTPS
      */
     public function testInSecureRequestOverSecureRoute()
     {
+        $this->setExpectedException(\Magento\Framework\Webapi\Exception::class, 'Operation allowed only in HTTPS');
+
         $this->routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(true));
         $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
         $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
@@ -131,11 +131,11 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthorizationException
-     * @expectedExceptionMessage The consumer isn't authorized to access 5, 6.
      */
     public function testAuthorizationFailed()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AuthorizationException::class, 'The consumer isn\'t authorized to access 5, 6.');
+
         $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
         $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
         $this->requestValidator->validate();

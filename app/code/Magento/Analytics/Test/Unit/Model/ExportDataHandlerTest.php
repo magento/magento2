@@ -228,10 +228,11 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testPrepareExportDataWithLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/';
         $archivePath = $this->subdirectoryPath . $this->archiveName;
 

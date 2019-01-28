@@ -38,11 +38,11 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot open file for write dictionary: "wrong/path"
      */
     public function testWrongOutputFile()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Cannot open file for write dictionary: "wrong/path"');
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $objectManagerHelper->getObject(
             \Magento\Setup\Module\I18n\Dictionary\Writer\Csv::class,

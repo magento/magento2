@@ -51,11 +51,11 @@ class EntityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Class 'stdClass' is irrelevant to the tested model
      */
     public function testConstructorIrrelevantModelClass()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Class \'stdClass\' is irrelevant to the tested model');
+
         new \Magento\TestFramework\Entity($this->_model, [], 'stdClass');
     }
 

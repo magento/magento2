@@ -193,10 +193,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $customerId = 34;
         $addressId = 53;
         $errors[] = __('Please enter the state/province.');
@@ -231,11 +232,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage region is a required field.
      */
     public function testSaveWithInvalidRegion()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'region is a required field.');
+
         $customerId = 34;
         $addressId = 53;
         $errors[] = __('region is a required field.');
@@ -274,11 +275,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "regionId" is required. Enter and try again.
      */
     public function testSaveWithInvalidRegionId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"regionId" is required. Enter and try again.');
+
         $customerId = 34;
         $addressId = 53;
         $errors[] = __('"regionId" is required. Enter and try again.');

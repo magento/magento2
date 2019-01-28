@@ -133,12 +133,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not find theme 'nonexistent_theme' for area 'area'
      * @return void
      */
     public function testUpdateDesignParamsWrongTheme()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Could not find theme \'nonexistent_theme\' for area \'area\'');
+
         $params = ['area' => 'area', 'theme' => 'nonexistent_theme'];
         $this->themeProvider->expects($this->once())
             ->method('getThemeByFullPath')
@@ -436,12 +436,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope separator "::" cannot be used without scope identifier.
      * @return void
      */
     public function testExtractModuleException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Scope separator "::" cannot be used without scope identifier.');
+
         $this->repository->extractModule('::asdsad');
     }
 }

@@ -47,13 +47,13 @@ class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Type "className" is not instance of Magento\Framework\App\DeploymentConfig\ValidatorInterface
      * @codingStandardsIgnoreEnd
      */
     public function testCreateWrongImplementation()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Type "className" is not instance of Magento\\Framework\\App\\DeploymentConfig\\ValidatorInterface');
+
         $className = 'className';
 
         $stdMock = $this->getMockBuilder(\stdClass::class)

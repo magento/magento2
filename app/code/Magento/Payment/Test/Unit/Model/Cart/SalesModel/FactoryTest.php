@@ -52,10 +52,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateInvalid()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->create('any invalid');
     }
 }

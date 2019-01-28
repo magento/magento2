@@ -14,11 +14,11 @@ use \Magento\Framework\View\Design\Fallback\Rule\Composite;
 class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Each item should implement the fallback rule interface
      */
     public function testConstructException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Each item should implement the fallback rule interface');
+
         new Composite([new \stdClass()]);
     }
 

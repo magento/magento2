@@ -116,11 +116,11 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 5
      */
     public function testGetWhenCategoryDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with id = 5');
+
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $categoryMock->expects(
@@ -227,11 +227,11 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save category
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'Could not save category');
+
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->extensibleDataObjectConverterMock
@@ -304,11 +304,11 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\StateException
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete category with id
      */
     public function testDeleteWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'Cannot delete category with id');
+
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryResourceMock->expects($this->once())->method('delete')->willThrowException(new \Exception());
         $this->model->delete($categoryMock);
@@ -337,11 +337,11 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 5
      */
     public function testDeleteByIdentifierWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with id = 5');
+
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $categoryMock->expects(

@@ -35,10 +35,11 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testEstimateBatchSizeThrowsExceptionIfIndexerIdIsNotRecognized()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $model = new BatchSizeCalculator(
             [],
             []

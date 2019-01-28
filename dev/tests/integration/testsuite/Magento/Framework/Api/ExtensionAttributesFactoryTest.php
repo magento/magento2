@@ -22,26 +22,29 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateThrowExceptionIfInterfaceNotImplemented()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->factory->create(\Magento\Framework\Api\ExtensionAttributesFactoryTest::class);
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateThrowExceptionIfInterfaceNotOverridden()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeExtensibleOne::class);
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateThrowExceptionIfReturnIsIncorrect()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeExtensibleTwo::class);
     }
 

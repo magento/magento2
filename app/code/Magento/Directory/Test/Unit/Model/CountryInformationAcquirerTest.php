@@ -143,11 +143,11 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
     /**
      * test GetGetCountryInfoNotFound
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The country isn't available.
      */
     public function testGetCountryInfoNotFound()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The country isn\'t available.');
+
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);

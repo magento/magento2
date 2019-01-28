@@ -199,11 +199,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attribute_code = test attribute code
      */
     public function testSaveNoSuchEntityException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with attribute_code = test attribute code');
+
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $existingModelMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn('12');
@@ -223,11 +223,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "frontend_label" is required. Enter and try again.
      */
     public function testSaveInputExceptionRequiredField()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"frontend_label" is required. Enter and try again.');
+
         $attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId']
@@ -241,11 +241,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the frontend_label field.
      */
     public function testSaveInputExceptionInvalidFieldValue()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Invalid value of "" provided for the frontend_label field.');
+
         $attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId']

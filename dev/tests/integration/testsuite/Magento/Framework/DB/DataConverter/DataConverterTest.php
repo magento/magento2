@@ -133,11 +133,11 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that exception with valid text is thrown when data is corrupted
      *
-     * @expectedException \Magento\Framework\DB\FieldDataConversionException
-     * @expectedExceptionMessage Error converting field `value` in table `table` where `id`=2 using
      */
     public function testDataConvertErrorReporting()
     {
+        $this->setExpectedException(\Magento\Framework\DB\FieldDataConversionException::class, 'Error converting field `value` in table `table` where `id`=2 using');
+
         $rows = [
             1 => 'N;',
             2 => 'a:2:{s:3:"foo";s:3:"bar";s:3:"bar";s:',

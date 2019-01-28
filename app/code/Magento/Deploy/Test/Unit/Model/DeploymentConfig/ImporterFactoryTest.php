@@ -45,13 +45,13 @@ class ImporterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Type "some/class/name" is not instance of Magento\Framework\App\DeploymentConfig\ImporterInterface
      * @codingStandardsIgnoreEnd
      */
     public function testCreateWithInvalidArgumentException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Type "some/class/name" is not instance of Magento\\Framework\\App\\DeploymentConfig\\ImporterInterface');
+
         $className = 'some/class/name';
 
         /** @var \StdClass|\PHPUnit_Framework_MockObject_MockObject $importerMock */

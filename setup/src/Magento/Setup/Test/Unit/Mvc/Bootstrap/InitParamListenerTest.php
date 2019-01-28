@@ -86,11 +86,11 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Magento root directory is not specified.
      */
     public function testCreateDirectoryListException()
     {
+        $this->setExpectedException(\LogicException::class, 'Magento root directory is not specified.');
+
         $this->listener->createDirectoryList([]);
     }
 

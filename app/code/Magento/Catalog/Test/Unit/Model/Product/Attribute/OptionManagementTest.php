@@ -60,11 +60,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid option id
      */
     public function testDeleteWithInvalidOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Invalid option id');
+
         $attributeCode = 'atrCde';
         $optionId = '';
         $this->eavOptionManagementMock->expects($this->never())->method('delete');

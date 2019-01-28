@@ -24,10 +24,11 @@ class LockValidatorCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCompositionsWithInvalidValidatorInstance()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $validators = [\Magento\Catalog\Model\Attribute\Backend\Startdate::class];
         $this->model = new \Magento\Catalog\Model\Attribute\LockValidatorComposite(
             $this->objectManagerMock,

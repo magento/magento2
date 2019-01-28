@@ -211,10 +211,11 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRestrictedCustomAttributesGet()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->model->getData(\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES);
     }
 

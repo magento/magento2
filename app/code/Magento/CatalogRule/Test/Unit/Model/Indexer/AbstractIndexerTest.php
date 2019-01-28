@@ -81,13 +81,13 @@ class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not rebuild index for empty products array
      *
      * @return void
      */
     public function testExecuteListWithEmptyIds()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Could not rebuild index for empty products array');
+
         $this->indexer->executeList([]);
     }
 
@@ -105,13 +105,13 @@ class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't rebuild the index for an undefined product.
      *
      * @return void
      */
     public function testExecuteRowWithEmptyId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We can\'t rebuild the index for an undefined product.');
+
         $this->indexer->executeRow(null);
     }
 

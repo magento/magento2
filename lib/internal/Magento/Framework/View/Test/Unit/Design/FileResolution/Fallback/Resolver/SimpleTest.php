@@ -183,11 +183,11 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File path 'var/test/../file.ext' is forbidden for security reasons.
      */
     public function testResolveSecurityException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'File path \'var/test/../file.ext\' is forbidden for security reasons.');
+
         $this->ruleMock->expects($this->once())
             ->method('getPatternDirs')
             ->willReturn([

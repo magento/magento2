@@ -152,11 +152,11 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity with id 9999
      */
     public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'No such entity with id 9999');
+
         $rateTitles = [
             'Label 1',
             'Label 2',
@@ -364,11 +364,11 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testValidate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'One or more input exceptions have occurred.');
+
         $regionId = 2;
         $rateTitles = ['Label 1', 'Label 2'];
         $regionMock = $this->createMock(\Magento\Directory\Model\Region::class);
@@ -394,11 +394,11 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithNoRate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"percentage_rate" is required. Enter and try again.');
+
         $rateTitles = ['Label 1', 'Label 2'];
 
         $countryCode = 'US';
@@ -432,11 +432,11 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithWrongRate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, '"percentage_rate" is required. Enter and try again.');
+
         $rateTitles = ['Label 1', 'Label 2'];
 
         $countryCode = 'US';

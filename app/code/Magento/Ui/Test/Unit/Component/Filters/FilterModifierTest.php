@@ -66,11 +66,11 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Condition type "not_allowed" is not allowed
      */
     public function testApplyFilterModifierWithNotAllowedCondition()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Condition type "not_allowed" is not allowed');
+
         $this->request->expects($this->once())->method('getParam')
             ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)
             ->willReturn([

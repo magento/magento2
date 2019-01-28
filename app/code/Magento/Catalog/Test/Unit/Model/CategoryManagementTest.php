@@ -210,11 +210,11 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Operation do not allow to move a parent category to any of children category
      */
     public function testMoveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Operation do not allow to move a parent category to any of children category');
+
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
@@ -242,11 +242,11 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not move category
      */
     public function testMoveWithCouldNotMoveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Could not move category');
+
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;

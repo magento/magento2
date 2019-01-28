@@ -52,11 +52,11 @@ class NotificationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Wrong notification ID specified.
      */
     public function testMarkAsReadThrowsExceptionWhenNotificationIdIsInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Wrong notification ID specified.');
+
         $notificationId = null;
         $service = $this->_getServiceInstanceForMarkAsReadTest($notificationId);
         $service->markAsRead($notificationId);

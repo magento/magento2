@@ -173,11 +173,11 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetVirtualProductThrowsExceptionIfPaymentMethodNotAvailable()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InvalidTransitionException::class, 'The requested Payment Method is not available.');
+
         $cartId = 100;
         $methodData = ['method' => 'data'];
         $paymentMethod = 'checkmo';
@@ -299,11 +299,11 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetSimpleProductTrowsExceptionIfShippingAddressNotSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InvalidTransitionException::class, 'The shipping address is missing. Set the address and try again.');
+
         $cartId = 100;
 
         $quoteMock = $this->createPartialMock(

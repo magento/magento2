@@ -165,11 +165,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Message
      */
     public function testLaunchException()
     {
+        $this->setExpectedException(\Exception::class, 'Message');
+
         $this->setUpLaunch();
         $this->frontControllerMock->expects($this->once())->method('dispatch')->with($this->requestMock)->will(
             $this->returnCallback(

@@ -83,20 +83,20 @@ class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage The product wasn't registered.
      */
     public function testGetProductWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class, 'The product wasn\'t registered.');
+
         $this->assertInstanceOf(ProductInterface::class, $this->model->getProduct());
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage The store wasn't registered. Verify the store and try again.
      */
     public function testGetStoreWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class, 'The store wasn\'t registered. Verify the store and try again.');
+
         $this->assertInstanceOf(StoreInterface::class, $this->model->getStore());
     }
 }

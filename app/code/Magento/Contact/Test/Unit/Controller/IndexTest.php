@@ -62,10 +62,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Dispatch test
      *
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatch()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $this->configMock->method('isEnabled')->willReturn(false);
 
         $this->controller->dispatch(

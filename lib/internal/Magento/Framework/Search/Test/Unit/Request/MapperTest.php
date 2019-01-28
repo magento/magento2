@@ -134,10 +134,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetQueryNotUsedStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_MATCH,
@@ -185,10 +186,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetQueryUsedStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -266,11 +268,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Reference is not provided
      */
     public function testGetQueryFilterReferenceException()
     {
+        $this->setExpectedException(\Exception::class, 'Reference is not provided');
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -364,10 +366,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetQueryException()
     {
+        $this->setExpectedException(\Exception::class);
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -667,10 +670,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetFilterNotUsedStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -741,10 +745,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetFilterUsedStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -782,11 +787,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid filter type
      */
     public function testGetFilterInvalidArgumentException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid filter type');
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -820,10 +825,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetFilterException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,

@@ -22,12 +22,12 @@ class XmlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parse error: Option "files_for_parse" is wrong.
      * @dataProvider dataProviderWrongOptionFilesForParse
      */
     public function testParseWithWrongOptionFilesForParse($options)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Parse error: Option "files_for_parse" is wrong.');
+
         $this->parser->parse($options);
     }
 

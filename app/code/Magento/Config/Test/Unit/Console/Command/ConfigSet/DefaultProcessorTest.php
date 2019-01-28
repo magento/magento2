@@ -146,13 +146,13 @@ class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage The value you set has already been locked. To change the value, use the --lock-env option.
      * @codingStandardsIgnoreEnd
      */
     public function testProcessLockedValue()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The value you set has already been locked. To change the value, use the --lock-env option.');
+
         $path = 'test/test/test';
         $value = 'value';
 

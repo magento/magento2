@@ -37,11 +37,11 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument converter named 'missedKey' has not been defined.
      */
     public function testConvertWithMissedConverter()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Argument converter named \'missedKey\' has not been defined.');
+
         $element = new \DOMElement('name');
         $composite = new Composite(['key' => $this->converter], 'type');
         $composite->convert($element, ['type' => 'missedKey']);
@@ -49,11 +49,11 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Converter named 'key' is expected to be an argument converter instance.
      */
     public function testConvertWithInvalidConverter()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Converter named \'key\' is expected to be an argument converter instance.');
+
         $element = new \DOMElement('name');
         $std = new \stdClass();
         $composite = new Composite(['key' => $std], 'type');

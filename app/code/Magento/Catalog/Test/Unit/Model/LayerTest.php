@@ -296,11 +296,11 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please correct the category.
      */
     public function testSetNewCurrentCategoryIfCategoryIsNotFound()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please correct the category.');
+
         $this->categoryRepository->expects($this->once())->method('get')
             ->will($this->throwException(new NoSuchEntityException()));
 
@@ -308,20 +308,20 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Must be category model instance or its id.
      */
     public function testSetCurrentCategoryInstanceOfException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Must be category model instance or its id.');
+
         $this->model->setCurrentCategory(null);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please correct the category.
      */
     public function testSetCurrentCategoryNotFoundException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please correct the category.');
+
         $this->category->expects($this->once())->method('getId')->will($this->returnValue(null));
 
         $this->model->setCurrentCategory($this->category);

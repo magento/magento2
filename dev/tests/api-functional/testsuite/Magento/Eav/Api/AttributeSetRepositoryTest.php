@@ -47,10 +47,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetId = 9999;
 
         $serviceInfo = [
@@ -140,11 +141,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The default attribute set can't be deleted.
      */
     public function testDeleteByIdDefaultAttributeSet()
     {
+        $this->setExpectedException(\Exception::class, 'The default attribute set can\'t be deleted.');
+
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Eav\Model\Config */
         $eavConfig = $objectManager->create(\Magento\Eav\Model\Config::class);
@@ -172,10 +173,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testDeleteByIdThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class);
+
         $attributeSetId = 9999;
 
         $serviceInfo = [

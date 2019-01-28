@@ -56,11 +56,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case for setName() with exception
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Trigger name should be a string
      */
     public function testSetNameWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Trigger name should be a string');
+
         $triggerName = new \stdClass();
         //non string
 
@@ -70,11 +70,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case for setTable() with exception
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Trigger table name should be a string
      */
     public function testSetTableWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Trigger table name should be a string');
+
         $tableName = new \stdClass();
         //non string
 
@@ -96,11 +96,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case for getName()
      *
-     * @expectedException \Zend_Db_Exception
-     * @expectedExceptionMessage Trigger name is not defined
      */
     public function testGetNameWithException()
     {
+        $this->setExpectedException(\Zend_Db_Exception::class, 'Trigger name is not defined');
+
         $tableName = 'TEST_TABLE_NAME_' . mt_rand(100, 999);
         $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
 
@@ -112,11 +112,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case for getTime() with Exception
      *
-     * @expectedException \Zend_Db_Exception
-     * @expectedExceptionMessage Trigger time is not defined
      */
     public function testGetTimeWithException()
     {
+        $this->setExpectedException(\Zend_Db_Exception::class, 'Trigger time is not defined');
+
         $tableName = 'TEST_TABLE_NAME_' . mt_rand(100, 999);
         $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
 
@@ -128,11 +128,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case for getTable()
      *
-     * @expectedException \Zend_Db_Exception
-     * @expectedExceptionMessage Trigger table name is not defined
      */
     public function testGetTableWithException()
     {
+        $this->setExpectedException(\Zend_Db_Exception::class, 'Trigger table name is not defined');
+
         $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
 
         $this->_object->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER)->setEvent($event);
@@ -143,11 +143,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test case for getEvent() with Exception
      *
-     * @expectedException \Zend_Db_Exception
-     * @expectedExceptionMessage Trigger event is not defined
      */
     public function testGetEventWithException()
     {
+        $this->setExpectedException(\Zend_Db_Exception::class, 'Trigger event is not defined');
+
         $tableName = 'TEST_TABLE_NAME_' . mt_rand(100, 999);
 
         $this->_object->setTable($tableName)->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER);
@@ -156,31 +156,31 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Trigger unsupported event type
      */
     public function testWrongEventTypeException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Trigger unsupported event type');
+
         $this->_object->setEvent('UNSUPORT EVENT TYPE');
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Trigger unsupported time type
      */
     public function testWrongTimeTypeException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Trigger unsupported time type');
+
         $this->_object->setTime('UNSUPORT TIME TYPE');
     }
 
     /**
      * Test case for setTable() with exception
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Trigger statement should be a string
      */
     public function testAddStatementWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Trigger statement should be a string');
+
         $statement = new \stdClass();
         //non string
 

@@ -114,11 +114,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage view_id view does not exist.
      */
     public function testLoadWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'view_id view does not exist.');
+
         $viewId = 'view_id';
         $this->configMock->expects(
             $this->once()
@@ -172,10 +172,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testSubscribeWithException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_DISABLED));
@@ -234,10 +235,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testUnsubscribeWithException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
@@ -318,11 +320,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test exception
      */
     public function testUpdateWithException()
     {
+        $this->setExpectedException(\Exception::class, 'Test exception');
+
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];

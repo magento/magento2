@@ -77,11 +77,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Store instance cannot be created.
      */
     public function testFetchNewIncrementIdRollsBackTransactionAndRethrowsExceptionIfProgramFlowIsInterrupted()
     {
+        $this->setExpectedException(\Exception::class, 'Store instance cannot be created.');
+
         $this->model->setIncrementModel('\IncrementModel');
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         // Interrupt program flow by exception

@@ -236,10 +236,11 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testGetProcessedTemplateException()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setMethods([
                 'setUseSessionInUrl',
@@ -362,11 +363,12 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $config
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider invalidInputParametersDataProvider
      */
     public function testSetDesignConfigWithInvalidInputParametersThrowsException($config)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->getModelMock()->setDesignConfig($config);
     }
 

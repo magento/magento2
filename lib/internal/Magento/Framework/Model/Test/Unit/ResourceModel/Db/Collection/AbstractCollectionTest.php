@@ -333,11 +333,11 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Magento\Framework\DB\Select does not extend \Magento\Framework\DataObject
      */
     public function testSetModelInvalidType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Magento\\Framework\\DB\\Select does not extend \\Magento\\Framework\\DataObject');
+
         $this->uut->setModel(Select::class);
     }
 

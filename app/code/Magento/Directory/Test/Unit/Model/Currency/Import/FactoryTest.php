@@ -59,11 +59,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Currency import service 'test' is not defined
      */
     public function testCreateUndefinedServiceClass()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Currency import service \'test\' is not defined');
+
         $this->_importConfig->expects(
             $this->once()
         )->method(
@@ -78,12 +78,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Class 'stdClass' has to implement
-     * \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function testCreateIrrelevantServiceClass()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Class \'stdClass\' has to implement \\Magento\\Directory\\Model\\Currency\\Import\\ImportInterface');
+
         $this->_importConfig->expects(
             $this->once()
         )->method(

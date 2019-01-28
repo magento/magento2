@@ -63,11 +63,11 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ cannot be applied twice"
      */
     public function testFixAppliedPatch()
     {
+        $this->setExpectedExceptionRegExp(\LogicException::class, '"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
+
         /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
         $patch1 = $this->createMock(PatchInterface::class);
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */

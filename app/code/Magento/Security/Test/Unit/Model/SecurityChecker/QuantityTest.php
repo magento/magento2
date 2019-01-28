@@ -113,10 +113,11 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
      * @param int $securityEventType
      * @param int $requestsMethod
      * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
      */
     public function testCheckException($securityEventType, $requestsMethod)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\SecurityViolationException::class);
+
         $limitNumberPasswordResetRequests = 10;
 
         $this->prepareTestCheck($requestsMethod, $limitNumberPasswordResetRequests);

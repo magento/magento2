@@ -443,11 +443,12 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @dataProvider getServiceNameInvalidNameDataProvider
      */
     public function testGetServiceNameInvalidName($interfaceClassName, $version)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->serviceMetadata->getServiceName($interfaceClassName, $version);
     }
 

@@ -158,10 +158,11 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteAfterSaveFailedWithLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $exception = new \Exception('Message');
         $this->enabledModel->setData('value', $this->valueEnabled);
 

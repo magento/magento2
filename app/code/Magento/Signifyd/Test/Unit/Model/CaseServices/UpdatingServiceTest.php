@@ -99,11 +99,11 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
      * Checks a test case when Signifyd case is empty entity.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The case entity should not be empty.
      */
     public function testUpdateWithEmptyCaseEntity()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The case entity should not be empty.');
+
         $data = [];
         $caseEntity = $this->withCaseEntity(null, 123, $data);
 
@@ -114,11 +114,11 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
      * Checks a test case when Signifyd case id is not specified for a case entity.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The case entity should not be empty.
      */
     public function testUpdateWithEmptyCaseId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The case entity should not be empty.');
+
         $data = [
             'caseId' => 123
         ];
@@ -131,11 +131,11 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
      * Checks as test case when service cannot save Signifyd case entity
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot update Case entity.
      */
     public function testUpdateWithFailedCaseSaving()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Cannot update Case entity.');
+
         $caseId = 123;
         $data = [
             'caseId' => $caseId,
@@ -157,11 +157,11 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
      * Checks as test case when message generator throws an exception
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot update Case entity.
      */
     public function testUpdateWithExceptionFromMessageGenerator()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Cannot update Case entity.');
+
         $caseId = 123;
         $data = [
             'caseId' => $caseId
@@ -186,11 +186,11 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
      * Checks a test case when comments history updater throws an exception.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot update Case entity.
      */
     public function testUpdateWithFailedCommentSaving()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Cannot update Case entity.');
+
         $caseId = 123;
         $data = [
             'caseId' => $caseId,

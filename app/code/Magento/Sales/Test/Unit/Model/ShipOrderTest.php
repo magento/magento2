@@ -304,10 +304,11 @@ class ShipOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
      */
     public function testDocumentValidationException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\DocumentValidationExceptionInterface::class);
+
         $orderId = 1;
         $items = [1 => 2];
         $notify = true;
@@ -362,10 +363,11 @@ class ShipOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotShipExceptionInterface
      */
     public function testCouldNotShipException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\CouldNotShipExceptionInterface::class);
+
         $orderId = 1;
         $items = [1 => 2];
         $notify = true;

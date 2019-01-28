@@ -311,11 +311,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
      */
     public function testSetShippingItemsInformationForAddressLeak()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Verify the shipping address information and continue.');
+
         $info = [
             [
                 1 => [
@@ -357,11 +357,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
      */
     public function testUpdateQuoteCustomerShippingAddressForAddressLeak()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Verify the shipping address information and continue.');
+
         $addressId = 43;
         $customerAddressId = 42;
 
@@ -387,11 +387,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the billing address information and continue.
      */
     public function testSetQuoteCustomerBillingAddressForAddressLeak()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Verify the billing address information and continue.');
+
         $addressId = 43;
         $customerAddressId = 42;
 
@@ -692,11 +692,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests exception for addresses with country id not in the allowed countries list.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      */
     public function testCreateOrdersCountryNotPresentInAllowedListException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Some addresses can\'t be used due to the configurations for specific countries.');
+
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAvailable'])

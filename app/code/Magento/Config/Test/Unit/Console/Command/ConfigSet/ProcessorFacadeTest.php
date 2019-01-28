@@ -166,11 +166,11 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @expectedExceptionMessage Some error
      */
     public function testProcessWithConfigurationMismatchException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\ConfigurationMismatchException::class, 'Some error');
+
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
@@ -196,11 +196,11 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Some error
      */
     public function testProcessWithCouldNotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'Some error');
+
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willReturn(true);

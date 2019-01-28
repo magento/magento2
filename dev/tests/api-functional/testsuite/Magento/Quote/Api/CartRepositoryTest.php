@@ -130,11 +130,11 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity with
      */
     public function testGetCartThrowsExceptionIfThereIsNoCartWithProvidedId()
     {
+        $this->setExpectedException(\Exception::class, 'No such entity with');
+
         $cartId = 9999;
 
         $serviceInfo = [
@@ -218,10 +218,11 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetListThrowsExceptionIfProvidedSearchFieldIsInvalid()
     {
+        $this->setExpectedException(\Exception::class);
+
         $serviceInfo = [
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
@@ -248,13 +249,13 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid state change requested
      * @dataProvider customerIdDataProvider
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
     public function testSaveQuoteException($customerId)
     {
+        $this->setExpectedException(\Exception::class, 'Invalid state change requested');
+
         $token = $this->getToken();
 
         /** @var Quote $quote */

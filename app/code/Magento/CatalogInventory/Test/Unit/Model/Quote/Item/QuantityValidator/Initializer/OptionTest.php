@@ -265,11 +265,11 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The stock item for Product in option is not valid.
      */
     public function testInitializeWithInvalidOptionQty()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The stock item for Product in option is not valid.');
+
         $optionValue = 5;
         $qty = 10;
         $this->optionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));

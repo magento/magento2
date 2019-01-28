@@ -95,11 +95,11 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage must be configured with a search query, but the query is empty
      */
     public function testCreateContainerAwareDataProviderWithoutQuery()
     {
+        $this->setExpectedException(\LogicException::class, 'must be configured with a search query, but the query is empty');
+
         $this->objectManager->expects($this->never())->method('create');
         /** @var DataProviderInterface $dataProvider */
         $dataProvider = $this->getMockBuilder(DataProvider::class)

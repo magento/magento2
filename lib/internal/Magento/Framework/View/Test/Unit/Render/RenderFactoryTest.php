@@ -45,11 +45,11 @@ class RenderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Type "RenderInterface" is not instance on Magento\Framework\View\RenderInterface
      */
     public function testGetException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Type "RenderInterface" is not instance on Magento\\Framework\\View\\RenderInterface');
+
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))

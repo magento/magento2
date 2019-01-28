@@ -151,10 +151,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDataThrowingException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $themePath = 'blank';
         $areaCode = 'adminhtml';
 

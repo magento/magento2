@@ -109,12 +109,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Expected Exception
      * @throws \Exception
      */
     public function testSaveFailed()
     {
+        $this->setExpectedException(\Exception::class, 'Expected Exception');
+
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
             ->will($this->returnValue('event_prefix'));

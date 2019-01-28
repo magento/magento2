@@ -88,10 +88,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Webapi\Exception
      */
     public function testNotMatch()
     {
+        $this->setExpectedException(\Magento\Framework\Webapi\Exception::class);
+
         $this->_apiConfigMock->expects(
             $this->once()
         )->method(

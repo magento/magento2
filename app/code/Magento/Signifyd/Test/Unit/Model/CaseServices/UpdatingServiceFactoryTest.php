@@ -114,11 +114,11 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks exception type and message for unknown case type.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Specified message type does not supported.
      */
     public function testCreateWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Specified message type does not supported.');
+
         $type = 'cases/unknown';
         $this->config->expects(self::once())
             ->method('isActive')

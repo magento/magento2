@@ -189,10 +189,11 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->blockResource->expects($this->once())
             ->method('save')
             ->with($this->block)
@@ -203,10 +204,11 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $this->blockResource->expects($this->once())
             ->method('delete')
             ->with($this->block)
@@ -217,10 +219,11 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetByIdException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $blockId = '123';
 
         $this->block->expects($this->once())

@@ -154,11 +154,11 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with cartId = 14
      */
     public function testGetWithExceptionById()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with cartId = 14');
+
         $cartId = 14;
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -303,11 +303,11 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with cartId = 14
      */
     public function testGetActiveWithExceptionById()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with cartId = 14');
+
         $cartId = 14;
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -325,11 +325,11 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with cartId = 15
      */
     public function testGetActiveWithExceptionByIsActive()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with cartId = 15');
+
         $cartId = 15;
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);

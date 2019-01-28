@@ -63,10 +63,11 @@ class OrdersUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \DomainException
      */
     public function testUpdateWhenBillingAgreementIsNotSet()
     {
+        $this->setExpectedException(\DomainException::class);
+
         $this->_registry->expects(
             $this->once()
         )->method(

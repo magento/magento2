@@ -74,10 +74,11 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing converting not valid cron configuration, expect to get exception
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertWrongConfiguration()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $xmlFile = __DIR__ . '/_files/sales_invalid.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));

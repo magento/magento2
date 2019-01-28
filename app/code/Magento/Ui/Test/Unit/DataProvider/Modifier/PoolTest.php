@@ -100,11 +100,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The parameter "sortOrder" is missing. Set the "sortOrder" and try again.
      */
     public function testWithSortOrderException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The parameter "sortOrder" is missing. Set the "sortOrder" and try again.');
+
         /** @var Pool $model */
         $model = $this->objectManager->getObject(Pool::class, [
             'factory' => $this->factoryMock,
@@ -119,11 +119,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The parameter "class" is missing. Set the "class" and try again.
      */
     public function testWithClassException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The parameter "class" is missing. Set the "class" and try again.');
+
         /** @var Pool $model */
         $model = $this->objectManager->getObject(Pool::class, [
             'factory' => $this->factoryMock,

@@ -185,10 +185,11 @@ class BlockRepositoryTest extends WebapiAbstract
 
     /**
      * Test delete \Magento\Cms\Api\Data\BlockInterface
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDelete()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $blockTitle = 'Block title';
         $blockIdentifier = 'block-title';
         /** @var  \Magento\Cms\Api\Data\BlockInterface $blockDataObject */

@@ -76,11 +76,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Publisher 'topic.message.queue.config.03' is not declared.
      */
     public function testGetDisabledPublisherThrowsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Publisher \'topic.message.queue.config.03\' is not declared.');
+
         /** @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
         $config->getPublisher('topic.message.queue.config.03');

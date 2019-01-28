@@ -97,11 +97,11 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks a case when request fails.
      *
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage Transaction has been declined. Please try again later.
      */
     public function testExecuteValidationFail()
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Command\CommandException::class, 'Transaction has been declined. Please try again later.');
+
         $commandSubject = ['authorize'];
         $validationFailures = [
             __('Failure #1'),
@@ -123,11 +123,11 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks a case when request fails and response errors are mapped.
      *
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage Failure Mapped
      */
     public function testExecuteValidationFailWithMappedErrors()
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Command\CommandException::class, 'Failure Mapped');
+
         $commandSubject = ['authorize'];
         $validationFailures = [
             __('Failure #1'),

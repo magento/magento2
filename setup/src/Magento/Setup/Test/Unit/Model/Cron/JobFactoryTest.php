@@ -139,11 +139,11 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage job is not supported
      */
     public function testCreateUnknownJob()
     {
+        $this->setExpectedException(\RuntimeException::class, 'job is not supported');
+
         $this->jobFactory->create('unknown', []);
     }
 

@@ -283,10 +283,11 @@ string',
     /**
      * Tests \Magento\Framework\DataObject->__call()
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCall()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->dataObject->setData('key', 'value');
         $this->dataObject->setTest('test');
         $this->assertEquals('test', $this->dataObject->getData('test'));

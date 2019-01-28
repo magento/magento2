@@ -44,11 +44,11 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Cache_Exception
-     * @expectedExceptionMessage 'db' option is not specified
      */
     public function testConstructorException()
     {
+        $this->setExpectedException(\Zend_Cache_Exception::class, '\'db\' option is not specified');
+
         new \Magento\Framework\Cache\Backend\MongoDb();
     }
 

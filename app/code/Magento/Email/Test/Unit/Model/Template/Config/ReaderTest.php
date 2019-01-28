@@ -157,11 +157,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Unable to determine a module
      */
     public function testReadUnknownModule()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Unable to determine a module');
+
         $this->_moduleDirResolver->expects($this->once())->method('getModuleName')->will($this->returnValue(null));
         $this->_converter->expects($this->never())->method('convert');
         $this->_model->read('scope');

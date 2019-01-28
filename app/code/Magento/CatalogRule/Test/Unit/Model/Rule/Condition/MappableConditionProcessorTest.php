@@ -996,11 +996,11 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Undefined condition type "olo-lo" passed in.
      */
     public function testException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Undefined condition type "olo-lo" passed in.');
+
         $simpleCondition = $this->getMockForSimpleCondition('field');
         $simpleCondition->setType('olo-lo');
         $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'any');

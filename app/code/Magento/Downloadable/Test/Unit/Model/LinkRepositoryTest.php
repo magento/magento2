@@ -259,11 +259,11 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The link title is empty. Enter the link title and try again.');
+
         $productSku = 'simple';
         $linkData = [
             'title' => '',
@@ -421,11 +421,11 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The link title is empty. Enter the link title and try again.');
+
         $linkId = 1;
         $productSku = 'simple';
         $productId = 1;
@@ -469,11 +469,11 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No downloadable link with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfLinkIdIsNotValid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No downloadable link with the provided ID was found. Verify the ID and try again.');
+
         $linkId = 1;
         $linkMock = $this->createMock(\Magento\Downloadable\Model\Link::class);
         $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($linkMock));

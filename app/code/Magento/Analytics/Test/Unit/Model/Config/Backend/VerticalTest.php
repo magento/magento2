@@ -48,10 +48,11 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveFailedWithLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->subject->setValue('');
 
         $this->subject->beforeSave();

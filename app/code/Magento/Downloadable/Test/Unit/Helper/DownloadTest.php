@@ -80,28 +80,29 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testSetResourceInvalidPath()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_helper->setResource('/some/path/../file', DownloadHelper::LINK_TYPE_FILE);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please set resource file and link type.
      */
     public function testGetFileSizeNoResource()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please set resource file and link type.');
+
         $this->_helper->getFileSize();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid download link type.
      */
     public function testGetFileSizeInvalidLinkType()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid download link type.');
+
         $this->_helper->setResource(self::FILE_PATH, 'The link type is invalid. Verify and try again.');
         $this->_helper->getFileSize();
     }
@@ -119,11 +120,11 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid download link type.
      */
     public function testGetFileSizeNoFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid download link type.');
+
         $this->_setupFileMocks(false);
         $this->_helper->getFileSize();
     }

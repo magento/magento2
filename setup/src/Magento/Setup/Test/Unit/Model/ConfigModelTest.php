@@ -156,11 +156,11 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage In module : Fake_ModuleConfigOption::createConfig
      */
     public function testProcessException()
     {
+        $this->setExpectedException(\Exception::class, 'In module : Fake_ModuleConfigOption::createConfig');
+
         $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
             ->method('createConfig')
@@ -176,11 +176,11 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following paths:
      */
     public function testWritePermissionErrors()
     {
+        $this->setExpectedException(\Exception::class, 'Missing write permissions to the following paths:');
+
         $this->filePermissions->expects($this->once())->method('getMissingWritablePathsForInstallation')
             ->willReturn(['/a/ro/dir', '/media']);
         $this->configModel->process([]);

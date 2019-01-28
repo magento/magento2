@@ -149,11 +149,11 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with name "Integration Name" exists.
      */
     public function testCreateIntegrationAlreadyExistsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\IntegrationException::class, 'The integration with name "Integration Name" exists.');
+
         $this->_integrationMock->expects(
             $this->any()
         )->method(
@@ -244,11 +244,11 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with name "Another Integration Name" exists.
      */
     public function testUpdateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\IntegrationException::class, 'The integration with name "Another Integration Name" exists.');
+
         $this->_integrationMock->expects(
             $this->any()
         )->method(
@@ -297,11 +297,11 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with ID "1" doesn't exist.
      */
     public function testGetException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\IntegrationException::class, 'The integration with ID "1" doesn\'t exist.');
+
         $this->_integrationMock->expects($this->any())->method('getId')->will($this->returnValue(null));
         $this->_integrationMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->_integrationMock->expects($this->never())->method('save');
@@ -385,11 +385,11 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with ID "1" doesn't exist.
      */
     public function testDeleteException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\IntegrationException::class, 'The integration with ID "1" doesn\'t exist.');
+
         $this->_integrationMock->expects($this->any())->method('getId')->will($this->returnValue(null));
         $this->_integrationMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->_integrationMock->expects($this->never())->method('delete');

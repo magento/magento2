@@ -88,11 +88,11 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage indexer_id indexer does not exist.
      */
     public function testLoadWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'indexer_id indexer does not exist.');
+
         $indexId = 'indexer_id';
         $this->configMock->expects(
             $this->once()
@@ -225,11 +225,11 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test exception
      */
     public function testReindexAllWithException()
     {
+        $this->setExpectedException(\Exception::class, 'Test exception');
+
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);
 
@@ -274,11 +274,11 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Error
-     * @expectedExceptionMessage Test Engine Error
      */
     public function testReindexAllWithError()
     {
+        $this->setExpectedException(\Error::class, 'Test Engine Error');
+
 
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);

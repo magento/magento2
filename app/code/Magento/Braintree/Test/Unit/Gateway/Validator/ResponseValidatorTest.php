@@ -51,10 +51,11 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateReadResponseException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $validationSubject = [
             'response' => null
         ];
@@ -63,10 +64,11 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateReadResponseObjectException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $validationSubject = [
             'response' => ['object' => null]
         ];

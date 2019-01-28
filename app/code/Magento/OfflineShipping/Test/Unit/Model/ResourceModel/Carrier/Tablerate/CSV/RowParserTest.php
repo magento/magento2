@@ -102,10 +102,11 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
      * @param $expectedMessage
      * @throws null|RowException
      * @dataProvider parseWithExceptionDataProvider
-     * @expectedException \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException
      */
     public function testParseWithException(array $rowData, $conditionFullName, array $columnValueMap, $expectedMessage)
     {
+        $this->setExpectedException(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException::class);
+
         $rowNumber = 120;
         $websiteId = 58;
         $conditionShortName = 'condition_short_name';

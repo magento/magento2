@@ -120,10 +120,11 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     }
 
     /**
-     * @expectedException \PHPUnit\Framework\AssertionFailedError
      */
     public function testAssertRedirectFailure()
     {
+        $this->setExpectedException(\PHPUnit\Framework\AssertionFailedError::class);
+
         $this->assertRedirect();
     }
 

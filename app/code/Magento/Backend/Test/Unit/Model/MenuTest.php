@@ -164,10 +164,11 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMoveNonExistentItemThrowsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
@@ -176,10 +177,11 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMoveToNonExistentItemThrowsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);

@@ -35,11 +35,11 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Interpreter named 'wrong' is expected to be an argument interpreter instance
      */
     public function testConstructWrongInterpreter()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Interpreter named \'wrong\' is expected to be an argument interpreter instance');
+
         $interpreters = [
             'correct' => $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class),
             'wrong' => $this->createMock(\Magento\Framework\ObjectManagerInterface::class),
@@ -101,12 +101,12 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument interpreter named 'one' has already been defined
      *
      */
     public function testAddInterpreterException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Argument interpreter named \'one\' has already been defined');
+
         $newInterpreter = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
         $this->_model->addInterpreter('one', $newInterpreter);
     }

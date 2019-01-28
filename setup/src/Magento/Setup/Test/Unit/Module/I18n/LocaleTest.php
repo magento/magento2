@@ -10,11 +10,11 @@ use \Magento\Setup\Module\I18n\Locale;
 class LocaleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Target locale must match the following format: "aa_AA".
      */
     public function testWrongLocaleFormatException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Target locale must match the following format: "aa_AA".');
+
         new Locale('wrong_locale');
     }
 

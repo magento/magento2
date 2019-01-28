@@ -182,10 +182,11 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithoutItem()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item
             ->expects($this->once())
@@ -213,10 +214,11 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithoutWishlist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item
             ->expects($this->once())

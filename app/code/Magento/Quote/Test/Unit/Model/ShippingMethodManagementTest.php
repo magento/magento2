@@ -181,11 +181,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testGetMethodWhenShippingAddressIsNotSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The shipping address is missing. Set the address and try again.');
+
         $cartId = 666;
         $this->quoteRepository->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
@@ -270,11 +270,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testGetListWhenShippingAddressIsNotSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The shipping address is missing. Set the address and try again.');
+
         $cartId = 834;
         $this->quoteRepository->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
@@ -320,11 +320,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
      */
     public function testSetMethodWithInputException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The shipping method can\'t be set for an empty cart. Add an item to cart and try again.');
+
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -339,11 +339,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetMethodWithVirtualProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The Cart includes virtual product(s) only, so a shipping address is not used.');
+
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -359,11 +359,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetMethodWithoutShippingAddress()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The shipping address is missing. Set the address and try again.');
+
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -382,11 +382,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The shipping method can't be set. Custom Error
      */
     public function testSetMethodWithCouldNotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The shipping method can\'t be set. Custom Error');
+
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -418,11 +418,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetMethodWithoutAddress()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The shipping address is missing. Set the address and try again.');
+
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;

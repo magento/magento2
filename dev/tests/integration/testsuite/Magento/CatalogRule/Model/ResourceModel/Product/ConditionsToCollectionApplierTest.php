@@ -83,13 +83,13 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()
      *
      * @magentoDbIsolation disabled
      */
     public function testExceptionUndefinedRuleOperator()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()');
+
         $conditions = [
             'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',
@@ -112,13 +112,13 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Undefined rule aggregator "olo-lo" passed in. Valid operators are: all,any
      *
      * @magentoDbIsolation disabled
      */
     public function testExceptionUndefinedRuleAggregator()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Undefined rule aggregator "olo-lo" passed in. Valid operators are: all,any');
+
         $conditions = [
             'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'olo-lo',

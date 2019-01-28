@@ -227,11 +227,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify product link(s).
      */
     public function testCheckProductBuyStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please specify product link(s).');
+
         $optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, ['getValue']);
 
         $optionMock->expects($this->any())->method('getValue')->will($this->returnValue('{}'));

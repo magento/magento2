@@ -48,10 +48,11 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testInvalidArgumentException1()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $matchQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType'])
@@ -65,10 +66,11 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testInvalidArgumentException2()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $filterMock = $this->getFilterQueryMock();
 
         $filterMock->expects($this->any())

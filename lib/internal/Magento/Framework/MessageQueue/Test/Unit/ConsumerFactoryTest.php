@@ -41,11 +41,11 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage pecified consumer "test_consumer_name" is not declared.
      */
     public function testUndeclaredConsumerName()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'pecified consumer "test_consumer_name" is not declared.');
+
         $consumerFactory = $this->objectManager->getObject(ConsumerFactory::class);
         $this->objectManager->setBackwardCompatibleProperty(
             $consumerFactory,

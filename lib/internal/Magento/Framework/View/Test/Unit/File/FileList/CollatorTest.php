@@ -78,31 +78,31 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Overriding view file 'new.xml' does not match to any of the files
      */
     public function testReplaceBaseFileException()
     {
+        $this->setExpectedException(\LogicException::class, 'Overriding view file \'new.xml\' does not match to any of the files');
+
         $file = $this->_createViewFile('new.xml', 'Fixture_TestModule');
         $this->_model->collate([$file], $this->_originFiles);
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Overriding view file 'test/fixture.xml' does not match to any of the files
      */
     public function testReplaceBaseFileEmptyThemePathException()
     {
+        $this->setExpectedException(\LogicException::class, 'Overriding view file \'test/fixture.xml\' does not match to any of the files');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule', '');
         $this->_model->collate([$file], $this->_originFiles);
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Overriding view file 'new.xml' does not match to any of the files
      */
     public function testReplaceThemeFileException()
     {
+        $this->setExpectedException(\LogicException::class, 'Overriding view file \'new.xml\' does not match to any of the files');
+
         $file = $this->_createViewFile('new.xml', 'Fixture_TestModule', 'area/theme/path');
         $this->_model->collate([$file], $this->_originFiles);
     }

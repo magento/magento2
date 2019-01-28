@@ -29,11 +29,11 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Profile configuration file `exception.file` is not readable or does not exists.
      */
     public function testLoadConfigException()
     {
+        $this->setExpectedException(\Exception::class, 'Profile configuration file `exception.file` is not readable or does not exists.');
+
         $this->model->loadConfig('exception.file');
     }
 

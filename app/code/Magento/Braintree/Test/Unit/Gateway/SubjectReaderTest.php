@@ -29,12 +29,12 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readCustomerId
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "customerId" field does not exists
      * @return void
      */
     public function testReadCustomerIdWithException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "customerId" field does not exists');
+
         $this->subjectReader->readCustomerId([]);
     }
 
@@ -50,12 +50,12 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readPublicHash
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "public_hash" field does not exists
      * @return void
      */
     public function testReadPublicHashWithException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "public_hash" field does not exists');
+
         $this->subjectReader->readPublicHash([]);
     }
 
@@ -71,12 +71,12 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readPayPal
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Transaction has't paypal attribute
      * @return void
      */
     public function testReadPayPalWithException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Transaction has\'t paypal attribute');
+
         $transaction = Transaction::factory([
             'id' => 'u38rf8kg6vn',
         ]);
@@ -123,11 +123,12 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
      * @param array $response
      * @param string $expectedMessage
      * @dataProvider invalidTransactionResponseDataProvider
-     * @expectedException \InvalidArgumentException
      * @return void
      */
     public function testReadTransactionWithInvalidResponse(array $response, string $expectedMessage): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->expectExceptionMessage($expectedMessage);
         $this->subjectReader->readTransaction($response);
     }

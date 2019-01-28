@@ -101,11 +101,11 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage error345
      */
     public function testSetAddressValidationFailed()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'error345');
+
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -172,11 +172,11 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetAddressForVirtualProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The Cart includes virtual product(s) only, so a shipping address is not used.');
+
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -194,11 +194,11 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The address failed to save. Verify the address and try again.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The address failed to save. Verify the address and try again.');
+
         $this->quoteAddressMock->expects($this->once())->method('save')->willThrowException(
             new \Exception('The address failed to save. Verify the address and try again.')
         );
@@ -264,11 +264,11 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testGetAddressOfQuoteWithVirtualProducts()
     {
+        $this->setExpectedException(\Exception::class, 'The Cart includes virtual product(s) only, so a shipping address is not used.');
+
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)

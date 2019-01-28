@@ -61,11 +61,11 @@ MUTATION;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testDeleteCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $addressId = 1;
         $mutation
             = <<<MUTATION
@@ -80,11 +80,11 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Customer Address 2 is set as default shipping address and can not be deleted
      */
     public function testDeleteDefaultShippingCustomerAddress()
     {
+        $this->setExpectedException(\Exception::class, 'Customer Address 2 is set as default shipping address and can not be deleted');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
@@ -106,11 +106,11 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Customer Address 2 is set as default billing address and can not be deleted
      */
     public function testDeleteDefaultBillingCustomerAddress()
     {
+        $this->setExpectedException(\Exception::class, 'Customer Address 2 is set as default billing address and can not be deleted');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
@@ -131,11 +131,11 @@ MUTATION;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Address id 9999 does not exist.
      */
     public function testDeleteNonExistCustomerAddress()
     {
+        $this->setExpectedException(\Exception::class, 'Address id 9999 does not exist.');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation

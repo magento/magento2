@@ -38,13 +38,13 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Entity object is undefined
      *
      * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
      */
     public function testGetEntityWhenEntityNotSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Entity object is undefined');
+
         $this->model->getEntity();
     }
 

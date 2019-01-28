@@ -266,10 +266,11 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+
         $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
 
         $this->groupFactory->expects($this->once())

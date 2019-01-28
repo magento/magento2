@@ -234,11 +234,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product is already attached.
      */
     public function testAddChildStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The product is already attached.');
+
         $productSku = 'configurable-sku';
         $childSku = 'simple-sku';
 
@@ -310,10 +310,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testRemoveChildForbidden()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
@@ -327,10 +328,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveChildInvalidChildSku()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $productSku = 'configurable';
         $childSku = 'simple_10';
 

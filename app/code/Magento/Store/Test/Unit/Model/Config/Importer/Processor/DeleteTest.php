@@ -307,11 +307,11 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some exception
      */
     public function testRunWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'Some exception');
+
         $data = [
             ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []

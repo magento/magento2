@@ -205,11 +205,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The sample type is invalid. Verify the sample type and try again.
      */
     public function testCreateThrowsExceptionIfSampleTypeIsInvalid()
     {
+        $this->setExpectedException(\Exception::class, 'The sample type is invalid. Verify the sample type and try again.');
+
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
@@ -225,11 +225,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided content must be valid base64 encoded data.
      */
     public function testCreateThrowsExceptionIfSampleFileContentIsNotAValidBase64EncodedString()
     {
+        $this->setExpectedException(\Exception::class, 'Provided content must be valid base64 encoded data.');
+
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
@@ -249,11 +249,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided file name contains forbidden characters.
      */
     public function testCreateThrowsExceptionIfSampleFileNameContainsForbiddenCharacters()
     {
+        $this->setExpectedException(\Exception::class, 'Provided file name contains forbidden characters.');
+
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
@@ -273,11 +273,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Sample URL must have valid format.
      */
     public function testCreateThrowsExceptionIfSampleUrlHasWrongFormat()
     {
+        $this->setExpectedException(\Exception::class, 'Sample URL must have valid format.');
+
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
@@ -294,12 +294,12 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Sort order must be a positive integer.
      * @dataProvider getInvalidSortOrder
      */
     public function testCreateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
+        $this->setExpectedException(\Exception::class, 'Sort order must be a positive integer.');
+
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
@@ -325,11 +325,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product needs to be the downloadable type. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
+        $this->setExpectedException(\Exception::class, 'The product needs to be the downloadable type. Verify the product and try again.');
+
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
@@ -345,11 +345,11 @@ class SampleRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
@@ -422,11 +422,11 @@ class SampleRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples/1';
         $requestData = [
             'isGlobalScopeContent' => true,
@@ -443,11 +443,11 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
+        $this->setExpectedException(\Exception::class, 'No downloadable sample with the provided ID was found. Verify the ID and try again.');
+
         $sampleId = 9999;
         $this->updateServiceInfo['rest']['resourcePath']
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
@@ -467,12 +467,12 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Sort order must be a positive integer.
      * @dataProvider getInvalidSortOrder
      */
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
+        $this->setExpectedException(\Exception::class, 'Sort order must be a positive integer.');
+
         $sampleId = $this->getTargetSample($this->getTargetProduct())->getId();
         $this->updateServiceInfo['rest']['resourcePath']
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
@@ -506,11 +506,11 @@ class SampleRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
+        $this->setExpectedException(\Exception::class, 'No downloadable sample with the provided ID was found. Verify the ID and try again.');
+
         $sampleId = 9999;
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/samples/{$sampleId}";
         $requestData = [

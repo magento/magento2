@@ -57,10 +57,11 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteCommandNotFound()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $commandName = 'register';
         $this->connector->execute($commandName);
     }

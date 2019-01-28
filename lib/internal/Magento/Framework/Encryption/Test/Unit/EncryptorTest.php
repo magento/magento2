@@ -109,10 +109,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      *
      * @dataProvider encryptWithEmptyKeyDataProvider
-     * @expectedException \SodiumException
      */
     public function testEncryptWithEmptyKey($key)
     {
+        $this->setExpectedException(\SodiumException::class);
+
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -228,10 +229,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testValidateKeyInvalid()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->_model->validateKey('-----    ');
     }
 

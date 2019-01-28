@@ -72,11 +72,11 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that app emulation stops when exception occurs.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Image Builder Exception
      */
     public function testGetImageThrowsAnException()
     {
+        $this->setExpectedException(\Exception::class, 'Image Builder Exception');
+
         $imageId = 1;
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()

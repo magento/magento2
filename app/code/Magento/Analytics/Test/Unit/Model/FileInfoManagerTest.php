@@ -119,10 +119,11 @@ class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
      * @param string|null $path
      * @param string|null $initializationVector
      * @dataProvider saveWithLocalizedExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveWithLocalizedException($path, $initializationVector)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->fileInfoMock
             ->expects($this->once())
             ->method('getPath')

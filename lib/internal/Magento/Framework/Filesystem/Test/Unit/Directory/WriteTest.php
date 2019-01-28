@@ -118,10 +118,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testOpenFileNonWritable()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\FileSystemException::class);
+
         $targetPath = '/path/to/target.file';
         $this->driver->expects($this->once())->method('isExists')->willReturn(true);
         $this->driver->expects($this->once())->method('isWritable')->willReturn(false);

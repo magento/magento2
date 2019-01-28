@@ -17,21 +17,21 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @expectedException        \Magento\Setup\Exception
-     * @expectedExceptionMessage Description file some-wrong-file.csv not found or is not readable
      */
     public function testDictionaryFileNotFoundException()
     {
+        $this->setExpectedException(\Magento\Setup\Exception::class, 'Description file some-wrong-file.csv not found or is not readable');
+
         $dictionary = new \Magento\Setup\Model\Dictionary('some-wrong-file.csv');
         $dictionary->getRandWord();
     }
 
     /**
-     * @expectedException        \Magento\Setup\Exception
-     * @expectedExceptionMessageRegExp /Dictionary file .*empty-dictionary\.csv is empty/
      */
     public function testDictionaryFileIsEmptyException()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Setup\Exception::class, '/Dictionary file .*empty-dictionary\\.csv is empty/');
+
         $filePath = __DIR__ . '/_files/empty-dictionary.csv';
         file_put_contents($filePath, '');
 

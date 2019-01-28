@@ -113,10 +113,11 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->stockStatusResourceMock->expects($this->once())
             ->method('save')
             ->with($this->stockStatusMock)
@@ -166,10 +167,11 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $this->stockStatusResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->stockStatusMock)
@@ -189,10 +191,11 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteByIdException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $id = 1;
 
         $this->stockStatusFactoryMock->expects($this->once())->method('create')->willReturn($this->stockStatusMock);

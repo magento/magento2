@@ -164,11 +164,11 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * Checks a case when configuration contains incorrect locale code.
      *
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
      */
     public function testGenerateStaticForNotAllowedStoreViewLocale()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, ';echo argument has invalid value, run info:language:list for list of available locales');
+
         $storeLocales = ['fr_FR', 'de_DE', ';echo'];
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
@@ -182,11 +182,11 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * Checks as case when admin locale is incorrect.
      *
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
      */
     public function testGenerateStaticForNotAllowedAdminLocale()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, ';echo argument has invalid value, run info:language:list for list of available locales');
+
         $storeLocales = ['fr_FR', 'de_DE', 'en_US'];
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);

@@ -85,11 +85,11 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Error500
      */
     public function testExecuteWithException()
     {
+        $this->setExpectedException(\Exception::class, 'Error500');
+
         $schedule = [
             1 => 20,
         ];

@@ -31,10 +31,11 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider requestPathExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateRequestPathException($requestPath)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_helper->validateRequestPath($requestPath);
     }
 
@@ -48,10 +49,11 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider requestPathExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateSuffixException($suffix)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_helper->validateSuffix($suffix);
     }
 

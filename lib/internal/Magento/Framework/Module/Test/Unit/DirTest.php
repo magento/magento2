@@ -57,11 +57,11 @@ class DirTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Directory type 'unknown' is not recognized
      */
     public function testGetDirModuleSubDirUnknown()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Directory type \'unknown\' is not recognized');
+
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
@@ -71,11 +71,11 @@ class DirTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Module 'Test Module' is not correctly registered.
      */
     public function testGetDirModuleIncorrectlyRegistered()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Module \'Test Module\' is not correctly registered.');
+
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
             ->with($this->identicalTo(ComponentRegistrar::MODULE), $this->identicalTo('Test Module'))

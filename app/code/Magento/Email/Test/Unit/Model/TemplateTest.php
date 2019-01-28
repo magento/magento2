@@ -676,10 +676,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
      */
     public function testProcessTemplateThrowsExceptionNonExistentTemplate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\MailException::class);
+
         $model = $this->getModelMock([
             'loadDefault',
             'applyDesignConfig',

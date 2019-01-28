@@ -38,10 +38,11 @@ class MemoryLimitTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testValidateUsageException()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $object = $this->_createObject('500K', '2M');
         $object->validateUsage();
     }

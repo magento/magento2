@@ -118,11 +118,11 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for "CMS No Route Page" in configuration.
      */
     public function testBeforeSave404Identifier()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This identifier is reserved for "CMS No Route Page" in configuration.');
+
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'no-route');
         $this->model->setIdentifier('no-route2');
@@ -144,11 +144,11 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for "CMS Home Page" in configuration.
      */
     public function testBeforeSaveHomeIdentifier()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This identifier is reserved for "CMS Home Page" in configuration.');
+
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'home');
         $this->model->setIdentifier('home2');
@@ -170,11 +170,11 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for "CMS No Cookies Page" in configuration.
      */
     public function testBeforeSaveNoCookiesIdentifier()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This identifier is reserved for "CMS No Cookies Page" in configuration.');
+
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'no-cookies');
         $this->model->setIdentifier('no-cookies2');

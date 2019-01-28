@@ -125,12 +125,11 @@ class CollectionTest extends BaseCollection
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage setRequestName
      */
     public function testGetFacetedDataWithException()
     {
+        $this->setExpectedException(\Exception::class, 'setRequestName', 333);
+
         $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
         $criteria->expects($this->once())

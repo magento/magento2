@@ -36,13 +36,13 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage stdClass: Instance of Magento\Config\Model\Config\Structure\ElementVisibilityInterface is expected, got stdClass instead
      * @codingStandardsIgnoreEnd
      */
     public function testException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\ConfigurationMismatchException::class, 'stdClass: Instance of Magento\\Config\\Model\\Config\\Structure\\ElementVisibilityInterface is expected, got stdClass instead');
+
         $visibility = [
             'stdClass' => new \stdClass()
         ];

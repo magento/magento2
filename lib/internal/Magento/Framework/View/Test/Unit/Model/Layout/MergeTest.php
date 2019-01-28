@@ -79,11 +79,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Processed schema file is not valid.
      */
     public function testValidateMergedLayoutThrowsException()
     {
+        $this->setExpectedException(\Magento\Framework\Config\Dom\ValidationSchemaException::class, 'Processed schema file is not valid.');
+
         $messages = [
             'Please correct the XSD data and try again.',
         ];

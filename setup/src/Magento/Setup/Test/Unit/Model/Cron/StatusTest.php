@@ -91,11 +91,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ".update_in_progress.flag" cannot be created
      */
     public function testToggleUpdateInProgressTrueException()
     {
+        $this->setExpectedException(\RuntimeException::class, '".update_in_progress.flag" cannot be created');
+
         $this->varReaderWriter->expects($this->once())
             ->method('touch')
             ->willThrowException(new FileSystemException(new \Magento\Framework\Phrase('Exception')));
@@ -123,11 +123,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ".update_error.flag" cannot be created
      */
     public function testToggleUpdateErrorTrueException()
     {
+        $this->setExpectedException(\RuntimeException::class, '".update_error.flag" cannot be created');
+
         $this->varReaderWriter->expects($this->once())
             ->method('touch')
             ->willThrowException(new FileSystemException(new \Magento\Framework\Phrase('Exception')));

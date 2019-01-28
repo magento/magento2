@@ -56,11 +56,11 @@ class ChainTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The requested asset type was 'assetType', but ended up with 'type'
      */
     public function testAssertValid()
     {
+        $this->setExpectedException(\LogicException::class, 'The requested asset type was \'assetType\', but ended up with \'type\'');
+
         $this->object->setContentType('type');
         $this->object->assertValid();
     }

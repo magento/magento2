@@ -116,11 +116,11 @@ class DesignConfigRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage The config can't be saved because it's empty. Complete the config and try again.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveWithoutConfig()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The config can\'t be saved because it\'s empty. Complete the config and try again.');
+
         $this->designConfig->expects($this->exactly(2))
             ->method('getExtensionAttributes')
             ->willReturn($this->designExtension);

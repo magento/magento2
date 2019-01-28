@@ -88,11 +88,11 @@ class GeneratorFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks correct exception message for unknown type of message generator.
      *
      * @covers \Magento\Signifyd\Model\MessageGenerators\GeneratorFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Specified message type does not supported.
      */
     public function testCreateWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Specified message type does not supported.');
+
         $type = 'cases/unknown';
         $this->factory->create($type);
     }

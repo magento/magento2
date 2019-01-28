@@ -105,12 +105,12 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxRuleId = 9999
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIdIfTargetTaxRuleDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with taxRuleId = 9999');
+
         $taxRuleDataObject = $this->taxRuleFactory->create();
         $taxRuleDataObject->setId(9999)
             ->setCode('code')
@@ -124,11 +124,11 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage No such entity
      */
     public function testSaveThrowsExceptionIfProvidedTaxClassIdsAreInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'No such entity');
+
         $taxRuleData = [
             'code' => 'code',
             // These TaxClassIds exist, but '2' is should be a productTaxClassId and
@@ -152,11 +152,11 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The position value of "-1" must be greater than or equal to 0.
      */
     public function testSaveThrowsExceptionIfProvidedPositionIsInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The position value of "-1" must be greater than or equal to 0.');
+
         $taxRuleData = [
             'code' => 'code',
             'customer_tax_class_ids' => [3],
@@ -221,11 +221,11 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxRuleId
      */
     public function testDeleteById()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with taxRuleId');
+
         /** @var $registry \Magento\Framework\Registry */
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
@@ -242,11 +242,11 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxRuleId
      */
     public function testDeleteByIdThrowsExceptionIfTargetTaxRuleDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with taxRuleId');
+
         /** @var $registry \Magento\Framework\Registry */
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
@@ -277,11 +277,11 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage "code" is required. Enter and try again.
      */
     public function testSaveThrowsExceptionIsRequiredFieldsAreMissing()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, '"code" is required. Enter and try again.');
+
         $taxRule = $this->taxRuleRepository->save($this->createTaxRuleDataObject());
         $taxRule->setCode(null);
 

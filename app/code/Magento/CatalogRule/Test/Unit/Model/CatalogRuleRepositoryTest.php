@@ -64,11 +64,11 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The "1" rule was unable to be saved. Please try again.
      */
     public function testEnableSaveRule()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The "1" rule was unable to be saved. Please try again.');
+
         $this->ruleMock->expects($this->at(0))->method('getRuleId')->willReturn(null);
         $this->ruleMock->expects($this->at(1))->method('getRuleId')->willReturn(1);
         $this->ruleMock->expects($this->never())->method('getId');
@@ -105,11 +105,11 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The "1" rule couldn't be removed.
      */
     public function testUnableDeleteRule()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'The "1" rule couldn\'t be removed.');
+
         $this->ruleMock->expects($this->once())->method('getRuleId')->willReturn(1);
         $this->ruleResourceMock
             ->expects($this->once())
@@ -131,11 +131,11 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The rule with the "1" ID wasn't found. Verify the ID and try again.
      */
     public function testGetNonExistentRule()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The rule with the "1" ID wasn\'t found. Verify the ID and try again.');
+
         $ruleId = 1;
         $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);

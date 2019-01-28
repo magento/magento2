@@ -91,11 +91,11 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The qty value is required to update quote item.
      */
     public function testUpdateNoQty()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The qty value is required to update quote item.');
+
         $this->object->update($this->itemMock, []);
     }
 

@@ -87,11 +87,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\ConfigurableProduct\Helper\Product\Options\Factory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Provided attribute can not be used with configurable product.
      */
     public function testCreateWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Provided attribute can not be used with configurable product.');
+
         $attributeId = 90;
         $data = [
             ['attribute_id' => $attributeId, 'values' => [

@@ -62,10 +62,11 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method create
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(

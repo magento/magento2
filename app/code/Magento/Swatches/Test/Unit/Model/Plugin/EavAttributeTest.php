@@ -190,11 +190,11 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Admin is a required field in each row
      */
     public function testBeforeSaveWithFailedValidation()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Admin is a required field in each row');
+
         $optionText = [
             'value' => [
                 0 => '',

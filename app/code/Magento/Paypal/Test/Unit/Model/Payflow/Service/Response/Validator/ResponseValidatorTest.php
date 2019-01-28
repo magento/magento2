@@ -85,11 +85,11 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Transaction has been declined
      */
     public function testValidateFail()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Transaction has been declined');
+
         $response = new DataObject(
             [
                 'result' => Payflowpro::RESPONSE_CODE_APPROVED,
@@ -106,11 +106,11 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Transaction has been declined
      */
     public function testValidateUnknownCode()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Transaction has been declined');
+
         $response = new DataObject(
             [
                 'result' => 7777777777,

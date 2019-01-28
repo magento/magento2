@@ -44,11 +44,11 @@ class FrontendStorageConfigurationPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid pool type with namespace: product
      */
     public function testGetWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid pool type with namespace: product');
+
         $this->assertEquals($this->defaultStorageConfiguration, $this->model->get('product'));
     }
 }

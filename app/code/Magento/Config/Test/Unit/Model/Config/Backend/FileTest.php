@@ -254,11 +254,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Exception!
      */
     public function testBeforeSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Exception!');
+
         $value = 'value';
         $groupId = 1;
         $field = 'field';

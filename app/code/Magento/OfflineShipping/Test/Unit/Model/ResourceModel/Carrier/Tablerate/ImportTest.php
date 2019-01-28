@@ -205,12 +205,12 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The Table Rates File Format is incorrect. Verify the format and try again.
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDataFromEmptyFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The Table Rates File Format is incorrect. Verify the format and try again.');
+
         $lines = [];
         $file = $this->createFileMock($lines);
         foreach ($this->import->getData($file, 1, 'short_name', 'full_name', 2) as $bunch) {

@@ -76,11 +76,11 @@ class AbstractCartTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer list for block "" is not defined
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Renderer list for block "" is not defined');
+
         $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
         $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
 

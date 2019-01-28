@@ -168,11 +168,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown module(s): 'Module_Baz'
      */
     public function testSetIsEnabledUnknown()
     {
+        $this->setExpectedException(\LogicException::class, 'Unknown module(s): \'Module_Baz\'');
+
         $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
         $this->object->setIsEnabled(true, ['Module_Baz']);

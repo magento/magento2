@@ -94,11 +94,11 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit\Framework\TestCa
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid URL key
      */
     public function testExecuteWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Invalid URL key');
+
         $categoryName = 'test';
         $categoryData = ['url_key' => 0];
         $this->category->expects($this->once())->method('getUrlKey')->willReturn($categoryName);

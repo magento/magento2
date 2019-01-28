@@ -761,11 +761,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\ConfigurableProduct\Model\Product\Type\Configurable::checkProductBuyState()
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage You need to choose options for your item.
      */
     public function testCheckProductBuyStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'You need to choose options for your item.');
+
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSkipCheckRequiredOption', 'getCustomOption'])
             ->disableOriginalConstructor()

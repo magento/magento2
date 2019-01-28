@@ -124,11 +124,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The payment method you requested is not available.
      */
     public function testGetMethodInstanceWithNoMethod()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The payment method you requested is not available.');
+
         $this->info->setData('method', false);
         $this->info->getMethodInstance();
     }
@@ -175,10 +175,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetAdditionalInformationException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->info->setAdditionalInformation('object', new \stdClass());
     }
 

@@ -287,11 +287,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown query type 'unknownQuery'
      */
     public function testGetUnknownQueryType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Unknown query type \'unknownQuery\'');
+
         $select = $this->createSelectMock(null, false, false);
         $this->mockBuilders($select);
         $query = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
@@ -542,11 +542,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unsupported relevance calculation method used.
      */
     public function testUnsupportedRelevanceCalculationMethod()
     {
+        $this->setExpectedException(\LogicException::class, 'Unsupported relevance calculation method used.');
+
         $helper = new ObjectManager($this);
         $helper->getObject(
             \Magento\Framework\Search\Adapter\Mysql\Mapper::class,

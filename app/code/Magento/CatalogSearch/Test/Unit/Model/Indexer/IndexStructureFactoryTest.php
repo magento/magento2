@@ -60,11 +60,11 @@ class IndexStructureFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no such index structure: current_structure
      */
     public function testCreateWithoutStructures()
     {
+        $this->setExpectedException(\LogicException::class, 'There is no such index structure: current_structure');
+
         $currentStructure = 'current_structure';
         $structures = [];
         $data = ['data'];
@@ -83,11 +83,11 @@ class IndexStructureFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage current_structure index structure doesn't implement
      */
     public function testCreateWithWrongStructure()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'current_structure index structure doesn\'t implement');
+
         $currentStructure = 'current_structure';
         $currentStructureClass = \stdClass::class;
         $structures = [

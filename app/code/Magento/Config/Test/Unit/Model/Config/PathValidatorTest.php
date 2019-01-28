@@ -55,11 +55,11 @@ class PathValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage The "test/test/test" path doesn't exist. Verify and try again.
      */
     public function testValidateWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, 'The "test/test/test" path doesn\'t exist. Verify and try again.');
+
         $this->structureMock->expects($this->once())
             ->method('getFieldPaths')
             ->willReturn([]);

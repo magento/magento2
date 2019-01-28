@@ -173,11 +173,11 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test update method throws exception.
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save Prices.
      */
     public function testUpdateWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'Could not save Prices.');
+
         $attributeId = 5;
         $prices = [
             [
@@ -266,11 +266,11 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test delete method throws exception.
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete Prices
      */
     public function testDeleteWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'Could not delete Prices');
+
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [

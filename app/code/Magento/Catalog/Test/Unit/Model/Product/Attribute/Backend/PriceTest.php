@@ -86,11 +86,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests for the cases that expect to fail validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider dataProviderValidateForFailure
      */
     public function testValidateForFailure($value)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $object->expects($this->once())->method('getData')->willReturn($value);
 

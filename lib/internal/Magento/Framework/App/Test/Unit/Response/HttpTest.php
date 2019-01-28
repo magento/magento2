@@ -292,11 +292,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ObjectManager isn't initialized
      */
     public function testWakeUpWithException()
     {
+        $this->setExpectedException(\RuntimeException::class, 'ObjectManager isn\'t initialized');
+
         /* ensure that the test preconditions are met */
         $objectManagerClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');

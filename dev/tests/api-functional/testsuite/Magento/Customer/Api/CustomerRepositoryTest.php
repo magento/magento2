@@ -146,11 +146,11 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Validate update by invalid customer.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The consumer isn't authorized to access %resources.
      */
     public function testInvalidCustomerUpdate()
     {
+        $this->setExpectedException(\Exception::class, 'The consumer isn\'t authorized to access %resources.');
+
         $this->_markTestAsRestOnly();
 
         //Create first customer and retrieve customer token.

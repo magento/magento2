@@ -377,10 +377,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
      */
     public function testApplyInlineCssThrowsExceptionWhenDesignParamsNotSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\MailException::class);
+
         $filter = $this->getModel();
         $cssProcessor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()

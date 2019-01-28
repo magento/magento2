@@ -431,11 +431,11 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
      */
     public function testGetRowFieldExportWithInvalidCallback()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
+
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
@@ -455,11 +455,11 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
      */
     public function testGetRowFieldWithInvalidCallback()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
+
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)

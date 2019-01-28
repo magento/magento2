@@ -64,11 +64,11 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Provided Attribute set non product Attribute set.
      */
     public function testSaveNonProductAttributeSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'Provided Attribute set non product Attribute set.');
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
         $this->attrSetRepositoryMock->expects($this->never())->method('save');
@@ -89,11 +89,11 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Provided Attribute set non product Attribute set.
      */
     public function testGetNonProductAttributeSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'Provided Attribute set non product Attribute set.');
+
         $attributeSetId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
@@ -117,11 +117,11 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Provided Attribute set non product Attribute set.
      */
     public function testDeleteNonProductAttributeSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'Provided Attribute set non product Attribute set.');
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
         $this->attrSetRepositoryMock->expects($this->never())

@@ -66,11 +66,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'This is implemented for bundle products only.');
+
         $this->optionMock->expects($this->once())->method('getSku')->willReturn('bundle_product_sku');
         $this->productRepositoryMock->expects($this->once())
             ->method('get')

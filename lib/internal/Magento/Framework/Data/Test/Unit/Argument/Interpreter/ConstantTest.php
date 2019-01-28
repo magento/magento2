@@ -26,12 +26,12 @@ class ConstantTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Constant name is expected.
      * @dataProvider evaluateBadValueDataProvider
      */
     public function testEvaluateBadValue($value)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Constant name is expected.');
+
         $this->object->evaluate($value);
     }
 

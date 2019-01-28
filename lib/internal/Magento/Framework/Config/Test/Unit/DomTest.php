@@ -94,11 +94,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage More than one node matching the query: /root/node/subnode
      */
     public function testMergeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'More than one node matching the query: /root/node/subnode');
+
         $xml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_two.xml");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_new_one.xml");
         $config = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
@@ -149,11 +149,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Error format '%message%,%unknown%' contains unsupported placeholders
      */
     public function testValidateCustomErrorFormatInvalid()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Error format \'%message%,%unknown%\' contains unsupported placeholders');
+
         $xml = '<root><unknown_node/></root>';
         $errorFormat = '%message%,%unknown%';
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
@@ -180,10 +180,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
      */
     public function testValidateDomDocumentThrowsException()
     {
+        $this->setExpectedException(\Magento\Framework\Config\Dom\ValidationSchemaException::class);
+
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }

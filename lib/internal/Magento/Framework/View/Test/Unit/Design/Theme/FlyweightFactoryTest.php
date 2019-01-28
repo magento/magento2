@@ -89,11 +89,11 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to load theme by specified key: '0'
      */
     public function testCreateDummy()
     {
+        $this->setExpectedException(\LogicException::class, 'Unable to load theme by specified key: \'0\'');
+
         $themeId = 0;
         $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
 
@@ -111,11 +111,11 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Incorrect theme identification key
      */
     public function testNegativeCreate()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Incorrect theme identification key');
+
         $this->factory->create(null);
     }
 }

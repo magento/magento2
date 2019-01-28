@@ -205,10 +205,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetWebsitesThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -219,10 +220,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessPriceThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -239,10 +241,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessPriceCustomerRepositoryThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -271,10 +274,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessPriceEmailThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $id = 1;
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
@@ -313,10 +317,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessStockThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -334,10 +339,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessStockCustomerRepositoryThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -368,10 +374,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessStockEmailThrowsException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);

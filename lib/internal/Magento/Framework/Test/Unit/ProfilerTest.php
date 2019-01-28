@@ -68,11 +68,11 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer name must not contain a nesting separator.
      */
     public function testStartException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer name must not contain a nesting separator.');
+
         \Magento\Framework\Profiler::enable();
         \Magento\Framework\Profiler::start('timer ' . \Magento\Framework\Profiler::NESTING_SEPARATOR . ' name');
     }
@@ -117,11 +117,11 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "unknown" has not been started.
      */
     public function testStopExceptionUnknown()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer "unknown" has not been started.');
+
         \Magento\Framework\Profiler::enable();
         \Magento\Framework\Profiler::start('timer');
         \Magento\Framework\Profiler::stop('unknown');
@@ -206,11 +206,11 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer name must not contain a nesting separator.
      */
     public function testClearException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer name must not contain a nesting separator.');
+
         \Magento\Framework\Profiler::enable();
         \Magento\Framework\Profiler::clear('timer ' . \Magento\Framework\Profiler::NESTING_SEPARATOR . ' name');
     }

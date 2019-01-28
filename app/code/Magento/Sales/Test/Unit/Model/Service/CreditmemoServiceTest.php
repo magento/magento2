@@ -103,11 +103,11 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Run test cancel method
-     * @expectedExceptionMessage You can not cancel Credit Memo
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCancel()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'You can not cancel Credit Memo');
+
         $this->assertTrue($this->creditmemoService->cancel(1));
     }
 
@@ -321,11 +321,11 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage The most money available to refund is 1.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testRefundExpectsMoneyAvailableToReturn()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The most money available to refund is 1.');
+
         $baseGrandTotal = 10;
         $baseTotalRefunded = 9;
         $baseTotalPaid = 10;
@@ -358,11 +358,11 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage We cannot register an existing credit memo.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testRefundDoNotExpectsId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We cannot register an existing credit memo.');
+
         $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();

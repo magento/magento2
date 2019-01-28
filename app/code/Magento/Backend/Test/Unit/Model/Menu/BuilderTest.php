@@ -124,10 +124,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfRangeException
      */
     public function testGetResultSkipItemsWithInvalidParent()
     {
+        $this->setExpectedException(\OutOfRangeException::class);
+
         $item1 = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
 

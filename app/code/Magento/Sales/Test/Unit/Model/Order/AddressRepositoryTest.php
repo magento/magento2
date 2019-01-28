@@ -176,11 +176,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The order address couldn't be deleted.
      */
     public function testDeleteWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'The order address couldn\'t be deleted.');
+
         $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
         $address->expects($this->never())
             ->method('getEntityId');
@@ -233,11 +233,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The order address couldn't be saved.
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The order address couldn\'t be saved.');
+
         $address = $this->createPartialMock(\Magento\Sales\Model\Order\Address::class, ['getEntityId']);
         $address->expects($this->never())
             ->method('getEntityId');

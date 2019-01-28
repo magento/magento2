@@ -59,11 +59,11 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid type given for Key. String expected
      */
     public function testIsValidInvalidType()
     {
+        $this->setExpectedException(\Exception::class, 'Invalid type given for Key. String expected');
+
         $invalidTokenType = 1;
         $this->keyLengthValidator->isValid($invalidTokenType);
     }

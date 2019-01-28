@@ -175,13 +175,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Sorry, but we can't find the new parent category you selected.
      * @codingStandardsIgnoreEnd
      */
     public function testMoveWhenCannotFindParentCategory()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Sorry, but we can\'t find the new parent category you selected.');
+
         $this->markTestIncomplete('MAGETWO-31165');
         $parentCategory = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
@@ -198,13 +198,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Sorry, but we can't find the new category you selected.
      * @codingStandardsIgnoreEnd
      */
     public function testMoveWhenCannotFindNewCategory()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Sorry, but we can\'t find the new category you selected.');
+
         $parentCategory = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
             ['getId', 'setStoreId', 'load']
@@ -221,13 +221,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage We can't move the category because the parent category name matches the child category name.
      * @codingStandardsIgnoreEnd
      */
     public function testMoveWhenParentCategoryIsSameAsChildCategory()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We can\'t move the category because the parent category name matches the child category name.');
+
         $this->markTestIncomplete('MAGETWO-31165');
         $parentCategory = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,

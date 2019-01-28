@@ -253,10 +253,11 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateResponseFailure()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->prepareTestValidateResponse('some_md5', 'login', false);
         $this->directpost->validateResponse();
     }
@@ -292,10 +293,11 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCheckTransIdFailure()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->responseMock->expects($this->once())
             ->method('getXTransId')
             ->willReturn(null);
@@ -335,11 +337,12 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
      * @param int $failuresHandlerCalls
      * @return void
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider checkResponseCodeFailureDataProvider
      */
     public function testCheckResponseCodeFailure(int $responseCode, int $failuresHandlerCalls): void
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $reasonText = 'reason text';
 
         $this->responseMock->expects($this->once())

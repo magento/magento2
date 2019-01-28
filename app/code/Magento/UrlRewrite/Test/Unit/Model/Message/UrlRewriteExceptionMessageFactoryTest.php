@@ -84,10 +84,11 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
      */
     public function testCreateMessageNotFound()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class);
+
         $exception = new \Exception('message');
         $this->urlRewriteExceptionMessageFactory->createMessage($exception);
     }

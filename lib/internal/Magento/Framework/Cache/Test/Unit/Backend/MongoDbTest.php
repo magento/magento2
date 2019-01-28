@@ -412,11 +412,11 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Cache_Exception
-     * @expectedExceptionMessage Unsupported cleaning mode: invalid_mode
      */
     public function testCleanInvalidMode()
     {
+        $this->setExpectedException(\Zend_Cache_Exception::class, 'Unsupported cleaning mode: invalid_mode');
+
         $this->_model->clean('invalid_mode');
     }
 }

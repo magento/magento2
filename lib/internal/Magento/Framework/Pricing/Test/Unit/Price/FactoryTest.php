@@ -54,12 +54,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @codingStandardsIgnoreStart
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Magento\Framework\Pricing\PriceInfo\Base doesn't implement \Magento\Framework\Pricing\Price\PriceInterface
      * @codingStandardsIgnoreEnd
      */
     public function testCreateWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Magento\\Framework\\Pricing\\PriceInfo\\Base doesn\'t implement \\Magento\\Framework\\Pricing\\Price\\PriceInterface');
+
         $quantity = 2.2;
         $className = \Magento\Framework\Pricing\PriceInfo\Base::class;
         $priceMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();

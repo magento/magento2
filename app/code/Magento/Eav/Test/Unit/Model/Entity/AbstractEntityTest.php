@@ -355,10 +355,11 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnSave()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 

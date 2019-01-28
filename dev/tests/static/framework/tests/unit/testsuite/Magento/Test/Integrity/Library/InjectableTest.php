@@ -148,10 +148,11 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
      * Covered with some different exception method
      *
      * @test
-     * @expectedException \ReflectionException
      */
     public function testGetDependenciesWithOtherException()
     {
+        $this->setExpectedException(\ReflectionException::class);
+
         $this->parameterReflection->expects($this->once())->method('getClass')->will(
             $this->returnCallback(
                 function () {

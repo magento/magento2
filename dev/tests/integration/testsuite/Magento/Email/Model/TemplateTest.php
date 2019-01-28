@@ -617,10 +617,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $config
      * @dataProvider setDesignConfigExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetDesignConfigException($config)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->mockModel();
         $model = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $model->setDesignConfig($config);
@@ -654,11 +655,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Email template 'foo' is not defined.
      */
     public function testGetTypeNonExistentType()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Email template \'foo\' is not defined.');
+
         $this->mockModel();
         $this->model->setId('foo');
         $this->model->getType();
@@ -708,11 +709,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage Please enter a template name.
      */
     public function testBeforeSaveEmptyTemplateCode()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\MailException::class, 'Please enter a template name.');
+
         $this->mockModel();
         $this->model->beforeSave();
     }

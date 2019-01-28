@@ -61,11 +61,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createPriceRender() if not found render class name
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Class name for price code "price_test" not registered
      */
     public function testCreatePriceRenderNoClassName()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Class name for price code "price_test" not registered');
+
         $methodData = [];
         $priceCode = 'price_test';
         $data = [];
@@ -82,11 +82,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createPriceRender() if not found price model
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Price model for price code "price_test" not registered
      */
     public function testCreatePriceRenderNoPriceModel()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Price model for price code "price_test" not registered');
+
         $methodData = [];
         $priceCode = 'price_test';
         $type = 'simple';
@@ -124,12 +124,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createPriceRender() if not found price model
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Block "Magento\Framework\View\Element\Template\Context" must implement
-     * \Magento\Framework\Pricing\Render\PriceBoxRenderInterface
      */
     public function testCreatePriceRenderBlockNotPriceBox()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Block "Magento\\Framework\\View\\Element\\Template\\Context" must implement \\Magento\\Framework\\Pricing\\Render\\PriceBoxRenderInterface');
+
         $methodData = [];
         $priceCode = 'price_test';
         $type = 'simple';
@@ -242,11 +241,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createAmountRender() if amount render class not found
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage There is no amount render class for price code "base_price_test"
      */
     public function testCreateAmountRenderNoAmountClass()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'There is no amount render class for price code "base_price_test"');
+
         $data = [];
         $type = 'simple';
         $methodData = [];
@@ -270,12 +269,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createAmountRender() if amount render block not implement Amount interface
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Block "Magento\Framework\View\Element\Template\Context"
-     * must implement \Magento\Framework\Pricing\Render\AmountRenderInterface
      */
     public function testCreateAmountRenderNotAmountInterface()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Block "Magento\\Framework\\View\\Element\\Template\\Context" must implement \\Magento\\Framework\\Pricing\\Render\\AmountRenderInterface');
+
         $type = 'simple';
         $methodData = [];
         $priceCode = 'base_price_test';
@@ -492,11 +490,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getAmountRenderBlockTemplate() through createAmountRender() in case when template not exists
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage For type "simple" amount render block not configured
      */
     public function testGetAmountRenderBlockTemplateNoTemplate()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'For type "simple" amount render block not configured');
+
         $type = 'simple';
         $methodData = [];
         $priceCode = 'base_price_test';
@@ -550,11 +548,11 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getRenderBlockTemplate() through createPriceRender() in case when template not exists
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Price code "price_test" render block not configured
      */
     public function testGetRenderBlockTemplate()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Price code "price_test" render block not configured');
+
         $methodData = [];
         $priceCode = 'price_test';
         $type = 'simple';

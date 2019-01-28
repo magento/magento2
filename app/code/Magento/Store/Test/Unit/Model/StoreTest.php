@@ -404,10 +404,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetBaseUrlWrongType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class

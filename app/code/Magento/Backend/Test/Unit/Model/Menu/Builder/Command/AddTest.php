@@ -39,10 +39,11 @@ class AddTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testChainWithAnotherAddCommandTrowsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->chain(new \Magento\Backend\Model\Menu\Builder\Command\Add($this->_params));
     }
 }

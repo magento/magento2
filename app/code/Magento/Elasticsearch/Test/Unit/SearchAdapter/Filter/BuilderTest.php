@@ -67,10 +67,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test build() method failure
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildFailure()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

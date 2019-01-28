@@ -43,11 +43,11 @@ class PatchFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass should implement Magento\Framework\Setup\Patch\PatchInterface interface
      */
     public function testCreateNonPatchInterface()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'stdClass should implement Magento\\Framework\\Setup\\Patch\\PatchInterface interface');
+
         $patchNonPatchInterface = $this->createMock(\stdClass::class);
         $this->objectManagerMock->expects($this->any())
             ->method('create')

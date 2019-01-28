@@ -382,11 +382,11 @@ class PreparedValueFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some exception
      */
     public function testCreateWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'Some exception');
+
         $this->structureFactoryMock->expects($this->once())
             ->method('create')
             ->willThrowException(new \Exception('Some exception'));

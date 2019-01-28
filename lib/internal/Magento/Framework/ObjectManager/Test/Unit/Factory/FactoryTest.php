@@ -41,11 +41,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Invalid parameter configuration provided for $firstParam argument
      */
     public function testResolveArgumentsException()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Invalid parameter configuration provided for $firstParam argument');
+
         $configMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Config::class);
         $configMock->expects($this->once())->method('getArguments')
             ->will($this->returnValue([

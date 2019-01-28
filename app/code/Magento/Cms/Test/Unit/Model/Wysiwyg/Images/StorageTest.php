@@ -250,22 +250,22 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Directory /storage/some/another/dir is not under storage root path.
      */
     public function testDeleteDirectoryOverRoot()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Directory /storage/some/another/dir is not under storage root path.');
+
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
     /**
      * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't delete root directory /storage/root/dir right now.
      */
     public function testDeleteRootDirectory()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'We can\'t delete root directory /storage/root/dir right now.');
+
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }

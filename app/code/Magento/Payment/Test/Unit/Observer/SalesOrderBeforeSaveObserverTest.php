@@ -159,11 +159,11 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * The method should check that the payment is available, as this is not always the case.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please provide payment for the order.
      */
     public function testDoesNothingWhenNoPaymentIsAvailable()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please provide payment for the order.');
+
         $this->_prepareEventMockWithMethods(['getOrder']);
 
         $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)->disableOriginalConstructor()->setMethods(

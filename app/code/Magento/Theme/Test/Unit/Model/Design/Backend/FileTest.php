@@ -220,11 +220,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage header_logo_src does not contain field 'file'
      */
     public function testBeforeSaveWithoutFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'header_logo_src does not contain field \'file\'');
+
         $this->fileBackend->setData(
             [
                 'value' => [

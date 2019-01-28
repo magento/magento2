@@ -814,10 +814,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAddProductException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->quote->addProduct($this->productMock, 'test');
     }
 

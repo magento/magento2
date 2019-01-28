@@ -79,11 +79,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xmlData
      * @dataProvider wrongXmlDataProvider
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid application config. Unknown node: wrong_node.
      */
     public function testMapThrowsExceptionWhenXmlHasWrongFormat($xmlData)
     {
+        $this->setExpectedException(\Exception::class, 'Invalid application config. Unknown node: wrong_node.');
+
         $dom = new \DOMDocument();
         $dom->loadXML($xmlData);
         $this->_mapper->convert($dom);

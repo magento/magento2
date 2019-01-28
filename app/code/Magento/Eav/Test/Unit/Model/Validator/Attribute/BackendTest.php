@@ -24,22 +24,22 @@ class BackendTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Model must be extended from \Magento\Framework\Model\AbstractModel
      */
     public function testisValidIfProvidedModelIsIncorrect()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Model must be extended from \\Magento\\Framework\\Model\\AbstractModel');
+
         $this->model->isValid(
             $this->createMock(\Magento\Framework\DataObject::class)
         );
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Model resource must be extended from \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function testisValidIfProvidedResourceModelIsIncorrect()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Model resource must be extended from \\Magento\\Eav\\Model\\Entity\\AbstractEntity');
+
         $resourceMock = $this->createMock(\Magento\Framework\DataObject::class);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
         $this->model->isValid($this->entityMock);

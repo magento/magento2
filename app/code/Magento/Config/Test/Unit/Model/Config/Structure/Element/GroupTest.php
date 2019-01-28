@@ -60,10 +60,11 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetCloneModelThrowsExceptionIfNoSourceModelIsSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_model->getCloneModel();
     }
 

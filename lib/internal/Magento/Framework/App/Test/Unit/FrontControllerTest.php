@@ -48,11 +48,11 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage  Front controller reached 100 router match iterations
      */
     public function testDispatchThrowException()
     {
+        $this->setExpectedException(\LogicException::class, 'Front controller reached 100 router match iterations');
+
         $validCounter = 0;
         $callbackValid = function () use (&$validCounter) {
             return $validCounter++%10 ? false : true;

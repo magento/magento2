@@ -111,11 +111,11 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong while deleting roles and permissions.
      */
     public function testRemovePermissionsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Something went wrong while deleting roles and permissions.');
+
         $roleName = UserContextInterface::USER_TYPE_INTEGRATION . self::INTEGRATION_ID;
         $this->roleMock->expects($this->once())
             ->method('load')
@@ -177,10 +177,11 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGrantPermissionsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->resources = [
             'Magento_Sales::sales',
             'Magento_Sales::sales_operations',

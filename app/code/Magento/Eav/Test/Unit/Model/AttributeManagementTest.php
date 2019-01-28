@@ -101,11 +101,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The AttributeSet with a "2" ID doesn't exist. Verify the attributeSet and try again.
      */
     public function testAssignNoSuchEntityException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The AttributeSet with a "2" ID doesn\'t exist. Verify the attributeSet and try again.');
+
         $entityTypeCode = 1;
         $attributeSetId = 2;
         $attributeGroupId = 3;
@@ -128,11 +128,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute set ID is incorrect. Verify the ID and try again.
      */
     public function testAssignInputException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The attribute set ID is incorrect. Verify the ID and try again.');
+
         $entityTypeCode = 1;
         $attributeSetId = 2;
         $attributeGroupId = 3;
@@ -160,11 +160,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute group doesn't belong to the attribute set.
      */
     public function testAssignInputExceptionGroupInSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The attribute group doesn\'t belong to the attribute set.');
+
         $entityTypeCode = 1;
         $attributeSetId = 2;
         $attributeGroupId = 3;
@@ -295,10 +295,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testUnassignInputException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $attributeSetId = 1;
         $attributeCode = 'code';
 
@@ -342,11 +343,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "1234567" attribute set wasn't found. Verify and try again.
      */
     public function testUnassignWithWrongAttributeSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The "1234567" attribute set wasn\'t found. Verify and try again.');
+
         $attributeSetId = 1234567;
         $attributeCode = 'code';
 
@@ -359,11 +360,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The system attribute can't be deleted.
      */
     public function testUnassignStateException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The system attribute can\'t be deleted.');
+
         $attributeSetId = 1;
         $attributeCode = 'code';
 
@@ -447,11 +448,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attributeSetId = 148
      */
     public function testGetAttributesNoSuchEntityException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with attributeSetId = 148');
+
         $entityType = 'type';
         $attributeSetId = 148;
 

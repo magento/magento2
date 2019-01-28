@@ -39,11 +39,11 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments
      */
     public function testExecuteInvalidLanguageArgument()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Not enough arguments');
+
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);

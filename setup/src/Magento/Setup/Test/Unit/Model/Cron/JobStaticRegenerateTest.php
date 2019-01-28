@@ -110,11 +110,12 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      * @covers \Magento\Setup\Model\Cron\JobStaticRegenerate::execute
      */
     public function testExecuteWithException()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')

@@ -93,10 +93,11 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testSyncDataException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $describeTable = ['column' => 'column'];
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));

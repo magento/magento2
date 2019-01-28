@@ -37,11 +37,11 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid Data Source class name: NotExistingBlockClass
      */
     public function testAddWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid Data Source class name: NotExistingBlockClass');
+
         $this->dataSourcePool->add('DataSourcePoolTestBlock', 'NotExistingBlockClass');
     }
 

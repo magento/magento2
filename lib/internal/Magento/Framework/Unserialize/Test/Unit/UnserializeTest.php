@@ -46,12 +46,12 @@ class UnserializeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $serialized The string containing serialized object
-     * @expectedException \Exception
-     * @expectedExceptionMessage String contains serialized object
      * @dataProvider unserializeObjectDataProvider
      */
     public function testUnserializeObject($serialized)
     {
+        $this->setExpectedException(\Exception::class, 'String contains serialized object');
+
         $this->assertFalse($this->unserialize->unserialize($serialized));
     }
 

@@ -22,10 +22,11 @@ class CustomlayoutupdateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @expectedException \Magento\Eav\Model\Entity\Attribute\Exception
      */
     public function testValidateException()
     {
+        $this->setExpectedException(\Magento\Eav\Model\Entity\Attribute\Exception::class);
+
         $object = new DataObject();
         $object->setData($this->attributeName, 'exception');
         $this->model->validate($object);

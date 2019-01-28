@@ -71,10 +71,11 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test MaintenanceModeDisable job execution when maintenance mode is set manually by admin
      *
-     * @expectedException \RuntimeException
      */
     public function testExecuteMaintenanceModeDisableExeption()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('isSetAddressInfo')->willReturn(true);
         $command->expects($this->never())->method('run');

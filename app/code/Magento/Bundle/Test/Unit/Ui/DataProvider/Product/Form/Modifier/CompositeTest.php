@@ -144,12 +144,11 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Type "SomeClass" is not an instance of
-     * Magento\Ui\DataProvider\Modifier\ModifierInterface
      */
     public function testModifyMetaWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Type "SomeClass" is not an instance of Magento\\Ui\\DataProvider\\Modifier\\ModifierInterface');
+
         /** @var \Exception|MockObject $modifierMock */
         $modifierMock = $this->createPartialMock(\Exception::class, ['modifyMeta']);
         $modifierMock->expects($this->never())

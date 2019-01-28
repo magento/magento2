@@ -138,22 +138,22 @@ class StatTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get method with invalid timer id
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "unknown_timer" doesn't exist.
      */
     public function testGetWithInvalidTimer()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer "unknown_timer" doesn\'t exist.');
+
         $this->_stat->get('unknown_timer');
     }
 
     /**
      * Test stop method with invalid timer id
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "unknown_timer" doesn't exist.
      */
     public function testStopWithInvalidTimer()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer "unknown_timer" doesn\'t exist.');
+
         $this->_stat->stop('unknown_timer', 1, 2, 3);
     }
 
@@ -394,20 +394,20 @@ class StatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "foo" doesn't exist.
      */
     public function testFetchInvalidTimer()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer "foo" doesn\'t exist.');
+
         $this->_stat->fetch('foo', 'bar');
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "foo" doesn't have value for "bar".
      */
     public function testFetchInvalidKey()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Timer "foo" doesn\'t have value for "bar".');
+
         $this->_stat->start('foo', 0, 0, 0);
         $this->_stat->fetch('foo', 'bar');
     }

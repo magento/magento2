@@ -26,10 +26,11 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
-     * @expectedException \Exception
      */
     public function testCustomAttributeWrongType()
     {
+        $this->setExpectedException(\Exception::class);
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'simple',

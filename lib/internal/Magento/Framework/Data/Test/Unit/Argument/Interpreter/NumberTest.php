@@ -20,13 +20,13 @@ class NumberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Numeric value is expected
      *
      * @dataProvider evaluateExceptionDataProvider
      */
     public function testEvaluateException($input)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Numeric value is expected');
+
         $this->_model->evaluate($input);
     }
 

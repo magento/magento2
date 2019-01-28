@@ -69,11 +69,11 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Attribute object is undefined
      */
     public function testGetAttributeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Attribute object is undefined');
+
         $this->_model->setAttribute(false);
         $this->_model->getAttribute();
     }

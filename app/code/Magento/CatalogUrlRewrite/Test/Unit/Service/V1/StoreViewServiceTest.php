@@ -112,11 +112,11 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot retrieve attribute for entity type "invalid_type"
      */
     public function testInvalidAttributeRetrieve()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Cannot retrieve attribute for entity type "invalid_type"');
+
         $invalidEntityType = 'invalid_type';
         $this->config->expects($this->once())->method('getAttribute')->will($this->returnValue(false));
 

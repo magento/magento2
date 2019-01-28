@@ -50,11 +50,11 @@ class ScopeResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The scope object is invalid. Verify the scope object and try again.
      */
     public function testGetScopeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The scope object is invalid. Verify the scope object and try again.');
+
         $this->_object->getScope();
     }
 

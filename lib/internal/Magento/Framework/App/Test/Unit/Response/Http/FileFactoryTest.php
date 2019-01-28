@@ -58,19 +58,20 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateIfContentDoesntHaveRequiredKeys()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->getModel()->create('fileName', []);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage File not found
      */
     public function testCreateIfFileNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'File not found');
+
         $file = 'some_file';
         $content = ['type' => 'filename', 'value' => $file];
 

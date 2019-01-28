@@ -169,11 +169,11 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "formElement" configuration parameter is required for the "test-name" field.
      */
     public function testPrepareException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The "formElement" configuration parameter is required for the "test-name" field.');
+
         $this->contextMock->expects($this->never())->method('getProcessor');
         $this->uiComponentFactoryMock->expects($this->never())
             ->method('create');

@@ -127,11 +127,11 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The address failed to save. Verify the address and try again.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The address failed to save. Verify the address and try again.');
+
         $cartId = 100;
         $addressId = 1;
 

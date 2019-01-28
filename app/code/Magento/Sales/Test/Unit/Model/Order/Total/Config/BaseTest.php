@@ -81,11 +81,11 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.
      */
     public function testGetTotalModelsInvalidTotalModel()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The total model should be extended from \\Magento\\Sales\\Model\\Order\\Total\\AbstractTotal.');
+
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
             $this->returnValue([
                 'some_code' =>

@@ -109,11 +109,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to resolve the source file for 'context/Magento_Module/dir/file.css'
      */
     public function testGetSourceFileMissing()
     {
+        $this->setExpectedException(\LogicException::class, 'Unable to resolve the source file for \'context/Magento_Module/dir/file.css\'');
+
         $this->context->expects($this->once())->method('getPath')->will($this->returnValue('context'));
         $this->source->expects($this->once())->method('getFile')->will($this->returnValue(false));
         $this->object->getSourceFile();
@@ -146,11 +146,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\View\Asset\File\NotFoundException
-     * @expectedExceptionMessage Unable to get content for 'Magento_Module/dir/file.css'
      */
     public function testGetContentNotFound()
     {
+        $this->setExpectedException(\Magento\Framework\View\Asset\File\NotFoundException::class, 'Unable to get content for \'Magento_Module/dir/file.css\'');
+
         $this->source->expects($this->once())
             ->method('getContent')
             ->with($this->object)

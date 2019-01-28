@@ -157,11 +157,11 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
      */
     public function testSaveAddressInformationIfCartIsEmpty()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The shipping method can\'t be set for an empty cart. Add an item to cart and try again.');
+
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -238,11 +238,11 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSaveAddressInformationIfShippingAddressNotSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The shipping address is missing. Set the address and try again.');
+
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -263,11 +263,11 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping information was unable to be saved. Verify the input data and try again.
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The shipping information was unable to be saved. Verify the input data and try again.');
+
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -304,11 +304,11 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Carrier with such method not found: carrier_code, shipping_method
      */
     public function testSaveAddressInformationIfCarrierCodeIsInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'Carrier with such method not found: carrier_code, shipping_method');
+
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';

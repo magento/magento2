@@ -30,11 +30,11 @@ class LayoutTestWithExceptions extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Construction problem.
      */
     public function testProcessWithExceptionsDeveloperMode()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Construction problem.');
+
         $this->layout->generateElements();
     }
 

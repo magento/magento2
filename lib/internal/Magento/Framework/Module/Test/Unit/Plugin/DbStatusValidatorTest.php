@@ -107,11 +107,11 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
      * @param array $dbVersionErrors
      *
      * @dataProvider aroundDispatchExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please upgrade your database:
      */
     public function testAroundDispatchException(array $dbVersionErrors)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Please upgrade your database:');
+
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')

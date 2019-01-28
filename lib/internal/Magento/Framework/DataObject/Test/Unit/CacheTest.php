@@ -24,11 +24,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Object already exists in registry (#1). Old object class: stdClass
      */
     public function testSaveWhenObjectAlreadyExistsInRegistry()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Object already exists in registry (#1). Old object class: stdClass');
+
         $object = new \stdClass();
         $hash = spl_object_hash($object);
         $newIdx = 'idx' . $hash;
@@ -54,11 +54,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The reference already exists: refName. New index: idx, old index: idx
      */
     public function testReferenceWhenReferenceAlreadyExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The reference already exists: refName. New index: idx, old index: idx');
+
         $refName = ['refName', 'refName'];
         $this->cache->reference($refName, 'idx');
     }

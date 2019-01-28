@@ -85,12 +85,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test wrong type exception
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Filter\Template
      * @return void
      */
     public function testWrongTypeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'WrongClass doesn\'t extend \\Magento\\Framework\\Filter\\Template');
+
         $className = 'WrongClass';
 
         $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();

@@ -86,11 +86,11 @@ class IndexSwitcherProxyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage current_handler index switcher doesn't implement
      */
     public function testSwitchIndexWithWrongHandler()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'current_handler index switcher doesn\'t implement');
+
         $currentHandler = 'current_handler';
         $currentHandlerClass = \stdClass::class;
         $handles = [

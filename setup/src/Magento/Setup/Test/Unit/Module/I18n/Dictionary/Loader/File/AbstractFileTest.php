@@ -29,11 +29,11 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot open dictionary file: "wrong_file.csv".
      */
     public function testLoadWrongFile()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Cannot open dictionary file: "wrong_file.csv".');
+
         $abstractLoaderMock = $this->getMockForAbstractClass(
             \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile::class,
             [],
@@ -113,11 +113,11 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid row #1: "exception_message".
      */
     public function testErrorsInPhraseCreating()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Invalid row #1: "exception_message".');
+
         $abstractLoaderMock = $this->getMockForAbstractClass(
             \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile::class,
             [$this->_factoryMock],

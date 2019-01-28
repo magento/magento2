@@ -162,11 +162,11 @@ class LockEnvProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Filesystem is not writable.
      */
     public function testProcessNotReadableFs()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Filesystem is not writable.');
+
         $path = 'test/test/test';
         $value = 'value';
 
@@ -191,11 +191,11 @@ class LockEnvProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid values
      */
     public function testCustomException()
     {
+        $this->setExpectedException(\Exception::class, 'Invalid values');
+
         $path = 'test/test/test';
         $value = 'value';
 

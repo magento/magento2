@@ -63,11 +63,11 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testChangePasswordIfUserIsNotAuthorizedTest()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $query = $this->getChangePassQuery('currentpassword', 'newpassword');
         $this->graphQlQuery($query);
     }
@@ -93,11 +93,11 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
      */
     public function testChangePasswordIfPasswordIsInvalid()
     {
+        $this->setExpectedException(\Exception::class, 'The password doesn\'t match this account. Verify the password and try again.');
+
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'anotherPassword1';

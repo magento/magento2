@@ -57,20 +57,20 @@ class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage There is no defined type dummyClass
      */
     public function testCreateNonExisted()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'There is no defined type dummyClass');
+
         $this->model->create('dummyClass');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Object is not instance of Magento\Config\Model\Placeholder\PlaceholderInterface
      */
     public function testCreateWrongImplementation()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Object is not instance of Magento\\Config\\Model\\Placeholder\\PlaceholderInterface');
+
         $this->model->create('wrongClass');
     }
 }

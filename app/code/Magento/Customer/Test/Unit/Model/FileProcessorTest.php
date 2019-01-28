@@ -235,11 +235,11 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File can not be saved to the destination folder.
      */
     public function testSaveTemporaryFileWithError()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'File can not be saved to the destination folder.');
+
         $attributeCode = 'img1';
 
         $allowedExtensions = [
@@ -288,11 +288,11 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unable to create directory customer/f/i
      */
     public function testMoveTemporaryFileUnableToCreateDirectory()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Unable to create directory customer/f/i');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = 'customer/f/i';
@@ -307,11 +307,11 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Destination folder is not writable or does not exists
      */
     public function testMoveTemporaryFileDestinationFolderDoesNotExists()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Destination folder is not writable or does not exists');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = 'customer/f/i';
@@ -361,11 +361,11 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong while saving the file
      */
     public function testMoveTemporaryFileWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Something went wrong while saving the file');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = 'customer/f/i';

@@ -69,11 +69,11 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 9999
      */
     public function testGetGroupException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with id = 9999');
+
         $this->groupRepository->getById(9999);
     }
 
@@ -130,11 +130,11 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "9999" provided for the taxClassId field.
      */
     public function testUpdateGroupException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Invalid value of "9999" provided for the taxClassId field.');
+
         $group = $this->groupFactory->create()->setId(null)->setCode('New Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
@@ -173,11 +173,11 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 9999
      */
     public function testDeleteDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with id = 9999');
+
         $this->assertFalse($this->groupRepository->deleteById(9999));
     }
 

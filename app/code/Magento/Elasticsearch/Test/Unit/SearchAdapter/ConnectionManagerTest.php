@@ -93,10 +93,11 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test getConnection() method with errors
-     * @expectedException \RuntimeException
      */
     public function testGetConnectionFailure()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $this->clientFactory->expects($this->any())
             ->method('create')
             ->willThrowException(new \Exception('Something went wrong'));

@@ -64,11 +64,11 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no such indexer handler: current_handler
      */
     public function testCreateWithoutHandlers()
     {
+        $this->setExpectedException(\LogicException::class, 'There is no such indexer handler: current_handler');
+
         $currentHandler = 'current_handler';
         $handlers = [];
         $data = ['data'];
@@ -87,11 +87,11 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage current_handler indexer handler doesn't implement
      */
     public function testCreateWithWrongHandler()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'current_handler indexer handler doesn\'t implement');
+
         $currentHandler = 'current_handler';
         $currentHandlerClass = \stdClass::class;
         $handlers = [
@@ -121,11 +121,11 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Indexer handler is not available: current_handler
      */
     public function testCreateWithoutAvailableHandler()
     {
+        $this->setExpectedException(\LogicException::class, 'Indexer handler is not available: current_handler');
+
         $currentHandler = 'current_handler';
         $currentHandlerClass = IndexerInterface::class;
         $handlers = [

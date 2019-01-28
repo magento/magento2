@@ -39,10 +39,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateHasRecursiveReference()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $fieldConfig = [
             'path' => 'design/email/header_template',
             'fieldset' => 'other_settings/email',

@@ -80,10 +80,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetAdjustmentByNotExistingCode()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->model->getAdjustmentByCode('not_existing_code');
     }
 }

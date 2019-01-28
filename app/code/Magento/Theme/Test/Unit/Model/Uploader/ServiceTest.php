@@ -213,10 +213,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidCssFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $fileName = 'file.name';
 
         $this->_uploader->expects(
@@ -294,10 +295,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidJsFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $fileName = 'file.name';
         $this->_service = new \Magento\Theme\Model\Uploader\Service(
             $this->_filesystemMock,

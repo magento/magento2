@@ -40,11 +40,11 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct
      */
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
+        $this->setExpectedException(\BadMethodCallException::class, 'Magento\\Framework\\App\\Test\\Unit\\ObjectManager\\FactoryStub::__construct');
+
         $rootPath = __DIR__ . '/_files/';
         $factory = Bootstrap::createObjectManagerFactory($rootPath, []);
         $factory->create([], false);

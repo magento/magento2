@@ -64,11 +64,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The image content is invalid. Verify the content and try again.
      */
     public function testCreateWithInvalidImageException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'The image content is invalid. Verify the content and try again.');
+
         $entryContentMock = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,11 +81,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product can't be saved.
      */
     public function testCreateWithCannotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The product can\'t be saved.');
+
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
@@ -135,11 +135,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateWithNonExistingImage()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No image with the provided ID was found. Verify the ID and try again.');
+
         $productSku = 'testProduct';
         $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
@@ -156,11 +156,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product can't be saved.
      */
     public function testUpdateWithCannotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class, 'The product can\'t be saved.');
+
         $productSku = 'testProduct';
         $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
@@ -215,11 +215,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testRemoveWithNonExistingImage()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No image with the provided ID was found. Verify the ID and try again.');
+
         $productSku = 'testProduct';
         $entryId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
@@ -252,11 +252,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The product doesn't exist. Verify and try again.
      */
     public function testGetWithNonExistingProduct()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The product doesn\'t exist. Verify and try again.');
+
         $productSku = 'testProduct';
         $imageId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
@@ -265,11 +265,11 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The image doesn't exist. Verify and try again.
      */
     public function testGetWithNonExistingImage()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The image doesn\'t exist. Verify and try again.');
+
         $productSku = 'testProduct';
         $imageId = 43;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)

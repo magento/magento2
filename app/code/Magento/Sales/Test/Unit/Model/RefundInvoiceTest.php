@@ -327,10 +327,11 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
      */
     public function testDocumentValidationException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\DocumentValidationExceptionInterface::class);
+
         $invoiceId = 1;
         $items = [1 => $this->creditmemoItemCreationMock];
         $notify = true;
@@ -390,10 +391,11 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface
      */
     public function testCouldNotCreditmemoException()
     {
+        $this->setExpectedException(\Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface::class);
+
         $invoiceId = 1;
         $items = [1 => $this->creditmemoItemCreationMock];
         $notify = true;

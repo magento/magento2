@@ -310,11 +310,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image content must be valid base64 encoded data.
      */
     public function testCreateThrowsExceptionIfProvidedContentIsNotBase64Encoded()
     {
+        $this->setExpectedException(\Exception::class, 'The image content must be valid base64 encoded data.');
+
         $encodedContent = 'not_a_base64_encoded_content';
         $requestData = [
             'id' => null,
@@ -335,11 +335,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image content must be valid base64 encoded data.
      */
     public function testCreateThrowsExceptionIfProvidedContentIsNotAnImage()
     {
+        $this->setExpectedException(\Exception::class, 'The image content must be valid base64 encoded data.');
+
         $encodedContent = base64_encode('not_an_image');
         $requestData = [
             'id' => null,
@@ -360,11 +360,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image MIME type is not valid or not supported.
      */
     public function testCreateThrowsExceptionIfProvidedImageHasWrongMimeType()
     {
+        $this->setExpectedException(\Exception::class, 'The image MIME type is not valid or not supported.');
+
         $encodedContent = base64_encode(file_get_contents($this->testImagePath));
         $requestData = [
             'id' => null,
@@ -384,11 +384,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
 
         $requestData = [
@@ -410,11 +410,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided image name contains forbidden characters.
      */
     public function testCreateThrowsExceptionIfProvidedImageNameContainsForbiddenCharacters()
     {
+        $this->setExpectedException(\Exception::class, 'Provided image name contains forbidden characters.');
+
         $requestData = [
             'id' => null,
             'media_type' => 'image',
@@ -433,11 +433,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media'
             . '/' . 'wrong-sku';
         $requestData = [
@@ -457,11 +457,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateThrowsExceptionIfThereIsNoImageWithGivenId()
     {
+        $this->setExpectedException(\Exception::class, 'No image with the provided ID was found. Verify the ID and try again.');
+
         $requestData = [
             'sku' => 'simple',
             'entry' => [
@@ -481,11 +481,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->setExpectedException(\Exception::class, 'The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media/9999';
         $requestData = [
             'sku' => 'wrong_product_sku',
@@ -497,11 +497,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfThereIsNoImageWithGivenId()
     {
+        $this->setExpectedException(\Exception::class, 'No image with the provided ID was found. Verify the ID and try again.');
+
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/simple/media/9999';
         $requestData = [
             'sku' => 'simple',

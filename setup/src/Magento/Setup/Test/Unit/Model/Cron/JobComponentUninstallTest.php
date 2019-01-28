@@ -204,11 +204,11 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unknown component type
      */
     public function testExecuteUnknownType()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Unknown component type');
+
         $this->setUpUpdater();
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
@@ -240,12 +240,12 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $params
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Job parameter format is incorrect
      * @dataProvider executeWrongFormatDataProvider
      */
     public function testExecuteWrongFormat(array $params)
     {
+        $this->setExpectedException(\RuntimeException::class, 'Job parameter format is incorrect');
+
         $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
         $this->themeUninstallHelper->expects($this->never())->method($this->anything());
 
@@ -277,11 +277,11 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage error
      */
     public function testExecuteUpdateFails()
     {
+        $this->setExpectedException(\RuntimeException::class, 'error');
+
         $this->updater->expects($this->once())->method('createUpdaterTask')->willReturn('error');
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')

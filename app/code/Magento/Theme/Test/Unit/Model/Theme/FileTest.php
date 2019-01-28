@@ -101,10 +101,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \UnexpectedValueException
      */
     public function testGetFullPathWithoutFileType()
     {
+        $this->setExpectedException(\UnexpectedValueException::class);
+
         $this->model->getFullPath();
     }
 
@@ -171,11 +172,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Theme id should be set
      */
     public function testGetThemeException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Theme id should be set');
+
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->with(null, DesignInterface::DEFAULT_AREA)

@@ -398,11 +398,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some error
      */
     public function testRunWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'Some error');
+
         $data = [
             'websites' => [],
             'groups' => [],

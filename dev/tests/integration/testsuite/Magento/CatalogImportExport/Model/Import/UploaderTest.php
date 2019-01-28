@@ -76,11 +76,11 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @magentoAppIsolation enabled
      * @return void
-     * @expectedException \Exception
-     * @expectedExceptionMessage Disallowed file type
      */
     public function testMoveWithInvalidFile(): void
     {
+        $this->setExpectedException(\Exception::class, 'Disallowed file type');
+
         $fileName = 'media_import_image.php';
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
         copy(__DIR__ . '/_files/' . $fileName, $filePath);

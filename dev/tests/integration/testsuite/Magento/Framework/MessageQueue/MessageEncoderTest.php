@@ -106,19 +106,20 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error occurred during message decoding
      */
     public function testDecodeInvalidMessageFormat()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Error occurred during message decoding');
+
         $this->encoder->decode('customer.created', "{");
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testDecodeInvalidMessage()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
             . '"Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
@@ -126,11 +127,11 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error occurred during message decoding
      */
     public function testDecodeIncorrectMessage()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Error occurred during message decoding');
+
         $this->encoder->decode('customer.created', "{");
     }
 

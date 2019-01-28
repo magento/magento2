@@ -181,10 +181,11 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->agreementMock->expects($this->exactly(2))->method('getAgreementId')->willReturn(null);
         $this->agrFactoryMock->expects($this->never())->method('create');
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
@@ -212,10 +213,11 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteByIdWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $agreementId = 1;
         $this->agrFactoryMock->expects($this->once())->method('create')->willReturn($this->agreementMock);
         $this->resourceMock

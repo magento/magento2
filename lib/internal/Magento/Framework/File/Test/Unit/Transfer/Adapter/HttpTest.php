@@ -88,22 +88,22 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->object->send(['filepath' => $file, 'headers' => $headers]);
     }
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filename is not set
      * @return void
      */
     public function testSendNoFileSpecifiedException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Filename is not set');
+
         $this->object->send([]);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File 'nonexistent.file' does not exists
      * @return void
      */
     public function testSendNoFileExistException(): void
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'File \'nonexistent.file\' does not exists');
+
         $this->object->send('nonexistent.file');
     }
 }

@@ -62,30 +62,33 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getFieldName() with Exception
      * @return void
-     * @expectedException \Exception
      */
     public function testGetFieldNameEmpty()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->model->getFieldName('attribute', ['entityType' => '']);
     }
 
     /**
      * Test getFieldName() with Exception
      * @return void
-     * @expectedException \LogicException
      */
     public function testGetFieldNameWrongType()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->model->getFieldName('attribute', ['entityType' => 'error']);
     }
 
     /**
      * Test getFieldName() with Exception
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testGetFieldNameFailure()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(false);

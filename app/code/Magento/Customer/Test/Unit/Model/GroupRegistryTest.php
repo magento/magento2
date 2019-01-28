@@ -61,10 +61,11 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
      * Tests that attempting to retrieve a non-existing entity will result in an exception.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $groupId = 1;
         $group = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
             ->setMethods(['load', 'getId', '__wakeup'])

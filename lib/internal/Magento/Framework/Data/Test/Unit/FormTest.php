@@ -103,11 +103,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage An element with a "1" ID already exists.
      */
     public function testElementExistsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'An element with a "1" ID already exists.');
+
         $buttonElement = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Button::class)
             ->disableOriginalConstructor()
             ->getMock();

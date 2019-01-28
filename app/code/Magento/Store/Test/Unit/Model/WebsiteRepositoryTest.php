@@ -93,10 +93,11 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \DomainException
      */
     public function testGetDefaultIsSeveral()
     {
+        $this->setExpectedException(\DomainException::class);
+
         $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -124,11 +125,11 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \DomainException
-     * @expectedExceptionMessage The default website isn't defined. Set the website and try again.
      */
     public function testGetDefaultIsZero()
     {
+        $this->setExpectedException(\DomainException::class, 'The default website isn\'t defined. Set the website and try again.');
+
         $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])

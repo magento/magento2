@@ -23,10 +23,11 @@ class CompositeBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testInitializeWithWrongProcessorInstance()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $processorValid = $this->createMock(BaseSelectProcessorInterface::class);
         $processorInvalid = $this->createMock(\stdClass::class);
 

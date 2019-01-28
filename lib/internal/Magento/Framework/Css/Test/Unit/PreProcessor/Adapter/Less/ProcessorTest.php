@@ -80,11 +80,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for processContent method (exception)
      *
-     * @expectedException \Magento\Framework\View\Asset\ContentProcessorException
-     * @expectedExceptionMessageRegExp (Test exception)
      */
     public function testProcessContentException()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\View\Asset\ContentProcessorException::class, '(Test exception)');
+
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())

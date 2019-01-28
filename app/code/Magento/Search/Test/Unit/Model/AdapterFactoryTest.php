@@ -58,10 +58,11 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionThrown()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('ClassName'));
 
@@ -73,10 +74,11 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateLogicException()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('Class'));
 

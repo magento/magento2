@@ -66,10 +66,11 @@ class FinalImplementationTest extends TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
      */
     public function testRuleFailsOnNotFinalizableNodes()
     {
+        $this->setExpectedException(\BadMethodCallException::class);
+
         $someNode = $this->getMockBuilder(AbstractNode::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

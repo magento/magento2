@@ -435,13 +435,13 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider invalidConfigurationFormatDataProvider
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Configuration has incorrect format
      *
      * @param mixed $configuration
      */
     public function testAddConfigurationInvalidFormat($configuration)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Configuration has incorrect format');
+
         $constraints = [
             ['alias' => 'alias', 'class' => 'Some\Validator\Class', 'options' => null, 'type' => 'entity'],
         ];

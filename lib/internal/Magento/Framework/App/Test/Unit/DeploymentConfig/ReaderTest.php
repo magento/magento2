@@ -77,11 +77,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid file name: invalid_name
      */
     public function testWrongFile()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid file name: invalid_name');
+
         new Reader($this->dirList, $this->driverPool, $this->configFilePool, 'invalid_name');
     }
 
@@ -113,12 +113,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test Reader::load() will throw exception in case of invalid configuration file(single file).
      *
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessageRegExp /Invalid configuration file: \'.*\/\_files\/emptyConfig\.php\'/
      * @return void
      */
     public function testLoadInvalidConfigurationFileWithFileKey()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Exception\RuntimeException::class, '/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
+
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -149,12 +149,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test Reader::load() will throw exception in case of invalid configuration file(multiple files).
      *
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessageRegExp /Invalid configuration file: \'.*\/\_files\/emptyConfig\.php\'/
      * @return void
      */
     public function testLoadInvalidConfigurationFile()
     {
+        $this->setExpectedExceptionRegExp(\Magento\Framework\Exception\RuntimeException::class, '/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
+
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();

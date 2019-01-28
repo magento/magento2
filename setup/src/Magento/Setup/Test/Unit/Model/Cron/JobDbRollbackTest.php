@@ -81,11 +81,11 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not complete
      */
     public function testExceptionOnExecute()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Could not complete');
+
         $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception);
         $this->jobDbRollback->execute();
     }

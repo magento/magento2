@@ -24,12 +24,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parse error. Passed option "config_files" is wrong.
      * @dataProvider dataProviderWrongOptionConfigFiles
      */
     public function testBuildWithWrongOptionConfigFiles($options)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Parse error. Passed option "config_files" is wrong.');
+
         $this->builder->build($options);
     }
 

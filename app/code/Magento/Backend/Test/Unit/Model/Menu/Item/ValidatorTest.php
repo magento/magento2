@@ -65,11 +65,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $requiredParam
      * @throws \BadMethodCallException
-     * @expectedException \BadMethodCallException
      * @dataProvider requiredParamsProvider
      */
     public function testValidateWithMissingRequiredParamThrowsException($requiredParam)
     {
+        $this->setExpectedException(\BadMethodCallException::class);
+
         try {
             unset($this->_params[$requiredParam]);
             $this->_model->validate($this->_params);
@@ -91,11 +92,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param string $param
      * @param mixed $invalidValue
      * @throws \InvalidArgumentException
-     * @expectedException \InvalidArgumentException
      * @dataProvider invalidParamsProvider
      */
     public function testValidateWithNonValidPrimitivesThrowsException($param, $invalidValue)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         try {
             $this->_params[$param] = $invalidValue;
             $this->_model->validate($this->_params);
@@ -134,10 +136,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $existedItems
      * @param $newItem
      * @dataProvider duplicateIdsProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateWithDuplicateIdsThrowsException($existedItems, $newItem)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         foreach ($existedItems as $item) {
             $item = array_merge($item, $this->_params);
             $this->_model->validate($item);
@@ -204,10 +207,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateParamWithNullForRequiredParamThrowsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->validateParam('title', null);
     }
 
@@ -222,10 +226,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateParamValidatesPrimitiveValues()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->_model->validateParam('toolTip', '/:');
     }
 

@@ -78,10 +78,11 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->rateModelMock->expects($this->once())
             ->method('load')
             ->with(self::TAX_RATE_ID)

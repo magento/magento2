@@ -218,12 +218,12 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
      * @param string[] $fields
      * @param array $conditions
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The field array failed to pass. The array must have a matching condition array.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterInconsistentArrays($fields, $conditions)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The field array failed to pass. The array must have a matching condition array.');
+
         $this->serviceCollection->addFieldToFilter($fields, $conditions);
     }
 
@@ -245,12 +245,12 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The array of fields failed to pass. The array must include at one field.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterEmptyArrays()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The array of fields failed to pass. The array must include at one field.');
+
         $this->serviceCollection->addFieldToFilter([], []);
     }
 }

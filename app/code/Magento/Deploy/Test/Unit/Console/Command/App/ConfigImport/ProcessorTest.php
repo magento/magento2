@@ -211,11 +211,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Import failed: Some error
      */
     public function testImportWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'Import failed: Some error');
+
         $exception = new \Exception('Some error');
         $this->outputMock->expects($this->never())
             ->method('writeln');
@@ -236,11 +236,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Import failed: error message
      */
     public function testImportWithValidation()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class, 'Import failed: error message');
+
         $configData = ['config data'];
         $importerClassName = 'someImporterClassName';
         $importers = ['someSection' => $importerClassName];

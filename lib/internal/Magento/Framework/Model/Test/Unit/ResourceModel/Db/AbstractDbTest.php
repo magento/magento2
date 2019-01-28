@@ -114,11 +114,11 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Empty identifier field name
      */
     public function testGetIdFieldNameException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Empty identifier field name');
+
         $this->_model->getIdFieldName();
     }
 
@@ -135,11 +135,11 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Empty main table name
      */
     public function testGetMainTableException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Empty main table name');
+
         $this->_model->getMainTable();
     }
 
@@ -581,10 +581,11 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnSave()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 

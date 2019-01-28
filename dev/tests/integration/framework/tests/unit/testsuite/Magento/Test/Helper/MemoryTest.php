@@ -87,10 +87,11 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $number
      * @dataProvider convertToBytesBadFormatDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertToBytesBadFormat($number)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         \Magento\TestFramework\Helper\Memory::convertToBytes($number);
     }
 
@@ -132,18 +133,20 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertToBytesInvalidArgument()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         \Magento\TestFramework\Helper\Memory::convertToBytes('3Z');
     }
 
     /**
-     * @expectedException \OutOfBoundsException
      */
     public function testConvertToBytesOutOfBounds()
     {
+        $this->setExpectedException(\OutOfBoundsException::class);
+
         if (PHP_INT_SIZE > 4) {
             $this->markTestSkipped('A 32-bit system is required to perform this test.');
         }

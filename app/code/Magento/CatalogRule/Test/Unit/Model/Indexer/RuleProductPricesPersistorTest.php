@@ -116,11 +116,11 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Insert error.
      */
     public function testExecuteWithException()
     {
+        $this->setExpectedException(\Exception::class, 'Insert error.');
+
         $priceData = [
             [
                 'product_id' => 1,

@@ -118,11 +118,11 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXXEXml()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The security validation of the XML document has failed.');
+
         $xmlString = '<!DOCTYPE scan [
             <!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource='
             . __DIR__ . '/AbstractCarrierOnline/xxe-xml.txt">]><scan>&test;</scan>';
@@ -134,11 +134,11 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXQBXml()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The security validation of the XML document has failed.');
+
         $xmlString = '<?xml version="1.0"?>
             <!DOCTYPE test [
               <!ENTITY value "value">

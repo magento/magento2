@@ -33,11 +33,11 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Instance of the phrase renderer is expected, got stdClass instead
      */
     public function testConstructorException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Instance of the phrase renderer is expected, got stdClass instead');
+
         new \Magento\Framework\Phrase\Renderer\Composite([new \stdClass()]);
     }
 

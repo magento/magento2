@@ -144,11 +144,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The 11 Cart doesn't contain the 5 item.
      */
     public function testDeleteWithInvalidQuoteItem()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'The 11 Cart doesn\'t contain the 5 item.');
+
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())
@@ -162,11 +162,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The item couldn't be removed from the quote.
      */
     public function testDeleteWithCouldNotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The item couldn\'t be removed from the quote.');
+
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())

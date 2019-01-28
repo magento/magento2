@@ -60,11 +60,11 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Invalid customer id 100
      */
     public function testValidateInvalidCustomer()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'Invalid customer id 100');
+
         $customerId = 100;
         $address = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
@@ -76,11 +76,11 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Invalid address id 101
      */
     public function testValidateInvalidAddress()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'Invalid address id 101');
+
         $address = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $this->customerRepositoryMock->expects($this->never())->method('getById');
         $address->expects($this->atLeastOnce())->method('getCustomerAddressId')->willReturn(101);

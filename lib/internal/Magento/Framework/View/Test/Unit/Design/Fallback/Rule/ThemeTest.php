@@ -50,11 +50,11 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface
      */
     public function testGetPatternDirsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Parameter "theme" should be specified and should implement the theme interface');
+
         $this->model->getPatternDirs([]);
     }
 

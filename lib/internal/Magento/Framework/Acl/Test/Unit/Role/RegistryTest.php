@@ -64,11 +64,11 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Acl_Role_Registry_Exception
-     * @expectedExceptionMessage Child Role id '20' does not exist
      */
     public function testAddParentWrongChildId()
     {
+        $this->setExpectedException(\Zend_Acl_Role_Registry_Exception::class, 'Child Role id \'20\' does not exist');
+
         $roleId = 1;
         $parentRoleId = 2;
         list(, $parentRole) = $this->initRoles($roleId, $parentRoleId);
@@ -77,11 +77,11 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Acl_Role_Registry_Exception
-     * @expectedExceptionMessage Parent Role id '26' does not exist
      */
     public function testAddParentWrongParentId()
     {
+        $this->setExpectedException(\Zend_Acl_Role_Registry_Exception::class, 'Parent Role id \'26\' does not exist');
+
         $roleId = 1;
         $parentRoleId = 2;
         list($role,) = $this->initRoles($roleId, $parentRoleId);

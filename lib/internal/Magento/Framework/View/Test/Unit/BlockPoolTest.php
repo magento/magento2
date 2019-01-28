@@ -54,11 +54,11 @@ class BlockPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid Block class name: NotExistingBlockClass
      */
     public function testAddWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid Block class name: NotExistingBlockClass');
+
         $this->blockPool->add('BlockPoolTestBlock', 'NotExistingBlockClass');
     }
 }

@@ -142,11 +142,11 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Circular sequence reference from 'b' to 'a'
      */
     public function testLoadCircular()
     {
+        $this->setExpectedException(\Exception::class, 'Circular sequence reference from \'b\' to \'a\'');
+
         $fixture = [
             'a' => ['name' => 'a', 'sequence' => ['b']],
             'b' => ['name' => 'b', 'sequence' => ['a']],

@@ -178,24 +178,26 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetException(): void
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $transactionId = null;
         $this->repository->get($transactionId);
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetNoSuchEntity(): void
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $transactionId = null;
         $transactionIdFromArgument = 12;
         $transaction = $this->mockTransaction($transactionId);

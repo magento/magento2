@@ -77,11 +77,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for method setItemObjectClass with exception.
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Incorrect_ClassName does not extend \Magento\Framework\DataObject
      */
     public function testSetItemObjectClassException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Incorrect_ClassName does not extend \\Magento\\Framework\\DataObject');
+
         $this->_model->setItemObjectClass('Incorrect_ClassName');
     }
 
@@ -147,11 +147,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for getCurPage with exception.
      *
-     * @expectedException \Magento\Framework\Exception\StateException
      * @return void
      */
     public function testGetCurPageWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         $this->_model->setCurPage(10);
         $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->_model->getCurPage();

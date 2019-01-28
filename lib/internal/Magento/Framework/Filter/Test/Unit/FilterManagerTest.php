@@ -63,11 +63,11 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Filter factory must implement FilterFactoryInterface interface, stdClass was given.
      */
     public function testGetFilterFactoriesWrongInstance()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Filter factory must implement FilterFactoryInterface interface, stdClass was given.');
+
         $factoryName = \Magento\Framework\Filter\Factory::class;
         $this->_factoryMock = new \stdClass();
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -108,11 +108,11 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filter was not found by given alias wrongAlias
      */
     public function testCreateFilterInstanceWrongAlias()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Filter was not found by given alias wrongAlias');
+
         $this->initMocks();
         $filterAlias = 'wrongAlias';
         $this->_factoryMock->expects(

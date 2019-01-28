@@ -72,11 +72,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some of the products below do not have all the required options.
      */
     public function testSubmitWithDeletedItem()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Some of the products below do not have all the required options.');
+
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple-2');
@@ -90,12 +90,12 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * Tries to create order with item of stock during checkout.
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some of the products are out of stock.
      * @magentoDbIsolation enabled
      */
     public function testSubmitWithItemOutOfStock()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Some of the products are out of stock.');
+
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuote('test01');
         $this->cartManagement->placeOrder($quote->getId());

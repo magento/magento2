@@ -113,10 +113,11 @@ class StockRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->stockResourceMock->expects($this->once())
             ->method('save')
             ->with($this->stockMock)
@@ -163,10 +164,11 @@ class StockRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $this->stockResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->stockMock)
@@ -187,11 +189,11 @@ class StockRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Unable to remove Stock with id "1"
      */
     public function testDeleteByIdException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'Unable to remove Stock with id "1"');
+
         $id = 1;
 
         $this->stockFactoryMock->expects($this->once())->method('create')->willReturn($this->stockMock);

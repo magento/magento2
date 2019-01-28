@@ -72,11 +72,11 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage error occurred
      */
     public function testAroundSaveRollBack()
     {
+        $this->setExpectedException(\Exception::class, 'error occurred');
+
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 

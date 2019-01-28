@@ -51,11 +51,11 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Request\CaptureDataBuilder::build
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage No authorization transaction to proceed capture.
      */
     public function testBuildWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'No authorization transaction to proceed capture.');
+
         $amount = 10.00;
         $buildSubject = [
             'payment' => $this->paymentDOMock,

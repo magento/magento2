@@ -139,11 +139,11 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Page not found
      */
     public function testExecutePageNotFound()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class, 'Page not found');
+
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)

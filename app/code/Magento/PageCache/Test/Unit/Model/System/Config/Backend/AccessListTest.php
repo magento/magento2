@@ -81,11 +81,12 @@ class AccessListTest extends TestCase
 
     /**
      * @param mixed $value
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider getInvalidValues
      */
     public function testBeforeSaveInvalid($value)
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->accessList->setValue($value);
         $this->accessList->beforeSave();
     }

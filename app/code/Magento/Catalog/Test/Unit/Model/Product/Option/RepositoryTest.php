@@ -95,10 +95,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetNonExistingOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $optionId = 1;
         $productSku = 'simple_product';
         $this->productRepositoryMock
@@ -131,10 +132,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDeleteByIdentifierNonExistingOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $optionId = 1;
         $productSku = 'simple_product';
         $this->productRepositoryMock
@@ -172,10 +174,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testDeleteByIdentifierWhenCannotRemoveOption()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $optionId = 1;
         $productSku = 'simple_product';
         $this->productRepositoryMock
@@ -199,20 +202,21 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The ProductSku is empty. Set the ProductSku and try again.
      */
     public function testSaveCouldNotSaveException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The ProductSku is empty. Set the ProductSku and try again.');
+
         $this->optionMock->expects($this->once())->method('getProductSku')->willReturn(null);
         $this->optionRepository->save($this->optionMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSaveNoSuchEntityException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $productSku = 'simple_product';
         $optionId = 1;
         $productOptionId = 2;

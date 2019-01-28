@@ -56,11 +56,11 @@ class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when payment order is not Payflow payment method.
      *
      * @covers \Magento\Paypal\Model\Payflow\CvvEmsCodeMapper::getCode
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "some_payment" does not supported by Payflow CVV mapper.
      */
     public function testGetCodeWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'The "some_payment" does not supported by Payflow CVV mapper.');
+
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()

@@ -32,11 +32,11 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing \Magento\Framework\Validator\Entity\Properties::isValid on invalid argument passed
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Instance of \Magento\Framework\Model\AbstractModel is expected.
      */
     public function testIsValidException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Instance of \\Magento\\Framework\\Model\\AbstractModel is expected.');
+
         $validator = new \Magento\Framework\Validator\Entity\Properties();
         $validator->isValid([]);
     }

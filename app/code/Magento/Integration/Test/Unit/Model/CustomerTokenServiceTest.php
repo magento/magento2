@@ -106,11 +106,11 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This customer has no tokens.
      */
     public function testRevokeCustomerAccessTokenWithoutCustomerId()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'This customer has no tokens.');
+
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByCustomerId')
             ->with(null)
@@ -122,11 +122,11 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens couldn't be revoked.
      */
     public function testRevokeCustomerAccessTokenCannotRevoked()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The tokens couldn\'t be revoked.');
+
         $exception = new \Exception();
         $customerId = 1;
         $this->_tokenModelCollectionMock->expects($this->once())

@@ -52,11 +52,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage Merge conflict with existing synonym group(s): (a,b,c)
      */
     public function testSaveCreateMergeConflict()
     {
+        $this->setExpectedException(\Magento\Search\Model\Synonym\MergeConflictException::class, 'Merge conflict with existing synonym group(s): (a,b,c)');
+
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(null);
         $synonymGroupModel->expects($this->once())->method('getSynonymGroup')->willReturn(null);
@@ -137,11 +137,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage (d,h,i)
      */
     public function testSaveUpdateMergeConflict()
     {
+        $this->setExpectedException(\Magento\Search\Model\Synonym\MergeConflictException::class, '(d,h,i)');
+
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(1);
         $synonymGroupModel->expects($this->exactly(2))->method('getSynonymGroup')->willReturn('a,b,c');

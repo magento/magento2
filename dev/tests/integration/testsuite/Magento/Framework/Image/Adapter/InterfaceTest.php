@@ -703,10 +703,11 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateUploadFileException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $imageAdapter->validateUploadFile(__FILE__);

@@ -170,10 +170,11 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\DB\DataConverter\DataConversionException
      */
     public function testConvertCorruptedData()
     {
+        $this->setExpectedException(\Magento\Framework\DB\DataConverter\DataConversionException::class);
+
         $this->serializeMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(

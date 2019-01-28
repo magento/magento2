@@ -106,11 +106,11 @@ class CommentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save comment:
      */
     public function testSaveValidationFailed()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Cannot save comment:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)

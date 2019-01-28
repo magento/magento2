@@ -21,10 +21,11 @@ class AbstractCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testConstructorRequiresObligatoryParams()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->getMockForAbstractClass(\Magento\Backend\Model\Menu\Builder\AbstractCommand::class);
     }
 

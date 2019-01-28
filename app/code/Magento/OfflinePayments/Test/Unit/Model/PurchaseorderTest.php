@@ -60,11 +60,11 @@ class PurchaseorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Purchase order number is a required field.
      */
     public function testValidate()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Purchase order number is a required field.');
+
         $data = new DataObject([]);
 
         $addressMock = $this->createMock(OrderAddressInterface::class);

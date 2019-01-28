@@ -79,11 +79,11 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Unable to write file into directory product/cache. Access forbidden.
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Exception::class, 'Unable to write file into directory product/cache. Access forbidden.');
+
         $exception = new FileSystemException(
             new \Magento\Framework\Phrase('Unable to write file into directory product/cache. Access forbidden.')
         );

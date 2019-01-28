@@ -210,20 +210,20 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      * Test DDL query inside transaction in Developer mode
      *
      * @dataProvider ddlSqlQueryProvider
-     * @expectedException \Exception
-     * @expectedExceptionMessage DDL statements are not allowed in transactions
      */
     public function testCheckDdlTransaction($ddlQuery)
     {
+        $this->setExpectedException(\Exception::class, 'DDL statements are not allowed in transactions');
+
         $this->_mockAdapter->query($ddlQuery);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Multiple queries can't be executed. Run a single query and try again.
      */
     public function testMultipleQueryException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Multiple queries can\'t be executed. Run a single query and try again.');
+
         $sql = "SELECT COUNT(*) AS _num FROM test; ";
         $sql.= "INSERT INTO test(id) VALUES (1); ";
         $sql.= "SELECT COUNT(*) AS _num FROM test; ";
@@ -561,11 +561,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Port must be configured within host (like 'localhost:33390') parameter, not within port
      */
     public function testConfigValidationByPortWithException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Port must be configured within host (like \'localhost:33390\') parameter, not within port');
+
         (new ObjectManager($this))->getObject(
             Mysql::class,
             ['config' => ['host' => 'localhost', 'port' => '33390']]

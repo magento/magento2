@@ -59,11 +59,11 @@ class BooleanUtilsTest extends \PHPUnit\Framework\TestCase
      * @param mixed $input
      *
      * @dataProvider toBooleanExceptionDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Boolean value is expected
      */
     public function testToBooleanException($input)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Boolean value is expected');
+
         $this->object->toBoolean($input);
     }
 

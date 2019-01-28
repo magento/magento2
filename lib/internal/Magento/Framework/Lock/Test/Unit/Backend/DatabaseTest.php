@@ -75,18 +75,20 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testlockWithTooLongName()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
+
         $this->database->lock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $this->statement->expects($this->any())
             ->method('fetchColumn')
             ->willReturn(true);

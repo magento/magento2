@@ -64,11 +64,11 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetCustomerIfUserIsNotAuthorized()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 query {
     customer {
@@ -83,11 +83,11 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked.
      */
     public function testGetCustomerIfAccountIsLocked()
     {
+        $this->setExpectedException(\Exception::class, 'The account is locked.');
+
         $this->lockCustomer(1);
 
         $currentEmail = 'customer@example.com';

@@ -52,11 +52,11 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetSubscriptionStatusIfUserIsNotAuthorizedTest()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 query {
     customer {
@@ -93,11 +93,11 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testChangeSubscriptionStatuIfUserIsNotAuthorizedTest()
     {
+        $this->setExpectedException(\Exception::class, 'The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 mutation {
     updateCustomer(

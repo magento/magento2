@@ -63,10 +63,11 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadPaymentException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $buildSubject = [];
 
         $this->configMock->expects(self::never())

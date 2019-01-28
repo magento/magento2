@@ -56,11 +56,11 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with entityType = type, attributeCode = code
      */
     public function testGetModelByAttributeWithoutModel()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with entityType = type, attributeCode = code');
+
         $entityType = 'type';
         $attributeCode = 'code';
 

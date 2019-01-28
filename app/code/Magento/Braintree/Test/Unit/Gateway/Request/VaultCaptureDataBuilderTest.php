@@ -109,11 +109,11 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks a builder execution if Payment Token doesn't exist.
      *
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage The Payment Token is not available to perform the request.
      */
     public function testBuildWithoutPaymentToken(): void
     {
+        $this->setExpectedException(\Magento\Payment\Gateway\Command\CommandException::class, 'The Payment Token is not available to perform the request.');
+
         $amount = 30.00;
         $buildSubject = [
             'payment' => $this->paymentDO,

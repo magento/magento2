@@ -182,10 +182,11 @@ class ModeTest extends \PHPUnit\Framework\TestCase
      * Test that previous mode will be enabled after error during static generation call.
      * We need this to be sure that mode will be reverted to it previous tate.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEnableDeveloperModeOnFail()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $mode = State::MODE_DEVELOPER;
         $dataStorage = [
             ConfigFilePool::APP_ENV => [

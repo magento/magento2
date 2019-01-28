@@ -79,11 +79,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage MySQL adapter: Missing required configuration option 'host'
      */
     public function testConstructorException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'MySQL adapter: Missing required configuration option \'host\'');
+
         new Mysql(
             [],
             $this->mysqlFactoryMock
@@ -91,11 +91,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Configuration array must have a key for 'dbname' that names the database instance
      */
     public function testGetConnectionInactive()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Configuration array must have a key for \'dbname\' that names the database instance');
+
         $config = ['host' => 'localhost', 'active' => false];
         $this->mysqlFactoryMock->expects($this->once())
             ->method('create')

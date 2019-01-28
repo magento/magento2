@@ -182,11 +182,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      * Test exception for handle
      *
      * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
-     * @expectedException        \Magento\Framework\Webapi\Exception
-     * @expectedExceptionMessage exception message
      */
     public function testHandleWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Webapi\Exception::class, 'exception message');
+
         $genWSDL = 'generatedWSDL';
         $exceptionMsg = 'exception message';
         $requestedService = ['catalogProduct'];

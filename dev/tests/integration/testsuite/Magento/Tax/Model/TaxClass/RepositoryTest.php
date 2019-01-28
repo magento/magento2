@@ -66,11 +66,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage A class with the same name already exists for ClassType PRODUCT.
      */
     public function testSaveThrowsExceptionIfGivenTaxClassNameIsNotUnique()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'A class with the same name already exists for ClassType PRODUCT.');
+
         //ClassType and name combination has to be unique.
         //Testing against existing Tax classes which are already setup when the instance is installed
         $taxClassDataObject = $this->taxClassFactory->create();
@@ -138,11 +138,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with class_id = -9999
      */
     public function testGetThrowsExceptionIfRequestedTaxClassDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with class_id = -9999');
+
         $this->taxClassRepository->get(-9999);
     }
 
@@ -166,11 +166,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with class_id = 99999
      */
     public function testDeleteByIdThrowsExceptionIfTargetTaxClassDoesNotExist()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class, 'No such entity with class_id = 99999');
+
         $nonexistentTaxClassId = 99999;
         $this->taxClassRepository->deleteById($nonexistentTaxClassId);
     }
@@ -200,11 +200,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Updating classType is not allowed.
      */
     public function testSaveThrowsExceptionIfTargetTaxClassHasDifferentClassType()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\InputException::class, 'Updating classType is not allowed.');
+
         $taxClassName = 'New Class Name';
         $taxClassDataObject = $this->taxClassFactory->create();
         $taxClassDataObject->setClassName($taxClassName)

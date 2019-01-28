@@ -36,11 +36,11 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage DOMDocument::loadXML(): Opening and ending tag mismatch
      */
     public function testLoadXmlInvalid()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'DOMDocument::loadXML(): Opening and ending tag mismatch');
+
         $sampleInvalidXml = '<?xml version="1.0"?><config></onfig>';
         $this->parser->initErrorHandler();
         $this->parser->loadXML($sampleInvalidXml);

@@ -79,11 +79,11 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer for type "some-type" does not exist.
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Renderer for type "some-type" does not exist.');
+
         $renderer = $this->createMock(\stdClass::class);
         $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,

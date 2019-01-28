@@ -99,11 +99,11 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "mediaDir/path" file doesn't exist. Verify the file and try again.
      */
     public function testCollectFileInfoNotFile()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The "mediaDir/path" file doesn\'t exist. Verify the file and try again.');
+
         $content = 'content';
         $mediaDirectory = 'mediaDir';
         $relativePath = 'relativePath';
@@ -129,11 +129,11 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File mediaDir/path is not readable
      */
     public function testCollectFileInfoNotReadable()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'File mediaDir/path is not readable');
+
         $content = 'content';
         $mediaDirectory = 'mediaDir';
         $relativePath = 'relativePath';

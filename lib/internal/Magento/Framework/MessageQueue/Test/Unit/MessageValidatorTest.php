@@ -38,11 +38,11 @@ class MessageValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Specified topic "customer.created" is not declared.
      */
     public function testValidateInvalidTopic()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Specified topic "customer.created" is not declared.');
+
         $this->model->validate('customer.created', 'Some message', true);
     }
 
@@ -81,11 +81,11 @@ class MessageValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Data in topic "customer.created" must be of type "Magento\Customer\Api\Data\CustomerInt
      */
     public function testEncodeInvalidMessageMethodType()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Data in topic "customer.created" must be of type "Magento\\Customer\\Api\\Data\\CustomerInt');
+
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigDataMethodType()
         );

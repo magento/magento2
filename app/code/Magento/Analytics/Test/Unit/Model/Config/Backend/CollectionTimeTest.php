@@ -77,20 +77,22 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAfterSaveWrongValue()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->collectionTime->setData('value', '00,01');
         $this->collectionTime->afterSave();
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAfterSaveWithLocalizedException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $exception = new \Exception('Test message');
         $this->collectionTime->setData('value', '05,04,03');
 

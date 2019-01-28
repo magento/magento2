@@ -30,20 +30,22 @@ class HttpMethodMapTest extends TestCase
     /**
      * Test validation of interface names.
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testExisting()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         new HttpMethodMap(['method1' => 'NonExistingClass']);
     }
 
     /**
      * Test validation of method names.
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testMethod()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         new HttpMethodMap([\Throwable::class]);
     }
 }

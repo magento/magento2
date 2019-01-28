@@ -54,11 +54,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "params" field is missing for one or more jobs
      */
     public function testPeekException()
     {
+        $this->setExpectedException(\RuntimeException::class, '"params" field is missing for one or more jobs');
+
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A"}, {"name": "job B"}]}');
@@ -66,11 +66,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "jobs" field is missing or is not an array
      */
     public function testPeekExceptionNoJobsKey()
     {
+        $this->setExpectedException(\RuntimeException::class, '"jobs" field is missing or is not an array');
+
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"foo": "bar"}');
@@ -101,11 +101,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "params" field is missing for one or more jobs
      */
     public function testPopQueuedJobException()
     {
+        $this->setExpectedException(\RuntimeException::class, '"params" field is missing for one or more jobs');
+
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A"}, {"name": "job B"}]}');
@@ -114,11 +114,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "jobs" field is missing or is not an array
      */
     public function testPopQueuedJobExceptionNoJobsKey()
     {
+        $this->setExpectedException(\RuntimeException::class, '"jobs" field is missing or is not an array');
+
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"foo": "bar"}');
@@ -159,11 +159,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage field is missing for one or more jobs
      */
     public function testAddJobsInvalidJobs()
     {
+        $this->setExpectedException(\RuntimeException::class, 'field is missing for one or more jobs');
+
         $this->queue->addJobs([['no_name' => 'no job', 'no_params' => []]]);
     }
 }

@@ -169,11 +169,11 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The shipment couldn't be deleted.
      */
     public function testDeleteWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, 'The shipment couldn\'t be deleted.');
+
         $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
         $shipment->expects($this->never())
             ->method('getEntityId');
@@ -226,11 +226,11 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The shipment couldn't be saved.
      */
     public function testSaveWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, 'The shipment couldn\'t be saved.');
+
         $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
         $shipment->expects($this->never())
             ->method('getEntityId');

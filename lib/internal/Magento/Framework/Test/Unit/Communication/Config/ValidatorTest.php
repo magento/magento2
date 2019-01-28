@@ -45,24 +45,22 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException  \LogicException
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage Response schema definition has service class with wrong annotated methods
      */
     public function testValidateResponseSchemaType()
     {
+        $this->setExpectedException(\LogicException::class, 'Response schema definition has service class with wrong annotated methods', 333);
+
         /** @var Validator $validator */
         $validator = new Validator($this->typeProcessor, $this->methodsMap);
         $validator->validateResponseSchemaType('123', '123');
     }
 
     /**
-     * @expectedException  \LogicException
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage Request schema definition has service class with wrong annotated methods
      */
     public function testValidateRequestSchemaType()
     {
+        $this->setExpectedException(\LogicException::class, 'Request schema definition has service class with wrong annotated methods', 333);
+
         /** @var Validator $validator */
         $validator = new Validator($this->typeProcessor, $this->methodsMap);
         $validator->validateRequestSchemaType('123', '123');

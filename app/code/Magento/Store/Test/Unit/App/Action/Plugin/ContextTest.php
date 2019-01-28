@@ -285,10 +285,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatchStoreParameterIsInvalidArray()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $this->storeManager->expects($this->once())
             ->method('getWebsite')
             ->willReturn($this->websiteMock);
@@ -328,10 +329,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatchNonExistingStore()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+
         $storeId = 'NonExisting';
         $this->requestMock->expects($this->once())
             ->method('getParam')

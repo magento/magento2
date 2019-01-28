@@ -79,10 +79,11 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionThrown()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
+
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('engineFactoryClass'))
             ->will($this->returnValue('t'));
@@ -91,10 +92,11 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LogicException
      */
     public function testCreateLogicException()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->model->create('input');
     }
 

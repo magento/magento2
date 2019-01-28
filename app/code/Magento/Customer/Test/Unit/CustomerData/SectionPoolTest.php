@@ -71,11 +71,11 @@ class SectionPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage b doesn't extend \Magento\Customer\CustomerData\SectionSourceInterface
      */
     public function testGetSectionsDataAllSectionsException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'b doesn\'t extend \\Magento\\Customer\\CustomerData\\SectionSourceInterface');
+
         $sectionNames = [];
         $identifierResult = [1, 2, 3];
         $this->objectManagerMock->expects($this->once())

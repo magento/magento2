@@ -52,20 +52,20 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Parameter id_path is not set.
      */
     public function testGetHrefWithoutSetIdPath()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Parameter id_path is not set.');
+
         $this->block->getHref();
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Wrong id_path structure.
      */
     public function testGetHrefIfSetWrongIdPath()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Wrong id_path structure.');
+
         $this->block->setData('id_path', 'wrong_id_path');
         $this->block->getHref();
     }

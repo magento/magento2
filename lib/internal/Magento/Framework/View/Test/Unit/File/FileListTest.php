@@ -75,21 +75,21 @@ class FileListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
      */
     public function testAddBaseFileException()
     {
+        $this->setExpectedException(\LogicException::class, 'View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\'');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule');
         $this->_model->add([$file]);
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
      */
     public function testAddThemeFileException()
     {
+        $this->setExpectedException(\LogicException::class, 'View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\'');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule', 'area/theme/path');
         $this->_model->add([$file]);
     }

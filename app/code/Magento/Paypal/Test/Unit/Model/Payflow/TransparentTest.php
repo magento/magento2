@@ -262,10 +262,11 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException  \Exception
      */
     public function testAuthorizeException()
     {
+        $this->setExpectedException(\Exception::class);
+
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
 
@@ -277,11 +278,11 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The payment couldn't be processed at this time. Please try again later.
      */
     public function testAuthorizeValidationException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'The payment couldn\'t be processed at this time. Please try again later.');
+
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
         $voidResponseMock = $this->crateVoidResponseMock();
@@ -313,13 +314,14 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      * @param int $resultCode
      * @param int $origResult
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider authorizeLocalizedExceptionDataProvider
      */
     public function testAuthorizeLocalizedException(
         $resultCode,
         $origResult
     ) {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
 

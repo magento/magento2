@@ -42,11 +42,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown connection name amqp
      */
     public function testGetNullConfig()
     {
+        $this->setExpectedException(\LogicException::class, 'Unknown connection name amqp');
+
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
@@ -56,11 +56,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown connection name amqp
      */
     public function testGetEmptyConfig()
     {
+        $this->setExpectedException(\LogicException::class, 'Unknown connection name amqp');
+
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)

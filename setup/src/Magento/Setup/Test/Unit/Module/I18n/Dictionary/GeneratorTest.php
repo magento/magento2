@@ -170,11 +170,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage No phrases found in the specified dictionary file.
      */
     public function testGenerateWithNoPhrases()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'No phrases found in the specified dictionary file.');
+
         $baseDir = 'no_phrases';
         $outputFilename = 'no_file.csv';
         $filesOptions = ['file1', 'file2'];

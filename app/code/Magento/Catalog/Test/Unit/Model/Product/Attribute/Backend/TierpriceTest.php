@@ -111,11 +111,11 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      * Test for validate method with exception.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Percentage value must be a number between 0 and 100.
      */
     public function testValidateWithException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Percentage value must be a number between 0 and 100.');
+
         $attributeName = 'tier_price';
         $tierPrices = [
             [

@@ -86,10 +86,11 @@ class RendererListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testGetRendererWithException()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $this->assertInstanceOf(
             \Magento\Framework\View\Element\BlockInterface::class,
             $this->renderList->getRenderer(null)

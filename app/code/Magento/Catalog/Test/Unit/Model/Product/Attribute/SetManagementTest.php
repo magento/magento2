@@ -71,10 +71,11 @@ class SetManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testCreateNonProductAttributeSet()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\StateException::class);
+
         $skeletonId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $skeletonSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);

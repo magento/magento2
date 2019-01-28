@@ -91,10 +91,11 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
      */
     public function testIsAvailableException()
     {
+        $this->setExpectedException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
+
         $this->getProductType($this->productTypeSimple);
         $this->checker->isAvailable($this->orderItemMock);
     }

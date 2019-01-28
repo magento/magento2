@@ -49,10 +49,11 @@ class BlockFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateBlockWithException()
     {
+        $this->setExpectedException(\LogicException::class);
+
         $this->blockFactory->createBlock('invalid_class_name');
     }
 }

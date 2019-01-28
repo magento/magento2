@@ -111,11 +111,11 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException     \Magento\Signifyd\Model\SignifydGateway\ApiCallException
-     * @expectedExceptionMessage  Response is not valid JSON: Decoding failed: Syntax error
      */
     public function testHandleEmptyJsonException()
     {
+        $this->setExpectedException(\Magento\Signifyd\Model\SignifydGateway\ApiCallException::class, 'Response is not valid JSON: Decoding failed: Syntax error');
+
         $this->response->expects($this->any())
             ->method('getStatus')
             ->willReturn(self::$successfulCode);
@@ -133,11 +133,11 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException     \Magento\Signifyd\Model\SignifydGateway\ApiCallException
-     * @expectedExceptionMessage  Response is not valid JSON: Some error
      */
     public function testHandleInvalidJson()
     {
+        $this->setExpectedException(\Magento\Signifyd\Model\SignifydGateway\ApiCallException::class, 'Response is not valid JSON: Some error');
+
         $this->response->expects($this->any())
             ->method('getStatus')
             ->willReturn(self::$successfulCode);

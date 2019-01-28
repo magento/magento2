@@ -37,11 +37,11 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Required parameter "module_name" is not specified
      */
     public function testGetPatternDirsException()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Required parameter "module_name" is not specified');
+
         $this->model->getPatternDirs([]);
     }
 

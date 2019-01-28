@@ -90,10 +90,11 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testRenderWithoutRenderList()
     {
+        $this->setExpectedException(\RuntimeException::class);
+
         $priceType = 'final';
         $arguments = ['param' => 1];
         $result = '';
@@ -197,11 +198,11 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Wrong Price Rendering layout configuration. Factory block is missed
      */
     public function testAmountRenderNoRenderPool()
     {
+        $this->setExpectedException(\RuntimeException::class, 'Wrong Price Rendering layout configuration. Factory block is missed');
+
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')

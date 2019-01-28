@@ -366,11 +366,11 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      * Checks a case when API request returns unexpected guarantee disposition.
      *
      * @covers \Magento\Signifyd\Model\SignifydGateway\Gateway::cancelGuarantee
-     * @expectedException \Magento\Signifyd\Model\SignifydGateway\GatewayException
-     * @expectedExceptionMessage API returned unexpected disposition: DECLINED.
      */
     public function testCancelGuaranteeWithUnexpectedDisposition()
     {
+        $this->setExpectedException(\Magento\Signifyd\Model\SignifydGateway\GatewayException::class, 'API returned unexpected disposition: DECLINED.');
+
         $caseId = 123;
         $dummyStoreId = 1;
 

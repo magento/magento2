@@ -154,13 +154,13 @@ class ReportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider importFileExistsDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filename has not permitted symbols in it
      * @param string $fileName
      * @return void
      */
     public function testImportFileExistsException($fileName)
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Filename has not permitted symbols in it');
+
         $this->report->importFileExists($fileName);
     }
 

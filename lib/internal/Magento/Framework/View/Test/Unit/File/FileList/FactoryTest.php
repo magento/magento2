@@ -48,11 +48,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Magento\Framework\View\File\FileList\Collator has to implement the collate interface.
      */
     public function testCreateException()
     {
+        $this->setExpectedException(\UnexpectedValueException::class, 'Magento\\Framework\\View\\File\\FileList\\Collator has to implement the collate interface.');
+
         $collator = new \stdClass();
 
         $this->objectManager
