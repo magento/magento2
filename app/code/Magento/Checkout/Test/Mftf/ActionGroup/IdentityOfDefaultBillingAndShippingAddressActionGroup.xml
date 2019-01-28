@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!--Assert That Shipping And Billing Address are the same-->
+    <actionGroup name="AssertThatShippingAndBillingAddressTheSame">
+        <!--Make sure that shipping and billing addresses are different-->
+        <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
+        <see userInput="Billing Address" stepKey="seeBillingAddress"/>
+        <!--Get shipping and billing addresses-->
+        <grabTextFrom selector="{{StorefrontIdentityOfDefaultBillingAndShippingAddressSection.shippingAddress}}" stepKey="shippingAddr"/>
+        <grabTextFrom selector="{{StorefrontIdentityOfDefaultBillingAndShippingAddressSection.billingAddress}}" stepKey="billingAddr"/>
+        <assertEquals actual="$billingAddr" expected="$shippingAddr" stepKey="assert"/>
+    </actionGroup>
+</actionGroups>

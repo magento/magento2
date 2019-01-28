@@ -5,11 +5,13 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 class MassUnhold extends AbstractMassAction
 {
@@ -40,6 +42,20 @@ class MassUnhold extends AbstractMassAction
         $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Sales\Api\OrderManagementInterface::class
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function execute()
+    {
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
+        return parent::execute();
     }
 
     /**

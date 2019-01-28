@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- action group to create a new catalog price rule giving a catalogRule entity -->
+    <actionGroup name="CreateCatalogPriceRule">
+        <arguments>
+            <argument name="catalogRule" defaultValue="CustomCatalogRule"/>
+        </arguments>
+        <!-- Go to the admin Catalog rule grid and add a new one -->
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewRule"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+
+        <!-- Fill the form according the attributes of the entity -->
+        <fillField selector="{{AdminCatalogPriceRuleSection.ruleName}}" userInput="{{catalogRule.name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminCatalogPriceRuleSection.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCatalogPriceRuleSection.websites}}" parameterArray="{{catalogRule.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCatalogPriceRuleSection.customerGroups}}" parameterArray="{{catalogRule.groups}}" stepKey="selectCustomerGroups"/>
+
+        <click selector="{{AdminCatalogPriceRuleSection.actionsTab}}" stepKey="openActionDropdown"/>
+        <selectOption selector="{{AdminCatalogPriceRuleActionsSection.apply}}" userInput="{{catalogRule.simple_action}}" stepKey="discountType"/>
+        <fillField selector="{{AdminCatalogPriceRuleActionsSection.discountAmount}}" userInput="{{catalogRule.discount_amount}}" stepKey="fillDiscountValue"/>
+        <selectOption selector="{{AdminCatalogPriceRuleActionsSection.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
+
+        <!-- Scroll to top and either save or save and apply after the action group -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForRuleSaved"/>
+        <see userInput="You saved the rule." stepKey="verifyRuleSaved"/>
+    </actionGroup>
+
+    <actionGroup name="RemoveCatalogPriceRule">
+        <arguments>
+            <argument name="ruleName" defaultValue="CustomCatalogRule.name"/>
+        </arguments>
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+
+        <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickToDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForElementVisible"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickToConfirm"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+        <see userInput="You deleted the rule." stepKey="verifyRuleIsDeleted"/>
+    </actionGroup>
+    <!--Add Catalog Rule Condition With product SKU-->
+    <actionGroup name="newCatalogPriceRuleByUIWithConditionIsSKU" extends="CreateCatalogPriceRule">
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+        <click selector="{{AdminCatalogPriceRuleSection.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.newCondition}}" after="openConditionsTab" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminCatalogPriceRuleConditionsSection.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|sku" after="addNewCondition" stepKey="selectTypeCondition"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.targetEllipsis('1')}}" after="selectTypeCondition" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{productSku}}" after="clickEllipsis" stepKey="fillProductSku"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillProductSku" stepKey="clickApply"/>
+    </actionGroup>
+    <!--Add Catalog Rule Condition With Category-->
+    <actionGroup name="newCatalogPriceRuleByUIWithConditionIsCategory" extends="CreateCatalogPriceRule">
+	    <arguments>
+	        <argument name="categoryId" type="string"/>
+ 	    </arguments>
+        <click selector="{{AdminCatalogPriceRuleSection.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.newCondition}}" after="openConditionsTab" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminCatalogPriceRuleConditionsSection.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|category_ids" after="addNewCondition" stepKey="selectTypeCondition"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.targetEllipsis('1')}}" after="selectTypeCondition" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{categoryId}}" after="clickEllipsis" stepKey="fillCategoryId"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillCategoryId" stepKey="clickApply"/>
+    </actionGroup>
+
+    <!-- Open rule for Edit -->
+    <actionGroup name="OpenCatalogPriceRule">
+        <arguments>
+            <argument name="ruleName" type="string" defaultValue="CustomCatalogRule.name"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

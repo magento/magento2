@@ -89,12 +89,17 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetExecutionTime()
     {
-        $time = '01:02:03';
-        $this->timezone->expects($this->any())->method('date')->willReturnSelf();
-        $this->timezone->expects($this->any())->method('getConfigTimezone')->willReturn('America/Los_Angeles');
-        $this->timezone->expects($this->any())->method('diff')->willReturnSelf();
-        $this->timezone->expects($this->any())->method('format')->willReturn($time);
-        $this->assertEquals($time, $this->report->getExecutionTime($time));
+        $startDate = '2000-01-01 01:01:01';
+        $endDate = '2000-01-01 02:03:04';
+        $executionTime = '01:02:03';
+
+        $startDateMock = $this->createTestProxy(\DateTime::class, ['time' => $startDate]);
+        $endDateMock = $this->createTestProxy(\DateTime::class, ['time' => $endDate]);
+        $this->timezone->method('date')
+            ->withConsecutive([$startDate], [])
+            ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
+
+        $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
     }
 
     /**

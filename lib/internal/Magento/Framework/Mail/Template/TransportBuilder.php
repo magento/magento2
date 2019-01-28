@@ -10,6 +10,8 @@ namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\MessageInterfaceFactory;
+use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -47,9 +49,16 @@ class TransportBuilder
     protected $templateOptions;
 
     /**
+     * Mail from address
+     *
+     * @var string|array
+     */
+    private $from;
+
+    /**
      * Mail Transport
      *
-     * @var \Magento\Framework\Mail\TransportInterface
+     * @var TransportInterface
      */
     protected $transport;
 
@@ -63,28 +72,33 @@ class TransportBuilder
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\Message
+     * @var MessageInterface
      */
     protected $message;
 
     /**
      * Sender resolver
      *
-     * @var \Magento\Framework\Mail\Template\SenderResolverInterface
+     * @var SenderResolverInterface
      */
     protected $_senderResolver;
 
     /**
-     * @var \Magento\Framework\Mail\TransportInterfaceFactory
+     * @var TransportInterfaceFactory
      */
     protected $mailTransportFactory;
+
+    /**
+     * @var MessageInterfaceFactory
+     */
+    private $messageFactory;
 
     /**
      * @param FactoryInterface $templateFactory
@@ -92,19 +106,24 @@ class TransportBuilder
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
+     * @param MessageInterfaceFactory|null $messageFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FactoryInterface $templateFactory,
         MessageInterface $message,
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
-        TransportInterfaceFactory $mailTransportFactory
+        TransportInterfaceFactory $mailTransportFactory,
+        MessageInterfaceFactory $messageFactory = null
     ) {
         $this->templateFactory = $templateFactory;
-        $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
+        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
+        $this->message = $this->messageFactory->create();
     }
 
     /**
@@ -166,8 +185,7 @@ class TransportBuilder
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
+        $this->from = $from;
         return $this;
     }
 
@@ -222,7 +240,7 @@ class TransportBuilder
     /**
      * Get mail transport
      *
-     * @return \Magento\Framework\Mail\TransportInterface
+     * @return TransportInterface
      */
     public function getTransport()
     {
@@ -240,10 +258,11 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create(\Magento\Framework\Mail\Message::class);
+        $this->message = $this->messageFactory->create();
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->from = null;
         return $this;
     }
 
@@ -276,6 +295,14 @@ class TransportBuilder
         $this->message->setMessageType($types[$template->getType()])
             ->setBody($body)
             ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
+
+        if ($this->from) {
+            $from = $this->_senderResolver->resolve(
+                $this->from,
+                $template->getDesignConfig()->getStore()
+            );
+            $this->message->setFrom($from['email'], $from['name']);
+        }
 
         return $this;
     }

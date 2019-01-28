@@ -40,7 +40,7 @@ class Datetime extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(AbstractElement $element)
     {
         return $this->dateTimeFormatter->formatObject(
-            $this->_localeDate->date(intval($element->getValue())),
+            $this->_localeDate->date((int) $element->getValue()),
             $this->_localeDate->getDateTimeFormat(\IntlDateFormatter::MEDIUM)
         );
     }

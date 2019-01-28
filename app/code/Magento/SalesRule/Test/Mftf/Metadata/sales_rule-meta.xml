@@ -72,4 +72,7 @@
             </object>
         </object>
     </operation>
+    <operation name="DeleteSalesRule" dataType="SalesRule" type="delete" auth="adminOauth" url="/V1/salesRules/{rule_id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
 </operations>

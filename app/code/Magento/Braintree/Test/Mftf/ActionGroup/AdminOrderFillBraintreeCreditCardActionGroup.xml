@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderFillBraintreeCreditCardActionGroup">
+        <arguments>
+            <argument name="cardData" defaultValue="BraintreeCard"/>
+        </arguments>
+        <waitForLoadingMaskToDisappear stepKey="waitLoadingMaskDisappear"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.braintreeCreditCardMethod}}" dependentSelector="{{AdminOrderFormPaymentSection.braintreeCreditCardMethod}}" visible="true" stepKey="chooseBraintreeCreditCard"/>
+        <waitForLoadingMaskToDisappear stepKey="waitLoadingMask"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.braintreeCcType}}" userInput="{{cardData.cc_type}}" stepKey="fillCc"/>
+        <!--Fill card number-->
+        <switchToIFrame selector="{{AdminOrderFormPaymentSection.braintreeCcFrame}}" stepKey="switchToCcIFrame"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.braintreeCardNumber}}" userInput="{{cardData.card_number}}" stepKey="fillCardNumber"/>
+        <switchToIFrame stepKey="switchToDefaultContext1"/>
+        <!--Fill card expiration month-->
+        <switchToIFrame selector="{{AdminOrderFormPaymentSection.braintreeCcExpMonthFrame}}" stepKey="switchToCcExpMonthIFrame"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.braintreeExpMonth}}" userInput="{{cardData.exp_month}}" stepKey="fillExpMonth"/>
+        <switchToIFrame stepKey="switchToDefaultContext2"/>
+        <!--Fill card expiration year-->
+        <switchToIFrame selector="{{AdminOrderFormPaymentSection.braintreeCcExpYear}}" stepKey="switchToCcExpYearIFrame"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.braintreeExpYear}}" userInput="{{cardData.exp_year}}" stepKey="fillExpYear"/>
+        <switchToIFrame stepKey="switchToDefaultContext3"/>
+        <!--Fill card CVV-->
+        <switchToIFrame selector="{{AdminOrderFormPaymentSection.braintreeCvvFrame}}" stepKey="switchToCvvIFrame"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.braintreeCvv}}" userInput="{{cardData.cvv}}" stepKey="fillCvv"/>
+        <switchToIFrame stepKey="switchToDefaultContext4"/>
+    </actionGroup>
+</actionGroups>

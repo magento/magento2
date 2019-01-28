@@ -46,11 +46,11 @@ class PriceModifier
 
         foreach ($prices as $key => $tierPrice) {
             if ($customerGroupId == 'all' && $tierPrice['price_qty'] == $qty
-                && $tierPrice['all_groups'] == 1 && intval($tierPrice['website_id']) === intval($websiteId)
+                && $tierPrice['all_groups'] == 1 && (int)$tierPrice['website_id'] === (int)$websiteId
             ) {
                 unset($prices[$key]);
             } elseif ($tierPrice['price_qty'] == $qty && $tierPrice['cust_group'] == $customerGroupId
-                && intval($tierPrice['website_id']) === intval($websiteId)
+                && (int)$tierPrice['website_id'] === (int)$websiteId
             ) {
                 unset($prices[$key]);
             }

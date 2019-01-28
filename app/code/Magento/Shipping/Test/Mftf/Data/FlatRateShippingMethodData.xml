@@ -16,7 +16,13 @@
     <entity name="flatRateActiveEnable" type="active">
         <data key="value">1</data>
     </entity>
-
+    <!-- Disable Flat Rate Shipping method config -->
+    <entity name="DisableFlatRateShippingMethodConfig" type="flat_rate_shipping_method">
+        <requiredEntity type="active">flatRateActiveDisable</requiredEntity>
+    </entity>
+    <entity name="flatRateActiveDisable" type="active">
+        <data key="value">0</data>
+    </entity>
     <!-- Flat Rate Shipping method default setup -->
     <entity name="FlatRateShippingMethodDefault" type="flat_rate_shipping_method">
         <requiredEntity type="active">flatRateActiveDefault</requiredEntity>

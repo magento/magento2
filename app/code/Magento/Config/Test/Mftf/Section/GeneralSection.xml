@@ -15,7 +15,7 @@
         <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
         <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit"/>
         <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
-        <element name="Save" type="button" selector="#save"/>
+        <element name="Save" type="button" selector="#save" timeout="30"/>
     </section>
     <section name="WebSection">
         <element name="DefaultLayoutsTab" type="button" selector="#web_default_layouts-head"/>

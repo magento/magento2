@@ -14,9 +14,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 
 /**
- * Process tier price data for handled existing product
+ * Process tier price data for handled existing product.
  */
-class UpdateHandler implements ExtensionInterface
+class UpdateHandler extends AbstractHandler
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -27,11 +27,6 @@ class UpdateHandler implements ExtensionInterface
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
     private $attributeRepository;
-
-    /**
-     * @var \Magento\Customer\Api\GroupManagementInterface
-     */
-    private $groupManagement;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -57,9 +52,10 @@ class UpdateHandler implements ExtensionInterface
         MetadataPool $metadataPool,
         Tierprice $tierPriceResource
     ) {
+        parent::__construct($groupManagement);
+
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
-        $this->groupManagement = $groupManagement;
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
     }
@@ -68,8 +64,7 @@ class UpdateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
@@ -82,14 +77,14 @@ class UpdateHandler implements ExtensionInterface
                     __('Tier prices data should be array, but actually other type is received')
                 );
             }
-            $websiteId = $this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
+            $websiteId = (int)$this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
-            $productId = $entity->getData($identifierField);
+            $productId = (int)$entity->getData($identifierField);
 
             // prepare original data to compare
             $origPrices = $entity->getOrigData($attribute->getName());
-            $old = $this->prepareOriginalDataToCompare($origPrices, $isGlobal);
+            $old = $this->prepareOldTierPriceToCompare($origPrices);
             // prepare data for save
             $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
 
@@ -108,34 +103,6 @@ class UpdateHandler implements ExtensionInterface
         }
 
         return $entity;
-    }
-
-    /**
-     * Get additional tier price fields
-     *
-     * @param array $objectArray
-     * @return array
-     */
-    private function getAdditionalFields(array $objectArray): array
-    {
-        $percentageValue = $this->getPercentage($objectArray);
-        return [
-            'value' => $percentageValue ? null : $objectArray['price'],
-            'percentage_value' => $percentageValue ?: null,
-        ];
-    }
-
-    /**
-     * Check whether price has percentage value.
-     *
-     * @param array $priceRow
-     * @return integer|null
-     */
-    private function getPercentage(array $priceRow)
-    {
-        return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? (int)$priceRow['percentage_value']
-            : null;
     }
 
     /**
@@ -168,7 +135,7 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-     * Insert new tier prices for processed product
+     * Insert new tier prices for processed product.
      *
      * @param int $productId
      * @param array $valuesToInsert
@@ -192,7 +159,7 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-     * Delete tier price values for processed product
+     * Delete tier price values for processed product.
      *
      * @param int $productId
      * @param array $valuesToDelete
@@ -210,48 +177,24 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-     * Get generated price key based on price data
+     * Get generated price key based on price data.
      *
      * @param array $priceData
      * @return string
      */
     private function getPriceKey(array $priceData): string
     {
+        $qty = $this->parseQty($priceData['price_qty']);
         $key = implode(
             '-',
-            array_merge([$priceData['website_id'], $priceData['cust_group']], [(int)$priceData['price_qty']])
+            array_merge([$priceData['website_id'], $priceData['cust_group']], [$qty])
         );
 
         return $key;
     }
 
     /**
-     * Prepare tier price data by provided price row data
-     *
-     * @param array $data
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function prepareTierPrice(array $data): array
-    {
-        $useForAllGroups = (int)$data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
-        $customerGroupId = $useForAllGroups ? 0 : $data['cust_group'];
-        $tierPrice = array_merge(
-            $this->getAdditionalFields($data),
-            [
-                'website_id' => $data['website_id'],
-                'all_groups' => (int)$useForAllGroups,
-                'customer_group_id' => $customerGroupId,
-                'value' => $data['price'] ?? null,
-                'qty' => (int)$data['price_qty']
-            ]
-        );
-
-        return $tierPrice;
-    }
-
-    /**
-     * Check by id is website global
+     * Check by id is website global.
      *
      * @param int $websiteId
      * @return bool
@@ -262,19 +205,18 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Prepare old data to compare.
+     *
      * @param array|null $origPrices
-     * @param bool $isGlobal
      * @return array
      */
-    private function prepareOriginalDataToCompare($origPrices, $isGlobal = true): array
+    private function prepareOldTierPriceToCompare($origPrices): array
     {
         $old = [];
         if (is_array($origPrices)) {
             foreach ($origPrices as $data) {
-                if ($isGlobal === $this->isWebsiteGlobal((int)$data['website_id'])) {
-                    $key = $this->getPriceKey($data);
-                    $old[$key] = $data;
-                }
+                $key = $this->getPriceKey($data);
+                $old[$key] = $data;
             }
         }
 
@@ -282,6 +224,8 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Prepare new data for save.
+     *
      * @param array $priceRows
      * @param bool $isGlobal
      * @return array

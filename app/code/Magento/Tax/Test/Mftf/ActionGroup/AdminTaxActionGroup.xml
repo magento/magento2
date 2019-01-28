@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add new Tax Rule with custom tax Rate and product Tax Class -->
+    <actionGroup name="AddTaxRule">
+        <arguments>
+            <argument name="taxRuleName" type="string"/>
+            <argument name="taxRate"/>
+            <argument name="productTaxClass"/>
+        </arguments>
+        <amOnPage url="{{AdminTaxRuleNewPage.url}}" stepKey="goToTaxRulePage"/>
+        <fillField selector="{{AdminTaxRuleEditFormSection.ruleName}}" userInput="{{taxRuleName}}" stepKey="fillTaxRuleName"/>
+        <click selector="{{AdminTaxRuleEditFormSection.selectTaxRate(taxRate.code)}}" stepKey="selectTaxRate"/>
+        <conditionalClick selector="{{AdminTaxRuleEditFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleEditFormSection.additionalSettings}}" visible="true" stepKey="clickAdditionalSettings"/>
+        <scrollTo selector="{{AdminTaxRuleEditFormSection.selectProductTaxClass(productTaxClass.class_name)}}" stepKey="scrollToProductTaxClass"/>
+        <click selector="{{AdminTaxRuleEditFormSection.selectProductTaxClass(productTaxClass.class_name)}}" stepKey="selectProductTaxClass"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveTaxRule"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteTaxRule">
+        <arguments>
+            <argument name="taxRuleName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminTaxRulesGridPage.url}}" stepKey="loadTaxRulePage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilterBefore"/>
+        <fillField selector="{{AdminTaxRulesGridHeaderSection.taxRuleCodeFilter}}" userInput="{{taxRuleName}}" stepKey="fillTaxRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="openTaxRule"/>
+        <waitForPageLoad stepKey="waitForTaxRulePage"/>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDeleteTaxRule"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForPageLoadAfterClickingDelete"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptDelete"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The tax rule has been deleted." stepKey="seeDeleteSuccessMessage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilterAfter"/>
+    </actionGroup>
+
+</actionGroups>

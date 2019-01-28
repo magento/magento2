@@ -91,6 +91,8 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider dataForFullPath
+     * @param string $swatchType
+     * @param string $expectedResult
      */
     public function testGetSwatchAttributeImage($swatchType, $expectedResult)
     {
@@ -98,7 +100,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-
         $this->storeMock
             ->expects($this->once())
             ->method('getBaseUrl')
@@ -107,11 +108,41 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $this->generateImageConfig();
 
-        $this->testGenerateSwatchVariations();
+        $image = $this->createPartialMock(\Magento\Framework\Image::class, [
+            'resize',
+            'save',
+            'keepTransparency',
+            'constrainOnly',
+            'keepFrame',
+            'keepAspectRatio',
+            'backgroundColor',
+            'quality'
+        ]);
+        $this->imageFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($image);
+        $image->expects($this->atLeastOnce())
+            ->method('resize')
+            ->will($this->returnSelf());
+        $image->expects($this->atLeastOnce())
+            ->method('backgroundColor')
+            ->with([255, 255, 255])
+            ->willReturnSelf();
 
         $result = $this->mediaHelperObject->getSwatchAttributeImage($swatchType, '/f/i/file.png');
+        $this->assertEquals($expectedResult, $result);
+    }
 
-        $this->assertEquals($result, $expectedResult);
+    public function testGetSwatchAttributeImageWithMissingFile()
+    {
+        $this->generateImageConfig();
+
+        $this->imageFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willThrowException(new \Exception(''));
+
+        $result = $this->mediaHelperObject->getSwatchAttributeImage('swatch_image', '/f/i/file.png');
+        $this->assertEquals('', $result);
     }
 
     /**
@@ -195,6 +226,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider dataForFolderName
+     * @param string $swatchType
+     * @param array|null $imageConfig
+     * @param string $expectedResult
      */
     public function testGetFolderNameSize($swatchType, $imageConfig, $expectedResult)
     {
@@ -293,6 +327,8 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getSwatchTypes
+     * @param string $swatchType
+     * @param string $expectedResult
      */
     public function testGetSwatchCachePath($swatchType, $expectedResult)
     {

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
@@ -19,6 +20,8 @@ class CreateHandler extends AbstractHandler
     const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
 
     /**
+     * Execute before Plugin
+     *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @param array $arguments
@@ -30,6 +33,7 @@ class CreateHandler extends AbstractHandler
         \Magento\Catalog\Model\Product $product,
         array $arguments = []
     ) {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $mediaGalleryCreateHandler->getAttribute();
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
         if (!empty($mediaCollection)) {
@@ -37,12 +41,14 @@ class CreateHandler extends AbstractHandler
             $mediaCollection = $this->addAdditionalStoreData($mediaCollection, $storeDataCollection);
             $product->setData(
                 $attribute->getAttributeCode(),
-                $mediaCollection + $product->getData($attribute->getAttributeCode())
+                $mediaCollection
             );
         }
     }
 
     /**
+     * Execute plugin
+     *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
@@ -57,6 +63,12 @@ class CreateHandler extends AbstractHandler
         );
 
         if (!empty($mediaCollection)) {
+            if ($product->getIsDuplicate() === true) {
+                $mediaCollection = $this->makeAllNewVideos($product->getId(), $mediaCollection);
+            }
+            $newVideoCollection = $this->collectNewVideos($mediaCollection);
+            $this->saveVideoData($newVideoCollection, 0);
+
             $videoDataCollection = $this->collectVideoData($mediaCollection);
             $this->saveVideoData($videoDataCollection, $product->getStoreId());
             $this->saveAdditionalStoreData($videoDataCollection);
@@ -66,6 +78,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Saves video data
+     *
      * @param array $videoDataCollection
      * @param int $storeId
      * @return void
@@ -79,6 +93,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Saves additioanal video data
+     *
      * @param array $videoDataCollection
      * @return void
      */
@@ -95,6 +111,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Saves video data
+     *
      * @param array $item
      * @return void
      */
@@ -107,6 +125,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Excludes current store data
+     *
      * @param array $mediaCollection
      * @param int $currentStoreId
      * @return array
@@ -122,6 +142,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Prepare video data for saving
+     *
      * @param array $rowData
      * @return array
      */
@@ -139,6 +161,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Loads video data
+     *
      * @param array $mediaCollection
      * @param int $excludedStore
      * @return array
@@ -161,6 +185,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Collect video data
+     *
      * @param array $mediaCollection
      * @return array
      */
@@ -168,10 +194,7 @@ class CreateHandler extends AbstractHandler
     {
         $videoDataCollection = [];
         foreach ($mediaCollection as $item) {
-            if (!empty($item['media_type'])
-                && empty($item['removed'])
-                && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
-            ) {
+            if ($this->isVideoItem($item)) {
                 $videoData = $this->extractVideoDataFromRowData($item);
                 $videoDataCollection[] = $videoData;
             }
@@ -181,6 +204,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Extract video data
+     *
      * @param array $rowData
      * @return array
      */
@@ -193,6 +218,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Collect items for additional data adding
+     *
      * @param array $mediaCollection
      * @return array
      */
@@ -200,11 +227,7 @@ class CreateHandler extends AbstractHandler
     {
         $ids = [];
         foreach ($mediaCollection as $item) {
-            if (!empty($item['media_type'])
-                && empty($item['removed'])
-                && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
-                && isset($item['save_data_from'])
-            ) {
+            if ($this->isVideoItem($item) && isset($item['save_data_from'])) {
                 $ids[] = $item['save_data_from'];
             }
         }
@@ -212,30 +235,35 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Add additional data
+     *
      * @param array $mediaCollection
      * @param array $data
      * @return array
      */
-    protected function addAdditionalStoreData(array $mediaCollection, array $data)
+    protected function addAdditionalStoreData(array $mediaCollection, array $data): array
     {
-        foreach ($mediaCollection as &$mediaItem) {
+        $return = [];
+        foreach ($mediaCollection as $key => $mediaItem) {
             if (!empty($mediaItem['save_data_from'])) {
                 $additionalData = $this->createAdditionalStoreDataCollection($data, $mediaItem['save_data_from']);
                 if (!empty($additionalData)) {
                     $mediaItem[self::ADDITIONAL_STORE_DATA_KEY] = $additionalData;
                 }
             }
+            $return[$key] = $mediaItem;
         }
-
-        return ['images' => $mediaCollection];
+        return ['images' => $return];
     }
 
     /**
+     * Creates additional video data
+     *
      * @param array $storeData
      * @param int $valueId
      * @return array
      */
-    protected function createAdditionalStoreDataCollection(array $storeData, $valueId)
+    protected function createAdditionalStoreDataCollection(array $storeData, $valueId): array
     {
         $result = [];
         foreach ($storeData as $item) {
@@ -246,5 +274,67 @@ class CreateHandler extends AbstractHandler
         }
 
         return $result;
+    }
+
+    /**
+     * Collect new videos
+     *
+     * @param array $mediaCollection
+     * @return array
+     */
+    private function collectNewVideos(array $mediaCollection): array
+    {
+        $return = [];
+        foreach ($mediaCollection as $item) {
+            if ($this->isVideoItem($item) && $this->isNewVideo($item)) {
+                $return[] = $this->extractVideoDataFromRowData($item);
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * Checks if gallery item is video
+     *
+     * @param $item
+     * @return bool
+     */
+    private function isVideoItem($item): bool
+    {
+        return !empty($item['media_type'])
+            && empty($item['removed'])
+            && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE;
+    }
+
+    /**
+     * Checks if video is new
+     *
+     * @param $item
+     * @return bool
+     */
+    private function isNewVideo($item): bool
+    {
+        return !isset($item['video_url_default'], $item['video_title_default'])
+            || empty($item['video_url_default'])
+            || empty($item['video_title_default']);
+    }
+
+    /**
+     * Mark all videos as new
+     *
+     * @param int $entityId
+     * @param array $mediaCollection
+     * @return array
+     */
+    private function makeAllNewVideos($entityId, array $mediaCollection): array
+    {
+        foreach ($mediaCollection as $key => $video) {
+            if ($this->isVideoItem($video)) {
+                unset($video['video_url_default'], $video['video_title_default']);
+                $video['entity_id'] = $entityId;
+                $mediaCollection[$key] = $video;
+            }
+        }
+        return $mediaCollection;
     }
 }

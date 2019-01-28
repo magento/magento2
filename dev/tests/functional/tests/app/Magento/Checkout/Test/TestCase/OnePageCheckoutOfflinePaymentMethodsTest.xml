@@ -123,8 +123,6 @@
             <data name="billingCheckboxState" xsi:type="string">Yes</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
-            <data name="issue" xsi:type="string">MAGETWO-91293</data>
-            <data name="tag" xsi:type="string">stable:no</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>

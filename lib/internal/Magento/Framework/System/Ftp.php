@@ -128,7 +128,7 @@ class Ftp
     public function connect($string, $timeout = 900)
     {
         $params = $this->validateConnectionString($string);
-        $port = isset($params['port']) ? intval($params['port']) : 21;
+        $port = isset($params['port']) ? (int)$params['port'] : 21;
 
         $this->_conn = ftp_connect($params['host'], $port, $timeout);
 
@@ -189,7 +189,7 @@ class Ftp
         if (empty($data[1])) {
             return false;
         }
-        if (intval($data[0]) != 257) {
+        if ((int)$data[0] != 257) {
             return false;
         }
         $out = trim($data[1], '"');

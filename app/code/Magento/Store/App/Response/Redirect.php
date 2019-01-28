@@ -81,17 +81,16 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected function _getUrl()
     {
         $refererUrl = $this->_request->getServer('HTTP_REFERER');
-        $url = (string)$this->_request->getParam(self::PARAM_NAME_REFERER_URL);
-        if ($url) {
-            $refererUrl = $url;
-        }
-        $url = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL);
-        if ($url) {
-            $refererUrl = $this->_urlCoder->decode($url);
-        }
-        $url = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
-        if ($url) {
-            $refererUrl = $this->_urlCoder->decode($url);
+        $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED)
+            ?: $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL);
+
+        if ($encodedUrl) {
+            $refererUrl = $this->_urlCoder->decode($encodedUrl);
+        } else {
+            $url = (string)$this->_request->getParam(self::PARAM_NAME_REFERER_URL);
+            if ($url) {
+                $refererUrl = $url;
+            }
         }
 
         if (!$this->_isUrlInternal($refererUrl)) {

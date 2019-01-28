@@ -77,20 +77,22 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     {
         $order = $this->getOrder('100000001');
 
-        /** @var ShipmentInterface $shipment */
-        $shipment = $this->objectManager->create(ShipmentInterface::class);
-
         /** @var ShipmentTrackInterface $track */
         $track = $this->objectManager->create(ShipmentTrackInterface::class);
         $track->setNumber('Test Number')
             ->setTitle('Test Title')
             ->setCarrierCode('Test CODE');
 
-        $shipment->setOrder($order)
-            ->addItem($this->objectManager->create(ShipmentItemInterface::class))
-            ->addTrack($track);
-
-        $saved = $this->shipmentRepository->save($shipment);
+        $items = [];
+        foreach ($order->getItems() as $item) {
+            $items[$item->getId()] = $item->getQtyOrdered();
+        }
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $this->objectManager->get(ShipmentFactory::class)
+            ->create($order, $items);
+        $shipment->addTrack($track);
+        $this->shipmentRepository->save($shipment);
+        $saved = $this->shipmentRepository->get((int)$shipment->getEntityId());
         self::assertNotEmpty($saved->getTracks());
     }
 

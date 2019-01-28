@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnabledMinimumOrderAmount500" type="sales_minimum_order">
+        <requiredEntity type="active">EnableMinimumOrderCheck</requiredEntity>
+        <requiredEntity type="amount">MinimumOrderAmount500</requiredEntity>
+    </entity>
+    <entity name="EnableMinimumOrderCheck" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="MinimumOrderAmount500" type="amount">
+        <data key="value">500</data>
+    </entity>
+
+    <entity name="DisabledMinimumOrderAmount" type="sales_minimum_order">
+        <requiredEntity type="active">DisableMinimumOrderCheck</requiredEntity>
+    </entity>
+    <entity name="DisableMinimumOrderCheck" type="active">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="CheckoutShippingTotalsSortOrder" type="checkout_totals_sort_order">
+        <requiredEntity type="shipping">ShippingTotalsSortOrder</requiredEntity>
+    </entity>
+    <entity name="ShippingTotalsSortOrder" type="shipping">
+        <data key="value">27</data>
+    </entity>
+
+    <entity name="DefaultTotalsSortOrder" type="checkout_totals_sort_order">
+        <requiredEntity type="shipping">DefaultShippingTotalSortOrder</requiredEntity>
+    </entity>
+
+    <entity name="DefaultShippingTotalSortOrder" type="shipping">
+        <requiredEntity type="shipping_inherit_value">DefaultTotalFlagDisabled</requiredEntity>
+    </entity>
+
+    <entity name="DefaultTotalFlagDisabled" type="shipping_inherit_value">
+        <data key="value">0</data>
+    </entity>
+</entities>

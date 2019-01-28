@@ -358,13 +358,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $this->setId($customerId);
         }
 
-        // Need to use attribute set or future updates can cause data loss
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(
-                CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
-            );
-        }
-
         return $this;
     }
 
@@ -958,6 +951,16 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $this->setData('shared_website_ids', $ids);
         }
         return $ids;
+    }
+
+    /**
+     * Retrieve attribute set id for customer.
+     *
+     * @return int
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
     }
 
     /**

@@ -15,7 +15,7 @@
     <entity name="RegionTX" type="region">
         <data key="region">Texas</data>
         <data key="region_code">TX</data>
-        <data key="region_id">1</data>
+        <data key="region_id">57</data>
     </entity>
     <entity name="RegionCA" type="region">
         <data key="region">California</data>

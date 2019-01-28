@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\File;
 
+use Magento\Framework\Image\Adapter\UploadConfigInterface;
+
 /**
  * File upload class
  *
@@ -136,12 +138,16 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see UploadConfigInterface::getMaxWidth()
      */
     const MAX_IMAGE_WIDTH = 1920;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see UploadConfigInterface::getMaxHeight()
      */
     const MAX_IMAGE_HEIGHT = 1200;
 
@@ -204,20 +210,22 @@ class Uploader
         $this->_result = false;
         $destinationFile = $destinationFolder;
         $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
-        $fileName = self::getCorrectFileName($fileName);
+        $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
             $this->setAllowCreateFolders(true);
-            $this->_dispretionPath = self::getDispersionPath($fileName);
+            $this->_dispretionPath = static::getDispersionPath($fileName);
             $destinationFile .= $this->_dispretionPath;
             $this->_createDestinationFolder($destinationFile);
         }
 
         if ($this->_allowRenameFiles) {
-            $fileName = self::getNewFileName(self::_addDirSeparator($destinationFile) . $fileName);
+            $fileName = static::getNewFileName(
+                static::_addDirSeparator($destinationFile) . $fileName
+            );
         }
 
-        $destinationFile = self::_addDirSeparator($destinationFile) . $fileName;
+        $destinationFile = static::_addDirSeparator($destinationFile) . $fileName;
 
         try {
             $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);

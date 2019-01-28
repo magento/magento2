@@ -7,69 +7,80 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Delegation\Data\NewOperation;
+use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Customer\Model\Customer\NotificationStorage;
+use Magento\Customer\Model\Delegation\Data\NewOperation;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Customer repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInterface
+class CustomerRepository implements CustomerRepositoryInterface
 {
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var CustomerFactory
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\Data\CustomerSecureFactory
+     * @var CustomerSecureFactory
      */
     protected $customerSecureFactory;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry
+     * @var CustomerRegistry
      */
     protected $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\AddressRepository
+     * @var AddressRepository
      */
     protected $addressRepository;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Customer
+     * @var Customer
      */
     protected $customerResourceModel;
 
     /**
-     * @var \Magento\Customer\Api\CustomerMetadataInterface
+     * @var CustomerMetadataInterface
      */
     protected $customerMetadata;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory
+     * @var CustomerSearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var ExtensibleDataObjectConverter
      */
     protected $extensibleDataObjectConverter;
 
@@ -84,7 +95,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $imageProcessor;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @var JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -104,38 +115,38 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     private $delegatedStorage;
 
     /**
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\Data\CustomerSecureFactory $customerSecureFactory
-     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param \Magento\Customer\Model\ResourceModel\AddressRepository $addressRepository
-     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel
-     * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
-     * @param \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param CustomerFactory $customerFactory
+     * @param CustomerSecureFactory $customerSecureFactory
+     * @param CustomerRegistry $customerRegistry
+     * @param AddressRepository $addressRepository
+     * @param Customer $customerResourceModel
+     * @param CustomerMetadataInterface $customerMetadata
+     * @param CustomerSearchResultsInterfaceFactory $searchResultsFactory
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param DataObjectHelper $dataObjectHelper
      * @param ImageProcessorInterface $imageProcessor
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param NotificationStorage $notificationStorage
      * @param DelegatedStorage|null $delegatedStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\Data\CustomerSecureFactory $customerSecureFactory,
-        \Magento\Customer\Model\CustomerRegistry $customerRegistry,
-        \Magento\Customer\Model\ResourceModel\AddressRepository $addressRepository,
-        \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel,
-        \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
-        \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        CustomerFactory $customerFactory,
+        CustomerSecureFactory $customerSecureFactory,
+        CustomerRegistry $customerRegistry,
+        AddressRepository $addressRepository,
+        Customer $customerResourceModel,
+        CustomerMetadataInterface $customerMetadata,
+        CustomerSearchResultsInterfaceFactory $searchResultsFactory,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         DataObjectHelper $dataObjectHelper,
         ImageProcessorInterface $imageProcessor,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
         DelegatedStorage $delegatedStorage = null
@@ -155,8 +166,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
-        $this->delegatedStorage = $delegatedStorage
-            ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
+        $this->delegatedStorage = $delegatedStorage ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
     }
 
     /**
@@ -205,12 +215,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
 
-        // Need to use attribute set or future updates can cause data loss
-        if (!$customerModel->getAttributeSetId()) {
-            $customerModel->setAttributeSetId(
-                \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
-            );
-        }
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
 
         // If customer email was changed, reset RpToken info
@@ -220,7 +224,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-        if (!array_key_exists('default_billing', $customerArr)
+        if (!array_key_exists('addresses', $customerArr)
             && null !== $prevCustomerDataArr
             && array_key_exists('default_billing', $prevCustomerDataArr)
         ) {
@@ -228,7 +232,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $prevCustomerDataArr['default_billing']
             );
         }
-        if (!array_key_exists('default_shipping', $customerArr)
+        if (!array_key_exists('addresses', $customerArr)
             && null !== $prevCustomerDataArr
             && array_key_exists('default_shipping', $prevCustomerDataArr)
         ) {
@@ -361,7 +365,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             ->joinAttribute('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
             ->joinAttribute('billing_region', 'customer_address/region', 'default_billing', null, 'left')
             ->joinAttribute('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left')
-            ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left');
+            ->joinAttribute('billing_company', 'customer_address/company', 'default_billing', null, 'left');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
@@ -401,15 +405,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 100.2.0
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
-     * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
+     * @param FilterGroup $filterGroup
+     * @param Collection $collection
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
      */
-    protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
-        \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
-    ) {
+    protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
+    {
         $fields = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';

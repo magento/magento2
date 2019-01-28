@@ -139,7 +139,7 @@ require(['mage/adminhtml/form'], function(){
     }
 
     /**
-     * Field dependences JSON map generator
+     * Field dependencies JSON map generator
      * @return string
      */
     protected function _getDependsJson()

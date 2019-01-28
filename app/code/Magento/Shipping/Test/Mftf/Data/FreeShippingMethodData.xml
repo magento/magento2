@@ -57,4 +57,19 @@
     <entity name="freeSortOrderDefault" type="sort_order">
         <data key="value" />
     </entity>
+
+    <!--Set Free Shipping Subtotal to 101-->
+    <entity name="setFreeShippingSubtotal" type="free_shipping_method">
+        <requiredEntity type="free_shipping_subtotal">freeShippingSubtotal</requiredEntity>
+    </entity>
+    <entity name="freeShippingSubtotal" type="free_shipping_subtotal">
+        <data key="value">101</data>
+    </entity>
+    <!--Set to default Free Shipping Subtotal-->
+    <entity name="setFreeShippingSubtotalToDefault" type="free_shipping_method">
+        <requiredEntity type="free_shipping_subtotal">freeShippingSubtotalDefault</requiredEntity>
+    </entity>
+    <entity name="freeShippingSubtotalDefault" type="free_shipping_subtotal">
+        <data key="value">0</data>
+    </entity>
 </entities>

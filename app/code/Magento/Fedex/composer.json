@@ -15,7 +15,7 @@
         "lib-libxml": "*"
     },
     "type": "magento2-module",
-    "version": "100.2.2",
+    "version": "100.2.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

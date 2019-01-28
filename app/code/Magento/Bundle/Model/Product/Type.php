@@ -8,13 +8,13 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 
 /**
  * Bundle Type Model
@@ -310,8 +310,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $selectionIds = $this->serializer->unserialize($customOption->getValue());
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
-                    foreach ($selections->getItems() as $selection) {
-                        $skuParts[] = $selection->getSku();
+                    foreach ($selectionIds as $selectionId) {
+                        $entity = $selections->getItemByColumnValue('selection_id', $selectionId);
+                        if (isset($entity) && $entity->getEntityId()) {
+                            $skuParts[] = $entity->getSku();
+                        }
                     }
                 }
             }
@@ -539,7 +542,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($options as $quoteItemOption) {
                     if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $quoteItemOption->setValue(intval($quoteItemOption->getValue()));
+                            $quoteItemOption->setValue((int)$quoteItemOption->getValue());
                         } else {
                             $quoteItemOption->setValue($value);
                         }
@@ -561,7 +564,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return intval($qty);
+        return (int)$qty;
     }
 
     /**
@@ -738,7 +741,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $price = $product->getPriceModel()
                         ->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
                     $attributes = [
-                        'price' => $this->priceCurrency->convert($price),
+                        'price' => $price,
                         'qty' => $qty,
                         'option_label' => $selection->getOption()
                             ->getTitle(),
@@ -818,11 +821,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     private function multiToFlatArray(array $array)
     {
         $flatArray = [];
-        foreach ($array as $key => $value) {
+        foreach ($array as $value) {
             if (is_array($value)) {
                 $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
             } else {
-                $flatArray[$key] = $value;
+                $flatArray[] = $value;
             }
         }
 
@@ -1013,10 +1016,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $secondItem->getPosition(),
             $secondItem->getSelectionId(),
         ];
-        if ($aPosition == $bPosition) {
-            return 0;
-        }
-        return $aPosition < $bPosition ? -1 : 1;
+
+        return $aPosition <=> $bPosition;
     }
 
     /**

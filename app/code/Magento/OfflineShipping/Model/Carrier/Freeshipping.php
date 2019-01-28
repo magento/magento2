@@ -97,8 +97,18 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
             $method->setCost('0.00');
 
             $result->append($method);
+        } elseif ($this->getConfigData('showmethod')) {
+            $error = $this->_rateErrorFactory->create();
+            $error->setCarrier($this->_code);
+            $error->setCarrierTitle($this->getConfigData('title'));
+            $errorMsg = $this->getConfigData('specificerrmsg');
+            $error->setErrorMessage(
+                $errorMsg ? $errorMsg : __(
+                    'Sorry, but we can\'t deliver to the destination country with this shipping module.'
+                )
+            );
+            return $error;
         }
-
         return $result;
     }
 

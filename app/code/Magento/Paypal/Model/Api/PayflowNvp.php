@@ -136,6 +136,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'CVV2MATCH' => 'cvv2_check_result',
 
         'USERSELECTEDFUNDINGSOURCE' => 'funding_source',
+
+        'NOSHIPPING' => 'suppress_shipping',
+        'REQBILLINGADDRESS' => 'require_billing_address',
     ];
 
     /**
@@ -248,6 +251,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'PAYFLOWCOLOR',
         'LOCALECODE',
         'USERSELECTEDFUNDINGSOURCE',
+        'NOSHIPPING',
+        'REQBILLINGADDRESS',
     ];
 
     /**

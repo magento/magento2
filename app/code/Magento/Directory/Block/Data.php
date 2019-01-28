@@ -184,7 +184,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            intval($this->getRegionId())
+            (int)$this->getRegionId()
         )->setOptions(
             $options
         )->getHtml();

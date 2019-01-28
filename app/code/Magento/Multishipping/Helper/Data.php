@@ -13,16 +13,19 @@ namespace Magento\Multishipping\Helper;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /**#@+
+    /*
      * Xml paths for multishipping checkout
+     *
      **/
     const XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE = 'multishipping/options/checkout_multiple';
 
     const XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY = 'multishipping/options/checkout_multiple_maximum_qty';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * Checkout session
+     *
+     * @var \Magento\Checkout\Model\Session
+     */
     protected $checkoutSession;
 
     /**

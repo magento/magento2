@@ -53,7 +53,7 @@ class Buttons extends \Magento\Backend\Block\Template
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
-        if (intval($this->getRequest()->getParam('rid'))) {
+        if ((int)$this->getRequest()->getParam('rid')) {
             $this->getToolbar()->addChild(
                 'deleteButton',
                 \Magento\Backend\Block\Widget\Button::class,
@@ -113,7 +113,7 @@ class Buttons extends \Magento\Backend\Block\Template
      */
     public function getDeleteButtonHtml()
     {
-        if (intval($this->getRequest()->getParam('rid')) == 0) {
+        if ((int)$this->getRequest()->getParam('rid') == 0) {
             return;
         }
         return $this->getChildHtml('deleteButton');

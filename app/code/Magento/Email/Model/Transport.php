@@ -7,13 +7,16 @@ namespace Magento\Email\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
-use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\Message;
 use Magento\Framework\Mail\TransportInterface;
+use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
+use Zend\Mail\Message as ZendMessage;
+use Zend\Mail\Transport\Sendmail;
 
 /**
  * Class that responsible for filling some message data before transporting it.
- * @see Zend_Mail_Transport_Sendmail is used for transport
+ * @see \Zend\Mail\Transport\Sendmail is used for transport
  */
 class Transport implements TransportInterface
 {
@@ -29,79 +32,81 @@ class Transport implements TransportInterface
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
-     * Object for sending eMails
+     * Whether return path should be set or no.
      *
-     * @var \Zend_Mail_Transport_Sendmail
+     * Possible values are:
+     * 0 - no
+     * 1 - yes (set value as FROM address)
+     * 2 - use custom value
+     *
+     * @var int
      */
-    private $transport;
+    private $isSetReturnPath;
 
     /**
-     * Email message object that should be instance of \Zend_Mail
-     *
-     * @var MessageInterface
+     * @var string|null
+     */
+    private $returnPathValue;
+
+    /**
+     * @var Sendmail
+     */
+    private $zendTransport;
+
+    /**
+     * @var Message
      */
     private $message;
 
     /**
-     * Core store config
-     *
-     * @var ScopeConfigInterface
+     * @var ZendMessage
      */
-    private $scopeConfig;
+    private $zendMessage;
 
     /**
-     * @param \Zend_Mail_Transport_Sendmail $transport
-     * @param MessageInterface $message Email message object
+     * @param Message $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
-     * @param string|array|\Zend_Config|null $parameters Config options for sendmail parameters
-     *
-     * @throws \InvalidArgumentException when $message is not an instance of \Zend_Mail
+     * @param ZendMessage $zendMessage
+     * @param null|string|array|\Traversable $parameters Config options for sendmail parameters
      */
     public function __construct(
-        \Zend_Mail_Transport_Sendmail $transport,
-        MessageInterface $message,
-        ScopeConfigInterface $scopeConfig
+        Message $message,
+        ScopeConfigInterface $scopeConfig,
+        ZendMessage $zendMessage,
+        $parameters = null
     ) {
-        if (!$message instanceof \Zend_Mail) {
-            throw new \InvalidArgumentException('The message should be an instance of \Zend_Mail');
-        }
-        $this->transport = $transport;
+        $this->isSetReturnPath = (int) $scopeConfig->getValue(
+            self::XML_PATH_SENDING_SET_RETURN_PATH,
+            ScopeInterface::SCOPE_STORE
+        );
+        $this->returnPathValue = $scopeConfig->getValue(
+            self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $this->zendTransport = new Sendmail($parameters);
         $this->message = $message;
-        $this->scopeConfig = $scopeConfig;
+        $this->zendMessage = $zendMessage;
     }
 
     /**
-     * Sets Return-Path to email if necessary, and sends email if it is allowed by System Configurations
-     *
-     * @return void
-     * @throws MailException
+     * @inheritdoc
      */
     public function sendMessage()
     {
         try {
-            /* configuration of whether return path should be set or no. Possible values are:
-             * 0 - no
-             * 1 - yes (set value as FROM address)
-             * 2 - use custom value
-             * @see Magento\Config\Model\Config\Source\Yesnocustom
-             */
-            $isSetReturnPath = $this->scopeConfig->getValue(
-                self::XML_PATH_SENDING_SET_RETURN_PATH,
-                ScopeInterface::SCOPE_STORE
-            );
-            $returnPathValue = $this->scopeConfig->getValue(
-                self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
-                ScopeInterface::SCOPE_STORE
-            );
-
-            if ($isSetReturnPath == '1') {
-                $this->message->setReturnPath($this->message->getFrom());
-            } elseif ($isSetReturnPath == '2' && $returnPathValue !== null) {
-                $this->message->setReturnPath($returnPathValue);
+            $message = $this->zendMessage->fromString($this->message->getRawMessage());
+            if (2 === $this->isSetReturnPath && $this->returnPathValue) {
+                $message->setSender($this->returnPathValue);
+            } elseif (1 === $this->isSetReturnPath && $message->getFrom()->count()) {
+                $fromAddressList = $message->getFrom();
+                $fromAddressList->rewind();
+                $message->setSender($fromAddressList->current()->getEmail());
             }
-            $this->transport->send($this->message);
+
+            $this->zendTransport->send($message);
         } catch (\Exception $e) {
-            throw new MailException(__($e->getMessage()), $e);
+            throw new MailException(new Phrase($e->getMessage()), $e);
         }
     }
 

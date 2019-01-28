@@ -10,6 +10,7 @@
     <section name="AdminMessagesSection">
         <element name="test" type="input" selector=".test"/>
         <element name="success" type="text" selector="#messages div.message-success"/>
-        <element name="nthSuccess" type="text" selector=".message.message-success.success:nth-of-type({{n}})>div" parameterized="true"/>
+        <element name="successMessageByIndex" type="text" selector=".message.message-success.success:nth-of-type({{n}})>div" parameterized="true"/>
+        <element name="error" type="text" selector="#messages div.message-error"/>
     </section>
 </sections>

@@ -103,8 +103,8 @@ class Rss extends \Magento\Wishlist\Helper\Data
     {
         if ($this->_customer === null) {
             $params = $this->urlDecoder->decode($this->_getRequest()->getParam('data'));
-            $data   = explode(',', $params);
-            $customerId    = abs(intval($data[0]));
+            $data = explode(',', $params);
+            $customerId = abs((int)$data[0]);
             if ($customerId && ($customerId == $this->_customerSession->getCustomerId())) {
                 $this->_customer = $this->_customerRepository->getById($customerId);
             } else {

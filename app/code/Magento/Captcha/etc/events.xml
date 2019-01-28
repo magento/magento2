@@ -18,10 +18,6 @@
     <event name="admin_user_authenticate_before">
         <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserLoginBackendObserver" />
     </event>
-    <event name="controller_action_predispatch_checkout_onepage_saveBilling">
-        <observer name="captcha_guest" instance="Magento\Captcha\Observer\CheckGuestCheckoutObserver" />
-        <observer name="captcha_register" instance="Magento\Captcha\Observer\CheckRegisterCheckoutObserver" />
-    </event>
     <event name="customer_customer_authenticated">
         <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForFrontendObserver" />
     </event>

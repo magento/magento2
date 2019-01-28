@@ -195,7 +195,7 @@ class BatchRangeIterator implements BatchIteratorInterface
             );
             $row = $this->connection->fetchRow($wrapperSelect);
 
-            $this->totalItemCount = intval($row['cnt']);
+            $this->totalItemCount = (int)$row['cnt'];
         }
 
         $rangeField = is_array($this->rangeField) ? $this->rangeField : [$this->rangeField];

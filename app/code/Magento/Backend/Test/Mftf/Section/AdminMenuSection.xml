@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminMenuSection">
+        <element name="catalog" type="button" selector="#menu-magento-catalog-catalog"/>
+        <element name="customers" type="button" selector="#menu-magento-customer-customer"/>
+        <element name="content" type="button" selector="#menu-magento-backend-content"/>
+        <element name="widgets" type="button" selector="#nav li[data-ui-id='menu-magento-widget-cms-widget-instance']"/>
+        <element name="stores" type="button" selector="#menu-magento-backend-stores"/>
+        <element name="configuration" type="button" selector="#nav li[data-ui-id='menu-magento-config-system-config']"/>
+    </section>
+</sections>

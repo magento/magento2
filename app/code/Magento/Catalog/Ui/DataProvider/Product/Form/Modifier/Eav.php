@@ -32,6 +32,7 @@ use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
+use \Magento\Catalog\Model\Product\Type as ProductType;
 
 /**
  * Class Eav
@@ -282,7 +283,7 @@ class Eav extends AbstractModifier
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-                $meta[$groupCode]['arguments']['data']['config']['label'] = __('%1', $group->getAttributeGroupName());
+                $meta[$groupCode]['arguments']['data']['config']['label'] = __($group->getAttributeGroupName());
                 $meta[$groupCode]['arguments']['data']['config']['collapsible'] = true;
                 $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
@@ -398,7 +399,7 @@ class Eav extends AbstractModifier
 
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
-                    if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
+                    if ($this->isPriceAttribute($attribute, $attributeValue)) {
                         $attributeValue = $this->formatPrice($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
@@ -407,6 +408,32 @@ class Eav extends AbstractModifier
         }
 
         return $data;
+    }
+
+    /**
+     * Obtain if given attribute is a price
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param string|integer $attributeValue
+     * @return bool
+     */
+    private function isPriceAttribute(ProductAttributeInterface $attribute, $attributeValue)
+    {
+        return $attribute->getFrontendInput() === 'price'
+            && is_scalar($attributeValue)
+            && !$this->isBundleSpecialPrice($attribute);
+    }
+
+    /**
+     * Obtain if current product is bundle and given attribute is special_price
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return bool
+     */
+    private function isBundleSpecialPrice(ProductAttributeInterface $attribute)
+    {
+        return $this->locator->getProduct()->getTypeId() === ProductType::TYPE_BUNDLE
+            && $attribute->getAttributeCode() === ProductAttributeInterface::CODE_SPECIAL_PRICE;
     }
 
     /**
@@ -909,6 +936,9 @@ class Eav extends AbstractModifier
         $attributeCode = $attribute->getAttributeCode();
         /** @var Product $product */
         $product = $this->locator->getProduct();
+        if ($product->isLockedAttribute($attributeCode)) {
+            return false;
+        }
 
         if (isset($this->canDisplayUseDefault[$attributeCode])) {
             return $this->canDisplayUseDefault[$attributeCode];

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCatalogPriceRuleSection">
+        <element name="saveAndApply" type="button" selector="#save_and_apply" timeout="30"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
+
+        <element name="ruleName" type="input" selector="[name='name']"/>
+        <element name="description" type="textarea" selector="[name='description']"/>
+        <element name="status" type="select" selector="[name='is_active']"/>
+
+        <element name="websites" type="select" selector="[name='website_ids']"/>
+        <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
+        <element name="customerGroups" type="select" selector="[name='customer_group_ids']"/>
+        <element name="customerGroupsOptions" type="select" selector="[name='customer_group_ids'] option"/>
+
+        <element name="fromDateButton" type="button" selector="[name='from_date'] + button" timeout="15"/>
+        <element name="toDateButton" type="button" selector="[name='to_date'] + button" timeout="15"/>
+        <element name="todayDate" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
+        <element name="priority" type="input" selector="[name='sort_order']"/>
+        <element name="conditionsTab" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions']"/>
+        <element name="actionsTab" type="block" selector="[data-index='actions']"/>
+    </section>
+</sections>

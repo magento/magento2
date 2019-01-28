@@ -16,10 +16,25 @@
         <amOnPage url="{{AdminSystemStoreWebsitePage.url}}" stepKey="navigateToNewWebsitePage"/>
         <waitForPageLoad stepKey="waitForStoresPageLoad"/>
         <!--Create Website-->
+        <waitForElementVisible selector="{{AdminNewWebsiteSection.name}}" stepKey="waitForWebsiteFormAppeared" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{newWebsiteName}}" stepKey="enterWebsiteName" />
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="enterWebsiteCode" />
         <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite" />
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
         <see userInput="You saved the website." stepKey="seeSavedMessage" />
+    </actionGroup>
+
+    <!--Get Website_id-->
+    <actionGroup name="AdminGetWebsiteIdActionGroup">
+        <arguments>
+            <argument name="website"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <fillField selector="{{AdminStoresGridSection.websiteFilterTextField}}" userInput="{{website.name}}" stepKey="fillSearchWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton" />
+        <see selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" userInput="{{website.name}}" stepKey="verifyThatCorrectWebsiteFound"/>
+        <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
+        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabFromCurrentUrl"/>
     </actionGroup>
 </actionGroups>

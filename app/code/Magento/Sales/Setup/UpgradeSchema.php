@@ -109,6 +109,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.10', '<')) {
             $this->expandRemoteIpField($installer);
         }
+        if (version_compare($context->getVersion(), '2.0.11', '<')) {
+            $this->expandLastTransIdField($installer);
+        }
     }
 
     /**
@@ -158,6 +161,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'length' => 45
+            ]
+        );
+    }
+
+    /**
+     * @param SchemaSetupInterface $installer
+     * @return void
+     */
+    private function expandLastTransIdField(SchemaSetupInterface $installer)
+    {
+        $connection = $installer->getConnection(self::$connectionName);
+        $connection->modifyColumn(
+            $installer->getTable('sales_order_payment', self::$connectionName),
+            'last_trans_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255
             ]
         );
     }

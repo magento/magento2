@@ -40,6 +40,17 @@
             .items {
                 padding: 6px 0;
                 text-align: left;
+                > .item {
+                    span {
+                        display: block;
+                    }
+
+                    &:last-child {
+                        span {
+                            display: inline;
+                        }
+                    }
+                }
             }
 
             > .action {
@@ -376,6 +387,16 @@
 
                             &:hover {
                                 .lib-css(background, @collapsible-nav-item-hover);
+                            }
+                        }
+
+                        span {
+                            display: block;
+                        }
+
+                        &:last-child {
+                            span {
+                                display: inline;
                             }
                         }
                     }

@@ -252,11 +252,11 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getAddToCartParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemAddParams);
         $this->wishlistHelperMock->expects($this->once())
             ->method('getRemoveParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemRemoveParams);
 
         $this->assertEquals($result, $this->model->getSectionData());
@@ -440,11 +440,11 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $this->wishlistHelperMock->expects($this->exactly(2))
             ->method('getAddToCartParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemAddParams);
         $this->wishlistHelperMock->expects($this->exactly(2))
             ->method('getRemoveParams')
-            ->with($itemMock, true)
+            ->with($itemMock)
             ->willReturn($itemRemoveParams);
 
         $this->assertEquals($result, $this->model->getSectionData());

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="SetSalesMinimumOrder" dataType="sales_minimum_order" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST" successRegex="/messages-message-success/">
+        <object key="groups" dataType="sales_minimum_order">
+            <object key="minimum_order" dataType="sales_minimum_order">
+                <object key="fields" dataType="sales_minimum_order">
+                    <object key="active" dataType="active">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="amount" dataType="amount">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="SetCheckoutTotalsSortOrder" dataType="checkout_totals_sort_order" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST" successRegex="/messages-message-success/">
+        <object key="groups" dataType="checkout_totals_sort_order">
+            <object key="totals_sort" dataType="checkout_totals_sort_order">
+                <object key="fields" dataType="checkout_totals_sort_order">
+                    <object key="subtotal" dataType="subtotal">
+                        <field key="value">integer</field>
+                        <object key="inherit" dataType="subtotal_inherit_value">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="discount" dataType="discount">
+                        <field key="value">integer</field>
+                        <object key="inherit" dataType="discount_inherit_value">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="shipping" dataType="shipping">
+                        <field key="value">integer</field>
+                        <object key="inherit" dataType="shipping_inherit_value">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="tax" dataType="tax">
+                        <field key="value">integer</field>
+                        <object key="inherit" dataType="tax_inherit_value">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="weee" dataType="weee">
+                        <field key="value">integer</field>
+                        <object key="inherit" dataType="weee_inherit_value">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="grand_total" dataType="grand_total">
+                        <field key="value">integer</field>
+                        <object key="inherit" dataType="grand_total_inherit_value">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>
