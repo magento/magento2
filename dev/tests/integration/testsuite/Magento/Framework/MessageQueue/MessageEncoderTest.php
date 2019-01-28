@@ -96,7 +96,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
             $addresses[0]
         );
         $this->assertEquals('3468676', $addresses[0]->getTelephone());
-        $this->assertEquals(true, $addresses[0]->isDefaultBilling());
+        $this->assertTrue($addresses[0]->isDefaultBilling());
 
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\RegionInterface::class,

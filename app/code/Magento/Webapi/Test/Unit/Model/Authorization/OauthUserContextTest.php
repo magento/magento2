@@ -118,7 +118,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($integrationId, []);
 
-        $this->assertEquals(null, $this->oauthUserContext->getUserId());
+        $this->assertNull($this->oauthUserContext->getUserId());
     }
 
     /**

@@ -176,7 +176,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals($orderItem, $this->order->getItemById($realOrderItemId));
-        $this->assertEquals(null, $this->order->getItemById($fakeOrderItemId));
+        $this->assertNull($this->order->getItemById($fakeOrderItemId));
     }
 
     /**
@@ -1050,7 +1050,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
     public function testSetPaymentNull()
     {
-        $this->assertEquals(null, $this->order->setPayment(null));
+        $this->assertNull($this->order->setPayment(null));
 
         $this->assertEquals(
             $this->order->getData(

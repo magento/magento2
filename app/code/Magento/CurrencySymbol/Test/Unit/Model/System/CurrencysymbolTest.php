@@ -270,7 +270,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
         $currencySymbol = $this->model->getCurrencySymbol('USD');
-        $this->assertEquals(false, $currencySymbol);
+        $this->assertFalse($currencySymbol);
     }
 
     /**

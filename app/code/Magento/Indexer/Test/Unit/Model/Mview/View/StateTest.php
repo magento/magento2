@@ -62,7 +62,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeSave()
     {
-        $this->assertEquals(null, $this->model->getUpdated());
+        $this->assertNull($this->model->getUpdated());
         $this->model->beforeSave();
         $this->assertTrue(($this->model->getUpdated() != null));
     }

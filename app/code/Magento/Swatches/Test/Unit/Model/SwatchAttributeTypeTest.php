@@ -147,8 +147,8 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertEquals(true, $this->swatchType->isTextSwatch($attributeMock));
-        $this->assertEquals(false, $this->swatchType->isVisualSwatch($attributeMock));
+        $this->assertTrue($this->swatchType->isTextSwatch($attributeMock));
+        $this->assertFalse($this->swatchType->isVisualSwatch($attributeMock));
     }
 
     /**

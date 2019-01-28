@@ -19,6 +19,6 @@ class AgreementsValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValid()
     {
-        $this->assertEquals(true, $this->model->isValid());
+        $this->assertTrue($this->model->isValid());
     }
 }

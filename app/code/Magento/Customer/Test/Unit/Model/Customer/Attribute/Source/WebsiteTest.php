@@ -89,6 +89,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $this->mockOptions();
 
-        $this->assertEquals(false, $this->model->getOptionText('value'));
+        $this->assertFalse($this->model->getOptionText('value'));
     }
 }

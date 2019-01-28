@@ -68,7 +68,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(true, $this->model->isLoggedInStatus());
+        $this->assertTrue($this->model->isLoggedInStatus());
     }
 
     /**
@@ -82,7 +82,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(false, $this->model->isLoggedInStatus());
+        $this->assertFalse($this->model->isLoggedInStatus());
         $this->assertEquals(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
@@ -137,7 +137,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOtherSessionsTerminated()
     {
-        $this->assertEquals(false, $this->model->isOtherSessionsTerminated());
+        $this->assertFalse($this->model->isOtherSessionsTerminated());
     }
 
     /**

@@ -143,7 +143,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testIsNeedToLogInHistory()
     {
-        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+        $this->assertFalse($this->_model->isNeedToLogInHistory());
     }
 
     /**

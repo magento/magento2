@@ -133,7 +133,7 @@ class AbstractComponentTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderChildComponentNotExists()
     {
-        $this->assertEquals(null, $this->abstractComponent->renderChildComponent('someComponent'));
+        $this->assertNull($this->abstractComponent->renderChildComponent('someComponent'));
     }
 
     /**

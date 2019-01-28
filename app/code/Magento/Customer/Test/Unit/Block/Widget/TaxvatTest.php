@@ -85,7 +85,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->_block->isEnabled());
+        $this->assertFalse($this->_block->isEnabled());
     }
 
     /**
@@ -123,6 +123,6 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->_block->isRequired());
+        $this->assertFalse($this->_block->isRequired());
     }
 }

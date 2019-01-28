@@ -101,7 +101,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals(null, $object->getTestAttribute());
+        $this->assertNull($object->getTestAttribute());
     }
 
     /**

@@ -117,7 +117,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     public function testValidateConsumer()
     {
         $this->consumerMock->expects($this->once())->method('isValidForTokenExchange')->willReturn(true);
-        $this->assertEquals(true, $this->tokenProvider->validateConsumer($this->consumerMock));
+        $this->assertTrue($this->tokenProvider->validateConsumer($this->consumerMock));
     }
 
     /**

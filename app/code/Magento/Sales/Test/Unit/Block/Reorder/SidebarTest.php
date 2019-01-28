@@ -265,6 +265,6 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
         $this->createBlockObject();
-        $this->assertSame(false, $this->block->isItemAvailableForReorder($orderItem));
+        $this->assertFalse($this->block->isItemAvailableForReorder($orderItem));
     }
 }

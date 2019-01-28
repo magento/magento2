@@ -119,6 +119,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        $this->assertEquals(false, $this->config->isProductSet('typeId'));
+        $this->assertFalse($this->config->isProductSet('typeId'));
     }
 }

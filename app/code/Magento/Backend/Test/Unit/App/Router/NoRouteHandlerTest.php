@@ -82,7 +82,7 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_requestMock)
         );
 
-        $this->assertEquals(true, $this->_model->process($this->_requestMock));
+        $this->assertTrue($this->_model->process($this->_requestMock));
     }
 
     /**
@@ -104,6 +104,6 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->_requestMock->expects($this->never())->method('setActionName');
 
-        $this->assertEquals(false, $this->_model->process($this->_requestMock));
+        $this->assertFalse($this->_model->process($this->_requestMock));
     }
 }

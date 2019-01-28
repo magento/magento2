@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));
-        $this->assertEquals(null, $config->get('a/b'));
+        $this->assertNull($config->get('a/b'));
         $this->assertEquals(33, $config->get('a/b', 33));
     }
 

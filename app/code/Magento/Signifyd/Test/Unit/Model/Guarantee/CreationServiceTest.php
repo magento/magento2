@@ -151,8 +151,7 @@ class CreationServiceTest extends TestCase
             ->method('update');
 
         $result = $this->service->createForOrder($dummyOrderId);
-        $this->assertEquals(
-            false,
+        $this->assertFalse(
             $result,
             'Service should return false in case of gateway failure'
         );
@@ -196,8 +195,7 @@ class CreationServiceTest extends TestCase
         $this->withGatewaySuccess($dummyGuaranteeDisposition);
 
         $result = $this->service->createForOrder($dummyOrderId);
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result,
             'Service should return true in case if case update service is called'
         );

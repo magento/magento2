@@ -118,7 +118,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testPing()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
-        $this->assertEquals(true, $this->model->ping());
+        $this->assertTrue($this->model->ping());
     }
 
     /**
@@ -127,7 +127,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testTestConnection()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
-        $this->assertEquals(true, $this->model->testConnection());
+        $this->assertTrue($this->model->testConnection());
     }
 
     /**
@@ -136,7 +136,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testTestConnectionFalse()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(false);
-        $this->assertEquals(true, $this->model->testConnection());
+        $this->assertTrue($this->model->testConnection());
     }
 
     /**
@@ -153,7 +153,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model->ping();
-        $this->assertEquals(true, $this->model->testConnection());
+        $this->assertTrue($this->model->testConnection());
     }
 
     /**

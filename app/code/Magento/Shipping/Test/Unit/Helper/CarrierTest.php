@@ -101,7 +101,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             $this->returnValue("GB")
         );
 
-        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
-        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
+        $this->assertTrue($this->helper->isCountryInEU("GB"));
+        $this->assertFalse($this->helper->isCountryInEU("US"));
     }
 }

@@ -76,7 +76,7 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testHasVerification()
     {
-        $this->assertEquals(true, $this->model->hasVerification());
+        $this->assertTrue($this->model->hasVerification());
     }
 
     public function testGetCvvImageUrl()

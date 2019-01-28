@@ -124,7 +124,7 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertEquals($inputData, $result);
 
         //test delete
-        $this->assertEquals(true, $this->deleteRule($ruleId));
+        $this->assertTrue($this->deleteRule($ruleId));
     }
 
     public function verifyGetList($ruleId)

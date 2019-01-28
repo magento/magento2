@@ -43,7 +43,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->once())->method('getOrderItem')->will($this->returnValue($this->orderItem));
         $this->orderItem->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $this->assertSame(null, $this->model->getChildren($item));
+        $this->assertNull($this->model->getChildren($item));
     }
 
     /**

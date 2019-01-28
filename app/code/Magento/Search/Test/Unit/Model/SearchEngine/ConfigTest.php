@@ -36,6 +36,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
-        $this->assertEquals(true, $config->isFeatureSupported('synonyms', 'mysql'));
+        $this->assertTrue($config->isFeatureSupported('synonyms', 'mysql'));
     }
 }

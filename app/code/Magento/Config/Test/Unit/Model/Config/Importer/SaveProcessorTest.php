@@ -134,6 +134,6 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
                 ['web/unsecure/base_url', 'http://magento3.local/', 'websites', 'base', $value2]
             ]);
 
-        $this->assertSame(null, $this->model->process($data));
+        $this->assertNull($this->model->process($data));
     }
 }

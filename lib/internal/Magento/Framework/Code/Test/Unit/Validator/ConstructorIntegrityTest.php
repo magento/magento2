@@ -26,17 +26,17 @@ class ConstructorIntegrityTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateIfParentClassExist()
     {
-        $this->assertEquals(true, $this->_model->validate(\Magento\SomeModule\Model\One\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\One\Test::class));
     }
 
     public function testValidateIfClassHasParentConstructCall()
     {
-        $this->assertEquals(true, $this->_model->validate(\Magento\SomeModule\Model\Two\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Two\Test::class));
     }
 
     public function testValidateIfClassHasArgumentsQtyEqualToParentClass()
     {
-        $this->assertEquals(true, $this->_model->validate(\Magento\SomeModule\Model\Three\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Three\Test::class));
     }
 
     public function testValidateIfClassHasExtraArgumentInTheParentConstructor()

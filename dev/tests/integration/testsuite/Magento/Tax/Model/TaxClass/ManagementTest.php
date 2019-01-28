@@ -87,8 +87,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeId, TaxClassManagementInterface::TYPE_CUSTOMER)
         );
         $this->assertNull($this->taxClassManagement->getTaxClassId(null));
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeName, TaxClassManagementInterface::TYPE_PRODUCT)
         );
     }

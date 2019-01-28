@@ -129,8 +129,7 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
         );
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->getCustomAttribute('not_existing_custom_attribute'),
             "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
         );

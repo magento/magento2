@@ -58,7 +58,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $this->assertEquals(false, $this->view->shouldRenderQuantity());
+        $this->assertFalse($this->view->shouldRenderQuantity());
     }
 
     public function testGetIdentities()

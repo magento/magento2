@@ -93,7 +93,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $package = $this->createMock(Package::class);
         $package->expects($this->once())->method('getPath')->willReturn('path');
 
-        $this->assertEquals(true, $this->queue->add($package));
+        $this->assertTrue($this->queue->add($package));
         $packages = $this->queue->getPackages();
         $this->assertEquals(
             $package,

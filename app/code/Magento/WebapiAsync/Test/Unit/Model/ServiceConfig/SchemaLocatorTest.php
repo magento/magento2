@@ -47,6 +47,6 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals(null, $this->model->getPerFileSchema());
+        $this->assertNull($this->model->getPerFileSchema());
     }
 }

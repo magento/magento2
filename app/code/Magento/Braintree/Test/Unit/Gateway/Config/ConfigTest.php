@@ -206,7 +206,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->getPath(Config::KEY_USE_CVV), ScopeInterface::SCOPE_STORE, null)
             ->willReturn(1);
 
-        static::assertEquals(true, $this->model->isCvvEnabled());
+        static::assertTrue($this->model->isCvvEnabled());
     }
 
     /**

@@ -206,7 +206,7 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/special', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     public function testGetCacheLifetime()

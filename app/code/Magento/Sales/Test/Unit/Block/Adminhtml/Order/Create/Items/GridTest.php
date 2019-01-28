@@ -265,7 +265,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $items = $this->block->setLayout($layoutMock)->getItems();
 
         $this->assertEquals('Message', $items[0]->getMessage());
-        $this->assertEquals(true, $this->block->getQuote()->getIsSuperMode());
+        $this->assertTrue($this->block->getQuote()->getIsSuperMode());
     }
 
     /**

@@ -175,7 +175,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(json_encode($cache))
         );
         $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
-        $this->assertEquals(false, $this->kernel->load());
+        $this->assertFalse($this->kernel->load());
     }
 
     /**

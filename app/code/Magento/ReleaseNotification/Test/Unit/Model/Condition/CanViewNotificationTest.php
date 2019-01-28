@@ -73,7 +73,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('release-notification-popup-1')
             ->willReturn("0");
-        $this->assertEquals(false, $this->canViewNotification->isVisible([]));
+        $this->assertFalse($this->canViewNotification->isVisible([]));
     }
 
     /**

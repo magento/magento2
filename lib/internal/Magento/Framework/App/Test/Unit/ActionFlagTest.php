@@ -85,6 +85,6 @@ class ActionFlagTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('controller')
         );
-        $this->assertEquals(false, $this->_actionFlag->get('action', 'flag'));
+        $this->assertFalse($this->_actionFlag->get('action', 'flag'));
     }
 }

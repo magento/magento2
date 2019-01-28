@@ -202,7 +202,7 @@ class DateTest extends AbstractFormTestCase
      */
     public function testOutputValue()
     {
-        $this->assertEquals(null, $this->date->outputValue());
+        $this->assertNull($this->date->outputValue());
         $date = new \Magento\Customer\Model\Metadata\Form\Date(
             $this->localeMock,
             $this->loggerMock,

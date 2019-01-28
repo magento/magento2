@@ -113,7 +113,7 @@ class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('assignCustomer')->willReturn(true);
 
-        $this->assertEquals(true, $this->guestCartManagement->assignCustomer($cartId, $customerId, $storeId));
+        $this->assertTrue($this->guestCartManagement->assignCustomer($cartId, $customerId, $storeId));
     }
 
     public function testPlaceOrder()

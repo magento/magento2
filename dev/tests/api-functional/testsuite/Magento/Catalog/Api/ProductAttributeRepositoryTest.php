@@ -198,7 +198,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertTrue($result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label_new', $result['default_frontend_label']);
         $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
@@ -234,7 +234,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertTrue($result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('front_lbl_store0_new', $result['default_frontend_label']);
         $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
@@ -266,7 +266,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertTrue($result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label', $result['default_frontend_label']);
         $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);

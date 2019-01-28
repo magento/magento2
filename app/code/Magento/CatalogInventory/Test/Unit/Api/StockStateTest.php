@@ -115,24 +115,21 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
 
     public function testVerifyStock()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->verifyStock($this->productId, $this->websiteId)
         );
     }
 
     public function testVerifyNotification()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->verifyNotification($this->productId, $this->websiteId)
         );
     }
 
     public function testCheckQty()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->checkQty($this->productId, $this->qty, $this->websiteId)
         );
     }

@@ -92,7 +92,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
         //following checks will be uncommented when all cart related services are ready
         $this->assertContains('customer', $cartData);
-        $this->assertEquals(true, $cartData['customer_is_guest']);
+        $this->assertTrue($cartData['customer_is_guest']);
         $this->assertContains('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);

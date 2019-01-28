@@ -72,21 +72,21 @@ abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValue()
     {
-        $this->assertSame(null, $this->getModel()->getValue());
+        $this->assertNull($this->getModel()->getValue());
     }
 
     public function testGetFormInputName()
     {
-        $this->assertSame(null, $this->getModel()->getFormInputName());
+        $this->assertNull($this->getModel()->getFormInputName());
     }
 
     public function testIsReadonly()
     {
-        $this->assertSame(false, $this->getModel()->isReadonly());
+        $this->assertFalse($this->getModel()->isReadonly());
     }
 
     public function testGetCssClasses()
     {
-        $this->assertSame(null, $this->getModel()->getCssClasses());
+        $this->assertNull($this->getModel()->getCssClasses());
     }
 }

@@ -56,8 +56,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
     public function testCopyFieldsetToTargetWhenFieldsetInputInvalid()
     {
         $this->fieldsetConfigMock->expects($this->never())->method('getFieldset');
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', [], 'target')
         );
     }

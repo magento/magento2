@@ -223,7 +223,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(true, $database->remove(5));
+        $this->assertTrue($database->remove(5));
     }
 
     public function testClean()
@@ -255,6 +255,6 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(true, $database->clean());
+        $this->assertTrue($database->clean());
     }
 }

@@ -101,7 +101,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('product_page_image_large_url', $decodedJson[0]['full']);
         $this->assertEquals('test_label', $decodedJson[0]['caption']);
         $this->assertEquals('2', $decodedJson[0]['position']);
-        $this->assertEquals(false, $decodedJson[0]['isMain']);
+        $this->assertFalse($decodedJson[0]['isMain']);
         $this->assertEquals('test_media_type', $decodedJson[0]['type']);
         $this->assertEquals('test_video_url', $decodedJson[0]['videoUrl']);
     }

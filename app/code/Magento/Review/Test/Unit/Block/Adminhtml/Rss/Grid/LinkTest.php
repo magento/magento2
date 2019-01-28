@@ -55,6 +55,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     public function testIsRssAllowed()
     {
-        $this->assertEquals(true, $this->link->isRssAllowed());
+        $this->assertTrue($this->link->isRssAllowed());
     }
 }

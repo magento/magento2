@@ -139,7 +139,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 [State::PARAM_MODE => State::MODE_DEVELOPER]
             );
 
-        $this->assertSame(null, $this->model->getMode());
+        $this->assertNull($this->model->getMode());
         $this->assertSame(State::MODE_DEVELOPER, $this->model->getMode());
     }
 

@@ -186,7 +186,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->client->expects($this->once())
             ->method('ping')
             ->willReturn(true);
-        $this->assertEquals(true, $this->model->ping());
+        $this->assertTrue($this->model->ping());
     }
 
     /**

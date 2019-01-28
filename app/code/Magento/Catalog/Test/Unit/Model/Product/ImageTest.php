@@ -256,8 +256,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->image->getNewFile()
         );
     }

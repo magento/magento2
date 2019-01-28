@@ -54,7 +54,7 @@ class DocumentRootTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMockSetForDocumentRootIsPub();
 
-        $this->assertSame(true, $this->documentRoot->isPub());
+        $this->assertTrue($this->documentRoot->isPub());
     }
 
     private function configMockSetForDocumentRootIsPub()

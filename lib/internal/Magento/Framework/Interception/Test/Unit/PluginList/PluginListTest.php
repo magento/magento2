@@ -256,7 +256,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects($this->once())
             ->method('save');
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertNull($this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -298,7 +298,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             ->with('global|scope|interception')
             ->willReturn($serializedData);
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertNull($this->object->getNext('Type', 'method'));
     }
 
     /**

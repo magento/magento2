@@ -208,7 +208,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPaymentId(1));
+        self::assertNull($this->paymentTokenManagement->getByPaymentId(1));
     }
 
     /**
@@ -246,7 +246,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
+        self::assertNull($this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
     }
 
     /**
@@ -262,7 +262,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
+        self::assertNull($this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
     }
 
     /**

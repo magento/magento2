@@ -153,7 +153,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->createAttributeMock(120, 'attribute_code')
         ];
         $this->mockAttributes($attributes);
-        $this->assertEquals(null, $this->attribute->getAttribute($attributeCode));
+        $this->assertNull($this->attribute->getAttribute($attributeCode));
     }
 
     /**

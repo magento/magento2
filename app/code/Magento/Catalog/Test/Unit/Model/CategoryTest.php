@@ -271,7 +271,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUseFlatResourceFalse()
     {
-        $this->assertEquals(false, $this->category->getUseFlatResource());
+        $this->assertFalse($this->category->getUseFlatResource());
     }
 
     public function testGetUseFlatResourceTrue()
@@ -281,7 +281,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         $category = $this->getCategoryModel();
-        $this->assertEquals(true, $category->getUseFlatResource());
+        $this->assertTrue($category->getUseFlatResource());
     }
 
     /**

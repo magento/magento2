@@ -29,6 +29,6 @@ class CheckboxSetTest extends AbstractElementTest
 
     public function testGetIsSelected()
     {
-        $this->assertSame(false, $this->getModel()->getIsSelected(''));
+        $this->assertFalse($this->getModel()->getIsSelected(''));
     }
 }

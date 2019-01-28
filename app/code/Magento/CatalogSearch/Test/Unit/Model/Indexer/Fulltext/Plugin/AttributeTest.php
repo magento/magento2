@@ -88,8 +88,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('dataHasChangedFor')
             ->with('is_searchable')
             ->willReturn(true);
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->beforeSave($this->subjectMock, $this->attributeMock)
         );
     }
@@ -133,8 +132,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())
             ->method('getIsSearchable')
             ->willReturn(true);
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->beforeDelete($this->subjectMock, $this->attributeMock)
         );
     }

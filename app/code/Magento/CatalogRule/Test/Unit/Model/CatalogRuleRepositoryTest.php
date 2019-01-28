@@ -86,7 +86,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($this->ruleMock);
-        $this->assertEquals(true, $this->repository->delete($this->ruleMock));
+        $this->assertTrue($this->repository->delete($this->ruleMock));
     }
 
     public function testDeleteRuleById()
@@ -101,7 +101,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($ruleMock);
-        $this->assertEquals(true, $this->repository->deleteById($ruleId));
+        $this->assertTrue($this->repository->deleteById($ruleId));
     }
 
     /**

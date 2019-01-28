@@ -81,8 +81,7 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('isDbDataUpToDate')
             ->will($this->returnValueMap($returnMap));
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
@@ -97,8 +96,7 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('isDbSchemaUpToDate');
         $this->moduleManager->expects($this->never())
             ->method('isDbDataUpToDate');
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }

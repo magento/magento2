@@ -90,7 +90,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testAllowAdvancedIndex()
     {
-        $this->assertEquals(false, $this->model->allowAdvancedIndex());
+        $this->assertFalse($this->model->allowAdvancedIndex());
     }
 
     /**
@@ -98,7 +98,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAvailable()
     {
-        $this->assertEquals(true, $this->model->isAvailable());
+        $this->assertTrue($this->model->isAvailable());
     }
 
     /**

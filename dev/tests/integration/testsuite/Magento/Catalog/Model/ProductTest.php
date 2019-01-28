@@ -605,7 +605,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
-        $this->assertEquals(false, $stockItem->getIsInStock());
+        $this->assertFalse($stockItem->getIsInStock());
         $stockData = [
             'backorders' => 1,
             'qty' => $qty,

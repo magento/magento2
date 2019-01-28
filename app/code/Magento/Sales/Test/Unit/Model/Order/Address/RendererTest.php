@@ -119,7 +119,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects(static::never())
             ->method('dispatch');
 
-        $this->assertEquals(null, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
+        $this->assertNull($this->orderAddressRenderer->format($this->orderAddressMock, $type));
     }
 
     /**

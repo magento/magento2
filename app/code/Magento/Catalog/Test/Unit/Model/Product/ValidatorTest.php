@@ -14,6 +14,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $responseMock = $this->createMock(\Magento\Framework\DataObject::class);
         $productMock->expects($this->once())->method('validate')->will($this->returnValue(true));
-        $this->assertEquals(true, $validator->validate($productMock, $requestMock, $responseMock));
+        $this->assertTrue($validator->validate($productMock, $requestMock, $responseMock));
     }
 }

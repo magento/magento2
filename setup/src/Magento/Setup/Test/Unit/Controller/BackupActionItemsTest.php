@@ -94,7 +94,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('size', $variables);
-        $this->assertEquals(true, $variables['size']);
+        $this->assertTrue($variables['size']);
     }
 
     public function testCheckActionWithError()

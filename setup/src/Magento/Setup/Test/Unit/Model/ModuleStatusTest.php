@@ -91,10 +91,10 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
 
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $allModules = $moduleStatus->getAllModules(['module1', 'module2']);
-        $this->assertSame(true, $allModules['module1']['selected']);
-        $this->assertSame(true, $allModules['module2']['selected']);
-        $this->assertSame(false, $allModules['module3']['selected']);
-        $this->assertSame(false, $allModules['module4']['selected']);
+        $this->assertTrue($allModules['module1']['selected']);
+        $this->assertTrue($allModules['module2']['selected']);
+        $this->assertFalse($allModules['module3']['selected']);
+        $this->assertFalse($allModules['module4']['selected']);
     }
 
     /**
@@ -116,7 +116,7 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $moduleStatus->setIsEnabled(false, 'module1');
         $allModules = $moduleStatus->getAllModules();
-        $this->assertSame(false, $allModules['module1']['selected']);
+        $this->assertFalse($allModules['module1']['selected']);
         $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
         $this->assertSame($expectedResult[2], $allModules['module3']['selected']);
         $this->assertSame($expectedResult[3], $allModules['module4']['selected']);

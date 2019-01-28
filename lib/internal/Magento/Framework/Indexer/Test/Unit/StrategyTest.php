@@ -43,13 +43,13 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
      */
     public function testUseIdxTable()
     {
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(false);
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(true);
-        $this->assertEquals(true, $this->_model->getUseIdxTable());
+        $this->assertTrue($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable();
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
     }
 
     /**

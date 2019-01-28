@@ -127,7 +127,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturn(2);
         $this->regionMock->expects($this->never())
             ->method('getCode');
-        $this->assertEquals(null, $this->address->getRegionCode());
+        $this->assertNull($this->address->getRegionCode());
     }
 
     public function testGetName()

@@ -128,7 +128,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->uut = $this->getUut();
 
         $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
-        $this->assertEquals(null, $this->uut->getMainTable());
+        $this->assertNull($this->uut->getMainTable());
     }
 
     public function testSetMainTableFirst()

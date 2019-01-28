@@ -103,6 +103,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('hasSingleStore')
             ->willReturn(true);
 
-        $this->assertSame(false, $this->model->isMultiWebsites());
+        $this->assertFalse($this->model->isMultiWebsites());
     }
 }

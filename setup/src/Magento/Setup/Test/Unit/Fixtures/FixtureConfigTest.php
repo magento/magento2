@@ -56,7 +56,7 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValue()
     {
-        $this->assertSame(null, $this->model->getValue('null_key'));
+        $this->assertNull($this->model->getValue('null_key'));
     }
 }
 

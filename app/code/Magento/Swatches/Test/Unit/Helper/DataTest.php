@@ -806,6 +806,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->getSwatchAttributes();
         $result = $this->swatchHelperObject->isProductHasSwatch($this->productMock);
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 }

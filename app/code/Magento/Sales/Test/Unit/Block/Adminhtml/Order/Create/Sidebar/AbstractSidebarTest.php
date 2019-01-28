@@ -50,6 +50,6 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
     public function testIsConfigurationRequired()
     {
         $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
-        $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
+        $this->assertFalse($this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }

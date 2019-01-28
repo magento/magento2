@@ -76,8 +76,8 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
                     [\PDO::FETCH_NUM, null, $listOfPrivileges]
                 ]
             );
-        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
-        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host:3339', 'user', 'password'));
+        $this->assertTrue($this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+        $this->assertTrue($this->dbValidator->checkDatabaseConnection('name', 'host:3339', 'user', 'password'));
     }
 
     /**
@@ -136,7 +136,7 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckDatabaseTablePrefix()
     {
-        $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('test'));
+        $this->assertTrue($this->dbValidator->checkDatabaseTablePrefix('test'));
     }
 
     /**
@@ -145,7 +145,7 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckDatabaseTablePrefixWrongFormat()
     {
-        $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
+        $this->assertTrue($this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
     }
 
     /**
@@ -154,8 +154,7 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckDatabaseTablePrefixWrongLength()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->dbValidator->checkDatabaseTablePrefix('mvbXzXzItSIr0wrZW3gqgV2UKrWiK1Mj7bkBlW72rZW3gqgV2UKrWiK1M')
         );
     }

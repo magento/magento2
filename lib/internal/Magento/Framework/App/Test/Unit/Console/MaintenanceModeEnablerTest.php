@@ -54,8 +54,7 @@ class MaintenanceModeEnablerTest extends TestCase
                 true
             );
         } catch (\Exception $e) {
-            $this->assertEquals(
-                true,
+            $this->assertTrue(
                 $maintenanceMode->isOn(),
                 'Maintenance mode is not active after failure'
             );

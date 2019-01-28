@@ -200,7 +200,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
 
     public function testGetChecksumNegative()
     {
-        $this->assertEquals(false, $this->_model->getChecksum(null));
+        $this->assertFalse($this->_model->getChecksum(null));
     }
 
     /**

@@ -182,7 +182,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->afterDelete($subject, true, $customer));
+        $this->assertTrue($this->plugin->afterDelete($subject, true, $customer));
     }
 
     public function testAroundDeleteById()
@@ -199,7 +199,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
+        $this->assertTrue($this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
     }
 
     /**

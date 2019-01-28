@@ -404,7 +404,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertNull($fileObject->parseOptionValue($userInput, []));
     }
 
     public function testParseOptionValueInvalid()
@@ -431,7 +431,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertNull($fileObject->parseOptionValue($userInput, []));
     }
 
     public function testPrepareOptionValueForRequest()

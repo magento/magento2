@@ -98,7 +98,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->block->isEnabled());
+        $this->assertFalse($this->block->isEnabled());
     }
 
     /**
@@ -139,7 +139,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->block->isRequired());
+        $this->assertFalse($this->block->isRequired());
     }
 
     /**

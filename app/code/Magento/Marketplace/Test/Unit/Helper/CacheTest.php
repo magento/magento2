@@ -64,7 +64,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->never())
             ->method('unserialize');
 
-        $this->assertSame(false, $this->cacheHelper->loadPartnersFromCache());
+        $this->assertFalse($this->cacheHelper->loadPartnersFromCache());
     }
 
     public function testSavePartnersToCache()

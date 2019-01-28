@@ -108,7 +108,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->_model, $this->_model->setExtractedData($data));
         $this->assertSame($data, $this->_model->getExtractedData());
         $this->assertSame('VALUE', $this->_model->getExtractedData('KEY'));
-        $this->assertSame(null, $this->_model->getExtractedData('BAD_KEY'));
+        $this->assertNull($this->_model->getExtractedData('BAD_KEY'));
     }
 
     /**

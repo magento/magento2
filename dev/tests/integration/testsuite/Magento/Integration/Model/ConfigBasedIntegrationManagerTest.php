@@ -78,7 +78,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
         // Check that the integrations do not exist already
         foreach ($newIntegrations as $integrationName => $integrationData) {
             $integration = $this->integrationService->findByName($integrationName);
-            $this->assertEquals(null, $integration->getId(), 'Integration already exists');
+            $this->assertNull($integration->getId(), 'Integration already exists');
         }
 
         // Create new integrations

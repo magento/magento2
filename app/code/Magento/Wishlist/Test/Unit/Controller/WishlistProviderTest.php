@@ -155,6 +155,6 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->will($this->returnValue(1));
 
-        $this->assertEquals(false, $this->wishlistProvider->getWishlist());
+        $this->assertFalse($this->wishlistProvider->getWishlist());
     }
 }

@@ -249,7 +249,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     public function testValidateResponseSuccess()
     {
         $this->prepareTestValidateResponse('some_md5', 'login', true);
-        $this->assertEquals(true, $this->directpost->validateResponse());
+        $this->assertTrue($this->directpost->validateResponse());
     }
 
     /**
@@ -288,7 +288,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->method('getXTransId')
             ->willReturn('111');
 
-        $this->assertEquals(true, $this->directpost->checkTransId());
+        $this->assertTrue($this->directpost->checkTransId());
     }
 
     /**
@@ -314,7 +314,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->method('getXResponseCode')
             ->willReturn($responseCode);
 
-        $this->assertEquals(true, $this->directpost->checkResponseCode());
+        $this->assertTrue($this->directpost->checkResponseCode());
     }
 
     /**

@@ -187,7 +187,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanShowProductPrice()
     {
-        $this->assertEquals(true, $this->block->getCanShowProductPrice($this->productMock));
+        $this->assertTrue($this->block->getCanShowProductPrice($this->productMock));
     }
 
     /**
@@ -199,7 +199,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->never())->method('getOptions');
 
-        $this->assertEquals(true, $this->block->getIsLastFieldset());
+        $this->assertTrue($this->block->getIsLastFieldset());
     }
 
     /**

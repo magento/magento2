@@ -677,7 +677,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         //pass empty array, delete all existing media gallery entries
         $response['media_gallery_entries'] = [];
         $response = $this->updateProduct($response);
-        $this->assertEquals(true, empty($response['media_gallery_entries']));
+        $this->assertTrue(empty($response['media_gallery_entries']));
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
 

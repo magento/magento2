@@ -181,10 +181,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $model = $this->getModelMock();
         $model->setIsChildTemplate(true);
-        $this->assertSame(true, $model->isChildTemplate());
+        $this->assertTrue($model->isChildTemplate());
 
         $model->setIsChildTemplate(false);
-        $this->assertSame(false, $model->isChildTemplate());
+        $this->assertFalse($model->isChildTemplate());
     }
 
     public function testSetAndGetTemplateFilter()

@@ -132,7 +132,7 @@ class OrderGetTest extends WebapiAbstract
         $appliedTaxes = $result['extension_attributes']['item_applied_taxes'];
         self::assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
         self::assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        self::assertEquals(true, $result['extension_attributes']['converting_from_quote']);
+        self::assertTrue($result['extension_attributes']['converting_from_quote']);
         self::assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
         self::assertNotEmpty($result['extension_attributes']['payment_additional_info']);
     }

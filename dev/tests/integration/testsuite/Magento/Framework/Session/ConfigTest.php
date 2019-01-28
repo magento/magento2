@@ -101,8 +101,8 @@ namespace Magento\Framework\Session {
             $this->assertEquals($this->_cacheLimiter, $model->getCacheLimiter());
             $this->assertEquals('/', $model->getCookiePath());
             $this->assertEquals('localhost', $model->getCookieDomain());
-            $this->assertEquals(false, $model->getCookieSecure());
-            $this->assertEquals(true, $model->getCookieHttpOnly());
+            $this->assertFalse($model->getCookieSecure());
+            $this->assertTrue($model->getCookieHttpOnly());
             $this->assertEquals($model->getSavePath(), $model->getOption('save_path'));
         }
 

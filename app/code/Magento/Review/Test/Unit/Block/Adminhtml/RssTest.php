@@ -125,7 +125,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
 
     public function testIsAllowed()
     {
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     public function testGetFeeds()

@@ -119,11 +119,11 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
 
     public function testCanFetchTransactionInfo()
     {
-        $this->assertEquals(false, $this->_model->canFetchTransactionInfo());
+        $this->assertFalse($this->_model->canFetchTransactionInfo());
     }
 
     public function testCanReviewPayment()
     {
-        $this->assertEquals(false, $this->_model->canReviewPayment());
+        $this->assertFalse($this->_model->canReviewPayment());
     }
 }

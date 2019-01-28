@@ -357,9 +357,9 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
     public function testShowPager()
     {
-        $this->assertEquals(false, $this->productsList->showPager());
+        $this->assertFalse($this->productsList->showPager());
         $this->productsList->setData('show_pager', true);
-        $this->assertEquals(true, $this->productsList->showPager());
+        $this->assertTrue($this->productsList->showPager());
     }
 
     public function testGetIdentities()

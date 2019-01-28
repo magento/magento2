@@ -54,6 +54,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_storageMock->expects($this->once())->method('get')
             ->will($this->returnValue([]));
         $result = $this->_model->getFieldset('test');
-        $this->assertEquals(null, $result);
+        $this->assertNull($result);
     }
 }
