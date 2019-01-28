@@ -65,7 +65,7 @@ class QuoteAddressValidator
         //validate customer id
         if ($customerId) {
             try {
-                $customer = $this->customerRepository->getById($customerId);
+                $this->customerRepository->getById($customerId);
             } catch (NoSuchEntityException $exception) {
                 throw new NoSuchEntityException(__('Invalid customer id %1', $customerId));
             }

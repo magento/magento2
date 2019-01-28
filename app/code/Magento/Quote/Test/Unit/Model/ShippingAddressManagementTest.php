@@ -10,6 +10,12 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\ShippingAddressManagement;
+
+/**
+ * Test for \Magento\Quote\Model\ShippingAddressManagement class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
