@@ -181,7 +181,7 @@ class ValidatorFile extends Validator
             $tmpDirectory = $this->filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
             $fileHash = md5($tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
             $fileRandomName = $this->random->getRandomString(32);
-            $filePath .= '/' .$fileRandomName;
+            $filePath .= '/' . $fileRandomName;
             $fileFullPath = $this->mediaDirectory->getAbsolutePath($this->quotePath . $filePath);
 
             $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));

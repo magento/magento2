@@ -28,7 +28,7 @@ for ($i = 1; $i <= 5; $i++) {
         ->setGroupId(1)
         ->setLastname('Smith')
         ->setWebsiteId(1)
-        ->setEmail('customer'.$i.'@example.com');
+        ->setEmail('customer' . $i . '@example.com');
     try {
         $customerRepository->save($customer, 'password');
     } catch (\Exception $e) {

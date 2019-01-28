@@ -86,7 +86,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLinkedMedia()
     {
         $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
-                ->getAbsolutePath()  . 'linked_media';
+                ->getAbsolutePath() . 'linked_media';
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('name', $this->dirName);
         $this->model->getStorage()

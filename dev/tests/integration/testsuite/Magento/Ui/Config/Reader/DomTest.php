@@ -86,6 +86,6 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     private function getMergedFilePath($filename)
     {
-        return realpath(__DIR__ . '/../../_files/view/ui_component') . DIRECTORY_SEPARATOR. $filename;
+        return realpath(__DIR__ . '/../../_files/view/ui_component') . DIRECTORY_SEPARATOR . $filename;
     }
 }

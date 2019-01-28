@@ -150,7 +150,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
             'swagger' => '2.0',
             'info' => [
                 'version' => $majorMinorVersion,
-                'title' => $this->productMetadata->getName() . ' ' .$this->productMetadata->getEdition(),
+                'title' => $this->productMetadata->getName() . ' ' . $this->productMetadata->getEdition(),
             ],
             'host' => $host,
             'basePath' => $basePath,

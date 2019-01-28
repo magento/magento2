@@ -39,7 +39,7 @@ class Random
     {
         $str = '';
         if (null === $chars) {
-            $chars = self::CHARS_LOWERS.self::CHARS_UPPERS.self::CHARS_DIGITS;
+            $chars = self::CHARS_LOWERS . self::CHARS_UPPERS . self::CHARS_DIGITS;
         }
 
         $charsMaxKey = mb_strlen($chars) - 1;

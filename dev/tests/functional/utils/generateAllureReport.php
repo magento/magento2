@@ -26,7 +26,7 @@ $allureResultsDir = MTF_BP . '/var/allure-results/';
 $allureReportDir = MTF_BP . '/var/allure-report/';
 
 // Generate report using Allure CLI.
-exec(ALLURE_CLI . ' generate ' . $allureResultsDir . ' -o '. $allureReportDir);
+exec(ALLURE_CLI . ' generate ' . $allureResultsDir . ' -o ' . $allureReportDir);
 
 // Open report using Allure CLI.
 exec(ALLURE_CLI . ' report open --report-dir ' . $allureReportDir);

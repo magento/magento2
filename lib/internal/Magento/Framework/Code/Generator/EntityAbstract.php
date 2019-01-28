@@ -328,7 +328,7 @@ abstract class EntityAbstract
             }
 
             if ($parameter->allowsNull()) {
-                $typeName = '?' .$typeName;
+                $typeName = '?' . $typeName;
             }
         }
 

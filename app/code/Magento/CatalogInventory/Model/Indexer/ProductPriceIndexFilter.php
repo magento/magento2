@@ -120,7 +120,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
                 $productIds[] = $row['product_id'];
             }
             if ($productIds !== null) {
-                $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];
+                $where = [$priceTable->getEntityField() . ' IN (?)' => $productIds];
                 $connection->delete($priceTable->getTableName(), $where);
             }
         }

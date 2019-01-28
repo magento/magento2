@@ -378,7 +378,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         if ($this->relevanceOrderDirection) {
             $this->getSelect()->order(
-                'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
+                'search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
             );
         }
         return parent::_renderFiltersBefore();

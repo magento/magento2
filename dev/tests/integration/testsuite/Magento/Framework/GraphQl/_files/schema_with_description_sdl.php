@@ -100,7 +100,7 @@ return [
         'kind' =>  'SCALAR',
         'name' =>  'String',
         'description' => 'The `String` scalar type represents textual data, represented as UTF-8' . "\n" .
-            'character sequences. The String type is most often used by GraphQL to'. "\n" .
+            'character sequences. The String type is most often used by GraphQL to' . "\n" .
             'represent free-form human-readable text.',
         'fields' =>  null,
         'inputFields' =>  null,

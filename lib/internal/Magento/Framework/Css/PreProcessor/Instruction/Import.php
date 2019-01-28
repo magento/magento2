@@ -22,9 +22,9 @@ class Import implements PreProcessorInterface
      */
     const REPLACE_PATTERN =
         '#@import[\s]*'
-        .'(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
-        .'(?P<path>[^\)\'\"]*?)'
-        .'(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
+        . '(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
+        . '(?P<path>[^\)\'\"]*?)'
+        . '(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module

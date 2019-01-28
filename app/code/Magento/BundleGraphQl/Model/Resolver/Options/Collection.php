@@ -104,7 +104,7 @@ class Collection
         $linkField = $optionsCollection->getConnection()->getAutoIncrementField($productTable);
         $optionsCollection->getSelect()->join(
             ['cpe' => $productTable],
-            'cpe.'.$linkField.' = main_table.parent_id',
+            'cpe.' . $linkField . ' = main_table.parent_id',
             []
         )->where(
             "cpe.entity_id IN (?)",

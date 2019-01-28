@@ -89,7 +89,7 @@ class HttpMethodValidatorTest extends TestCase
      */
     public function testNotAllowedMethod()
     {
-        $this->request->setMethod('method' .rand(0, 1000));
+        $this->request->setMethod('method' . rand(0, 1000));
         $action = $this->getMockForAbstractClass(ActionInterface::class);
 
         $this->validator->validate($this->request, $action);

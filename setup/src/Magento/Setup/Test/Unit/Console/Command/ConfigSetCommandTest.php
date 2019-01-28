@@ -116,7 +116,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         if (strtolower($interactionType) === 'y') {
             $message = 'You saved the new configuration.' . PHP_EOL;
         } else {
-            $message = 'You made no changes to the configuration.'.PHP_EOL;
+            $message = 'You made no changes to the configuration.' . PHP_EOL;
         }
         $this->assertSame(
             $message,

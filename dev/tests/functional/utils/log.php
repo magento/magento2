@@ -16,4 +16,4 @@ if (preg_match('/\.\.(\\\|\/)/', $name)) {
     throw new \InvalidArgumentException('Invalid log file name');
 }
 
-echo serialize(file_get_contents('../../../../var/log' .'/' .$name));
+echo serialize(file_get_contents('../../../../var/log' . '/' . $name));

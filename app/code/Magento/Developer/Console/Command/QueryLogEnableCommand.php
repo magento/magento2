@@ -115,6 +115,6 @@ class QueryLogEnableCommand extends Command
 
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $configGroup]);
 
-        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        $output->writeln("<info>" . self::SUCCESS_MESSAGE . "</info>");
     }
 }

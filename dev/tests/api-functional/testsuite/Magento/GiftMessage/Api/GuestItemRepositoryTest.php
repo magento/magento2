@@ -97,7 +97,7 @@ class GuestItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message/' .  $itemId,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

@@ -221,9 +221,9 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
         $connection->expects($this->once())
-            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId .')');
+            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId . ')');
         $connection->expects($this->once())
-            ->method('delete')->with($operationTable, 'id IN (' . $operationId .')')->willReturn(1);
+            ->method('delete')->with($operationTable, 'id IN (' . $operationId . ')')->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->once())->method('getTopicName')->willReturn($topicName);
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
@@ -269,9 +269,9 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
         $connection->expects($this->once())
-            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId .')');
+            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId . ')');
         $connection->expects($this->once())
-            ->method('delete')->with($operationTable, 'id IN (' . $operationId .')')
+            ->method('delete')->with($operationTable, 'id IN (' . $operationId . ')')
             ->willThrowException(new \Exception($exceptionMessage));
         $connection->expects($this->once())->method('rollBack')->willReturnSelf();
         $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);

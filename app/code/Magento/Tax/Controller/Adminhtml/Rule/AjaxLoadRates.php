@@ -59,7 +59,7 @@ class AjaxLoadRates extends Action
             if (!empty($ratesFilter)) {
                 $this->searchCriteriaBuilder->addFilter(
                     Rate::KEY_CODE,
-                    '%'.$ratesFilter.'%',
+                    '%' . $ratesFilter . '%',
                     'like'
                 );
             }

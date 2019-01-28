@@ -79,7 +79,7 @@ foreach ($options as $option) {
      */
     $imageContentFactory = $objectManager->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
     $imageContent = $imageContentFactory->create();
-    $testImagePath = __DIR__ .'/magento_image.jpg';
+    $testImagePath = __DIR__ . '/magento_image.jpg';
     $imageContent->setBase64EncodedData(base64_encode(file_get_contents($testImagePath)));
     $imageContent->setType("image/jpeg");
     $imageContent->setName("1.jpg");

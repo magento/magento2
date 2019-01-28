@@ -91,7 +91,7 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
 
     protected function parseFile()
     {
-        $file = __DIR__.'/_files/objectsCode.php.txt';
+        $file = __DIR__ . '/_files/objectsCode.php.txt';
         $this->tokenizer->parse($file);
     }
 }

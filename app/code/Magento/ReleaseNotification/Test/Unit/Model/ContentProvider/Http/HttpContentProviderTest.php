@@ -63,7 +63,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $version = '2.3.0';
         $edition = 'Community';
         $locale = 'fr_FR';
-        $url = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
+        $url = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
         $response = '{"return":"success"}';
 
         $this->urlBuilderMock->expects($this->any())
@@ -89,7 +89,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $version = '2.3.5';
         $edition = 'Community';
         $locale = 'fr_FR';
-        $url = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
+        $url = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
 
         $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')
@@ -111,8 +111,8 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $version = '2.3.1';
         $edition = 'Community';
         $locale = 'fr_FR';
-        $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
-        $urlDefaultLocale = 'https://content.url.example/'. $version . '/' . $edition . '/en_US.json';
+        $urlLocale = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
+        $urlDefaultLocale = 'https://content.url.example/' . $version . '/' . $edition . '/en_US.json';
         $response = '{"return":"default-locale"}';
 
         $this->urlBuilderMock->expects($this->exactly(2))
@@ -146,8 +146,8 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentSuccessOnDefaultOrEmpty($version, $edition, $locale, $response)
     {
-        $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
-        $urlDefaultLocale = 'https://content.url.example/'. $version . '/' . $edition . '/en_US.json';
+        $urlLocale = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
+        $urlDefaultLocale = 'https://content.url.example/' . $version . '/' . $edition . '/en_US.json';
         $urlDefault = 'https://content.url.example/' . $version . '/default.json';
 
         $this->urlBuilderMock->expects($this->exactly(3))

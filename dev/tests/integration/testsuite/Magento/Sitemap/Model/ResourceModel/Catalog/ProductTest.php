@@ -77,7 +77,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
         $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/m/a/magento_image_sitemap.png',
+            self::BASE_IMAGE_PATH . '/m/a/magento_image_sitemap.png',
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
         );
@@ -85,12 +85,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $imagesCollection = $products[4]->getImages()->getCollection();
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/m/a/magento_image_sitemap.png',
+            self::BASE_IMAGE_PATH . '/m/a/magento_image_sitemap.png',
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
         );
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/s/e/second_image.png',
+            self::BASE_IMAGE_PATH . '/s/e/second_image.png',
             $imagesCollection[1]->getUrl(),
             'Incorrect image url'
         );
@@ -102,12 +102,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $imagesCollection = $products[5]->getImages()->getCollection();
         $this->assertCount(1, $imagesCollection);
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/s/e/second_image_1.png',
+            self::BASE_IMAGE_PATH . '/s/e/second_image_1.png',
             $imagesCollection[0]->getUrl(),
             'Image url is incorrect'
         );
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/s/e/second_image_1.png',
+            self::BASE_IMAGE_PATH . '/s/e/second_image_1.png',
             $products[5]->getImages()->getThumbnail(),
             'Product thumbnail is incorrect'
         );
@@ -145,7 +145,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
         $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/s/e/second_image.png',
+            self::BASE_IMAGE_PATH . '/s/e/second_image.png',
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
         );
@@ -153,7 +153,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $imagesCollection = $products[4]->getImages()->getCollection();
         $this->assertEquals(
-            self::BASE_IMAGE_PATH.'/s/e/second_image.png',
+            self::BASE_IMAGE_PATH . '/s/e/second_image.png',
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
         );

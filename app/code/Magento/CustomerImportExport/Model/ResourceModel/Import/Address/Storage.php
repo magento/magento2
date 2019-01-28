@@ -95,7 +95,7 @@ class Storage
         $collection->removeAttributeToSelect();
         $select = $collection->getSelect();
         $tableId = array_keys($select->getPart(Select::FROM))[0];
-        $select->where($tableId .'.parent_id in (?)', $customerIds);
+        $select->where($tableId . '.parent_id in (?)', $customerIds);
 
         $this->collectionIterator->iterate(
             $collection,

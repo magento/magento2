@@ -48,7 +48,7 @@ class RelationComposite
             $processor->processRelation($object);
         }
         $this->eventManager->dispatch(
-            $object->getEventPrefix(). '_process_relation',
+            $object->getEventPrefix() . '_process_relation',
             [
                 'object' => $object
             ]

@@ -207,7 +207,7 @@ class CsrfValidatorTest extends TestCase
     public function testValidateWithInvalidKey()
     {
         $this->request->setPost(
-            new Parameters(['form_key' => $this->formKey->getFormKey() .'1'])
+            new Parameters(['form_key' => $this->formKey->getFormKey() . '1'])
         );
         $this->request->setMethod(HttpRequest::METHOD_POST);
 

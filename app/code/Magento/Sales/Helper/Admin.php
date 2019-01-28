@@ -154,8 +154,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $i = 1;
             $data = str_replace('%', '%%', $data);
             $regexp = "#(?J)<a"
-                ."(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
-                .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
+                . "(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
+                . ">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
             while (preg_match($regexp, $data, $matches)) {
                 $text = '';
                 if (!empty($matches['text'])) {

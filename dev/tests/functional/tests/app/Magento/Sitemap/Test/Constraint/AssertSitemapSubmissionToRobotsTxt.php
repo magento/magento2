@@ -41,7 +41,7 @@ class AssertSitemapSubmissionToRobotsTxt extends AbstractConstraint
             'File ' . $this->filename . ' is not readable or not exists.'
         );
 
-        $expectedRobotsContent = 'Sitemap: ' .  $_ENV['app_frontend_url'] . 'sitemap.xml';
+        $expectedRobotsContent = 'Sitemap: ' . $_ENV['app_frontend_url'] . 'sitemap.xml';
         \PHPUnit\Framework\Assert::assertTrue(
             strpos($browser->getHtmlSource(), $expectedRobotsContent) !== false,
             'File ' . $this->filename . ' contains incorrect data.'

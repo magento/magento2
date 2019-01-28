@@ -63,7 +63,7 @@ class ClassAnnotationStructureSniffTest extends \PHPUnit\Framework\TestCase
     {
         $reportFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'phpcs_report.txt';
         $this->copyFile(
-            __DIR__ . DIRECTORY_SEPARATOR . '_files'. DIRECTORY_SEPARATOR,
+            __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR,
             TESTS_TEMP_DIR
         );
         $codeSniffer = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(

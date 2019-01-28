@@ -290,7 +290,7 @@ class MethodArgumentsSniff implements Sniff
     ) : void {
         $parameterNames = $this->getMethodParameters($paramDefinitions);
         if (!in_array($methodArguments[$ptr], $parameterNames)) {
-            $error = $methodArguments[$ptr]. ' parameter is missing in method annotation';
+            $error = $methodArguments[$ptr] . ' parameter is missing in method annotation';
             $phpcsFile->addFixableError($error, $stackPtr, 'MethodArguments');
         }
     }
@@ -342,7 +342,7 @@ class MethodArgumentsSniff implements Sniff
             ) {
                 if ($methodArguments[$ptr] != $parameterNames[$ptr]) {
                     $phpcsFile->addFixableError(
-                        $methodArguments[$ptr].' parameter is not in order',
+                        $methodArguments[$ptr] . ' parameter is not in order',
                         $paramPointers[$ptr],
                         'MethodArguments'
                     );
@@ -429,7 +429,7 @@ class MethodArgumentsSniff implements Sniff
             case 2:
                 if ($this->isInvalidType($paramDefinitions[0])) {
                     $phpcsFile->addFixableError(
-                        $paramDefinitions[0].' is not a valid PHP type',
+                        $paramDefinitions[0] . ' is not a valid PHP type',
                         $paramPointers[$ptr],
                         'MethodArguments'
                     );
@@ -451,7 +451,7 @@ class MethodArgumentsSniff implements Sniff
                     );
                     if ($this->isInvalidType($paramDefinitions[0])) {
                         $phpcsFile->addFixableError(
-                            $paramDefinitions[0].' is not a valid PHP type',
+                            $paramDefinitions[0] . ' is not a valid PHP type',
                             $paramPointers[$ptr],
                             'MethodArguments'
                         );

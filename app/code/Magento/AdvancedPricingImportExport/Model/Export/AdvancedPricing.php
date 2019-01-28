@@ -471,7 +471,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             ImportAdvancedPricing::COL_TIER_PRICE_QTY => 'ap.qty',
             ImportAdvancedPricing::COL_TIER_PRICE => 'ap.value',
             ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE => 'ap.percentage_value',
-            'product_link_id' => 'ap.' .$productEntityLinkField,
+            'product_link_id' => 'ap.' . $productEntityLinkField,
         ];
         if ($exportFilter && array_key_exists('tier_price', $exportFilter)) {
             if (!empty($exportFilter['tier_price'][0])) {
@@ -488,7 +488,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 $selectFields
             )
             ->where(
-                'ap.'.$productEntityLinkField.' IN (?)',
+                'ap.' . $productEntityLinkField . ' IN (?)',
                 $productIds
             );
 
@@ -602,7 +602,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             }
 
             if ($storeName && $currencyCode) {
-                $code = $storeName.' ['.$currencyCode.']';
+                $code = $storeName . ' [' . $currencyCode . ']';
             } else {
                 $code = $storeName;
             }

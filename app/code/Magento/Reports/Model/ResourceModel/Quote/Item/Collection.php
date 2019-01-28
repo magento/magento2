@@ -195,7 +195,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         )->joinLeft(
             ['product_price' => $productAttrPrice->getBackend()->getTable()],
             "product_price.{$linkField} = main_table.{$linkField}"
-            ." AND product_price.attribute_id = {$productAttrPriceId}",
+            . " AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value')]
         )->where("main_table.entity_id IN (?)", $productIds);
 

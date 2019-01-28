@@ -86,7 +86,7 @@ class XmlCatalogGenerateCommand extends Command
                     self::IDE_OPTION,
                     null,
                     InputOption::VALUE_REQUIRED,
-                    'Format in which catalog will be generated. Supported: ['.
+                    'Format in which catalog will be generated. Supported: [' .
                     implode(', ', $this->getSupportedFormats()) . ']',
                     'phpstorm'
                 ),

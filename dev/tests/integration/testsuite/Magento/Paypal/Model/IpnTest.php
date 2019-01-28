@@ -108,7 +108,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $comments = $order->load($order->getId())->getAllStatusHistory();
         $commentData = reset($comments);
         $commentOrigin = sprintf(
-            'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of $%d.00. '.
+            'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of $%d.00. ' .
             'Transaction ID: "%s". Credit Memo has not been created. Please create offline Credit Memo.',
             abs($refundAmount),
             $ipnData['txn_id']

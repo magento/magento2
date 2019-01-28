@@ -140,7 +140,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
     public function testExecuteLocalizedException()
     {
         $taxRateId=999;
-        $exceptionMessage='No such entity with taxRateId = '.$taxRateId;
+        $exceptionMessage='No such entity with taxRateId = ' . $taxRateId;
         $noSuchEntityEx= new NoSuchEntityException(__($exceptionMessage));
 
         $objectManager = new ObjectManager($this);

@@ -186,7 +186,7 @@ class Image implements LocalInterface
         $path = $this->getModule()
             . DIRECTORY_SEPARATOR . $this->getMiscPath()
             . DIRECTORY_SEPARATOR . $this->getFilePath();
-        return preg_replace('|\Q'. DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);
+        return preg_replace('|\Q' . DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);
     }
 
     /**

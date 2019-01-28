@@ -280,12 +280,12 @@ abstract class AbstractConfig implements ConfigInterface
             case Config::METHOD_WPS_EXPRESS:
             case Config::METHOD_WPP_EXPRESS:
                 $isEnabled = $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPS_EXPRESS .'/active',
+                    'payment/' . Config::METHOD_WPS_EXPRESS . '/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 )
                 || $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPP_EXPRESS .'/active',
+                    'payment/' . Config::METHOD_WPP_EXPRESS . '/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 );
@@ -294,12 +294,12 @@ abstract class AbstractConfig implements ConfigInterface
             case Config::METHOD_WPS_BML:
             case Config::METHOD_WPP_BML:
                 $isEnabled = $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPS_BML .'/active',
+                    'payment/' . Config::METHOD_WPS_BML . '/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 )
                 || $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPP_BML .'/active',
+                    'payment/' . Config::METHOD_WPP_BML . '/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 );
@@ -308,12 +308,12 @@ abstract class AbstractConfig implements ConfigInterface
             case Config::METHOD_PAYMENT_PRO:
             case Config::METHOD_PAYFLOWPRO:
                 $isEnabled = $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_PAYMENT_PRO .'/active',
+                    'payment/' . Config::METHOD_PAYMENT_PRO . '/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 )
                 || $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_PAYFLOWPRO .'/active',
+                    'payment/' . Config::METHOD_PAYFLOWPRO . '/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 );

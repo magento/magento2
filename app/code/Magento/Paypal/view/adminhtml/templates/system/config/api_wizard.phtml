@@ -28,7 +28,7 @@
 
         <a class="action-default"
            data-paypal-button="true"
-           href="<?= /* @noEscape */ $block->escapeUrl($block->getSandboxButtonUrl(). '?' . $block->getQuery()) ?>"
+           href="<?= /* @noEscape */ $block->escapeUrl($block->getSandboxButtonUrl() . '?' . $block->getQuery()) ?>"
            target="PPFrame"><?= $block->escapeHtml($block->getSandboxButtonLabel()) ?></a>
     </div>
 </div>

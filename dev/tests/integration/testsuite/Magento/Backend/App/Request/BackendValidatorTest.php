@@ -276,7 +276,7 @@ class BackendValidatorTest extends TestCase
      */
     public function testValidateWithInvalidKey()
     {
-        $invalidKey = $this->url->getSecretKey() .'Invalid';
+        $invalidKey = $this->url->getSecretKey() . 'Invalid';
         $this->request->setParams([
             BackendUrl::SECRET_KEY_PARAM_NAME => $invalidKey,
         ]);
@@ -301,7 +301,7 @@ class BackendValidatorTest extends TestCase
     public function testValidateWithInvalidFormKey()
     {
         $this->request->setPost(
-            new Parameters(['form_key' => $this->formKey->getFormKey() .'1'])
+            new Parameters(['form_key' => $this->formKey->getFormKey() . '1'])
         );
         $this->request->setMethod(HttpRequest::METHOD_POST);
 

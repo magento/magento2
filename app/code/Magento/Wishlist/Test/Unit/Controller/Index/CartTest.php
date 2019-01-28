@@ -567,7 +567,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with('You added '  . $productName . ' to your shopping cart.', null)
+            ->with('You added ' . $productName . ' to your shopping cart.', null)
             ->willReturnSelf();
 
         $this->cartHelperMock->expects($this->once())

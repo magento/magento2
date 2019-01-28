@@ -22,7 +22,7 @@ class WhereRenderer implements RendererInterface
     public function render(Select $select, $sql = '')
     {
         if ($select->getPart(Select::FROM) && $select->getPart(Select::WHERE)) {
-            $sql .= ' ' . Select::SQL_WHERE . ' ' .  implode(' ', $select->getPart(Select::WHERE));
+            $sql .= ' ' . Select::SQL_WHERE . ' ' . implode(' ', $select->getPart(Select::WHERE));
         }
         return $sql;
     }

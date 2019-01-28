@@ -63,12 +63,12 @@ class SourceArgumentsReader
                 try {
                     $paramClass = $param->getClass();
                     if ($paramClass) {
-                        $typeName = '\\' .$paramClass->getName();
+                        $typeName = '\\' . $paramClass->getName();
                     }
                 } catch (\ReflectionException $exception) {
                     //If there's a problem loading a class then ignore it and
                     //just return it's name.
-                    $typeName = '\\' .$param->getType()->getName();
+                    $typeName = '\\' . $param->getType()->getName();
                 }
             }
             $types[] = $typeName;

@@ -48,7 +48,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPreparedCollection($from, $to, $period, $locale, $expected)
     {
-        $encodedFilter = base64_encode('report_from='. $from . '&report_to=' . $to . '&report_period=' . $period);
+        $encodedFilter = base64_encode('report_from=' . $from . '&report_to=' . $to . '&report_period=' . $period);
 
         $this->block->setVarNameFilter('filtername');
         /** @var $request RequestInterface */

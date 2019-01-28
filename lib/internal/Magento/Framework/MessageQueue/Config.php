@@ -83,7 +83,7 @@ class Config implements ConfigInterface
     public function getConnectionByConsumer($consumer)
     {
         $connection = $this->queueConfigData->get(
-            ConfigInterface::CONSUMERS . '/'. $consumer . '/'. ConfigInterface::CONSUMER_CONNECTION
+            ConfigInterface::CONSUMERS . '/' . $consumer . '/' . ConfigInterface::CONSUMER_CONNECTION
         );
         if (!$connection) {
             throw new LocalizedException(

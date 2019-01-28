@@ -90,7 +90,7 @@ class ProfilerEnableCommand extends Command
 
         $this->filesystem->write(BP . '/' . self::PROFILER_FLAG_FILE, $type);
         if ($this->filesystem->fileExists(BP . '/' . self::PROFILER_FLAG_FILE)) {
-            $output->write('<info>'. sprintf(self::SUCCESS_MESSAGE, $type) . '</info>');
+            $output->write('<info>' . sprintf(self::SUCCESS_MESSAGE, $type) . '</info>');
             if ($type == 'csvfile') {
                 $output->write(
                     '<info> ' . sprintf(

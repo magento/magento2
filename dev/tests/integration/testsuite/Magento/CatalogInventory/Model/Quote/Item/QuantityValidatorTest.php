@@ -273,6 +273,6 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
                 return $quoteItem;
             }
         }
-        $this->fail('Test failed since no quoteItem found by productId '.$productId);
+        $this->fail('Test failed since no quoteItem found by productId ' . $productId);
     }
 }

@@ -84,7 +84,7 @@ class ModuleRegistryUninstaller
     public function removeModulesFromDeploymentConfig(OutputInterface $output, array $modules)
     {
         $output->writeln(
-            '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
+            '<info>Removing ' . implode(', ', $modules) . ' from module list in deployment configuration</info>'
         );
         $configuredModules = $this->deploymentConfig->getConfigData(
             \Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES

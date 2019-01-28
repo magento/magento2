@@ -13,7 +13,7 @@ require __DIR__ . '/../../error_handler.php';
 
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
-$fixtureBaseDir = $integrationTestsDir. '/testsuite';
+$fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
 if (!defined('TESTS_BASE_DIR')) {
     define('TESTS_BASE_DIR', $testsBaseDir);

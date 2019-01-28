@@ -123,7 +123,7 @@ class GenerateVclCommand extends Command
         $errors = $this->validate($input);
         if ($errors) {
             foreach ($errors as $error) {
-                $output->writeln('<error>'.$error.'</error>');
+                $output->writeln('<error>' . $error . '</error>');
 
                 return Cli::RETURN_FAILURE;
             }
@@ -149,7 +149,7 @@ class GenerateVclCommand extends Command
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
-            $output->writeln('<error>'.$e->getMessage().'</error>');
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }

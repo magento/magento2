@@ -18,7 +18,7 @@ $customerRepository = $objectManager->create(CustomerRepositoryInterface::class)
 for ($i = 1; $i <= 5; $i++) {
     try {
         /** @var CustomerInterface $customer */
-        $customer = $customerRepository->get('customer'.$i.'@example.com');
+        $customer = $customerRepository->get('customer' . $i . '@example.com');
         $customerRepository->delete($customer);
     } catch (\Exception $e) {
     }

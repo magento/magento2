@@ -79,7 +79,7 @@ class PackagesAuth
      */
     private function getPackagesJsonUrl()
     {
-        return $this->urlPrefix .  $this->getCredentialBaseUrl() .  '/packages.json';
+        return $this->urlPrefix . $this->getCredentialBaseUrl() . '/packages.json';
     }
 
     /**

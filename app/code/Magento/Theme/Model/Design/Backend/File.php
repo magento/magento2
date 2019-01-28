@@ -189,7 +189,7 @@ class File extends BackendFile
             $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type']];
             $baseUrl = $baseUrl['value'] . '/';
         }
-        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl  . $fileName;
+        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl . $fileName;
     }
 
     /**

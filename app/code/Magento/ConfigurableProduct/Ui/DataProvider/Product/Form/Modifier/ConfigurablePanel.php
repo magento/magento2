@@ -197,7 +197,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'autoRender' => false,
                                         'componentType' => 'insertListing',
                                         'component' => 'Magento_ConfigurableProduct/js'
-                                            .'/components/associated-product-insert-listing',
+                                            . '/components/associated-product-insert-listing',
                                         'dataScope' => $this->associatedListingPrefix
                                             . static::ASSOCIATED_PRODUCT_LISTING,
                                         'externalProvider' => $this->associatedListingPrefix

@@ -75,7 +75,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->imageUploader->saveFileToTmpDir('image');
-        $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR. $fileName;
+        $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR . $fileName;
         $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
     }
 
@@ -101,7 +101,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->imageUploader->saveFileToTmpDir('image');
-        $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR. $fileName;
+        $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR . $fileName;
         $this->assertFalse(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
     }
 
@@ -127,7 +127,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->imageUploader->saveFileToTmpDir('image');
-        $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR. $fileName;
+        $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR . $fileName;
         $this->assertFalse(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
     }
 

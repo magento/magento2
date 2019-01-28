@@ -113,7 +113,7 @@ class Notificator implements NotificatorInterface
                     )
                 ],
                 $user->getEmail(),
-                $user->getFirstName().' '.$user->getLastName()
+                $user->getFirstName() . ' ' . $user->getLastName()
             );
         } catch (LocalizedException $exception) {
             throw new NotificatorException(
@@ -182,7 +182,7 @@ class Notificator implements NotificatorInterface
                     'changes' => implode(', ', $changed)
                 ],
                 $email,
-                $user->getFirstName().' '.$user->getLastName()
+                $user->getFirstName() . ' ' . $user->getLastName()
             );
         } catch (LocalizedException $exception) {
             throw new NotificatorException(

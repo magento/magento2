@@ -136,7 +136,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     protected function getCacheStates()
     {
         $configFilePool = new ConfigFilePool();
-        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/'. DirectoryList::CONFIG .'/'
+        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/' . DirectoryList::CONFIG . '/'
             . $configFilePool->getPath($configFilePool::APP_ENV);
         $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
         return $configData[State::CACHE_KEY];

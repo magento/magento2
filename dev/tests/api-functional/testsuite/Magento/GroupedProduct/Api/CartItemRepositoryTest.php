@@ -44,7 +44,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $cartId = $quote->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH .  $cartId . '/items',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [

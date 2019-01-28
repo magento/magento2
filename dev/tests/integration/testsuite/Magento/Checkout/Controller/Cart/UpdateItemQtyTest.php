@@ -99,7 +99,7 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
                 'request' => [],
                 'response' => [
                     'success' => false,
-                    'error_message' => 'Something went wrong while saving the page.'.
+                    'error_message' => 'Something went wrong while saving the page.' .
                         ' Please refresh the page and try again.'
                 ]
             ],

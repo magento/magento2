@@ -124,7 +124,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->context->method('getPath')->willReturn($absolutePath);
         $this->encryptor->method('hash')->willReturn($hashPath);
         static::assertEquals(
-            $absolutePath . '/cache/'. $hashPath . $filePath,
+            $absolutePath . '/cache/' . $hashPath . $filePath,
             $imageModel->getPath()
         );
     }

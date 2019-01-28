@@ -37,7 +37,7 @@ $targetTmpDirPath = $mediaConfig->getBaseTmpMediaPath();
 $mediaDirectory->create($targetDirPath);
 $mediaDirectory->create($targetTmpDirPath);
 
-$dist = $mediaDirectory->getAbsolutePath($mediaConfig->getBaseMediaPath() .  DIRECTORY_SEPARATOR . 'magento_image.jpg');
+$dist = $mediaDirectory->getAbsolutePath($mediaConfig->getBaseMediaPath() . DIRECTORY_SEPARATOR . 'magento_image.jpg');
 copy(__DIR__ . '/magento_image.jpg', $dist);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */

@@ -33,7 +33,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturnCallback(
                 function ($str) {
-                    return 'ESCAPED:' .$str;
+                    return 'ESCAPED:' . $str;
                 }
             );
         $context = $this->getMockBuilder(Context::class)

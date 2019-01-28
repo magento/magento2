@@ -211,7 +211,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         foreach ($topics as $topicName => $topicConfig) {
             $queueNames = array_keys($topicConfig['queues']);
             foreach ($queueNames as $queueName) {
-                $name = $topicName . '--' . $topicConfig['exchange']. '--' .$queueName;
+                $name = $topicName . '--' . $topicConfig['exchange'] . '--' . $queueName;
                 $output[$name] = [
                     'queue' => $queueName,
                     'exchange' => $topicConfig['exchange'],

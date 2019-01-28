@@ -433,7 +433,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($expected as $key => $item) {
             $methodName = 'get' . ucfirst($key);
-            self::assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
+            self::assertEquals($item, $address->$methodName(), 'The "' . $key . '" does not match.');
         }
     }
 

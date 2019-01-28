@@ -57,7 +57,7 @@ class DbTest extends \Magento\TestFramework\Indexer\TestCase
         $tableName = Bootstrap::getObjectManager()->get(Setup::class)
             ->getTable('test_table_with_custom_trigger');
         $this->assertRegExp(
-            '/CREATE  TRIGGER test_custom_trigger AFTER INSERT ON '. $tableName . ' FOR EACH ROW/',
+            '/CREATE  TRIGGER test_custom_trigger AFTER INSERT ON ' . $tableName . ' FOR EACH ROW/',
             $content
         );
         //Clean up.

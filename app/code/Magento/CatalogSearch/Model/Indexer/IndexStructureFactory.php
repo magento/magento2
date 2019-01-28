@@ -73,7 +73,7 @@ class IndexStructureFactory
 
         if (!$indexStructure instanceof IndexStructureInterface) {
             throw new \InvalidArgumentException(
-                $currentStructure . ' index structure doesn\'t implement '. IndexStructureInterface::class
+                $currentStructure . ' index structure doesn\'t implement ' . IndexStructureInterface::class
             );
         }
 

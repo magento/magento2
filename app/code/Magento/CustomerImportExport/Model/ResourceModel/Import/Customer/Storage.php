@@ -91,7 +91,7 @@ class Storage
         $select = $collection->getSelect();
         $customerTableId = array_keys($select->getPart(Select::FROM))[0];
         $select->where(
-            $customerTableId .'.email in (?)',
+            $customerTableId . '.email in (?)',
             array_map(
                 function (array $customer) {
                     return $customer['email'];
@@ -194,7 +194,7 @@ class Storage
             ) {
                 //Only looking for customers we don't already have ID for.
                 //We need unique identifiers.
-                $uniqueKey = $email .'_' .$websiteId;
+                $uniqueKey = $email . '_' . $websiteId;
                 $identifiers[$uniqueKey] = [
                     'email' => $email,
                     'website_id' => $websiteId,

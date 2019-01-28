@@ -253,7 +253,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             );
             // Store scope attribute value
-            $columnValue = $this->getConnection()->getIfNullSql('t2_'  . $attributeCode . '.value', $columnValue);
+            $columnValue = $this->getConnection()->getIfNullSql('t2_' . $attributeCode . '.value', $columnValue);
         }
 
         // Add attribute value to result set if needed

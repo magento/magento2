@@ -95,7 +95,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure1Generate()
     {
-        return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' -o tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+        return $this->_exec('allure generate tests' . DIRECTORY_SEPARATOR . '_output' . DIRECTORY_SEPARATOR . 'allure-results' . DIRECTORY_SEPARATOR . ' -o tests' . DIRECTORY_SEPARATOR . '_output' . DIRECTORY_SEPARATOR . 'allure-report' . DIRECTORY_SEPARATOR . '');
     }
 
     /**
@@ -105,7 +105,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Generate()
     {
-        return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' --output tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .' --clean');
+        return $this->_exec('allure generate tests' . DIRECTORY_SEPARATOR . '_output' . DIRECTORY_SEPARATOR . 'allure-results' . DIRECTORY_SEPARATOR . ' --output tests' . DIRECTORY_SEPARATOR . '_output' . DIRECTORY_SEPARATOR . 'allure-report' . DIRECTORY_SEPARATOR . ' --clean');
     }
 
     /**
@@ -115,7 +115,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure1Open()
     {
-        return $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+        return $this->_exec('allure report open --report-dir tests' . DIRECTORY_SEPARATOR . '_output' . DIRECTORY_SEPARATOR . 'allure-report' . DIRECTORY_SEPARATOR . '');
     }
 
     /**
@@ -125,7 +125,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Open()
     {
-        return $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+        return $this->_exec('allure open --port 0 tests' . DIRECTORY_SEPARATOR . '_output' . DIRECTORY_SEPARATOR . 'allure-report' . DIRECTORY_SEPARATOR . '');
     }
 
     /**

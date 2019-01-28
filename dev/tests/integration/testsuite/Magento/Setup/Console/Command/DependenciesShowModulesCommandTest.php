@@ -64,7 +64,7 @@ class DependenciesShowModulesCommandTest extends \PHPUnit\Framework\TestCase
             ',All,Hard,Soft' . PHP_EOL . '"Total number of dependencies",2,2,0' . PHP_EOL,
             $fileContents
         );
-        $this->assertContains('"Dependencies for each module:",All,Hard,Soft'. PHP_EOL, $fileContents);
+        $this->assertContains('"Dependencies for each module:",All,Hard,Soft' . PHP_EOL, $fileContents);
         $this->assertContains(
             'magento/module-a,1,1,0' . PHP_EOL . '" -- magento/module-b",,1,0' . PHP_EOL,
             $fileContents

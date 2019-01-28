@@ -76,7 +76,7 @@ class StockStatusSelectBuilder
                 []
             )->joinInner(
                 ['cpei' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
-                'cpel.'. $linkField . ' = cpei.' . $linkField
+                'cpel.' . $linkField . ' = cpei.' . $linkField
                 . ' AND cpei.attribute_id = ' . $this->getAttribute('status')->getId()
                 . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
                 []

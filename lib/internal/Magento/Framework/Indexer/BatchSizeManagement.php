@@ -51,7 +51,7 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
         // Log warning if allocated memory for temp table greater than 20% of innodb_buffer_pool_size
         if ($size > $bufferPoolSize * .2) {
             $message = 'Memory size allocated for the temporary table is more than 20% of innodb_buffer_pool_size. ' .
-                'Please update innodb_buffer_pool_size or decrease batch size value '.
+                'Please update innodb_buffer_pool_size or decrease batch size value ' .
                 '(which decreases memory usages for the temporary table). ' .
                 'Current batch size: %1; Allocated memory size: %2 bytes; InnoDB buffer pool size: %3 bytes.';
             $this->logger->warning(new \Magento\Framework\Phrase($message, [$batchSize, $size, $bufferPoolSize]));

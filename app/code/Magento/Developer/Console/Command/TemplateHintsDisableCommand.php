@@ -57,6 +57,6 @@ class TemplateHintsDisableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->resourceConfig->saveConfig('dev/debug/template_hints_storefront', 0, 'default', 0);
-        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        $output->writeln("<info>" . self::SUCCESS_MESSAGE . "</info>");
     }
 }
