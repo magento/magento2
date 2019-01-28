@@ -1646,7 +1646,11 @@
             <column name="product_id"/>
             <column name="store_id"/>
         </constraint>
+<<<<<<< HEAD
         <index referenceId="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="hash">
+=======
+        <index name="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="btree">
+>>>>>>> parent of 8fc4480... MAGETWO-89402: Make 'db:status' command works properly
             <column name="product_id"/>
             <column name="category_id"/>
             <column name="store_id"/>

@@ -1591,14 +1591,9 @@
             <argument name="schemaPatchReader" xsi:type="object">\Magento\Framework\Setup\Patch\SchemaPatchReader</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Setup\Patch\UpToDateData">
+    <type name="Magento\Framework\Setup\Declaration\Schema\Db\SchemaBuilder">
         <arguments>
-            <argument name="dataPatchReader" xsi:type="object">\Magento\Framework\Setup\Patch\DataPatchReader</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Setup\Patch\UpToDateSchema">
-        <arguments>
-            <argument name="schemaReader" xsi:type="object">\Magento\Framework\Setup\Patch\SchemaPatchReader</argument>
+            <argument name="logger" xsi:type="object">\Magento\Framework\Setup\Patch\DataPatchReader</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\MessageQueue\Config\CompositeReader">

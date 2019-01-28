@@ -14,7 +14,7 @@ use Magento\Framework\Module\Dir;
 /**
  * Allows to read all patches through the whole system
  */
-class PatchReader
+class PatchReader implements ReaderInterface
 {
     /**
      * Folder name, where patches are
@@ -90,7 +90,7 @@ class PatchReader
         $specificPatchPath = $patchesPath . DIRECTORY_SEPARATOR . $this->getTypeFolder();
         $patchesMask = $specificPatchPath . DIRECTORY_SEPARATOR . '*.php';
 
-        foreach (Glob::glob($patchesMask, GLOB_NOSORT) as $patchPath) {
+        foreach (Glob::glob($patchesMask) as $patchPath) {
             $moduleName = $this->getModuleNameForNamespace($moduleName);
             $patchClasses[] = $moduleName . '\\Setup\\' .
                 self::SETUP_PATCH_FOLDER . '\\' .
@@ -102,13 +102,21 @@ class PatchReader
     }
 
     /**
-     * @param string $moduleName
+     * @param null $moduleName
      * @return array
      */
-    public function read($moduleName)
+    public function read($moduleName = null)
     {
-        $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
-        $patches = $this->getPatchClassesPerModule($moduleName, $modulePath);
+        $patches = [];
+        if ($moduleName === null) {
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+                $patches += $this->getPatchClassesPerModule($moduleName, $modulePath);
+            }
+        } else {
+            $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            $patches = $this->getPatchClassesPerModule($moduleName, $modulePath);
+        }
+
         return $patches;
     }
 }

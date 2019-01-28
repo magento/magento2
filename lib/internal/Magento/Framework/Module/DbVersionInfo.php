@@ -31,11 +31,6 @@ class DbVersionInfo
     private $moduleResource;
 
     /**
-     * @var array
-     */
-    private $dbVersionErrorsCache = null;
-
-    /**
      * @param ModuleListInterface $moduleList
      * @param ResourceInterface $moduleResource
      */
@@ -97,19 +92,16 @@ class DbVersionInfo
      */
     public function getDbVersionErrors()
     {
-        if ($this->dbVersionErrorsCache === null) {
-            $this->dbVersionErrorsCache = [];
-            foreach ($this->moduleList->getNames() as $moduleName) {
-                if (!$this->isSchemaUpToDate($moduleName)) {
-                    $this->dbVersionErrorsCache[] = $this->getSchemaInfo($moduleName);
-                }
-                if (!$this->isDataUpToDate($moduleName)) {
-                    $this->dbVersionErrorsCache[] = $this->getDataInfo($moduleName);
-                }
+        $errors = [];
+        foreach ($this->moduleList->getNames() as $moduleName) {
+            if (!$this->isSchemaUpToDate($moduleName)) {
+                $errors[] = $this->getSchemaInfo($moduleName);
+            }
+            if (!$this->isDataUpToDate($moduleName)) {
+                $errors[] = $this->getDataInfo($moduleName);
             }
         }
-
-        return $this->dbVersionErrorsCache;
+        return $errors;
     }
 
     /**
