@@ -145,7 +145,7 @@ class ImageProcessor implements ImageProcessorInterface
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $fileName = $this->getFileName($imageContent);
-        $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
+        $tmpFileName = substr(md5(mt_rand()), 0, 7) . '.' . $fileName;
         $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
         $fileAttributes = [

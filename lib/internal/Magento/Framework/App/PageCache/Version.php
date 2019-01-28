@@ -62,7 +62,7 @@ class Version
      */
     protected function generateValue()
     {
-        return md5(rand() . time());
+        return md5(mt_rand() . time());
     }
 
     /**

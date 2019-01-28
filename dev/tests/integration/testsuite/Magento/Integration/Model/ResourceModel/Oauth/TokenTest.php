@@ -103,7 +103,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
             $token = $this->tokenFactory->create();
             $token->setType(Token::TYPE_ACCESS)
                 ->setUserType($tokenData['userType'])
-                ->setToken(rand(1, PHP_INT_MAX))
+                ->setToken(mt_rand(1, PHP_INT_MAX))
                 ->setCreatedAt($dateTimeUtils->formatDate($tokenData['createdAt']));
             $this->tokenResourceModel->save($token);
             $tokenData['tokenId'] = $token->getId();

@@ -41,8 +41,8 @@ class CodeSnifferTest extends \PHPUnit\Framework\TestCase
 
     public function testRun()
     {
-        $whiteList = ['test' . rand(), 'test' . rand()];
-        $extensions = ['test' . rand(), 'test' . rand()];
+        $whiteList = ['test' . mt_rand(), 'test' . mt_rand()];
+        $extensions = ['test' . mt_rand(), 'test' . mt_rand()];
 
         $expectedCliEmulation = [
             'files' => $whiteList,

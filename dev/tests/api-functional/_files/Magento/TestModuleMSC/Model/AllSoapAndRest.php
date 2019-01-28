@@ -56,7 +56,7 @@ class AllSoapAndRest implements \Magento\TestModuleMSC\Api\AllSoapAndRestInterfa
      */
     public function create($name)
     {
-        return $this->itemDataFactory->create()->setItemId(rand())->setName($name);
+        return $this->itemDataFactory->create()->setItemId(mt_rand())->setName($name);
     }
 
     /**

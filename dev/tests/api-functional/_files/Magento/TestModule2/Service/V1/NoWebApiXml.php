@@ -48,7 +48,7 @@ class NoWebApiXml implements \Magento\TestModule2\Service\V1\NoWebApiXmlInterfac
      */
     public function create($name)
     {
-        return $this->itemFactory->create()->setId(rand())->setName($name);
+        return $this->itemFactory->create()->setId(mt_rand())->setName($name);
     }
 
     /**

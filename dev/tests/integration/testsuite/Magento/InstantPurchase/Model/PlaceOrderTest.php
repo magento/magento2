@@ -86,7 +86,7 @@ class PlaceOrderTest extends TestCase
         $grouped = $this->getFixtureProduct('grouped-product');
         $selectedQuantities = [];
         foreach ($grouped->getTypeInstance()->getAssociatedProductIds($grouped) as $associatedProductId) {
-            $selectedQuantities[$associatedProductId] = rand(1, 3);
+            $selectedQuantities[$associatedProductId] = mt_rand(1, 3);
         }
 
         $this->invokeTestProductPlacement(

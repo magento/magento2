@@ -57,7 +57,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGrantPermissions()
     {
-        $integrationId = rand(1, 1000);
+        $integrationId = mt_rand(1, 1000);
         $resources = ['Magento_Sales::create', 'Magento_Cms::page', 'Magento_Backend::dashboard'];
         /** Preconditions check */
         $this->_ensurePermissionsAreNotGranted($integrationId, $resources);
@@ -93,12 +93,12 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'integration' => [
-                'integrationId' => rand(1, 1000),
+                'integrationId' => mt_rand(1, 1000),
                 'initialResources' => ['Magento_Cms::page', 'Magento_Backend::dashboard'],
                 'newResources' => ['Magento_Sales::cancel', 'Magento_Cms::page_delete'],
             ],
             'integration clear permissions' => [
-                'integrationId' => rand(1, 1000),
+                'integrationId' => mt_rand(1, 1000),
                 'initialResources' => ['Magento_Sales::capture', 'Magento_Cms::page_delete'],
                 'newResources' => [],
             ]
@@ -110,7 +110,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGrantAllPermissions()
     {
-        $integrationId = rand(1, 1000);
+        $integrationId = mt_rand(1, 1000);
         $this->_service->grantAllPermissions($integrationId);
         $this->_ensurePermissionsAreGranted($integrationId, ['Magento_Backend::all']);
     }

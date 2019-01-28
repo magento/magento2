@@ -49,7 +49,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $layout = $this->objectManager->get(LayoutInterface::class);
         $this->accountBlock = $layout->createBlock(
             Account::class,
-            'address_block' . rand(),
+            'address_block' . mt_rand(),
             ['sessionQuote' => $sessionQuoteMock]
         );
         parent::setUp();
@@ -87,7 +87,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
 
         /** @var LayoutInterface $layout */
         $layout = $this->objectManager->get(LayoutInterface::class);
-        $accountBlock = $layout->createBlock(Account::class, 'address_block' . rand());
+        $accountBlock = $layout->createBlock(Account::class, 'address_block' . mt_rand());
 
         $form = $accountBlock->getForm();
         $form->setUseContainer(true);

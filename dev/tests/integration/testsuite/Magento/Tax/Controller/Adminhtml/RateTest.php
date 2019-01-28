@@ -56,7 +56,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         return [
             [
                 $postData + [
-                    'code' => 'Rate ' . uniqid(rand()),
+                    'code' => 'Rate ' . uniqid(mt_rand()),
                     'zip_is_range' => '1',
                     'zip_from' => '10000',
                     'zip_to' => '20000',
@@ -66,7 +66,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ],
             [
                 $postData + [
-                    'code' => 'Rate ' . uniqid(rand()),
+                    'code' => 'Rate ' . uniqid(mt_rand()),
                     'zip_is_range' => '0',
                     'zip_from' => '10000',
                     'zip_to' => '20000',
@@ -116,7 +116,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             [
                 // Zip as range but no range values provided
                 [
-                    'rate' => rand(1, 10000),
+                    'rate' => mt_rand(1, 10000),
                     'tax_country_id' => 'US',
                     'tax_region_id' => '0',
                     'code' => 'Rate ' . uniqid(),
@@ -130,7 +130,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             // Code is empty
             [
                 [
-                    'rate' => rand(1, 10000),
+                    'rate' => mt_rand(1, 10000),
                     'tax_country_id' => 'US',
                     'tax_region_id' => '0',
                     'code' => '',
@@ -144,7 +144,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             // Country ID empty
             [
                 [
-                    'rate' => rand(1, 10000),
+                    'rate' => mt_rand(1, 10000),
                     'tax_country_id' => '',
                     'tax_region_id' => '0',
                     'code' => 'Rate ' . uniqid(),
@@ -158,7 +158,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             // Tax zip code is empty
             [
                 [
-                    'rate' => rand(1, 10000),
+                    'rate' => mt_rand(1, 10000),
                     'tax_country_id' => 'US',
                     'tax_region_id' => '0',
                     'code' => 'Rate ' . uniqid(),

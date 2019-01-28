@@ -77,14 +77,14 @@ class NewVideoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHtmlId()
     {
-        $this->mathRandom->expects($this->any())->method('getUniqueHash')->with('id_')->willReturn('id_' . rand());
+        $this->mathRandom->expects($this->any())->method('getUniqueHash')->with('id_')->willReturn('id_' . mt_rand());
         $result = $this->block->getHtmlId();
         $this->assertNotNull($result);
     }
 
     public function testGetWidgetOptions()
     {
-        $rand = rand();
+        $rand = mt_rand();
         $this->mathRandom->expects($this->any())->method('getUniqueHash')->with('id_')->willReturn('id_' . $rand);
         $saveVideoUrl = 'http://host/index.php/admin/catalog/product_gallery/upload/key/';
         $saveRemoteVideoUrl = 'http://host/index.php/admin/product_video/product_gallery/retrieveImage/';

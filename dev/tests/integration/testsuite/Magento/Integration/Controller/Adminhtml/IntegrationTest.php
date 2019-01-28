@@ -134,7 +134,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     public function testSaveActionNewIntegration()
     {
         $url = 'http://magento.ll/endpoint_url';
-        $integrationName = md5(rand());
+        $integrationName = md5(mt_rand());
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [

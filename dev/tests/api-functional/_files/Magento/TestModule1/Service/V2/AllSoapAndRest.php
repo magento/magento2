@@ -62,7 +62,7 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestIn
      */
     public function create($name)
     {
-        return $this->itemFactory->create()->setId(rand())->setName($name)->setPrice('10');
+        return $this->itemFactory->create()->setId(mt_rand())->setName($name)->setPrice('10');
     }
 
     /**

@@ -93,7 +93,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValueNoItem()
     {
-        $resultPrice = rand(1, 9);
+        $resultPrice = mt_rand(1, 9);
 
         $this->price->expects($this->once())
             ->method('getValue')
@@ -109,9 +109,9 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValue()
     {
-        $resultPrice = rand(1, 9);
-        $customOptionOneQty = rand(1, 9);
-        $customOptionTwoQty = rand(1, 9);
+        $resultPrice = mt_rand(1, 9);
+        $customOptionOneQty = mt_rand(1, 9);
+        $customOptionTwoQty = mt_rand(1, 9);
 
         $priceInfoBase = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
             ->disableOriginalConstructor()
@@ -203,7 +203,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAmount()
     {
-        $resultPrice = rand(1, 9);
+        $resultPrice = mt_rand(1, 9);
 
         $this->price->expects($this->exactly(4))
             ->method('getValue')

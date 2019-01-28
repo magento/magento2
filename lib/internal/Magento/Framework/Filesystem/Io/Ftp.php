@@ -330,7 +330,7 @@ class Ftp extends AbstractIo
     protected function _tmpFilename($new = false)
     {
         if ($new || !$this->_tmpFilename) {
-            $this->_tmpFilename = tempnam(md5(uniqid(rand(), true)), '');
+            $this->_tmpFilename = tempnam(md5(uniqid(mt_rand(), true)), '');
         }
         return $this->_tmpFilename;
     }

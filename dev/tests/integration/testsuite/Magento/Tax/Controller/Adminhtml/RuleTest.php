@@ -118,7 +118,7 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 'tax_country_id' => 'US',
                 'tax_region_id' => '8',
                 'rate' => '8.25',
-                'code' => 'US-CA-*-Rate' . $i . rand(),
+                'code' => 'US-CA-*-Rate' . $i . mt_rand(),
                 'zip_is_range' => true,
                 'zip_from' => 78765,
                 'zip_to' => 78780,
