@@ -80,8 +80,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $expectedStores = [
             ['label' => 'Main Website', 'value' => []],
             [
-                'label' => '    Main Website Store',
-                'value' => [['label' => '    Default Store View', 'value' => 1]]
+                'label' => '    Main Website Store',
+                'value' => [['label' => '    Default Store View', 'value' => 1]]
             ],
         ];
         $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());

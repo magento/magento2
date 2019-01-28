@@ -247,7 +247,7 @@ class Session implements ConfigOptionsListInterface
                 self::INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING,
-                'Redis disable locking. Values: false (default), true'
+                'Redis disable locking. Values: false (default), true'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_SESSION_REDIS_MIN_LIFETIME,
@@ -389,6 +389,6 @@ class Session implements ConfigOptionsListInterface
         $default = $this->getDefaultConfigValue(self::INPUT_KEY_SESSION_REDIS_COMPRESSION_LIBRARY);
         $otherLibs = array_diff($this->validCompressionLibraries, [$default]);
 
-        return 'Redis compression library. Values: ' . $default . ' (default), ' . implode(', ', $otherLibs);
+        return 'Redis compression library. Values: ' . $default . ' (default), ' . implode(', ', $otherLibs);
     }
 }

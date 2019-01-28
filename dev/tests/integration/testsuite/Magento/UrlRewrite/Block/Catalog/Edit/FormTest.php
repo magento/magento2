@@ -236,8 +236,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 [
                     ['label' => 'Main Website', 'value' => []],
                     [
-                        'label' => '    Main Website Store',
-                        'value' => [['label' => '    Default Store View', 'value' => 1]]
+                        'label' => '    Main Website Store',
+                        'value' => [['label' => '    Default Store View', 'value' => 1]]
                     ]
                 ],
             ],
@@ -247,8 +247,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 [
                     ['label' => 'Main Website', 'value' => []],
                     [
-                        'label' => '    Main Website Store',
-                        'value' => [['label' => '    Default Store View', 'value' => 1]]
+                        'label' => '    Main Website Store',
+                        'value' => [['label' => '    Default Store View', 'value' => 1]]
                     ]
                 ]
             ],
@@ -258,8 +258,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 [
                     ['label' => 'Main Website', 'value' => []],
                     [
-                        'label' => '    Main Website Store',
-                        'value' => [['label' => '    Default Store View', 'value' => 1]]
+                        'label' => '    Main Website Store',
+                        'value' => [['label' => '    Default Store View', 'value' => 1]]
                     ]
                 ]
             ]
