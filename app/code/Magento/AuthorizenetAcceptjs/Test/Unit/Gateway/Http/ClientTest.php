@@ -195,7 +195,6 @@ class ClientTest extends TestCase
             'logger' => $this->logger
         ]);
 
-
         $apiClient->placeRequest($this->getTransferObjectMock($request));
     }
 

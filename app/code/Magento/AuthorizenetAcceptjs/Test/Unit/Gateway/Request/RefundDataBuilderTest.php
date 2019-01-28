@@ -48,16 +48,16 @@ class RefundDataBuilderTest extends TestCase
     public function testBuild()
     {
         $this->paymentMock->method('getAdditionalInformation')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['opaqueDataDescriptor', 'encfoo'],
                 ['opaqueDataValue', 'encbar']
-            ]));
+            ]);
 
         $this->paymentMock->method('decrypt')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['encfoo', 'foo'],
                 ['encbar', 'bar']
-            ]));
+            ]);
 
         $expected = [
             'transactionRequest' => [

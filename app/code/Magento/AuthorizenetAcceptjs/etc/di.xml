@@ -14,7 +14,7 @@
     <virtualType name="AuthorizenetAcceptjsFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
             <argument name="code" xsi:type="string">authorizenet_acceptjs</argument>
-            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\AuthorizenetAcceptjs\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">AuthorizenetAcceptjsInfoBlock</argument>
             <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>
             <argument name="validatorPool" xsi:type="object">AuthorizenetAcceptjsValidatorPool</argument>
@@ -36,7 +36,7 @@
     </virtualType>
 
     <!-- Validators -->
-    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorChain">
+    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
         <arguments>
             <argument name="chainBreakingValidators" xsi:type="array">
                 <item name="general" xsi:type="boolean">true</item>

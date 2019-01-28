@@ -56,16 +56,16 @@ class PaymentDataBuilderTest extends TestCase
     public function testBuild()
     {
         $this->paymentMock->method('getAdditionalInformation')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['opaqueDataDescriptor', 'foo'],
                 ['opaqueDataValue', 'bar']
-            ]));
+            ]);
 
         $this->paymentMock->method('encrypt')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['foo', 'encfoo'],
                 ['bar', 'encbar']
-            ]));
+            ]);
 
         $expected = [
             'transactionRequest' => [
