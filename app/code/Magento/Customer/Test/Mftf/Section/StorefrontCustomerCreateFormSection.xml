@@ -11,6 +11,7 @@
     <section name="StorefrontCustomerCreateFormSection">
         <element name="firstnameField" type="input" selector="#firstname"/>
         <element name="lastnameField" type="input" selector="#lastname"/>
+        <element name="lastnameLabel" type="text" selector="//label[@for='lastname']"/>
         <element name="emailField" type="input" selector="#email_address"/>
         <element name="passwordField" type="input" selector="#password"/>
         <element name="confirmPasswordField" type="input" selector="#password-confirmation"/>

@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
@@ -41,7 +42,7 @@
         <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization"/>
-        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.urlKey}}" stepKey="fillUpdatedUrlKey"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedUrlKey"/>
         <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillUpdatedMetaTitle"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
@@ -52,13 +53,12 @@
         <waitForPageLoad stepKey="waitForUrlRewritePage"/>
 
         <!--Verify Updated Category UrlKey-->
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.urlKey}}" stepKey="fillUpdatedCategoryUrlKey"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{SimpleRootSubCategory.urlKey}}.html" />
-
+        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
         <!--Verify Updated Category UrlKey directs to category Store Front-->
-        <amOnPage url="{{SimpleRootSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <amOnPage url="{{SimpleRootSubCategory.url_key}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleRootSubCategory.name)}}" stepKey="seeUpdatedCategoryInStoreFrontPage"/>
 
@@ -77,7 +77,7 @@
         <seeInField stepKey="seeUpdatedDiscription" selector="{{AdminCategoryContentSection.description}}" userInput="Updated category Description Fields"/>
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
-        <seeInField stepKey="seeUpdatedUrlKey" selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.urlKey}}"/>
+        <seeInField stepKey="seeUpdatedUrlKey" selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.url_key}}"/>
         <seeInField stepKey="seeUpdatedMetaTitleInput" selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}"/>
     </test>
 </tests>
