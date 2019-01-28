@@ -33,11 +33,8 @@ define([
             }
 
             option = options[value];
-            if (!option) {
-                return;
-            }
             
-            if (option['is_zipcode_optional']) {
+            if (option && option['is_zipcode_optional']) {
                 this.error(false);
                 this.validation = _.omit(this.validation, 'required-entry');
             } else {
