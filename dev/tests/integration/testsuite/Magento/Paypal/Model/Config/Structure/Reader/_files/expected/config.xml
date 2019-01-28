@@ -347,7 +347,7 @@
                             <field id="enable_payflow_link"/>
                         </requires>
                     </field>
-                    <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41">
+                    <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41" showInDefault="1" showInWebsite="1">
                         <comment><![CDATA[Payflow Link lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                         <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
@@ -358,7 +358,7 @@
                             <field id="enable_express_checkout"/>
                         </requires>
                     </field>
-                    <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+                    <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                         <config_path>payment/payflow_express_bml/sort_order</config_path>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                         <depends>
@@ -1216,15 +1216,14 @@
                                 <attribute type="shared">1</attribute>
                             </field>
                             <field id="checkout_display" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                                <label>Checkout Display</label>
+                                <label>Customize Smart Buttons</label>
                                 <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
                                 <attribute type="shared">1</attribute>
                             </field>
                             <group id="checkout_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
-                                <label>PayPal Button - Checkout Page</label>
+                                <label>Checkout Page</label>
                                 <field id="checkout_page_button_customize" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
                                     <label>Customize Button</label>
-                                    <comment><![CDATA[Customize the display of the PayPal button in the Checkout.]]></comment>
                                     <config_path>paypal/style/checkout_page_button_customize</config_path>
                                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                     <attribute type="shared">1</attribute>
@@ -1269,10 +1268,11 @@
                                     </depends>
                                     <attribute type="shared">1</attribute>
                                 </field>
-                                <field id="checkout_page_button_size" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                                <field id="checkout_page_button_size" translate="label tooltip" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                                     <label>Size</label>
                                     <config_path>paypal/style/checkout_page_button_size</config_path>
                                     <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getSize</source_model>
+                                    <tooltip>Select Responsive to ensure the PayPal button renders correctly on mobile devices.</tooltip>
                                     <depends>
                                         <field id="checkout_page_button_customize">1</field>
                                     </depends>
@@ -1298,8 +1298,8 @@
                                     <attribute type="shared">1</attribute>
                                 </field>
                             </group>
-                            <group id="product_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
-                                <label>PayPal Button - Product Page</label>
+                            <group id="product_page_button" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
+                                <label>Product Pages</label>
                                 <field id="product_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
                                     <comment/>
                                     <config_path>paypal/style/product_page_button_customize</config_path>
@@ -1352,7 +1352,7 @@
                                 </field>
                             </group>
                             <group id="cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="110">
-                                <label>PayPal Button - Cart Page</label>
+                                <label>Cart Page</label>
                                 <field id="cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
                                     <comment/>
                                     <config_path>paypal/style/cart_page_button_customize</config_path>
@@ -1405,7 +1405,7 @@
                                 </field>
                             </group>
                             <group id="mini_cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="120">
-                                <label>PayPal Button - Mini Cart</label>
+                                <label>Mini Cart</label>
                                 <field id="mini_cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
                                     <comment/>
                                     <config_path>paypal/style/mini_cart_page_button_customize</config_path>
@@ -1467,8 +1467,10 @@
                                 offered and the currency offered by the merchant is USD.]]>
                                     </comment>
                                     <config_path>paypal/style/disable_funding_options</config_path>
+                                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect\DisabledFundingOptions</frontend_model>
                                     <source_model>Magento\Paypal\Model\System\Config\Source\DisableFundingOptions</source_model>
                                     <attribute type="shared">1</attribute>
+                                    <can_be_empty>1</can_be_empty>
                                 </field>
                             </group>
                         </group>
@@ -1515,7 +1517,7 @@
                         <frontend_class>paypal-enabler paypal-ec-separate</frontend_class>
                     </field>
 
-                    <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="21">
+                    <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="21" showInDefault="1" showInWebsite="1">
                         <comment><![CDATA[Payments Pro Hosted Solution lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                         <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
@@ -1790,7 +1792,7 @@
                                 <field id="enable_payflow_advanced"/>
                             </requires>
                         </field>
-                        <field id="enable_express_checkout_bml" sortOrder="42" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml">
+                        <field id="enable_express_checkout_bml" sortOrder="42" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" showInDefault="1" showInWebsite="1">
                             <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                             You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                             <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
@@ -1801,7 +1803,7 @@
                                 <field id="enable_payflow_advanced"/>
                             </requires>
                         </field>
-                        <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+                        <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                             <config_path>payment/payflow_express_bml/sort_order</config_path>
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                             <depends>
@@ -2073,6 +2075,8 @@
                         <field id="enable_paypal_payflow">
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
                         </field>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <group id="paypal_payflow_api_settings" translate="label">
                             <label>Payflow Pro and Express Checkout</label>
                             <field id="business_account" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/business_account" translate="label" sortOrder="10">
@@ -2087,8 +2091,6 @@
                                 <field id="enable_paypal_payflow"/>
                             </requires>
                         </field>
-                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
-                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout_bml_payflow" translate="label" type="select" sortOrder="21" showInWebsite="1" showInDefault="1">
                             <label>Enable PayPal Credit</label>
                             <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
@@ -2102,7 +2104,7 @@
                                 <field id="enable_paypal_payflow"/>
                             </requires>
                         </field>
-                        <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+                        <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                             <config_path>payment/payflow_express_bml/sort_order</config_path>
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                             <depends>

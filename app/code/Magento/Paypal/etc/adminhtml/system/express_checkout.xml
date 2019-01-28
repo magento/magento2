@@ -646,15 +646,14 @@
                         <attribute type="shared">1</attribute>
                     </field>
                     <field id="checkout_display" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Checkout Display</label>
+                        <label>Customize Smart Buttons</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
                         <attribute type="shared">1</attribute>
                     </field>
                     <group id="checkout_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
-                        <label>PayPal Button - Checkout Page</label>
-                        <field id="checkout_page_button_customize" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                        <label>Checkout Page</label>
+                        <field id="checkout_page_button_customize" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
                             <label>Customize Button</label>
-                            <comment><![CDATA[Customize the display of the PayPal button in the Checkout.]]></comment>
                             <config_path>paypal/style/checkout_page_button_customize</config_path>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <attribute type="shared">1</attribute>
@@ -699,10 +698,11 @@
                             </depends>
                             <attribute type="shared">1</attribute>
                         </field>
-                        <field id="checkout_page_button_size" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                        <field id="checkout_page_button_size" translate="label tooltip" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                             <label>Size</label>
                             <config_path>paypal/style/checkout_page_button_size</config_path>
                             <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getSize</source_model>
+                            <tooltip>Select Responsive to ensure the PayPal button renders correctly on mobile devices.</tooltip>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                             </depends>
@@ -728,8 +728,8 @@
                             <attribute type="shared">1</attribute>
                         </field>
                     </group>
-                    <group id="product_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
-                        <label>PayPal Button - Product Page</label>
+                    <group id="product_page_button" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
+                        <label>Product Pages</label>
                         <field id="product_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
                             <comment/>
                             <config_path>paypal/style/product_page_button_customize</config_path>
@@ -782,7 +782,7 @@
                         </field>
                     </group>
                     <group id="cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="110">
-                        <label>PayPal Button - Cart Page</label>
+                        <label>Cart Page</label>
                         <field id="cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
                             <comment/>
                             <config_path>paypal/style/cart_page_button_customize</config_path>
@@ -835,7 +835,7 @@
                         </field>
                     </group>
                     <group id="mini_cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="120">
-                        <label>PayPal Button - Mini Cart</label>
+                        <label>Mini Cart</label>
                         <field id="mini_cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
                             <comment/>
                             <config_path>paypal/style/mini_cart_page_button_customize</config_path>
