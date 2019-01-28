@@ -11,6 +11,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Message manager model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface

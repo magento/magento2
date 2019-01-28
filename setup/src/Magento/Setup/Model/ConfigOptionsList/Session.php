@@ -124,7 +124,7 @@ class Session implements ConfigOptionsListInterface
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
@@ -250,7 +250,7 @@ class Session implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -281,7 +281,7 @@ class Session implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {

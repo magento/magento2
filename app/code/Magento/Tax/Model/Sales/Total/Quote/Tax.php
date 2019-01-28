@@ -407,6 +407,7 @@ class Tax extends CommonTaxCollector
 
     /**
      * Process model configuration array.
+     *
      * This method can be used for changing totals collect sort order
      *
      * @param   array $config
