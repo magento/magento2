@@ -26,7 +26,7 @@ class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
         \Magento\AdminNotification\Model\NotificationService $notificationService = null
     ) {
         parent::__construct($context);
-        $this->notificationService = $notificationService?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->notificationService = $notificationService ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\AdminNotification\Model\NotificationService::class);
     }
 

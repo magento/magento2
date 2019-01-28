@@ -156,7 +156,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $isJson = true;
         $this->prepareIsAllowed(true, true, true, $scope);
 
-        $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
+        $jsonCall = is_array($body) ? 2 * (count($body) + 1) : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(
@@ -221,7 +221,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $isJson = true;
         $this->prepareIsAllowed(true, true, true, $scope);
 
-        $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
+        $jsonCall = is_array($body) ? 2 * (count($body) + 1) : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(

@@ -38,8 +38,8 @@ class RestClient
         \Magento\TestFramework\Helper\JsonSerializer $jsonSerializer = null
     ) {
         $objectManager = Bootstrap::getObjectManager();
-        $this->curlClient = $curlClient ? : $objectManager->get(CurlClient::class);
-        $this->jsonSerializer = $jsonSerializer ? : $objectManager->get(JsonSerializer::class);
+        $this->curlClient = $curlClient ?: $objectManager->get(CurlClient::class);
+        $this->jsonSerializer = $jsonSerializer ?: $objectManager->get(JsonSerializer::class);
     }
 
     /**

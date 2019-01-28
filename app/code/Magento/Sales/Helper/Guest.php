@@ -128,7 +128,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->orderRepository = $orderRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\OrderRepositoryInterface::class);
-        $this->searchCriteriaBuilder = $searchCriteria?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->searchCriteriaBuilder = $searchCriteria ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         parent::__construct(
             $context

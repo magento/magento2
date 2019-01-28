@@ -33,8 +33,8 @@ class CurlClientWithCookies
         \Magento\TestFramework\Helper\JsonSerializer $jsonSerializer
     ) {
         $objectManager = Bootstrap::getObjectManager();
-        $this->curlClient = $curlClient ? : $objectManager->get(CurlClient::class);
-        $this->jsonSerializer = $jsonSerializer ? : $objectManager->get(JsonSerializer::class);
+        $this->curlClient = $curlClient ?: $objectManager->get(CurlClient::class);
+        $this->jsonSerializer = $jsonSerializer ?: $objectManager->get(JsonSerializer::class);
     }
 
     /**

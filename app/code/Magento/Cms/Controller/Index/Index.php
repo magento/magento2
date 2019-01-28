@@ -54,8 +54,8 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
         Page $page = null
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->scopeConfig = $scopeConfig ? : ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        $this->page = $page ? : ObjectManager::getInstance()->get(Page::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->page = $page ?: ObjectManager::getInstance()->get(Page::class);
         parent::__construct($context);
     }
 

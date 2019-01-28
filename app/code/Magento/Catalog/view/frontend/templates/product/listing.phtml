@@ -63,7 +63,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                             . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $block->getAddToCartUrl($_product) . '"} }\'>'
                                             . '<span>' . __('Add to Cart') . '</span></button>';
                         } else {
-                            $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
+                            $info['button'] = $_product->getIsSalable() ? '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
                                                                             '<div class="stock unavailable"><span>' . __('Out of stock') . '</span></div>';
                         }
 

@@ -79,7 +79,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      */
     protected function getComponentRefererUrl()
     {
-        return $this->filter->getComponentRefererUrl()?: 'customer/*/index';
+        return $this->filter->getComponentRefererUrl() ?: 'customer/*/index';
     }
 
     /**

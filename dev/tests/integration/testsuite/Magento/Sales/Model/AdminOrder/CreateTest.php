@@ -498,7 +498,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $this->objectManager->removeSharedInstance(OrderManagementInterface::class);
         }
 
-        $customerEmail = $customerEmailSecondAttempt ? :$this->model->getQuote()->getCustomer()->getEmail();
+        $customerEmail = $customerEmailSecondAttempt ?: $this->model->getQuote()->getCustomer()->getEmail();
         $orderData['account']['email'] = $customerEmailSecondAttempt;
 
         $this->preparePreconditionsForCreateOrder(

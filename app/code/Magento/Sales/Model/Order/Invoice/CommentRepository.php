@@ -82,9 +82,9 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->invoiceCommentSender = $invoiceCommentSender
-            ?:ObjectManager::getInstance()->get(InvoiceCommentSender::class);
+            ?: ObjectManager::getInstance()->get(InvoiceCommentSender::class);
         $this->invoiceRepository = $invoiceRepository
-            ?:ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 

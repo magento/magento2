@@ -76,7 +76,7 @@ class PackageInfo
     ) {
         $this->reader = $reader;
         $this->componentRegistrar = $componentRegistrar;
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 

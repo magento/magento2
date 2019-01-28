@@ -87,7 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         $this->priceCurrency = $priceCurrency;
-        $this->paymentFailures = $paymentFailures ? : \Magento\Framework\App\ObjectManager::getInstance()
+        $this->paymentFailures = $paymentFailures ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(PaymentFailuresInterface::class);
         parent::__construct($context);
     }

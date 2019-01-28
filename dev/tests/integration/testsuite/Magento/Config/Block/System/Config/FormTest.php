@@ -301,7 +301,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->_setupFieldsInheritCheckbox($fieldId, false, $expectedConfigValue);
 
         if ($isDbOverrideValue) {
-            $backendModel = $this->field->getAttribute('backend_model') ? : \Magento\Framework\App\Config\Value::class;
+            $backendModel = $this->field->getAttribute('backend_model') ?: \Magento\Framework\App\Config\Value::class;
             $path = $this->section->getId() .'/'. $this->group->getId() . '/' . $this->field->getId();
             $model = Bootstrap::getObjectManager()->create($backendModel);
             $model->setPath($path);

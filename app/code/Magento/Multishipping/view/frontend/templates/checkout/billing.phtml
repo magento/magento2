@@ -70,7 +70,7 @@
                             <?php
                             $methods = $block->getMethods();
                             $methodsCount = count($methods);
-                            $methodsForms = $block->hasFormTemplates() ? $block->getFormTemplates(): [];
+                            $methodsForms = $block->hasFormTemplates() ? $block->getFormTemplates() : [];
 
                             foreach ($methods as $_method) :
                                     $code = $_method->getCode();

@@ -74,8 +74,8 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
             'default_shipping' => true,
             'default_billing' => true
         ];
-        $defaultShippingText = $updateAddress['default_shipping'] ? "true": "false";
-        $defaultBillingText = $updateAddress['default_billing'] ? "true": "false";
+        $defaultShippingText = $updateAddress['default_shipping'] ? "true" : "false";
+        $defaultBillingText = $updateAddress['default_billing'] ? "true" : "false";
 
         $mutation
             = <<<MUTATION

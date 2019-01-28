@@ -159,7 +159,7 @@ class Migration
         ];
         $this->_compositeModules = $compositeModules;
         $this->setup = $setup;
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
@@ -376,7 +376,7 @@ class Migration
     protected function _getReplacement($data, $contentType, $entityType = '')
     {
         switch ($contentType) {
-            case self::FIELD_CONTENT_TYPE_SERIALIZED:
+            case self::FIELD_CONTENT_TYPE_SERIALIZED :
                 $data = $this->_getAliasInSerializedStringReplacement($data, $entityType);
                 break;
                 // wiki and xml content types use the same replacement method

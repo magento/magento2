@@ -70,7 +70,7 @@ class PackagesAuth
         $this->serviceLocator = $serviceLocator;
         $this->curlClient = $curl;
         $this->filesystem = $filesystem;
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 

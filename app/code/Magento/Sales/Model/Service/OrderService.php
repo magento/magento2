@@ -84,7 +84,7 @@ class OrderService implements OrderManagementInterface
         $this->notifier = $notifier;
         $this->eventManager = $eventManager;
         $this->orderCommentSender = $orderCommentSender;
-        $this->paymentFailures = $paymentFailures ? : \Magento\Framework\App\ObjectManager::getInstance()
+        $this->paymentFailures = $paymentFailures ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\PaymentFailuresInterface::class);
     }
 

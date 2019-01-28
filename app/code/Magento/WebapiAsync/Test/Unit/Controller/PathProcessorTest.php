@@ -47,7 +47,7 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testAllStoreCode($storeCodeInPath, $storeCodeSet, $setCurrentStoreCallCtr = 1)
     {
-        $storeCodeInPath = !$storeCodeInPath ? : '/' . $storeCodeInPath; // add leading slash if store code not empty
+        $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty
         $inPath = 'rest' . $storeCodeInPath . $this->endpointPath;
         $this->storeManagerMock->expects($this->exactly($setCurrentStoreCallCtr))
            ->method('setCurrentStore')

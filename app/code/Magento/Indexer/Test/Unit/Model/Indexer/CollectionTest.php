@@ -95,7 +95,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 ->method('load')
                 ->with($indexerId);
             $indexer
-                ->expects($this->exactly($state ? 1: 0))
+                ->expects($this->exactly($state ? 1 : 0))
                 ->method('setState')
                 ->with($state);
             $calls[] = $indexer;

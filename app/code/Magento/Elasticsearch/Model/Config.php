@@ -97,7 +97,7 @@ class Config implements ClientOptionsInterface
             'enableAuth' => $this->getElasticsearchConfigData('enable_auth'),
             'username' => $this->getElasticsearchConfigData('username'),
             'password' => $this->getElasticsearchConfigData('password'),
-            'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
+            'timeout' => $this->getElasticsearchConfigData('server_timeout') ?: self::ELASTICSEARCH_DEFAULT_TIMEOUT,
         ];
         $options = array_merge($defaultOptions, $options);
         return $options;

@@ -68,7 +68,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
 
         /** @var OrderInjectable $fixture */
         $this->createQuote($fixture);
-        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote  : 'carts/' . (int)$this->quote;
+        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote : 'carts/' . (int)$this->quote;
         $this->url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($fixture) . '/V1/' . $url;
 
         $this->setProducts($fixture);

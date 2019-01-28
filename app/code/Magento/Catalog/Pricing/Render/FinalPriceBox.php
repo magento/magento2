@@ -182,7 +182,7 @@ class FinalPriceBox extends BasePriceBox
      */
     public function getCacheKey()
     {
-        return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
+        return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page' : '');
     }
 
     /**

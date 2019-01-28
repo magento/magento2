@@ -139,7 +139,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous,
                     Config::TOPIC_REQUEST => $requestSchema,
                     Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_CLASS,
-                    Config::TOPIC_RESPONSE => ($isSynchronous) ? $responseSchema: null,
+                    Config::TOPIC_RESPONSE => ($isSynchronous) ? $responseSchema : null,
                     Config::TOPIC_HANDLERS => $handlers
                 ];
             } elseif ($requestSchema) {

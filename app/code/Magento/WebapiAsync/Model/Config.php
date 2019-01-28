@@ -54,7 +54,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     ) {
         $this->cache = $cache;
         $this->webApiConfig = $webApiConfig;
-        $this->serializer = $serializer ? : ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**

@@ -173,6 +173,6 @@ class Argument implements FieldInterface
      */
     public function hasDefaultValue() : bool
     {
-        return $this->defaultValue ? true: false;
+        return $this->defaultValue ? true : false;
     }
 }

@@ -47,7 +47,7 @@
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?= (++$_index==$_count && !$_showlastRow)?' class="border"':'' ?>>
+    <tr<?= (++$_index==$_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title" id="order_item_<?= /* @escapeNotVerified */ $_item->getId() ?>_title">

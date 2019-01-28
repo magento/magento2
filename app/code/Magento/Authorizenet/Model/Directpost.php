@@ -190,7 +190,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         $this->orderSender = $orderSender;
         $this->transactionRepository = $transactionRepository;
         $this->_code = static::METHOD_CODE;
-        $this->paymentFailures = $paymentFailures ? : ObjectManager::getInstance()
+        $this->paymentFailures = $paymentFailures ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\PaymentFailuresInterface::class);
 
         parent::__construct(
