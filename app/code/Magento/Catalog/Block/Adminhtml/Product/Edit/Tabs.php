@@ -109,7 +109,7 @@ class Tabs extends WidgetTabs
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -119,6 +119,8 @@ class Tabs extends WidgetTabs
     }
 
     /**
+     * Get group collection.
+     *
      * @param int $attributeSetId
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
      */
@@ -131,10 +133,11 @@ class Tabs extends WidgetTabs
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _prepareLayout()
     {
@@ -315,6 +318,8 @@ class Tabs extends WidgetTabs
     }
 
     /**
+     * Set attribute tab block.
+     *
      * @param string $attributeTabBlock
      * @return $this
      */
@@ -337,6 +342,8 @@ class Tabs extends WidgetTabs
     }
 
     /**
+     * Get accordion.
+     *
      * @param string $parentTab
      * @return string
      */
