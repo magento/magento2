@@ -22,11 +22,11 @@ class Code  extends AbstractValidator
     /**
      * Validates the correctness of the attribute code
      *
-     * @param $attributeCode
+     * @param string $attributeCode
      * @return bool
      * @throws LocalizedException
      */
-    public function isValid($attributeCode)
+    public function isValid($attributeCode): bool
     {
         /**
          * Check attribute_code for allowed characters
