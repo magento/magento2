@@ -39,18 +39,33 @@
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
             <argument name="customer"/>
+            <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <!--Clear grid filters-->
+        <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminOrderCustomersGridSection.apply}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
         <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
         <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
+        <!-- Select store view if appears -->
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect" />
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+
+    <!--Navigate to New Order Page for existing Customer And Store-->
+    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="navigateToNewOrderPageExistingCustomer" >
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
+        <waitForPageLoad stepKey="waitForLoad" after="selectStoreView"/>
     </actionGroup>
 
     <!--Check the required fields are actually required-->
@@ -155,6 +170,18 @@
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+
+    <!--Add bundle product to order and check product price in the grid-->
+    <actionGroup name="addBundleProductToOrderAndCheckPriceInGrid" extends="addBundleProductToOrder">
+        <arguments>
+            <argument name="price" type="string"/>
+        </arguments>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.rowPrice('1')}}" stepKey="grabProductPriceFromGrid" after="clickOk"/>
+        <assertEquals stepKey="assertProductPriceInGrid" message="Bundle product price in grid should be equal {{price}}" after="grabProductPriceFromGrid">
+            <expectedResult type="string">{{price}}</expectedResult>
+            <actualResult type="variable">grabProductPriceFromGrid</actualResult>
+        </assertEquals>
     </actionGroup>
 
     <!--Add downloadable product to order -->
@@ -295,6 +322,32 @@
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 
+    <actionGroup name="CreateOrderInStoreChoosingPaymentMethodActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="customer"/>
+            <argument name="storeView"/>
+        </arguments>
+        <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
+        <waitForPageLoad stepKey="waitForStoresPageOpened"/>
+        <click stepKey="chooseStore" selector="{{AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <waitForPageLoad stepKey="waitForProductsListForOrder"/>
+        <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addSelectedProductToOrder"/>
+        <waitForPageLoad stepKey="waitForProductAddedInOrder"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethodsThickened"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+    </actionGroup>
+
     <!--Cancel order that is in pending status-->
     <actionGroup name="cancelPendingOrder">
         <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
@@ -303,5 +356,11 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
+    </actionGroup>
+
+    <!--Select Check Money payment method-->
+    <actionGroup name="SelectCheckMoneyPaymentMethod">
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
     </actionGroup>
 </actionGroups>

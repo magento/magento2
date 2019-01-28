@@ -383,26 +383,34 @@ define([
          * Chose action for the form save button
          */
         saveFormHandler: function () {
-            this.serializeData();
+            this.formElement().validate();
+
+            if (this.formElement().source.get('params.invalid') === false) {
+                this.serializeData();
+            }
 
             if (this.checkForNewAttributes()) {
                 this.formSaveParams = arguments;
                 this.attributeSetHandlerModal().openModal();
             } else {
                 this.formElement().save(arguments[0], arguments[1]);
+
+                if (this.formElement().source.get('params.invalid')) {
+                    this.unserializeData();
+                }
             }
         },
 
         /**
          * Serialize data for specific form fields
          *
-         * Get data from outdated fields, serialize it and produce new form fields.
+         * Serializes some complex data fields
          *
-         * Outdated fields:
+         * Original fields:
          *   - configurable-matrix;
          *   - associated_product_ids.
          *
-         * New fields:
+         * Serialized fields in request:
          *   - configurable-matrix-serialized;
          *   - associated_product_ids_serialized.
          */
@@ -417,6 +425,25 @@ define([
                 this.source.data['associated_product_ids_serialized'] =
                     JSON.stringify(this.source.data['associated_product_ids']);
                 delete this.source.data['associated_product_ids'];
+            }
+        },
+
+        /**
+         * Unserialize data for specific form fields
+         *
+         * Unserializes some fields that were serialized this.serializeData
+         */
+        unserializeData: function () {
+            if (this.source.data['configurable-matrix-serialized']) {
+                this.source.data['configurable-matrix'] =
+                    JSON.parse(this.source.data['configurable-matrix-serialized']);
+                delete this.source.data['configurable-matrix-serialized'];
+            }
+
+            if (this.source.data['associated_product_ids_serialized']) {
+                this.source.data['associated_product_ids'] =
+                    JSON.parse(this.source.data['associated_product_ids_serialized']);
+                delete this.source.data['associated_product_ids_serialized'];
             }
         },
 
@@ -443,20 +470,20 @@ define([
          * @returns {Boolean}
          */
         addNewAttributeSetHandler: function () {
-            var choosenAttributeSetOption;
+            var chosenAttributeSetOption;
 
             this.formElement().validate();
 
             if (this.formElement().source.get('params.invalid') === false) {
-                choosenAttributeSetOption = this.attributeSetSelection;
+                chosenAttributeSetOption = this.attributeSetSelection;
 
-                if (choosenAttributeSetOption === 'new') {
+                if (chosenAttributeSetOption === 'new') {
                     this.createNewAttributeSet();
 
                     return false;
                 }
 
-                if (choosenAttributeSetOption === 'existing') {
+                if (chosenAttributeSetOption === 'existing') {
                     this.set(
                         'skeletonAttributeSet',
                         this.attributeSetId
@@ -467,6 +494,10 @@ define([
 
                 return true;
             }
+
+            this.unserializeData();
+
+            return false;
         },
 
         /**
