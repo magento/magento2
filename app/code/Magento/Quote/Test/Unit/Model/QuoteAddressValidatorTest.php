@@ -82,11 +82,10 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 100;
         $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
-        $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface');
 
         $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepositoryMock->expects($this->once())->method('getById')->with($customerId)
-            ->willReturn($customerMock);
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
         $this->model->validate($address);
     }
 
