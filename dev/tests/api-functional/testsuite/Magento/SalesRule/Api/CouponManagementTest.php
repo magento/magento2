@@ -13,11 +13,11 @@ class CouponManagementTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'salesRuleCouponManagementV1';
     const RESOURCE_PATH = '/V1/coupons';
-    const SERVICE_VERSION = "V1";
+    const SERVICE_VERSION = 'V1';
 
     const SERVICE_NAME_COUPON = 'salesRuleCouponRepositoryV1';
     const RESOURCE_PATH_COUPON = '/V1/coupons';
-    const SERVICE_VERSION_COUPON = "V1";
+    const SERVICE_VERSION_COUPON = 'V1';
 
     /**
      * @param int $count
@@ -114,7 +114,7 @@ class CouponManagementTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/generate",
+                'resourcePath' => self::RESOURCE_PATH . '/generate',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
             ],
             'soap' => [
@@ -123,12 +123,12 @@ class CouponManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'generate',
             ],
         ];
-        $requestData = [  "couponSpec"=>
+        $requestData = [  'couponSpec'=>
             [
-                "rule_id" => $ruleId,
-                "quantity"  => $count,
-                "length" => $length,
-                "format"  => $format
+                'rule_id' => $ruleId,
+                'quantity'  => $count,
+                'length' => $length,
+                'format'  => $format
             ]
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);

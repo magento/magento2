@@ -44,7 +44,7 @@ class FullTest extends TestCase
 
     public function testExecuteFull()
     {
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], "", false);
+        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], '', false);
         $indexerMock->expects($this->exactly(4))->method('isScheduled')->willReturn(false);
         $indexerMock->expects($this->exactly(4))->method('reindexAll');
         $this->indexerRegistryMock->expects($this->exactly(4))->method('get')->willReturn($indexerMock);
@@ -54,7 +54,7 @@ class FullTest extends TestCase
 
     public function testExecuteList()
     {
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], "", false);
+        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], '', false);
         $indexerMock->expects($this->exactly(4))->method('isScheduled')->willReturn(false);
         $indexerMock->expects($this->exactly(4))->method('reindexList')->with([1, 2]);
         $this->indexerRegistryMock->expects($this->exactly(4))->method('get')->willReturn($indexerMock);
@@ -64,7 +64,7 @@ class FullTest extends TestCase
 
     public function testExecuteRow()
     {
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], "", false);
+        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], '', false);
         $indexerMock->expects($this->exactly(4))->method('isScheduled')->willReturn(false);
         $indexerMock->expects($this->exactly(4))->method('reindexRow')->with(1);
         $this->indexerRegistryMock->expects($this->exactly(4))->method('get')->willReturn($indexerMock);

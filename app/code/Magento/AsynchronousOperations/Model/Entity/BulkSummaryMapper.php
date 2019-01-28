@@ -45,7 +45,7 @@ class BulkSummaryMapper implements MapperInterface
         if (!empty($data['uuid'])) {
             $metadata = $this->metadataPool->getMetadata($entityType);
             $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-            $select = $connection->select()->from($metadata->getEntityTable(), 'id')->where("uuid = ?", $data['uuid']);
+            $select = $connection->select()->from($metadata->getEntityTable(), 'id')->where('uuid = ?', $data['uuid']);
             $identifier = $connection->fetchOne($select);
             if ($identifier !== false) {
                 $data['id'] = $identifier;

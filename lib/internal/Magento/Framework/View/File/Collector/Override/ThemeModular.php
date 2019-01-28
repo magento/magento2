@@ -109,7 +109,7 @@ class ThemeModular implements CollectorInterface
         }
         $result = [];
         $pattern = "#/(?<module>[^/]+)/{$this->subDir}(?<themeVendor>[^/]+)/(?<themeName>[^/]+)/"
-            . $this->pathPatternHelper->translatePatternFromGlob($filePath) . "$#i";
+            . $this->pathPatternHelper->translatePatternFromGlob($filePath) . '$#i';
         foreach ($files as $file) {
             $filename = $themeDir->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {

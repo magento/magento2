@@ -8,7 +8,7 @@ return [
     'entity_0' => [
             'data_0' => [
                     '_website' => 'base',
-                    '_email' => "%email%",
+                    '_email' => '%email%',
                     '_entity_id' => '%id%',
                     'city' => 'Culver City',
                     'company' => 'Magento',
@@ -24,7 +24,7 @@ return [
     'entity_1' => [
             'data_0' => [
                     '_website' => 'base',
-                    '_email' => "%email%",
+                    '_email' => '%email%',
                     '_entity_id' => '%id%',
                     'city' => 'New York',
                     'company' => 'Magento',

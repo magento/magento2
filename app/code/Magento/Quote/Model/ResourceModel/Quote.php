@@ -217,9 +217,9 @@ class Quote extends AbstractDb
         }
         $connection = $this->getConnection();
         $subSelect = $connection->select();
-        $conditionCheck = $connection->quoteIdentifier('q.items_count') . " > 0";
+        $conditionCheck = $connection->quoteIdentifier('q.items_count') . ' > 0';
         $conditionTrue = $connection->quoteIdentifier('q.items_count') . ' - 1';
-        $ifSql = "IF (" . $conditionCheck . "," . $conditionTrue . ", 0)";
+        $ifSql = 'IF (' . $conditionCheck . ',' . $conditionTrue . ', 0)';
 
         $subSelect->from(
             false,

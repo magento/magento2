@@ -57,7 +57,7 @@ class InvalidateVarnishObserver implements ObserverInterface
             $bareTags = $this->getTagResolver()->getTags($object);
 
             $tags = [];
-            $pattern = "((^|,)%s(,|$))";
+            $pattern = '((^|,)%s(,|$))';
             foreach ($bareTags as $tag) {
                 $tags[] = sprintf($pattern, $tag);
             }

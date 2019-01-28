@@ -25,9 +25,9 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ConsumerConfig|\PHPUnit_Framework_MockObject_MockObject */
     protected $consumerConfigMock;
 
-    const TEST_CONSUMER_NAME = "test_consumer_name";
-    const TEST_CONSUMER_QUEUE = "test_consumer_queue";
-    const TEST_CONSUMER_METHOD = "test_consumer_method";
+    const TEST_CONSUMER_NAME = 'test_consumer_name';
+    const TEST_CONSUMER_QUEUE = 'test_consumer_queue';
+    const TEST_CONSUMER_METHOD = 'test_consumer_method';
 
     protected function setUp()
     {

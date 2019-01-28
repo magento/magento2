@@ -57,7 +57,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = $quoteIdMask->getMaskedId();
         $data = [
             'data' => [
-                'country_id' => "US",
+                'country_id' => 'US',
                 'postcode' => null,
                 'region' => null,
                 'region_id' => null
@@ -146,7 +146,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = $quoteIdMask->getMaskedId();
         $data = [
             'data' => [
-                'country_id' => "US",
+                'country_id' => 'US',
                 'postcode' => null,
                 'region' => null,
                 'region_id' => null

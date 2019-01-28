@@ -43,7 +43,7 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         return [
             'link1' => [
-                'title' => "link1",
+                'title' => 'link1',
                 'sort_order'=> 10,
                 'is_shareable' => 1,
                 'price' => 2.0,
@@ -65,7 +65,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 'is_shareable' => 0,
                 'price' => 3.0,
                 'number_of_downloads' => 100,
-                'link_type' => "url",
+                'link_type' => 'url',
                 'link_url' => 'http://www.example.com/link2.jpg',
                 'sample_type' => 'url',
                 'sample_url' => 'http://www.example.com/link2.jpg',
@@ -140,14 +140,14 @@ class ProductRepositoryTest extends WebapiAbstract
     protected function createDownloadableProduct()
     {
         $product = [
-            "sku" => self::PRODUCT_SKU,
-            "name" => self::PRODUCT_SKU,
-            "type_id" => \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
-            "price" => 10,
+            'sku' => self::PRODUCT_SKU,
+            'name' => self::PRODUCT_SKU,
+            'type_id' => \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+            'price' => 10,
             'attribute_set_id' => 4,
-            "extension_attributes" => [
-                "downloadable_product_links" => array_values($this->getLinkData()),
-                "downloadable_product_samples" => array_values($this->getSampleData()),
+            'extension_attributes' => [
+                'downloadable_product_links' => array_values($this->getLinkData()),
+                'downloadable_product_samples' => array_values($this->getSampleData()),
             ],
         ];
 
@@ -168,13 +168,13 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         $response = $this->createDownloadableProduct();
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'])
         );
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'])
         );
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
         $this->assertEquals(2, count($resultLinks));
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertTrue(isset($resultLinks[0]['link_file']));
@@ -188,7 +188,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $expectedLinkData = $this->getExpectedLinkData();
         $this->assertEquals($expectedLinkData, $resultLinks);
 
-        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $this->assertEquals(2, count($resultSamples));
         $this->assertTrue(isset($resultSamples[0]['id']));
         unset($resultSamples[0]['id']);
@@ -208,7 +208,7 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         $response = $this->createDownloadableProduct();
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
         $link1Id = $resultLinks[0]['id'];
         $link2Id = $resultLinks[1]['id'];
 
@@ -226,18 +226,18 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
         $linkData = $this->getLinkData();
 
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] =
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'] =
             [$updatedLink1Data, $linkData['link1'], $linkData['link2']];
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'])
         );
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'])
         );
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
 
         $this->assertEquals(3, count($resultLinks));
         $this->assertTrue(isset($resultLinks[0]['id']));
@@ -272,7 +272,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $expectedLinkData = array_merge($expectedLinkData, $this->getExpectedLinkData());
         $this->assertEquals($expectedLinkData, $resultLinks);
 
-        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $this->assertEquals(2, count($resultSamples));
     }
 
@@ -284,7 +284,7 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         $response = $this->createDownloadableProduct();
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
         $link1Id = $resultLinks[0]['id'];
         $link2Id = $resultLinks[1]['id'];
 
@@ -328,18 +328,18 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] =
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'] =
             [$updatedLink1Data, $updatedLink2Data];
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'])
         );
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'])
         );
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
 
         $this->assertEquals(2, count($resultLinks));
         $this->assertTrue(isset($resultLinks[0]['id']));
@@ -385,7 +385,7 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
         $this->assertEquals($expectedLinkData, $resultLinks);
 
-        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $this->assertEquals(2, count($resultSamples));
     }
 
@@ -394,7 +394,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $response = $this->createDownloadableProduct();
 
         $resultSample
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $sample1Id = $resultSample[0]['id'];
         $sample2Id = $resultSample[1]['id'];
 
@@ -407,22 +407,22 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
         $sampleData = $this->getSampleData();
 
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'] =
             [$updatedSample1Data, $sampleData['sample1'], $sampleData['sample2']];
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'])
         );
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'])
         );
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
 
         $this->assertEquals(2, count($resultLinks));
 
-        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $this->assertEquals(3, count($resultSamples));
         $this->assertTrue(isset($resultSamples[0]['id']));
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
@@ -451,7 +451,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $response = $this->createDownloadableProduct();
 
         $resultSample
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $sample1Id = $resultSample[0]['id'];
         $sample2Id = $resultSample[1]['id'];
 
@@ -474,22 +474,22 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
         ];
 
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'] =
             [$updatedSample1Data, $updatedSamp2e1Data];
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'])
         );
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'])
         );
         $resultLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_links'];
 
         $this->assertEquals(2, count($resultLinks));
 
-        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
+        $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['downloadable_product_samples'];
         $this->assertEquals(2, count($resultSamples));
         $this->assertTrue(isset($resultSamples[0]['id']));
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
@@ -592,7 +592,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'deleteById',
             ],
         ];
-        $requestData = ["sku" => $productSku];
+        $requestData = ['sku' => $productSku];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
@@ -610,7 +610,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $product['custom_attributes'][$i]['value'] = [''];
                 }
             }
         }

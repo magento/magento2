@@ -284,7 +284,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         $select->order('main_table.position');
 
         if ($parentPath) {
-            $select->where($_conn->quoteInto("main_table.path like ?", "{$parentPath}/%"));
+            $select->where($_conn->quoteInto('main_table.path like ?', "{$parentPath}/%"));
         }
         if ($recursionLevel != 0) {
             $levelField = $_conn->quoteIdentifier('level');

@@ -188,7 +188,7 @@ class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
         $groupSortOrder = '15';
         $templateId = '4';
         $attributeIds = [
-            'selected' => ["178"],
+            'selected' => ['178'],
             'total' => '1'
         ];
 

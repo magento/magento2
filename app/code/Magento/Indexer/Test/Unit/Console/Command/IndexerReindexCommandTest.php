@@ -445,7 +445,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             "The following requested index types are not supported: '"
             . join("', '", $inputIndexers)
             . "'." . PHP_EOL . 'Supported types: '
-            . join(", ", array_map(
+            . join(', ', array_map(
                 function ($item) {
                     /** @var IndexerInterface $item */
                     $item->getId();

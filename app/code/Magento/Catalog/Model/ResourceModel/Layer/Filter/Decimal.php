@@ -136,7 +136,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select = $this->_getSelect($filter);
         $connection = $this->getConnection();
 
-        $countExpr = new \Zend_Db_Expr("COUNT(*)");
+        $countExpr = new \Zend_Db_Expr('COUNT(*)');
         $rangeExpr = new \Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
 
         $select->columns(['decimal_range' => $rangeExpr, 'count' => $countExpr]);

@@ -65,7 +65,7 @@ class Type
             $type = isset($this->customTypes[$attributeCode]) ? $this->customTypes[$attributeCode] : $type;
             return $type;
         } elseif ($type === TypeProcessor::ANY_TYPE) {
-            return "";
+            return '';
         } elseif ($isComplexType) {
             try {
                 $type = $this->typeProcessor->translateTypeName($type);

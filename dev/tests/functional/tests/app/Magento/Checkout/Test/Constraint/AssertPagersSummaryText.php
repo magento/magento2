@@ -16,7 +16,7 @@ use Magento\Checkout\Test\Fixture\Cart;
  */
 class AssertPagersSummaryText extends AbstractConstraint
 {
-    const PAGER_SUMMARY_TEXT = "Items 1 to %s of %s total";
+    const PAGER_SUMMARY_TEXT = 'Items 1 to %s of %s total';
 
     /**
      * Verify that pagers summary text on the shopping cart is correct.

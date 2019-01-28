@@ -75,7 +75,7 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue(''));
         try {
             $this->_factory->get();
-            $this->fail("Exception is expected to be raised");
+            $this->fail('Exception is expected to be raised');
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $exceptionMessage = 'Server cannot match any of the given Accept HTTP header media type(s) '.
                 'from the request: "" with media types from the config of response renderer.';

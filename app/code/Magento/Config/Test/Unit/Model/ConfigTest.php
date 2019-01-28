@@ -380,7 +380,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         return [
             'depth 2' => ['section/group', "Your configuration depth is 2 for path 'section/group'"],
             'depth 1' => ['section', "Your configuration depth is 1 for path 'section'"],
-            'depth 4' => ['section/group/field/sub-field', "Your configuration depth is 4 for path"
+            'depth 4' => ['section/group/field/sub-field', 'Your configuration depth is 4 for path'
                 . " 'section/group/field/sub-field'", ],
         ];
     }

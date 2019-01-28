@@ -148,7 +148,7 @@ class Collection extends AbstractAction
      */
     public function asString($format = '')
     {
-        $str = __("Perform following actions");
+        $str = __('Perform following actions');
         return $str;
     }
 

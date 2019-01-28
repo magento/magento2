@@ -26,7 +26,7 @@ class AssertNewsletterQueueInGrid extends AbstractAssertForm
         TemplateQueueIndex $indexQueue,
         Queue $queue
     ) {
-        $startAt = strftime("%b %e, %Y", strtotime($queue->getQueueStartAt()));
+        $startAt = strftime('%b %e, %Y', strtotime($queue->getQueueStartAt()));
         $filter = [
             'newsletter_subject' => $queue->getNewsletterSubject(),
             'start_at_from' => $startAt,

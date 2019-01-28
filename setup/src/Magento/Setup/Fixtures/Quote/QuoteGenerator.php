@@ -254,7 +254,7 @@ class QuoteGenerator
             '%code%' => 'info_buyRequest',
             '%value%' => $this->serializer->serialize([
                 'product' => $this->getStubProductId($entityId, $index, Type::TYPE_SIMPLE),
-                'qty' => "1",
+                'qty' => '1',
                 'uenc' => 'aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw'
             ])
         ]);
@@ -292,11 +292,11 @@ class QuoteGenerator
         ]);
         $itemData['%productId%'] = $this->getStubProductChildId($entityId, $index, $productType);
         $this->query('quote_item_option', $itemData, [
-            '%code%' => "product_qty_" . $this->getStubProductChildId($entityId, $index, $productType),
-            '%value%' => "1"
+            '%code%' => 'product_qty_' . $this->getStubProductChildId($entityId, $index, $productType),
+            '%value%' => '1'
         ]);
         $this->query('quote_item_option', $itemData, [
-            '%code%' => "simple_product",
+            '%code%' => 'simple_product',
             '%value%' => $this->getStubProductChildId($entityId, $index, $productType)
         ]);
     }
@@ -326,11 +326,11 @@ class QuoteGenerator
 
         $this->query('quote_item', $quote, $itemData);
         $this->query('quote_item_option', $itemData, [
-            '%code%' => "info_buyRequest",
+            '%code%' => 'info_buyRequest',
             '%value%' => $this->getStubProductChildBuyRequest($entityId, $index, $productType)['quote']
         ]);
         $this->query('quote_item_option', $itemData, [
-            '%code%' => "parent_product_id",
+            '%code%' => 'parent_product_id',
             '%value%' => $this->getStubProductId($entityId, $index, $productType)
         ]);
     }
@@ -540,19 +540,19 @@ class QuoteGenerator
                 $resource = $template['_resource'];
                 unset($template['_resource']);
             } else {
-                $resource = explode("_", $table);
+                $resource = explode('_', $table);
                 foreach ($resource as &$item) {
                     $item = ucfirst($item);
                 }
-                $resource = "Magento\\"
+                $resource = 'Magento\\'
                     . array_shift($resource)
-                    . "\\Model\\ResourceModel\\"
-                    . implode("\\", $resource);
+                    . '\\Model\\ResourceModel\\'
+                    . implode('\\', $resource);
             }
 
             $tableName = $this->getTableName($table, $resource);
 
-            $querySuffix = "";
+            $querySuffix = '';
             if (isset($template['_query_suffix'])) {
                 $querySuffix = $template['_query_suffix'];
                 unset($template['_query_suffix']);
@@ -653,10 +653,10 @@ class QuoteGenerator
             $productsResult[$key]['sku'] = $simpleProduct->getSku();
             $productsResult[$key]['name'] = $simpleProduct->getName();
             $productsResult[$key]['buyRequest'] = $this->serializer->serialize([
-                "info_buyRequest" => [
-                    "uenc" => "aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,",
-                    "product" => $simpleId,
-                    "qty" => "1"
+                'info_buyRequest' => [
+                    'uenc' => 'aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,',
+                    'product' => $simpleId,
+                    'qty' => '1'
                 ]
             ]);
         }
@@ -685,35 +685,35 @@ class QuoteGenerator
             $superAttribute = [];
             foreach ($options as $option) {
                 $attributesInfo[] = [
-                    "label" => $option->getLabel(),
-                    "value" => $option['options']['0']['label'],
-                    "option_id" => $option->getAttributeId(),
-                    "option_value" => $option->getValues()[0]->getValueIndex()
+                    'label' => $option->getLabel(),
+                    'value' => $option['options']['0']['label'],
+                    'option_id' => $option->getAttributeId(),
+                    'option_value' => $option->getValues()[0]->getValueIndex()
                 ];
                 $superAttribute[$option->getAttributeId()] = $option->getValues()[0]->getValueIndex();
             }
 
             $configurableBuyRequest = [
-                "info_buyRequest" => [
-                    "uenc" => "aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw",
-                    "product" => $configurableId,
-                    "selected_configurable_option" => $simpleId,
-                    "related_product" => "",
-                    "super_attribute" => $superAttribute,
-                    "qty" => 1
+                'info_buyRequest' => [
+                    'uenc' => 'aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw',
+                    'product' => $configurableId,
+                    'selected_configurable_option' => $simpleId,
+                    'related_product' => '',
+                    'super_attribute' => $superAttribute,
+                    'qty' => 1
                 ],
-                "attributes_info" => $attributesInfo,
-                "simple_name" => $configurableChild->getName(),
-                "simple_sku" => $configurableChild->getSku(),
+                'attributes_info' => $attributesInfo,
+                'simple_name' => $configurableChild->getName(),
+                'simple_sku' => $configurableChild->getSku(),
             ];
             $simpleBuyRequest = [
-                "info_buyRequest" => [
-                    "uenc" => "aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,",
-                    "product" => $configurableId,
-                    "selected_configurable_option" => $simpleId,
-                    "related_product" => "",
-                    "super_attribute" => $superAttribute,
-                    "qty" => "1"
+                'info_buyRequest' => [
+                    'uenc' => 'aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,',
+                    'product' => $configurableId,
+                    'selected_configurable_option' => $simpleId,
+                    'related_product' => '',
+                    'super_attribute' => $superAttribute,
+                    'qty' => '1'
                 ]
             ];
 

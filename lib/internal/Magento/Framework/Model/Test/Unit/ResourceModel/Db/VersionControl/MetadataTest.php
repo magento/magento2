@@ -42,7 +42,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->resource = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
-            "",
+            '',
             false,
             false,
             true,
@@ -51,7 +51,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->connection = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
-            "",
+            '',
             false,
             false
         );

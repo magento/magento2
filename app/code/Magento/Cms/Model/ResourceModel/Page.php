@@ -119,7 +119,7 @@ class Page extends AbstractDb
             throw new LocalizedException(
                 __(
                     "The page URL key can't use capital letters or disallowed symbols. "
-                    . "Remove the letters and symbols and try again."
+                    . 'Remove the letters and symbols and try again.'
                 )
             );
         }

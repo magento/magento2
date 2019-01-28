@@ -104,7 +104,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($timestamp);
 
         $this->model->setUpdatedAt(
-            date("Y-m-d H:i:s", $timestamp - 1)
+            date('Y-m-d H:i:s', $timestamp - 1)
         );
 
         $this->assertEquals($expectedResult, $this->model->isSessionExpired());

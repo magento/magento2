@@ -169,7 +169,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 "e.{$entityIdField} = t_d.{$entityIdField}",
                 ['e.entity_id']
             )->where(
-                "e.entity_id IN (?)",
+                'e.entity_id IN (?)',
                 array_keys($this->_itemsById)
             )->where(
                 't_d.attribute_id IN (?)',
@@ -191,7 +191,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 "e.{$entityIdField} = t_d.{$entityIdField}",
                 ['e.entity_id']
             )->where(
-                "e.entity_id IN (?)",
+                'e.entity_id IN (?)',
                 array_keys($this->_itemsById)
             )->where(
                 'attribute_id IN (?)',
@@ -260,7 +260,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
 
             $defCondition = str_replace($tableAlias, $defAlias, $defCondition);
             $defCondition .= $connection->quoteInto(
-                " AND " . $connection->quoteColumnAs("{$defAlias}.store_id", null) . " = ?",
+                ' AND ' . $connection->quoteColumnAs("{$defAlias}.store_id", null) . ' = ?',
                 $this->getDefaultStoreId()
             );
 

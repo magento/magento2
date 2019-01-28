@@ -121,6 +121,6 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget with type Recently Viewed Products is present on Category page.";
+        return 'Widget with type Recently Viewed Products is present on Category page.';
     }
 }

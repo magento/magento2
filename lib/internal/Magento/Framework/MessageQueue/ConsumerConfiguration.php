@@ -18,7 +18,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @deprecated
      * @see ConsumerConfigurationInterface::TOPIC_TYPE
      */
-    const CONSUMER_TYPE = "consumer_type";
+    const CONSUMER_TYPE = 'consumer_type';
 
     /**
      * @deprecated

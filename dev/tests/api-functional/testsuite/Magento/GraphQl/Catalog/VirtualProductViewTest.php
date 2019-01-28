@@ -70,7 +70,7 @@ QUERY;
         $this->assertArrayNotHasKey(
             'weight',
             $response['products']['items'][0],
-            "response does contain the key weight"
+            'response does contain the key weight'
         );
     }
 

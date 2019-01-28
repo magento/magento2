@@ -94,8 +94,8 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteSuccess()
     {
-        $configVal = "Config val";
-        $token = "Secret token!";
+        $configVal = 'Config val';
+        $token = 'Secret token!';
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);

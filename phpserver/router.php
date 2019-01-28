@@ -38,18 +38,18 @@ $debug = function ($val) {
  */
 
 if (php_sapi_name() === 'cli-server') {
-    $debug("URI: {$_SERVER["REQUEST_URI"]}");
-    if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
+    $debug("URI: {$_SERVER['REQUEST_URI']}");
+    if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER['REQUEST_URI'])) {
         return false;    // serve the requested resource as-is.
     }
 
-    $path = pathinfo($_SERVER["SCRIPT_FILENAME"]);
-    $url   = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
-    $route = parse_url(substr($_SERVER["REQUEST_URI"], 1))["path"];
+    $path = pathinfo($_SERVER['SCRIPT_FILENAME']);
+    $url   = pathinfo(substr($_SERVER['REQUEST_URI'], 1));
+    $route = parse_url(substr($_SERVER['REQUEST_URI'], 1))['path'];
     $pathinfo = pathinfo($route);
     $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 
-    if ($path["basename"] == 'favicon.ico') {
+    if ($path['basename'] == 'favicon.ico') {
         return false;
     }
 
@@ -59,7 +59,7 @@ if (php_sapi_name() === 'cli-server') {
         $route = preg_replace('#pub/errors/default/#', 'errors/default/', $route, 1);
     }
 
-    $magentoPackagePubDir = __DIR__."/../pub";
+    $magentoPackagePubDir = __DIR__.'/../pub';
 
     if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||

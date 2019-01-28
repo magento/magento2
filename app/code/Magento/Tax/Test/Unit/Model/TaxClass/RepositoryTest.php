@@ -272,7 +272,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new LocalizedException(__("Something went wrong")));
+            ->willThrowException(new LocalizedException(__('Something went wrong')));
         $this->model->save($taxClass);
     }
 

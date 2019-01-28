@@ -29,7 +29,7 @@ class AssertCustomerNameFrontend extends AbstractConstraint
         CustomerAccountEdit $customerAccountEdit,
         Customer $customer
     ) {
-        $customerName = $customer->getFirstname() . " " . $customer->getLastname();
+        $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
 
         $customerAccountIndex->open();
         $infoBlock = $customerAccountIndex->getInfoBlock()->getContactInfoContent();
@@ -42,7 +42,7 @@ class AssertCustomerNameFrontend extends AbstractConstraint
 
         $customerAccountIndex->getInfoBlock()->openEditContactInfo();
         $nameInEdit = $customerAccountEdit->getAccountInfoForm()->getFirstName()
-            . " " . $customerAccountEdit->getAccountInfoForm()->getLastName();
+            . ' ' . $customerAccountEdit->getAccountInfoForm()->getLastName();
         \PHPUnit\Framework\Assert::assertTrue(
             $nameInEdit == $customerName,
             'Customer name on Account info tab is not matching the fixture.'

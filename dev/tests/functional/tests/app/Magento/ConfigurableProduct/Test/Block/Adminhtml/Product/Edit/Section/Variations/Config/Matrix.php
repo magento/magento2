@@ -215,7 +215,7 @@ class Matrix extends Form
         while ($this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH)->isVisible()) {
             $variation = $this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH);
             if ($variationText == $variation->getText()) {
-                throw new \Exception("Failed to delete configurable product variation");
+                throw new \Exception('Failed to delete configurable product variation');
             }
             $variationText = $variation->getText();
             $variation->find($this->actionMenu)->hover();

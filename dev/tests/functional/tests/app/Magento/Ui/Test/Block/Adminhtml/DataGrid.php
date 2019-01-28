@@ -113,7 +113,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $cellByHeader = "//td[%s+1]";
+    protected $cellByHeader = '//td[%s+1]';
 
     // @codingStandardsIgnoreStart
     /**
@@ -392,7 +392,7 @@ class DataGrid extends Grid
      * @param string $sort
      * @return void
      */
-    public function sortGridByField($field, $sort = "desc")
+    public function sortGridByField($field, $sort = 'desc')
     {
         $reverseSort = $sort == 'desc' ? 'asc' : 'desc';
         $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $reverseSort, $field), Locator::SELECTOR_XPATH);

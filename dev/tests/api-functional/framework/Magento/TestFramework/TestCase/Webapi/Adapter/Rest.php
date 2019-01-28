@@ -126,7 +126,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             $resourcePath = $serviceInfo['rest']['resourcePath'];
         }
         if (!isset($resourcePath)) {
-            throw new \Exception("REST endpoint cannot be identified.");
+            throw new \Exception('REST endpoint cannot be identified.');
         }
         return $resourcePath;
     }
@@ -144,7 +144,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             $httpMethod = $serviceInfo['rest']['httpMethod'];
         }
         if (!isset($httpMethod)) {
-            throw new \Exception("REST HTTP method cannot be identified.");
+            throw new \Exception('REST HTTP method cannot be identified.');
         }
         return $httpMethod;
     }

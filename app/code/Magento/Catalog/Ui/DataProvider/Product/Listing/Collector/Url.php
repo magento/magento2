@@ -21,19 +21,19 @@ use Magento\Framework\Data\Helper\PostHelper;
 class Url implements ProductRenderCollectorInterface
 {
     /** Compare Data key */
-    const KEY_COMPARE_URL_POST_DATA = "compare_url_post_data";
+    const KEY_COMPARE_URL_POST_DATA = 'compare_url_post_data';
 
     /** Add to cart url key post data */
-    const KEY_ADD_TO_CART_URL_POST_DATA = "add_to_cart_url_post_data";
+    const KEY_ADD_TO_CART_URL_POST_DATA = 'add_to_cart_url_post_data';
 
     /** Add to cart url key */
-    const KEY_ADD_TO_CART_URL = "add_to_cart_url";
+    const KEY_ADD_TO_CART_URL = 'add_to_cart_url';
 
     /** Product Url */
-    const KEY_URL = "url";
+    const KEY_URL = 'url';
 
     /** Has Required options key */
-    const KEY_HAS_REQUIRED_OPTIONS = "has_required_options";
+    const KEY_HAS_REQUIRED_OPTIONS = 'has_required_options';
 
     /**
      * @var AbstractProduct
@@ -93,7 +93,7 @@ class Url implements ProductRenderCollectorInterface
             $this->postHelper->getPostData(
                 $this->abstractProduct->getAddToCartUrl($product, ['useUencPlaceholder' => true]),
                 ['product' => $product->getId(),
-                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => "%uenc%"
+                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '%uenc%'
                 ]
             )
         );

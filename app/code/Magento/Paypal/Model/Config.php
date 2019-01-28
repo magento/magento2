@@ -1527,7 +1527,7 @@ class Config extends AbstractConfig
     {
         switch ($fieldName) {
             case 'allow_ba_signup':
-                return "payment/" . self::METHOD_WPP_EXPRESS . "/{$fieldName}";
+                return 'payment/' . self::METHOD_WPP_EXPRESS . "/{$fieldName}";
             default:
                 return $this->_mapExpressFieldset($fieldName);
         }
@@ -1543,7 +1543,7 @@ class Config extends AbstractConfig
     {
         switch ($fieldName) {
             case 'allow_ba_signup':
-                return "payment/" . self::METHOD_WPP_PE_EXPRESS . "/{$fieldName}";
+                return 'payment/' . self::METHOD_WPP_PE_EXPRESS . "/{$fieldName}";
             default:
                 return $this->_mapExpressFieldset($fieldName);
         }

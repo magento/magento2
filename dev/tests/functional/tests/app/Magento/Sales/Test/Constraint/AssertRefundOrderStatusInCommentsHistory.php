@@ -48,6 +48,6 @@ class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message with appropriate order status is available in Comments History section.";
+        return 'Message with appropriate order status is available in Comments History section.';
     }
 }

@@ -17,7 +17,7 @@ class AssertShippingMethodOnPrintOrder extends AbstractConstraint
     /**
      * Shipping method and carrier template.
      */
-    const SHIPPING_TEMPLATE = "%s - %s";
+    const SHIPPING_TEMPLATE = '%s - %s';
 
     /**
      * Assert that shipping method was printed correctly on sales guest print page.
@@ -31,7 +31,7 @@ class AssertShippingMethodOnPrintOrder extends AbstractConstraint
         $expected = sprintf(self::SHIPPING_TEMPLATE, $shipping['shipping_service'], $shipping['shipping_method']);
         \PHPUnit\Framework\Assert::assertTrue(
             $salesGuestPrint->getInfoShipping()->isShippingMethodVisible($expected),
-            "Shipping method was printed incorrectly."
+            'Shipping method was printed incorrectly.'
         );
     }
 
@@ -42,6 +42,6 @@ class AssertShippingMethodOnPrintOrder extends AbstractConstraint
      */
     public function toString()
     {
-        return "Shipping method was printed correctly.";
+        return 'Shipping method was printed correctly.';
     }
 }

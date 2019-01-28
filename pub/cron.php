@@ -12,8 +12,8 @@ use Magento\Store\Model\StoreManager;
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 if (php_sapi_name() === 'cli') {
-    echo "You cannot run this from the command line." . PHP_EOL .
-        "Run \"php bin/magento cron:run\" instead." . PHP_EOL;
+    echo 'You cannot run this from the command line.' . PHP_EOL .
+        'Run "php bin/magento cron:run" instead.' . PHP_EOL;
     exit(1);
 } else {
     $opt = $_GET;

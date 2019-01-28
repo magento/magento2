@@ -46,7 +46,7 @@ class CollectionTimeLabel extends \Magento\Config\Block\System\Config\Form\Field
             ->getDisplayName(false, \IntlTimeZone::DISPLAY_LONG, $locale);
         $element->setData(
             'comment',
-            sprintf("%s (%s)", $getLongTimeZoneName, $timeZoneCode)
+            sprintf('%s (%s)', $getLongTimeZoneName, $timeZoneCode)
         );
         return parent::render($element);
     }

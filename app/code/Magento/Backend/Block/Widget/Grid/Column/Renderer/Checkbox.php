@@ -105,7 +105,7 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($this->getNoObjectId() || $this->getColumn()->getUseIndex()) {
             $v = $value;
         } else {
-            $v = $row->getId() != "" ? $row->getId() : $value;
+            $v = $row->getId() != '' ? $row->getId() : $value;
         }
 
         return $this->_getCheckboxHtml($v, $checked);

@@ -51,6 +51,6 @@ class AssertConfigurableAttributesAbsentOnProductPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Configurable attributes are absent on product page on frontend.";
+        return 'Configurable attributes are absent on product page on frontend.';
     }
 }

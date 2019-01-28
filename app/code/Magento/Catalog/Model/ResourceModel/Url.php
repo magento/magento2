@@ -244,7 +244,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )->where(
                 't1.attribute_id = :attribute_id'
             )->where(
-                "e.entity_id IN(?)",
+                'e.entity_id IN(?)',
                 $categoryIds
             )->group('e.entity_id');
 

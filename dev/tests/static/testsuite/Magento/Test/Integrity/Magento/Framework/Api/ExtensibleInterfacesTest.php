@@ -93,14 +93,14 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
             $methodReflection = $interfaceReflection->getMethod('getExtensionAttributes');
             /** Ensure that proper return type of getExtensionAttributes() method is specified */
             $methodDocBlock = $methodReflection->getDocComment();
-            $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . "/";
+            $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . '/';
             if (!preg_match($pattern, $methodDocBlock)) {
                 $errors[] =
                     "'{$fullInterfaceName}::getExtensionAttributes()' must be declared "
                     . "with a return type of '{$extensionInterfaceName}'.";
             }
         } catch (\ReflectionException $e) {
-            $errors[] = "The following method should be declared in "
+            $errors[] = 'The following method should be declared in '
                 . "'{$extensionInterfaceName}'. '{$extensionInterfaceName}' must be specified as"
                 . " a return type for '{$fullInterfaceName}::getExtensionAttributes()'";
         }

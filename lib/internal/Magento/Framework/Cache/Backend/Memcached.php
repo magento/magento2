@@ -34,7 +34,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
             if (isset($options['slab_size'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
-                        "Invalid value for the node <slab_size>. Expected to be positive integer."
+                        'Invalid value for the node <slab_size>. Expected to be positive integer.'
                     )
                 );
             }

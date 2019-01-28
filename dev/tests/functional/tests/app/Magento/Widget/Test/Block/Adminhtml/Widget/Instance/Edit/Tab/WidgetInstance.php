@@ -53,7 +53,7 @@ class WidgetInstance extends Tab
             $pageGroup = explode('/', $field['page_group']);
             /** @var WidgetInstanceForm $layoutForm */
             $layoutForm = $this->blockFactory->create(
-                $path . str_replace(" ", "", $pageGroup[0]),
+                $path . str_replace(' ', '', $pageGroup[0]),
                 [
                     'element' => $this->_rootElement->find(sprintf($this->formSelector, $key), Locator::SELECTOR_XPATH)
                 ]

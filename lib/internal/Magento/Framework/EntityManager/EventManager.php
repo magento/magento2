@@ -36,7 +36,7 @@ class EventManager
      */
     private function resolveEntityPrefix($entityType)
     {
-        return strtolower(str_replace("\\", "_", $entityType));
+        return strtolower(str_replace('\\', '_', $entityType));
     }
 
     /**

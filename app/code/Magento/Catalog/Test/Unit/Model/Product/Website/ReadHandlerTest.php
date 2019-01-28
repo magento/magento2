@@ -45,14 +45,14 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productId);
         $websiteIds = [1,2];
         $this->websiteLink->expects($this->once())
-            ->method("getWebsiteIdsByProductId")
+            ->method('getWebsiteIdsByProductId')
             ->with($productId)
             ->willReturn($websiteIds);
         $product->expects($this->exactly(2))
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
         $this->extensionAttributes->expects($this->once())
-            ->method("getWebsiteIds")
+            ->method('getWebsiteIds')
             ->willReturn(null);
 
         $product->expects($this->once())
@@ -69,7 +69,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $websiteIds = [1,2];
         $this->extensionAttributes->expects($this->once())
-            ->method("getWebsiteIds")
+            ->method('getWebsiteIds')
             ->willReturn($websiteIds);
         $product->expects($this->never())
             ->method('setExtensionAttributes')

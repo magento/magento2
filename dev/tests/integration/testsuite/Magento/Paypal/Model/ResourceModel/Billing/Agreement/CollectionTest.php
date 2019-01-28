@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $billingAgreementCollection->addCustomerDetails();
 
-        $this->assertEquals(1, $billingAgreementCollection->count(), "Invalid collection items quantity.");
+        $this->assertEquals(1, $billingAgreementCollection->count(), 'Invalid collection items quantity.');
         /** @var \Magento\Paypal\Model\Billing\Agreement $billingAgreement */
         $billingAgreement = $billingAgreementCollection->getFirstItem();
 

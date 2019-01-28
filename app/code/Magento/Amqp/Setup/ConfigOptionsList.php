@@ -203,7 +203,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             );
 
             if (!$result) {
-                $errors[] = "Could not connect to the Amqp Server.";
+                $errors[] = 'Could not connect to the Amqp Server.';
             }
         }
 

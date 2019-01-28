@@ -88,7 +88,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $this->assertEquals(
             $this->getFirstFixtureAddressData(),
             $addressData,
-            "Address data is invalid."
+            'Address data is invalid.'
         );
     }
 

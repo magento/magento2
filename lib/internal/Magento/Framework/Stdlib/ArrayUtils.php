@@ -24,7 +24,7 @@ class ArrayUtils
         if (empty($sort)) {
             return false;
         }
-        $oldLocale = setlocale(LC_COLLATE, "0");
+        $oldLocale = setlocale(LC_COLLATE, '0');
         // use fallback locale if $localeCode is not available
 
         if (strpos($locale, '.UTF8') === false) {

@@ -226,7 +226,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testFormatPriceQuoteItem()
     {
         $price = 3.554;
-        $formattedPrice = "$3.55";
+        $formattedPrice = '$3.55';
 
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
@@ -254,7 +254,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testFormatPriceOrderItem()
     {
         $price = 3.554;
-        $formattedPrice = "$3.55";
+        $formattedPrice = '$3.55';
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
@@ -281,7 +281,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testFormatPriceInvoiceItem()
     {
         $price = 3.554;
-        $formattedPrice = "$3.55";
+        $formattedPrice = '$3.55';
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()

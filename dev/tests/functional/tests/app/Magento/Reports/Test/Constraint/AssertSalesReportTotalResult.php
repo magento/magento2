@@ -38,7 +38,7 @@ class AssertSalesReportTotalResult extends AbstractAssertSalesReportResult
         \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
-            "Grand total Sales result is not correct."
+            'Grand total Sales result is not correct.'
         );
     }
 

@@ -218,7 +218,7 @@ class BaseFinalPrice
             ]
         );
 
-        $select->where("e.type_id = ?", $productType);
+        $select->where('e.type_id = ?', $productType);
 
         if ($entityIds !== null) {
             if (count($entityIds) > 1) {

@@ -155,7 +155,7 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->atLeastOnce())->method('getExistsQuoteQuantity')->willReturn(0);
         $this->config->expects($this->atLeastOnce())
             ->method('getFixtureDataFilename')
-            ->willReturn($dir . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . 'orders_fixture_data.json');
+            ->willReturn($dir . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'orders_fixture_data.json');
         $this->storeManager->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
         $this->storeManager->expects($this->atLeastOnce())
             ->method('getWebsite')->with($websiteId)->willReturn($website);

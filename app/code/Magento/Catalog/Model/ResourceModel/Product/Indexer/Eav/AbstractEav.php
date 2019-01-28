@@ -180,7 +180,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             []
         )->join(
             ['sw' => $this->getTable('store_website')],
-            "cs.website_id = sw.website_id",
+            'cs.website_id = sw.website_id',
             []
         )->join(
             ['cpw' => $this->getTable('catalog_product_website')],

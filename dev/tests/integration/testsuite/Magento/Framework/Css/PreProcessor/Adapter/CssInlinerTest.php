@@ -48,13 +48,13 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
         $fixtureDir = dirname(dirname(__DIR__));
         return [
             'noSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithoutSpaces' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
+                'resultHtml' => $fixtureDir . '/_files/css/test-input.html',
+                'cssWithoutSpaces' => $fixtureDir . '/_files/css/test-css-no-spaces.css',
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ],
             'withSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithSpaces' => $fixtureDir . "/_files/css/test-css-with-spaces.css",
+                'resultHtml' => $fixtureDir . '/_files/css/test-input.html',
+                'cssWithSpaces' => $fixtureDir . '/_files/css/test-css-with-spaces.css',
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ],
         ];
@@ -91,8 +91,8 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
         $fixtureDir = dirname(dirname(__DIR__));
         return [
             'noSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithoutSpaces' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
+                'resultHtml' => $fixtureDir . '/_files/css/test-input.html',
+                'cssWithoutSpaces' => $fixtureDir . '/_files/css/test-css-no-spaces.css',
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ]
         ];

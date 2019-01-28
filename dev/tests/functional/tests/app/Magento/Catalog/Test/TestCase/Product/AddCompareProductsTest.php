@@ -62,7 +62,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
         }
         $this->products = $this->createProducts($products);
         $this->addProducts($this->products, $assertProductCompareSuccessAddMessage);
-        $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+        $this->cmsIndex->getLinksBlock()->openLink('Compare Products');
 
         return ['products' => $this->products];
     }
@@ -75,7 +75,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
     public function tearDown()
     {
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+        $this->cmsIndex->getLinksBlock()->openLink('Compare Products');
         for ($i = 1, $count = count($this->products); $i <= $count; $i++) {
             $this->catalogProductCompare->getCompareProductsBlock()->removeProduct();
         }

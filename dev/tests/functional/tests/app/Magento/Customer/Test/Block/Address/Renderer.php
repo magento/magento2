@@ -47,31 +47,31 @@ class Renderer
     {
         $region = $this->resolveRegion();
         switch ($this->type) {
-            case "html":
-                $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
+            case 'html':
+                $outputPattern = '{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}'
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}\n{{depend}}{{company}}\n{{/depend}}{{street}}\n"
                     . "{{city}}, {{{$region}}}, {{postcode}}\n{{country_id}}\n{{depend}}T: {{telephone}}{{/depend}}"
                     . "{{depend}}\nF: {{fax}}{{/depend}}{{depend}}\nVAT: {{vat_id}}{{/depend}}";
                 break;
-            case "html_without_company":
-                $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
+            case 'html_without_company':
+                $outputPattern = '{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}'
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}\n{{/depend}}{{street}}\n"
                     . "{{city}}, {{{$region}}} {{postcode}}\n{{country_id}}\n{{depend}}{{telephone}}{{/depend}}";
                 break;
-            case "html_without_company_separated_names":
+            case 'html_without_company_separated_names':
                 $outputPattern = "{{depend}}{{prefix}}\n{{/depend}}{{firstname}}\n{{depend}}{{middlename}}\n{{/depend}}"
                     . "{{lastname}}{{depend}}\n{{suffix}}{{/depend}}\n{{/depend}}{{street}}\n"
                     . "{{city}}\n{{{$region}}}\n{{postcode}}\n{{country_id}}\n{{depend}}{{telephone}}{{/depend}}";
                 break;
-            case "html_for_select_element":
-                $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
-                    . "{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{/depend}}{{street}}, "
+            case 'html_for_select_element':
+                $outputPattern = '{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}'
+                    . '{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{/depend}}{{street}}, '
                     . "{{city}}, {{{$region}}} {{postcode}}, {{country_id}}";
                 break;
-            case "oneline":
+            case 'oneline':
             default:
-                $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
-                    . "{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{street}}, "
+                $outputPattern = '{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}'
+                    . '{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{street}}, '
                     . "{{city}}, {{{$region}}} {{postcode}}, {{country_id}}";
                 break;
         }
@@ -129,7 +129,7 @@ class Renderer
             preg_match_all('@\{\{(\w+)\}\}@', $dependPart, $depends);
             foreach ($depends[1] as $depend) {
                 if ($this->address->getData(trim($depend)) === null) {
-                    $outputPattern = str_replace($matches[0][$key], "", $outputPattern);
+                    $outputPattern = str_replace($matches[0][$key], '', $outputPattern);
                 }
             }
         }

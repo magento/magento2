@@ -59,7 +59,7 @@ return [
             'id'          => 'root.start-updater-disable',
             'url'         => 'disable',
             'templateUrl' => "$base/start-updater",
-            'title'       => "Disable",
+            'title'       => 'Disable',
             'controller'  => 'startUpdaterController',
             'header'      => 'Step 3: Disable',
             'nav'         => true,

@@ -212,7 +212,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             case Rate::KEY_REGION_NAME:
                 return 'region_table.code';
             default:
-                return "main_table." . $field;
+                return 'main_table.' . $field;
         }
     }
 
@@ -251,7 +251,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         $regionCode = $taxRate->getTaxRegionId();
         // if regionCode eq 0 (all regions *), do not validate with existing region list
         if (\Zend_Validate::is($regionCode, 'NotEmpty') &&
-            $regionCode != "0" && !\Zend_Validate::is(
+            $regionCode != '0' && !\Zend_Validate::is(
                 $this->regionFactory->create()->load($regionCode)->getId(),
                 'NotEmpty'
             )

@@ -66,7 +66,7 @@ class Images extends AbstractModifier
         ) {
             foreach ($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'] as $index => $image) {
                 if (!isset($image['label'])) {
-                    $data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'][$index]['label'] = "";
+                    $data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'][$index]['label'] = '';
                 }
             }
         }

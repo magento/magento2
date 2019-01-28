@@ -86,7 +86,7 @@ class Version
             ) {
                 $this->getLogger()->critical('Can not load static content version.');
                 throw new \UnexpectedValueException(
-                    "Unable to retrieve deployment version of static files from the file system."
+                    'Unable to retrieve deployment version of static files from the file system.'
                 );
             }
             $result = $this->generateVersion();

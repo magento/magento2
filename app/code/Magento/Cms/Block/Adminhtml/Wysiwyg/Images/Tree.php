@@ -156,10 +156,10 @@ class Tree extends \Magento\Backend\Block\Template
     public function getTreeWidgetOptions()
     {
         return [
-            "folderTree" => [
-                "rootName" => $this->getRootNodeName(),
-                "url" => $this->getTreeLoaderUrl(),
-                "currentPath" => array_reverse($this->getTreeCurrentPath()),
+            'folderTree' => [
+                'rootName' => $this->getRootNodeName(),
+                'url' => $this->getTreeLoaderUrl(),
+                'currentPath' => array_reverse($this->getTreeCurrentPath()),
             ]
         ];
     }

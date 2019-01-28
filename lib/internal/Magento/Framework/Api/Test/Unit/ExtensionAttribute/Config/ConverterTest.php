@@ -99,34 +99,34 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                     Converter::DATA_TYPE => 'string',
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
-                        Converter::JOIN_REFERENCE_TABLE => "library_account",
+                        Converter::JOIN_REFERENCE_TABLE => 'library_account',
                         Converter::JOIN_FIELDS => [
                             [
-                                Converter::JOIN_FIELD => "library_card_id",
-                                Converter::JOIN_FIELD_COLUMN => ""
+                                Converter::JOIN_FIELD => 'library_card_id',
+                                Converter::JOIN_FIELD_COLUMN => ''
                             ]
                         ],
-                        Converter::JOIN_ON_FIELD => "id",
-                        Converter::JOIN_REFERENCE_FIELD => "customer_id",
+                        Converter::JOIN_ON_FIELD => 'id',
+                        Converter::JOIN_REFERENCE_FIELD => 'customer_id',
                     ],
                 ],
                 'reviews' => [
                     Converter::DATA_TYPE => 'Magento\Reviews\Api\Data\Reviews[]',
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
-                        Converter::JOIN_REFERENCE_TABLE => "reviews",
+                        Converter::JOIN_REFERENCE_TABLE => 'reviews',
                         Converter::JOIN_FIELDS => [
                             [
-                                Converter::JOIN_FIELD => "comment",
-                                Converter::JOIN_FIELD_COLUMN => ""
+                                Converter::JOIN_FIELD => 'comment',
+                                Converter::JOIN_FIELD_COLUMN => ''
                             ],
                             [
-                                Converter::JOIN_FIELD => "rating",
-                                Converter::JOIN_FIELD_COLUMN => ""
+                                Converter::JOIN_FIELD => 'rating',
+                                Converter::JOIN_FIELD_COLUMN => ''
                             ]
                         ],
-                        Converter::JOIN_ON_FIELD => "customer_id",
-                        Converter::JOIN_REFERENCE_FIELD => "customer_id",
+                        Converter::JOIN_ON_FIELD => 'customer_id',
+                        Converter::JOIN_REFERENCE_FIELD => 'customer_id',
                     ],
                 ],
             ],

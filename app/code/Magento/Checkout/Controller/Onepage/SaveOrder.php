@@ -40,7 +40,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                     'error_messages',
                     __(
                         "The order wasn't placed. "
-                        . "First, agree to the terms and conditions, then try placing your order again."
+                        . 'First, agree to the terms and conditions, then try placing your order again.'
                     )
                 );
                 return $this->resultJsonFactory->create()->setData($result->getData());

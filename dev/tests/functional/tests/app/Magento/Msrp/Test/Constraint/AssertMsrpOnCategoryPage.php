@@ -59,6 +59,6 @@ class AssertMsrpOnCategoryPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MSRP data on category page is correct.";
+        return 'Displayed Product MSRP data on category page is correct.';
     }
 }

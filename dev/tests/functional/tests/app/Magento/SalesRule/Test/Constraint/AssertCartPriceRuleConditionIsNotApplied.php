@@ -39,6 +39,6 @@ class AssertCartPriceRuleConditionIsNotApplied extends AssertCartPriceRuleApplyi
      */
     public function toString()
     {
-        return "Shopping cart subtotal equals to grand total - price rule has not been applied.";
+        return 'Shopping cart subtotal equals to grand total - price rule has not been applied.';
     }
 }

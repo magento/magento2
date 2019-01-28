@@ -67,10 +67,10 @@ class Authentication
              * the PHP directive cgi.rfc2616_headers must be set to 0 (the default value).
              */
             $auth = $server['HTTP_AUTHORIZATION'];
-            list($user, $pass) = explode(':', base64_decode(substr($auth, strpos($auth, " ") + 1)));
+            list($user, $pass) = explode(':', base64_decode(substr($auth, strpos($auth, ' ') + 1)));
         } elseif (!empty($server['Authorization'])) {
             $auth = $server['Authorization'];
-            list($user, $pass) = explode(':', base64_decode(substr($auth, strpos($auth, " ") + 1)));
+            list($user, $pass) = explode(':', base64_decode(substr($auth, strpos($auth, ' ') + 1)));
         }
 
         return [$user, $pass];

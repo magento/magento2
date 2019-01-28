@@ -56,7 +56,7 @@ class ItemRepositoryTest extends WebapiAbstract
             'message' => 'Gift Message Text',
         ];
 
-        $requestData = ["cartId" => $cartId, "itemId" => $itemId];
+        $requestData = ['cartId' => $cartId, 'itemId' => $itemId];
         $resultMessage = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertCount(5, $resultMessage);
         unset($resultMessage['gift_message_id']);
@@ -99,7 +99,7 @@ class ItemRepositoryTest extends WebapiAbstract
             'message' => 'Gift Message Text',
         ];
 
-        $requestData = ["itemId" => $itemId];
+        $requestData = ['itemId' => $itemId];
         $resultMessage = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertCount(5, $resultMessage);
         unset($resultMessage['gift_message_id']);

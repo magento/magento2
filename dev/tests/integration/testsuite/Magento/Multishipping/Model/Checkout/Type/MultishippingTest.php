@@ -105,7 +105,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressId = $this->model->$methodName();
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
+        self::assertEquals($secondFixtureAddressId, $address->getId(), 'Invalid address loaded.');
         self::assertEquals(
             $secondFixtureAddressStreet,
             $address->getStreet(),
@@ -123,7 +123,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             $secondFixtureAddressId,
             $address->getId(),
-            "Method results are not cached properly."
+            'Method results are not cached properly.'
         );
     }
 
@@ -161,7 +161,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressId = $this->model->$methodName();
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
+        self::assertEquals($firstFixtureAddressId, $address->getId(), 'Invalid address loaded.');
         self::assertEquals(
             $firstFixtureAddressStreet,
             $address->getStreet(),
@@ -199,7 +199,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $methodName = 'getCustomerDefault' . ucfirst($addressType) . 'Address';
         $address = $this->model->$methodName();
 
-        self::assertNull($address, "When customer has no addresses, null is expected.");
+        self::assertNull($address, 'When customer has no addresses, null is expected.');
     }
 
     /**

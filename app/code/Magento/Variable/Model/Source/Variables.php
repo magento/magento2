@@ -13,8 +13,8 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     /**
      * Variable types
      */
-    const DEFAULT_VARIABLE_TYPE = "default";
-    const CUSTOM_VARIABLE_TYPE = "custom";
+    const DEFAULT_VARIABLE_TYPE = 'default';
+    const CUSTOM_VARIABLE_TYPE = 'custom';
 
     /**
      * Assoc array of configuration variables.

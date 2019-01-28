@@ -7,17 +7,17 @@ namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
-    const RESOURCE_PERMISSIONS = "resourceRefs";
-    const DATA_TYPE = "type";
+    const RESOURCE_PERMISSIONS = 'resourceRefs';
+    const DATA_TYPE = 'type';
 
-    const JOIN_DIRECTIVE = "join";
-    const JOIN_REFERENCE_TABLE = "join_reference_table";
-    const JOIN_REFERENCE_FIELD = "join_reference_field";
-    const JOIN_ON_FIELD= "join_on_field";
+    const JOIN_DIRECTIVE = 'join';
+    const JOIN_REFERENCE_TABLE = 'join_reference_table';
+    const JOIN_REFERENCE_FIELD = 'join_reference_field';
+    const JOIN_ON_FIELD= 'join_on_field';
 
-    const JOIN_FIELDS = "fields";
-    const JOIN_FIELD = "field";
-    const JOIN_FIELD_COLUMN = "column";
+    const JOIN_FIELDS = 'fields';
+    const JOIN_FIELD = 'field';
+    const JOIN_FIELD_COLUMN = 'column';
 
     /**
      * Convert dom node tree to array

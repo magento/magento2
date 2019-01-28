@@ -70,7 +70,7 @@ return [
             'id'          => 'root.start-updater-uninstall',
             'url'         => 'uninstall',
             'templateUrl' => "$base/start-updater",
-            'title'       => "Uninstall",
+            'title'       => 'Uninstall',
             'controller'  => 'startUpdaterController',
             'header'      => 'Step 4: Uninstall',
             'nav'         => true,

@@ -72,6 +72,6 @@ class AssertCurrencyRateAppliedOnProductPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Currency rate has been applied correctly on Configurable Product page.";
+        return 'Currency rate has been applied correctly on Configurable Product page.';
     }
 }

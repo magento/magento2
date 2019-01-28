@@ -204,6 +204,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _sortWidgets($a, $b)
     {
-        return strcmp($a["label"], $b["label"]);
+        return strcmp($a['label'], $b['label']);
     }
 }

@@ -561,8 +561,8 @@ QUERY;
         foreach ($categoryIds as $index => $value) {
             $categoryIds[$index] = [ 'id' => (int)$value];
         }
-        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
-        $this->assertNotNull($response['products']['items'][0]['categories'], "categories must not be null");
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], 'Categories must not be empty');
+        $this->assertNotNull($response['products']['items'][0]['categories'], 'categories must not be null');
         $this->assertEquals($categoryIds, $response['products']['items'][0]['categories']);
         /** @var MetadataPool $metaData */
         $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
@@ -987,7 +987,7 @@ products(
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(0, $response['products']['total_count']);
-        $this->assertEmpty($response['products']['items'], "No items should be returned.");
+        $this->assertEmpty($response['products']['items'], 'No items should be returned.');
     }
 
     /**

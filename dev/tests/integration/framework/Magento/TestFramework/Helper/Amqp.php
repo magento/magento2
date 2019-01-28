@@ -89,10 +89,10 @@ class Amqp
     public function clearQueue(string $name, int $numMessages = 50)
     {
         $body = [
-            "count" => $numMessages,
-            "ackmode" => "ack_requeue_false",
-            "encoding" => "auto",
-            "truncate" => 50000
+            'count' => $numMessages,
+            'ackmode' => 'ack_requeue_false',
+            'encoding' => 'auto',
+            'truncate' => 50000
         ];
         $this->curl->post($this->host . 'queue/%2f/' . $name . '/get', json_encode($body));
         return $this->curl->getBody();

@@ -140,7 +140,7 @@ class DeployStaticContentCommand extends Command
         $deployService->deploy($options);
 
         if (!$refreshOnly) {
-            $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
+            $logger->notice(PHP_EOL . 'Execution time: ' . (microtime(true) - $time));
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;

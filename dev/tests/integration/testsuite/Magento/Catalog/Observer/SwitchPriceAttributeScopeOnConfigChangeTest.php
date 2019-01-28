@@ -53,7 +53,7 @@ class SwitchPriceAttributeScopeOnConfigChangeTest extends \PHPUnit\Framework\Tes
 
         $eventManager = $this->objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
         $eventManager->dispatch(
-            "admin_system_config_changed_section_catalog",
+            'admin_system_config_changed_section_catalog',
             ['website' => 0, 'store' => 0]
         );
         foreach (['price', 'cost', 'special_price'] as $attributeCode) {

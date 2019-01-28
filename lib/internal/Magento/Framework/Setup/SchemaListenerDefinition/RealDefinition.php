@@ -37,7 +37,7 @@ class RealDefinition implements DefinitionConverterInterface
     public function convertToDefinition(array $definition)
     {
         if (isset($definition['length'])) {
-            list($definition['precision'], $definition['scale']) = explode(",", $definition['length']);
+            list($definition['precision'], $definition['scale']) = explode(',', $definition['length']);
         }
         return [
             'xsi:type' => $definition['type'],

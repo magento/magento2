@@ -20,14 +20,14 @@ class BlockForm extends Form
      *
      * @var string
      */
-    protected $toggleButton = "#toggleblock_content";
+    protected $toggleButton = '#toggleblock_content';
 
     /**
      * Content Editor form.
      *
      * @var string
      */
-    protected $contentForm = "#page_content";
+    protected $contentForm = '#page_content';
 
     /**
      * Custom Variable block selector.
@@ -41,7 +41,7 @@ class BlockForm extends Form
      *
      * @var string
      */
-    protected $addVariableButton = ".add-variable";
+    protected $addVariableButton = '.add-variable';
 
     /**
      * Clicking in content tab 'Insert Variable' button.

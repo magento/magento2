@@ -219,8 +219,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCookie()
     {
-        $key = "cookieName";
-        $default = "defaultValue";
+        $key = 'cookieName';
+        $default = 'defaultValue';
 
         $this->cookieReader
             ->expects($this->once())
@@ -232,8 +232,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCookieDefault()
     {
-        $key = "cookieName";
-        $default = "defaultValue";
+        $key = 'cookieName';
+        $default = 'defaultValue';
 
         $this->cookieReader
             ->expects($this->once())
@@ -246,9 +246,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCookieNameExists()
     {
-        $key = "cookieName";
-        $default = "defaultValue";
-        $value = "cookieValue";
+        $key = 'cookieName';
+        $default = 'defaultValue';
+        $value = 'cookieValue';
 
         $this->cookieReader
             ->expects($this->once())
@@ -262,7 +262,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetCookieNullName()
     {
         $nullKey = null;
-        $default = "defaultValue";
+        $default = 'defaultValue';
 
         $this->cookieReader
             ->expects($this->once())

@@ -29,7 +29,7 @@ $id = $block->escapeHtml($block->getData('id'));
         <span><?= $block->escapeHtml($details['cc_last_4']) ?></span>
         (<span><?= $block->escapeHtml(__('expires')) ?></span>:
         <span><?php /* @noEscape */ echo $block->escapeHtml(
-                $details['cc_exp_month'] . "/" . $details['cc_exp_year']
+                $details['cc_exp_month'] . '/' . $details['cc_exp_year']
             ); ?></span>)
     </div>
 </div>

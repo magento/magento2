@@ -1190,7 +1190,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         /* If an email was used to start the registration process and it is the same email as the one
            used to register, then this can skip confirmation.
            */
-        $skipConfirmationIfEmail = $this->_registry->registry("skip_confirmation_if_email");
+        $skipConfirmationIfEmail = $this->_registry->registry('skip_confirmation_if_email');
         if (!$skipConfirmationIfEmail) {
             return false;
         }

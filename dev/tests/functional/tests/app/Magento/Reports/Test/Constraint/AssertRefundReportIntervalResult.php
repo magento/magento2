@@ -42,7 +42,7 @@ class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
         \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
-            "Refund total Sales result is not correct."
+            'Refund total Sales result is not correct.'
         );
     }
 

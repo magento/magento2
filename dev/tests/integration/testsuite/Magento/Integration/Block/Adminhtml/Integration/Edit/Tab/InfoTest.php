@@ -94,7 +94,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             $html
         );
         $this->assertRegExp(
-            "/<input id=\"integration_properties_identity_link_url\" name=\"identity_link_url\".*"
+            '/<input id="integration_properties_identity_link_url" name="identity_link_url".*'
             . "value=\"$identityLinkUrl\".*type=\"text\".*>/",
             $html
         );

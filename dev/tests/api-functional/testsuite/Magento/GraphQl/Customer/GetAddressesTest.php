@@ -58,7 +58,7 @@ QUERY;
         $this->assertArrayHasKey('addresses', $response['customer']);
         $this->assertTrue(
             is_array([$response['customer']['addresses']]),
-            " Addresses field must be of an array type."
+            ' Addresses field must be of an array type.'
         );
         self::assertEquals($customer->getId(), $response['customer']['id']);
         $this->assertCustomerAddressesFields($customer, $response);

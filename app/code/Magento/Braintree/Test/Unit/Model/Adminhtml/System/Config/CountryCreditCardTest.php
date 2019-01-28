@@ -116,7 +116,7 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
                         'country_id' => 'US',
                         'cc_types' => ['AE', 'VI', 'MA']
                     ],
-                    '__empty' => "",
+                    '__empty' => '',
                 ],
                 'expected' => [
                     'AF' => ['AE', 'VI'],
@@ -138,7 +138,7 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
                         'country_id' => 'US',
                         'cc_types' => ['VI', 'OT']
                     ],
-                    '__empty' => "",
+                    '__empty' => '',
                 ],
                 'expected' => [
                     'AF' => ['AE', 'VI'],

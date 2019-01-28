@@ -171,7 +171,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     public function setCredentials($login, $pass)
     {
         $val = base64_encode("{$login}:{$pass}");
-        $this->addHeader("Authorization", "Basic {$val}");
+        $this->addHeader('Authorization', "Basic {$val}");
     }
 
     /**
@@ -226,7 +226,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     public function get($uri)
     {
-        $this->makeRequest("GET", $uri);
+        $this->makeRequest('GET', $uri);
     }
 
     /**
@@ -243,7 +243,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     public function post($uri, $params)
     {
-        $this->makeRequest("POST", $uri, $params);
+        $this->makeRequest('POST', $uri, $params);
     }
 
     /**
@@ -278,12 +278,12 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode('; ', $row);
             $c = count($values);
             if (!$c) {
                 continue;
             }
-            list($key, $val) = explode("=", $values[0]);
+            list($key, $val) = explode('=', $values[0]);
             if ($val === null) {
                 continue;
             }
@@ -305,12 +305,12 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode('; ', $row);
             $c = count($values);
             if (!$c) {
                 continue;
             }
-            list($key, $val) = explode("=", $values[0]);
+            list($key, $val) = explode('=', $values[0]);
             if ($val === null) {
                 continue;
             }
@@ -321,7 +321,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
                 continue;
             }
             for ($i = 0; $i < $c; $i++) {
-                list($subkey, $val) = explode("=", $values[$i]);
+                list($subkey, $val) = explode('=', $values[$i]);
                 $out[trim($key)][trim($subkey)] = trim($val);
             }
         }
@@ -361,7 +361,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
             $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
-        } elseif ($method == "GET") {
+        } elseif ($method == 'GET') {
             $this->curlOption(CURLOPT_HTTPGET, 1);
         } else {
             $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
@@ -380,7 +380,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             foreach ($this->_cookies as $k => $v) {
                 $cookies[] = "{$k}={$v}";
             }
-            $this->curlOption(CURLOPT_COOKIE, implode(";", $cookies));
+            $this->curlOption(CURLOPT_COOKIE, implode(';', $cookies));
         }
 
         if ($this->_timeout) {
@@ -437,21 +437,21 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected function parseHeaders($ch, $data)
     {
         if ($this->_headerCount == 0) {
-            $line = explode(" ", trim($data), 3);
+            $line = explode(' ', trim($data), 3);
             if (count($line) < 2) {
-                $this->doError("Invalid response line returned from server: " . $data);
+                $this->doError('Invalid response line returned from server: ' . $data);
             }
             $this->_responseStatus = (int)$line[1];
         } else {
             $name = $value = '';
-            $out = explode(": ", trim($data), 2);
+            $out = explode(': ', trim($data), 2);
             if (count($out) == 2) {
                 $name = $out[0];
                 $value = $out[1];
             }
 
             if (strlen($name)) {
-                if ("Set-Cookie" == $name) {
+                if ('Set-Cookie' == $name) {
                     if (!isset($this->_responseHeaders[$name])) {
                         $this->_responseHeaders[$name] = [];
                     }

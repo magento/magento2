@@ -75,7 +75,7 @@ class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
             ->method('getComment')
             ->willReturn('Subscription status: Enabled');
         $this->assertRegExp(
-            "/Subscription status: Enabled/",
+            '/Subscription status: Enabled/',
             $this->subscriptionStatusLabel->render($this->abstractElementMock)
         );
     }

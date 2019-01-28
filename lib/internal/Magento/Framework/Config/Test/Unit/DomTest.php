@@ -99,8 +99,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     public function testMergeException()
     {
-        $xml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_two.xml");
-        $newXml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_new_one.xml");
+        $xml = file_get_contents(__DIR__ . '/_files/dom/ambiguous_two.xml');
+        $newXml = file_get_contents(__DIR__ . '/_files/dom/ambiguous_new_one.xml');
         $config = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
         $config->merge($newXml);
     }

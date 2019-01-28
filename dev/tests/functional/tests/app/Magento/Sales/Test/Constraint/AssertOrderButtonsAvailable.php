@@ -47,6 +47,6 @@ class AssertOrderButtonsAvailable extends AbstractConstraint
      */
     public function toString()
     {
-        return "All buttons are available on order page.";
+        return 'All buttons are available on order page.';
     }
 }

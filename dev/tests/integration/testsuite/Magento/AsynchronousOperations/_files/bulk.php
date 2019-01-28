@@ -96,14 +96,14 @@ $operations = [
 ];
 
 $bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `user_type`, `description`, `operation_count`)"
-    . " VALUES (:uuid, :user_id, :user_type, :description, :operation_count);";
+    . ' VALUES (:uuid, :user_id, :user_type, :description, :operation_count);';
 foreach ($bulks as $bulk) {
     $connection->query($bulkQuery, $bulk);
 }
 
 $operationQuery = "INSERT INTO {$operationTable}"
-    . " (`bulk_uuid`, `topic_name`, `serialized_data`, `status`, `error_code`, `result_message`)"
-    . " VALUES (:bulk_uuid, :topic_name, :serialized_data, :status, :error_code, :result_message);";
+    . ' (`bulk_uuid`, `topic_name`, `serialized_data`, `status`, `error_code`, `result_message`)'
+    . ' VALUES (:bulk_uuid, :topic_name, :serialized_data, :status, :error_code, :result_message);';
 foreach ($operations as $operation) {
     $connection->query($operationQuery, $operation);
 }

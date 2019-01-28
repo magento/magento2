@@ -21,7 +21,7 @@ class Denied extends Block
      *
      * @var string
      */
-    protected $accessDeniedText = ".page-heading";
+    protected $accessDeniedText = '.page-heading';
 
     /**
      * Get comments history

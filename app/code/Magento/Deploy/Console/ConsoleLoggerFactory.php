@@ -58,7 +58,7 @@ class ConsoleLoggerFactory
         $logger = $this->objectManagerProvider->get()->create($this->type, ['output' => $output]);
         if (!$logger instanceof LoggerInterface) {
             throw new LocalizedException(
-                new Phrase("Wrong logger interface specified.")
+                new Phrase('Wrong logger interface specified.')
             );
         }
         return $logger;

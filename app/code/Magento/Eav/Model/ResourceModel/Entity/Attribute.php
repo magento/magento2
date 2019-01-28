@@ -127,7 +127,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ];
             $select = $connection->select()->from(
                 $this->getTable('eav_entity_attribute'),
-                new \Zend_Db_Expr("MAX(sort_order)")
+                new \Zend_Db_Expr('MAX(sort_order)')
             )->where(
                 'attribute_set_id = :attribute_set_id'
             )->where(
@@ -574,12 +574,12 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getFlatUpdateSelect(AbstractAttribute $attribute, $storeId)
     {
         $connection = $this->getConnection();
-        $joinConditionTemplate = "%s.entity_id=%s.entity_id" .
-            " AND %s.entity_type_id = " .
+        $joinConditionTemplate = '%s.entity_id=%s.entity_id' .
+            ' AND %s.entity_type_id = ' .
             $attribute->getEntityTypeId() .
-            " AND %s.attribute_id = " .
+            ' AND %s.attribute_id = ' .
             $attribute->getId() .
-            " AND %s.store_id = %d";
+            ' AND %s.store_id = %d';
         $joinCondition = sprintf(
             $joinConditionTemplate,
             'e',
@@ -606,7 +606,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [$attribute->getAttributeCode() => $valueExpr]
         );
         if ($attribute->getFlatAddChildData()) {
-            $select->where("e.is_child = ?", 0);
+            $select->where('e.is_child = ?', 0);
         }
 
         return $select;

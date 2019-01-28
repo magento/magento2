@@ -129,7 +129,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
         $nameAttributeHtml = $element->getExtType() === 'multiple' ? 'name="' . $element->getId() . '_checkbox"' : '';
         $elementId = $element->getId();
         $dataAttribute = "data-disable='{$elementId}'";
-        $dataCheckboxName = "toggle_" . "{$elementId}";
+        $dataCheckboxName = 'toggle_' . "{$elementId}";
         $checkboxLabel = __('Change');
         // @codingStandardsIgnoreStart
         $html = <<<HTML

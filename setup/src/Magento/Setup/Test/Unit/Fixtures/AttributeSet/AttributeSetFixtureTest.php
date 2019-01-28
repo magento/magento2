@@ -48,7 +48,7 @@ class AttributeSetFixtureTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attributeSetMock->expects($this->once())
             ->method('setAttributeSetName')
-            ->with("attribute set name");
+            ->with('attribute set name');
         $attributeSetMock->expects($this->once())
             ->method('setEntityTypeId')
             ->with(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE);

@@ -57,12 +57,12 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(
             $objectManager,
             $objectManager->get(ObjectManagerInterface::class),
-            "Object manager instance should be the same after cache clearing."
+            'Object manager instance should be the same after cache clearing.'
         );
         $this->assertSame(
             $objectManager,
             $objectManager->get(\Magento\Framework\App\ObjectManager::class),
-            "Object manager instance should be the same after cache clearing."
+            'Object manager instance should be the same after cache clearing.'
         );
         foreach (self::$persistedInstances as $className) {
             $this->assertSame(

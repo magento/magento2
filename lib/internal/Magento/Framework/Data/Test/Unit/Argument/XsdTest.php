@@ -23,7 +23,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $this->_typesXsdSchema = __DIR__ . "/_files/types_schema.xsd";
+        $this->_typesXsdSchema = __DIR__ . '/_files/types_schema.xsd';
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 

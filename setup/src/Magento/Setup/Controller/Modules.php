@@ -51,10 +51,10 @@ class Modules extends AbstractActionController
         }
         $validity = $this->checkGraph($enabledModules);
         ksort($allModules);
-        if ($validity->getVariable("success")) {
+        if ($validity->getVariable('success')) {
             return new JsonModel(['success' => true, 'modules' => $allModules]);
         } else {
-            $errorMessage = $validity->getVariable("error");
+            $errorMessage = $validity->getVariable('error');
             return new JsonModel(['success' => false, 'modules' => $allModules,
                 'error' => '<b> Corrupt config.php!</b> <br />' . $errorMessage]);
         }
@@ -138,7 +138,7 @@ class Modules extends AbstractActionController
             $updateType = 'disable';
         }
         $message = " Unable to $updateType modules because of the following constraints:<br>" . PHP_EOL
-            . implode("<br>" . PHP_EOL, $constraints);
+            . implode('<br>' . PHP_EOL, $constraints);
         return $message;
     }
 }

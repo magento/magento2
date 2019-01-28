@@ -66,11 +66,11 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ->willReturn('New hint');
         $html = $this->vertical->render($this->abstractElementMock);
         $this->assertRegExp(
-            "/New comment/",
+            '/New comment/',
             $html
         );
         $this->assertRegExp(
-            "/New hint/",
+            '/New hint/',
             $html
         );
     }

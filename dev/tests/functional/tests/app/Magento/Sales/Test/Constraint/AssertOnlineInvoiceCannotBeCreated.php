@@ -54,6 +54,6 @@ class AssertOnlineInvoiceCannotBeCreated extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message that invoice can be created only offline is present.";
+        return 'Message that invoice can be created only offline is present.';
     }
 }

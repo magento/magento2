@@ -52,7 +52,7 @@ class OldDbValidator implements UpToDateValidatorInterface
                 }
 
                 $messages[] = sprintf(
-                    "<info>%20s %10s: %11s  ->  %-11s</info>",
+                    '<info>%20s %10s: %11s  ->  %-11s</info>',
                     $error[DbVersionInfo::KEY_MODULE],
                     $error[DbVersionInfo::KEY_TYPE],
                     $error[DbVersionInfo::KEY_CURRENT],

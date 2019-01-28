@@ -58,7 +58,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Widget Type'),
                 'name' => 'widget_type',
                 'required' => true,
-                'onchange' => "wWidget.validateField()",
+                'onchange' => 'wWidget.validateField()',
                 'options' => $this->_getWidgetSelectOptions(),
                 'after_element_html' => $this->_getWidgetSelectAfterHtml()
             ]

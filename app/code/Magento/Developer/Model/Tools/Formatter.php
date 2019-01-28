@@ -16,7 +16,7 @@ class Formatter
     /**
      * @param string $indent
      */
-    public function __construct($indent = "    ")
+    public function __construct($indent = '    ')
     {
         $this->_indent = $indent;
     }

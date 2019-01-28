@@ -42,8 +42,8 @@ class XssPhtmlTemplateTest extends \PHPUnit\Framework\TestCase
                 $lines = $xssOutputValidator->getLinesWithXssSensitiveOutput($file);
                 $this->assertEmpty(
                     $lines,
-                    "Potentially XSS vulnerability. " .
-                    "Please verify that output is escaped at lines " . $lines
+                    'Potentially XSS vulnerability. ' .
+                    'Please verify that output is escaped at lines ' . $lines
                 );
             },
             Files::init()->getPhtmlFiles()
@@ -64,14 +64,14 @@ class XssPhtmlTemplateTest extends \PHPUnit\Framework\TestCase
             );
         }
 
-        $result = "";
+        $result = '';
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             if (in_array($moduleName, $exemptModules)) {
                 continue;
             }
             foreach (Files::init()->getFiles([$modulePath], '*.phtml') as $file) {
                 $fileContents = file_get_contents($file);
-                $pattern = "/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/";
+                $pattern = '/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/';
                 $instances = preg_grep($pattern, explode("\n", $fileContents));
                 if (!empty($instances)) {
                     foreach (array_keys($instances) as $line) {

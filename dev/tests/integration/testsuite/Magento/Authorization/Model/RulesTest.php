@@ -38,7 +38,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
         $this->_model
             ->setRoleType('G')
             ->setResourceId('Magento_Backend::all')
-            ->setPrivileges("")
+            ->setPrivileges('')
             ->setAssertId(0)
             ->setRoleId(1)
             ->setPermission('allow');

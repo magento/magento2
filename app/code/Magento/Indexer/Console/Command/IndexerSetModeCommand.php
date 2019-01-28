@@ -67,7 +67,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
                 // we must have an exit code higher than zero to indicate something was wrong
                 $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
-                $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
+                $output->writeln($indexer->getTitle() . ' indexer process unknown error:' . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
                 // we must have an exit code higher than zero to indicate something was wrong
                 $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;

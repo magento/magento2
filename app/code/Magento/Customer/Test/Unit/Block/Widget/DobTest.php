@@ -478,7 +478,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"}}'));
 
         $this->attribute->expects($this->once())
-            ->method("isRequired")
+            ->method('isRequired')
             ->willReturn(false);
 
         $this->assertEquals(
@@ -490,7 +490,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
     public function testGetHtmlExtraParamsWithRequiredOption()
     {
         $this->attribute->expects($this->once())
-            ->method("isRequired")
+            ->method('isRequired')
             ->willReturn(true);
         $this->escaper->expects($this->any())
             ->method('escapeHtml')

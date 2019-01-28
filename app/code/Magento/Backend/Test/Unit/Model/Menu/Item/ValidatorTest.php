@@ -217,7 +217,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             $result = $this->_model->validateParam('toolTip', null);
             $this->assertNull($result);
         } catch (\Exception $e) {
-            $this->fail("Non required null values should not be validated");
+            $this->fail('Non required null values should not be validated');
         }
     }
 

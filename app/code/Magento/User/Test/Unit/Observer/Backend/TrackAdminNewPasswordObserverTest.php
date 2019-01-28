@@ -81,7 +81,7 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testTrackAdminPassword()
     {
-        $newPW = "mYn3wpassw0rd";
+        $newPW = 'mYn3wpassw0rd';
         $uid = 123;
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserverMock */
         $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)

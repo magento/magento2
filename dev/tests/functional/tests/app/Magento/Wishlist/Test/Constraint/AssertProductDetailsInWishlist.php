@@ -42,6 +42,6 @@ class AssertProductDetailsInWishlist extends AbstractAssertWishlistProductDetail
      */
     public function toString()
     {
-        return "Expected product options are equal to actual.";
+        return 'Expected product options are equal to actual.';
     }
 }

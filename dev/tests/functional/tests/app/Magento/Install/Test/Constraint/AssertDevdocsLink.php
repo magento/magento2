@@ -41,6 +41,6 @@ class AssertDevdocsLink extends AbstractConstraint
      */
     public function toString()
     {
-        return "Developer Documentation link is correct.";
+        return 'Developer Documentation link is correct.';
     }
 }

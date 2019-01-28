@@ -13,7 +13,7 @@ class RuleRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
     const RESOURCE_PATH = '/V1/salesRules';
-    const SERVICE_VERSION = "V1";
+    const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -60,7 +60,7 @@ class RuleRepositoryTest extends WebapiAbstract
             ],
             'action_condition' => [
                 'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
-                "conditions" => [
+                'conditions' => [
                     [
                         'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'operator' => '==',

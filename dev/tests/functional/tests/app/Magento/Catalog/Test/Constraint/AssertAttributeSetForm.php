@@ -51,7 +51,7 @@ class AssertAttributeSetForm extends AbstractConstraint
             $attributeLabel = $productAttribute->getFrontendLabel();
             \PHPUnit\Framework\Assert::assertTrue(
                 $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeLabel),
-                "Product Attribute is absent on Attribute Set Groups"
+                'Product Attribute is absent on Attribute Set Groups'
             );
         }
     }

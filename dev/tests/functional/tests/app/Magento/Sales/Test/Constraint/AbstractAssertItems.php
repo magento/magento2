@@ -21,7 +21,7 @@ abstract class AbstractAssertItems extends AbstractAssertForm
      *
      * @var string
      */
-    protected $sortKey = "::sku";
+    protected $sortKey = '::sku';
 
     /**
      * List compare fields.

@@ -97,7 +97,7 @@ class SettingCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturnMap([
                 [
-                    'system/' . $scope . "/" . ($scopeCode ? $scopeCode . '/' : '') . $path,
+                    'system/' . $scope . '/' . ($scopeCode ? $scopeCode . '/' : '') . $path,
                     null,
                     $confValue
                 ],

@@ -35,6 +35,6 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
             $this->messageManager->addError(__('An error occurred while deleting this role.'));
         }
 
-        return $resultRedirect->setPath("*/*/");
+        return $resultRedirect->setPath('*/*/');
     }
 }

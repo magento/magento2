@@ -293,7 +293,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         // See that address is deleted
         try {
             $addressDataObject = $this->repository->getById($addressId);
-            $this->fail("Expected NoSuchEntityException not caught");
+            $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
             $this->assertEquals('No such entity with addressId = 1', $exception->getMessage());
         }
@@ -316,7 +316,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         // See that address is deleted
         try {
             $addressDataObject = $this->repository->getById($addressId);
-            $this->fail("Expected NoSuchEntityException not caught");
+            $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
             $this->assertEquals('No such entity with addressId = 1', $exception->getMessage());
         }
@@ -329,7 +329,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         try {
             $this->repository->deleteById(12345);
-            $this->fail("Expected NoSuchEntityException not caught");
+            $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
             $this->assertEquals('No such entity with addressId = 12345', $exception->getMessage());
         }

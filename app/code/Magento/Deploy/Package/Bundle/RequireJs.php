@@ -241,8 +241,8 @@ class RequireJs implements BundleInterface
     {
         if (!isset($this->fileContent[$sourcePath])) {
             $content = $this->staticDir->readFile($this->minification->addMinifiedSign($sourcePath));
-            if (mb_detect_encoding($content) !== "UTF-8") {
-                $content = mb_convert_encoding($content, "UTF-8");
+            if (mb_detect_encoding($content) !== 'UTF-8') {
+                $content = mb_convert_encoding($content, 'UTF-8');
             }
 
             $this->fileContent[$sourcePath] = $content;

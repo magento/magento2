@@ -56,7 +56,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             }
             $body .= count($parameters)
                 ? "parent::__construct({$this->_getParameterList($parameters)});"
-                : "parent::__construct();";
+                : 'parent::__construct();';
         }
         return [
             'name' => '__construct',

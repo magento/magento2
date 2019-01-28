@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
  */
 class Translation implements ConfigTypeInterface
 {
-    const CONFIG_TYPE = "i18n";
+    const CONFIG_TYPE = 'i18n';
 
     /**
      * @var DataObject[]

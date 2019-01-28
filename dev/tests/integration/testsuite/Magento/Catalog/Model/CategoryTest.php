@@ -259,8 +259,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testValidate()
     {
         $this->_model->addData([
-            "include_in_menu" => false,
-            "is_active" => false,
+            'include_in_menu' => false,
+            'is_active' => false,
             'name' => 'test',
         ]);
         $this->assertNotEmpty($this->_model->validate());

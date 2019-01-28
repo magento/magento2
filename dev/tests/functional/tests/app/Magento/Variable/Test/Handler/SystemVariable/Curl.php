@@ -38,7 +38,7 @@ class Curl extends AbstractCurl implements SystemVariableInterface
             throw new \Exception("System Variable creation by curl handler was not successful! Response: $response");
         }
 
-        preg_match("~Location: [^\\s]*system_variable\\/edit\\/variable_id\\/(\\d+)~", $response, $matches);
+        preg_match('~Location: [^\\s]*system_variable\\/edit\\/variable_id\\/(\\d+)~', $response, $matches);
         $id = isset($matches[1]) ? $matches[1] : null;
         return ['variable_id' => $id];
     }

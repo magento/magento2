@@ -234,8 +234,8 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
     public function getMethodData()
     {
         return [
-            "getDomain" => ["setDomain", 'getDomain', "example.com"],
-            "getPath" => ["setPath", 'getPath', "path"]
+            'getDomain' => ['setDomain', 'getDomain', 'example.com'],
+            'getPath' => ['setPath', 'getPath', 'path']
         ];
     }
 }

@@ -94,9 +94,9 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
         return [
             [false],
             [1],
-            ["23"],
+            ['23'],
             [null],
-            [""],
+            [''],
             [-1],
             [12.3],
             [true],

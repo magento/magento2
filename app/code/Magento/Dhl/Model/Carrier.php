@@ -943,7 +943,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $bodyXml = $this->_xmlElFactory->create(['data' => $responseBody]);
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
                 if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
-                    $debugPoint['info'] = sprintf(__("DHL service is not available at %s date"), $date);
+                    $debugPoint['info'] = sprintf(__('DHL service is not available at %s date'), $date);
                 } else {
                     $this->_debug($debugPoint);
                     break;
@@ -1029,7 +1029,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 ->getWebsite($this->_request->getWebsiteId())
                 ->getBaseCurrencyCode();
             $nodeDutiable->addChild('DeclaredCurrency', $baseCurrencyCode);
-            $nodeDutiable->addChild('DeclaredValue', sprintf("%.2F", $rawRequest->getValue()));
+            $nodeDutiable->addChild('DeclaredValue', sprintf('%.2F', $rawRequest->getValue()));
         }
 
         return $xml;
@@ -1176,7 +1176,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             if (isset($shipmentDetails->GlobalProductCode)) {
                 $dhlProductDescription = $this->getDhlProductTitle((string)$shipmentDetails->GlobalProductCode);
             }
-            $dhlProductDescription = $dhlProductDescription ? $dhlProductDescription : __("DHL");
+            $dhlProductDescription = $dhlProductDescription ? $dhlProductDescription : __('DHL');
             $this->_errors[] = __("Zero shipping charge for '%1'", $dhlProductDescription);
         }
 
@@ -1195,7 +1195,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $measureUnit = $this->getCountryParams($countryId)->getMeasureUnit();
         if (empty($measureUnit)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot identify measure unit for %1", $countryId)
+                __('Cannot identify measure unit for %1', $countryId)
             );
         }
 
@@ -1214,7 +1214,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $weightUnit = $this->getCountryParams($countryId)->getWeightUnit();
         if (empty($weightUnit)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot identify weight unit for %1", $countryId)
+                __('Cannot identify weight unit for %1', $countryId)
             );
         }
 
@@ -1370,7 +1370,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _getMinDimension($dimensionUnit)
     {
-        return $dimensionUnit == "CENTIMETER" ? self::DIMENSION_MIN_CM : self::DIMENSION_MIN_IN;
+        return $dimensionUnit == 'CENTIMETER' ? self::DIMENSION_MIN_CM : self::DIMENSION_MIN_IN;
     }
 
     /**
@@ -1494,7 +1494,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $nodeDutiable = $xml->addChild('Dutiable', '', '');
             $nodeDutiable->addChild(
                 'DeclaredValue',
-                sprintf("%.2F", $rawRequest->getOrderShipment()->getOrder()->getSubtotal())
+                sprintf('%.2F', $rawRequest->getOrderShipment()->getOrder()->getSubtotal())
             );
             $baseCurrencyCode = $this->_storeManager->getWebsite($rawRequest->getWebsiteId())->getBaseCurrencyCode();
             $nodeDutiable->addChild('DeclaredCurrency', $baseCurrencyCode);

@@ -33,7 +33,7 @@ class Navigation extends Links
             }
         }
 
-        usort($sortableLink, [$this, "compare"]);
+        usort($sortableLink, [$this, 'compare']);
         return array_merge($sortableLink, $links);
     }
 

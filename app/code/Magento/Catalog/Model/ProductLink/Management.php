@@ -74,7 +74,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
             foreach ($items as $newLink) {
                 $type = $newLink->getLinkType();
                 if ($type == null) {
-                    throw InputException::requiredField("linkType");
+                    throw InputException::requiredField('linkType');
                 }
                 if (!isset($linkTypes[$type])) {
                     throw new NoSuchEntityException(

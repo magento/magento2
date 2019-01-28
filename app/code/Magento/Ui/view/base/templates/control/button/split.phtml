@@ -21,7 +21,7 @@
         </button>
 
         <?php if (!$block->getDisabled()): ?>
-            <ul class="dropdown-menu" <?= /* @escapeNotVerified */ $block->getUiId("dropdown-menu") ?>>
+            <ul class="dropdown-menu" <?= /* @escapeNotVerified */ $block->getUiId('dropdown-menu') ?>>
                 <?php foreach ($block->getOptions() as $key => $option): ?>
                 <li>
                     <span <?= $block->getOptionAttributesHtml($key, $option) ?>>

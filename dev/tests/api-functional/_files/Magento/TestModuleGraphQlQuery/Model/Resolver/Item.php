@@ -25,13 +25,13 @@ class Item implements ResolverInterface
     ) {
         $id = 0;
         foreach ($args as $key => $argValue) {
-            if ($key === "id") {
+            if ($key === 'id') {
                 $id = (int)$argValue;
             }
         }
         $itemData = [
             'item_id' => $id,
-            'name' => "itemName"
+            'name' => 'itemName'
         ];
         return $itemData;
     }

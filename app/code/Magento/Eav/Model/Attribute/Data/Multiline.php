@@ -132,10 +132,10 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
                 $output = $values;
                 break;
             case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML:
-                $output = implode("<br />", $values);
+                $output = implode('<br />', $values);
                 break;
             case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ONELINE:
-                $output = implode(" ", $values);
+                $output = implode(' ', $values);
                 break;
             default:
                 $output = implode("\n", $values);

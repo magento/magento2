@@ -377,7 +377,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('insert')->willReturn($this->selectMock);
-        $this->model->trackPassword($this->userMock, "myPas#w0rd", 1);
+        $this->model->trackPassword($this->userMock, 'myPas#w0rd', 1);
     }
 
     public function testGetLatestPassword()

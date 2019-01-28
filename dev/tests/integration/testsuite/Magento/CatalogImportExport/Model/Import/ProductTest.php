@@ -979,9 +979,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($productCollection as $product) {
             $products[$product->getSku()] = $product;
         }
-        $this->assertArrayNotHasKey("simple1", $products, "Simple Product should not have been imported");
-        $this->assertArrayNotHasKey("simple3", $products, "Simple Product 3 should not have been imported");
-        $this->assertArrayNotHasKey("simple2", $products, "Simple Product2 should not have been imported");
+        $this->assertArrayNotHasKey('simple1', $products, 'Simple Product should not have been imported');
+        $this->assertArrayNotHasKey('simple3', $products, 'Simple Product 3 should not have been imported');
+        $this->assertArrayNotHasKey('simple2', $products, 'Simple Product2 should not have been imported');
     }
 
     /**
@@ -1011,7 +1011,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 1);
         $this->assertEquals(
             "Value for 'multiselect_attribute' attribute contains incorrect value, "
-            . "see acceptable values on settings specified for Admin",
+            . 'see acceptable values on settings specified for Admin',
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
     }

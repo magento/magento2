@@ -94,7 +94,7 @@ class Io
          * multiple processes are attempting to access the generated file simultaneously.
          */
         $content = "<?php\n" . $content;
-        $tmpFile = $fileName . "." . getmypid();
+        $tmpFile = $fileName . '.' . getmypid();
         $this->filesystemDriver->filePutContents($tmpFile, $content);
 
         try {

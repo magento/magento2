@@ -45,7 +45,7 @@ class AssertGroupedProductInItemsOrderedGrid extends AbstractConstraint
     public function processAssert(OrderCreateIndex $orderCreateIndex, array $products)
     {
         if (empty($products)) {
-            throw new \Exception("No products");
+            throw new \Exception('No products');
         }
         $data = $this->prepareData($products, $orderCreateIndex->getCreateBlock()->getItemsBlock());
 

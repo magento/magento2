@@ -342,7 +342,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $expectedFlatReindexCalls,
         $expectedProductReindexCall
     ) {
-        $affectedProductIds = ["1", "2"];
+        $affectedProductIds = ['1', '2'];
         $this->category->setAffectedProductIds($affectedProductIds);
         $pathIds = ['path/1/2', 'path/2/3'];
         $this->category->setData('path_ids', $pathIds);
@@ -386,9 +386,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             [false, null, null, null, 0],
             [true, null, null, null, 0],
             [false, [], null, null, 0],
-            [false, ["1", "2"], null, null, 1],
+            [false, ['1', '2'], null, null, 1],
             [false, null, 1, null, 1],
-            [false, ["1", "2"], 0, 1, 1],
+            [false, ['1', '2'], 0, 1, 1],
             [false, null, 1, 1, 0],
         ];
     }

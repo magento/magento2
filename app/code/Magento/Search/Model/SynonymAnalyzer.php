@@ -57,7 +57,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
         $synonymGroups = $this->getSynonymGroupsByPhrase($phrase);
 
         // Replace multiple spaces in a row with the only one space
-        $phrase = preg_replace("/ {2,}/", " ", $phrase);
+        $phrase = preg_replace('/ {2,}/', ' ', $phrase);
 
         // Go through every returned record looking for presence of the actual phrase. If there were no matching
         // records found in DB then create a new entry for it in the returned array

@@ -26,7 +26,7 @@ class AssertSalesRuleOnPrintOrder extends AbstractConstraint
         \PHPUnit\Framework\Assert::assertEquals(
             abs($prices['discount']),
             $salesGuestPrint->getViewSalesRule()->getItemBlock()->getSalesRuleDiscount(),
-            "Sales rule amount not equals."
+            'Sales rule amount not equals.'
         );
     }
 
@@ -37,6 +37,6 @@ class AssertSalesRuleOnPrintOrder extends AbstractConstraint
      */
     public function toString()
     {
-        return "Sales rule amount was printed correctly.";
+        return 'Sales rule amount was printed correctly.';
     }
 }

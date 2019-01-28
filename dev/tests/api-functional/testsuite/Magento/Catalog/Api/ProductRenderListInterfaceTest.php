@@ -45,7 +45,7 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
 
         $filter1 = $filterBuilder
             ->setField('entity_id')
-            ->setValue(implode(",", $expectedIds))
+            ->setValue(implode(',', $expectedIds))
             ->setConditionType('in')
             ->create();
 
@@ -58,7 +58,7 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "?" . http_build_query($searchData),
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchData),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [

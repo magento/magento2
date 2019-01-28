@@ -167,7 +167,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
             ->will($this->returnValue($resources));
-        $rootArray = "rootArrayValue";
+        $rootArray = 'rootArrayValue';
         $this->integrationHelper->expects($this->once())
             ->method('mapResources')
             ->with(['resource1', 'resource2', 'resource3'])

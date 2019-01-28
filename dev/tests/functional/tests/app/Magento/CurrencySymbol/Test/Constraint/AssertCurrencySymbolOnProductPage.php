@@ -56,6 +56,6 @@ class AssertCurrencySymbolOnProductPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Currency Symbol has been changed on Product Details page.";
+        return 'Currency Symbol has been changed on Product Details page.';
     }
 }

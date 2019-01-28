@@ -573,7 +573,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     $errorTitle = (string)$response->Notifications->Message;
                 }
             } elseif (isset($response->RateReplyDetails)) {
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
 
                 if (is_array($response->RateReplyDetails)) {
                     foreach ($response->RateReplyDetails as $rate) {
@@ -774,7 +774,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
                 }
 
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
 
                 foreach ($xml->Entry as $entry) {
                     if (in_array((string)$entry->Service, $allowedMethods)) {

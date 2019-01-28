@@ -26,17 +26,17 @@ class TableDiff
     /**
      * Column type for diff.
      */
-    const COLUMN_DIFF_TYPE = "columns";
+    const COLUMN_DIFF_TYPE = 'columns';
 
     /**
      * Constraint type for diff.
      */
-    const CONSTRAINT_DIFF_TYPE = "constraints";
+    const CONSTRAINT_DIFF_TYPE = 'constraints';
 
     /**
      * Constraint type for diff.
      */
-    const INDEX_DIFF_TYPE = "indexes";
+    const INDEX_DIFF_TYPE = 'indexes';
 
     /**
      * @var DiffManager

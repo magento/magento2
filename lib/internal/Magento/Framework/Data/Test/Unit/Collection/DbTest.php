@@ -149,7 +149,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         )->method(
             'prepareSqlCondition'
         )->withConsecutive(
-            ["`weight`", ['in' => [1, 3]]],
+            ['`weight`', ['in' => [1, 3]]],
             ['`name`', ['like' => 'M%']],
             ['`is_imported`', $this->anything()]
         )->willReturnOnConsecutiveCalls(
@@ -164,7 +164,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->willReturn($select);
         $this->collection->setConnection($adapter);
-        $select = $this->collection->getSelect()->from("test");
+        $select = $this->collection->getSelect()->from('test');
 
         $this->collection->addFieldToFilter(
             ['weight', 'name'],

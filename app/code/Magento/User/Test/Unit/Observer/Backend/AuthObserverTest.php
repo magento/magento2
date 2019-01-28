@@ -144,7 +144,7 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testAdminAuthenticate()
     {
-        $password = "myP@sw0rd";
+        $password = 'myP@sw0rd';
         $uid = 123;
         $authResult = true;
         $lockExpires = false;
@@ -204,7 +204,7 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testAdminAuthenticateThrowsException()
     {
-        $password = "myP@sw0rd";
+        $password = 'myP@sw0rd';
         $authResult = true;
         $lockExpires = '3015-07-08 11:14:15.638276';
 
@@ -242,7 +242,7 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testAdminAuthenticateUpdateLockingInfo()
     {
-        $password = "myP@sw0rd";
+        $password = 'myP@sw0rd';
         $uid = 123;
         $authResult = false;
         $firstFailure = '1965-07-08 11:14:15.638276';

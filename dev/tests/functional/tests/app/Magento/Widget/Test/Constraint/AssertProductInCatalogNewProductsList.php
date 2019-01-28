@@ -67,6 +67,6 @@ class AssertProductInCatalogNewProductsList extends AbstractConstraint
      */
     public function toString()
     {
-        return "Product is present in Catalog New Products List widget on storefront Category page.";
+        return 'Product is present in Catalog New Products List widget on storefront Category page.';
     }
 }

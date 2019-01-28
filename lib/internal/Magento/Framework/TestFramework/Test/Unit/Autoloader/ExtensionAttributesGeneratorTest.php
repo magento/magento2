@@ -23,7 +23,7 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerateExtensionAttributes()
     {
         $this->assertStringMatchesFormat(
-            "%Anamespace My;%Aclass SimpleExtension implements SimpleExtensionInterface%A",
+            '%Anamespace My;%Aclass SimpleExtension implements SimpleExtensionInterface%A',
             $this->subject->generate('\My\SimpleExtension')
         );
     }

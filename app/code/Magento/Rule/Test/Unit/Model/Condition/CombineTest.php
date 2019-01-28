@@ -54,8 +54,8 @@ class CombineTest extends \PHPUnit\Framework\TestCase
         $this->combine = (new ObjectManagerHelper($this))->getObject(
             \Magento\Rule\Model\Condition\Combine::class,
             [
-                "conditionFactory"    => $this->conditionFactoryMock,
-                "logger"    => $this->loggerMock,
+                'conditionFactory'    => $this->conditionFactoryMock,
+                'logger'    => $this->loggerMock,
             ]
         );
     }

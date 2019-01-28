@@ -419,10 +419,10 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 [
                     self::STORE_ID => [
-                        1 => "test",
+                        1 => 'test',
                         2 => false,
                         3 => null,
-                        4 => "",
+                        4 => '',
                     ]
                 ]
             );
@@ -442,7 +442,7 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
                 ['option_id', self::OPTION_ID],
                 ['store_id', 1],
                 ['type', Swatch::SWATCH_TYPE_TEXTUAL],
-                ['value', "test"]
+                ['value', 'test']
             );
 
         $this->eavAttribute->afterAfterSave($this->attribute);

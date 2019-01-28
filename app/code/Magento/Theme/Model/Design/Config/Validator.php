@@ -77,7 +77,7 @@ class Validator
                             __(
                                 'The "%templateName" template contains an incorrect configuration, with a reference '
                                 . 'to itself. Remove or change the reference, then try again.',
-                                ["templateName" => $name]
+                                ['templateName' => $name]
                             )
                         );
                     }

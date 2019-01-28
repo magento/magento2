@@ -179,7 +179,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      */
     public function getFileName()
     {
-        $filename = $this->getTime() . "_" . $this->getType();
+        $filename = $this->getTime() . '_' . $this->getType();
         $backupName = $this->getName();
 
         if (!empty($backupName)) {

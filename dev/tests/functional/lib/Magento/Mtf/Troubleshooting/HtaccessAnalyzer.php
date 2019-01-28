@@ -79,7 +79,7 @@ class HtaccessAnalyzer extends \Symfony\Component\Console\Command\Command
             ['output' => $output]
         );
         try {
-            $output->writeln("Checking .htaccess file...");
+            $output->writeln('Checking .htaccess file...');
             $this->curl->write($_ENV['app_frontend_url'] . $this->commandPath, [], CurlInterface::GET);
             $this->curl->read();
             $responseCode = $this->curl->getInfo(CURLINFO_HTTP_CODE);
@@ -92,6 +92,6 @@ class HtaccessAnalyzer extends \Symfony\Component\Console\Command\Command
         } catch (\Exception $e) {
             $output->outputMessages(['error' => [$e->getMessage()]]);
         }
-        $output->writeln(".htaccess check finished.");
+        $output->writeln('.htaccess check finished.');
     }
 }

@@ -409,7 +409,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('join')
-            ->with(['main_table' => 'backend_table'], "main_table.entity_id = e.entity_id")
+            ->with(['main_table' => 'backend_table'], 'main_table.entity_id = e.entity_id')
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('joinLeft')

@@ -176,7 +176,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             self::assertEquals(
                 $expected[$sku],
                 $product->getCartQty(),
-                "Failed asserting that Product Cart Quantity matches expected"
+                'Failed asserting that Product Cart Quantity matches expected'
             );
         }
     }

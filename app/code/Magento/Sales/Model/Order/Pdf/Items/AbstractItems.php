@@ -250,7 +250,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
             $resultValue .= $value['title'];
 
             if (isset($value['price'])) {
-                $resultValue .= " " . $order->formatPrice($value['price']);
+                $resultValue .= ' ' . $order->formatPrice($value['price']);
             }
             return $resultValue;
         } else {

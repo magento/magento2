@@ -177,7 +177,7 @@ class Grouped extends AbstractModifier
             'id' => $linkedProduct->getId(),
             'name' => $linkedProduct->getName(),
             'sku' => $linkItem->getLinkedProductSku(),
-            'price' => $currency->toCurrency(sprintf("%f", $linkedProduct->getPrice())),
+            'price' => $currency->toCurrency(sprintf('%f', $linkedProduct->getPrice())),
             'qty' => $linkItem->getExtensionAttributes()->getQty(),
             'position' => $linkItem->getPosition(),
             'positionCalculated' => $linkItem->getPosition(),

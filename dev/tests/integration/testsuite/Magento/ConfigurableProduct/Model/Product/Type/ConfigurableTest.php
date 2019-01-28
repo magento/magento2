@@ -320,7 +320,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->product
         );
         $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
-        $this->assertEquals("simple_10", $product->getSku());
+        $this->assertEquals('simple_10', $product->getSku());
     }
 
     /**

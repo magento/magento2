@@ -61,6 +61,6 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
      */
     public function toString()
     {
-        return "PHP Version, PHP Extensions and File Permission are ok.";
+        return 'PHP Version, PHP Extensions and File Permission are ok.';
     }
 }

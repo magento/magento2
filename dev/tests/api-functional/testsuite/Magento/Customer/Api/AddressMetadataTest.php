@@ -15,9 +15,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AddressMetadataTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerAddressMetadataV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/attributeMetadata/customerAddress";
+    const SERVICE_NAME = 'customerAddressMetadataV1';
+    const SERVICE_VERSION = 'V1';
+    const RESOURCE_PATH = '/V1/attributeMetadata/customerAddress';
 
     /**
      * Test retrieval of attribute metadata for the address entity type.

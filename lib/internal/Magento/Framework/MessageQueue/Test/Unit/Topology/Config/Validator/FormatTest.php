@@ -47,13 +47,13 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateMissingRequiredExchangeFields()
     {
-        $expectedMessage = "Missing [name] field for exchange ex01." . PHP_EOL .
-            "Missing [type] field for exchange ex01." . PHP_EOL .
-            "Missing [connection] field for exchange ex01." . PHP_EOL .
-            "Missing [durable] field for exchange ex01." . PHP_EOL .
-            "Missing [autoDelete] field for exchange ex01." . PHP_EOL .
-            "Missing [internal] field for exchange ex01." . PHP_EOL .
-            "Missing [arguments] field for exchange ex01.";
+        $expectedMessage = 'Missing [name] field for exchange ex01.' . PHP_EOL .
+            'Missing [type] field for exchange ex01.' . PHP_EOL .
+            'Missing [connection] field for exchange ex01.' . PHP_EOL .
+            'Missing [durable] field for exchange ex01.' . PHP_EOL .
+            'Missing [autoDelete] field for exchange ex01.' . PHP_EOL .
+            'Missing [internal] field for exchange ex01.' . PHP_EOL .
+            'Missing [arguments] field for exchange ex01.';
         $this->expectException('\LogicException');
         $this->expectExceptionMessage($expectedMessage);
         $configData = [
@@ -76,12 +76,12 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateMissingRequiredBindingFields()
     {
-        $expectedMessage = "Missing [id] field for binding ex01 in exchange config." . PHP_EOL .
-            "Missing [destinationType] field for binding ex01 in exchange config." . PHP_EOL .
-            "Missing [destination] field for binding ex01 in exchange config." . PHP_EOL .
-            "Missing [disabled] field for binding ex01 in exchange config." . PHP_EOL .
-            "Missing [topic] field for binding ex01 in exchange config." . PHP_EOL .
-            "Missing [arguments] field for binding ex01 in exchange config.";
+        $expectedMessage = 'Missing [id] field for binding ex01 in exchange config.' . PHP_EOL .
+            'Missing [destinationType] field for binding ex01 in exchange config.' . PHP_EOL .
+            'Missing [destination] field for binding ex01 in exchange config.' . PHP_EOL .
+            'Missing [disabled] field for binding ex01 in exchange config.' . PHP_EOL .
+            'Missing [topic] field for binding ex01 in exchange config.' . PHP_EOL .
+            'Missing [arguments] field for binding ex01 in exchange config.';
         $this->expectException('\LogicException');
         $this->expectExceptionMessage($expectedMessage);
         $configData = [
@@ -105,7 +105,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateInvalidBindingsFormat()
     {
-        $expectedMessage = "Invalid bindings format for exchange ex01.";
+        $expectedMessage = 'Invalid bindings format for exchange ex01.';
         $this->expectException('\LogicException');
         $this->expectExceptionMessage($expectedMessage);
         $configData = [

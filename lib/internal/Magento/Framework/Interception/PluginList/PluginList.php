@@ -284,7 +284,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             if (false == in_array($scope, $this->_scopePriorityScheme)) {
                 $this->_scopePriorityScheme[] = $scope;
             }
-            $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
+            $cacheId = implode('|', $this->_scopePriorityScheme) . '|' . $this->_cacheId;
             $data = $this->_cache->load($cacheId);
             if ($data) {
                 list($this->_data, $this->_inherited, $this->_processed) = $this->serializer->unserialize($data);

@@ -258,7 +258,7 @@ class CreateCustomerBackendEntityTest extends Injectable
             $configFixture->persist();
             $this->allowedCountriesData[] = [
                 'website' => $websiteFixture,
-                'countries' => explode(",", $countries)
+                'countries' => explode(',', $countries)
             ];
         }
     }

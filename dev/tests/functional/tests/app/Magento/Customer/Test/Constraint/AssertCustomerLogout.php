@@ -54,6 +54,6 @@ class AssertCustomerLogout extends AbstractConstraint
      */
     public function toString()
     {
-        return "Customer is successfully log out.";
+        return 'Customer is successfully log out.';
     }
 }

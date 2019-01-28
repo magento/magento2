@@ -19,7 +19,7 @@ class Renderer
         "{{var street_line1}}\n" .
         "{{depend street_line2}}{{var street_line2}}\n{{/depend}}" .
         "{{depend city}}{{var city}},{{/depend}} {{var region}} {{depend postcode}}{{var postcode}},{{/depend}}\n" .
-        "{{var country}}";
+        '{{var country}}';
 
     /**
      * @var EventManager

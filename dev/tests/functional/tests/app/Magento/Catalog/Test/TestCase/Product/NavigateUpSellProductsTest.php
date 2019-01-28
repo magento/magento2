@@ -77,7 +77,7 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
     {
         \PHPUnit\Framework\Assert::assertFalse(
             $this->catalogProductView->getUpsellBlock()->isVisible(),
-            "Up-sell section is present."
+            'Up-sell section is present.'
         );
     }
 

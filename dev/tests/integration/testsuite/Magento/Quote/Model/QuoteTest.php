@@ -167,7 +167,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->unsetData('customer_group_id');
 
         /** Execute SUT */
-        $this->assertEquals($customerGroupId, $quote->getCustomerGroupId(), "Customer group ID is invalid");
+        $this->assertEquals($customerGroupId, $quote->getCustomerGroupId(), 'Customer group ID is invalid');
     }
 
     /**
@@ -389,11 +389,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $customerData = $customerRepository->getById($fixtureCustomerId);
         $this->assertEmpty(
             $quote->getBillingAddress()->getId(),
-            "Precondition failed: billing address should be empty."
+            'Precondition failed: billing address should be empty.'
         );
         $this->assertEmpty(
             $quote->getShippingAddress()->getId(),
-            "Precondition failed: shipping address should be empty."
+            'Precondition failed: shipping address should be empty.'
         );
         return $customerData;
     }

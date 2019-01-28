@@ -35,7 +35,7 @@ class AssertProductIsNotVisibleInCompareBlock extends AbstractConstraint
         FixtureInterface $product = null
     ) {
         $cmsIndex->open();
-        $cmsIndex->getLinksBlock()->openLink("My Account");
+        $cmsIndex->getLinksBlock()->openLink('My Account');
         $compareBlock = $customerAccountIndex->getCompareProductsBlock();
 
         if (($countProducts > 1) && ($product !== null)) {

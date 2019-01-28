@@ -107,7 +107,7 @@ class Collection
             'cpe.'.$linkField.' = main_table.parent_id',
             []
         )->where(
-            "cpe.entity_id IN (?)",
+            'cpe.entity_id IN (?)',
             $this->skuMap
         );
         $optionsCollection->setPositionOrder();

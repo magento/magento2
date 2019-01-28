@@ -90,7 +90,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals('Some Group Code', $decodedCustomerObject->getExtensionAttributes()->getTestGroupCode());
         $addresses = $decodedCustomerObject->getAddresses();
-        $this->assertCount(1, $addresses, "Address was not decoded.");
+        $this->assertCount(1, $addresses, 'Address was not decoded.');
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\AddressInterface::class,
             $addresses[0]
@@ -111,7 +111,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      */
     public function testDecodeInvalidMessageFormat()
     {
-        $this->encoder->decode('customer.created', "{");
+        $this->encoder->decode('customer.created', '{');
     }
 
     /**
@@ -131,7 +131,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      */
     public function testDecodeIncorrectMessage()
     {
-        $this->encoder->decode('customer.created', "{");
+        $this->encoder->decode('customer.created', '{');
     }
 
     /**

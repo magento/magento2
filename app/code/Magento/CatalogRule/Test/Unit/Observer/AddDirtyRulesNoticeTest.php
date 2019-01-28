@@ -38,7 +38,7 @@ class AddDirtyRulesNoticeTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $message = "test";
+        $message = 'test';
         $flagMock = $this->getMockBuilder(\Magento\CatalogRule\Model\Flag::class)
             ->setMethods(['getState'])
             ->disableOriginalConstructor()

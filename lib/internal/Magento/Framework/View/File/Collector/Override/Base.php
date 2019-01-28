@@ -100,7 +100,7 @@ class Base implements CollectorInterface
         $files = $themeDir->search($searchPattern);
         $result = [];
         $pattern = "#(?<moduleName>[^/]+)/{$this->subDir}"
-            . $this->pathPatternHelper->translatePatternFromGlob($filePath) . "$#i";
+            . $this->pathPatternHelper->translatePatternFromGlob($filePath) . '$#i';
         foreach ($files as $file) {
             $filename = $themeDir->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {

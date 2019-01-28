@@ -118,7 +118,7 @@ class RollbackCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable() && ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)
                 || $input->getOption(self::INPUT_KEY_DB_BACKUP_FILE))
         ) {
-            $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
+            $output->writeln('<info>No information is available: the Magento application is not installed.</info>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }

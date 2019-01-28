@@ -104,7 +104,7 @@
                                 <td class="cell product attribute">
                                     <div class="attribute value">
                                         <?php switch ($attribute->getAttributeCode()) {
-                                            case "price": ?>
+                                            case 'price': ?>
                                                 <?php
                                                     /* @escapeNotVerified */ echo $block->getProductPrice(
                                                         $item,
@@ -112,7 +112,7 @@
                                                     )
                                                 ?>
                                                 <?php break;
-                                            case "small_image": ?>
+                                            case 'small_image': ?>
                                                 <?php $block->getImage($item, 'product_small_image')->toHtml(); ?>
                                                 <?php break;
                                             default: ?>

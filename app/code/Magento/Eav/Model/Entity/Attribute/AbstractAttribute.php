@@ -943,7 +943,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 }
                 $prop = $describe[$this->getAttributeCode()];
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => $prop['DATA_TYPE'] . ($prop['LENGTH'] ? "({$prop['LENGTH']})" : ""),
+                    'type'     => $prop['DATA_TYPE'] . ($prop['LENGTH'] ? "({$prop['LENGTH']})" : ''),
                     'unsigned' => $prop['UNSIGNED'] ? true : false,
                     'is_null'  => $prop['NULLABLE'],
                     'default'  => $prop['DEFAULT'],

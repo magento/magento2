@@ -28,7 +28,7 @@ class Synchronizer
     const TIME_TO_DO_ONE_ACTION = 1;
 
     /** Flag, which says, can we synchronize product actions with backend or not */
-    const ALLOW_SYNC_WITH_BACKEND_PATH = "catalog/recently_products/synchronize_with_backend";
+    const ALLOW_SYNC_WITH_BACKEND_PATH = 'catalog/recently_products/synchronize_with_backend';
 
     /**
      * @var Session

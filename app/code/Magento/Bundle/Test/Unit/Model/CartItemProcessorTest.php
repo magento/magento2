@@ -114,7 +114,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $optionId = 4;
         $optionSelections = 42;
         $optionQty = 1;
-        $bundleOption = [$optionId => $optionSelections, 5 => ""];
+        $bundleOption = [$optionId => $optionSelections, 5 => ''];
         $bundleOptionQty = [$optionId => $optionQty];
 
         $buyRequestMock = new \Magento\Framework\DataObject(

@@ -98,7 +98,7 @@ class Client
                     }
                     if (isset($error['trace'])) {
                         $traceString = $error['trace'];
-                        TestCase::assertNotEmpty($traceString, "trace is empty");
+                        TestCase::assertNotEmpty($traceString, 'trace is empty');
                     }
                 }
 

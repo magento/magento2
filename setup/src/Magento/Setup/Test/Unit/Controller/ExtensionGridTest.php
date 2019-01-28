@@ -58,11 +58,11 @@ class ExtensionGridTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->lastSyncData = [
-            "lastSyncDate" => [
+            'lastSyncDate' => [
                 'date' => self::FORMATTED_DATE,
                 'time' => self::FORMATTED_TIME,
             ],
-            "packages" => [
+            'packages' => [
                 'magento/sample-module-one' => [
                     'name' => 'magento/sample-module-one',
                     'type' => 'magento2-module',

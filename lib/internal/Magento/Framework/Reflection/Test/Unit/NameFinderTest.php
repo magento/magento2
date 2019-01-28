@@ -28,10 +28,10 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
     {
         $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $setterName = $this->nameFinder->getSetterMethodName($class, 'AttrName');
-        $this->assertEquals("setAttrName", $setterName);
+        $this->assertEquals('setAttrName', $setterName);
 
         $booleanSetterName = $this->nameFinder->getSetterMethodName($class, 'Active');
-        $this->assertEquals("setIsActive", $booleanSetterName);
+        $this->assertEquals('setIsActive', $booleanSetterName);
     }
 
     /**

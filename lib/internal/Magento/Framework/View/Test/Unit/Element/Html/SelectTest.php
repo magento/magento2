@@ -231,9 +231,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     private function getOptionsWithSingleQuotes()
     {
         return [
-            'id' => "testId",
-            'name' => "test[name]",
-            'class' => "test class",
+            'id' => 'testId',
+            'name' => 'test[name]',
+            'class' => 'test class',
             'title' => "test'Title",
             'options' => [
                 'regular' => [

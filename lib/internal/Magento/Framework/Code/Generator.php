@@ -191,8 +191,8 @@ class Generator
     {
         if (!($this->objectManager instanceof ObjectManagerInterface)) {
             throw new \LogicException(
-                "Object manager was expected to be set using setObjectManger() "
-                . "before getObjectManager() invocation."
+                'Object manager was expected to be set using setObjectManger() '
+                . 'before getObjectManager() invocation.'
             );
         }
         return $this->objectManager;

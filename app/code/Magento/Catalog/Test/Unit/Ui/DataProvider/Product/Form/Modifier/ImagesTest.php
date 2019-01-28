@@ -26,7 +26,7 @@ class ImagesTest extends AbstractModifierTest
     {
         $this->productMock->expects($this->once())->method('getId')->willReturn(2051);
         $actualResult = $this->getModel()->modifyData($this->getSampleData());
-        $this->assertSame("", $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
+        $this->assertSame('', $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
     }
 
     public function testModifyMeta()

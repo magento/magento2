@@ -319,25 +319,25 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testDispatchWithEmptyShippingAddress()
     {
-        $customerCountryCode = "DE";
-        $customerVat = "123123123";
+        $customerCountryCode = 'DE';
+        $customerVat = '123123123';
         $defaultShipping = 1;
 
         $customerAddress = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
         $customerAddress->expects($this->once())
-            ->method("getCountryId")
+            ->method('getCountryId')
             ->willReturn($customerCountryCode);
 
         $customerAddress->expects($this->once())
-            ->method("getVatId")
+            ->method('getVatId')
             ->willReturn($customerVat);
         $this->addressRepository->expects($this->once())
-            ->method("getById")
+            ->method('getById')
             ->with($defaultShipping)
             ->willReturn($customerAddress);
 
         $this->customerMock->expects($this->atLeastOnce())
-            ->method("getDefaultShipping")
+            ->method('getDefaultShipping')
             ->willReturn($defaultShipping);
 
         $this->vatValidatorMock->expects($this->once())
@@ -366,7 +366,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->with($customerCountryCode, $validationResult, $this->storeId)
             ->will($this->returnValue('customerGroupId'));
         $this->customerSession->expects($this->once())
-            ->method("setCustomerGroupId")
+            ->method('setCustomerGroupId')
             ->with('customerGroupId');
 
         $this->vatValidatorMock->expects($this->once())

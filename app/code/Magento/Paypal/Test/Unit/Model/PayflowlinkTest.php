@@ -166,7 +166,7 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                "payment/payflow_link/active",
+                'payment/payflow_link/active',
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             )->willReturn($configResult);

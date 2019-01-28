@@ -67,6 +67,6 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about refunded amount is available in Comments History section.";
+        return 'Message about refunded amount is available in Comments History section.';
     }
 }

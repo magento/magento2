@@ -45,6 +45,6 @@ class AssertProductNotSearchableBySku extends AbstractConstraint
      */
     public function toString()
     {
-        return "Product is not searchable by SKU.";
+        return 'Product is not searchable by SKU.';
     }
 }

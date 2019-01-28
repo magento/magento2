@@ -94,8 +94,8 @@ class OTPRequest
                 ZendClient::POST,
                 $this->config->getValue($this->otpUrlConfigPath),
                 [
-                    "access-token" => $this->analyticsToken->getToken(),
-                    "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
+                    'access-token' => $this->analyticsToken->getToken(),
+                    'url' => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
                 ]
             );
 

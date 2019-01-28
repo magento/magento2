@@ -336,7 +336,7 @@ class StoresFixture extends Fixture
             //Generating category for store
             $category = $this->categoryFactory->create();
             $categoryPath = Category::TREE_ROOT_ID;
-            $category->setName("Category " . $storeGroupName)
+            $category->setName('Category ' . $storeGroupName)
                 ->setPath($categoryPath)
                 ->setLevel(1)
                 ->setAvailableSortBy('name')

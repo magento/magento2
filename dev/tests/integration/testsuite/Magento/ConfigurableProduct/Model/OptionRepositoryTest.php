@@ -19,8 +19,8 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $optionRepository = $objectManager->create(\Magento\ConfigurableProduct\Api\OptionRepositoryInterface::class);
 
         $options = $optionRepository->getList($productSku);
-        $this->assertCount(1, $options, "Invalid number of option.");
-        $this->assertNotNull($options[0]->getExtensionAttributes(), "Extension attributes not loaded");
+        $this->assertCount(1, $options, 'Invalid number of option.');
+        $this->assertNotNull($options[0]->getExtensionAttributes(), 'Extension attributes not loaded');
         /** @var \Magento\Eav\Model\Entity\Attribute $joinedEntity */
         $joinedEntity = $objectManager->create(\Magento\Eav\Model\Entity\Attribute::class);
         $joinedEntity->load($options[0]->getId());
@@ -29,7 +29,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $joinedExtensionAttributeValue,
             $result['test_dummy_attribute'],
-            "Extension attributes were not loaded correctly"
+            'Extension attributes were not loaded correctly'
         );
     }
 }

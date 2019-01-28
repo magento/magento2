@@ -58,7 +58,7 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
             'select',
             [
                 'name' => 'is_filterable',
-                'label' => __("Use in Layered Navigation"),
+                'label' => __('Use in Layered Navigation'),
                 'title' => __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price'),
                 'note' => __(
                     'Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.
@@ -78,7 +78,7 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
             'select',
             [
                 'name' => 'is_filterable_in_search',
-                'label' => __("Use in Search Results Layered Navigation"),
+                'label' => __('Use in Search Results Layered Navigation'),
                 'title' => __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price'),
                 'note' => __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.'),
                 'values' => $this->optionList->toOptionArray(),

@@ -67,7 +67,7 @@ return [
             "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n",
             "Element 'router', attribute 'id': '' is not a valid value of the atomic type 'routerIdType'.\nLine: 1\n",
             "Element 'router', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or " .
+            'Warning: No precomputed value available, the value was either invalid or ' .
             "something strange happend.\nLine: 1\n"
         ],
     ],
@@ -79,7 +79,7 @@ return [
             "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n",
             "Element 'router', attribute 'id': 'as' is not a valid value of the atomic type 'routerIdType'.\nLine: 1\n",
             "Element 'router', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or " .
+            'Warning: No precomputed value available, the value was either invalid or ' .
             "something strange happend.\nLine: 1\n"
         ],
     ],
@@ -92,7 +92,7 @@ return [
             "Element 'router', attribute 'id': '##%#' is not a valid value of the atomic type" .
             " 'routerIdType'.\nLine: 1\n",
             "Element 'router', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or " .
+            'Warning: No precomputed value available, the value was either invalid or ' .
             "something strange happend.\nLine: 1\n"
         ],
     ],

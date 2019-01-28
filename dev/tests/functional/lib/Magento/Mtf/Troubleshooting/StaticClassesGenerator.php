@@ -58,7 +58,7 @@ class StaticClassesGenerator extends \Symfony\Component\Console\Command\Command
             Output::class,
             ['output' => $output]
         );
-        $output->writeln("Generating static classes...");
+        $output->writeln('Generating static classes...');
         exec('php ' . MTF_BP . DIRECTORY_SEPARATOR . 'utils' . DIRECTORY_SEPARATOR . 'generate.php', $error, $exitCode);
         if ($exitCode) {
             $output->outputMessages(['error' => $error]);

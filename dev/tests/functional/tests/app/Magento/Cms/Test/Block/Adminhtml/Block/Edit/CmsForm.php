@@ -20,7 +20,7 @@ class CmsForm extends Form
      *
      * @var string
      */
-    protected $toggleButton = "#toggleblock_content";
+    protected $toggleButton = '#toggleblock_content';
 
     /**
      * CMS Block Content area.

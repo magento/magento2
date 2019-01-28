@@ -200,7 +200,7 @@ class Config
     protected function _getAccessList()
     {
         $result = '';
-        $tpl = "    \"%s\";";
+        $tpl = '    "%s";';
         $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
         if (!empty($accessList)) {
             $result = [];
@@ -225,7 +225,7 @@ class Config
     protected function _getDesignExceptions()
     {
         $result = '';
-        $tpl = "%s (req.http.user-agent ~ \"%s\") {\n" . "        hash_data(\"%s\");\n" . "    }";
+        $tpl = "%s (req.http.user-agent ~ \"%s\") {\n" . "        hash_data(\"%s\");\n" . '    }';
 
         $expressions = $this->_scopeConfig->getValue(
             self::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
@@ -236,7 +236,7 @@ class Config
             foreach ($rules as $i => $rule) {
                 if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
                     if (!empty($matches[2])) {
-                        $pattern = sprintf("(?%s)%s", $matches[2], $matches[1]);
+                        $pattern = sprintf('(?%s)%s', $matches[2], $matches[1]);
                     } else {
                         $pattern = $matches[1];
                     }

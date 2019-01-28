@@ -70,26 +70,26 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         ];
         $expected = [
             [
-                'request_path' => "category-1.html",
-                'target_path' => "catalog/category/view/id/3",
+                'request_path' => 'category-1.html',
+                'target_path' => 'catalog/category/view/id/3',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-1/category-1-1.html",
-                'target_path' => "catalog/category/view/id/4",
+                'request_path' => 'category-1/category-1-1.html',
+                'target_path' => 'catalog/category/view/id/4',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-1/category-1-1/category-1-1-1.html",
-                'target_path' => "catalog/category/view/id/5",
+                'request_path' => 'category-1/category-1-1/category-1-1-1.html',
+                'target_path' => 'catalog/category/view/id/5',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-2.html",
-                'target_path' =>  "catalog/category/view/id/6",
+                'request_path' => 'category-2.html',
+                'target_path' =>  'catalog/category/view/id/6',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ]
@@ -107,26 +107,26 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         $category->save();
         $expected = [
             [
-                'request_path' => "new-url.html",
-                'target_path' => "catalog/category/view/id/3",
+                'request_path' => 'new-url.html',
+                'target_path' => 'catalog/category/view/id/3',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "new-url/category-1-1.html",
-                'target_path' => "catalog/category/view/id/4",
+                'request_path' => 'new-url/category-1-1.html',
+                'target_path' => 'catalog/category/view/id/4',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "new-url/category-1-1/category-1-1-1.html",
-                'target_path' => "catalog/category/view/id/5",
+                'request_path' => 'new-url/category-1-1/category-1-1-1.html',
+                'target_path' => 'catalog/category/view/id/5',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-2.html",
-                'target_path' =>  "catalog/category/view/id/6",
+                'request_path' => 'category-2.html',
+                'target_path' =>  'catalog/category/view/id/6',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ]
@@ -155,26 +155,26 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         $category->save();
         $expected = [
             [
-                'request_path' => "category-1.html",
-                'target_path' => "catalog/category/view/id/3",
+                'request_path' => 'category-1.html',
+                'target_path' => 'catalog/category/view/id/3',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-1/category-1-1.html",
-                'target_path' => "catalog/category/view/id/4",
+                'request_path' => 'category-1/category-1-1.html',
+                'target_path' => 'catalog/category/view/id/4',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-1/category-1-1/category-1-1-1.html",
-                'target_path' => "catalog/category/view/id/5",
+                'request_path' => 'category-1/category-1-1/category-1-1-1.html',
+                'target_path' => 'catalog/category/view/id/5',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ],
             [
-                'request_path' => "category-2.html",
-                'target_path' =>  "catalog/category/view/id/6",
+                'request_path' => 'category-2.html',
+                'target_path' =>  'catalog/category/view/id/6',
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ]

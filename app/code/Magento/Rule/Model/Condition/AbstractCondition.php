@@ -207,18 +207,18 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
      */
     public function asXml()
     {
-        return "<type>" .
+        return '<type>' .
             $this->getType() .
-            "</type>" .
-            "<attribute>" .
+            '</type>' .
+            '<attribute>' .
             $this->getAttribute() .
-            "</attribute>" .
-            "<operator>" .
+            '</attribute>' .
+            '<operator>' .
             $this->getOperator() .
-            "</operator>" .
-            "<value>" .
+            '</operator>' .
+            '<value>' .
             $this->getValue() .
-            "</value>";
+            '</value>';
     }
 
     /**

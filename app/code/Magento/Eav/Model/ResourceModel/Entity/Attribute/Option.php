@@ -78,12 +78,12 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $attributeTable = $attribute->getBackend()->getTable();
         $attributeCode = $attribute->getAttributeCode();
 
-        $joinConditionTemplate = "%s.entity_id = %s.entity_id" .
-            " AND %s.entity_type_id = " .
+        $joinConditionTemplate = '%s.entity_id = %s.entity_id' .
+            ' AND %s.entity_type_id = ' .
             $attribute->getEntityTypeId() .
-            " AND %s.attribute_id = " .
+            ' AND %s.attribute_id = ' .
             $attribute->getId() .
-            " AND %s.store_id = %d";
+            ' AND %s.store_id = %d';
         $joinCondition = sprintf(
             $joinConditionTemplate,
             'e',

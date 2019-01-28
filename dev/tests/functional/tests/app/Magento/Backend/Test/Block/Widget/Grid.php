@@ -429,7 +429,7 @@ abstract class Grid extends Block
      * @param $field
      * @param string $sort
      */
-    public function sortGridByField($field, $sort = "desc")
+    public function sortGridByField($field, $sort = 'desc')
     {
         $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $field, $sort));
         if ($sortBlock->isVisible()) {

@@ -44,6 +44,6 @@ class AssertLifetimeStatisticsUpdatedMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Correct message is displayed after refreshing lifetime statistics.";
+        return 'Correct message is displayed after refreshing lifetime statistics.';
     }
 }

@@ -202,7 +202,7 @@ return [
             "Element 'add', attribute 'parent': [facet 'pattern'] The value 'Some#Name::system_other_settings' " .
             "is not accepted by the pattern '[A-Za-z0-9/_:]{3,}'.\nLine: 1\n",
             "Element 'add', attribute 'parent': 'Some#Name::system_other_settings' " .
-            "is not a valid value of the atomic " .
+            'is not a valid value of the atomic ' .
             "type 'typeId'.\nLine: 1\n"
         ],
     ],

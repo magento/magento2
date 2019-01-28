@@ -35,7 +35,7 @@ class MigrationData
     ) {
         foreach ($this->_requiredParams as $param) {
             if (!isset($data[$param])) {
-                throw new \InvalidArgumentException("Missing required param " . $param);
+                throw new \InvalidArgumentException('Missing required param ' . $param);
             }
             $this->_patterns[$param] = $data[$param];
         }

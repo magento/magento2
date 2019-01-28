@@ -78,8 +78,8 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => null
             ],
@@ -111,8 +111,8 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],
@@ -143,8 +143,8 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],
@@ -178,8 +178,8 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],
@@ -209,7 +209,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
         $expectedResponse = [
@@ -243,7 +243,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
         foreach ($this->getPaymentMethodFieldsForAssert() as $field) {

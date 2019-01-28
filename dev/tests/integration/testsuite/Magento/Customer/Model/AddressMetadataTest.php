@@ -37,15 +37,15 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomAttributesMetadata()
     {
         $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
-        $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $this->assertCount(0, $customAttributesMetadata, 'Invalid number of attributes returned.');
 
         // Verify the consistency of getCustomAttributeMetadata() function from the 2nd call of the same service
         $customAttributesMetadata2 = $this->service->getCustomAttributesMetadata();
-        $this->assertCount(0, $customAttributesMetadata2, "Invalid number of attributes returned.");
+        $this->assertCount(0, $customAttributesMetadata2, 'Invalid number of attributes returned.');
 
         // Verify the consistency of getCustomAttributesMetadata() function from the 2nd service
         $customAttributesMetadata3 = $this->serviceTwo->getCustomAttributesMetadata();
-        $this->assertCount(0, $customAttributesMetadata3, "Invalid number of attributes returned.");
+        $this->assertCount(0, $customAttributesMetadata3, 'Invalid number of attributes returned.');
     }
 
     /**
@@ -82,12 +82,12 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             }
         }
         if (!$customAttributeFound) {
-            $this->fail("Custom attribute declared in the config not found.");
+            $this->fail('Custom attribute declared in the config not found.');
         }
         if (!$customAttributesFound) {
-            $this->fail("Custom attributes declared in the config not found.");
+            $this->fail('Custom attributes declared in the config not found.');
         }
-        $this->assertCount(2, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $this->assertCount(2, $customAttributesMetadata, 'Invalid number of attributes returned.');
 
         // Verify the consistency of the custom attribute metadata from two calls of the same service
         // after getAttributeCode was called
@@ -210,7 +210,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
         // Verify the consistency of getAttributes() function from the 2nd call of the same service
         $formAttributesMetadata = $this->service->getAttributes('customer_address_edit');
-        $this->assertCount(15, $formAttributesMetadata, "Invalid number of attributes for the specified form.");
+        $this->assertCount(15, $formAttributesMetadata, 'Invalid number of attributes for the specified form.');
         $formAttributesMetadata1 = $this->service->getAttributes('customer_address_edit');
         $this->assertEquals(
             $formAttributesMetadata,

@@ -69,10 +69,10 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
     public function dataProviderValues()
     {
         return [
-            ["", 0, ""],
-            ["string1", 0, "string1"],
-            ["string1\nstring2", 0, "string1"],
-            ["string1\nstring2", 1, "string2"],
+            ['', 0, ''],
+            ['string1', 0, 'string1'],
+            ["string1\nstring2", 0, 'string1'],
+            ["string1\nstring2", 1, 'string2'],
             ["string1\nstring2", 2, null],
             [null, 0, null],
         ];

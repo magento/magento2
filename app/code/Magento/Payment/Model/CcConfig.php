@@ -75,7 +75,7 @@ class CcConfig
     public function getSsStartYears()
     {
         $years = [];
-        $first = date("Y");
+        $first = date('Y');
 
         for ($index = 5; $index >= 0; $index--) {
             $year = $first - $index;

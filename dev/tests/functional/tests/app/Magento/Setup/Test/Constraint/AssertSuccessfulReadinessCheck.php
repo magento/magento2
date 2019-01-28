@@ -93,6 +93,6 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
      */
     public function toString()
     {
-        return "System Upgrade readiness check passed.";
+        return 'System Upgrade readiness check passed.';
     }
 }

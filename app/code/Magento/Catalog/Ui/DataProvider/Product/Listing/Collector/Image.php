@@ -30,7 +30,7 @@ use Magento\Framework\View\DesignLoader;
 class Image implements ProductRenderCollectorInterface
 {
     /** Key for image information access to, when render product */
-    const KEY = "images";
+    const KEY = 'images';
 
     /**
      * @var ImageFactory
@@ -115,7 +115,7 @@ class Image implements ProductRenderCollectorInterface
             $helper = $this->state
                 ->emulateAreaCode(
                     'frontend',
-                    [$this, "emulateImageCreating"],
+                    [$this, 'emulateImageCreating'],
                     [$product, $imageCode, (int) $productRender->getStoreId(), $image]
                 );
 

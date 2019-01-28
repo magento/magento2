@@ -21,7 +21,7 @@ class Available extends \Magento\Framework\Data\Form\Element\Multiselect
     public function getToggleCode()
     {
         $htmlId = 'use_config_' . $this->getHtmlId();
-        return "toggleValueElements(this, this.parentNode.parentNode);" .
+        return 'toggleValueElements(this, this.parentNode.parentNode);' .
             "if (!this.checked) toggleValueElements(\$('{$htmlId}'), \$('{$htmlId}').parentNode);";
     }
 

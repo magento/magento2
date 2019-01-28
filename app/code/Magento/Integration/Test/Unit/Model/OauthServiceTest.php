@@ -301,7 +301,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Framework\Oauth\Exception(
                     __(
                         "The oAuth consumer account couldn't be loaded due to an unexpected error. "
-                        . "Please try again later."
+                        . 'Please try again later.'
                     )
                 )
             )
@@ -349,7 +349,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Framework\Oauth\Exception(
                     __(
                         "The oAuth consumer account couldn't be loaded due to an unexpected error. "
-                        . "Please try again later."
+                        . 'Please try again later.'
                     )
                 )
             )

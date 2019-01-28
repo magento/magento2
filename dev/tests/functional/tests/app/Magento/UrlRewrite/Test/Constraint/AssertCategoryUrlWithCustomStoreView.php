@@ -46,7 +46,7 @@ class AssertCategoryUrlWithCustomStoreView extends AbstractConstraint
         \PHPUnit\Framework\Assert::assertContains(
             $actualUrl,
             $browser->getUrl(),
-            "Category URL is not correct."
+            'Category URL is not correct.'
         );
     }
 

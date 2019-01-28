@@ -669,7 +669,7 @@ class Structure
     {
         if (!is_array($value)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("An array expected: %1", [var_export($value, 1)])
+                new \Magento\Framework\Phrase('An array expected: %1', [var_export($value, 1)])
             );
         }
     }

@@ -56,7 +56,7 @@ class Validator
             throw new ValidatorException(
                 new Phrase(
                     "The transition year isn't included in the system date range. "
-                    . "Verify the year date range and try again."
+                    . 'Verify the year date range and try again.'
                 )
             );
         }

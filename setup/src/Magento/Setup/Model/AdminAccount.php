@@ -178,7 +178,7 @@ class AdminAccount
         try {
             $result = $this->connection->fetchRow(
                 "SELECT user_id, username, email FROM {$this->getTableName('admin_user')} "
-                . "WHERE username = :username OR email = :email",
+                . 'WHERE username = :username OR email = :email',
                 ['username' => $this->data[self::KEY_USER], 'email' => $this->data[self::KEY_EMAIL]]
             );
         } catch (\Exception $e) {

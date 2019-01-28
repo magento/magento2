@@ -46,6 +46,6 @@ class AssertVersionAndEditionCheck extends AbstractConstraint
      */
     public function toString()
     {
-        return "System Upgrade edition and version check passed.";
+        return 'System Upgrade edition and version check passed.';
     }
 }

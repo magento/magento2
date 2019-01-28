@@ -761,7 +761,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             0,
             $this->messageManager->getMessages()->getCount(),
-            "Precondition failed: Errors occurred before SUT execution."
+            'Precondition failed: Errors occurred before SUT execution.'
         );
         /** Selectively check quote data */
         $createOrderData = $this->model->getData();

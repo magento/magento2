@@ -21,7 +21,7 @@ class AssertOrderSuccessCreateMessage extends AbstractConstraint
     /**
      * Message displayed after created sales order
      */
-    const SUCCESS_MESSAGE = "You created the order.";
+    const SUCCESS_MESSAGE = 'You created the order.';
 
     /**
      * Assert that after create sales order successful message appears

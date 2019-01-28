@@ -90,6 +90,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $output->write(PHP_EOL);
-        $output->writeln("<info>Product images resized successfully</info>");
+        $output->writeln('<info>Product images resized successfully</info>');
     }
 }

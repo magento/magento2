@@ -255,7 +255,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
         $this->customerRegistry->expects($this->atLeastOnce())
-            ->method("remove")
+            ->method('remove')
             ->with($customerId);
         $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')

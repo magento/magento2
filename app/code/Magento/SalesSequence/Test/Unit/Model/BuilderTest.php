@@ -190,7 +190,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     private function stepCreateSequence($sequenceName, $startNumber)
     {
-        $sql = "some sql";
+        $sql = 'some sql';
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getTableName');
         $this->resourceMock->expects($this->any())

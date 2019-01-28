@@ -100,12 +100,12 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'isScopeGlobal' => false,
                 'expectedJoinCondition' => [
                     0 => [
-                        'requisites' => ['code_t1' => "table"],
+                        'requisites' => ['code_t1' => 'table'],
                         'condition' =>
                             "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
                     ],
                     1 => [
-                        'requisites' => ['code_t2' => "table"],
+                        'requisites' => ['code_t2' => 'table'],
                         'condition' =>
                             "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
                     ],
@@ -117,12 +117,12 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'isScopeGlobal' => false,
                 'expectedJoinCondition' => [
                     0 => [
-                        'requisites' => ['code_t1' => "table"],
+                        'requisites' => ['code_t1' => 'table'],
                         'condition' =>
                             "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
                     ],
                     1 => [
-                        'requisites' => ['code_t2' => "table"],
+                        'requisites' => ['code_t2' => 'table'],
                         'condition' =>
                             "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
                     ],
@@ -134,7 +134,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'isScopeGlobal' => true,
                 'expectedJoinCondition' => [
                     0 => [
-                        'requisites' => ['code_t' => "table"],
+                        'requisites' => ['code_t' => 'table'],
                         'condition' =>
                             "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
                     ],
@@ -146,7 +146,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'isScopeGlobal' => true,
                 'expectedJoinCondition' => [
                     0 => [
-                        'requisites' => ['code_t' => "table"],
+                        'requisites' => ['code_t' => 'table'],
                         'condition' =>
                             "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
                     ],

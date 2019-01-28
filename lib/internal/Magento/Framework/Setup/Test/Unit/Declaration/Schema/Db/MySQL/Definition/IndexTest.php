@@ -92,25 +92,25 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 'name' => 'ft_index',
                 'type' => IndexDto::FULLTEXT_INDEX,
                 'columns' => ['title', 'content'],
-                'expectedExpression' => "FULLTEXT INDEX `ft_index` (`title`,`content`)"
+                'expectedExpression' => 'FULLTEXT INDEX `ft_index` (`title`,`content`)'
             ],
             [
                 'name' => 'ft_index',
                 'type' => IndexDto::FULLTEXT_INDEX,
                 'columns' => ['title'],
-                'expectedExpression' => "FULLTEXT INDEX `ft_index` (`title`)"
+                'expectedExpression' => 'FULLTEXT INDEX `ft_index` (`title`)'
             ],
             [
                 'name' => 'ft_index',
                 'type' => 'btree',
                 'columns' => ['title'],
-                'expectedExpression' => "INDEX `ft_index` (`title`)"
+                'expectedExpression' => 'INDEX `ft_index` (`title`)'
             ],
             [
                 'name' => 'ft_index',
                 'type' => 'HASH',
                 'columns' => ['title'],
-                'expectedExpression' => "INDEX `ft_index` (`title`)"
+                'expectedExpression' => 'INDEX `ft_index` (`title`)'
             ],
         ];
     }

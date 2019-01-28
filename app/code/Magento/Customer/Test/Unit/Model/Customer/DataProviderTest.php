@@ -469,7 +469,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ]);
         $mocks = [$attributeMock, $attributeBooleanMock];
         $this->injectVisibilityProps($attributeMock, $attributeBooleanMock, $options);
-        if ($type == "address") {
+        if ($type == 'address') {
             $mocks[] = $this->getCountryAttrMock();
         }
         return $mocks;
@@ -973,13 +973,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_edit'],
                     'user_defined' => true,
-                    'specific_code_prefix' => "_1"
+                    'specific_code_prefix' => '_1'
                 ],
                 'test-code-boolean' => [
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_create'],
                     'user_defined' => true,
-                    'specific_code_prefix' => "_1"
+                    'specific_code_prefix' => '_1'
                 ]
             ]
         );
@@ -990,13 +990,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_create'],
                     'user_defined' => false,
-                    'specific_code_prefix' => "_2"
+                    'specific_code_prefix' => '_2'
                 ],
                 'test-code-boolean' => [
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_create'],
                     'user_defined' => true,
-                    'specific_code_prefix' => "_2"
+                    'specific_code_prefix' => '_2'
                 ]
             ]
         );
@@ -1033,13 +1033,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_edit'],
                     'user_defined' => true,
-                    'specific_code_prefix' => "_1"
+                    'specific_code_prefix' => '_1'
                 ],
                 'test-code-boolean' => [
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_create'],
                     'user_defined' => true,
-                    'specific_code_prefix' => "_1"
+                    'specific_code_prefix' => '_1'
                 ]
             ]
         );
@@ -1050,13 +1050,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_create'],
                     'user_defined' => false,
-                    'specific_code_prefix' => "_2"
+                    'specific_code_prefix' => '_2'
                 ],
                 'test-code-boolean' => [
                     'visible' => true,
                     'is_used_in_forms' => ['customer_account_create'],
                     'user_defined' => true,
-                    'specific_code_prefix' => "_2"
+                    'specific_code_prefix' => '_2'
                 ]
             ]
         );
@@ -1099,7 +1099,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private function getCustomerAttributeExpectations($isRegistration)
     {
         return [
-            self::ATTRIBUTE_CODE . "_1" => [
+            self::ATTRIBUTE_CODE . '_1' => [
                 'arguments' => [
                     'data' => [
                         'config' => [
@@ -1118,7 +1118,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
             ],
-            self::ATTRIBUTE_CODE . "_2" => [
+            self::ATTRIBUTE_CODE . '_2' => [
                 'arguments' => [
                     'data' => [
                         'config' => [

@@ -20,10 +20,10 @@ class AuthorizenetCc extends PaymentCc
      * @var array
      */
     private $authorizenetForm = [
-        "cc_number" => "//*[@id='authorizenet_directpost_cc_number']",
-        "cc_exp_month" => "//*[@id='authorizenet_directpost_expiration']",
-        "cc_exp_year" => "//*[@id='authorizenet_directpost_expiration_yr']",
-        "cc_cid" => "//*[@id='authorizenet_directpost_cc_cid']",
+        'cc_number' => "//*[@id='authorizenet_directpost_cc_number']",
+        'cc_exp_month' => "//*[@id='authorizenet_directpost_expiration']",
+        'cc_exp_year' => "//*[@id='authorizenet_directpost_expiration_yr']",
+        'cc_cid' => "//*[@id='authorizenet_directpost_cc_cid']",
     ];
 
     /**

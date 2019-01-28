@@ -307,7 +307,7 @@ class File extends DataSource
     {
         $this->csv = [];
         foreach (str_getcsv($csvContent, "\n") as $value) {
-            $explodedArray = explode(",", $value);
+            $explodedArray = explode(',', $value);
             $count = count($explodedArray);
             for ($i = 0; $i < $count; $i++) {
                 if (preg_match('/^\".*[^"]$/U', $explodedArray[$i])) {

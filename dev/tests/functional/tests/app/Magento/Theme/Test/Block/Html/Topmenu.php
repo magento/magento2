@@ -41,7 +41,7 @@ class Topmenu extends Block
      *
      * @var string
      */
-    protected $navigationMenuItems = "/li";
+    protected $navigationMenuItems = '/li';
 
     /**
      * Select category from top menu by name and click on it

@@ -146,7 +146,7 @@ class UpdateCmsPageRewriteEntityTest extends Injectable
         if (in_array($this->storeName, $this->skippedStores)) {
             return;
         }
-        $storeName = explode("/", $this->storeName);
+        $storeName = explode('/', $this->storeName);
         $filter['store_title'] = end($storeName);
         $this->storeIndex->open();
         $this->storeIndex->getStoreGrid()->searchAndOpen($filter);

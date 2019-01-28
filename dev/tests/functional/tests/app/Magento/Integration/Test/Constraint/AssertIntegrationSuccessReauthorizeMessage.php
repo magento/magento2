@@ -35,7 +35,7 @@ class AssertIntegrationSuccessReauthorizeMessage extends AbstractConstraint
         \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::SUCCESS_REAUTHORIZE_MESSAGE, $integration->getName()),
             $integrationIndexPage->getMessagesBlock()->getSuccessMessage(),
-            "Wrong success message is displayed."
+            'Wrong success message is displayed.'
         );
     }
 

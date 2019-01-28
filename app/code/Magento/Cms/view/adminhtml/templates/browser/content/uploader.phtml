@@ -20,9 +20,9 @@ foreach ($filters as $media_type) {
 $resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
     ? "{action: 'resize', maxWidth: "
         . $block->escapeHtml($block->getImageUploadMaxWidth())
-        . ", maxHeight: "
+        . ', maxHeight: '
         . $block->escapeHtml($block->getImageUploadMaxHeight())
-        . "}"
+        . '}'
     : "{action: 'resize'}";
 ?>
 

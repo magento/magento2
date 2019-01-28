@@ -57,6 +57,6 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about authorized amount is available in Comments History section.";
+        return 'Message about authorized amount is available in Comments History section.';
     }
 }

@@ -54,6 +54,6 @@ class AssertSelectSeveralExtensions extends AbstractConstraint
      */
     public function toString()
     {
-        return "Extensions are found and selected on the grid.";
+        return 'Extensions are found and selected on the grid.';
     }
 }

@@ -40,7 +40,7 @@ class Fpt extends Block
      */
     protected function escapeCurrency($price)
     {
-        preg_match("/^\\D*\\s*([\\d,\\.]+)\\s*\\D*$/", $price, $matches);
+        preg_match('/^\\D*\\s*([\\d,\\.]+)\\s*\\D*$/', $price, $matches);
         return (isset($matches[1])) ? $matches[1] : null;
     }
 }

@@ -33,8 +33,8 @@ class AssertSearchTermSuccessSaveMessage extends AbstractConstraint
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'
-            . PHP_EOL . "Expected: " . self::SUCCESS_MESSAGE
-            . PHP_EOL . "Actual: " . $actualMessage
+            . PHP_EOL . 'Expected: ' . self::SUCCESS_MESSAGE
+            . PHP_EOL . 'Actual: ' . $actualMessage
         );
     }
 

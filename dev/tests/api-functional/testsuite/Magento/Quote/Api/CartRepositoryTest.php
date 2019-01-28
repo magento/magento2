@@ -311,11 +311,11 @@ class CartRepositoryTest extends WebapiAbstract
 
         $this->_webApiCall($serviceInfo, $requestData);
 
-        $quote->loadActive($requestData["quote"]["id"]);
-        $this->assertEquals($requestData["quote"]["customer"]["firstname"], $quote->getCustomerFirstname());
-        $this->assertEquals($requestData["quote"]["customer"]["middlename"], $quote->getCustomerMiddlename());
-        $this->assertEquals($requestData["quote"]["customer"]["lastname"], $quote->getCustomerLastname());
-        $this->assertEquals($requestData["quote"]["customer"]["email"], $quote->getCustomerEmail());
+        $quote->loadActive($requestData['quote']['id']);
+        $this->assertEquals($requestData['quote']['customer']['firstname'], $quote->getCustomerFirstname());
+        $this->assertEquals($requestData['quote']['customer']['middlename'], $quote->getCustomerMiddlename());
+        $this->assertEquals($requestData['quote']['customer']['lastname'], $quote->getCustomerLastname());
+        $this->assertEquals($requestData['quote']['customer']['email'], $quote->getCustomerEmail());
     }
 
     /**

@@ -22,7 +22,7 @@ use Magento\TestFramework\Helper\Customer as CustomerHelper;
 class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/customers/me';
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    const RESOURCE_PATH_CUSTOMER_TOKEN = '/V1/integration/customer/token';
 
     /**
      * @var CustomerRepositoryInterface
@@ -145,10 +145,10 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $requestData = ['customer' => $updatedCustomerData];
 
         $response = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($lastName . "Updated", $response[CustomerInterface::LASTNAME]);
+        $this->assertEquals($lastName . 'Updated', $response[CustomerInterface::LASTNAME]);
 
         $customerData = $this->_getCustomerData($this->customerData[CustomerInterface::ID]);
-        $this->assertEquals($lastName . "Updated", $customerData->getLastname());
+        $this->assertEquals($lastName . 'Updated', $customerData->getLastname());
     }
 
     public function testGetCustomerData()
@@ -216,7 +216,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $fixtureCustomerId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => "/V1/customers/me/billingAddress",
+                'resourcePath' => '/V1/customers/me/billingAddress',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
                 'token' => $this->token,
             ],
@@ -226,7 +226,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->assertEquals(
             $this->getFirstFixtureAddressData(),
             $addressData,
-            "Default billing address data is invalid."
+            'Default billing address data is invalid.'
         );
     }
 
@@ -237,7 +237,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $fixtureCustomerId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => "/V1/customers/me/shippingAddress",
+                'resourcePath' => '/V1/customers/me/shippingAddress',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
                 'token' => $this->token,
             ],
@@ -247,7 +247,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->assertEquals(
             $this->getFirstFixtureAddressData(),
             $addressData,
-            "Default shipping address data is invalid."
+            'Default shipping address data is invalid.'
         );
     }
 

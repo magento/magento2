@@ -82,7 +82,7 @@ class StorefrontAnalyzer extends \Symfony\Component\Console\Command\Command
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]
         );
-        $output->writeln("Verifying Magento Storefront...");
+        $output->writeln('Verifying Magento Storefront...');
         $storefrontUrlAnalyzerMessages = $this->runStorefrontUrlAnalyzer();
         if (isset($storefrontUrlAnalyzerMessages['error']) === false) {
             $output->outputMessages($this->urlAnalyzer->fixLastSlash('app_frontend_url'));
@@ -90,7 +90,7 @@ class StorefrontAnalyzer extends \Symfony\Component\Console\Command\Command
         } else {
             $output->outputMessages($storefrontUrlAnalyzerMessages);
         }
-        $output->writeln("Storefront verification finished.");
+        $output->writeln('Storefront verification finished.');
     }
 
     /**

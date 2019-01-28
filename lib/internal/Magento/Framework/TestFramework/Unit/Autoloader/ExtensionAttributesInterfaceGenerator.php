@@ -44,7 +44,7 @@ class ExtensionAttributesInterfaceGenerator implements GeneratorInterface
      */
     private function isExtensionInterface($className)
     {
-        $suffix = "ExtensionInterface";
+        $suffix = 'ExtensionInterface';
         $sourceName = rtrim(substr($className, 0, -strlen($suffix)), '\\');
         return $sourceName . $suffix == $className;
     }

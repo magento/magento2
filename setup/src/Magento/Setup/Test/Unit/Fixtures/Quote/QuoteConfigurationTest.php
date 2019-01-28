@@ -55,7 +55,7 @@ class QuoteConfigurationTest extends \PHPUnit\Framework\TestCase
             'big_configurable_count_to' => 1,
             'big_configurable_count_from' => 1,
             'fixture_data_filename' =>
-                $dir . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . 'orders_fixture_data.json',
+                $dir . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'orders_fixture_data.json',
             'order_quotes_enable' => 1,
         ];
         $this->fixtureModelMock->expects($this->atLeastOnce())

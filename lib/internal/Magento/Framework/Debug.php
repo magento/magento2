@@ -149,7 +149,7 @@ class Debug
     {
         $out = '';
         if (is_object($arg)) {
-            $out .= sprintf("&%s#%s#", get_class($arg), spl_object_hash($arg));
+            $out .= sprintf('&%s#%s#', get_class($arg), spl_object_hash($arg));
         } elseif (is_resource($arg)) {
             $out .= '#[' . get_resource_type($arg) . ']';
         } elseif (is_array($arg)) {
@@ -176,7 +176,7 @@ class Debug
             $out .= $arg;
         } elseif (is_string($arg)) {
             if (strlen($arg) > self::$argLength) {
-                $arg = substr($arg, 0, self::$argLength) . "...";
+                $arg = substr($arg, 0, self::$argLength) . '...';
             }
             $arg = strtr($arg, ["\t" => '\t', "\r" => '\r', "\n" => '\n', "'" => '\\\'']);
             $out .= "'" . $arg . "'";

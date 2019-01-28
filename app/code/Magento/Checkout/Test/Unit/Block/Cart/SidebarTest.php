@@ -105,7 +105,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTotalsHtml()
     {
-        $totalsHtml = "$134.36";
+        $totalsHtml = '$134.36';
         $totalsBlockMock = $this->getMockBuilder(\Magento\Checkout\Block\Shipping\Price::class)
             ->disableOriginalConstructor()
             ->setMethods(['toHtml'])

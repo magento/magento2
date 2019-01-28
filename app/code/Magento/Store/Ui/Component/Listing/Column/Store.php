@@ -110,11 +110,11 @@ class Store extends Column
         $data = $this->systemStore->getStoresStructure(false, $origStores);
 
         foreach ($data as $website) {
-            $content .= $website['label'] . "<br/>";
+            $content .= $website['label'] . '<br/>';
             foreach ($website['children'] as $group) {
-                $content .= str_repeat('&nbsp;', 3) . $this->escaper->escapeHtml($group['label']) . "<br/>";
+                $content .= str_repeat('&nbsp;', 3) . $this->escaper->escapeHtml($group['label']) . '<br/>';
                 foreach ($group['children'] as $store) {
-                    $content .= str_repeat('&nbsp;', 6) . $this->escaper->escapeHtml($store['label']) . "<br/>";
+                    $content .= str_repeat('&nbsp;', 6) . $this->escaper->escapeHtml($store['label']) . '<br/>';
                 }
             }
         }

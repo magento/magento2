@@ -75,16 +75,16 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
                     'type' => $this->_getFactoryClass(),
                 ],
             ],
-            'body' => "\$this->"
+            'body' => '$this->'
                 . $this->_getFactoryPropertyName()
-                . " = \$" . $this->_getFactoryPropertyName() . ';',
+                . ' = $' . $this->_getFactoryPropertyName() . ';',
             'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => [
                     [
                         'name' => 'param',
                         'description' => $this->getSourceClassName()
-                            . " \$" . $this->_getFactoryPropertyName(),
+                            . ' $' . $this->_getFactoryPropertyName(),
                     ],
                 ],
             ]

@@ -293,7 +293,7 @@ class Addresses extends Tab
             if ($option->isVisible()) {
                 $value = $option->getValue();
 
-                if ($value != "") {
+                if ($value != '') {
                     $data[] = $value;
                 }
             }

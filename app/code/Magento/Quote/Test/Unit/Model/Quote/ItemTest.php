@@ -161,7 +161,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testSetAndQuote()
     {
-        $idValue = "id_value";
+        $idValue = 'id_value';
 
         $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->setMethods(['getId', 'getStoreId', '__wakeup'])
@@ -1058,7 +1058,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBuyRequestOptionByCode()
     {
-        $optionCode = "info_buyRequest";
+        $optionCode = 'info_buyRequest';
         $buyRequestQuantity = 23;
         $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setItem', 'getCode', '__wakeup', 'getValue'])
@@ -1118,7 +1118,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $origin = 'origin';
         $code = 1;
-        $message = "message";
+        $message = 'message';
         $additionalData = new \Magento\Framework\DataObject();
         $additionalData->setTemp(true);
 
@@ -1145,8 +1145,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testRemoveErrorInfosByParams()
     {
-        $message = "message";
-        $message2 = "message2";
+        $message = 'message';
+        $message2 = 'message2';
 
         $this->errorInfos->expects($this->at(0))
             ->method('addItem')
@@ -1176,8 +1176,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testRemoveErrorInfosByParamsAllErrorsRemoved()
     {
-        $message = "message";
-        $message2 = "message2";
+        $message = 'message';
+        $message2 = 'message2';
 
         $this->errorInfos->expects($this->at(0))
             ->method('addItem')

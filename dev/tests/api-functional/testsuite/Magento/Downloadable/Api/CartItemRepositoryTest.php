@@ -271,7 +271,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $this->assertEquals($expectedResult, $this->_webApiCall($serviceInfo, $requestData));
     }
 

@@ -137,7 +137,7 @@ class CustomerForm extends Form
             $mapping['change_email']['selector'],
             $mapping['change_email']['strategy'],
             'checkbox'
-        )->setValue($value ? "Yes" : "No");
+        )->setValue($value ? 'Yes' : 'No');
     }
 
     /**
@@ -153,7 +153,7 @@ class CustomerForm extends Form
             $mapping['change_password']['selector'],
             $mapping['change_password']['strategy'],
             'checkbox'
-        )->setValue($value ? "Yes" : "No");
+        )->setValue($value ? 'Yes' : 'No');
     }
 
     /**

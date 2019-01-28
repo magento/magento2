@@ -65,7 +65,7 @@ class SettingChecker
         );
 
         if (null === $config) {
-            $config = $this->config->get($this->resolvePath($scope, $scopeCode) . "/" . $path);
+            $config = $this->config->get($this->resolvePath($scope, $scopeCode) . '/' . $path);
         }
 
         return $config !== null;

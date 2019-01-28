@@ -37,9 +37,9 @@ class XmlScanner implements ScannerInterface
             $dom = new \DOMDocument();
             $dom->load($file);
             $xpath = new \DOMXPath($dom);
-            $xpath->registerNamespace("php", "http://php.net/xpath");
+            $xpath->registerNamespace('php', 'http://php.net/xpath');
             $xpath->registerPhpFunctions('preg_match');
-            $virtualTypeQuery = "//virtualType/@name";
+            $virtualTypeQuery = '//virtualType/@name';
 
             foreach ($xpath->query($virtualTypeQuery) as $virtualNode) {
                 $virtualTypes[] = $virtualNode->nodeValue;

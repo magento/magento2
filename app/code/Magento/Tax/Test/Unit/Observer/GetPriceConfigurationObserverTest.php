@@ -168,7 +168,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
     public function getPriceConfigurationProvider()
     {
         return [
-            "basic" => [
+            'basic' => [
                 'testArray' => [
                     [
                         [

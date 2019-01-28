@@ -67,6 +67,6 @@ class AssertOutOfStockOptionIsAbsentOnProductPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Out of stock configurable option is absent on product page on frontend.";
+        return 'Out of stock configurable option is absent on product page on frontend.';
     }
 }

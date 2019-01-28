@@ -202,7 +202,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     protected function translateField($field)
     {
         switch ($field) {
-            case "id":
+            case 'id':
                 return 'tax_calculation_rule_id';
             case 'tax_rate_ids':
                 return 'tax_calculation_rate_id';

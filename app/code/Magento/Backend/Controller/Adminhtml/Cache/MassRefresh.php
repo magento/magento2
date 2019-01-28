@@ -37,7 +37,7 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
                 $updatedTypes++;
             }
             if ($updatedTypes > 0) {
-                $this->messageManager->addSuccessMessage(__("%1 cache type(s) refreshed.", $updatedTypes));
+                $this->messageManager->addSuccessMessage(__('%1 cache type(s) refreshed.', $updatedTypes));
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());

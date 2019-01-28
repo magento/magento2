@@ -31,7 +31,7 @@ class AssertShippingReportIntervalResult extends AbstractAssertShippingReportRes
         \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $shipmentResult,
-            "Shipment report interval result not contains actual data."
+            'Shipment report interval result not contains actual data.'
         );
     }
 

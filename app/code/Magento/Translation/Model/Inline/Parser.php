@@ -446,12 +446,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $tagHtml = str_replace($matches[0], '', $tagHtml);
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . htmlspecialchars($matches[1]) . ',' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . htmlspecialchars($matches[1]) . ',' . str_replace('"', "'", join(',', $trArr)) . ']'
                     );
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . str_replace('"', "'", join(',', $trArr)) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);

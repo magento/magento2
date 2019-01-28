@@ -96,7 +96,7 @@ class MessageValidator
      */
     protected function validateMessage($message, $messageType, $topic)
     {
-        if (preg_match_all("/\\\\/", $messageType)) {
+        if (preg_match_all('/\\\\/', $messageType)) {
             $this->validateClassType($message, $messageType, $topic);
         } else {
             $this->validatePrimitiveType($message, $messageType, $topic);
@@ -175,7 +175,7 @@ class MessageValidator
         $type = is_object($message) ? get_class($message) : gettype($message);
         $type = $type == 'boolean' ? 'bool' : $type;
         $type = $type == 'double' ? 'float' : $type;
-        return $type == "integer" ? "int" : $type;
+        return $type == 'integer' ? 'int' : $type;
     }
 
     /**

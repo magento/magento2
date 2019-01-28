@@ -27,7 +27,7 @@ class AssertShippingAddressJsValidationMessagesIsAbsent extends AbstractConstrai
 
         /** @var \Magento\Mtf\Client\ElementInterface $field */
         foreach ($requiredFields as $field) {
-            $errorContainer = $field->find("div .field-error");
+            $errorContainer = $field->find('div .field-error');
             \PHPUnit\Framework\Assert::assertFalse(
                 $errorContainer->isVisible(),
                 'Js validation error messages must be absent for required fields after checkout start.'

@@ -95,11 +95,11 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
     {
         $id = 5;
         $countryId = 15;
-        $street = ["7700 W Parmer Lane", "second line"];
+        $street = ['7700 W Parmer Lane', 'second line'];
         $isDefaultShipping = true;
 
         $regionId = 7;
-        $region = "TX";
+        $region = 'TX';
 
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
@@ -377,7 +377,7 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
                 [
                     'id' => '1',
                     'country_id' => '1',
-                    'street' => ["7701 W Parmer Lane", "Second Line"],
+                    'street' => ['7701 W Parmer Lane', 'Second Line'],
                     'default_shipping' => true,
                     'region' => [
                         'region_id' => '1',
@@ -387,7 +387,7 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
                 [
                     'id' => '2',
                     'country_id' => '2',
-                    'street' => ["7702 W Parmer Lane", "Second Line"],
+                    'street' => ['7702 W Parmer Lane', 'Second Line'],
                     'default_shipping' => false,
                     'region' => [
                         'region_id' => '2',
@@ -397,7 +397,7 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 [
-                    'street' => ["7701 W Parmer Lane", "Second Line"],
+                    'street' => ['7701 W Parmer Lane', 'Second Line'],
                     'default_shipping' => true,
                     'region' => [
                         'region_id' => '1',
@@ -407,7 +407,7 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
                 [
                     'id' => '2',
                     'country_id' => '2',
-                    'street' => ["7702 W Parmer Lane", "Second Line"],
+                    'street' => ['7702 W Parmer Lane', 'Second Line'],
                     'default_shipping' => false,
                     'region' => [
                         'region_id' => '2',

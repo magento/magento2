@@ -141,7 +141,7 @@ class Oauth implements OauthInterface
         $signatureMethod = self::SIGNATURE_SHA1,
         $httpMethod = 'POST'
     ) {
-        $required = ["oauth_consumer_key", "oauth_consumer_secret", "oauth_token", "oauth_token_secret"];
+        $required = ['oauth_consumer_key', 'oauth_consumer_secret', 'oauth_token', 'oauth_token_secret'];
         $this->_checkRequiredParams($params, $required);
         $consumer = $this->_tokenProvider->getConsumerByKey($params['oauth_consumer_key']);
         $headerParameters = [
@@ -236,11 +236,11 @@ class Oauth implements OauthInterface
         // Required parameters validation. Default to minimum required params if not provided.
         if (empty($requiredParams)) {
             $requiredParams = [
-                "oauth_consumer_key",
-                "oauth_signature",
-                "oauth_signature_method",
-                "oauth_nonce",
-                "oauth_timestamp",
+                'oauth_consumer_key',
+                'oauth_signature',
+                'oauth_signature_method',
+                'oauth_nonce',
+                'oauth_timestamp',
             ];
         }
         $this->_checkRequiredParams($protocolParams, $requiredParams);

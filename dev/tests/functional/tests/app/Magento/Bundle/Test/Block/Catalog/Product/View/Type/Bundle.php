@@ -366,7 +366,7 @@ class Bundle extends Block
     private function getFlatTextData()
     {
         $productPrice = $this->_rootElement->find($this->assignedProductPrice)->getText();
-        $productPrice = preg_replace("/[^0-9.,]/", '', $productPrice);
+        $productPrice = preg_replace('/[^0-9.,]/', '', $productPrice);
         $productName = $this->_rootElement->find($this->assignedProductName)->getText();
         $options[$productName] = [
             'title' => $productName,

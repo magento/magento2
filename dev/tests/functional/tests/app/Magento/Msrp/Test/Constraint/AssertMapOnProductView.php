@@ -62,6 +62,6 @@ class AssertMapOnProductView extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MAP data on product view page is correct.";
+        return 'Displayed Product MAP data on product view page is correct.';
     }
 }

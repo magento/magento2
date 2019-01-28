@@ -86,9 +86,9 @@ class ConfigAnalyzer extends \Symfony\Component\Console\Command\Command
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]
         );
-        $output->writeln("Checking config.xml file configuration...");
+        $output->writeln('Checking config.xml file configuration...');
         $output->outputMessages($this->checkConfigFileAvailable());
-        $output->writeln("config.xml file check is finished.");
+        $output->writeln('config.xml file check is finished.');
     }
 
     /**

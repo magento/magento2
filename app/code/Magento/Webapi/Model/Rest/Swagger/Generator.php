@@ -609,7 +609,7 @@ class Generator extends AbstractSchemaGenerator
      */
     protected function toLowerCaseDashSeparated($typeName)
     {
-        return strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $typeName));
+        return strtolower(preg_replace('/(.)([A-Z])/', '$1-$2', $typeName));
     }
 
     /**

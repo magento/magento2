@@ -60,6 +60,6 @@ class AssertWidgetOnFrontendInCatalog extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget is present on Category page.";
+        return 'Widget is present on Category page.';
     }
 }

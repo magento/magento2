@@ -70,7 +70,7 @@ class TierPriceValidator
      *
      * @var string
      */
-    private $allWebsitesValue = "0";
+    private $allWebsitesValue = '0';
 
     /**
      * Allowed product types.

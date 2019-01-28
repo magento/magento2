@@ -26,7 +26,7 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $giftMessageOrderForm = ".gift-message fieldset";
+    protected $giftMessageOrderForm = '.gift-message fieldset';
 
     /**
      * Allow gift message on order level
@@ -40,14 +40,14 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $giftMessageOrderButton = ".action-update";
+    protected $giftMessageOrderButton = '.action-update';
 
     /**
      * Selector for Gift Message Summary
      *
      * @var string
      */
-    protected $giftMessageSummary = ".gift-message-summary";
+    protected $giftMessageSummary = '.gift-message-summary';
 
     /**
      * Fixture factory.

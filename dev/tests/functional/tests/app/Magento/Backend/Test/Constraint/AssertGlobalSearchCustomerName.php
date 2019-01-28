@@ -28,14 +28,14 @@ class AssertGlobalSearchCustomerName extends AbstractConstraint
     public function processAssert(Dashboard $dashboard, GlobalSearch $search, CustomerIndex $customerIndex)
     {
         $customer = $search->getDataFieldConfig('query')['source']->getEntity();
-        $customerName = $customer->getFirstname() . " " . $customer->getLastname();
+        $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
         $isVisibleInResult = $dashboard->getAdminPanelHeader()->isSearchResultVisible($customerName);
         \PHPUnit\Framework\Assert::assertTrue(
             $isVisibleInResult,
             'Customer name ' . $customerName . ' is absent in search results'
         );
 
-        $dashboard->getAdminPanelHeader()->navigateToGrid("Customers");
+        $dashboard->getAdminPanelHeader()->navigateToGrid('Customers');
         $isCustomerGridVisible = $customerIndex->getCustomerGridBlock()->isVisible();
         \PHPUnit\Framework\Assert::assertTrue(
             $isCustomerGridVisible,

@@ -72,7 +72,7 @@ class GuestCouponManagementTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $this->assertEquals($couponCode, $this->_webApiCall($serviceInfo, $requestData));
     }
 
@@ -96,7 +96,7 @@ class GuestCouponManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Remove',
             ],
         ];
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
         $quote->load('test_order_1', 'reserved_order_id');
         $this->assertEquals('', $quote->getCouponCode());
@@ -129,8 +129,8 @@ class GuestCouponManagementTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "couponCode" => $couponCode,
+            'cartId' => $cartId,
+            'couponCode' => $couponCode,
         ];
 
         $this->_webApiCall($serviceInfo, $requestData);
@@ -164,8 +164,8 @@ class GuestCouponManagementTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "couponCode" => $couponCode,
+            'cartId' => $cartId,
+            'couponCode' => $couponCode,
         ];
 
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));

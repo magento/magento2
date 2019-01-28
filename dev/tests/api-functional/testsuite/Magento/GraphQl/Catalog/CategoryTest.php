@@ -292,7 +292,7 @@ QUERY;
         $category = $categoryCollection->getFirstItem();
         $categoryId = $category->getId();
 
-        $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
+        $this->assertNotEmpty($categoryId, 'Preconditions failed: category is not available.');
 
         $query = <<<QUERY
 {

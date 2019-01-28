@@ -42,7 +42,7 @@ class AccessChangeQuoteControl
     public function beforeSave(CartRepositoryInterface $subject, CartInterface $quote)
     {
         if (! $this->changeQuoteControl->isAllowed($quote)) {
-            throw new StateException(__("Invalid state change requested"));
+            throw new StateException(__('Invalid state change requested'));
         }
     }
 }

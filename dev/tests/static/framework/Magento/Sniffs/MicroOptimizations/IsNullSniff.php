@@ -31,7 +31,7 @@ class IsNullSniff implements Sniff
         $tokens = $sourceFile->getTokens();
         if ($tokens[$stackPtr]['content'] === $this->blacklist) {
             $sourceFile->addError(
-                "is_null must be avoided. Use strict comparison instead.",
+                'is_null must be avoided. Use strict comparison instead.',
                 $stackPtr,
                 'IsNullUsage'
             );

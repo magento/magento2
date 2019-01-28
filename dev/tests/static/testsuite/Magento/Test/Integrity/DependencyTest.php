@@ -211,7 +211,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $defaultThemes = [];
         foreach (self::$_listConfigXml as $file) {
             $config = simplexml_load_file($file);
-            $nodes = @($config->xpath("/config/*/design/theme/full_name") ?: []);
+            $nodes = @($config->xpath('/config/*/design/theme/full_name') ?: []);
             foreach ($nodes as $node) {
                 $defaultThemes[] = (string)$node;
             }
@@ -330,7 +330,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     if (!count($modules)) {
                         continue;
                     }
-                    $result[] = sprintf("%s [%s]", $type, implode(', ', $modules));
+                    $result[] = sprintf('%s [%s]', $type, implode(', ', $modules));
                 }
                 if (count($result)) {
                     $this->fail('Module ' . $module . ' has undeclared dependencies: ' . implode(', ', $result));
@@ -604,7 +604,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         // Read module's routes.xml file
         $config = simplexml_load_file($configFile);
-        $nodes  = $config->xpath("/config/router/*");
+        $nodes  = $config->xpath('/config/router/*');
         foreach ($nodes as $node) {
             $id = (string)$node['id'];
             if ($id != 'adminhtml' && '' == (string)$node['frontName']) {

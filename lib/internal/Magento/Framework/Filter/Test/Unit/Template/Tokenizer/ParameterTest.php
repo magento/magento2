@@ -50,7 +50,7 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
             ["%20direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
             [" direct_url='about-magento-demo-store\\[newDemo]",
             ['direct_url' => 'about-magento-demo-store\\[newDemo]']],
-            ["   ", []]
+            ['   ', []]
         ];
     }
 

@@ -19,7 +19,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
 
     const CLASS_FILE_NAME = 'class/file/name';
 
-    const FILE_CONTENT = "content";
+    const FILE_CONTENT = 'content';
 
     /**#@-*/
 

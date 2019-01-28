@@ -19,7 +19,7 @@ class Product extends Block
      * @var array
      */
     protected $mapping = [
-        'selection_qty' => "[data-column=qty] input",
+        'selection_qty' => '[data-column=qty] input',
     ];
 
     /**

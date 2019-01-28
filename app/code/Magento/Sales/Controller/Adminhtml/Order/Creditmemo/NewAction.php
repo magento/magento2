@@ -71,10 +71,10 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
             $resultPage->getConfig()->getTitle()->prepend(__('Credit Memos'));
             if ($creditmemo->getInvoice()) {
                 $resultPage->getConfig()->getTitle()->prepend(
-                    __("New Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
+                    __('New Memo for #%1', $creditmemo->getInvoice()->getIncrementId())
                 );
             } else {
-                $resultPage->getConfig()->getTitle()->prepend(__("New Memo"));
+                $resultPage->getConfig()->getTitle()->prepend(__('New Memo'));
             }
             return $resultPage;
         } else {

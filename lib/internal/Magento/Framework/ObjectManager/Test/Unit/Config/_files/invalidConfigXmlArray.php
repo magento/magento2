@@ -184,7 +184,7 @@ return [
             "Element 'virtualType', attribute 'name': '' is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend." .
+            'invalid or something strange happend.' .
             "\nLine: 2\n",
         ],
     ],
@@ -215,7 +215,7 @@ return [
             "is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend." .
+            'invalid or something strange happend.' .
             "\nLine: 2\n",
         ],
     ],
@@ -233,7 +233,7 @@ return [
             "is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend." .
+            'invalid or something strange happend.' .
             "\nLine: 2\n",
         ],
     ],

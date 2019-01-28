@@ -153,7 +153,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->willReturn($this->customer);
         $this->address->expects($this->atLeastOnce())
-            ->method("getId")
+            ->method('getId')
             ->willReturn($addressId);
         $this->addressRegistry->expects($this->once())
             ->method('retrieve')
@@ -180,10 +180,10 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getAddressesCollection')
             ->willReturn($addressCollection);
         $addressCollection->expects($this->once())
-            ->method("removeItemByKey")
+            ->method('removeItemByKey')
             ->with($addressId);
         $addressCollection->expects($this->once())
-            ->method("addItem")
+            ->method('addItem')
             ->with($this->address);
         $this->address->expects($this->once())
             ->method('getDataModel')

@@ -42,7 +42,7 @@ class AssertProductInItemsOrderedGrid extends AbstractAssertForm
     public function processAssert(OrderCreateIndex $orderCreateIndex, array $products, $productsIsConfigured = true)
     {
         if (!$products) {
-            throw new \Exception("No products");
+            throw new \Exception('No products');
         }
         $this->productsIsConfigured = $productsIsConfigured;
         $data = $this->prepareData($products, $orderCreateIndex->getCreateBlock()->getItemsBlock());

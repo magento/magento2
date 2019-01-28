@@ -66,7 +66,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->messageManager->addSuccessMessage(__("%1 cache type(s) enabled.", $updatedTypes));
+                $this->messageManager->addSuccessMessage(__('%1 cache type(s) enabled.', $updatedTypes));
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());

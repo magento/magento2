@@ -74,10 +74,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             if ($period !== null && $dateFrom !== null && $dateTo !== null && $period != 'month') {
                 $count = count($union);
                 if ($period == 'year') {
-                    if ($dbTableName == "report_viewed_product_aggregated_daily") {
+                    if ($dbTableName == 'report_viewed_product_aggregated_daily') {
                         $this->assertEquals($count, 2);
                     }
-                    if ($dbTableName == "report_viewed_product_aggregated_yearly") {
+                    if ($dbTableName == 'report_viewed_product_aggregated_yearly') {
                         $this->assertEquals($count, 3);
                     }
                 } else {

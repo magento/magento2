@@ -129,7 +129,7 @@ class Builder
     public function create()
     {
         if (!isset($this->data['requestName'])) {
-            throw new \InvalidArgumentException("Request name not defined.");
+            throw new \InvalidArgumentException('Request name not defined.');
         }
         $requestName = $this->data['requestName'];
         /** @var array $data */

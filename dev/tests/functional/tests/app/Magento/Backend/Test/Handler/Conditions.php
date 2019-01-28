@@ -109,7 +109,7 @@ abstract class Conditions extends Curl
     protected function prepareCondition($conditions)
     {
         $decodeConditions = empty($conditions)
-            ? $this->decodeValue("[Conditions combination]")
+            ? $this->decodeValue('[Conditions combination]')
             : $this->decodeValue("{Conditions combination:[{$conditions}]}");
         return $this->convertMultipleCondition($decodeConditions);
     }
@@ -189,7 +189,7 @@ abstract class Conditions extends Curl
         if (count($ruleParam) != count($rules)) {
             throw new \Exception(
                 "Can't find all params. "
-                . "\nSearch: " . implode(', ', $rules) . " "
+                . "\nSearch: " . implode(', ', $rules) . ' '
                 . "\nFind: " . implode(', ', $ruleParam)
             );
         }

@@ -5,7 +5,7 @@
  */
 
 if (!isset($_GET['website_code'])) {
-    throw new \Exception("website_code GET parameter is not set.");
+    throw new \Exception('website_code GET parameter is not set.');
 }
 
 $websiteCode = urldecode($_GET['website_code']);

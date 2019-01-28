@@ -273,9 +273,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
 
-        $filenameWithoutExtension = substr($filenameWithoutExtension, 0, strrpos($filenameWithoutExtension, "."));
+        $filenameWithoutExtension = substr($filenameWithoutExtension, 0, strrpos($filenameWithoutExtension, '.'));
 
-        list($time, $type) = explode("_", $filenameWithoutExtension);
+        list($time, $type) = explode('_', $filenameWithoutExtension);
 
         $name = str_replace($time . '_' . $type, '', $filenameWithoutExtension);
 

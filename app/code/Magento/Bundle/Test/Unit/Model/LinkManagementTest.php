@@ -768,7 +768,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveChildWithoutId()
     {
-        $bundleProductSku = "bundleSku";
+        $bundleProductSku = 'bundleSku';
         $linkedProductSku = 'simple';
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $productLink->expects($this->any())->method('getId')->will($this->returnValue(null));
@@ -803,7 +803,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     {
         $id = 12345;
         $linkedProductSku = 'simple';
-        $bundleProductSku = "bundleProductSku";
+        $bundleProductSku = 'bundleProductSku';
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $productLink->expects($this->any())->method('getId')->will($this->returnValue($id));
         $productLink->expects($this->any())->method('getSku')->will($this->returnValue($linkedProductSku));
@@ -843,7 +843,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveChildWithCompositeProductLink()
     {
-        $bundleProductSku = "bundleProductSku";
+        $bundleProductSku = 'bundleProductSku';
         $id = 12;
         $linkedProductSku = 'simple';
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
@@ -878,7 +878,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     {
         $id = 12;
         $linkedProductSku = 'simple';
-        $bundleProductSku = "bundleProductSku";
+        $bundleProductSku = 'bundleProductSku';
 
         $productLink = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $productLink->expects($this->any())->method('getId')->will($this->returnValue($id));

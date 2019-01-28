@@ -27,7 +27,7 @@ class UrlAnalyzer
             $_ENV[$key] = $_ENV[$key] . '/';
             $fileContents = str_replace($param, $param . '/', $fileContents);
             file_put_contents(MTF_PHPUNIT_FILE, $fileContents);
-            $message['info'][] = "Slash at the end of url was added in the config file.";
+            $message['info'][] = 'Slash at the end of url was added in the config file.';
         }
         return $message;
     }

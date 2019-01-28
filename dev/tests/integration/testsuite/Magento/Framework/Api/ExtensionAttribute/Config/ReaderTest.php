@@ -79,26 +79,26 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             \Magento\Tax\Api\Data\TaxRateInterface::class => [],
             \Magento\Catalog\Api\Data\Product::class => [
                 'stock_item' => [
-                    "type" => "Magento\CatalogInventory\Api\Data\StockItem",
-                    "resourceRefs" => [],
-                    "join" => null,
+                    'type' => "Magento\CatalogInventory\Api\Data\StockItem",
+                    'resourceRefs' => [],
+                    'join' => null,
                 ],
             ],
             \Magento\Customer\Api\Data\CustomerInterface::class => [
                 'custom_1' => [
-                    "type" => "Magento\Customer\Api\Data\CustomerCustom",
-                    "resourceRefs" => [],
-                    "join" => null,
+                    'type' => "Magento\Customer\Api\Data\CustomerCustom",
+                    'resourceRefs' => [],
+                    'join' => null,
                 ],
                 'custom_2' => [
-                    "type" => "Magento\CustomerExtra\Api\Data\CustomerCustom22",
-                    "resourceRefs" => [],
-                    "join" => null,
+                    'type' => "Magento\CustomerExtra\Api\Data\CustomerCustom22",
+                    'resourceRefs' => [],
+                    'join' => null,
                 ],
                 'custom_3' => [
-                    "type" => "Magento\Customer\Api\Data\CustomerCustom3",
-                    "resourceRefs" => [],
-                    "join" => null,
+                    'type' => "Magento\Customer\Api\Data\CustomerCustom3",
+                    'resourceRefs' => [],
+                    'join' => null,
                 ],
             ],
         ];

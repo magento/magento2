@@ -18,7 +18,7 @@ class Foreign implements FactoryInterface
     /**
      * Default ON DELETE action.
      */
-    const DEFAULT_ON_DELETE = "CASCADE";
+    const DEFAULT_ON_DELETE = 'CASCADE';
 
     /**
      * @var ObjectManagerInterface

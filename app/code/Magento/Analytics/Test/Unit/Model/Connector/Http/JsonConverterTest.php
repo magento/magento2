@@ -83,6 +83,6 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturn('serializedResult');
-        $this->assertEquals('serializedResult', $this->converter->toBody(["token" => "secret-token"]));
+        $this->assertEquals('serializedResult', $this->converter->toBody(['token' => 'secret-token']));
     }
 }

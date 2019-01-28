@@ -91,7 +91,7 @@ QUERY;
         );
 
         // use case for invalid storeCode
-        $nonExistingStoreCode = "non_existent_store";
+        $nonExistingStoreCode = 'non_existent_store';
         $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Store code non_existent_store does not exist');

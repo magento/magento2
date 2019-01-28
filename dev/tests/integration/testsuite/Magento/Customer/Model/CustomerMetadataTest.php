@@ -58,7 +58,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $customAttributesMetadataQty,
             $customAttributesMetadata1Qty,
-            "Invalid number of attributes returned."
+            'Invalid number of attributes returned.'
         );
 
         // Verify the consistency of getCustomAttributesMetadata() function from the 2nd service
@@ -66,7 +66,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $customAttributesMetadataQty,
             $customAttributesMetadata2Qty,
-            "Invalid number of attributes returned."
+            'Invalid number of attributes returned.'
         );
     }
 
@@ -151,7 +151,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $expectedCustomAttributeCodeArray,
             array_intersect($expectedCustomAttributeCodeArray, $actual),
-            "Expected attributes not returned from the service."
+            'Expected attributes not returned from the service.'
         );
 
         // Verify the consistency of custom attribute metadata from two calls of the same service
@@ -334,7 +334,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributes()
     {
         $formAttributesMetadata = $this->service->getAttributes('adminhtml_customer');
-        $this->assertCount(14, $formAttributesMetadata, "Invalid number of attributes for the specified form.");
+        $this->assertCount(14, $formAttributesMetadata, 'Invalid number of attributes for the specified form.');
         // Verify the consistency of getAttributes() function from the 2nd call of the same service
         $formAttributesMetadata1 = $this->service->getAttributes('adminhtml_customer');
         $this->assertEquals(

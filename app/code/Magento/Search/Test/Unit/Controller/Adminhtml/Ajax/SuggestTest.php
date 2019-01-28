@@ -101,7 +101,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $searchString = "simple";
+        $searchString = 'simple';
         $firstItemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('FirstItem')

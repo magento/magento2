@@ -103,7 +103,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $expectedResult,
             $this->_condition->validateAttribute($valueForValidate),
-            "Failed asserting that "
+            'Failed asserting that '
             . var_export($existingValue, true)
             . $operator
             . var_export($valueForValidate, true)
@@ -142,7 +142,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $expectedResult,
             $this->_condition->validate($objectMock),
-            "Failed asserting that "
+            'Failed asserting that '
             . var_export($existingValue, true)
             . $operator
             . var_export($valueForValidate, true)
@@ -213,7 +213,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $expectedResult,
             $this->_condition->validateAttribute($valueForValidate),
-            "Failed asserting that "
+            'Failed asserting that '
             . var_export($existingValue, true)
             . $operator
             . var_export($valueForValidate, true)

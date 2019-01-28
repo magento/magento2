@@ -15,12 +15,12 @@ class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstra
     /**
      * Items counter default message
      */
-    const ITEMS_COUNTER_MASSAGE = "%s Items in Cart";
+    const ITEMS_COUNTER_MASSAGE = '%s Items in Cart';
 
     /**
      * Items counter message with limitations
      */
-    const VISIBLE_ITEMS_COUNTER_MASSAGE = "%s of %s Items in Cart";
+    const VISIBLE_ITEMS_COUNTER_MASSAGE = '%s of %s Items in Cart';
 
     /**
      * Assert that quantity of visible Cart items are the same as minicart configuration value.

@@ -215,7 +215,7 @@ class Helper extends \Magento\Framework\DB\Helper
             "/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;\n" .
             "\n-- Dump completed on " .
             $this->_coreDate->gmtDate() .
-            " GMT";
+            ' GMT';
 
         return $footer;
     }

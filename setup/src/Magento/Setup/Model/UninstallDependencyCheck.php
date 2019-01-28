@@ -79,7 +79,7 @@ class UninstallDependencyCheck
                 }
 
                 if (!empty($dependencies[$package])) {
-                    $messages[] = $package . " has the following dependent package(s): "
+                    $messages[] = $package . ' has the following dependent package(s): '
                         . implode(', ', $dependencies[$package]);
                 }
             }

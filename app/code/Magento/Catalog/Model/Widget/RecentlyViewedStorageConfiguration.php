@@ -14,7 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class RecentlyViewedStorageConfiguration implements FrontendStorageConfigurationInterface
 {
     /** Recently Viewed lifetime */
-    const XML_LIFETIME_PATH = "catalog/recently_products/recently_viewed_lifetime";
+    const XML_LIFETIME_PATH = 'catalog/recently_products/recently_viewed_lifetime';
 
     /**
      * @var ScopeConfigInterface

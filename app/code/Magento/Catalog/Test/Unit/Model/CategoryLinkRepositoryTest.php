@@ -96,8 +96,8 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDeleteByIds()
     {
-        $categoryId = "42";
-        $productSku = "testSku";
+        $categoryId = '42';
+        $productSku = 'testSku';
         $productId = 55;
         $productPositions = [55 => 1];
         $categoryMock = $this->createPartialMock(
@@ -122,8 +122,8 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteByIdsWithCouldNotSaveException()
     {
-        $categoryId = "42";
-        $productSku = "testSku";
+        $categoryId = '42';
+        $productSku = 'testSku';
         $productId = 55;
         $productPositions = [55 => 1];
         $categoryMock = $this->createPartialMock(
@@ -149,8 +149,8 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteWithInputException()
     {
-        $categoryId = "42";
-        $productSku = "testSku";
+        $categoryId = '42';
+        $productSku = 'testSku';
         $productId = 60;
         $productPositions = [55 => 1];
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
@@ -173,8 +173,8 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDelete()
     {
-        $categoryId = "42";
-        $productSku = "testSku";
+        $categoryId = '42';
+        $productSku = 'testSku';
         $productId = 55;
         $productPositions = [55 => 1];
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);

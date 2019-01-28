@@ -56,6 +56,6 @@ class AssertVoidInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about voided amount is available in Comments History section.";
+        return 'Message about voided amount is available in Comments History section.';
     }
 }

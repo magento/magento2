@@ -20,8 +20,8 @@ class AssertCacheStatus extends AbstractConstraint
      * @var array
      */
     private $cacheTypes = [
-        'block_html' => "Blocks HTML output",
-        'full_page' => "Page Cache",
+        'block_html' => 'Blocks HTML output',
+        'full_page' => 'Page Cache',
     ];
 
     /**
@@ -37,7 +37,7 @@ class AssertCacheStatus extends AbstractConstraint
         foreach ($caches as $cacheType => $cacheStatus) {
             \PHPUnit\Framework\Assert::assertTrue(
                 $adminCache->getGridBlock()->isCacheStatusCorrect($this->cacheTypes[$cacheType], $cacheStatus),
-                $this->cacheTypes[$cacheType] . " cache status in grid does not equal to " . $cacheStatus
+                $this->cacheTypes[$cacheType] . ' cache status in grid does not equal to ' . $cacheStatus
             );
         }
     }

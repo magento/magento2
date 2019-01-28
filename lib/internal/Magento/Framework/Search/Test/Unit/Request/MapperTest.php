@@ -994,15 +994,15 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         ];
 
         $bucket = [
-            "name" => "category_bucket",
-            "field" => "category",
-            "metric" => [
-                ["type" => "sum"],
-                ["type" => "count"],
-                ["type" => "min"],
-                ["type" => "max"],
+            'name' => 'category_bucket',
+            'field' => 'category',
+            'metric' => [
+                ['type' => 'sum'],
+                ['type' => 'count'],
+                ['type' => 'min'],
+                ['type' => 'max'],
             ],
-            "type" => "termBucket",
+            'type' => 'termBucket',
         ];
         $metricClass = \Magento\Framework\Search\Request\Aggregation\Metric::class;
         $bucketClass = \Magento\Framework\Search\Request\Aggregation\TermBucket::class;
@@ -1054,20 +1054,20 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         ];
 
         $bucket = [
-            "name" => "price_bucket",
-            "field" => "price",
-            "metric" => [
-                ["type" => "sum"],
-                ["type" => "count"],
-                ["type" => "min"],
-                ["type" => "max"],
+            'name' => 'price_bucket',
+            'field' => 'price',
+            'metric' => [
+                ['type' => 'sum'],
+                ['type' => 'count'],
+                ['type' => 'min'],
+                ['type' => 'max'],
             ],
-            "range" => [
-                ["from" => "", "to" => "50"],
-                ["from" => "50", "to" => "100"],
-                ["from" => "100", "to" => ""],
+            'range' => [
+                ['from' => '', 'to' => '50'],
+                ['from' => '50', 'to' => '100'],
+                ['from' => '100', 'to' => ''],
             ],
-            "type" => "rangeBucket",
+            'type' => 'rangeBucket',
         ];
         $metricClass = \Magento\Framework\Search\Request\Aggregation\Metric::class;
         $bucketClass = \Magento\Framework\Search\Request\Aggregation\RangeBucket::class;

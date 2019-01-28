@@ -79,14 +79,14 @@ class AdminAnalyzer extends \Symfony\Component\Console\Command\Command
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]
         );
-        $this->output->writeln("Verifying Magento Admin...");
+        $this->output->writeln('Verifying Magento Admin...');
         $adminUrlAnalyzerMessages = $this->runAdminUrlAnalyzer();
         if (isset($adminUrlAnalyzerMessages['error']) === false) {
             $this->output->outputMessages($this->urlAnalyzer->checkDomain($_ENV['app_backend_url']));
         } else {
             $this->output->outputMessages($adminUrlAnalyzerMessages);
         }
-        $this->output->writeln("Admin verification finished.");
+        $this->output->writeln('Admin verification finished.');
     }
 
     /**

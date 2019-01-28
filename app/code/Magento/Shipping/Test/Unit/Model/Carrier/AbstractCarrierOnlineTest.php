@@ -105,7 +105,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
 
     public function testParseXml()
     {
-        $xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><GetResponse><value>42</value>></GetResponse>";
+        $xmlString = '<?xml version="1.0" encoding="UTF-8"?><GetResponse><value>42</value>></GetResponse>';
         $simpleXmlElement = $this->carrier->parseXml($xmlString);
         $this->assertEquals('GetResponse', $simpleXmlElement->getName());
         $this->assertEquals(42, (int)$simpleXmlElement->value);

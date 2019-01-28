@@ -73,7 +73,7 @@ class Handler extends AbstractFactory
         $this->factoryContent .= "     * @return \\{$item['class']}\n";
         $this->factoryContent .= "     */\n";
         $this->factoryContent .= "    public function {$methodNameSuffix}(FixtureInterface \$fixture = null)\n";
-        $this->factoryContent .= "    {";
+        $this->factoryContent .= '    {';
 
         if (!empty($fallbackComment)) {
             $this->factoryContent .= $fallbackComment . "\n";
@@ -82,7 +82,7 @@ class Handler extends AbstractFactory
         }
 
         $this->factoryContent .= "        \$handler = \$this->objectManager->get({$realClass}::class);\n";
-        $this->factoryContent .= "        return \$handler->persist(\$fixture);";
+        $this->factoryContent .= '        return $handler->persist($fixture);';
         $this->factoryContent .= "\n    }\n";
 
         $this->cnt++;

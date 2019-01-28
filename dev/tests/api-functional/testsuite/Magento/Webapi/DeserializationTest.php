@@ -47,7 +47,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Response does not contain expected message."
+                'Response does not contain expected message.'
             );
         }
     }
@@ -74,7 +74,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Response does not contain expected message."
+                'Response does not contain expected message.'
             );
         }
     }

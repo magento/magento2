@@ -28,7 +28,7 @@
                 <span class="filter-value"><?= /* @escapeNotVerified */ $block->stripTags($_filter->getLabel()) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
-                $currentFilterName = $block->escapeHtml(__($_filter->getName())) . " " . $block->stripTags($_filter->getLabel());
+                $currentFilterName = $block->escapeHtml(__($_filter->getName())) . ' ' . $block->stripTags($_filter->getLabel());
                 if ($clearLinkUrl):
                     ?>
                     <a class="action previous" href="<?= /* @escapeNotVerified */ $_filter->getRemoveUrl() ?>"
@@ -42,7 +42,7 @@
                     </a>
                 <?php else: ?>
                     <a class="action remove" href="<?= /* @escapeNotVerified */ $_filter->getRemoveUrl() ?>"
-                       title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Remove')) . " " . $currentFilterName ?>">
+                       title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Remove')) . ' ' . $currentFilterName ?>">
                         <span><?= /* @escapeNotVerified */ __('Remove This Item') ?></span>
                     </a>
                 <?php endif; ?>

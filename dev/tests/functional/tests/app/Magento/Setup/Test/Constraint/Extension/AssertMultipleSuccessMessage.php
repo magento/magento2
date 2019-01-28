@@ -38,6 +38,6 @@ class AssertMultipleSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Extension Updater success message is correct.";
+        return 'Extension Updater success message is correct.';
     }
 }

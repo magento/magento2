@@ -69,7 +69,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $productId1 = 10;
         $productId2 = 20;
 
-        $label = "color";
+        $label = 'color';
 
         $this->configurableAttribute = $this->eavConfig->getAttribute('catalog_product', 'test_configurable');
         $this->assertNotNull($this->configurableAttribute);
@@ -79,35 +79,35 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $configurableProductOptions = [
             [
-                "attribute_id" =>  $this->configurableAttribute->getId(),
-                "label" => $label,
-                "position" => 0,
-                "values" => [
+                'attribute_id' =>  $this->configurableAttribute->getId(),
+                'label' => $label,
+                'position' => 0,
+                'values' => [
                     [
-                        "value_index" =>  $options[0]['option_id'],
+                        'value_index' =>  $options[0]['option_id'],
                     ],
                     [
-                        "value_index" =>  $options[1]['option_id'],
+                        'value_index' =>  $options[1]['option_id'],
                     ]
                 ],
             ]
         ];
 
         $product = [
-            "sku" => self::CONFIGURABLE_PRODUCT_SKU,
-            "name" => self::CONFIGURABLE_PRODUCT_SKU,
-            "type_id" => "configurable",
-            "price" => 50,
+            'sku' => self::CONFIGURABLE_PRODUCT_SKU,
+            'name' => self::CONFIGURABLE_PRODUCT_SKU,
+            'type_id' => 'configurable',
+            'price' => 50,
             'attribute_set_id' => 4,
-            "custom_attributes" => [
+            'custom_attributes' => [
                 [
-                    "attribute_code" => $this->configurableAttribute->getAttributeCode(),
-                    "value" => $options[0]['option_id'],
+                    'attribute_code' => $this->configurableAttribute->getAttributeCode(),
+                    'value' => $options[0]['option_id'],
                 ],
             ],
-            "extension_attributes" => [
-                "configurable_product_options" => $configurableProductOptions,
-                "configurable_product_links" => [$productId1, $productId2],
+            'extension_attributes' => [
+                'configurable_product_options' => $configurableProductOptions,
+                'configurable_product_links' => [$productId1, $productId2],
             ],
         ];
 
@@ -122,15 +122,15 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         $productId1 = 10;
         $productId2 = 20;
-        $label = "color";
+        $label = 'color';
 
         $response = $this->createConfigurableProduct();
         $this->assertEquals(self::CONFIGURABLE_PRODUCT_SKU, $response[ProductInterface::SKU]);
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'])
         );
         $resultConfigurableProductOptions
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
         $this->assertEquals(1, count($resultConfigurableProductOptions));
         $this->assertTrue(isset($resultConfigurableProductOptions[0]['label']));
         $this->assertTrue(isset($resultConfigurableProductOptions[0]['id']));
@@ -141,10 +141,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals(2, count($resultConfigurableProductOptions[0]['values']));
 
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'])
         );
         $resultConfigurableProductLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'];
         $this->assertEquals(2, count($resultConfigurableProductLinks));
 
         $this->assertEquals([$productId1, $productId2], $resultConfigurableProductLinks);
@@ -163,17 +163,17 @@ class ProductRepositoryTest extends WebapiAbstract
         $response = $this->saveProduct($response);
 
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'])
         );
         $resultConfigurableProductOptions
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
         $this->assertEquals(0, count($resultConfigurableProductOptions));
 
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'])
         );
         $resultConfigurableProductLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'];
         $this->assertEquals(0, count($resultConfigurableProductLinks));
 
         $this->assertEquals([], $resultConfigurableProductLinks);
@@ -188,7 +188,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $newLabel = 'size';
 
         $response = $this->createConfigurableProduct();
-        $option = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"][0];
+        $option = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'][0];
 
         $optionId = $option['id'];
         $productId = $option['product_id'];
@@ -210,10 +210,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $response = $this->saveProduct($response);
 
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'])
         );
         $resultConfigurableProductOptions
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
         $this->assertEquals(1, count($resultConfigurableProductOptions));
 
         unset($updatedOption['id']);
@@ -237,19 +237,19 @@ class ProductRepositoryTest extends WebapiAbstract
         $response = $this->saveProduct($response);
 
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'])
         );
         $resultConfigurableProductOptions
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
         $this->assertEquals(1, count($resultConfigurableProductOptions));
         //Since one product is removed, the available values for the option is reduced
         $this->assertEquals(1, count($resultConfigurableProductOptions[0]['values']));
 
         $this->assertTrue(
-            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"])
+            isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'])
         );
         $resultConfigurableProductLinks
-            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'];
         $this->assertEquals(1, count($resultConfigurableProductLinks));
         $this->assertEquals([$productId1], $resultConfigurableProductLinks);
 
@@ -258,10 +258,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links']
             = [$productId1, $productId2];
         //set the value for required attribute
-        $response["custom_attributes"][] =
+        $response['custom_attributes'][] =
         [
-            "attribute_code" => $this->configurableAttribute->getAttributeCode(),
-            "value" => $resultConfigurableProductOptions[0]['values'][0]['value_index'],
+            'attribute_code' => $this->configurableAttribute->getAttributeCode(),
+            'value' => $resultConfigurableProductOptions[0]['values'][0]['value_index'],
         ];
 
         $response = $this->saveProduct($response);
@@ -289,12 +289,12 @@ class ProductRepositoryTest extends WebapiAbstract
         $expectedMessage = 'The product was unable to be saved. Please try again.';
         try {
             $this->saveProduct($response);
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -332,12 +332,12 @@ class ProductRepositoryTest extends WebapiAbstract
         $expectedMessage = 'Products "%1" and "%2" have the same set of attribute values.';
         try {
             $this->saveProduct($response);
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -365,12 +365,12 @@ class ProductRepositoryTest extends WebapiAbstract
         $expectedMessage = 'The product was unable to be saved. Please try again.';
         try {
             $this->saveProduct($response);
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -448,7 +448,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'deleteById',
             ],
         ];
-        $requestData = ["sku" => $productSku];
+        $requestData = ['sku' => $productSku];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
@@ -466,7 +466,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $product['custom_attributes'][$i]['value'] = [''];
                 }
             }
         }

@@ -18,22 +18,22 @@ class SubscriptionStatusProvider
     /**
      * Represents an enabled subscription state.
      */
-    const ENABLED = "Enabled";
+    const ENABLED = 'Enabled';
 
     /**
      * Represents a failed subscription state.
      */
-    const FAILED = "Failed";
+    const FAILED = 'Failed';
 
     /**
      * Represents a pending subscription state.
      */
-    const PENDING = "Pending";
+    const PENDING = 'Pending';
 
     /**
      * Represents a disabled subscription state.
      */
-    const DISABLED = "Disabled";
+    const DISABLED = 'Disabled';
 
     /**
      * @var ScopeConfigInterface

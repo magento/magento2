@@ -558,7 +558,7 @@ class Price implements DimensionalIndexerInterface
             null
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            "i.entity_id=e.entity_id",
+            'i.entity_id=e.entity_id',
             []
         )->where(
             'e.type_id=?',

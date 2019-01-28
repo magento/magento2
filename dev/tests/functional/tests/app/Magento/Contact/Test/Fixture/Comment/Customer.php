@@ -54,7 +54,7 @@ class Customer extends DataSource
     public function getData($key = null)
     {
         if (empty($this->data)) {
-            throw new \Exception("Data must be set");
+            throw new \Exception('Data must be set');
         }
 
         if (isset($this->data['dataset']) && !$this->customer) {

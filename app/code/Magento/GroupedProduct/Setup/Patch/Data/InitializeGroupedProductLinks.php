@@ -68,7 +68,7 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
                 ['c' => $this->moduleDataSetup->getTable('catalog_product_link_attribute')]
             )
             ->where(
-                "c.link_type_id=?",
+                'c.link_type_id=?',
                 \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
             );
         $result = $this->moduleDataSetup->getConnection()->fetchAll($select);

@@ -119,7 +119,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->getDefault();
 
         $this->expectExceptionMessage(
-            "The default website is invalid. Make sure no more than one default is defined and try again."
+            'The default website is invalid. Make sure no more than one default is defined and try again.'
         );
     }
 

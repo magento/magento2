@@ -25,7 +25,7 @@ class AssertNoDeleteForSystemCustomerGroup extends AbstractConstraint
     {
         \PHPUnit\Framework\Assert::assertFalse(
             $customerGroupEdit->getPageMainActions()->checkDeleteButton(),
-            "Delete button is visible."
+            'Delete button is visible.'
         );
     }
 

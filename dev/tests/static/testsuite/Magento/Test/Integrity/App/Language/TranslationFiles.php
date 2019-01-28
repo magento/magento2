@@ -84,7 +84,7 @@ class TranslationFiles extends \PHPUnit\Framework\TestCase
         foreach ($failures as $locale => $localeErrors) {
             $message .= $locale . PHP_EOL;
             foreach ($localeErrors as $typeError => $error) {
-                $message .= PHP_EOL . "##########" . PHP_EOL . ucfirst($typeError) . ':' . PHP_EOL;
+                $message .= PHP_EOL . '##########' . PHP_EOL . ucfirst($typeError) . ':' . PHP_EOL;
                 foreach ($error as $phrase) {
                     $message .= '"' . $phrase . '","' . $phrase . '"' . PHP_EOL;
                 }

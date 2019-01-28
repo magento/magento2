@@ -33,7 +33,7 @@ class Payments extends Block
      *
      * @var string
      */
-    protected $save = "#save";
+    protected $save = '#save';
 
     /**
      * @param string $countryCode

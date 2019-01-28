@@ -64,7 +64,7 @@
                         <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
                         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
                         <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
-                        <li class="admin__page-nav-item <?php if ($block->getTabIsHidden($_tab)): ?> <?= "no-display" ?> <?php endif; ?> " <?= /* @escapeNotVerified */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
+                        <li class="admin__page-nav-item <?php if ($block->getTabIsHidden($_tab)): ?> <?= 'no-display' ?> <?php endif; ?> " <?= /* @escapeNotVerified */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
                             <a href="<?= /* @escapeNotVerified */ $_tabHref ?>" id="<?= /* @escapeNotVerified */ $block->getTabId($_tab) ?>"
                                name="<?= /* @escapeNotVerified */ $block->getTabId($_tab, false) ?>"
                                title="<?= /* @escapeNotVerified */ $block->getTabTitle($_tab) ?>"

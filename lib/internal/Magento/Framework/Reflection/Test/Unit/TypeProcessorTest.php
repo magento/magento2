@@ -226,8 +226,8 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public static function processSimpleTypeExceptionProvider()
     {
         return [
-            "int type, string value" => ['test', 'int'],
-            "float type, string value" => ['test', 'float'],
+            'int type, string value' => ['test', 'int'],
+            'float type, string value' => ['test', 'float'],
         ];
     }
 
@@ -319,8 +319,8 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testGetOperationName()
     {
         $this->assertEquals(
-            "resNameMethodName",
-            $this->typeProcessor->getOperationName("resName", "methodName")
+            'resNameMethodName',
+            $this->typeProcessor->getOperationName('resName', 'methodName')
         );
     }
 

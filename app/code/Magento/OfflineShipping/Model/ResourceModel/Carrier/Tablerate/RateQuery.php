@@ -46,8 +46,8 @@ class RateQuery
         $orWhere = '(' . implode(
             ') OR (',
             [
-                "dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = :postcode",
-                "dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = :postcode_prefix",
+                'dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = :postcode',
+                'dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = :postcode_prefix',
                 "dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = ''",
 
                 // Handle asterisk in dest_zip field
@@ -56,8 +56,8 @@ class RateQuery
                 "dest_country_id = '0' AND dest_region_id = :region_id AND dest_zip = '*'",
                 "dest_country_id = '0' AND dest_region_id = 0 AND dest_zip = '*'",
                 "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = ''",
-                "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = :postcode",
-                "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = :postcode_prefix"
+                'dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = :postcode',
+                'dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = :postcode_prefix'
             ]
         ) . ')';
         $select->where($orWhere);
@@ -131,7 +131,7 @@ class RateQuery
      */
     private function getDestPostcodePrefix()
     {
-        if (!preg_match("/^(.+)-(.+)$/", $this->request->getDestPostcode(), $zipParts)) {
+        if (!preg_match('/^(.+)-(.+)$/', $this->request->getDestPostcode(), $zipParts)) {
             return $this->request->getDestPostcode();
         }
 

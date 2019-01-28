@@ -82,13 +82,13 @@ class ConditionResolver
         }
 
         switch ($condition['type']) {
-            case "value":
+            case 'value':
                 $value = $this->getConnection()->quote($argument);
                 break;
-            case "variable":
+            case 'variable':
                 $value = new Expression($argument);
                 break;
-            case "identifier":
+            case 'identifier':
                 $value = $this->getConnection()->quoteIdentifier(
                     $referencedEntity ? $referencedEntity . '.' . $argument : $argument
                 );

@@ -284,7 +284,7 @@ class Widget
                     'description' => __((string)$widget['description']),
                 ];
             }
-            usort($result, [$this, "sortWidgets"]);
+            usort($result, [$this, 'sortWidgets']);
             $this->widgetsArray = $result;
         }
         return $this->widgetsArray;
@@ -446,7 +446,7 @@ class Widget
      */
     protected function sortWidgets($firstElement, $secondElement)
     {
-        return strcmp($firstElement["name"], $secondElement["name"]);
+        return strcmp($firstElement['name'], $secondElement['name']);
     }
 
     /**

@@ -111,7 +111,7 @@ class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
 
     public function testRequestRegeneration()
     {
-        $this->writeInterface->expects($this->once())->method("touch");
+        $this->writeInterface->expects($this->once())->method('touch');
         $this->model->requestRegeneration();
     }
 }

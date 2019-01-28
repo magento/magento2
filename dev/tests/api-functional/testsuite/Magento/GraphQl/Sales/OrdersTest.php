@@ -86,17 +86,17 @@ QUERY;
             $this->assertEquals(
                 $data['increment_id'],
                 $actualData[$key]['increment_id'],
-                "increment_id is different than the expected for order - " . $data['increment_id']
+                'increment_id is different than the expected for order - ' . $data['increment_id']
             );
             $this->assertEquals(
                 $data['grand_total'],
                 $actualData[$key]['grand_total'],
-                "grand_total is different than the expected for order - " . $data['increment_id']
+                'grand_total is different than the expected for order - ' . $data['increment_id']
             );
             $this->assertEquals(
                 $data['status'],
                 $actualData[$key]['status'],
-                "status is different than the expected for order - " . $data['increment_id']
+                'status is different than the expected for order - ' . $data['increment_id']
             );
         }
     }

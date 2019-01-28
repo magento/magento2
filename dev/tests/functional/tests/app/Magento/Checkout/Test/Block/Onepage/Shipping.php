@@ -166,7 +166,7 @@ class Shipping extends Form
      */
     public function getRequiredFields()
     {
-        return $this->_rootElement->getElements("div .field._required");
+        return $this->_rootElement->getElements('div .field._required');
     }
 
     /**

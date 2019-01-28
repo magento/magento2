@@ -280,18 +280,18 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $this->_allSeries = $datas;
 
         //Google encoding values
-        if ($this->_encoding == "s") {
+        if ($this->_encoding == 's') {
             // simple encoding
-            $params['chd'] = "s:";
-            $dataDelimiter = "";
-            $dataSetdelimiter = ",";
-            $dataMissing = "_";
+            $params['chd'] = 's:';
+            $dataDelimiter = '';
+            $dataSetdelimiter = ',';
+            $dataMissing = '_';
         } else {
             // extended encoding
-            $params['chd'] = "e:";
-            $dataDelimiter = "";
-            $dataSetdelimiter = ",";
-            $dataMissing = "__";
+            $params['chd'] = 'e:';
+            $dataDelimiter = '';
+            $dataSetdelimiter = ',';
+            $dataMissing = '__';
         }
 
         // process each string in the array, and find the max length
@@ -329,7 +329,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         foreach ($this->getAllSeries() as $index => $serie) {
             $thisdataarray = $serie;
-            if ($this->_encoding == "s") {
+            if ($this->_encoding == 's') {
                 // SIMPLE ENCODING
                 for ($j = 0; $j < sizeof($thisdataarray); $j++) {
                     $currentvalue = $thisdataarray[$j];
@@ -420,9 +420,9 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
                     $tmpstring = implode('|', $this->_axisLabels[$idx]);
 
-                    $valueBuffer[] = $indexid . ":|" . $tmpstring;
+                    $valueBuffer[] = $indexid . ':|' . $tmpstring;
                 } elseif ($idx == 'y') {
-                    $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
+                    $valueBuffer[] = $indexid . ':|' . implode('|', $yLabels);
                 }
                 $indexid++;
             }

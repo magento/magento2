@@ -79,7 +79,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $optionId = $option->getOptionId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/products/' . $productSku . "/options/" . $optionId,
+                'resourcePath' => '/V1/products/' . $productSku . '/options/' . $optionId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -106,7 +106,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $productSku = 'simple';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/products/' . $productSku . "/options",
+                'resourcePath' => '/V1/products/' . $productSku . '/options',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -197,7 +197,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $optionDataPost['product_sku'] = $productSku;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => "/V1/products/options",
+                'resourcePath' => '/V1/products/options',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -252,7 +252,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $optionId = $option->getOptionId();
         $optionDataPost = [
             'product_sku' => $productSku,
-            'title' => $option->getTitle() . "_updated",
+            'title' => $option->getTitle() . '_updated',
             'type' => $option->getType(),
             'sort_order' => (int)$option->getSortOrder(),
             'is_require' => (bool)$option->getIsRequire(),

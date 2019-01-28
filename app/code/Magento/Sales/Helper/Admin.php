@@ -153,7 +153,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $links = [];
             $i = 1;
             $data = str_replace('%', '%%', $data);
-            $regexp = "#(?J)<a"
+            $regexp = '#(?J)<a'
                 ."(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
                 .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
             while (preg_match($regexp, $data, $matches)) {

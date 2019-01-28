@@ -98,7 +98,7 @@ class AllowedCountries
             case ScopeInterface::SCOPE_STORES:
                 return [$this->storeManager->getStore()->getId()];
             default:
-                throw new \InvalidArgumentException("Invalid scope is specified");
+                throw new \InvalidArgumentException('Invalid scope is specified');
         }
     }
 

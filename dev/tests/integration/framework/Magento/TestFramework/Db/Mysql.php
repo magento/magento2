@@ -116,7 +116,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     {
         $this->ensureDefaultsExtraFile();
         if (!$this->isDbDumpExists()) {
-            throw new \LogicException("DB dump file does not exist: " . $this->getSetupDbDumpFilename());
+            throw new \LogicException('DB dump file does not exist: ' . $this->getSetupDbDumpFilename());
         }
         $this->_shell->execute(
             'mysql --defaults-file=%s --host=%s --port=%s %s < %s',

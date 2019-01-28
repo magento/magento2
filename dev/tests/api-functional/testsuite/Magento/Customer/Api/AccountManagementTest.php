@@ -362,12 +362,12 @@ class AccountManagementTest extends WebapiAbstract
             } else {
                 $this->_webApiCall($serviceInfo);
             }
-            $this->fail("Expected exception to be thrown.");
+            $this->fail('Expected exception to be thrown.');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Exception message does not match"
+                'Exception message does not match'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -760,7 +760,7 @@ class AccountManagementTest extends WebapiAbstract
         $this->assertEquals(
             $this->getFirstFixtureAddressData(),
             $addressData,
-            "Default billing address data is invalid."
+            'Default billing address data is invalid.'
         );
     }
 
@@ -787,7 +787,7 @@ class AccountManagementTest extends WebapiAbstract
         $this->assertEquals(
             $this->getFirstFixtureAddressData(),
             $addressData,
-            "Default shipping address data is invalid."
+            'Default shipping address data is invalid.'
         );
     }
 
@@ -829,7 +829,7 @@ class AccountManagementTest extends WebapiAbstract
     public function testCreateCustomerWithSubscription()
     {
         $customerData = $this->customerHelper->createSampleCustomer(
-            ["extension_attributes" => ["is_subscribed" => true]]
+            ['extension_attributes' => ['is_subscribed' => true]]
         );
 
         $this->assertNotNull($customerData['id']);
@@ -844,7 +844,7 @@ class AccountManagementTest extends WebapiAbstract
     {
         //Creating customer and subscribe
         $customerData = $this->customerHelper->createSampleCustomer(
-            ["extension_attributes" => ["is_subscribed" => true]]
+            ['extension_attributes' => ['is_subscribed' => true]]
         );
         $this->assertNotNull($customerData['id']);
 
@@ -855,10 +855,10 @@ class AccountManagementTest extends WebapiAbstract
         $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
         //Manage customer in order to unsubscribe
         $this->customerHelper->updateSampleCustomer(
-            $customerData["id"],
+            $customerData['id'],
             array_merge(
                 $customerData,
-                ["extension_attributes" => ["is_subscribed" => false]]
+                ['extension_attributes' => ['is_subscribed' => false]]
             )
         );
         $this->initSubscriber();

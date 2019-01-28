@@ -157,7 +157,7 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
             $this->browser->open($_ENV['app_frontend_url'] . $itemProduct->getUrlKey() . '.html');
             $this->catalogProductView->getViewBlock()->clickAddToCompare();
         }
-        $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+        $this->cmsIndex->getLinksBlock()->openLink('Compare Products');
         $this->catalogProductCompare->getCompareProductsBlock()->removeAllProducts();
 
         // Steps:

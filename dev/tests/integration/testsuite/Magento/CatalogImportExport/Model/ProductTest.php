@@ -111,10 +111,10 @@ class ProductTest extends AbstractProductExportImportTestCase
                     'simple',
                 ],
                 [
-                    "image",
-                    "small_image",
-                    "thumbnail",
-                    "media_gallery"
+                    'image',
+                    'small_image',
+                    'thumbnail',
+                    'media_gallery'
                 ]
             ],
             'simple-product-crosssell' => [

@@ -51,7 +51,7 @@ class Logger
         $data = array_filter($data);
 
         if (!$data) {
-            throw new \InvalidArgumentException("Log data is empty");
+            throw new \InvalidArgumentException('Log data is empty');
         }
 
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */

@@ -144,7 +144,7 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->expectExceptionMessage(
             "The attribute set couldn't be saved due to an error. Verify your information and try again. "
-            . "If the error persists, please try again later."
+            . 'If the error persists, please try again later.'
         );
     }
 
@@ -172,7 +172,7 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->expectExceptionMessage(
             "The attribute set couldn't be deleted due to an error. "
-            . "Try again — if the error persists, please try again later."
+            . 'Try again — if the error persists, please try again later.'
         );
     }
 

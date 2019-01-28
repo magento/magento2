@@ -668,7 +668,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringContains('customer/account/edit/'));
         // Not sure if its the most secure message. Not changing the behavior for now in the new AccountManagement APIs.
         $this->assertSessionMessages(
-            $this->equalTo(["The password doesn&#039;t match this account. Verify the password and try again."]),
+            $this->equalTo(['The password doesn&#039;t match this account. Verify the password and try again.']),
             MessageInterface::TYPE_ERROR
         );
     }

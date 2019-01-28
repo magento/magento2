@@ -269,7 +269,7 @@ class Queue
     {
         $this->lastJobStarted = time();
         $this->logger->info(
-            "Execute: " . $package->getPath(),
+            'Execute: ' . $package->getPath(),
             [
                 'process' => $package->getPath(),
                 'count' => count($package->getFiles()),

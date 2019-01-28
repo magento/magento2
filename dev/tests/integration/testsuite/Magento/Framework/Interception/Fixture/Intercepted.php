@@ -69,7 +69,7 @@ class Intercepted extends InterceptedParent implements InterceptedInterface
      */
     public function G($param1)
     {
-        return '<G>' . $param1 . "</G>";
+        return '<G>' . $param1 . '</G>';
     }
 
     /**

@@ -141,7 +141,7 @@ class PatchRegistry implements \IteratorAggregate
 
         foreach ($deps as $dep) {
             if (isset($this->cyclomaticStack[$dep])) {
-                throw new \LogicException("Cyclomatic dependency during patch installation");
+                throw new \LogicException('Cyclomatic dependency during patch installation');
             }
 
             $depInstance = $this->registerPatch($dep);

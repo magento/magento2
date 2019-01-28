@@ -191,7 +191,7 @@ class Dictionary
         $result = [];
         if (isset($path)) {
             $directoryRead = $this->directoryReadFactory->create($path);
-            $foundCsvFiles = $directoryRead->search("*.csv");
+            $foundCsvFiles = $directoryRead->search('*.csv');
             foreach ($foundCsvFiles as $foundCsvFile) {
                 $file = $directoryRead->openFile($foundCsvFile);
                 while (($row = $file->readCsv()) !== false) {

@@ -329,7 +329,7 @@ class Timezone implements TimezoneInterface
     private function appendTimeIfNeeded($date, $includeTime)
     {
         if ($includeTime && !preg_match('/\d{1}:\d{2}/', $date)) {
-            $date .= " 0:00am";
+            $date .= ' 0:00am';
         }
         return $date;
     }

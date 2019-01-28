@@ -26,7 +26,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'customerCustomerRepositoryV1';
     const RESOURCE_PATH = '/V1/customers';
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    const RESOURCE_PATH_CUSTOMER_TOKEN = '/V1/integration/customer/token';
 
     /**
      * Sample values for testing
@@ -218,7 +218,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         //Verify if the customer is deleted
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage(sprintf("No such entity with customerId = %s", $customerData[Customer::ID]));
+        $this->expectExceptionMessage(sprintf('No such entity with customerId = %s', $customerData[Customer::ID]));
         $this->_getCustomerData($customerData[Customer::ID]);
     }
 
@@ -242,12 +242,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, ['customerId' => $invalidId]);
 
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -291,7 +291,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         //Verify if the customer is updated
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
-        $this->assertEquals($lastName . "Updated", $existingCustomerDataObject->getLastname());
+        $this->assertEquals($lastName . 'Updated', $existingCustomerDataObject->getLastname());
     }
 
     /**
@@ -331,12 +331,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         $expectedMessage = '"Associate to Website" is a required value.';
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-            $this->fail("Expected exception.");
+            $this->fail('Expected exception.');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj =  $this->customerHelper->processRestExceptionResult($e);
@@ -363,7 +363,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/-1",
+                'resourcePath' => self::RESOURCE_PATH . '/-1',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -382,12 +382,12 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-            $this->fail("Expected exception.");
+            $this->fail('Expected exception.');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);

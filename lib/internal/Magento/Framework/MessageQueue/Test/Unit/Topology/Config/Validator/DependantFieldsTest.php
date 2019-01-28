@@ -65,7 +65,7 @@ class DependantFieldsTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateMissingTopicField()
     {
-        $expectedMessage = "Topic name is required for topic based exchange: ex01";
+        $expectedMessage = 'Topic name is required for topic based exchange: ex01';
         $this->expectException('\LogicException');
         $this->expectExceptionMessage($expectedMessage);
         $configData = [

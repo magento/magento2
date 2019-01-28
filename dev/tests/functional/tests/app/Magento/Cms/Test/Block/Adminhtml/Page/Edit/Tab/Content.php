@@ -36,7 +36,7 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $addVariableButton = ".add-variable";
+    protected $addVariableButton = '.add-variable';
 
     /**
      * Insert Widget button selector.

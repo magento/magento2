@@ -891,7 +891,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
-        $countSelect->columns("COUNT(DISTINCT main_table.entity_id)");
+        $countSelect->columns('COUNT(DISTINCT main_table.entity_id)');
 
         return $countSelect;
     }

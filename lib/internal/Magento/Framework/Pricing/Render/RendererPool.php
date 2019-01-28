@@ -163,7 +163,7 @@ class RendererPool extends AbstractBlock
             "{$itemType}/adjustments/{$priceType}",
             "{$itemType}/adjustments/default",
             "default/adjustments/{$priceType}",
-            "default/adjustments/default",
+            'default/adjustments/default',
         ];
         $renders = $this->findDataByPattern($fallbackPattern);
         if ($renders) {

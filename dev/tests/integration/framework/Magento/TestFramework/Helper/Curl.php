@@ -25,6 +25,6 @@ class Curl extends CurlLibrary
      */
     public function delete($uri)
     {
-        $this->makeRequest("DELETE", $uri);
+        $this->makeRequest('DELETE', $uri);
     }
 }

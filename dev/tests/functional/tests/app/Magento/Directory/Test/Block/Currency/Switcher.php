@@ -46,7 +46,7 @@ class Switcher extends Block
     {
         $this->waitForElementVisible($this->currencySwitch);
         $currencyLink = $this->_rootElement->find($this->currencySwitch);
-        $customCurrencySwitch = explode(" ", $this->_rootElement->find($this->currencySwitch)->getText());
+        $customCurrencySwitch = explode(' ', $this->_rootElement->find($this->currencySwitch)->getText());
         $currencyCode = $currencySymbol->getCode();
         if ($customCurrencySwitch[0] !== $currencyCode) {
             $currencyLink->click();

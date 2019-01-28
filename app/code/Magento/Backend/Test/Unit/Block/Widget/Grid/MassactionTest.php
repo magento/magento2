@@ -181,45 +181,45 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'test_id1',
-                ["label" => "Test Item One", "url" => "*/*/test1"],
+                ['label' => 'Test Item One', 'url' => '*/*/test1'],
                 new \Magento\Framework\DataObject(
                     [
-                        "label" => "Test Item One",
-                        "url" => "http://localhost/index.php/backend/admin/test/test1",
-                        "id" => 'test_id1',
+                        'label' => 'Test Item One',
+                        'url' => 'http://localhost/index.php/backend/admin/test/test1',
+                        'id' => 'test_id1',
                     ]
                 ),
             ],
             [
                 'test_id2',
-                new \Magento\Framework\DataObject(["label" => "Test Item Two", "url" => "*/*/test2"]),
+                new \Magento\Framework\DataObject(['label' => 'Test Item Two', 'url' => '*/*/test2']),
                 new \Magento\Framework\DataObject(
                     [
-                        "label" => "Test Item Two",
-                        "url" => "http://localhost/index.php/backend/admin/test/test2",
-                        "id" => 'test_id2',
+                        'label' => 'Test Item Two',
+                        'url' => 'http://localhost/index.php/backend/admin/test/test2',
+                        'id' => 'test_id2',
                     ]
                 )
             ],
             [
                 'enabled',
-                new \Magento\Framework\DataObject(["label" => "Test Item Enabled", "url" => "*/*/test2"]),
+                new \Magento\Framework\DataObject(['label' => 'Test Item Enabled', 'url' => '*/*/test2']),
                 new \Magento\Framework\DataObject(
                     [
-                        "label" => "Test Item Enabled",
-                        "url" => "http://localhost/index.php/backend/admin/test/test2",
-                        "id" => 'enabled',
+                        'label' => 'Test Item Enabled',
+                        'url' => 'http://localhost/index.php/backend/admin/test/test2',
+                        'id' => 'enabled',
                     ]
                 )
             ],
             [
                 'refresh',
-                new \Magento\Framework\DataObject(["label" => "Test Item Refresh", "url" => "*/*/test2"]),
+                new \Magento\Framework\DataObject(['label' => 'Test Item Refresh', 'url' => '*/*/test2']),
                 new \Magento\Framework\DataObject(
                     [
-                        "label" => "Test Item Refresh",
-                        "url" => "http://localhost/index.php/backend/admin/test/test2",
-                        "id" => 'refresh',
+                        'label' => 'Test Item Refresh',
+                        'url' => 'http://localhost/index.php/backend/admin/test/test2',
+                        'id' => 'refresh',
                     ]
                 )
             ]

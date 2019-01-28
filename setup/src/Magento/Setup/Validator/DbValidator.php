@@ -116,7 +116,7 @@ class DbValidator
      */
     private function checkDatabaseName(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
     {
-        $query = "SHOW DATABASES";
+        $query = 'SHOW DATABASES';
         $accessibleDbs = $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN, 0);
         foreach ($accessibleDbs as $accessibleDbName) {
             if ($dbName == $accessibleDbName) {
@@ -125,7 +125,7 @@ class DbValidator
         }
         throw new \Magento\Setup\Exception(
             "Database '{$dbName}' does not exist "
-            ."or specified database server user does not have privileges to access this database."
+            .'or specified database server user does not have privileges to access this database.'
         );
     }
 
@@ -159,7 +159,7 @@ class DbValidator
         ];
 
         // check global privileges
-        $userPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES "
+        $userPrivilegesQuery = 'SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES '
             . "WHERE REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($userPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
         if (empty(array_diff($requiredPrivileges, $this->parseGrantInfo($grantInfo)))) {
@@ -167,7 +167,7 @@ class DbValidator
         }
 
         // check table privileges
-        $schemaPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM SCHEMA_PRIVILEGES " .
+        $schemaPrivilegesQuery = 'SELECT PRIVILEGE_TYPE FROM SCHEMA_PRIVILEGES ' .
             "WHERE '$dbName' LIKE TABLE_SCHEMA AND REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($schemaPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
         if (empty(array_diff($requiredPrivileges, $this->parseGrantInfo($grantInfo)))) {

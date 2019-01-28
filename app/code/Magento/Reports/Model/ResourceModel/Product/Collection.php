@@ -274,7 +274,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
-        $countSelect->columns("count(DISTINCT e.entity_id)");
+        $countSelect->columns('count(DISTINCT e.entity_id)');
 
         return $countSelect;
     }

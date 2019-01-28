@@ -66,9 +66,9 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     public function gatewayResponseInvariants()
     {
         return [
-            "Input data is a string" => ['testInput'],
-            "Input data is an object" => [new \stdClass],
-            "Input data is an array" => [['test' => 'input']]
+            'Input data is a string' => ['testInput'],
+            'Input data is an object' => [new \stdClass],
+            'Input data is an array' => [['test' => 'input']]
         ];
     }
 
@@ -80,7 +80,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(
             DataObject::class,
             $output,
-            "Method must return instance of \\Magento\\Framework\\DataObject."
+            'Method must return instance of \\Magento\\Framework\\DataObject.'
         );
     }
 

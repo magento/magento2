@@ -76,7 +76,7 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
 
     public function testRender()
     {
-        $timeZone = "America/New_York";
+        $timeZone = 'America/New_York';
         $this->abstractElementMock->setForm($this->formMock);
         $this->timeZoneMock->expects($this->once())
             ->method('getConfigTimezone')

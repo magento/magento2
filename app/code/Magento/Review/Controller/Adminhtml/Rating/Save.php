@@ -45,7 +45,7 @@ class Save extends RatingController implements HttpPostActionInterface
                     $i = 1;
                     foreach ($options as $key => $optionCode) {
                         $optionModel = $this->_objectManager->create(\Magento\Review\Model\Rating\Option::class);
-                        if (!preg_match("/^add_([0-9]*?)$/", $key)) {
+                        if (!preg_match('/^add_([0-9]*?)$/', $key)) {
                             $optionModel->setId($key);
                         }
 

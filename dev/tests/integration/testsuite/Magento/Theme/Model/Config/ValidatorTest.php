@@ -46,7 +46,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->templateModel = $objectManager->create(\Magento\Email\Model\Template::class);
         $this->templateModel->load(self::TEMPLATE_CODE, 'template_code');
         $this->templateFactoryMock->expects($this->once())
-            ->method("create")
+            ->method('create')
             ->willReturn($this->templateModel);
         $this->model = $objectManager->create(
             \Magento\Theme\Model\Design\Config\Validator::class,
@@ -108,7 +108,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateNoRecursiveReference()
     {
         $this->templateFactoryMock->expects($this->once())
-            ->method("create")
+            ->method('create')
             ->willReturn($this->templateModel);
 
         $fieldConfig = [

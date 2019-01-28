@@ -68,18 +68,18 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $oAuthClient = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
         $requestToken = $oAuthClient->requestRequestToken();
 
-        $this->assertNotEmpty($requestToken->getRequestToken(), "Request token value is not set");
-        $this->assertNotEmpty($requestToken->getRequestTokenSecret(), "Request token secret is not set");
+        $this->assertNotEmpty($requestToken->getRequestToken(), 'Request token value is not set');
+        $this->assertNotEmpty($requestToken->getRequestTokenSecret(), 'Request token secret is not set');
 
         $this->assertEquals(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN,
             strlen($requestToken->getRequestToken()),
-            "Request token value length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN
+            'Request token value length should be ' . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN
         );
         $this->assertEquals(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET,
             strlen($requestToken->getRequestTokenSecret()),
-            "Request token secret length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET
+            'Request token secret length should be ' . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET
         );
     }
 
@@ -126,18 +126,18 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             self::$_verifier,
             $requestToken->getRequestTokenSecret()
         );
-        $this->assertNotEmpty($accessToken->getAccessToken(), "Access token value is not set.");
-        $this->assertNotEmpty($accessToken->getAccessTokenSecret(), "Access token secret is not set.");
+        $this->assertNotEmpty($accessToken->getAccessToken(), 'Access token value is not set.');
+        $this->assertNotEmpty($accessToken->getAccessTokenSecret(), 'Access token secret is not set.');
 
         $this->assertEquals(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN,
             strlen($accessToken->getAccessToken()),
-            "Access token value length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN
+            'Access token value length should be ' . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN
         );
         $this->assertEquals(
             \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET,
             strlen($accessToken->getAccessTokenSecret()),
-            "Access token secret length should be " . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET
+            'Access token secret length should be ' . \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET
         );
     }
 

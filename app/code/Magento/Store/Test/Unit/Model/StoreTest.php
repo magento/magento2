@@ -651,7 +651,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         if ($expected) {
             $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
         } else {
-            $this->assertFalse($model->isCurrentlySecure(), "Was expecting this test to show as not secure!");
+            $this->assertFalse($model->isCurrentlySecure(), 'Was expecting this test to show as not secure!');
         }
     }
 

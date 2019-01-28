@@ -218,7 +218,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                         'price' => [
                             'type' => 'int',
                             'required' => true,
-                            'documentation' => ""
+                            'documentation' => ''
                         ]
                     ]
                 ],
@@ -240,7 +240,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                                     'parameters' => [
                                         'result' => [
                                             'type' => 'TestModule5V2EntityAllSoapAndRest',
-                                            'documentation' => "",
+                                            'documentation' => '',
                                             'required' => true,
                                         ],
                                     ],
@@ -266,7 +266,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                         'price' => [
                             'type' => 'int',
                             'required' => true,
-                            'documentation' => ""
+                            'documentation' => ''
                         ]
                     ]
                 ],

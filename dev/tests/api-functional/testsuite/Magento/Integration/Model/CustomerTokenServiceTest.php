@@ -24,9 +24,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
  */
 class CustomerTokenServiceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "integrationCustomerTokenServiceV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    const SERVICE_NAME = 'integrationCustomerTokenServiceV1';
+    const SERVICE_VERSION = 'V1';
+    const RESOURCE_PATH_CUSTOMER_TOKEN = '/V1/integration/customer/token';
 
     /**
      * @var CustomerTokenServiceInterface
@@ -115,7 +115,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             $this->assertInputExceptionMessages($e);
         }
         if ($noExceptionOccurred) {
-            $this->fail("Exception was expected to be thrown when provided credentials are invalid.");
+            $this->fail('Exception was expected to be thrown when provided credentials are invalid.');
         }
     }
 
@@ -138,7 +138,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             $this->assertInvalidCredentialsException($e);
         }
         if ($noExceptionOccurred) {
-            $this->fail("Exception was expected to be thrown when provided credentials are invalid.");
+            $this->fail('Exception was expected to be thrown when provided credentials are invalid.');
         }
     }
 
@@ -218,7 +218,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
         }
         if ($noExceptionOccurred) {
             $this->fail(
-                "Precondition failed: exception should have occurred when token was requested with invalid credentials."
+                'Precondition failed: exception should have occurred when token was requested with invalid credentials.'
             );
         }
 
@@ -260,7 +260,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
                 $this->assertInvalidCredentialsException($e);
             }
             if ($noExceptionOccurred) {
-                $this->fail("Exception was expected to be thrown when provided credentials are invalid.");
+                $this->fail('Exception was expected to be thrown when provided credentials are invalid.');
             }
         }
 
@@ -272,7 +272,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             $this->assertInvalidCredentialsException($e);
         }
         if ($noExceptionOccurred) {
-            $this->fail("Exception was expected to be thrown because account should have been locked at this point.");
+            $this->fail('Exception was expected to be thrown because account should have been locked at this point.');
         }
     }
 
@@ -283,13 +283,13 @@ class CustomerTokenServiceTest extends WebapiAbstract
      */
     private function assertInvalidCredentialsException($e)
     {
-        $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode(), "Response HTTP code is invalid.");
+        $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode(), 'Response HTTP code is invalid.');
         $exceptionData = $this->processRestExceptionResult($e);
         $expectedExceptionData = [
             'message' => 'The account sign-in was incorrect or your account is disabled temporarily. '
                 . 'Please wait and try again later.'
         ];
-        $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
+        $this->assertEquals($expectedExceptionData, $exceptionData, 'Exception message is invalid.');
     }
 
     /**

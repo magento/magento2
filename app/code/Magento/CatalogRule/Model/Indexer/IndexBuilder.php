@@ -257,7 +257,7 @@ class IndexBuilder
         } catch (\Exception $e) {
             $this->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Catalog rule indexing failed. See details in exception log.")
+                __('Catalog rule indexing failed. See details in exception log.')
             );
         }
     }
@@ -294,7 +294,7 @@ class IndexBuilder
         } catch (\Exception $e) {
             $this->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Catalog rule indexing failed. See details in exception log.")
+                __('Catalog rule indexing failed. See details in exception log.')
             );
         }
     }

@@ -46,8 +46,8 @@ class DeployMarker extends Command
      */
     protected function configure()
     {
-        $this->setName("newrelic:create:deploy-marker");
-        $this->setDescription("Check the deploy queue for entries and create an appropriate deploy marker.")
+        $this->setName('newrelic:create:deploy-marker');
+        $this->setDescription('Check the deploy queue for entries and create an appropriate deploy marker.')
             ->addArgument(
                 'message',
                 InputArgument::REQUIRED,

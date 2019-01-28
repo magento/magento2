@@ -62,7 +62,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->getConnection()->quoteInto('table_rating.store_id > ?', 0),
         ];
 
-        $sumPercentField = new \Zend_Db_Expr("SUM(table_rating.percent)");
+        $sumPercentField = new \Zend_Db_Expr('SUM(table_rating.percent)');
         $sumPercentApproved = new \Zend_Db_Expr('SUM(table_rating.percent_approved)');
         $countRatingId = new \Zend_Db_Expr('COUNT(table_rating.rating_id)');
 
@@ -116,7 +116,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         /* @var \Magento\Framework\DB\Select $countSelect */
         $countSelect = clone $select;
         $countSelect->reset();
-        $countSelect->from($select, "COUNT(*)");
+        $countSelect->from($select, 'COUNT(*)');
 
         return $countSelect;
     }

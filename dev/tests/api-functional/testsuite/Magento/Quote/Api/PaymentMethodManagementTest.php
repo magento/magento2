@@ -44,8 +44,8 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => null
             ],
@@ -77,8 +77,8 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],
@@ -109,8 +109,8 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],
@@ -144,8 +144,8 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "method" => [
+            'cartId' => $cartId,
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],
@@ -175,7 +175,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
         $expectedResponse = [
@@ -209,7 +209,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
         foreach ($this->getPaymentMethodFieldsForAssert() as $field) {
@@ -298,7 +298,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         ];
 
         $requestData = [
-            "method" => [
+            'method' => [
                 'method' => 'checkmo',
                 'po_number' => '200'
             ],

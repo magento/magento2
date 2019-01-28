@@ -149,7 +149,7 @@ class Validator
         }
 
         throw new \InvalidArgumentException(
-            "Param " . $param . " doesn't pass validation: " . implode(
+            'Param ' . $param . " doesn't pass validation: " . implode(
                 '; ',
                 $validator->getMessages()
             )

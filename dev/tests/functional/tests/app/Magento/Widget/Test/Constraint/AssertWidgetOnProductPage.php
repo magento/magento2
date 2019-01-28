@@ -52,6 +52,6 @@ class AssertWidgetOnProductPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget is present on Product page.";
+        return 'Widget is present on Product page.';
     }
 }

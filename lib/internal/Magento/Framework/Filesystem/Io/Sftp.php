@@ -46,7 +46,7 @@ class Sftp extends AbstractIo
         $this->_connection = new \phpseclib\Net\SFTP($host, $port, $args['timeout']);
         if (!$this->_connection->login($args['username'], $args['password'])) {
             throw new \Exception(
-                sprintf("Unable to open SFTP connection as %s@%s", $args['username'], $args['host'])
+                sprintf('Unable to open SFTP connection as %s@%s', $args['username'], $args['host'])
             );
         }
     }

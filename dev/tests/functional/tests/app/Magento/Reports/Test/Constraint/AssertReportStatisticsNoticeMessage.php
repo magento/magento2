@@ -43,7 +43,7 @@ class AssertReportStatisticsNoticeMessage extends AbstractAssertSalesReportResul
         \PHPUnit\Framework\Assert::assertEquals(
             $currentDateTime,
             $displayedDateTime,
-            "Message in Sales Reports Page is displayed in an incorrect timezone."
+            'Message in Sales Reports Page is displayed in an incorrect timezone.'
         );
     }
 

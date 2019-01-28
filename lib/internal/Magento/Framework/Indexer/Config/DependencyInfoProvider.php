@@ -77,7 +77,7 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
         $indexerData = $this->getIndexerData($indexerId);
         if (!isset($indexerData['indexer_id']) || $indexerData['indexer_id'] != $indexerId) {
             throw new NoSuchEntityException(
-                new Phrase("%1 indexer does not exist.", [$indexerId])
+                new Phrase('%1 indexer does not exist.', [$indexerId])
             );
         }
 

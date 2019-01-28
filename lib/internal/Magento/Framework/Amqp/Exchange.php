@@ -120,8 +120,8 @@ class Exchange implements ExchangeInterface
                 } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
                     throw new LocalizedException(
                         new \Magento\Framework\Phrase(
-                            "The RPC (Remote Procedure Call) failed. The connection timed out after %time_out. "
-                            . "Please try again later.",
+                            'The RPC (Remote Procedure Call) failed. The connection timed out after %time_out. '
+                            . 'Please try again later.',
                             ['time_out' => $this->rpcConnectionTimeout]
                         )
                     );

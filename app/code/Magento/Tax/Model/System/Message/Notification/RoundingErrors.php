@@ -87,7 +87,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
                 'Click on the link to <a href="%1">ignore this notification</a>',
                 $this->urlBuilder->getUrl('tax/tax/ignoreTaxNotification', ['section' => 'price_display'])
             );
-            $messageDetails .= "</p>";
+            $messageDetails .= '</p>';
         }
 
         return $messageDetails;

@@ -60,7 +60,7 @@ class Interval implements IntervalInterface
         if ($upper !== null) {
             $select->where("${value} < ?", $upper - self::DELTA);
         }
-        $select->order("value ASC")
+        $select->order('value ASC')
             ->limit($limit, $offset);
 
         return $this->arrayValuesToFloat(

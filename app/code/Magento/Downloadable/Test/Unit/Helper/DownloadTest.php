@@ -237,7 +237,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionManager
             ->expects($this->once())->method('writeClose');
-        $this->_setupUrlMocks(self::FILE_SIZE, self::URL, ['disposition' => "inline; filename=test.txt"]);
+        $this->_setupUrlMocks(self::FILE_SIZE, self::URL, ['disposition' => 'inline; filename=test.txt']);
         $this->_helper->output();
     }
 }

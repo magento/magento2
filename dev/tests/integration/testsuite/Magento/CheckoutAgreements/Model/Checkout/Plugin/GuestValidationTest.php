@@ -145,7 +145,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(
                 __(
                     "The order wasn't placed. "
-                    . "First, agree to the terms and conditions, then try placing your order again."
+                    . 'First, agree to the terms and conditions, then try placing your order again.'
                 ),
                 $e->getMessage()
             );

@@ -41,7 +41,7 @@ class AssertProductAttributeAbsenceInTemplateGroups extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertFalse(
             $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeCode),
-            "Attribute " . $attributeCode . " is present in Attribute set's Groups section."
+            'Attribute ' . $attributeCode . " is present in Attribute set's Groups section."
         );
     }
 

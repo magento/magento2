@@ -90,7 +90,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     public function testStartBundleCustomization()
     {
-        $this->markTestSkipped("Functionality not implemented in Magento 1.x. Implemented in Magento 2");
+        $this->markTestSkipped('Functionality not implemented in Magento 1.x. Implemented in Magento 2');
         $this->assertFalse($this->_block->startBundleCustomization());
     }
 }

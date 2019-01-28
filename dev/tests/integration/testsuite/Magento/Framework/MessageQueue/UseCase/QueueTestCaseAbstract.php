@@ -50,7 +50,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $this->logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt';
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers' => $this->consumers,
             'logFilePath' => $this->logFilePath,

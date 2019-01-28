@@ -52,7 +52,7 @@ class Options extends Section
      *
      * @var string
      */
-    protected $importGrid = ".product_form_product_form_import_options_modal";
+    protected $importGrid = '.product_form_product_form_import_options_modal';
 
     /**
      * Locator for 'Add Value' button.
@@ -345,8 +345,8 @@ class Options extends Section
      */
     protected function optionNameConvert($inputType)
     {
-        $option = substr($inputType, strpos($inputType, "/") + 1);
-        $option = str_replace([' ', '&'], "", $option);
+        $option = substr($inputType, strpos($inputType, '/') + 1);
+        $option = str_replace([' ', '&'], '', $option);
         $end = strpos($option, '-');
         if ($end !== false) {
             $option = substr($option, 0, $end) . ucfirst(substr($option, ($end + 1)));

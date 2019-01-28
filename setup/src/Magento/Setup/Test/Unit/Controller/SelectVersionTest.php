@@ -60,7 +60,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     {
         $this->systemPackage->expects($this->once())
             ->method('getPackageVersions')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->will($this->throwException(new \Exception('Test error message')));
         $jsonModel = $this->controller->systemPackageAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -90,7 +90,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     {
         $this->systemPackage->expects($this->once())
             ->method('getInstalledSystemPackages')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->will($this->throwException(new \Exception('Test error message')));
         $jsonModel = $this->controller->installedSystemPackageAction();
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);

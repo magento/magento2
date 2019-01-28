@@ -62,7 +62,7 @@ class BlocksTest extends \PHPUnit\Framework\TestCase
                     if (!isset(self::$_blockAliases[$alias])) {
                         $this->fail(
                             "Element with alias '{$alias}' is used as a block in file '{$file}' " .
-                            "via getChildBlock() method," .
+                            'via getChildBlock() method,' .
                             " while '{$alias}' alias is declared as a container in file(s): " .
                             join(
                                 ', ',
@@ -72,13 +72,13 @@ class BlocksTest extends \PHPUnit\Framework\TestCase
                     } else {
                         $this->markTestIncomplete(
                             "Element with alias '{$alias}' is used as a block in file '{$file}' " .
-                            "via getChildBlock() method." .
+                            'via getChildBlock() method.' .
                             " It's impossible to determine explicitly whether the element is a block or a container, " .
-                            "as it is declared as a container in file(s): " .
+                            'as it is declared as a container in file(s): ' .
                             join(
                                 ', ',
                                 self::$_containerAliases[$alias]['files']
-                            ) . " and as a block in file(s): " . join(
+                            ) . ' and as a block in file(s): ' . join(
                                 ', ',
                                 self::$_blockAliases[$alias]['files']
                             )

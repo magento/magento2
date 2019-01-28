@@ -191,7 +191,7 @@ class OauthHelper
         /** Magento cache must be cleared to activate just created ACL role. */
         $varPath = realpath(BP . '/var');
         if (!$varPath) {
-            throw new LogicException("Magento cache cannot be cleared after new ACL role creation.");
+            throw new LogicException('Magento cache cannot be cleared after new ACL role creation.');
         } else {
             $cachePath = $varPath . '/cache';
             if (is_dir($cachePath)) {

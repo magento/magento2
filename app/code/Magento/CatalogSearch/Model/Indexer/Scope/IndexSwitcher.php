@@ -61,7 +61,7 @@ class IndexSwitcher implements IndexSwitcherInterface
                 throw new IndexTableNotExistException(
                     __(
                         "Temporary table for index $index doesn't exist,"
-                        . " which is inconsistent with state of scope resolver"
+                        . ' which is inconsistent with state of scope resolver'
                     )
                 );
             }

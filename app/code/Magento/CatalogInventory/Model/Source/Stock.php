@@ -43,7 +43,7 @@ class Stock extends AbstractSource
     {
         $collection->getSelect()->joinLeft(
             ['stock_item_table' => 'cataloginventory_stock_item'],
-            "e.entity_id=stock_item_table.product_id",
+            'e.entity_id=stock_item_table.product_id',
             []
         );
         $collection->getSelect()->order("stock_item_table.qty $dir");

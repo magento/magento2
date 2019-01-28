@@ -94,7 +94,7 @@ class SampleFileProvider
         $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
 
         if (!$directoryRead->isFile($filePath)) {
-            throw new NoSuchEntityException(__("There is no file: %file", ['file' => $filePath]));
+            throw new NoSuchEntityException(__('There is no file: %file', ['file' => $filePath]));
         }
 
         return $filePath;

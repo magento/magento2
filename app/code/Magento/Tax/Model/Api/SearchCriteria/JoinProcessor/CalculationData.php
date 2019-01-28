@@ -15,7 +15,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 class CalculationData implements CustomJoinInterface
 {
     /** Alias of table, that will be joined */
-    const CALCULATION_DATA_ALIAS = "cd";
+    const CALCULATION_DATA_ALIAS = 'cd';
 
     /**
      * @param \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection $collection

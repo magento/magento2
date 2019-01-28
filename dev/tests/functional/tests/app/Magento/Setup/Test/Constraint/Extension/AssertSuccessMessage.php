@@ -35,15 +35,15 @@ class AssertSuccessMessage extends AbstractConstraint
     {
         switch ($type) {
             case self::TYPE_INSTALL:
-                $message = "You installed:";
+                $message = 'You installed:';
                 break;
 
             case self::TYPE_UNINSTALL:
-                $message = "You uninstalled:";
+                $message = 'You uninstalled:';
                 break;
 
             case self::TYPE_UPDATE:
-                $message = "You updated:";
+                $message = 'You updated:';
                 break;
 
             default:
@@ -69,6 +69,6 @@ class AssertSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Extension Updater success message is correct.";
+        return 'Extension Updater success message is correct.';
     }
 }

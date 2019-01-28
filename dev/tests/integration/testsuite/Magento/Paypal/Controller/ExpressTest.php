@@ -111,12 +111,12 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertNotEquals(
             $fixtureCustomerEmail,
             $quote->getCustomerEmail(),
-            "Precondition failed: customer email in quote is invalid."
+            'Precondition failed: customer email in quote is invalid.'
         );
         $this->assertNotEquals(
             $fixtureCustomerFirstname,
             $quote->getCustomerFirstname(),
-            "Precondition failed: customer first name in quote is invalid."
+            'Precondition failed: customer first name in quote is invalid.'
         );
 
         /** Execute SUT */
@@ -129,12 +129,12 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(
             $fixtureCustomerEmail,
             $updatedQuote->getCustomer()->getEmail(),
-            "Customer email in quote is invalid."
+            'Customer email in quote is invalid.'
         );
         $this->assertEquals(
             $fixtureCustomerFirstname,
             $updatedQuote->getCustomer()->getFirstname(),
-            "Customer first name in quote is invalid."
+            'Customer first name in quote is invalid.'
         );
     }
 

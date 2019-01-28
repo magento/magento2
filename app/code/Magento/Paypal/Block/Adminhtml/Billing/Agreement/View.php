@@ -72,7 +72,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'cancel',
                 [
                     'label' => __('Cancel'),
-                    'onclick' => "confirmSetLocation(" . "'{$confirmText}', '{$this->_getCancelUrl()}'" . ")",
+                    'onclick' => 'confirmSetLocation(' . "'{$confirmText}', '{$this->_getCancelUrl()}'" . ')',
                     'class' => 'cancel'
                 ],
                 -1

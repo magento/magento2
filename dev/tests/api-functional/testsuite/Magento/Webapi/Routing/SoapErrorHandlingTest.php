@@ -29,7 +29,7 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         ];
         try {
             $this->_webApiCall($serviceInfo);
-            $this->fail("SoapFault was not raised as expected.");
+            $this->fail('SoapFault was not raised as expected.');
         } catch (\SoapFault $e) {
             $this->checkSoapFault(
                 $e,
@@ -49,7 +49,7 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         ];
         try {
             $this->_webApiCall($serviceInfo);
-            $this->fail("SoapFault was not raised as expected.");
+            $this->fail('SoapFault was not raised as expected.');
         } catch (\SoapFault $e) {
             /** In developer mode message is masked, so checks should be different in two modes */
             if (strpos($e->getMessage(), 'Internal Error') === false) {
@@ -106,7 +106,7 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
 
         try {
             $this->_webApiCall($serviceInfo);
-            $this->fail("SoapFault was not raised as expected.");
+            $this->fail('SoapFault was not raised as expected.');
         } catch (\SoapFault $e) {
             $this->checkSoapFault(
                 $e,
@@ -146,7 +146,7 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
 
         try {
             $this->_webApiCall($serviceInfo, $arguments);
-            $this->fail("SoapFault was not raised as expected.");
+            $this->fail('SoapFault was not raised as expected.');
         } catch (\SoapFault $e) {
             $this->checkSoapFault(
                 $e,

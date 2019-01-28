@@ -24,7 +24,7 @@ use Magento\Msrp\Model\Config;
 class MsrpPrice implements ProductRenderCollectorInterface
 {
     /** msrp price key */
-    const KEY = "msrp_price";
+    const KEY = 'msrp_price';
 
     /**
      * @var PriceCurrencyInterface

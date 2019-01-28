@@ -54,6 +54,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->model->__construct($contextMock);
 
-        $this->assertEquals("Add", $this->model->getAddButtonLabel());
+        $this->assertEquals('Add', $this->model->getAddButtonLabel());
     }
 }

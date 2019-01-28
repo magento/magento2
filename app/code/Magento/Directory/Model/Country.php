@@ -130,16 +130,16 @@ class Country extends \Magento\Framework\Model\AbstractModel
             if (!$this->getId()) {
                 $template = '{{firstname}} {{lastname}}';
             } elseif (!$html) {
-                $template = "{{firstname}} {{lastname}}
+                $template = '{{firstname}} {{lastname}}
 {{company}}
 {{street1}}
 {{street2}}
-{{city}}, {{region}} {{postcode}}";
+{{city}}, {{region}} {{postcode}}';
             } else {
-                $template = "{{firstname}} {{lastname}}<br/>
+                $template = '{{firstname}} {{lastname}}<br/>
 {{street}}<br/>
 {{city}}, {{region}} {{postcode}}<br/>
-T: {{telephone}}";
+T: {{telephone}}';
             }
         }
 

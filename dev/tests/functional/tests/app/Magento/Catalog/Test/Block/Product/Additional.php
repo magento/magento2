@@ -105,7 +105,7 @@ class Additional extends Block
         $htmlData = array_slice($htmlData, 2, -2); //Remove <html> and <body> tags
         $middleElement = ceil(count($htmlData) / 2);
         for ($index = 0; $index < $middleElement; $index++) {
-            $selector .= $htmlData[$index]['tag'] . " ";
+            $selector .= $htmlData[$index]['tag'] . ' ';
         }
 
         return trim($selector);

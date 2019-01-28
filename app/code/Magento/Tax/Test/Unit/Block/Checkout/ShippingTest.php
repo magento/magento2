@@ -50,7 +50,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     public function displayShippingDataProvider()
     {
         return [
-            ["flatrate_flatrate", true],
+            ['flatrate_flatrate', true],
             [null, false]
         ];
     }

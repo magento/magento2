@@ -147,7 +147,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             foreach ($itemData as $key => $value) {
                 if ($key == 'tax_ratio') {
                     $taxRatio = json_decode($invoiceItem->getData($key), true);
-                    $this->assertEquals($value['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
+                    $this->assertEquals($value['weee'], $taxRatio['weee'], 'Tax ratio is incorrect');
                 } else {
                     $this->assertEquals(
                         $value,
@@ -252,7 +252,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                         ],
                         'weee_tax_applied_row_amount' => 30,
                         'base_weee_tax_applied_row_amount' => 30,
-                        'tax_ratio' => ["weee" => 1.0],
+                        'tax_ratio' => ['weee' => 1.0],
                     ],
                 ],
                 'invoice_data' => [

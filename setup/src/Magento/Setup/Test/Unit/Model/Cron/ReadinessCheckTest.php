@@ -118,7 +118,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
-                ReadinessCheck::KEY_ERROR => ""
+                ReadinessCheck::KEY_ERROR => ''
             ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
@@ -144,7 +144,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
-                ReadinessCheck::KEY_ERROR => ""
+                ReadinessCheck::KEY_ERROR => ''
             ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
@@ -165,7 +165,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
-                ReadinessCheck::KEY_ERROR => ""
+                ReadinessCheck::KEY_ERROR => ''
             ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
@@ -186,7 +186,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
-                ReadinessCheck::KEY_ERROR => ""
+                ReadinessCheck::KEY_ERROR => ''
             ],
             ReadinessCheck::KEY_LAST_TIMESTAMP => 50,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100,

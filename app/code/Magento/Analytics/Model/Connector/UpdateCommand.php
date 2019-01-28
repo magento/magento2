@@ -91,10 +91,10 @@ class UpdateCommand implements CommandInterface
                 ZendClient::PUT,
                 $this->config->getValue($this->updateUrlPath),
                 [
-                    "url" => $this->flagManager
+                    'url' => $this->flagManager
                         ->getFlagData(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE),
-                    "new-url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
-                    "access-token" => $this->analyticsToken->getToken(),
+                    'new-url' => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
+                    'access-token' => $this->analyticsToken->getToken(),
                 ]
             );
             $result = $this->responseResolver->getResult($response);

@@ -61,12 +61,12 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -84,12 +84,12 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -108,12 +108,12 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
-            $this->fail("Expected exception");
+            $this->fail('Expected exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);

@@ -280,7 +280,7 @@ class Dob extends AbstractWidget
                 self::MIN_DATE_RANGE_KEY
             );
             if ($minDateValue !== null) {
-                return date("Y/m/d", $minDateValue);
+                return date('Y/m/d', $minDateValue);
             }
         }
         return null;
@@ -301,7 +301,7 @@ class Dob extends AbstractWidget
                 self::MAX_DATE_RANGE_KEY
             );
             if ($maxDateValue !== null) {
-                return date("Y/m/d", $maxDateValue);
+                return date('Y/m/d', $maxDateValue);
             }
         }
         return null;

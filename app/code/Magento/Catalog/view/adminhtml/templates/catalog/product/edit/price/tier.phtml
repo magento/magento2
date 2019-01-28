@@ -68,12 +68,12 @@ var tierPriceRowTemplate = '<tr>'
     + '</select></td>'
     + '<td class="col-qty">'
         + '<input class="<?= /* @escapeNotVerified */ $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][price_qty]" value="<%- data.qty %>" id="tier_price_row_<%- data.index %>_qty" />'
-        + '<span><?= /* @escapeNotVerified */ __("and above") ?></span>'
+        + '<span><?= /* @escapeNotVerified */ __('and above') ?></span>'
     + '</td>'
     + '<td class="col-price"><input class="<?= /* @escapeNotVerified */ $_htmlClass ?> required-entry <?= /* @escapeNotVerified */ $_priceValueValidation ?>" type="text" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][price]" value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
     + '<td class="col-delete"><input type="hidden" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][delete]" class="delete" value="" id="tier_price_row_<%- data.index %>_delete" />'
     + '<button title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Delete Tier')) ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
-    + '<span><?= /* @escapeNotVerified */ __("Delete") ?></span></button></td>'
+    + '<span><?= /* @escapeNotVerified */ __('Delete') ?></span></button></td>'
     + '</tr>';
 
 var tierPriceControl = {

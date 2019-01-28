@@ -53,7 +53,7 @@ class PhpFormatter implements FormatterInterface
                         $elements[] = $prefix . ' * ' . $commentLine;
                     }
 
-                    $elements[] = $prefix . " */";
+                    $elements[] = $prefix . ' */';
                 }
 
                 if (is_array($value)) {

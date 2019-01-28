@@ -37,13 +37,13 @@ class NotificationRenderer
     {
         $title = $this->escaper->escapeHtml($page['mainContent']['title']);
         $imageUrl = $this->escaper->escapeUrl($page['mainContent']['imageUrl']);
-        $content = "";
+        $content = '';
 
         if (!empty($imageUrl)) {
             $content .= "<div class='release-notification-title-with-image' style='background-image: url(\"" . $imageUrl
                 . "\")'>";
             $content .= $title;
-            $content .= "</div>";
+            $content .= '</div>';
         } else {
             $content = $title;
         }
@@ -88,15 +88,15 @@ class NotificationRenderer
      */
     private function buildContentTextAreas(array $contentAreas)
     {
-        $content = "";
+        $content = '';
         $lastContentArea = end($contentAreas);
 
         foreach ($contentAreas as $contentArea) {
-            $content .= "<p>";
+            $content .= '<p>';
             $content .= $this->escaper->escapeHtml($contentArea['text']);
-            $content .= "</p>";
+            $content .= '</p>';
             if ($contentArea != $lastContentArea) {
-                $content .= "<br />";
+                $content .= '<br />';
             }
         }
 
@@ -111,15 +111,15 @@ class NotificationRenderer
      */
     private function buildLists(array $lists)
     {
-        $content = "<ul>";
+        $content = '<ul>';
 
         foreach ($lists as $listItem) {
-            $content .= "<li><span>";
+            $content .= '<li><span>';
             $content .= $this->escaper->escapeHtml($listItem['text']);
-            $content .= "</span></li>";
+            $content .= '</span></li>';
         }
 
-        $content .= "</ul>";
+        $content .= '</ul>';
 
         return $content;
     }
@@ -132,7 +132,7 @@ class NotificationRenderer
      */
     private function buildSubHeadings(array $subHeadings)
     {
-        $content = "";
+        $content = '';
 
         foreach ($subHeadings as $subHeading) {
             if (!empty($subHeading['imageUrl'])) {
@@ -142,13 +142,13 @@ class NotificationRenderer
                 $content .= "<div class='highlight-item-no-image'>";
             }
 
-            $content .= "<h3>";
+            $content .= '<h3>';
             $content .= $this->escaper->escapeHtml($subHeading['title']);
-            $content .= "</h3>";
-            $content .= "<p>";
+            $content .= '</h3>';
+            $content .= '<p>';
             $content .= $this->formatContentWithLinks($subHeading['content']);
-            $content .= "</p>";
-            $content .= "</div>";
+            $content .= '</p>';
+            $content .= '</div>';
         }
 
         return $content;
@@ -162,9 +162,9 @@ class NotificationRenderer
      */
     private function buildFooter(array $footer)
     {
-        $content = "<p>";
+        $content = '<p>';
         $content .= $this->escaper->escapeHtml($footer['content']);
-        $content .= "</p>";
+        $content .= '</p>';
 
         return $this->formatContentWithLinks($content);
     }
@@ -186,7 +186,7 @@ class NotificationRenderer
 
         foreach ($urlMatches[0] as $key => $urlMatch) {
             if (!empty($urlTextMatches[0])) {
-                $linkMatch = $urlMatch . " " . $urlTextMatches[0][$key];
+                $linkMatch = $urlMatch . ' ' . $urlTextMatches[0][$key];
                 $content = str_replace(
                     $linkMatch,
                     "<a target='_blank' href='{$this->escaper->escapeUrl($urlMatch)}'>

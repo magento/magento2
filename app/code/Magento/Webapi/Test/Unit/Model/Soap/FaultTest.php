@@ -206,7 +206,7 @@ XML;
 
     public function testConstructor()
     {
-        $message = "Soap fault reason.";
+        $message = 'Soap fault reason.';
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Framework\Webapi\Exception(
@@ -257,7 +257,7 @@ FAULT_XML;
         $this->assertEquals(
             $this->_sanitizeXML($expectedXml),
             $this->_sanitizeXML($actualXml),
-            "Soap fault is invalid."
+            'Soap fault is invalid.'
         );
     }
 

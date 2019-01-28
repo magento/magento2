@@ -354,7 +354,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $productSku = 'simple';
         $productId = 1;
         $linkFile = '/l/i/link.jpg';
-        $encodedFiles = "something";
+        $encodedFiles = 'something';
         $linkData = [
             'id' => $linkId,
             'title' => 'Updated Title',

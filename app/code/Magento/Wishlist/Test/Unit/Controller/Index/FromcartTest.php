@@ -269,7 +269,7 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')
-            ->with(__("%1 has been moved to your wish list.", $productName))
+            ->with(__('%1 has been moved to your wish list.', $productName))
             ->willReturnSelf();
 
         $this->resultRedirect->expects($this->once())

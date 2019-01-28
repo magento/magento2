@@ -72,7 +72,7 @@ class RestClient
     public function post($resourcePath, $data, $headers = [])
     {
         $url = $this->constructResourceUrl($resourcePath);
-        if (in_array("Content-Type: application/json", $headers)) {
+        if (in_array('Content-Type: application/json', $headers)) {
             // json encode data
             if ($data != self::EMPTY_REQUEST_BODY) {
                 $data = $this->jsonSerializer->jsonEncode($data);
@@ -95,7 +95,7 @@ class RestClient
     public function put($resourcePath, $data, $headers = [])
     {
         $url = $this->constructResourceUrl($resourcePath);
-        if (in_array("Content-Type: application/json", $headers)) {
+        if (in_array('Content-Type: application/json', $headers)) {
             // json encode data
             if ($data != self::EMPTY_REQUEST_BODY) {
                 $data = $this->jsonSerializer->jsonEncode($data);

@@ -41,6 +41,6 @@ class AssertCustomerSuccessRegisterMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Customer is successfully registered.";
+        return 'Customer is successfully registered.';
     }
 }

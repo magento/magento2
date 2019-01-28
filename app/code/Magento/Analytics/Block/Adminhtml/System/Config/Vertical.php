@@ -33,7 +33,7 @@ class Vertical extends \Magento\Config\Block\System\Config\Form\Field
         $rowHtml .= sprintf(
             '<tr id="row_%s"><td class="label config-vertical-label">%s</td><td class="value">%s</td></tr>',
             $element->getHtmlId(),
-            $element->getLabelHtml($element->getHtmlId(), "[WEBSITE]"),
+            $element->getLabelHtml($element->getHtmlId(), '[WEBSITE]'),
             $element->getElementHtml()
         );
         return $rowHtml;

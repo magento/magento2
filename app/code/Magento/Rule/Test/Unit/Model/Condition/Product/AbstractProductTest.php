@@ -76,7 +76,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, ["getAttribute"]);
+        $product = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, ['getAttribute']);
         $this->_condition->setAttribute('category_ids');
         $this->_condition->setValueParsed('1');
         $this->_condition->setOperator('{}');
@@ -103,7 +103,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ["getAttribute", 'getResource']
+            ['getAttribute', 'getResource']
         );
         $product->expects($this->once())
             ->method('getResource')
@@ -122,7 +122,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ["getAttribute", 'getResource']
+            ['getAttribute', 'getResource']
         );
         $product->setId(1);
         $time = '04/19/2012 11:59 am';

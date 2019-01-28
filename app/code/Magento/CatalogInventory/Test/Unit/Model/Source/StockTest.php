@@ -30,13 +30,13 @@ class StockTest extends TestCase
             ->method('joinLeft')
             ->with(
                 ['stock_item_table' => 'cataloginventory_stock_item'],
-                "e.entity_id=stock_item_table.product_id",
+                'e.entity_id=stock_item_table.product_id',
                 []
             )
             ->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('order')
-            ->with("stock_item_table.qty DESC")
+            ->with('stock_item_table.qty DESC')
             ->willReturnSelf();
 
         $this->model->addValueSortToCollection($collectionMock);

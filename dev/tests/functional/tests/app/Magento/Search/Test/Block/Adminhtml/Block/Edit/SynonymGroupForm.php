@@ -20,7 +20,7 @@ class SynonymGroupForm extends Form
      *
      * @var string
      */
-    protected $toggleButton = "#toggleblock_content";
+    protected $toggleButton = '#toggleblock_content';
 
     /**
      * Synonym Group Content area.

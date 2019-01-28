@@ -78,7 +78,7 @@ class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 10;
         $orderQty = 3;
-        $comment = "Comment!";
+        $comment = 'Comment!';
 
         $this->itemMock->expects($this->once())
             ->method('getOrderItemId')

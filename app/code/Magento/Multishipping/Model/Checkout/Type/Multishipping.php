@@ -429,7 +429,7 @@ class Multishipping extends \Magento\Framework\DataObject
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         "The maximum quantity can't be more than %1 when shipping to multiple addresses. "
-                        . "Change the quantity and try again.",
+                        . 'Change the quantity and try again.',
                         $maxQty
                     )
                 );
@@ -650,7 +650,7 @@ class Multishipping extends \Magento\Framework\DataObject
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     "This payment method can't be used for shipping to multiple addresses. "
-                    . "Change the payment method and try again."
+                    . 'Change the payment method and try again.'
                 )
             );
         }

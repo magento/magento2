@@ -184,7 +184,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
      */
     protected function setBillingAddress(OrderInjectable $order)
     {
-        $url = $this->url . "/billing-address";
+        $url = $this->url . '/billing-address';
         $address = $order->getBillingAddressId();
 
         unset($address['default_billing']);
@@ -194,13 +194,13 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
                 $address[$key] = $this->mappingData[$key][$address[$key]];
             }
         }
-        $data = ["address" => $address];
+        $data = ['address' => $address];
         $this->webapiTransport->write($url, $data);
         $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception("Could not set billing address to quote!");
+            throw new \Exception('Could not set billing address to quote!');
         }
     }
 
@@ -258,8 +258,8 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
     {
         $url = $this->url . '/selected-payment-method';
         $data = [
-            "cartId" => $this->quote,
-            "method" => $order->getPaymentAuthExpiration()
+            'cartId' => $this->quote,
+            'method' => $order->getPaymentAuthExpiration()
         ];
         $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
         $response = json_decode($this->webapiTransport->read(), true);
@@ -279,7 +279,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
     protected function placeOrder()
     {
         $url = $this->url . '/order';
-        $data = ["cartId" => $this->quote];
+        $data = ['cartId' => $this->quote];
         $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
         $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();

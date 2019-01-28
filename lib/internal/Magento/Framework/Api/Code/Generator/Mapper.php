@@ -74,15 +74,15 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
                     'type' => $this->getSourceClassName() . 'Builder',
                 ],
             ],
-            'body' => "\$this->"
+            'body' => '$this->'
                 . $this->_getSourceBuilderPropertyName()
-                . " = \$" . $this->_getSourceBuilderPropertyName() . ';',
+                . ' = $' . $this->_getSourceBuilderPropertyName() . ';',
             'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->getSourceClassName() . " \$" . $this->_getSourceBuilderPropertyName(),
+                        'description' => $this->getSourceClassName() . ' $' . $this->_getSourceBuilderPropertyName(),
                     ],
                 ],
             ]
@@ -97,8 +97,8 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getClassMethods()
     {
         $construct = $this->_getDefaultConstructorDefinition();
-        $body = "\$this->" . $this->_getSourceBuilderPropertyName() . "->populateWithArray(\$object->getData());"
-            . "\nreturn \$this->" . $this->_getSourceBuilderPropertyName() . "->create();";
+        $body = '$this->' . $this->_getSourceBuilderPropertyName() . '->populateWithArray($object->getData());'
+            . "\nreturn \$this->" . $this->_getSourceBuilderPropertyName() . '->create();';
         $extract = [
             'name' => 'extractDto',
             'parameters' => [

@@ -140,7 +140,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     public function getValueHtml($item)
     {
         if ($attributes = $this->getSelectionAttributes($item)) {
-            return sprintf('%d', $attributes['qty']) . ' x ' . $this->escapeHtml($item->getName()) . " "
+            return sprintf('%d', $attributes['qty']) . ' x ' . $this->escapeHtml($item->getName()) . ' '
                 . $this->getOrder()->formatPrice($attributes['price']);
         }
         return $this->escapeHtml($item->getName());

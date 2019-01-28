@@ -136,7 +136,7 @@ class ReviewReportEntityTest extends Injectable
             $this->loginCustomer($customer);
         }
         // Steps
-        if ($review->getType() === "Administrator") {
+        if ($review->getType() === 'Administrator') {
             $review->persist();
             $product = $review->getDataFieldConfig('entity_id')['source']->getEntity();
         } else {

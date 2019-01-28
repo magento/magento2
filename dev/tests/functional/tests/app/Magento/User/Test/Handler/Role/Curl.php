@@ -117,7 +117,7 @@ class Curl extends AbstractCurl implements RoleInterface
         $adminUsers = $fixture->getDataFieldConfig('in_role_user')['source']->getAdminUsers();
         $userIds = [];
         foreach ($adminUsers as $adminUser) {
-            $userIds[] = $adminUser->getUserId() . "=true";
+            $userIds[] = $adminUser->getUserId() . '=true';
         }
 
         return ['in_role_user' => implode('&', $userIds)];

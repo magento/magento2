@@ -20,7 +20,7 @@ class AssertCacheInvalidatePopUp extends AbstractConstraint
      * @var array
      */
     private $cacheTypes = [
-        'block_html' => "Blocks HTML output",
+        'block_html' => 'Blocks HTML output',
     ];
 
     /**

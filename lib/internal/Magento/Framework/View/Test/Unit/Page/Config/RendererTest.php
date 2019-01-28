@@ -177,7 +177,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testRenderTitle()
     {
         $title = 'some_title';
-        $expected = "<title>some_title</title>" . "\n";
+        $expected = '<title>some_title</title>' . "\n";
 
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')

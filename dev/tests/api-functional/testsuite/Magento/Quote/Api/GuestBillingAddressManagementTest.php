@@ -78,7 +78,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
         asort($data);

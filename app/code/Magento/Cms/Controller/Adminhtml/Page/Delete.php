@@ -32,7 +32,7 @@ class Delete extends \Magento\Backend\App\Action implements HttpPostActionInterf
         $resultRedirect = $this->resultRedirectFactory->create();
         
         if ($id) {
-            $title = "";
+            $title = '';
             try {
                 // init model and delete
                 $model = $this->_objectManager->create(\Magento\Cms\Model\Page::class);

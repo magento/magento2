@@ -46,7 +46,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingPrice()
     {
         $shippingPrice = 5;
-        $convertedPrice = "$5";
+        $convertedPrice = '$5';
 
         $shippingRateMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Rate::class)
             ->disableOriginalConstructor()

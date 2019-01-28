@@ -152,7 +152,7 @@ class ValidatorFile extends Validator
                 throw new LocalizedException(
                     __(
                         "The file was too big and couldn't be uploaded. "
-                        . "Use a file smaller than %1 MBs and try to upload again.",
+                        . 'Use a file smaller than %1 MBs and try to upload again.',
                         $value
                     )
                 );

@@ -80,7 +80,7 @@ class DiInfoCommand extends Command
      */
     private function printConstructorArguments($className, $output)
     {
-        $output->writeln("Constructor Parameters:");
+        $output->writeln('Constructor Parameters:');
         $paramsTable = new Table($output);
         $paramsTable
             ->setHeaders(['Name', 'Requested Type', 'Configured Value']);
@@ -108,7 +108,7 @@ class DiInfoCommand extends Command
         $virtualTypes = $this->diInformation->getVirtualTypes($className);
         if (!empty($virtualTypes)) {
             $output->writeln('');
-            $output->writeln("Virtual Types:");
+            $output->writeln('Virtual Types:');
             foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
                 $output->writeln('   ' . $virtualType);
             }

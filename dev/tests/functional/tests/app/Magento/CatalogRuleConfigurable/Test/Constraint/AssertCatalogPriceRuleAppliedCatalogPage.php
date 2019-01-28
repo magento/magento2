@@ -74,7 +74,7 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
         $errorMessage = [];
         foreach ($formData as $key => $value) {
             if ($value != $fixtureData[$key]) {
-                $errorMessage[] = "Value " . $key . " is not equal."
+                $errorMessage[] = 'Value ' . $key . ' is not equal.'
                     . "\nExpected: " . $fixtureData[$key]
                     . "\nActual: " . $value . "\n";
             }

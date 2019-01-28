@@ -37,7 +37,7 @@
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()): ?>
                 <li class="store-switcher-all <?php if ( ! ($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) {
-                    echo "disabled";
+                    echo 'disabled';
                 } ?> <?php if ( ! $block->hasScopeSelected()) {
                     ?> current<?php
                 } ?>">
@@ -62,7 +62,7 @@
                         <?php if ($showWebsite == false): ?>
                             <?php $showWebsite = true; ?>
                             <li class="store-switcher-website <?php if ( ! ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website))) {
-                                echo "disabled";
+                                echo 'disabled';
                             } ?> <?php if ($block->isWebsiteSelected($website)) {
                                 ?> current<?php
                             } ?>">
@@ -82,7 +82,7 @@
                         <?php if ($showGroup == false): ?>
                             <?php $showGroup = true; ?>
                             <li class="store-switcher-store <?php if ( ! ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group))) {
-                                echo "disabled";
+                                echo 'disabled';
                             } ?> <?php if ($block->isStoreGroupSelected($group)) {
                                 ?> current<?php
                             } ?>">
@@ -100,7 +100,7 @@
                             </li>
                         <?php endif; ?>
                         <li class="store-switcher-store-view <?php if ( ! ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store))) {
-                            echo "disabled";
+                            echo 'disabled';
                         } ?> <?php if ($block->isStoreSelected($store)) {
                             ?> current<?php
                         } ?>">

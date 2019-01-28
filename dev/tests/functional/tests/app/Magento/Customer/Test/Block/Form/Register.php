@@ -35,14 +35,14 @@ class Register extends Form
      *
      * @var string
      */
-    protected $passwordError = "#password-error";
+    protected $passwordError = '#password-error';
 
     /**
      * Locator for password confirmation error
      *
      * @var string
      */
-    protected $passwordConfirmationError = "#password-confirmation-error";
+    protected $passwordConfirmationError = '#password-confirmation-error';
 
     /**
      * Fixture mapping.

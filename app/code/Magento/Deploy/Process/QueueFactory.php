@@ -52,7 +52,7 @@ class QueueFactory
         $queue = $this->objectManager->create($this->type, $arguments);
         if (!$queue instanceof Queue) {
             throw new LocalizedException(
-                new Phrase("Wrong queue type specified.")
+                new Phrase('Wrong queue type specified.')
             );
         }
         return $queue;

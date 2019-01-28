@@ -20,7 +20,7 @@ use Magento\Review\Block\Product\ReviewRenderer;
 class Review implements ProductRenderCollectorInterface
 {
     /** Review html key */
-    const KEY = "review_html";
+    const KEY = 'review_html';
 
     /**
      * @var ReviewRenderer

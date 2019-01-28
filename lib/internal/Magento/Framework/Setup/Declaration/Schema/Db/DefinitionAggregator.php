@@ -39,7 +39,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         $type = $column->getType();
         if (!isset($this->definitionProcessors[$type])) {
             throw new \InvalidArgumentException(
-                sprintf("Cannot process object to definition for type %s", $type)
+                sprintf('Cannot process object to definition for type %s', $type)
             );
         }
 
@@ -55,7 +55,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         $type = $data['type'];
         if (!isset($this->definitionProcessors[$type])) {
             throw new \InvalidArgumentException(
-                sprintf("Cannot process definition to array for type %s", $type)
+                sprintf('Cannot process definition to array for type %s', $type)
             );
         }
 

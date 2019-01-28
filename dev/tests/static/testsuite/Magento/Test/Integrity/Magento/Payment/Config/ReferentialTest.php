@@ -86,7 +86,7 @@ class ReferentialTest extends \PHPUnit\Framework\TestCase
 
         if (!empty($missing)) {
             $message = sprintf(
-                "The groups, referenced in store configuration for the payment, " .
+                'The groups, referenced in store configuration for the payment, ' .
                 "don't correspond to any payment group declared in payment.xml: %s",
                 implode(', ', $missing)
             );

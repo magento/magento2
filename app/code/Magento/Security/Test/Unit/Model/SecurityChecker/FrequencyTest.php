@@ -119,7 +119,7 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $this->objectManager->getObject(\Magento\Security\Model\PasswordResetRequestEvent::class);
         $record->setCreatedAt(
-            date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests)
+            date('Y-m-d H:i:s', $timestamp - $limitTimeBetweenPasswordResetRequests)
         );
 
         $this->collectionMock->expects($this->once())
@@ -149,7 +149,7 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $this->objectManager->getObject(\Magento\Security\Model\PasswordResetRequestEvent::class);
         $record->setCreatedAt(
-            date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests + 1)
+            date('Y-m-d H:i:s', $timestamp - $limitTimeBetweenPasswordResetRequests + 1)
         );
 
         $this->collectionMock->expects($this->once())

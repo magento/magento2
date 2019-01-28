@@ -115,7 +115,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $bind = [':attribute_set_id' => $object->getAttributeSetId()];
         $select = $connection->select()->from(
             $this->getMainTable(),
-            new \Zend_Db_Expr("MAX(sort_order)")
+            new \Zend_Db_Expr('MAX(sort_order)')
         )->where(
             'attribute_set_id = :attribute_set_id'
         );

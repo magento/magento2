@@ -19,7 +19,7 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     /**
      * As we can have only one primary key. It name should be always PRIMARY/
      */
-    const PRIMARY_NAME = "PRIMARY";
+    const PRIMARY_NAME = 'PRIMARY';
 
     /**
      * @var array

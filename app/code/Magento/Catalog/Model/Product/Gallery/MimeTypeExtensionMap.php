@@ -29,7 +29,7 @@ class MimeTypeExtensionMap
         if (isset($this->mimeTypeExtensionMap[$mimeType])) {
             return $this->mimeTypeExtensionMap[$mimeType];
         } else {
-            return "";
+            return '';
         }
     }
 }

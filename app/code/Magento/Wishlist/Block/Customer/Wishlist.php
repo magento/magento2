@@ -90,8 +90,8 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     private function paginateCollection()
     {
-        $page = $this->getRequest()->getParam("p", 1);
-        $limit = $this->getRequest()->getParam("limit", 10);
+        $page = $this->getRequest()->getParam('p', 1);
+        $limit = $this->getRequest()->getParam('limit', 10);
         $this->_collection
             ->setPageSize($limit)
             ->setCurPage($page);

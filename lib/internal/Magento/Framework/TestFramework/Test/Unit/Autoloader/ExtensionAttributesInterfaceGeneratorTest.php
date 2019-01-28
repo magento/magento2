@@ -23,8 +23,8 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit\Framework\TestC
     public function testGenerateExtensionAttributesInterface()
     {
         $this->assertStringMatchesFormat(
-            "%Anamespace My;%Ainterface SimpleExtensionInterface extends "
-            . "\\Magento\\Framework\\Api\\ExtensionAttributesInterface%A",
+            '%Anamespace My;%Ainterface SimpleExtensionInterface extends '
+            . '\\Magento\\Framework\\Api\\ExtensionAttributesInterface%A',
             $this->subject->generate('\My\SimpleExtensionInterface')
         );
     }

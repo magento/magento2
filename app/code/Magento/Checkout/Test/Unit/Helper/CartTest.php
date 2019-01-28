@@ -150,7 +150,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
 
         $params = [
-            Action::PARAM_NAME_URL_ENCODED => strtr("%uenc%", '+/=', '-_,'),
+            Action::PARAM_NAME_URL_ENCODED => strtr('%uenc%', '+/=', '-_,'),
             'product' => $productEntityId,
             'custom_param' => 'value',
             '_scope' => $storeId,

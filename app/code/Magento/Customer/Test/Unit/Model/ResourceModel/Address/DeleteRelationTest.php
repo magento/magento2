@@ -68,8 +68,8 @@ class DeleteRelationTest extends \PHPUnit\Framework\TestCase
         $addressModel->expects($this->any())->method('getId')->willReturn($addressId);
         $addressModel->expects($this->any())->method('getIsCustomerSaveTransaction')->willReturn(false);
 
-        $customerModel->expects($this->any())->method("getDefaultBilling")->willReturn($isDefaultBilling);
-        $customerModel->expects($this->any())->method("getDefaultShipping")->willReturn($isDefaultShipping);
+        $customerModel->expects($this->any())->method('getDefaultBilling')->willReturn($isDefaultBilling);
+        $customerModel->expects($this->any())->method('getDefaultShipping')->willReturn($isDefaultShipping);
 
         if ($addressId && ($isDefaultBilling || $isDefaultShipping)) {
             $customerId = 1;

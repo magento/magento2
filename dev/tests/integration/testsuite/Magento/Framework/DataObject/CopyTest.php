@@ -90,17 +90,17 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerInterface::class, $target);
         $this->assertNull(
             $target->getEmail(),
-            "Email should not be set because it is not defined in the fieldset."
+            'Email should not be set because it is not defined in the fieldset.'
         );
         $this->assertEquals(
             $firstName,
             $target->getFirstname(),
-            "First name was not copied."
+            'First name was not copied.'
         );
         $this->assertEquals(
             $groupCode,
             $target->getExtensionAttributes()->getTestGroupCode(),
-            "Extension attribute was not copied."
+            'Extension attribute was not copied.'
         );
     }
 

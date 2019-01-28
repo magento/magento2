@@ -37,6 +37,6 @@ class AssertFindExtensionOnGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return "Extension is found on the grid.";
+        return 'Extension is found on the grid.';
     }
 }

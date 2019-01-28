@@ -40,7 +40,7 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $giftMessageItemButton = ".action-update";
+    protected $giftMessageItemButton = '.action-update';
 
     /**
      * Selector for Gift Message Summary

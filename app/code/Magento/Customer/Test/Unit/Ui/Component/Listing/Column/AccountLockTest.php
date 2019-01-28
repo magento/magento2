@@ -88,7 +88,7 @@ class AccountLockTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         'items' => [
                             [
-                                'lock_expires' => date("F j, Y", strtotime('-1 days'))
+                                'lock_expires' => date('F j, Y', strtotime('-1 days'))
                             ],
                         ]
                     ]
@@ -108,7 +108,7 @@ class AccountLockTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         'items' => [
                             [
-                                'lock_expires' => date("F j, Y", strtotime('+1 days'))
+                                'lock_expires' => date('F j, Y', strtotime('+1 days'))
                             ],
                         ]
                     ]

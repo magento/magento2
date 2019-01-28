@@ -35,7 +35,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->processor = $this->createProcessor();
         $this->processor->saveReport($reportData);
         if (!$this->processor->reportId) {
-            $this->fail("Failed to generate report id");
+            $this->fail('Failed to generate report id');
         }
         $this->assertFileExists($this->processor->_reportDir . '/' . $this->processor->reportId);
         $this->assertEquals($expectedReportData, $this->processor->reportData);

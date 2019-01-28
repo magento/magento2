@@ -182,29 +182,29 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'type' => '\\' . JoinProcessorInterface::class,
                 ],
             ],
-            'body' => "\$this->"
+            'body' => '$this->'
                 . $this->_getSourcePersistorPropertyName()
-                . " = \$" . $this->_getSourcePersistorPropertyName() . ";\n"
-                . "\$this->"
+                . ' = $' . $this->_getSourcePersistorPropertyName() . ";\n"
+                . '$this->'
                 . $this->_getSourceCollectionFactoryPropertyName()
-                . " = \$" . $this->_getSourceCollectionFactoryPropertyName() . ";\n"
-                . "\$this->extensionAttributesJoinProcessor = \$extensionAttributesJoinProcessor;"
+                . ' = $' . $this->_getSourceCollectionFactoryPropertyName() . ";\n"
+                . '$this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;'
             ,
             'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->getSourceClassName() . " \$" . $this->_getSourcePersistorPropertyName(),
+                        'description' => $this->getSourceClassName() . ' $' . $this->_getSourcePersistorPropertyName(),
                     ],
                     [
                         'name' => 'param',
                         'description' => $this->_getCollectionFactoryClassName()
-                            . " \$" . $this->_getSourceCollectionFactoryPropertyName(),
+                            . ' $' . $this->_getSourceCollectionFactoryPropertyName(),
                     ],
                     [
                         'name' => 'param',
-                        'description' => '\\' . JoinProcessorInterface::class . " \$extensionAttributesJoinProcessor",
+                        'description' => '\\' . JoinProcessorInterface::class . ' $extensionAttributesJoinProcessor',
                     ],
                 ],
             ]
@@ -223,15 +223,15 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         /** @var ParameterReflection $parameterReflection */
         $parameterReflection = $methodReflection->getParameters()[0];
         $body = "if (!\$id) {\n"
-            . "    throw new \\" . InputException::class . "(\n"
+            . '    throw new \\' . InputException::class . "(\n"
             . "        new \\Magento\\Framework\\Phrase('An ID is needed. Set the ID and try again.')\n"
             . "    );\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
-            . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
+            . '    $entity = $this->' . $this->_getSourcePersistorPropertyName()
             . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
-            . "        throw new \\" . NoSuchEntityException::class . "(\n"
+            . '        throw new \\' . NoSuchEntityException::class . "(\n"
             . "            new \\Magento\\Framework\\Phrase(\n"
             . "                'The entity that was requested doesn\'t exist. Verify the entity and try again.'\n"
             . "            )\n"
@@ -239,7 +239,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             . "    }\n"
             . "    \$this->registry[\$id] = \$entity;\n"
             . "}\n"
-            . "return \$this->registry[\$id];";
+            . 'return $this->registry[$id];';
         return [
             'name' => 'get',
             'parameters' => [
@@ -359,7 +359,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         $body = "\$ids = \$this->{$this->_getSourcePersistorPropertyName()}->doPersist();\n"
             . "foreach (\$ids as \$id) {\n"
             . "unset(\$this->registry[\$id]);\n"
-            . "}";
+            . '}';
         return [
             'name' => 'flush',
             'parameters' => [],
@@ -384,7 +384,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $info = $this->getMethodParamAndReturnType('save');
         $body = "\$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);\n"
-            . "return \$entity;";
+            . 'return $entity;';
         return [
             'name' => 'save',
             'parameters' => [
@@ -400,7 +400,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->getSourceClassName() . " \$entity",
+                        'description' => $this->getSourceClassName() . ' $entity',
                     ],
                     [
                         'name' => 'return',
@@ -532,7 +532,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getGetListMethod()
     {
-        $body = "\$collection = \$this->" . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
+        $body = '$collection = $this->' . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
         . "\$this->extensionAttributesJoinProcessor->process(\$collection);\n"
         . "\$this->getCollectionProcessor()->process(\$searchCriteria, \$collection);\n"
         . "return \$collection;\n";
@@ -573,7 +573,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $body = "if (!\$this->collectionProcessor) {\n"
             . "    \$this->collectionProcessor = \\Magento\\Framework\\App\\ObjectManager::getInstance()->get(\n"
-            . "        \\" . CollectionProcessorInterface::class . "::class\n"
+            . '        \\' . CollectionProcessorInterface::class . "::class\n"
             . "    );\n"
             . "}\n"
             . "return \$this->collectionProcessor;\n";
@@ -590,7 +590,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'return',
-                        'description' => "\\" . CollectionProcessorInterface::class,
+                        'description' => '\\' . CollectionProcessorInterface::class,
                     ],
                 ],
             ]

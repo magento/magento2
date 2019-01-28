@@ -334,7 +334,7 @@ class Session implements ConfigOptionsListInterface
         if (isset($options[self::INPUT_KEY_SESSION_REDIS_COMPRESSION_LIBRARY])
             && !in_array($options[self::INPUT_KEY_SESSION_REDIS_COMPRESSION_LIBRARY], $this->validCompressionLibraries)
         ) {
-            $errors[] = "Invalid Redis compression library "
+            $errors[] = 'Invalid Redis compression library '
                 . "'{$options[self::INPUT_KEY_SESSION_REDIS_COMPRESSION_LIBRARY]}'";
         }
 

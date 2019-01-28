@@ -75,7 +75,7 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateRootComponent()
     {
-        $identifier = "product_listing";
+        $identifier = 'product_listing';
         $context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $bundleComponents = [
             'attributes' => [
@@ -117,8 +117,8 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testNonRootComponent()
     {
-        $identifier = "custom_select";
-        $name = "fieldset";
+        $identifier = 'custom_select';
+        $name = 'fieldset';
         $context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $arguments = ['context' => $context];
         $defintionArguments = [

@@ -21,7 +21,7 @@ class Database extends Form
      *
      * @var string
      */
-    protected $successConnectionMessage = ".text-success";
+    protected $successConnectionMessage = '.text-success';
 
     /**
      * 'Next' button.

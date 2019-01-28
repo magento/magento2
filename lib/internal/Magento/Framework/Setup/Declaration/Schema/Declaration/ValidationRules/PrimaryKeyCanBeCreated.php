@@ -46,7 +46,7 @@ class PrimaryKeyCanBeCreated implements ValidationInterface
                     $errors[] = [
                         'column' => $column->getName(),
                         'message' => sprintf(self::ERROR_MESSAGE, $table->getName()) .
-                            "All columns should be not nullable"
+                            'All columns should be not nullable'
                     ];
                 }
             }

@@ -58,7 +58,7 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
     public function testIndexActionWithExceptions()
     {
         $this->maintenanceMode->expects($this->once())->method('set')->will(
-            $this->throwException(new \Exception("Test error message"))
+            $this->throwException(new \Exception('Test error message'))
         );
         $jsonModel = $this->controller->indexAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
@@ -66,6 +66,6 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
         $this->assertArrayHasKey('error', $variables);
-        $this->assertEquals("Test error message", $variables['error']);
+        $this->assertEquals('Test error message', $variables['error']);
     }
 }

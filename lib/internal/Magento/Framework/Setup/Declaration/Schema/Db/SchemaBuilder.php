@@ -179,7 +179,7 @@ class SchemaBuilder
     {
         if (!is_array($data['column'])) {
             throw new Exception(
-                new Phrase("Cannot find columns for internal index")
+                new Phrase('Cannot find columns for internal index')
             );
         }
 

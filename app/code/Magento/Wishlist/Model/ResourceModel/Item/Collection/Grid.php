@@ -135,7 +135,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         switch ($field) {
             case 'product_name':
                 $value = (string)$condition['like'];
-                $value = trim(trim($value, "'"), "%");
+                $value = trim(trim($value, "'"), '%');
                 return $this->addProductNameFilter($value);
             case 'store_id':
                 if (isset($condition['eq'])) {

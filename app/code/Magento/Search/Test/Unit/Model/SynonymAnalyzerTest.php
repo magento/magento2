@@ -50,11 +50,11 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
     {
         $phrase = 'Elizabeth is the british queen';
         $expected = [
-            0 => [ 0 => "Elizabeth" ],
-            1 => [ 0 => "is" ],
-            2 => [ 0 => "the" ],
-            3 => [ 0 => "british", 1 => "english" ],
-            4 => [ 0 => "queen", 1 => "monarch" ],
+            0 => [ 0 => 'Elizabeth' ],
+            1 => [ 0 => 'is' ],
+            2 => [ 0 => 'the' ],
+            3 => [ 0 => 'british', 1 => 'english' ],
+            4 => [ 0 => 'queen', 1 => 'monarch' ],
         ];
         $this->synReaderModel->expects($this->once())
             ->method('loadByPhrase')

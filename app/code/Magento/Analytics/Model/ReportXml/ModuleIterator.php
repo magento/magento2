@@ -39,7 +39,7 @@ class ModuleIterator extends \IteratorIterator
         $current = parent::current();
         if (is_array($current) && isset($current['module_name'])) {
             $current['status'] =
-                $this->moduleManager->isEnabled($current['module_name']) == 1 ? 'Enabled' : "Disabled";
+                $this->moduleManager->isEnabled($current['module_name']) == 1 ? 'Enabled' : 'Disabled';
         }
         return $current;
     }

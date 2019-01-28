@@ -57,7 +57,7 @@ class Page extends AbstractFactory
         $this->factoryContent .= "     * @return {$item['class']}\n";
         $this->factoryContent .= "     */\n";
         $this->factoryContent .= "    public function get{$methodNameSuffix}()\n";
-        $this->factoryContent .= "    {";
+        $this->factoryContent .= '    {';
 
         if (!empty($fallbackComment)) {
             $this->factoryContent .= $fallbackComment . "\n";

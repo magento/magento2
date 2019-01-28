@@ -26,7 +26,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
         } catch (NoSuchEntityException $e) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            return $resultRedirect->setPath("*/*/");
+            return $resultRedirect->setPath('*/*/');
         }
 
         $resultPage = $this->initResultPage();
@@ -47,7 +47,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
             ->addContent($toolbarSaveBlock);
 
         $resultPage->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
-        $resultPage->getConfig()->getTitle()->prepend(sprintf("%s", $taxRateDataObject->getCode()));
+        $resultPage->getConfig()->getTitle()->prepend(sprintf('%s', $taxRateDataObject->getCode()));
         return $resultPage;
     }
 }

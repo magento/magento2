@@ -91,7 +91,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
         $this->curl->expects($this->once())->method('setCredentials')->with('username', 'password');
         $this->curl->expects($this->once())
             ->method('getStatus')
-            ->will($this->throwException(new \Exception("Test error")));
+            ->will($this->throwException(new \Exception('Test error')));
         $this->curl->expects($this->never())->method('getBody')->willReturn("{'someJson}");
 
         $expectedValue = '{"success":false,"message":"Test error"}';
@@ -127,6 +127,6 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($directoryWrite));
         $directoryWrite->expects($this->once())->method('writeFile')->willReturn(true);
 
-        $this->assertTrue($this->packagesAuth->saveAuthJson("testusername", "testpassword"));
+        $this->assertTrue($this->packagesAuth->saveAuthJson('testusername', 'testpassword'));
     }
 }

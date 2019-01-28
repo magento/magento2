@@ -367,7 +367,7 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
         if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Order creation by curl handler was not successful! Response: $response");
         }
-        preg_match("~<h1 class=\"page-title\">#(.*)</h1>~", $response, $matches);
+        preg_match('~<h1 class="page-title">#(.*)</h1>~', $response, $matches);
 
         return isset($matches[1]) ? $matches[1] : null;
     }

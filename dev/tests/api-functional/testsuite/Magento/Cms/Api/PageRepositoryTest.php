@@ -265,7 +265,7 @@ class PageRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/search" . '?' . http_build_query($requestData),
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [

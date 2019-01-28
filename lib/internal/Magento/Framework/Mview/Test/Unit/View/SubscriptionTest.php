@@ -129,32 +129,32 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
 
         $triggerMock->expects($this->at(4))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->with('INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);')
             ->will($this->returnSelf());
 
         $triggerMock->expects($this->at(5))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->with('INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);')
             ->will($this->returnSelf());
 
         $triggerMock->expects($this->at(11))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->with('INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);')
             ->will($this->returnSelf());
 
         $triggerMock->expects($this->at(12))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->with('INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);')
             ->will($this->returnSelf());
 
         $triggerMock->expects($this->at(18))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);")
+            ->with('INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);')
             ->will($this->returnSelf());
 
         $triggerMock->expects($this->at(19))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);")
+            ->with('INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);')
             ->will($this->returnSelf());
 
         $changelogMock = $this->getMockForAbstractClass(

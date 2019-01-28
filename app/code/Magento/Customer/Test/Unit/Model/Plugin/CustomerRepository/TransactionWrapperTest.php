@@ -42,7 +42,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $passwordHash = true;
 
-    const ERROR_MSG = "error occurred";
+    const ERROR_MSG = 'error occurred';
 
     protected function setUp()
     {

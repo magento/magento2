@@ -71,7 +71,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $this->assertEquals($output, $this->_webApiCall($serviceInfo, $requestData));
     }
 
@@ -110,10 +110,10 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartItem" => [
-                "sku" => $productSku,
-                "qty" => 7,
-                "quote_id" => $cartId,
+            'cartItem' => [
+                'sku' => $productSku,
+                'qty' => 7,
+                'quote_id' => $cartId,
             ],
         ];
         $this->_webApiCall($serviceInfo, $requestData);
@@ -156,8 +156,8 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "itemId" => $itemId,
+            'cartId' => $cartId,
+            'itemId' => $itemId,
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
@@ -201,17 +201,17 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $requestData = [
-                "cartItem" => [
-                    "qty" => 5,
-                    "quote_id" => $cartId,
-                    "itemId" => $itemId,
+                'cartItem' => [
+                    'qty' => 5,
+                    'quote_id' => $cartId,
+                    'itemId' => $itemId,
                 ],
             ];
         } else {
             $requestData = [
-                "cartItem" => [
-                    "qty" => 5,
-                    "quote_id" => $cartId,
+                'cartItem' => [
+                    'qty' => 5,
+                    'quote_id' => $cartId,
                 ],
             ];
         }

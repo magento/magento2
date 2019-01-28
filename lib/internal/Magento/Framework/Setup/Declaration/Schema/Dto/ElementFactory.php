@@ -80,7 +80,7 @@ class ElementFactory
     public function create($type, array $elementStructuralData)
     {
         if (!isset($this->typeFactories[$type])) {
-            throw new \InvalidArgumentException(sprintf("Types %s is not declared", $type));
+            throw new \InvalidArgumentException(sprintf('Types %s is not declared', $type));
         }
 
         $elementStructuralData = $this->castGenericAttributes($elementStructuralData);

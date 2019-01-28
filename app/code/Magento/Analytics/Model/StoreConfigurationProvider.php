@@ -86,10 +86,10 @@ class StoreConfigurationProvider
         $report = [];
         foreach ($this->configPaths as $configPath) {
             $report[] = [
-                "config_path" => $configPath,
-                "scope" => $scope,
-                "scope_id" => $scopeId,
-                "value" => $this->scopeConfig->getValue(
+                'config_path' => $configPath,
+                'scope' => $scope,
+                'scope_id' => $scopeId,
+                'value' => $this->scopeConfig->getValue(
                     $configPath,
                     $scope,
                     $scopeId

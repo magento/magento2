@@ -43,7 +43,7 @@ class FrontendStorageConfigurationPool
         if (isset($this->storageConfigurations[$namespace])) {
             if (!$this->storageConfigurations[$namespace] instanceof FrontendStorageConfigurationInterface) {
                 throw new LocalizedException(
-                    __(sprintf("Invalid pool type with namespace: %s", $namespace))
+                    __(sprintf('Invalid pool type with namespace: %s', $namespace))
                 );
             }
         } else {

@@ -55,17 +55,17 @@ class ConditionResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFilter()
     {
-        $condition = ["type" => "variable", "_value" => "1", "attribute" => "id", "operator" => "neq"];
-        $valueCondition = ["type" => "value", "_value" => "2", "attribute" => "first_name", "operator" => "eq"];
+        $condition = ['type' => 'variable', '_value' => '1', 'attribute' => 'id', 'operator' => 'neq'];
+        $valueCondition = ['type' => 'value', '_value' => '2', 'attribute' => 'first_name', 'operator' => 'eq'];
         $identifierCondition = [
-            "type" => "identifier",
-            "_value" => "other_field",
-            "attribute" => "last_name",
-            "operator" => "eq"];
-        $filter = [["glue" => "AND", "condition" => [$valueCondition]]];
+            'type' => 'identifier',
+            '_value' => 'other_field',
+            'attribute' => 'last_name',
+            'operator' => 'eq'];
+        $filter = [['glue' => 'AND', 'condition' => [$valueCondition]]];
         $filterConfig = [
-            ["glue" => "OR", "condition" => [$condition], 'filter' => $filter],
-            ["glue" => "OR", "condition" => [$identifierCondition]],
+            ['glue' => 'OR', 'condition' => [$condition], 'filter' => $filter],
+            ['glue' => 'OR', 'condition' => [$identifierCondition]],
         ];
         $aliasName = 'n';
         $this->selectBuilderMock->expects($this->any())
@@ -78,7 +78,7 @@ class ConditionResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->selectBuilderMock->expects($this->any())
             ->method('getColumns')
-            ->willReturn(['price' => new Expression("(n.price = 400)")]);
+            ->willReturn(['price' => new Expression('(n.price = 400)')]);
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')

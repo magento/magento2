@@ -39,7 +39,7 @@ class Discount extends AbstractTotal
          */
         if ($baseShippingAmount && $order->getBaseShippingAmount() <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("You can not refund shipping if there is no shipping amount.")
+                __('You can not refund shipping if there is no shipping amount.')
             );
         }
         if ($baseShippingAmount) {

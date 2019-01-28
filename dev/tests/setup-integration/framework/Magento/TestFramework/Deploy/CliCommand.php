@@ -88,7 +88,7 @@ class CliCommand
         $upgradeCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params="'
             . $initParams['magento-init-params'] . '"';
         $installParams = $this->toCliArguments($installParams);
-        $upgradeCommand .= ' ' . implode(" ", array_keys($installParams));
+        $upgradeCommand .= ' ' . implode(' ', array_keys($installParams));
 
         return $this->shell->execute($upgradeCommand, array_values($installParams));
     }
@@ -119,7 +119,7 @@ class CliCommand
             $this->parametersHolder->getDbData('checkout')
         );
         $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote ' .
-            implode(" ", array_keys($installParams)) .
+            implode(' ', array_keys($installParams)) .
             ' -vvv --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
 
@@ -138,7 +138,7 @@ class CliCommand
             $this->parametersHolder->getDbData('sales')
         );
         $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales ' .
-            implode(" ", array_keys($installParams)) .
+            implode(' ', array_keys($installParams)) .
             ' -vvv --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
 
@@ -203,12 +203,12 @@ class CliCommand
     public function install(array $modules, array $installParams = [])
     {
         if (empty($modules)) {
-            throw new \Exception("Cannot install Magento without modules");
+            throw new \Exception('Cannot install Magento without modules');
         }
 
         $params = $this->parametersHolder->getInitParams();
         $installParams += [
-            InstallCommand::INPUT_KEY_ENABLE_MODULES => implode(",", $modules),
+            InstallCommand::INPUT_KEY_ENABLE_MODULES => implode(',', $modules),
             InstallCommand::INPUT_KEY_DISABLE_MODULES => 'all'
         ];
         $installParams = $this->toCliArguments(

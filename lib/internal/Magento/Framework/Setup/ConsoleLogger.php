@@ -49,7 +49,7 @@ class ConsoleLogger implements LoggerInterface
     public function logSuccess($message)
     {
         $this->terminateLine();
-        $this->console->writeln("<info>[SUCCESS]" . ($message ? ": $message" : '') . '</info>');
+        $this->console->writeln('<info>[SUCCESS]' . ($message ? ": $message" : '') . '</info>');
     }
 
     /**
@@ -58,7 +58,7 @@ class ConsoleLogger implements LoggerInterface
     public function logError(\Exception $e)
     {
         $this->terminateLine();
-        $this->console->writeln("<error>[ERROR]: " . $e . '</error>');
+        $this->console->writeln('<error>[ERROR]: ' . $e . '</error>');
     }
 
     /**

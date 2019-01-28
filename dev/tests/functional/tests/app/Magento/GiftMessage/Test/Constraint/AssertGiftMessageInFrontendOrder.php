@@ -65,6 +65,6 @@ class AssertGiftMessageInFrontendOrder extends AbstractConstraint
      */
     public function toString()
     {
-        return "Gift message is displayed on order(s) view page on frontend correctly.";
+        return 'Gift message is displayed on order(s) view page on frontend correctly.';
     }
 }

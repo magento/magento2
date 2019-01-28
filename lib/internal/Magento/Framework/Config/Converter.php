@@ -97,7 +97,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $result = [];
         for ($varNode = $node->firstChild; $varNode !== null; $varNode = $varNode->nextSibling) {
-            if ($varNode instanceof \DOMElement && $varNode->tagName == "var") {
+            if ($varNode instanceof \DOMElement && $varNode->tagName == 'var') {
                 $varName = $varNode->getAttribute('name');
                 $result[$varName] = $this->parseVarElement($varNode);
             }

@@ -18,7 +18,7 @@ class EmailAddressTest extends \PHPUnit\Framework\TestCase
     {
         /** @var EmailAddress $emailAddress */
         $emailAddress = new EmailAddress();
-        $this->assertTrue($emailAddress->isValid("user@domain.unknown"));
+        $this->assertTrue($emailAddress->isValid('user@domain.unknown'));
     }
 
     /**
@@ -29,6 +29,6 @@ class EmailAddressTest extends \PHPUnit\Framework\TestCase
         /** @var EmailAddress $emailAddress */
         $emailAddress = new EmailAddress();
         $emailAddress->setValidateTld(true);
-        $this->assertFalse($emailAddress->isValid("user@domain.unknown"));
+        $this->assertFalse($emailAddress->isValid('user@domain.unknown'));
     }
 }

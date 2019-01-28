@@ -44,6 +44,6 @@ class AssertRecentStatisticsUpdatedMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Correct message is displayed after refreshing recent statistics.";
+        return 'Correct message is displayed after refreshing recent statistics.';
     }
 }

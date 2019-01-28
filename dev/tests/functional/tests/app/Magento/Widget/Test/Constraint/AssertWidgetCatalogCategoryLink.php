@@ -71,6 +71,6 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
      */
     public function toString()
     {
-        return "Created widget displayed on frontend on Home and Advanced Search pages.";
+        return 'Created widget displayed on frontend on Home and Advanced Search pages.';
     }
 }

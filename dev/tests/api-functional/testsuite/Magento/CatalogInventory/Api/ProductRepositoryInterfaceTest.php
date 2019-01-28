@@ -264,7 +264,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'enable_qty_increments' => false,
                 'use_config_manage_stock' => false,
                 'manage_stock' => true,
-                'low_stock_date' => "0",
+                'low_stock_date' => '0',
                 'is_decimal_divided' => false,
                 'stock_status_changed_auto' => 0,
             ]
@@ -310,7 +310,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $product['custom_attributes'][$i]['value'] = [''];
                 }
             }
         }
@@ -343,7 +343,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $product['custom_attributes'][$i]['value'] = [''];
                 }
             }
         }

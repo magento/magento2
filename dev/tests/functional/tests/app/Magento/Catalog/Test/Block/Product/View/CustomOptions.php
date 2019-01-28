@@ -540,7 +540,7 @@ class CustomOptions extends Form
      */
     protected function getOptionType($option)
     {
-        $option = strpos($option, "/") !== false ? substr($option, strpos($option, "/") + 1) : $option;
+        $option = strpos($option, '/') !== false ? substr($option, strpos($option, '/') + 1) : $option;
         return strtolower(preg_replace('/[^a-z]/i', '', $option));
     }
 }

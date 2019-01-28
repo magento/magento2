@@ -228,7 +228,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
             'capture escaped single-quotes inside text' => [
                 "{{trans 'Hello \\'tested\\' world!'|escape}}",
-                "Hello &#039;tested&#039; world!",
+                'Hello &#039;tested&#039; world!',
             ],
 
             'basic var' => [
@@ -435,7 +435,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigDirectiveAvailable()
     {
-        $path = "web/unsecure/base_url";
+        $path = 'web/unsecure/base_url';
         $availableConfigs = [['value' => $path]];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
@@ -459,7 +459,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     public function testConfigDirectiveUnavailable()
     {
-        $path = "web/unsecure/base_url";
+        $path = 'web/unsecure/base_url';
         $availableConfigs = [];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';

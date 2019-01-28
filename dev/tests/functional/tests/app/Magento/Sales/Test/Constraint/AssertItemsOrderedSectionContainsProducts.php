@@ -41,6 +41,6 @@ class AssertItemsOrderedSectionContainsProducts extends AbstractConstraint
      */
     public function toString()
     {
-        return "Items Ordered section on Create Order page on backend contains correct products.";
+        return 'Items Ordered section on Create Order page on backend contains correct products.';
     }
 }

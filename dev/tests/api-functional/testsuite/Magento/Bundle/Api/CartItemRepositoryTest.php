@@ -105,17 +105,17 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartItem" => [
-                "sku" => $productSku,
-                "qty" => $itemQty,
-                "quote_id" => $cartId,
-                "product_option" => [
-                    "extension_attributes" => [
-                        "bundle_options" => [
+            'cartItem' => [
+                'sku' => $productSku,
+                'qty' => $itemQty,
+                'quote_id' => $cartId,
+                'product_option' => [
+                    'extension_attributes' => [
+                        'bundle_options' => [
                             [
-                                "option_id" => (int)$bundleOptionId,
-                                "option_qty" => $itemQty,
-                                "option_selections" => [(int)$optionSelections]
+                                'option_id' => (int)$bundleOptionId,
+                                'option_qty' => $itemQty,
+                                'option_selections' => [(int)$optionSelections]
                             ]
                         ]
                     ]
@@ -171,14 +171,14 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
         $requestData = [
-            "cartItem" => [
-                "sku" => $itemSku,
-                "qty" => 2,
-                "quote_id" => $cartId,
-                "item_id" => $itemId,
-                "product_option" => [
-                    "extension_attributes" => [
-                        "bundle_options" => $bundleOptions
+            'cartItem' => [
+                'sku' => $itemSku,
+                'qty' => 2,
+                'quote_id' => $cartId,
+                'item_id' => $itemId,
+                'product_option' => [
+                    'extension_attributes' => [
+                        'bundle_options' => $bundleOptions
                     ]
                 ]
             ]

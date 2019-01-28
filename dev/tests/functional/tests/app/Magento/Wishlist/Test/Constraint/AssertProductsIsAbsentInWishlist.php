@@ -36,7 +36,7 @@ class AssertProductsIsAbsentInWishlist extends AbstractConstraint
             \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
-        $customerAccountIndex->open()->getAccountMenuBlock()->openMenuItem("My Wish List");
+        $customerAccountIndex->open()->getAccountMenuBlock()->openMenuItem('My Wish List');
         $itemBlock = $wishlistIndex->getWishlistBlock()->getProductItemsBlock();
 
         foreach ($products as $itemProduct) {

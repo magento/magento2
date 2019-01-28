@@ -36,7 +36,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     public function sampleTokenizeStringProvider()
     {
         return [
-            ["firstname", [['type' => 'variable', 'name' => 'firstname']]],
+            ['firstname', [['type' => 'variable', 'name' => 'firstname']]],
             [
                 "invoke(arg1, arg2, 2, 2.7, -1, 'Mike\\'s')",
                 [['type' => 'method', 'name' => 'invoke', 'args' => ['arg1', 'arg2', 2, 2.7, -1, "Mike's"]]]
@@ -62,12 +62,12 @@ class VariableTest extends \PHPUnit\Framework\TestCase
                             'id' => 'foobar',
                             0 => [123, 'foobar'],
                             'bar' => ['foo', 1234, '$foo.bar'],
-                            'foo:bar' => ['bar', "1234", '$foo.bar'],
+                            'foo:bar' => ['bar', '1234', '$foo.bar'],
                         ],
                     ]],
                 ],
             ],
-            ["  ", []],
+            ['  ', []],
         ];
     }
 }

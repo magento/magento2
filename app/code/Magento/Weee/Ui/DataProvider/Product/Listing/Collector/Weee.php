@@ -23,10 +23,10 @@ use Magento\Weee\Helper\Data;
 class Weee implements ProductRenderCollectorInterface
 {
     /** Weee attribute key */
-    const KEY = "weee_attributes";
+    const KEY = 'weee_attributes';
 
     /** Wee adjustment key */
-    const KEY_ADJUSTMENT = "weee_adjustment";
+    const KEY_ADJUSTMENT = 'weee_adjustment';
 
     /**
      * @var Data

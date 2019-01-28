@@ -51,6 +51,6 @@ class AssertWidgetAbsentOnFrontendHome extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget is absent on Home page.";
+        return 'Widget is absent on Home page.';
     }
 }

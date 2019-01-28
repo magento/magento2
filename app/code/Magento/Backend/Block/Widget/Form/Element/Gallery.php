@@ -70,7 +70,7 @@ class Gallery extends \Magento\Backend\Block\Template implements
         $this->addChild(
             'delete_button',
             \Magento\Backend\Block\Widget\Button::class,
-            ['label' => __('Delete'), 'onclick' => "deleteImage(#image#)", 'class' => 'delete']
+            ['label' => __('Delete'), 'onclick' => 'deleteImage(#image#)', 'class' => 'delete']
         );
 
         $this->addChild(

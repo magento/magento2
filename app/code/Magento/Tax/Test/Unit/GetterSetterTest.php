@@ -25,7 +25,7 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
 
             $this->assertTrue(
                 method_exists($classObject, $setterName),
-                "Method " . $setterName . " does not exist in " . $className
+                'Method ' . $setterName . ' does not exist in ' . $className
             );
 
             if (is_array($variableValue)) {
@@ -44,7 +44,7 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
                     [$classObject, $setterName],
                     $variableValue
                 ),
-                "Calling method " . $setterName . " failed in " . $className
+                'Calling method ' . $setterName . ' failed in ' . $className
             );
         }
 
@@ -53,17 +53,17 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
 
             $this->assertTrue(
                 method_exists($classObject, $getterName),
-                "Method " . $getterName . " does not exist in " . $className
+                'Method ' . $getterName . ' does not exist in ' . $className
             );
             $result = call_user_func([$classObject, $getterName]);
             $this->assertNotFalse(
                 $result,
-                "Calling method " . $getterName . " failed in " . $className
+                'Calling method ' . $getterName . ' failed in ' . $className
             );
             $this->assertSame(
                 $result,
                 $variableValue,
-                "Value from " . $getterName . "did not match in " . $className
+                'Value from ' . $getterName . 'did not match in ' . $className
             );
         }
     }

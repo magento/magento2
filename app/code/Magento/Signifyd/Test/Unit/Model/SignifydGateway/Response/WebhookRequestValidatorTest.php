@@ -66,7 +66,7 @@ class WebhookRequestValidatorTest extends \PHPUnit\Framework\TestCase
         $this->decoder->expects($this->once())
             ->method('decode')
             ->with($body)
-            ->willReturn(['status' => "DISMISSED", 'orderId' => '19418']);
+            ->willReturn(['status' => 'DISMISSED', 'orderId' => '19418']);
 
         $webhookRequest = $this->createWebhookRequest($body, $topic, $hash);
 
@@ -195,7 +195,7 @@ class WebhookRequestValidatorTest extends \PHPUnit\Framework\TestCase
         $this->decoder->expects($this->once())
             ->method('decode')
             ->with($body)
-            ->willReturn(['status' => "DISMISSED", 'orderId' => '19418']);
+            ->willReturn(['status' => 'DISMISSED', 'orderId' => '19418']);
 
         $this->assertFalse(
             $this->model->validate($webhookRequest),

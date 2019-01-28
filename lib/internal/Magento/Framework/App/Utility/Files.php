@@ -827,7 +827,7 @@ class Files
         $files = self::getFiles(
             array_merge(
                 [
-                    BP . "/lib/web/{mage,varien}"
+                    BP . '/lib/web/{mage,varien}'
                 ],
                 $themePaths,
                 $moduleWebPaths
@@ -941,8 +941,8 @@ class Files
                 $files = [];
                 $themePath = str_replace(DIRECTORY_SEPARATOR, '/', $themePackage->getPath());
                 $paths = [
-                    $themePath . "/web",
-                    $themePath . "/*_*/web",
+                    $themePath . '/web',
+                    $themePath . '/*_*/web',
                     $themePath . "/web/i18n/{$locale}",
                     $themePath . "/*_*/web/i18n/{$locale}"
                 ];
@@ -986,7 +986,7 @@ class Files
     public function getStaticLibraryFiles()
     {
         $result = [];
-        $this->_accumulateFilesByPatterns([BP . "/lib/web"], '*', $result, '_parseLibStatic');
+        $this->_accumulateFilesByPatterns([BP . '/lib/web'], '*', $result, '_parseLibStatic');
         return $result;
     }
 
@@ -1088,16 +1088,16 @@ class Files
             }
         }
         $paths = [
-            BP . "/lib/web/varien"
+            BP . '/lib/web/varien'
         ];
         $paths = array_merge($paths, $viewAreaPaths, $themePaths);
         $files = self::getFiles($paths, '*.js');
 
         if ($area == 'adminhtml') {
-            $adminhtmlPaths = [BP . "/lib/web/mage/{adminhtml,backend}"];
+            $adminhtmlPaths = [BP . '/lib/web/mage/{adminhtml,backend}'];
             $files = array_merge($files, self::getFiles($adminhtmlPaths, '*.js'));
         } else {
-            $frontendPaths = [BP . "/lib/web/mage"];
+            $frontendPaths = [BP . '/lib/web/mage'];
             /* current structure of /lib/web/mage directory contains frontend javascript in the root,
                backend javascript in subdirectories. That's why script shouldn't go recursive throught subdirectories
                to get js files for frontend */
@@ -1190,7 +1190,7 @@ class Files
                             $file,
                         ];
                     } else {
-                        echo $regex . " - " . $file . "\n";
+                        echo $regex . ' - ' . $file . "\n";
                         throw new \UnexpectedValueException("Could not parse theme template file '$file'");
                     }
                 }
@@ -1212,7 +1212,7 @@ class Files
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             $files = [];
             $this->_accumulateFilesByPatterns(
-                [$moduleDir . "/view/*/templates"],
+                [$moduleDir . '/view/*/templates'],
                 '*.phtml',
                 $files
             );
@@ -1251,7 +1251,7 @@ class Files
         }
         $moduleEmailPaths = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $moduleEmailPaths[] = $moduleDir . "/view/email";
+            $moduleEmailPaths[] = $moduleDir . '/view/email';
         }
         $files = self::getFiles($moduleEmailPaths, '*.html');
         $result = self::composeDataSets($files);

@@ -375,8 +375,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $newCustomerAddresses = $newCustomer->getAddresses();
         $addressId = $newCustomerAddresses[0]->getId();
 
-        $this->assertEquals($newCustomer->getDefaultBilling(), $addressId, "Default billing invalid value");
-        $this->assertEquals($newCustomer->getDefaultShipping(), $addressId, "Default shipping invalid value");
+        $this->assertEquals($newCustomer->getDefaultBilling(), $addressId, 'Default billing invalid value');
+        $this->assertEquals($newCustomer->getDefaultShipping(), $addressId, 'Default shipping invalid value');
     }
 
     /**
@@ -596,13 +596,13 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 1;
         $customerData = [
-            "id" => 1,
-            "website_id" => 1,
-            "email" => "roni_cost@example.com",
-            "firstname" => "1111",
-            "lastname" => "Boss",
-            "middlename" => null,
-            "gender" => 0
+            'id' => 1,
+            'website_id' => 1,
+            'email' => 'roni_cost@example.com',
+            'firstname' => '1111',
+            'lastname' => 'Boss',
+            'middlename' => null,
+            'gender' => 0
         ];
 
         $customerEntity = $this->customerFactory->create(['data' => $customerData]);

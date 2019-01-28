@@ -92,7 +92,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function returnIncompatibleDataType()
     {
-        return "incompatibleDataType";
+        return 'incompatibleDataType';
     }
 
     /**

@@ -220,7 +220,7 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testAddComment()
     {
-        $clearComment = "Comment text here...";
+        $clearComment = 'Comment text here...';
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with(123)
@@ -231,7 +231,7 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->orderMock);
         $this->orderStatusHistoryMock->expects($this->once())
             ->method('getComment')
-            ->willReturn("<h1>" . $clearComment);
+            ->willReturn('<h1>' . $clearComment);
         $this->orderRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->orderMock)

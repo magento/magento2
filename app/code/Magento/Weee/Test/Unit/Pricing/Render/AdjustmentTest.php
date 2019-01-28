@@ -101,10 +101,10 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->once())
             ->method('format')
             ->with(10, true, 2)
-            ->will($this->returnValue("$10.00"));
+            ->will($this->returnValue('$10.00'));
 
         $displayValue = 10;
-        $expectedValue = "$10.00";
+        $expectedValue = '$10.00';
         $typeOfDisplay = 1; //Just to set it to not false
         /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
         $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)

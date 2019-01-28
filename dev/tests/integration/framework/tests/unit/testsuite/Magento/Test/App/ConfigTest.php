@@ -29,8 +29,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $configType = "system";
-        $path = "stores/one";
+        $configType = 'system';
+        $path = 'stores/one';
         $value = 1;
         $this->model->setValue($path, $value, 'default', 'one');
 
@@ -39,8 +39,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testClean()
     {
-        $configType = "system";
-        $path = "stores/one";
+        $configType = 'system';
+        $path = 'stores/one';
         $value = 1;
         $this->model->setValue($path, $value, 'default', 'one');
         $this->assertEquals($value, $this->model->get($configType, 'default/stores/one'));

@@ -35,7 +35,7 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
                 $resultRedirect->setPath('sales/order/index');
                 return $resultRedirect;
             }
-            $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $order->getIncrementId()));
+            $resultPage->getConfig()->getTitle()->prepend(sprintf('#%s', $order->getIncrementId()));
             return $resultPage;
         }
         $resultRedirect->setPath('sales/*/');

@@ -81,11 +81,11 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 
         $layoutTemplates = $layoutXml->xpath('//template');
         foreach ($layoutTemplates as $template) {
-            $action = $template->xpath("parent::*");
+            $action = $template->xpath('parent::*');
             $attributes = $action[0]->attributes();
             switch ($attributes['method']) {
                 case 'setTemplate':
-                    $parent = $action[0]->xpath("parent::*");
+                    $parent = $action[0]->xpath('parent::*');
                     $attributes = $parent[0]->attributes();
                     $referenceName = (string)$attributes['name'];
                     $block = $layoutXml->xpath(

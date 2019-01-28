@@ -76,7 +76,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $this->showEnabledModules($output);
         $output->writeln('');
 
-        $output->writeln("<info>List of disabled modules:</info>");
+        $output->writeln('<info>List of disabled modules:</info>');
         $this->showDisabledModules($output);
         $output->writeln('');
     }

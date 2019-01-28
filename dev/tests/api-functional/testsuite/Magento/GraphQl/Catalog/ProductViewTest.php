@@ -554,7 +554,7 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $this->assertNotNull($response['products']['items'][0]['product_links'], "product_links must not be null");
+        $this->assertNotNull($response['products']['items'][0]['product_links'], 'product_links must not be null');
         $this->assertProductLinks($product, $response['products']['items'][0]['product_links'][0]);
     }
 
@@ -644,7 +644,7 @@ QUERY;
         $secondProduct->setId(
             $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
-        self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
+        self::assertNotNull($response['products']['items'][0]['price'], 'price must be not null');
         self::assertCount(2, $response['products']['items']);
         $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
         $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
@@ -657,12 +657,12 @@ QUERY;
     private function assertMediaGalleryEntries($product, $actualResponse)
     {
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
-        $this->assertCount(1, $mediaGalleryEntries, "Precondition failed, incorrect number of media gallery entries.");
+        $this->assertCount(1, $mediaGalleryEntries, 'Precondition failed, incorrect number of media gallery entries.');
         $this->assertTrue(
             is_array([$actualResponse['media_gallery_entries']]),
-            "Media galleries field must be of an array type."
+            'Media galleries field must be of an array type.'
         );
-        $this->assertCount(1, $actualResponse['media_gallery_entries'], "There must be 1 record in media gallery.");
+        $this->assertCount(1, $actualResponse['media_gallery_entries'], 'There must be 1 record in media gallery.');
         $mediaGalleryEntry = $mediaGalleryEntries[0];
         $this->assertResponseFields(
             $actualResponse['media_gallery_entries'][0],

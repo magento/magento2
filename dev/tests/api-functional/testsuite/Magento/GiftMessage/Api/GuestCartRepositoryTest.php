@@ -60,7 +60,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
             'message' => 'I thought all for the best.',
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $resultMessage = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertCount(5, $resultMessage);
         unset($resultMessage['gift_message_id']);

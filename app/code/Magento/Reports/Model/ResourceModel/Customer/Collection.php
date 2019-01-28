@@ -195,9 +195,9 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
 
             $totalExpr = $this->_addOrderStatFilter ?
                 "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded} - {$baseDiscountCanceled}"
-                    . " - ABS(orders.base_discount_amount))*orders.base_to_global_rate" :
+                    . ' - ABS(orders.base_discount_amount))*orders.base_to_global_rate' :
                 "orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded} - {$baseDiscountCanceled}"
-                    . " - ABS(orders.base_discount_amount)";
+                    . ' - ABS(orders.base_discount_amount)';
 
             $select = $this->orderResource->getConnection()->select();
             $select->from(
@@ -263,7 +263,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
-        $countSelect->columns("count(DISTINCT e.entity_id)");
+        $countSelect->columns('count(DISTINCT e.entity_id)');
 
         return $countSelect;
     }

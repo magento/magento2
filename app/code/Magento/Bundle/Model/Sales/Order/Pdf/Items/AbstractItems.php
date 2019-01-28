@@ -265,7 +265,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         if (!$this->isChildCalculated($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result .= " " . $this->filterManager->stripTags(
+                $result .= ' ' . $this->filterManager->stripTags(
                     $this->getOrderItem()->getOrder()->formatPrice($attributes['price'])
                 );
             }

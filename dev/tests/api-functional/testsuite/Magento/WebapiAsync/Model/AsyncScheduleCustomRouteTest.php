@@ -72,7 +72,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $this->logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt';
         $this->registry = $this->objectManager->get(Registry::class);
 
         $params = array_merge_recursive(
@@ -125,7 +125,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
                 [$product]
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->fail('Not all products were created');
         }
     }
 
@@ -165,7 +165,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
             ->getSize();
 
         if ($size > 0) {
-            throw new Exception(new Phrase("Collection size after clearing the products: %size", ['size' => $size]));
+            throw new Exception(new Phrase('Collection size after clearing the products: %size', ['size' => $size]));
         }
     }
 

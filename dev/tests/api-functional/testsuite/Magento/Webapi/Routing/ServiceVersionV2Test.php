@@ -138,6 +138,6 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         ];
         $requestData = ['id' => $itemId, 'name' => 'testName'];
         $item = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($itemId, $item['id'], "Item delete failed");
+        $this->assertEquals($itemId, $item['id'], 'Item delete failed');
     }
 }

@@ -95,11 +95,11 @@ class LiselectstoreElement extends SimpleElement
             $class = $element->getAttribute('class');
             $dropdownData[] = [
                 'element' => $element,
-                'storeView' => $this->isSubstring($class, "store-switcher-store-view"),
-                'store' => $this->isSubstring($class, "store-switcher-store "),
-                'website' => $this->isSubstring($class, "store-switcher-website"),
-                'current' => $this->isSubstring($class, "current"),
-                'default_config' => $this->isSubstring($class, "store-switcher-all"),
+                'storeView' => $this->isSubstring($class, 'store-switcher-store-view'),
+                'store' => $this->isSubstring($class, 'store-switcher-store '),
+                'website' => $this->isSubstring($class, 'store-switcher-website'),
+                'current' => $this->isSubstring($class, 'current'),
+                'default_config' => $this->isSubstring($class, 'store-switcher-all'),
             ];
         }
         return $dropdownData;
@@ -116,8 +116,8 @@ class LiselectstoreElement extends SimpleElement
         $data = [];
         foreach ($dropdownData as $key => $dropdownElement) {
             if ($dropdownElement['storeView']) {
-                $data[] = $this->findNearestElement('website', $key, $dropdownData) . "/"
-                    . $this->findNearestElement('store', $key, $dropdownData) . "/"
+                $data[] = $this->findNearestElement('website', $key, $dropdownData) . '/'
+                    . $this->findNearestElement('store', $key, $dropdownData) . '/'
                     . $dropdownElement['element']->getText();
             }
         }
@@ -169,8 +169,8 @@ class LiselectstoreElement extends SimpleElement
                 if ($element['default_config'] == true) {
                     return $element['element']->getText();
                 }
-                $path = $this->findNearestElement('website', $key, $elements) . "/"
-                    . $this->findNearestElement('store', $key, $elements) . "/"
+                $path = $this->findNearestElement('website', $key, $elements) . '/'
+                    . $this->findNearestElement('store', $key, $elements) . '/'
                     . $element['element']->getText();
                 return $path;
             }

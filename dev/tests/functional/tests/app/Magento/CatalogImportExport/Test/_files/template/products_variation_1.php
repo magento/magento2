@@ -8,7 +8,7 @@ return [
     'entity_0' => [
         'data_0' => [
             'sku' => '%sku%',
-            'product_type' => "simple",
+            'product_type' => 'simple',
             'name' => '%name%',
             'price' => '999.00',
             'url_key' => '%url_key%',
@@ -18,7 +18,7 @@ return [
     'entity_1' => [
         'data_0' => [
             'sku' => '%sku%',
-            'product_type' => "simple",
+            'product_type' => 'simple',
             'name' => '%name%',
             'price' => '999.00',
             'url_key' => '%url_key%',
@@ -28,7 +28,7 @@ return [
     'entity_2' => [
         'data_0' => [
             'sku' => '%sku%',
-            'product_type' => "simple",
+            'product_type' => 'simple',
             'name' => '%name%',
             'price' => '%price%.00',
             'url_key' => '%url_key%',

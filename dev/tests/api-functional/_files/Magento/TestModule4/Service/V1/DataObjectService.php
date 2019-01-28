@@ -30,7 +30,7 @@ class DataObjectService implements \Magento\TestModule4\Service\V1\DataObjectSer
      */
     public function getData($id)
     {
-        return $this->responseFactory->create()->setEntityId($id)->setName("Test");
+        return $this->responseFactory->create()->setEntityId($id)->setName('Test');
     }
 
     /**

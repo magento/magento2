@@ -48,7 +48,7 @@ class Curl extends AbstractCurl implements TaxRuleInterface
 
         if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
-            throw new \Exception("Tax rate creation by curl handler was not successful!");
+            throw new \Exception('Tax rate creation by curl handler was not successful!');
         }
 
         preg_match("~Location: [^\s]*\/rule\/(\d+)~", $response, $matches);

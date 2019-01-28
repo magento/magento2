@@ -175,7 +175,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('prepend')
             ->withConsecutive(
                 ['Shipments'],
-                ["#" . $incrementId]
+                ['#' . $incrementId]
             )
             ->willReturnSelf();
 

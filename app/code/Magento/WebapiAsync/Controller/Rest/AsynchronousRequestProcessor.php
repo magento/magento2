@@ -25,7 +25,7 @@ use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
  */
 class AsynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = "/^\\/async(\\/V.+)/";
+    const PROCESSOR_PATH = '/^\\/async(\\/V.+)/';
     const BULK_PROCESSOR_PATH = "/^\\/async\/bulk(\\/V.+)/";
 
     /**
@@ -92,7 +92,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
         $path = $request->getPathInfo();
-        $path = preg_replace($this->processorPath, "$1", $path);
+        $path = preg_replace($this->processorPath, '$1', $path);
         $request->setPathInfo(
             $path
         );

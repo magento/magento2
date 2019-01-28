@@ -89,7 +89,7 @@ class Main extends Block
      */
     public function getAttributeSetName()
     {
-        return $this->_rootElement->find("#attribute_set_name", Locator::SELECTOR_CSS)->getValue();
+        return $this->_rootElement->find('#attribute_set_name', Locator::SELECTOR_CSS)->getValue();
     }
 
     /**

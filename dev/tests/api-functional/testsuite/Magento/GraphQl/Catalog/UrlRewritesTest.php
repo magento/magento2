@@ -68,8 +68,8 @@ QUERY;
         $this->assertResponseFields(
             $response['products']['items'][0]['url_rewrites'][0],
             [
-                "url" => $urlRewrite->getRequestPath(),
-                "parameters" => $this->getUrlParameters($urlRewrite->getTargetPath())
+                'url' => $urlRewrite->getRequestPath(),
+                'parameters' => $this->getUrlParameters($urlRewrite->getTargetPath())
             ]
         );
     }
@@ -123,8 +123,8 @@ QUERY;
             $this->assertResponseFields(
                 $response['products']['items'][0]['url_rewrites'][$i],
                 [
-                    "url" => $urlRewrite->getRequestPath(),
-                    "parameters" => $this->getUrlParameters($urlRewrite->getTargetPath())
+                    'url' => $urlRewrite->getRequestPath(),
+                    'parameters' => $this->getUrlParameters($urlRewrite->getTargetPath())
                 ]
             );
         }

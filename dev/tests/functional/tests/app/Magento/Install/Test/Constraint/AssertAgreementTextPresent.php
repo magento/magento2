@@ -55,6 +55,6 @@ class AssertAgreementTextPresent extends AbstractConstraint
      */
     public function toString()
     {
-        return "License agreement text is present on Terms & Agreement page.";
+        return 'License agreement text is present on Terms & Agreement page.';
     }
 }

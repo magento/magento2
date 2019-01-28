@@ -211,7 +211,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
         } catch (NoSuchEntityException $exception) {
             $this->assertEquals(
                 "No item with the provided ID was found in the Order, or a gift message isn't allowed. "
-                . "Verify and try again.",
+                . 'Verify and try again.',
                 $exception->getMessage()
             );
         }

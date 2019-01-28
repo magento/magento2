@@ -107,8 +107,8 @@ class SelectVersion extends Form
      */
     public function chooseUpgradeOtherComponents(array $packages) :void
     {
-        $this->_rootElement->find("[for=yesUpdateComponents]")->click();
-        $this->waitForElementNotVisible("[ng-show=\"!componentsProcessed\"");
+        $this->_rootElement->find('[for=yesUpdateComponents]')->click();
+        $this->waitForElementNotVisible('[ng-show="!componentsProcessed"');
 
         if (!$this->isComponentsEmpty()) {
             $otherComponentGrid = $this->getOtherComponentsGrid();

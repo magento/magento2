@@ -43,7 +43,7 @@ class CircularDependencyTest extends \PHPUnit\Framework\TestCase
             preg_match('#/([^/]+?/[^/]+?)/etc/module\.xml$#', $configFile, $moduleName);
             $moduleName = str_replace('/', '_', $moduleName[1]);
             $config = simplexml_load_file($configFile);
-            $result = $config->xpath("/config/module/depends/module") ?: [];
+            $result = $config->xpath('/config/module/depends/module') ?: [];
             foreach ($result as $node) {
                 /** @var \SimpleXMLElement $node */
                 $this->moduleDependencies[$moduleName][] = (string) $node['name'];

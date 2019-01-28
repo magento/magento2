@@ -119,7 +119,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getCompareLinkBlock()->waitForCompareProductsLinks();
-        $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+        $this->cmsIndex->getLinksBlock()->openLink('Compare Products');
         $this->catalogProductCompare->getCompareProductsBlock()->removeAllProducts();
     }
 
@@ -130,6 +130,6 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget with type Recently Compared Products is present on Product Compare page";
+        return 'Widget with type Recently Compared Products is present on Product Compare page';
     }
 }

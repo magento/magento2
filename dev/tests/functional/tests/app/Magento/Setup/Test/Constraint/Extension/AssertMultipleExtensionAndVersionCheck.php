@@ -38,6 +38,6 @@ class AssertMultipleExtensionAndVersionCheck extends AbstractConstraint
      */
     public function toString()
     {
-        return "Extension name and version check passed.";
+        return 'Extension name and version check passed.';
     }
 }

@@ -22,7 +22,7 @@ class ProductCustomOptionTypeListTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "types",
+                'resourcePath' => self::RESOURCE_PATH . 'types',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [

@@ -187,7 +187,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
     {
         \PHPUnit\Framework\Assert::assertFalse(
             $this->catalogProductView->getRelatedProductBlock()->isVisible(),
-            "Related section is present."
+            'Related section is present.'
         );
     }
 

@@ -290,7 +290,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $result = $codeMessDetector->run(self::getWhitelist(['php']));
 
-        $output = "";
+        $output = '';
         if (file_exists($reportFile)) {
             $output = file_get_contents($reportFile);
         }
@@ -298,7 +298,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             Command::EXIT_SUCCESS,
             $result,
-            "PHP Code Mess has found error(s):" . PHP_EOL . $output
+            'PHP Code Mess has found error(s):' . PHP_EOL . $output
         );
 
         // delete empty reports
@@ -328,14 +328,14 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $result = $copyPasteDetector->run([BP]);
 
-        $output = "";
+        $output = '';
         if (file_exists($reportFile)) {
             $output = file_get_contents($reportFile);
         }
 
         $this->assertTrue(
             $result,
-            "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
+            'PHP Copy/Paste Detector has found error(s):' . PHP_EOL . $output
         );
     }
 
@@ -371,7 +371,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             0,
             count($filesMissingStrictTyping),
-            "Following files are missing strict type declaration:"
+            'Following files are missing strict type declaration:'
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)
         );

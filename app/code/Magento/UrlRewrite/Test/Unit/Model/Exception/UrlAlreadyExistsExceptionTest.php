@@ -48,7 +48,7 @@ class UrlAlreadyExistsExceptionTest extends \PHPUnit\Framework\TestCase
         $expectedCode = 42;
         $urls = ['someUrl.html'];
         $localizedException = new UrlAlreadyExistsException(
-            new Phrase("message %1", ['test']),
+            new Phrase('message %1', ['test']),
             new \Exception(),
             $expectedCode,
             $urls

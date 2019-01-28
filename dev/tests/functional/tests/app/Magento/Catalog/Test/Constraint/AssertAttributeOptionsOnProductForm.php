@@ -46,7 +46,7 @@ class AssertAttributeOptionsOnProductForm extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertTrue(
             empty($diff),
-            "Products attribute options are absent on product form: " . implode(', ', $diff)
+            'Products attribute options are absent on product form: ' . implode(', ', $diff)
         );
     }
 

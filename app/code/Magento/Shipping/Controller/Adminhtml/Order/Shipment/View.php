@@ -68,7 +68,7 @@ class View extends \Magento\Backend\App\Action
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
             $resultPage->setActiveMenu('Magento_Sales::sales_shipment');
             $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
-            $resultPage->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
+            $resultPage->getConfig()->getTitle()->prepend('#' . $shipment->getIncrementId());
             return $resultPage;
         } else {
             $resultForward = $this->resultForwardFactory->create();

@@ -1458,7 +1458,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     'type' => 'datetime',
                 ],
                 '$rowData' => [
-                    'code' => "5 September 2015",
+                    'code' => '5 September 2015',
                 ],
             ],
             [
@@ -1531,7 +1531,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     'type' => 'datetime',
                 ],
                 '$rowData' => [
-                    'code' => "incorrect datetime",
+                    'code' => 'incorrect datetime',
                 ],
             ],
             [

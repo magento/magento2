@@ -138,7 +138,7 @@ class ColumnSavior implements DataSaviorInterface
             $column->getName()
         ];
 
-        return implode("_", $dimensions);
+        return implode('_', $dimensions);
     }
 
     /**

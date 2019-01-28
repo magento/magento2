@@ -19,7 +19,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  */
 class SynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = "/^\\/V\\d+/";
+    const PROCESSOR_PATH = '/^\\/V\\d+/';
 
     /**
      * @var RestResponse

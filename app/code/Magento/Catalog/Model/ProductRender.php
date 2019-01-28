@@ -141,7 +141,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
      */
     public function getType()
     {
-        return $this->getData("type");
+        return $this->getData('type');
     }
 
     /**
@@ -149,7 +149,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
      */
     public function getIsSalable()
     {
-        return $this->getData("is_salable");
+        return $this->getData('is_salable');
     }
 
     /**

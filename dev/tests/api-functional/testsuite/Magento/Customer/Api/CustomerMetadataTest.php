@@ -16,9 +16,9 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class CustomerMetadataTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerCustomerMetadataV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/attributeMetadata/customer";
+    const SERVICE_NAME = 'customerCustomerMetadataV1';
+    const SERVICE_VERSION = 'V1';
+    const RESOURCE_PATH = '/V1/attributeMetadata/customer';
 
     /**
      * @var CustomerMetadataInterface

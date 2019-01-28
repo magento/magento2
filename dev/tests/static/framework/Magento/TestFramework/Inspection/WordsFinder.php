@@ -292,7 +292,7 @@ class WordsFinder
         $contents = $checkContents ? file_get_contents($file) : '';
         if (isset($this->exclude[$file]) && !empty($this->exclude[$file])) {
             foreach ($this->exclude[$file] as $stringToEliminate) {
-                $contents = str_replace($stringToEliminate, "", $contents);
+                $contents = str_replace($stringToEliminate, '', $contents);
             }
         }
 

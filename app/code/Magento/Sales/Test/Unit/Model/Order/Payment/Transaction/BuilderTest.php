@@ -71,7 +71,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $document,
         $isTransactionExists
     ) {
-        $parentTransactionId = "12";
+        $parentTransactionId = '12';
         $shouldCloseParentTransaction = true;
         $parentTransactionIsClosed = false;
         if ($document) {

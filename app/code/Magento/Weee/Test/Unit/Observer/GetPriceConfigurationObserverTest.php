@@ -109,7 +109,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
     public function getPriceConfigurationProvider()
     {
         return [
-            "basic" => [
+            'basic' => [
                 'hasWeeeAttributes' => true,
                 'testArray' => [
                     [
@@ -154,7 +154,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
 
-            "layered, with extra keys" => [
+            'layered, with extra keys' => [
                 'hasWeeeAttributes' => true,
                 'testArray' => [
                     [
@@ -200,7 +200,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
 
-            "no Weee attributes, expect WeeePrice to be same as FinalPrice" => [
+            'no Weee attributes, expect WeeePrice to be same as FinalPrice' => [
                 'hasWeeeAttributes' => false,
                 'testArray' => [
                     [

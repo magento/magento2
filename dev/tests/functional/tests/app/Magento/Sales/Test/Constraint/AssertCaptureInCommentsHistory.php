@@ -67,6 +67,6 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about captured amount is available in Comments History section.";
+        return 'Message about captured amount is available in Comments History section.';
     }
 }

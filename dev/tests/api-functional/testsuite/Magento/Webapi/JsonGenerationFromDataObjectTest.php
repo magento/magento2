@@ -31,7 +31,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
 
     protected function setUp()
     {
-        $this->_markTestAsRestOnly("JSON generation tests are intended to be executed for REST adapter only.");
+        $this->_markTestAsRestOnly('JSON generation tests are intended to be executed for REST adapter only.');
 
         $this->storeCode = Bootstrap::getObjectManager()->get(StoreManagerInterface::class)
             ->getStore()->getCode();

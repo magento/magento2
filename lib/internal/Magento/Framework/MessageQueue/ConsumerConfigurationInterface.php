@@ -10,11 +10,11 @@ namespace Magento\Framework\MessageQueue;
  */
 interface ConsumerConfigurationInterface
 {
-    const CONSUMER_NAME = "consumer_name";
+    const CONSUMER_NAME = 'consumer_name';
 
-    const QUEUE_NAME = "queue_name";
-    const MAX_MESSAGES = "max_messages";
-    const SCHEMA_TYPE = "schema_type";
+    const QUEUE_NAME = 'queue_name';
+    const MAX_MESSAGES = 'max_messages';
+    const SCHEMA_TYPE = 'schema_type';
     const TOPICS = 'topics';
     const TOPIC_TYPE = 'consumer_type';
     const TOPIC_HANDLERS = 'handlers';

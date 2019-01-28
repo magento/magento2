@@ -88,13 +88,13 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
                 'field' => 'testField',
                 'value' => 'testValue',
                 'isNegation' => false,
-                'expectedResult' => "testField LIKE %testValue%",
+                'expectedResult' => 'testField LIKE %testValue%',
             ],
             'negative' => [
                 'field' => 'testField2',
                 'value' => 'testValue2',
                 'isNegation' => true,
-                'expectedResult' => "testField2 NOT LIKE %testValue2%",
+                'expectedResult' => 'testField2 NOT LIKE %testValue2%',
             ],
         ];
     }

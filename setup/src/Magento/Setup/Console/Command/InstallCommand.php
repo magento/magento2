@@ -309,7 +309,7 @@ class InstallCommand extends AbstractSetupCommand
             );
         }
 
-        $output->writeln("");
+        $output->writeln('');
 
         foreach ($this->userConfig->getOptionsList() as $option) {
             $configOptionsToValidate[$option->getName()] = $this->askQuestion(
@@ -320,7 +320,7 @@ class InstallCommand extends AbstractSetupCommand
             );
         }
 
-        $output->writeln("");
+        $output->writeln('');
 
         foreach ($this->adminUser->getOptionsList(InputOption::VALUE_OPTIONAL) as $option) {
             $configOptionsToValidate[$option->getName()] = $this->askQuestion(
@@ -331,7 +331,7 @@ class InstallCommand extends AbstractSetupCommand
             );
         }
 
-        $output->writeln("");
+        $output->writeln('');
 
         $returnConfigOptionsToValidate = [];
         foreach ($configOptionsToValidate as $key => $value) {

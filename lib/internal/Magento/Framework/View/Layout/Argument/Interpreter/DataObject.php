@@ -48,7 +48,7 @@ class DataObject implements InterpreterInterface
         $result = $this->objectManager->create($className);
         if ($this->expectedClass && !$result instanceof $this->expectedClass) {
             throw new \UnexpectedValueException(
-                sprintf("Instance of %s is expected, got %s instead.", $this->expectedClass, get_class($result))
+                sprintf('Instance of %s is expected, got %s instead.', $this->expectedClass, get_class($result))
             );
         }
         return $result;

@@ -68,10 +68,10 @@ class View extends \Magento\Backend\App\Action
             $resultPage->setActiveMenu('Magento_Sales::sales_creditmemo');
             if ($creditmemo->getInvoice()) {
                 $resultPage->getConfig()->getTitle()->prepend(
-                    __("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
+                    __('View Memo for #%1', $creditmemo->getInvoice()->getIncrementId())
                 );
             } else {
-                $resultPage->getConfig()->getTitle()->prepend(__("View Memo"));
+                $resultPage->getConfig()->getTitle()->prepend(__('View Memo'));
             }
             return $resultPage;
         } else {

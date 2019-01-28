@@ -74,8 +74,8 @@ class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
                 $this->selectMock,
                 $this->adapterMock,
                 $indexes,
-                TemporaryTableService::INDEX_METHOD_HASH . "Other",
-                TemporaryTableService::DB_ENGINE_INNODB . "Other"
+                TemporaryTableService::INDEX_METHOD_HASH . 'Other',
+                TemporaryTableService::DB_ENGINE_INNODB . 'Other'
             )
         );
     }

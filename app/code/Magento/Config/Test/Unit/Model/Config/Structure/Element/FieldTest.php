@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class FieldTest extends \PHPUnit\Framework\TestCase
 {
-    const FIELD_TEST_CONSTANT = "field test constant";
+    const FIELD_TEST_CONSTANT = 'field test constant';
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Field

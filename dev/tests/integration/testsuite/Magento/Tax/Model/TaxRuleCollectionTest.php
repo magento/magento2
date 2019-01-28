@@ -28,7 +28,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         $expectedFirstTaxRuleId = $firstTaxRuleFixture->getId();
 
         if (($dbTaxRulesQty == 0) || ($collection->getFirstItem()->getId() != $expectedFirstTaxRuleId)) {
-            $this->fail("Preconditions failed.");
+            $this->fail('Preconditions failed.');
         }
         /** @var \Magento\Tax\Model\TaxRuleCollection $taxRulesCollection */
         $taxRulesCollection = Bootstrap::getObjectManager()

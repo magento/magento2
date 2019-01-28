@@ -66,7 +66,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     public function testHandleErrors()
     {
         /** Add error message */
-        $firstErrorMessage = "No document type declaration. ";
+        $firstErrorMessage = 'No document type declaration. ';
         $this->_xmlDeserializer->handleErrors(null, $firstErrorMessage, null, null);
         /** Assert that first error message was added */
         $this->assertAttributeEquals(
@@ -76,7 +76,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
             'Error message was not set to xml deserializer.'
         );
         /** Add error message */
-        $secondErrorMessage = "Strings should be wrapped in double quotes.";
+        $secondErrorMessage = 'Strings should be wrapped in double quotes.';
         $expectedMessages = $firstErrorMessage . $secondErrorMessage;
         $this->_xmlDeserializer->handleErrors(null, $secondErrorMessage, null, null);
         /** Assert that both error messages were added */
@@ -101,7 +101,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         /** Initialize SUT. */
         try {
             $this->_xmlDeserializer->deserialize($invalidXml);
-            $this->fail("Exception is expected to be raised");
+            $this->fail('Exception is expected to be raised');
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $exceptionMessage = 'Decoding Error: End tag for "key1" was omitted.';
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
@@ -127,7 +127,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         /** Initialize SUT. */
         try {
             $this->_xmlDeserializer->deserialize($invalidXml);
-            $this->fail("Exception is expected to be raised");
+            $this->fail('Exception is expected to be raised');
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertEquals('Decoding error.', $e->getMessage(), 'Exception message is invalid');

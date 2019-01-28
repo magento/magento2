@@ -67,7 +67,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' =>   self::RESOURCE_PATH
-                    . $productSku . "/group-prices/" . $customerGroupId . "/tiers/" . $qty,
+                    . $productSku . '/group-prices/' . $customerGroupId . '/tiers/' . $qty,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [

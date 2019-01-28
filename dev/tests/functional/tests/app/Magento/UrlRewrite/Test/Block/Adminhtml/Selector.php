@@ -23,7 +23,7 @@ class Selector extends Block
      */
     public function selectType($urlrewriteType)
     {
-        $this->_rootElement->find("[data-role=entity-type-selector]", Locator::SELECTOR_CSS, 'select')
+        $this->_rootElement->find('[data-role=entity-type-selector]', Locator::SELECTOR_CSS, 'select')
             ->setValue($urlrewriteType);
     }
 }

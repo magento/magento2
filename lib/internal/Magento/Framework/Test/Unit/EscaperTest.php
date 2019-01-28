@@ -289,8 +289,8 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     {
         $data = "Text with 'single' and \"double\" quotes";
         $expected = [
-            "Text with &#039;single&#039; and &quot;double&quot; quotes",
-            "Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes",
+            'Text with &#039;single&#039; and &quot;double&quot; quotes',
+            'Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes',
         ];
         $this->assertEquals($expected[0], $this->escaper->escapeQuote($data));
         $this->assertEquals($expected[1], $this->escaper->escapeQuote($data, true));

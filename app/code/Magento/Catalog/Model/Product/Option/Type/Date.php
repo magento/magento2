@@ -126,7 +126,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         "The product's required option(s) weren't entered. "
-                        . "Make sure the options are entered and try again."
+                        . 'Make sure the options are entered and try again.'
                     )
                 );
             }

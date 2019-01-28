@@ -35,7 +35,7 @@ class Updater extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(AbstractElement $element)
     {
         $html = parent::_getElementHtml($element);
-        $html .= "<script type=\"text/javascript\">" .
+        $html .= '<script type="text/javascript">' .
             "require(['mage/adminhtml/form'], function(){" .
             "window.updater = new RegionUpdater('tax_defaults_country'," .
             " 'tax_region', 'tax_defaults_region', " .

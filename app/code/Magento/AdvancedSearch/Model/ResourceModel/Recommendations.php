@@ -84,7 +84,7 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
         $existsRelatedQueries = $this->getRelatedQueries($queryId);
         $neededRelatedQueries = array_diff($relatedQueries, $existsRelatedQueries);
         foreach ($neededRelatedQueries as $relationId) {
-            $connection->insert($this->getMainTable(), ["query_id" => $queryId, "relation_id" => $relationId]);
+            $connection->insert($this->getMainTable(), ['query_id' => $queryId, 'relation_id' => $relationId]);
         }
         return $this;
     }

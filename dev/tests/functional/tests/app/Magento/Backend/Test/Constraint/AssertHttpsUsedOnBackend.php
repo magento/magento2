@@ -54,7 +54,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      */
     protected function assertUsedProtocol($expectedProtocol)
     {
-        if (substr($expectedProtocol, -3) !== "://") {
+        if (substr($expectedProtocol, -3) !== '://') {
             $expectedProtocol .= '://';
         }
 

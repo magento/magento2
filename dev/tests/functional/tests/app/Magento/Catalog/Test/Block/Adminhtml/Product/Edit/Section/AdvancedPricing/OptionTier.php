@@ -89,7 +89,7 @@ class OptionTier extends AbstractOptions
         if (null !== $rows) {
             foreach ($rows as $row) {
                 $data = $this->dataMapping($fields);
-                if ($row->find($data['value_type']['selector'])->getValue() == "fixed") {
+                if ($row->find($data['value_type']['selector'])->getValue() == 'fixed') {
                     unset($data['percentage_value']);
                 }
                 $fieldsData[] = $this->_getData($data, $row);

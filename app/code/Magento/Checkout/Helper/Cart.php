@@ -74,7 +74,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     public function getAddUrl($product, $additional = [])
     {
         if (isset($additional['useUencPlaceholder'])) {
-            $uenc = "%uenc%";
+            $uenc = '%uenc%';
             unset($additional['useUencPlaceholder']);
         } else {
             $uenc = $this->urlEncoder->encode($this->_urlBuilder->getCurrentUrl());

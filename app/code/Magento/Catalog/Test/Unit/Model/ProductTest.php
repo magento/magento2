@@ -1025,10 +1025,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetProductLinks()
     {
         $outputRelatedLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
-        $outputRelatedLink->setSku("Simple Product 1");
-        $outputRelatedLink->setLinkType("related");
-        $outputRelatedLink->setLinkedProductSku("Simple Product 2");
-        $outputRelatedLink->setLinkedProductType("simple");
+        $outputRelatedLink->setSku('Simple Product 1');
+        $outputRelatedLink->setLinkType('related');
+        $outputRelatedLink->setLinkedProductSku('Simple Product 2');
+        $outputRelatedLink->setLinkedProductType('simple');
         $outputRelatedLink->setPosition(0);
         $expectedOutput = [$outputRelatedLink];
         $this->productLinkRepositoryMock->expects($this->once())->method('getList')->willReturn($expectedOutput);
@@ -1042,10 +1042,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testSetProductLinks()
     {
         $link = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
-        $link->setSku("Simple Product 1");
-        $link->setLinkType("upsell");
-        $link->setLinkedProductSku("Simple Product 2");
-        $link->setLinkedProductType("simple");
+        $link->setSku('Simple Product 1');
+        $link->setLinkType('upsell');
+        $link->setLinkedProductSku('Simple Product 2');
+        $link->setLinkedProductType('simple');
         $link->setPosition(0);
         $productLinks = [$link];
         $this->model->setProductLinks($productLinks);

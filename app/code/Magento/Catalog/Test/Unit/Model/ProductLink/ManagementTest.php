@@ -63,8 +63,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "Simple Product 2");
-        $inputRelatedLink->setData("type_id", "simple");
+        $inputRelatedLink->setData('sku', 'Simple Product 2');
+        $inputRelatedLink->setData('type_id', 'simple');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -91,8 +91,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "Simple Product 2");
-        $inputRelatedLink->setData("type_id", "simple");
+        $inputRelatedLink->setData('sku', 'Simple Product 2');
+        $inputRelatedLink->setData('type_id', 'simple');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -115,8 +115,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "Simple Product 1");
-        $inputRelatedLink->setData("type_id", "related");
+        $inputRelatedLink->setData('sku', 'Simple Product 1');
+        $inputRelatedLink->setData('type_id', 'related');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -140,7 +140,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
 
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
-        $inputRelatedLink->setData("sku", "Simple Product 1");
+        $inputRelatedLink->setData('sku', 'Simple Product 1');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -166,8 +166,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "Simple Product 2");
-        $inputRelatedLink->setData("type_id", "simple");
+        $inputRelatedLink->setData('sku', 'Simple Product 2');
+        $inputRelatedLink->setData('type_id', 'simple');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -191,8 +191,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "Simple Product 2");
-        $inputRelatedLink->setData("type_id", "simple");
+        $inputRelatedLink->setData('sku', 'Simple Product 2');
+        $inputRelatedLink->setData('type_id', 'simple');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -227,8 +227,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "bad sku");
-        $inputRelatedLink->setData("type_id", "bad type");
+        $inputRelatedLink->setData('sku', 'bad sku');
+        $inputRelatedLink->setData('type_id', 'bad type');
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 

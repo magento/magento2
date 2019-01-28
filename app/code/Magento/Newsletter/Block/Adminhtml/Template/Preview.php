@@ -18,7 +18,7 @@ class Preview extends \Magento\Backend\Block\Widget
      *
      * @var string
      */
-    protected $profilerName = "newsletter_template_proccessing";
+    protected $profilerName = 'newsletter_template_proccessing';
 
     /**
      * @var \Magento\Newsletter\Model\TemplateFactory
@@ -84,7 +84,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->revertDesign();
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
+            $templateProcessed = '<pre>' . htmlspecialchars($templateProcessed) . '</pre>';
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);

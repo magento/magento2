@@ -220,7 +220,7 @@ class Address extends AbstractCustomer
      * @array
      */
     protected $validColumnNames = [
-        "region_id", "vat_is_valid", "vat_request_date", "vat_request_id", "vat_request_success"
+        'region_id', 'vat_is_valid', 'vat_request_date', 'vat_request_id', 'vat_request_success'
     ];
 
     /**

@@ -509,7 +509,7 @@ class Processor
         $this->_reportFile = $this->_reportDir . '/' . $reportId;
 
         if (!file_exists($this->_reportFile) || !is_readable($this->_reportFile)) {
-            header("Location: " . $this->getBaseUrl());
+            header('Location: ' . $this->getBaseUrl());
             die();
         }
         $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));

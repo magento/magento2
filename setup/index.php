@@ -7,8 +7,8 @@ use Magento\Setup\Application;
 use Magento\Setup\Model\ObjectManagerProvider;
 
 if (PHP_SAPI == 'cli') {
-    echo "You cannot run this from the command line." . PHP_EOL .
-        "Run \"php bin/magento\" instead." . PHP_EOL;
+    echo 'You cannot run this from the command line.' . PHP_EOL .
+        'Run "php bin/magento" instead.' . PHP_EOL;
     exit(1);
 }
 try {

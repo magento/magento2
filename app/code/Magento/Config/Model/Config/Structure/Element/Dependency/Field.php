@@ -36,7 +36,7 @@ class Field
      * @param array $fieldData
      * @param string $fieldPrefix
      */
-    public function __construct(array $fieldData = [], $fieldPrefix = "")
+    public function __construct(array $fieldData = [], $fieldPrefix = '')
     {
         if (isset($fieldData['separator'])) {
             $this->_values = explode($fieldData['separator'], $fieldData['value']);

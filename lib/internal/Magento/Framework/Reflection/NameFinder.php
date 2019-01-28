@@ -41,7 +41,7 @@ class NameFinder
      */
     public function getFieldDescriptionFromGetterDescription($shortDescription)
     {
-        return ucfirst(substr(strstr($shortDescription, " "), 1));
+        return ucfirst(substr(strstr($shortDescription, ' '), 1));
     }
 
     /**

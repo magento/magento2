@@ -1234,7 +1234,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 "e.{$linkField} = t_d.{$linkField}",
                 ['t_d.attribute_id']
             )->where(
-                " e.entity_id IN (?)",
+                ' e.entity_id IN (?)',
                 array_keys($this->_itemsById)
             )->where(
                 't_d.attribute_id IN (?)',

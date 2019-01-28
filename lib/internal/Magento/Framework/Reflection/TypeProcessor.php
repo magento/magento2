@@ -237,7 +237,7 @@ class TypeProcessor
         $description = rtrim($shortDescription);
         $longDescription = str_replace(["\n", "\r"], '', $longDescription);
         if (!empty($longDescription) && !empty($description)) {
-            $description .= " ";
+            $description .= ' ';
         }
         $description .= ltrim($longDescription);
 
@@ -740,7 +740,7 @@ class TypeProcessor
         $methodDocBlock = $methodReflection->getDocBlock();
         if (!$methodDocBlock) {
             throw new \InvalidArgumentException(
-                "Each method must have a doc block. "
+                'Each method must have a doc block. '
                 . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
             );
         }

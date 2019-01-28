@@ -147,7 +147,7 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
                 '" ' .
                 $element->serialize(
                     $htmlAttributes
-                ) . "/>" . "\n";
+                ) . '/>' . "\n";
             $html .= '<input type="hidden" name="' . $regionIdHtmlName . '" id="' . $regionIdHtmlId . '" value=""/>';
             $html .= '</div>' . "\n";
         }

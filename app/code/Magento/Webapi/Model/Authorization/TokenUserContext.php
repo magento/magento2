@@ -161,7 +161,7 @@ class TokenUserContext implements UserContextInterface
             return;
         }
 
-        $headerPieces = explode(" ", $authorizationHeaderValue);
+        $headerPieces = explode(' ', $authorizationHeaderValue);
         if (count($headerPieces) !== 2) {
             $this->isRequestProcessed = true;
             return;

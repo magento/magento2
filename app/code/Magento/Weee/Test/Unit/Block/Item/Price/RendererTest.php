@@ -161,7 +161,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             'weee_enabled_showdetail_string_zero_false' => [
                 'isWeeeEnabled' => true,
                 'showWeeeDetails' => true,
-                'hasWeeeAmount' => "0.0000",
+                'hasWeeeAmount' => '0.0000',
                 'expectedValue' => false,
             ],
             'weee_enabled_showdetail_false' => [

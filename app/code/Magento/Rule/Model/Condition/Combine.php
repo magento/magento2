@@ -187,12 +187,12 @@ class Combine extends AbstractCondition
      */
     public function asXml($containerKey = 'conditions', $itemKey = 'condition')
     {
-        $xml = "<aggregator>" .
+        $xml = '<aggregator>' .
             $this->getAggregator() .
-            "</aggregator>" .
-            "<value>" .
+            '</aggregator>' .
+            '<value>' .
             $this->getValue() .
-            "</value>" .
+            '</value>' .
             "<{$containerKey}>";
         foreach ($this->getConditions() as $condition) {
             $xml .= "<{$itemKey}>" . $condition->asXml() . "</{$itemKey}>";
@@ -306,7 +306,7 @@ class Combine extends AbstractCondition
      */
     public function asString($format = '')
     {
-        $str = __("If %1 of these conditions are %2:", $this->getAggregatorName(), $this->getValueName());
+        $str = __('If %1 of these conditions are %2:', $this->getAggregatorName(), $this->getValueName());
         return $str;
     }
 

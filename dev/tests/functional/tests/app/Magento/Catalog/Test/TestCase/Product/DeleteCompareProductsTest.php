@@ -75,7 +75,7 @@ class DeleteCompareProductsTest extends AbstractCompareProductsTest
         }
         $this->products = $this->createProducts($products);
         $this->addProducts($this->products);
-        $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+        $this->cmsIndex->getLinksBlock()->openLink('Compare Products');
         $this->catalogProductCompare->getCompareProductsBlock()->removeProduct($removeProductIndex);
 
         return ['product' => $this->products[$removeProductIndex - 1], 'countProducts' => count($this->products)];
@@ -90,7 +90,7 @@ class DeleteCompareProductsTest extends AbstractCompareProductsTest
     {
         if (count($this->products) > 1) {
             $this->cmsIndex->open();
-            $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+            $this->cmsIndex->getLinksBlock()->openLink('Compare Products');
             $this->catalogProductCompare->getCompareProductsBlock()->removeAllProducts();
         }
     }

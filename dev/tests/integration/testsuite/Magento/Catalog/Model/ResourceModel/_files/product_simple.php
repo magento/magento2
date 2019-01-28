@@ -16,7 +16,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('simple products')
     ->setPrice(10)
     ->setWeight(1)
-    ->setShortDescription("Short description")
+    ->setShortDescription('Short description')
     ->setTaxClassId(0)
     ->setTierPrice(
         [

@@ -127,7 +127,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetElementComplexTypeName()
     {
-        $this->assertEquals("Test", $this->_wsdlGenerator->getElementComplexTypeName("test"));
+        $this->assertEquals('Test', $this->_wsdlGenerator->getElementComplexTypeName('test'));
     }
 
     /**
@@ -135,7 +135,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPortTypeName()
     {
-        $this->assertEquals("testPortType", $this->_wsdlGenerator->getPortTypeName("test"));
+        $this->assertEquals('testPortType', $this->_wsdlGenerator->getPortTypeName('test'));
     }
 
     /**
@@ -143,7 +143,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBindingName()
     {
-        $this->assertEquals("testBinding", $this->_wsdlGenerator->getBindingName("test"));
+        $this->assertEquals('testBinding', $this->_wsdlGenerator->getBindingName('test'));
     }
 
     /**
@@ -151,7 +151,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPortName()
     {
-        $this->assertEquals("testPort", $this->_wsdlGenerator->getPortName("test"));
+        $this->assertEquals('testPort', $this->_wsdlGenerator->getPortName('test'));
     }
 
     /**
@@ -159,7 +159,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetServiceName()
     {
-        $this->assertEquals("testService", $this->_wsdlGenerator->getServiceName("test"));
+        $this->assertEquals('testService', $this->_wsdlGenerator->getServiceName('test'));
     }
 
     /**
@@ -167,7 +167,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInputMessageName()
     {
-        $this->assertEquals("operationNameRequest", $this->_wsdlGenerator->getInputMessageName("operationName"));
+        $this->assertEquals('operationNameRequest', $this->_wsdlGenerator->getInputMessageName('operationName'));
     }
 
     /**
@@ -175,7 +175,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOutputMessageName()
     {
-        $this->assertEquals("operationNameResponse", $this->_wsdlGenerator->getOutputMessageName("operationName"));
+        $this->assertEquals('operationNameResponse', $this->_wsdlGenerator->getOutputMessageName('operationName'));
     }
 
     /**

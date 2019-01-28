@@ -120,7 +120,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
             $wishlist->save();
 
             $this->messageManager->addSuccessMessage(__(
-                "%1 has been moved to your wish list.",
+                '%1 has been moved to your wish list.',
                 $this->escaper->escapeHtml($item->getProduct()->getName())
             ));
         } catch (LocalizedException $e) {

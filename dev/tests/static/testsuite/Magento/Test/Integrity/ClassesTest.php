@@ -31,7 +31,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    private static $keywordsBlacklist = ["String", "Array", "Boolean", "Element"];
+    private static $keywordsBlacklist = ['String', 'Array', 'Boolean', 'Element'];
 
     /**
      * @var array|null
@@ -233,7 +233,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
              * @param array $file
              */
             function ($file) {
-                $relativePath = str_replace(BP . "/", "", $file);
+                $relativePath = str_replace(BP . '/', '', $file);
                 // exceptions made for fixture files from tests
                 if (strpos($relativePath, '/_files/') !== false) {
                     return;
@@ -312,7 +312,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                $relativePath = str_replace(BP, "", $file);
+                $relativePath = str_replace(BP, '', $file);
                 // Due to the examples given with the regex patterns, we skip this test file itself
                 if (preg_match(
                     '/\/dev\/tests\/static\/testsuite\/Magento\/Test\/Integrity\/ClassesTest.php$/',
@@ -376,7 +376,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
                     $this->assertClassesExist($vendorClasses, $file);
                 }
 
-                if (!empty($result3['exception']) && $result3['exception'][0] != "") {
+                if (!empty($result3['exception']) && $result3['exception'][0] != '') {
                     $badClasses = array_merge($badClasses, array_filter($result3['exception'], 'strlen'));
                 }
 
@@ -566,7 +566,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
             $lib = array_shift($namespaceParts);
             if ($lib == 'framework') {
                 $subLib = $namespaceParts[0];
-                $subLib = strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $subLib));
+                $subLib = strtolower(preg_replace('/(.)([A-Z])/', '$1-$2', $subLib));
                 $libraryName = $vendor . '/' . $lib . '-' . $subLib;
                 $libraryDir = $this->componentRegistrar->getPath(
                     ComponentRegistrar::LIBRARY,
@@ -582,7 +582,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
                     );
                 }
             } else {
-                $lib = strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $lib));
+                $lib = strtolower(preg_replace('/(.)([A-Z])/', '$1-$2', $lib));
                 $libraryName = $vendor . '/' . $lib;
                 $libraryDir = $this->componentRegistrar->getPath(
                     ComponentRegistrar::LIBRARY,

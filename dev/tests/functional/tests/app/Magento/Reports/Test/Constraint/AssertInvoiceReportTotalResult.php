@@ -31,7 +31,7 @@ class AssertInvoiceReportTotalResult extends AbstractAssertInvoiceReportResult
         \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $invoiceResult,
-            "Grand total Invoice result is not correct."
+            'Grand total Invoice result is not correct.'
         );
     }
 

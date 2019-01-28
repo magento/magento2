@@ -130,7 +130,7 @@ class AbstractAction
         $table = $this->connection->newTable(
             $tableName
         )->setComment(
-            sprintf("Catalog Category Flat", $tableName)
+            sprintf('Catalog Category Flat', $tableName)
         );
 
         //Adding columns
@@ -455,7 +455,7 @@ class AbstractAction
                 )
             ]
         )->where(
-            "e.entity_id IN (?)",
+            'e.entity_id IN (?)',
             $entityIds
         )->where(
             'def.store_id IN (?)',

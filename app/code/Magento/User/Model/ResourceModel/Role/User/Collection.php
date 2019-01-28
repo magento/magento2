@@ -31,7 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         parent::_initSelect();
 
-        $this->getSelect()->where("user_id > 0");
+        $this->getSelect()->where('user_id > 0');
 
         return $this;
     }

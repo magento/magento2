@@ -119,8 +119,8 @@ class VersionTest extends \PHPUnit\Framework\TestCase
     public function processProvider()
     {
         return [
-            "post" => [true],
-            "notPost" => [false]
+            'post' => [true],
+            'notPost' => [false]
         ];
     }
 }

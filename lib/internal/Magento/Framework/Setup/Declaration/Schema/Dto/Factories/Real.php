@@ -18,12 +18,12 @@ class Real implements FactoryInterface
     /**
      * Default SQL precision.
      */
-    const DEFAULT_PRECISION = "10";
+    const DEFAULT_PRECISION = '10';
 
     /**
      * Default SQL scale.
      */
-    const DEFAULT_SCALE = "0";
+    const DEFAULT_SCALE = '0';
 
     /**
      * @var ObjectManagerInterface

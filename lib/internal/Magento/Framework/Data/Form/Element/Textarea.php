@@ -84,7 +84,7 @@ class Textarea extends AbstractElement
         $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
             . $this->serialize($this->getHtmlAttributes()) . $this->_getUiId() . ' >';
         $html .= $this->getEscapedValue();
-        $html .= "</textarea>";
+        $html .= '</textarea>';
         $html .= $this->getAfterElementHtml();
         return $html;
     }

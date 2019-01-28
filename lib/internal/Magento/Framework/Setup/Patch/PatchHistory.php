@@ -21,7 +21,7 @@ class PatchHistory
     /**
      * Name of a patch
      */
-    const CLASS_NAME = "patch_name";
+    const CLASS_NAME = 'patch_name';
 
     /**
      * Patch type for schema patches
@@ -82,7 +82,7 @@ class PatchHistory
     public function fixPatch($patchName)
     {
         if ($this->isApplied($patchName)) {
-            throw new \LogicException(sprintf("Patch %s cannot be applied twice", $patchName));
+            throw new \LogicException(sprintf('Patch %s cannot be applied twice', $patchName));
         }
 
         $adapter = $this->resourceConnection->getConnection();
@@ -99,14 +99,14 @@ class PatchHistory
     {
         if (!$this->isApplied($patchName)) {
             throw new \LogicException(
-                sprintf("Patch %s should be applied, before you can revert it", $patchName)
+                sprintf('Patch %s should be applied, before you can revert it', $patchName)
             );
         }
 
         $adapter = $this->resourceConnection->getConnection();
         $adapter->delete(
             $this->resourceConnection->getTableName(self::TABLE_NAME),
-            [self::CLASS_NAME . "= ?" => $patchName]
+            [self::CLASS_NAME . '= ?' => $patchName]
         );
     }
 

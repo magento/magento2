@@ -121,7 +121,7 @@ class Handler
 
         // check if the operation is a secure operation & whether the request was made in HTTPS
         if ($serviceMethodInfo[ServiceMetadata::KEY_IS_SECURE] && !$this->_request->isSecure()) {
-            throw new WebapiException(__("Operation allowed only in HTTPS"));
+            throw new WebapiException(__('Operation allowed only in HTTPS'));
         }
 
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
@@ -188,7 +188,7 @@ class Handler
         } elseif (is_scalar($data) || $data === null) {
             $result = $data;
         } else {
-            throw new \InvalidArgumentException("Service returned result in invalid format.");
+            throw new \InvalidArgumentException('Service returned result in invalid format.');
         }
         return [self::RESULT_NODE_NAME => $result];
     }

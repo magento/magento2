@@ -9,8 +9,8 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
 $registry = $objectManager
     ->get(\Magento\Framework\Registry::class);
-$registry->unregister("isSecureArea");
-$registry->register("isSecureArea", true);
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
 
 /** @var Magento\Store\Model\Website $website */
 $website = $objectManager->get(Magento\Store\Model\Website::class);

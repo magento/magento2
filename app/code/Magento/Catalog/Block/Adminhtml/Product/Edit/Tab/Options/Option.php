@@ -415,7 +415,7 @@ class Option extends Widget
         $containers[] = '$(this).up(1)';
         $containers = implode(',', $containers);
         $localId = $this->getFieldId() . '_' . $id . '_' . $selectIdHtml . $name . '_use_default';
-        $localName = "options_use_default[" . $id . "]" . $selectNameHtml . "[" . $name . "]";
+        $localName = 'options_use_default[' . $id . ']' . $selectNameHtml . '[' . $name . ']';
         $useDefault =
             '<div class="field-service">'
             . '<input type="checkbox" class="use-default-control"'

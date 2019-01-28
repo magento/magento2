@@ -44,7 +44,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $websiteIds = [1,2];
         $this->storeManager->expects($this->once())
-            ->method("isSingleStoreMode")
+            ->method('isSingleStoreMode')
             ->willReturn(false);
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
@@ -91,7 +91,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('getDefaultStoreView')
             ->willReturn($store);
         $this->storeManager->expects($this->once())
-            ->method("isSingleStoreMode")
+            ->method('isSingleStoreMode')
             ->willReturn(true);
 
         $this->productWebsiteLink->expects($this->once())

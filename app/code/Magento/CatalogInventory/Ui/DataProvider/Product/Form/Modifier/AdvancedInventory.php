@@ -213,7 +213,7 @@ class AdvancedInventory extends AbstractModifier
             $container['arguments']['data']['config'] = [
                 'formElement' => 'container',
                 'componentType' => 'container',
-                'component' => "Magento_Ui/js/form/components/group",
+                'component' => 'Magento_Ui/js/form/components/group',
                 'label' => $labelField,
                 'breakLine' => false,
                 'dataScope' => $fieldCode,

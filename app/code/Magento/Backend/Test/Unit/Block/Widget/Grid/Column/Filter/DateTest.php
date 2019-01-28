@@ -119,7 +119,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEscapedValueEscapeString()
     {
-        $value = "\"><img src=x onerror=alert(2) />";
+        $value = '"><img src=x onerror=alert(2) />';
         $array = [
             'orig_from' => $value,
             'from' => $value,

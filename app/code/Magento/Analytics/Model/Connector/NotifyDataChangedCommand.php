@@ -82,8 +82,8 @@ class NotifyDataChangedCommand implements CommandInterface
                 ZendClient::POST,
                 $this->config->getValue($this->notifyDataChangedUrlPath),
                 [
-                    "access-token" => $this->analyticsToken->getToken(),
-                    "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
+                    'access-token' => $this->analyticsToken->getToken(),
+                    'url' => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
                 ]
             );
             $result = $this->responseResolver->getResult($response);

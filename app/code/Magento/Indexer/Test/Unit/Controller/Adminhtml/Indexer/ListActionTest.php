@@ -126,8 +126,8 @@ class ListActionTest extends \PHPUnit\Framework\TestCase
 
         $this->items = $this->createPartialMock(\Magento\Backend\Model\Menu\Item::class, ['getParentItems']);
 
-        $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
-        $this->contextMock->expects($this->any())->method("getResponse")->willReturn($this->response);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->response);
         $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->view));
 
         $this->page = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['getConfig']);

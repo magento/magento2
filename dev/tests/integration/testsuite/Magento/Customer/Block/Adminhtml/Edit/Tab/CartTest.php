@@ -82,7 +82,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->_block->setCollection($mockCollection);
         $this->assertContains(
-            "<div class=\"admin__data-grid-header admin__data-grid-toolbar\"",
+            '<div class="admin__data-grid-header admin__data-grid-toolbar"',
             $this->_block->getGridParentHtml()
         );
     }
@@ -97,9 +97,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml()
     {
         $html = $this->_block->toHtml();
-        $this->assertContains("<div id=\"customer_cart_grid\"", $html);
-        $this->assertContains("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $html);
-        $this->assertContains("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
+        $this->assertContains('<div id="customer_cart_grid"', $html);
+        $this->assertContains('<div class="admin__data-grid-header admin__data-grid-toolbar"', $html);
+        $this->assertContains('customer_cart_gridJsObject = new varienGrid("customer_cart_grid",', $html);
         $this->assertContains(
             'backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fcustomer_id\u002F'
             . self::CUSTOMER_ID_VALUE,

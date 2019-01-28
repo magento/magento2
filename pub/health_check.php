@@ -6,7 +6,7 @@
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
-register_shutdown_function("fatalErrorHandler");
+register_shutdown_function('fatalErrorHandler');
 
 try {
     require __DIR__ . '/../app/bootstrap.php';
@@ -34,7 +34,7 @@ foreach ($deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNE
         $dbAdapter->getConnection();
     } catch (\Exception $e) {
         http_response_code(500);
-        $logger->error("MySQL connection failed: " . $e->getMessage());
+        $logger->error('MySQL connection failed: ' . $e->getMessage());
         exit(1);
     }
 }
@@ -46,7 +46,7 @@ if ($cacheConfigs) {
         if (!isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND]) ||
             !isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND_OPTIONS])) {
             http_response_code(500);
-            $logger->error("Cache configuration is invalid");
+            $logger->error('Cache configuration is invalid');
             exit(1);
         }
         $cacheBackendClass = $cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND];
@@ -56,7 +56,7 @@ if ($cacheConfigs) {
             $backend->test('test_cache_id');
         } catch (\Exception $e) {
             http_response_code(500);
-            $logger->error("Cache storage is not accessible");
+            $logger->error('Cache storage is not accessible');
             exit(1);
         }
     }

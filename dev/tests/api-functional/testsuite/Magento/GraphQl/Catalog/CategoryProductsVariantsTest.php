@@ -67,7 +67,7 @@ QUERY;
         $assertionMap = [
             [
                 'response_field' => 'product', 'expected_value' => [
-                    "sku" => $product->getSku()
+                    'sku' => $product->getSku()
                 ]
             ],
         ];

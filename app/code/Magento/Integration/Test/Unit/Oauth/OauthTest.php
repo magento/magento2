@@ -702,7 +702,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             1,
             $this->_oauth->validateAccessTokenRequest($requiredParams, self::REQUEST_URL),
-            "Consumer ID is invalid."
+            'Consumer ID is invalid.'
         );
     }
 
@@ -756,7 +756,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_setupConsumer();
         $this->_setupToken(true, \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS);
 
-        $this->assertEquals(1, $this->_oauth->validateAccessToken($this->_oauthToken), "Consumer ID is invalid.");
+        $this->assertEquals(1, $this->_oauth->validateAccessToken($this->_oauthToken), 'Consumer ID is invalid.');
     }
 
     public function testBuildAuthorizationHeader()

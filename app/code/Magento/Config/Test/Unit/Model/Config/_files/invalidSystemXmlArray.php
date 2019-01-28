@@ -94,9 +94,9 @@ return [
             "'id': [facet 'minLength'] The value 'f' has a length of '1'; this underruns the allowed minimum length " .
             "of '2'.\nLine: 1\n",
             "Element 'field', attribute 'id': 'f' is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
-            "Element" .
+            'Element' .
             " 'field', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or something" .
+            'Warning: No precomputed value available, the value was either invalid or something' .
             " strange happend.\nLine: 1\n",
             "Element 'tab', attribute 'id': [facet 'minLength'] The value 'h' has a length of '1'; " .
             "this underruns the allowed minimum length of '2'.\nLine: 1\n",
@@ -171,7 +171,7 @@ return [
             "Element 'group': The attribute 'id' " . "is required but missing.\nLine: 1\n",
             "Element 'attribute': The attribute 'type' is " . "required but missing.\nLine: 1\n",
             "Element 'field': The attribute 'id' is required but missing.\nLine: 1\n",
-            "Element " . "'field': The attribute 'id' is required but missing.\nLine: 1\n",
+            'Element ' . "'field': The attribute 'id' is required but missing.\nLine: 1\n",
             "Element 'option': The attribute 'label' is " . "required but missing.\nLine: 1\n",
             "Element 'tab': The attribute 'id' is required but missing.\nLine: 1\n"
         ],

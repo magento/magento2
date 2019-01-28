@@ -23,7 +23,7 @@ class AssertSuccessMessage extends AbstractConstraint
      */
     public function processAssert(SetupWizard $setupWizard, $package)
     {
-        $message = "You upgraded";
+        $message = 'You upgraded';
         \PHPUnit\Framework\Assert::assertContains(
             $message,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
@@ -43,6 +43,6 @@ class AssertSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "System Upgrade success message is correct.";
+        return 'System Upgrade success message is correct.';
     }
 }

@@ -44,6 +44,6 @@ class AssertCustomVariableNotInCmsPageForm extends AbstractConstraint
      */
     public function toString()
     {
-        return "Custom System Variable is absent in Cms Page Form.";
+        return 'Custom System Variable is absent in Cms Page Form.';
     }
 }

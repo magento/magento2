@@ -117,10 +117,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->getSelect()->join(
             ['link' => $this->_queueLinkTable],
-            "link.subscriber_id = main_table.subscriber_id",
+            'link.subscriber_id = main_table.subscriber_id',
             []
         )->where(
-            "link.queue_id = ? ",
+            'link.queue_id = ? ',
             $queue->getId()
         );
         $this->_queueJoinedFlag = true;

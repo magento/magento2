@@ -587,7 +587,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected function _removeBom($sourceFile)
     {
         $string = $this->_varDirectory->readFile($this->_varDirectory->getRelativePath($sourceFile));
-        if ($string !== false && substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
+        if ($string !== false && substr($string, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
             $string = substr($string, 3);
             $this->_varDirectory->writeFile($this->_varDirectory->getRelativePath($sourceFile), $string);
         }

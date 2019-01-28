@@ -9,7 +9,7 @@ return [
         'data_0' => [
             'sku' => '%sku%',
             'attribute_set_code' => 'Default',
-            'product_type' => "simple",
+            'product_type' => 'simple',
             'name' => '%name%',
             'product_websites' => 'base,%code%',
             'price' => '999.00',
@@ -24,7 +24,7 @@ return [
         'data_0' => [
             'sku' => '%sku%',
             'attribute_set_code' => 'Default',
-            'product_type' => "simple",
+            'product_type' => 'simple',
             'name' => '%name%',
             'product_websites' => 'base',
             'price' => '999.00',
@@ -39,7 +39,7 @@ return [
         'data_0' => [
             'sku' => '%configurable_attribute_sku%',
             'attribute_set_code' => 'Default',
-            'product_type' => "simple",
+            'product_type' => 'simple',
             'name' => '%configurable_attribute_name%',
             'product_websites' => 'base',
             'price' => '50.00',
@@ -52,7 +52,7 @@ return [
         'data_1' => [
             'sku' => '%sku%',
             'attribute_set_code' => 'Default',
-            'product_type' => "configurable",
+            'product_type' => 'configurable',
             'name' => '%name%',
             'product_websites' => 'base',
             'price' => '50.00',
@@ -61,7 +61,7 @@ return [
             'weight' => '30',
             'qty' => '50',
             'configurable_variations' =>
-                "sku=%configurable_attribute_sku%,%configurable_additional_attributes%=black"
+                'sku=%configurable_attribute_sku%,%configurable_additional_attributes%=black'
         ],
     ],
 ];

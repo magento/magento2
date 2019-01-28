@@ -22,9 +22,9 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testReturnWizardAction()
     {
-        $paymentMethod = "paypal_express";
-        $token = "token_value";
-        $referenceId = "Reference-id-1";
+        $paymentMethod = 'paypal_express';
+        $token = 'token_value';
+        $referenceId = 'Reference-id-1';
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -112,8 +112,8 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractController
         );
         /** @var \Magento\Paypal\Model\Billing\Agreement $createdBillingAgreement */
         $createdBillingAgreement = $billingAgreementCollection->getLastItem();
-        $this->assertEquals($fixtureCustomerId, $createdBillingAgreement->getCustomerId(), "Customer ID is invalid.");
-        $this->assertEquals($referenceId, $createdBillingAgreement->getReferenceId(), "Reference ID is invalid.");
-        $this->assertEquals($paymentMethod, $createdBillingAgreement->getMethodCode(), "Method code is invalid.");
+        $this->assertEquals($fixtureCustomerId, $createdBillingAgreement->getCustomerId(), 'Customer ID is invalid.');
+        $this->assertEquals($referenceId, $createdBillingAgreement->getReferenceId(), 'Reference ID is invalid.');
+        $this->assertEquals($paymentMethod, $createdBillingAgreement->getMethodCode(), 'Method code is invalid.');
     }
 }

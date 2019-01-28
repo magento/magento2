@@ -58,7 +58,7 @@ class Plugin
 
         // Required attributes of simple product for configurable creation
         if ($request->getParam('popup') && ($requiredAttributes = $request->getParam('required'))) {
-            $requiredAttributes = explode(",", $requiredAttributes);
+            $requiredAttributes = explode(',', $requiredAttributes);
             foreach ($product->getAttributes() as $attribute) {
                 if (in_array($attribute->getId(), $requiredAttributes)) {
                     $attribute->setIsRequired(1);

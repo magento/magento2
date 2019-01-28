@@ -89,7 +89,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
                 ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
-                . "If the error persists, please try again later.");
+                . 'If the error persists, please try again later.');
             $this->setMessageToResponse($response, [$message]);
             $response->setError(true);
         }
@@ -131,7 +131,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             }
         }
 
-        $multipleOption = $this->getRequest()->getParam("frontend_input");
+        $multipleOption = $this->getRequest()->getParam('frontend_input');
         $multipleOption = (null === $multipleOption) ? 'select' : $multipleOption;
 
         if (isset($this->multipleAttributeList[$multipleOption])) {

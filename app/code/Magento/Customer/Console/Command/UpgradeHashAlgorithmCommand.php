@@ -68,10 +68,10 @@ class UpgradeHashAlgorithmCommand extends Command
                 $version .= Encryptor::DELIMITER . Encryptor::HASH_VERSION_LATEST;
                 $customer->setPasswordHash($this->encryptor->getHash($hash, $salt, $version));
                 $customer->save();
-                $output->write(".");
+                $output->write('.');
             }
         }
-        $output->writeln(".");
-        $output->writeln("<info>Finished</info>");
+        $output->writeln('.');
+        $output->writeln('<info>Finished</info>');
     }
 }

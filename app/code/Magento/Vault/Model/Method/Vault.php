@@ -332,7 +332,7 @@ class Vault implements VaultPaymentInterface
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -422,7 +422,7 @@ class Vault implements VaultPaymentInterface
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -506,7 +506,7 @@ class Vault implements VaultPaymentInterface
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
 
         if ($paymentToken === null) {
-            throw new \LogicException("No token found");
+            throw new \LogicException('No token found');
         }
 
         $extensionAttributes = $this->getPaymentExtensionAttributes($orderPayment);
@@ -534,7 +534,7 @@ class Vault implements VaultPaymentInterface
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -543,7 +543,7 @@ class Vault implements VaultPaymentInterface
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -552,7 +552,7 @@ class Vault implements VaultPaymentInterface
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -561,7 +561,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canReviewPayment()
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -570,7 +570,7 @@ class Vault implements VaultPaymentInterface
      */
     public function acceptPayment(InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -579,7 +579,7 @@ class Vault implements VaultPaymentInterface
      */
     public function denyPayment(InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**
@@ -644,7 +644,7 @@ class Vault implements VaultPaymentInterface
      */
     public function initialize($paymentAction, $stateObject)
     {
-        throw new \DomainException("Not implemented");
+        throw new \DomainException('Not implemented');
     }
 
     /**

@@ -94,7 +94,7 @@ class TaxRuleFixtureFactory
             $postcode = '*';
             if (isset($rateData['postcode'])) {
                 $postcode = $rateData['postcode'];
-                $code = $code . " - " . $postcode;
+                $code = $code . ' - ' . $postcode;
             }
 
             $taxRate = $taxRateFactory->create();

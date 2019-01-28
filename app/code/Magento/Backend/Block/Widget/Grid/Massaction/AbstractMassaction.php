@@ -251,7 +251,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getApplyButtonHtml()
     {
-        return $this->getButtonHtml(__('Submit'), $this->getJsObjectName() . ".apply()");
+        return $this->getButtonHtml(__('Submit'), $this->getJsObjectName() . '.apply()');
     }
 
     /**
@@ -298,7 +298,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
         $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
-            return join(",", $gridIds);
+            return join(',', $gridIds);
         }
         return '';
     }

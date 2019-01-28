@@ -152,7 +152,7 @@ class OauthClient extends AbstractService
     protected function _parseResponseBody($responseBody)
     {
         if (!is_string($responseBody)) {
-            throw new TokenResponseException("Response body is expected to be a string.");
+            throw new TokenResponseException('Response body is expected to be a string.');
         }
         parse_str($responseBody, $data);
         if (null === $data || !is_array($data)) {
@@ -172,7 +172,7 @@ class OauthClient extends AbstractService
     public function getOauthVerifier()
     {
         if (!isset($this->_oauthVerifier) || isEmpty($this->_oauthVerifier)) {
-            throw new TokenResponseException("oAuth verifier must be obtained during request token request.");
+            throw new TokenResponseException('oAuth verifier must be obtained during request token request.');
         }
         return $this->_oauthVerifier;
     }

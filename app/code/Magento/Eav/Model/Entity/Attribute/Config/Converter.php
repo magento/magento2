@@ -31,7 +31,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             foreach ($entity->getElementsByTagName('attribute') as $entityAttribute) {
                 $attributeFields = [];
                 foreach ($entityAttribute->getElementsByTagName('field') as $fieldData) {
-                    $locked = $fieldData->attributes->getNamedItem('locked')->nodeValue == "true" ? true : false;
+                    $locked = $fieldData->attributes->getNamedItem('locked')->nodeValue == 'true' ? true : false;
                     $attributeFields[$fieldData->attributes->getNamedItem(
                         'code'
                     )->nodeValue] = [

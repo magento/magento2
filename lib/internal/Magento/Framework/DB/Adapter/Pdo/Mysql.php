@@ -709,13 +709,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected function _unQuote($string)
     {
         $translate = [
-            "\\000" => "\000",
-            "\\n"   => "\n",
-            "\\r"   => "\r",
-            "\\\\"  => "\\",
+            '\\000' => "\000",
+            '\\n'   => "\n",
+            '\\r'   => "\r",
+            '\\\\'  => '\\',
             "\'"    => "'",
-            "\\\""  => "\"",
-            "\\032" => "\032",
+            '\\"'  => '"',
+            '\\032' => "\032",
         ];
         return strtr($string, $translate);
     }
@@ -906,7 +906,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             || $onDelete == AdapterInterface::FK_ACTION_RESTRICT
         ) {
             $sql = sprintf(
-                "DELETE p.* FROM %s AS p LEFT JOIN %s AS r ON p.%s = r.%s WHERE r.%s IS NULL",
+                'DELETE p.* FROM %s AS p LEFT JOIN %s AS r ON p.%s = r.%s WHERE r.%s IS NULL',
                 $this->quoteIdentifier($tableName),
                 $this->quoteIdentifier($refTableName),
                 $this->quoteIdentifier($columnName),
@@ -916,7 +916,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->rawQuery($sql);
         } elseif ($onDelete == AdapterInterface::FK_ACTION_SET_NULL) {
             $sql = sprintf(
-                "UPDATE %s AS p LEFT JOIN %s AS r ON p.%s = r.%s SET p.%s = NULL WHERE r.%s IS NULL",
+                'UPDATE %s AS p LEFT JOIN %s AS r ON p.%s = r.%s SET p.%s = NULL WHERE r.%s IS NULL',
                 $this->quoteIdentifier($tableName),
                 $this->quoteIdentifier($refTableName),
                 $this->quoteIdentifier($columnName),
@@ -974,7 +974,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (is_array($definition)) {
             $definition = array_change_key_case($definition, CASE_UPPER);
             if (empty($definition['COMMENT'])) {
-                throw new \Zend_Db_Exception("Impossible to create a column without comment.");
+                throw new \Zend_Db_Exception('Impossible to create a column without comment.');
             }
             if (!empty($definition['PRIMARY'])) {
                 $primaryKey = sprintf(', ADD PRIMARY KEY (%s)', $this->quoteIdentifier($columnName));
@@ -2117,7 +2117,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $columns = $table->getColumns();
         foreach ($columns as $columnEntry) {
             if (empty($columnEntry['COMMENT'])) {
-                throw new \Zend_Db_Exception("Cannot create table without columns comments");
+                throw new \Zend_Db_Exception('Cannot create table without columns comments');
             }
         }
 
@@ -2131,7 +2131,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             "CREATE TABLE IF NOT EXISTS %s (\n%s\n) %s",
             $this->quoteIdentifier($table->getName()),
             implode(",\n", $sqlFragment),
-            implode(" ", $tableOptions)
+            implode(' ', $tableOptions)
         );
 
         if ($this->getTransactionLevel() > 0) {
@@ -2165,7 +2165,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             "CREATE TEMPORARY TABLE %s (\n%s\n) %s",
             $this->quoteIdentifier($table->getName()),
             implode(",\n", $sqlFragment),
-            implode(" ", $tableOptions)
+            implode(' ', $tableOptions)
         );
 
         return $this->query($sql);
@@ -2877,7 +2877,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function startSetup()
     {
         $this->rawQuery("SET SQL_MODE=''");
-        $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
+        $this->rawQuery('SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0');
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
 
         return $this;
@@ -2891,7 +2891,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function endSetup()
     {
         $this->rawQuery("SET SQL_MODE=IFNULL(@OLD_SQL_MODE,'')");
-        $this->rawQuery("SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)");
+        $this->rawQuery('SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)');
 
         return $this;
     }
@@ -2930,26 +2930,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function prepareSqlCondition($fieldName, $condition)
     {
         $conditionKeyMap = [
-            'eq'            => "{{fieldName}} = ?",
-            'neq'           => "{{fieldName}} != ?",
-            'like'          => "{{fieldName}} LIKE ?",
-            'nlike'         => "{{fieldName}} NOT LIKE ?",
-            'in'            => "{{fieldName}} IN(?)",
-            'nin'           => "{{fieldName}} NOT IN(?)",
-            'is'            => "{{fieldName}} IS ?",
-            'notnull'       => "{{fieldName}} IS NOT NULL",
-            'null'          => "{{fieldName}} IS NULL",
-            'gt'            => "{{fieldName}} > ?",
-            'lt'            => "{{fieldName}} < ?",
-            'gteq'          => "{{fieldName}} >= ?",
-            'lteq'          => "{{fieldName}} <= ?",
-            'finset'        => "FIND_IN_SET(?, {{fieldName}})",
-            'regexp'        => "{{fieldName}} REGEXP ?",
-            'from'          => "{{fieldName}} >= ?",
-            'to'            => "{{fieldName}} <= ?",
+            'eq'            => '{{fieldName}} = ?',
+            'neq'           => '{{fieldName}} != ?',
+            'like'          => '{{fieldName}} LIKE ?',
+            'nlike'         => '{{fieldName}} NOT LIKE ?',
+            'in'            => '{{fieldName}} IN(?)',
+            'nin'           => '{{fieldName}} NOT IN(?)',
+            'is'            => '{{fieldName}} IS ?',
+            'notnull'       => '{{fieldName}} IS NOT NULL',
+            'null'          => '{{fieldName}} IS NULL',
+            'gt'            => '{{fieldName}} > ?',
+            'lt'            => '{{fieldName}} < ?',
+            'gteq'          => '{{fieldName}} >= ?',
+            'lteq'          => '{{fieldName}} <= ?',
+            'finset'        => 'FIND_IN_SET(?, {{fieldName}})',
+            'regexp'        => '{{fieldName}} REGEXP ?',
+            'from'          => '{{fieldName}} >= ?',
+            'to'            => '{{fieldName}} <= ?',
             'seq'           => null,
             'sneq'          => null,
-            'ntoa'          => "INET_NTOA({{fieldName}}) LIKE ?",
+            'ntoa'          => 'INET_NTOA({{fieldName}}) LIKE ?',
         ];
 
         $query = '';
@@ -3124,9 +3124,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function getCheckSql($expression, $true, $false)
     {
         if ($expression instanceof \Zend_Db_Expr || $expression instanceof \Zend_Db_Select) {
-            $expression = sprintf("IF((%s), %s, %s)", $expression, $true, $false);
+            $expression = sprintf('IF((%s), %s, %s)', $expression, $true, $false);
         } else {
-            $expression = sprintf("IF(%s, %s, %s)", $expression, $true, $false);
+            $expression = sprintf('IF(%s, %s, %s)', $expression, $true, $false);
         }
 
         return new \Zend_Db_Expr($expression);
@@ -3142,9 +3142,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function getIfNullSql($expression, $value = 0)
     {
         if ($expression instanceof \Zend_Db_Expr || $expression instanceof \Zend_Db_Select) {
-            $expression = sprintf("IFNULL((%s), %s)", $expression, $value);
+            $expression = sprintf('IFNULL((%s), %s)', $expression, $value);
         } else {
-            $expression = sprintf("IFNULL(%s, %s)", $expression, $value);
+            $expression = sprintf('IFNULL(%s, %s)', $expression, $value);
         }
 
         return new \Zend_Db_Expr($expression);

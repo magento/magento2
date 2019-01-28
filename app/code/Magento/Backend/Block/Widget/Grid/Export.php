@@ -35,7 +35,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @var string
      */
-    protected $_template = "Magento_Backend::widget/grid/export.phtml";
+    protected $_template = 'Magento_Backend::widget/grid/export.phtml';
 
     /**
      * @var \Magento\Framework\Data\CollectionFactory

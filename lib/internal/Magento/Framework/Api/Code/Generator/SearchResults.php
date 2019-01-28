@@ -46,7 +46,7 @@ class SearchResults extends EntityAbstract
         $getItems = [
             'name' => 'getItems',
             'parameters' => [],
-            'body' => "return parent::getItems();",
+            'body' => 'return parent::getItems();',
             'docblock' => [
                 'shortDescription' => 'Returns array of items',
                 'tags' => [

@@ -77,14 +77,14 @@ class PublisherConsumerController
     {
         if ($this->osInfo->isWindows()) {
             throw new EnvironmentPreconditionException(
-                "This test relies on *nix shell and should be skipped in Windows environment."
+                'This test relies on *nix shell and should be skipped in Windows environment.'
             );
         }
         $connections = $this->amqpHelper->getConnections();
         foreach (array_keys($connections) as $connectionName) {
             $this->amqpHelper->deleteConnection($connectionName);
         }
-        $this->amqpHelper->clearQueue("async.operations.all");
+        $this->amqpHelper->clearQueue('async.operations.all');
         foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
                 exec("kill {$consumerProcessId}");
@@ -180,7 +180,7 @@ class PublisherConsumerController
         } while (!$assertion && ($i++ < 180));
 
         if (!$assertion) {
-            throw new PreconditionFailedException("No asynchronous messages were processed.");
+            throw new PreconditionFailedException('No asynchronous messages were processed.');
         }
     }
 

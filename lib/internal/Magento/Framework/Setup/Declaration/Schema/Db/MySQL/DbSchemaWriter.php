@@ -254,7 +254,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
                         $adapter->quoteIdentifier($statement->getTableName()),
-                        implode(", ", $statementsSql)
+                        implode(', ', $statementsSql)
                     )
                 );
             } else {
@@ -262,7 +262,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
                         $adapter->quoteIdentifier($statement->getTableName()),
-                        implode(", ", $statementsSql)
+                        implode(', ', $statementsSql)
                     )
                 );
                 //Do post update, like SQL DML operations or etc...

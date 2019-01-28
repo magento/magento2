@@ -54,7 +54,7 @@ class SomePatch implements
     public function apply()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->insert('test_table', ['varchar' => "_ref"]);
+        $adapter->insert('test_table', ['varchar' => '_ref']);
     }
 
     /**

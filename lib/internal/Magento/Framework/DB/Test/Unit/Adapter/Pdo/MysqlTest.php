@@ -224,9 +224,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMultipleQueryException()
     {
-        $sql = "SELECT COUNT(*) AS _num FROM test; ";
-        $sql.= "INSERT INTO test(id) VALUES (1); ";
-        $sql.= "SELECT COUNT(*) AS _num FROM test; ";
+        $sql = 'SELECT COUNT(*) AS _num FROM test; ';
+        $sql.= 'INSERT INTO test(id) VALUES (1); ';
+        $sql.= 'SELECT COUNT(*) AS _num FROM test; ';
         $this->_mockAdapter->query($sql);
     }
 
@@ -464,8 +464,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             'insert' => 'insertValue',
         ];
         $fields = ['select', 'insert'];
-        $sqlQuery = "INSERT  INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
-            . "ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)";
+        $sqlQuery = 'INSERT  INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) '
+            . 'ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)';
 
         $stmtMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
         $bind = ['indexValue', 'rowValue', 'selectValue', 'insertValue'];

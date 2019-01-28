@@ -72,7 +72,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setReviewFilter($reviewId)
     {
-        $this->getSelect()->where("main_table.review_id = ?", $reviewId);
+        $this->getSelect()->where('main_table.review_id = ?', $reviewId);
         return $this;
     }
 
@@ -84,7 +84,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setEntityPkFilter($entityId)
     {
-        $this->getSelect()->where("entity_pk_value = ?", $entityId);
+        $this->getSelect()->where('entity_pk_value = ?', $entityId);
         return $this;
     }
 

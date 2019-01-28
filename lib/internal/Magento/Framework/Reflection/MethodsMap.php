@@ -99,7 +99,7 @@ class MethodsMap
      */
     public function getMethodsMap($interfaceName)
     {
-        $key = self::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . "-" . md5($interfaceName);
+        $key = self::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . '-' . md5($interfaceName);
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);
             if ($methodMap) {

@@ -26,7 +26,7 @@ class AssertEmailValidationErrorGenerated extends AbstractConstraint
         IntegrationNew $integrationNew,
         Integration $integration
     ) {
-        $errors = $integrationNew->getIntegrationForm()->getJsErrors("integration_info");
+        $errors = $integrationNew->getIntegrationForm()->getJsErrors('integration_info');
         $emailJsError = false;
         foreach ($errors as $error) {
             if (strpos($error, 'Please enter a valid email address') !== false) {

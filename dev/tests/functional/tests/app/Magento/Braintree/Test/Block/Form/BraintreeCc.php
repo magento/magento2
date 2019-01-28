@@ -23,10 +23,10 @@ class BraintreeCc extends PaymentCc
      * @var array
      */
     protected $braintreeForm = [
-        "cc_number" => "//*[@id='braintree-hosted-field-number']",
-        "cc_exp_month" => "//*[@id='braintree-hosted-field-expirationMonth']",
-        "cc_exp_year" => "//*[@id='braintree-hosted-field-expirationYear']",
-        "cc_cid" => "//*[@id='braintree-hosted-field-cvv']",
+        'cc_number' => "//*[@id='braintree-hosted-field-number']",
+        'cc_exp_month' => "//*[@id='braintree-hosted-field-expirationMonth']",
+        'cc_exp_year' => "//*[@id='braintree-hosted-field-expirationYear']",
+        'cc_cid' => "//*[@id='braintree-hosted-field-cvv']",
     ];
 
     /**

@@ -216,8 +216,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $condition = ['in' => [1, 2]];
         $values = [1, 2];
         $conditionType = 'nin';
-        $preparedSql = "category_id IN(1,2)";
-        $tableName = "catalog_category_product";
+        $preparedSql = 'category_id IN(1,2)';
+        $tableName = 'catalog_category_product';
         $this->connectionMock->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->exactly(2))->method('prepareSqlCondition')->withConsecutive(
             ['cat.category_id', $condition],

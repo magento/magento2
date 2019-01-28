@@ -302,7 +302,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $buyRequest = new \Magento\Framework\DataObject();
-        $expectedMsg = "Please specify the quantity of product(s).";
+        $expectedMsg = 'Please specify the quantity of product(s).';
 
         $productCollection = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class
@@ -385,7 +385,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([0 => 0]);
-        $expectedMsg = "Please specify the quantity of product(s).";
+        $expectedMsg = 'Please specify the quantity of product(s).';
 
         $cached = true;
         $associatedProducts = [];
@@ -439,7 +439,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
             ['_prepareProduct', 'deleteTypeSpecificData']
         );
-        $associatedPrepareResult = "";
+        $associatedPrepareResult = '';
         $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
@@ -465,7 +465,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
     public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult()
     {
-        $expectedMsg = "Cannot process the item.";
+        $expectedMsg = 'Cannot process the item.';
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
@@ -589,7 +589,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
     public function testPrepareForCartAdvancedZeroQty()
     {
-        $expectedMsg = "Please specify the quantity of product(s).";
+        $expectedMsg = 'Please specify the quantity of product(s).';
         $associatedId = 9384;
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));

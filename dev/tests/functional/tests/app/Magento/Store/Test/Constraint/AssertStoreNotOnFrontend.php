@@ -38,7 +38,7 @@ class AssertStoreNotOnFrontend extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertFalse(
             $isStoreViewVisible,
-            "Store view is visible in dropdown on CmsIndex page"
+            'Store view is visible in dropdown on CmsIndex page'
         );
     }
 

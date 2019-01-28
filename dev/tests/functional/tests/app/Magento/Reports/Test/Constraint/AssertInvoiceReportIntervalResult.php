@@ -35,7 +35,7 @@ class AssertInvoiceReportIntervalResult extends AbstractAssertInvoiceReportResul
         \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $invoiceResult,
-            "Invoice report interval result not contains actual data."
+            'Invoice report interval result not contains actual data.'
         );
     }
 

@@ -67,13 +67,13 @@ class AssertTaxRuleForm extends AbstractConstraint
                 $diff = array_diff($value, $formData[$key]);
                 $diff = array_merge($diff, array_diff($formData[$key], $value));
                 if (!empty($diff)) {
-                    $errorMessage[] = "Data in " . $key . " field not equal."
-                        . "\nExpected: " . implode(", ", $value)
-                        . "\nActual: " . implode(", ", $formData[$key]);
+                    $errorMessage[] = 'Data in ' . $key . ' field not equal.'
+                        . "\nExpected: " . implode(', ', $value)
+                        . "\nActual: " . implode(', ', $formData[$key]);
                 }
             } else {
                 if ($value !== $formData[$key]) {
-                    $errorMessage[] = "Data in " . $key . " field not equal."
+                    $errorMessage[] = 'Data in ' . $key . ' field not equal.'
                         . "\nExpected: " . $value
                         . "\nActual: " . $formData[$key];
                 }

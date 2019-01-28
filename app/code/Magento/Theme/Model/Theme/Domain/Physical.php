@@ -93,7 +93,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
             $theme->getId()
         )->count();
 
-        $title = sprintf("%s - %s #%s", $theme->getThemeTitle(), __('Copy'), $themeCopyCount + 1);
+        $title = sprintf('%s - %s #%s', $theme->getThemeTitle(), __('Copy'), $themeCopyCount + 1);
         return $title;
     }
 }

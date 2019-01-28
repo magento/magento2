@@ -62,7 +62,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(3, $result, 'Misconfigured components filtration does not work as expected.');
 
         /** Verify that components were ordered according to the defined sort order */
-        $incorrectSortingMessage = "Registered components were sorted incorrectly";
+        $incorrectSortingMessage = 'Registered components were sorted incorrectly';
         $this->assertSame($thirdComponent, $result[0]['type'], $incorrectSortingMessage);
         $this->assertSame($firstComponent, $result[1]['type'], $incorrectSortingMessage);
         $this->assertSame($secondComponent, $result[2]['type'], $incorrectSortingMessage);

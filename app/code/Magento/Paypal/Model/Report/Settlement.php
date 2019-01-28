@@ -31,27 +31,27 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Default PayPal SFTP host
      */
-    const REPORTS_HOSTNAME = "reports.paypal.com";
+    const REPORTS_HOSTNAME = 'reports.paypal.com';
 
     /**
      * Default PayPal SFTP host for sandbox mode
      */
-    const SANDBOX_REPORTS_HOSTNAME = "reports.sandbox.paypal.com";
+    const SANDBOX_REPORTS_HOSTNAME = 'reports.sandbox.paypal.com';
 
     /**
      * PayPal SFTP path
      */
-    const REPORTS_PATH = "/ppreports/outgoing";
+    const REPORTS_PATH = '/ppreports/outgoing';
 
     /**
      * Original charset of old report files
      */
-    const FILES_IN_CHARSET = "UTF-16";
+    const FILES_IN_CHARSET = 'UTF-16';
 
     /**
      * Target charset of report files to be parsed
      */
-    const FILES_OUT_CHARSET = "UTF-8";
+    const FILES_OUT_CHARSET = 'UTF-8';
 
     /**
      * Reports rows storage

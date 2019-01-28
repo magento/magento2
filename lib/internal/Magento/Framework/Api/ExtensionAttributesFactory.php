@@ -53,7 +53,7 @@ class ExtensionAttributesFactory
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
                 . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
-                . "Concrete return type should be specified."
+                . 'Concrete return type should be specified.'
             );
         }
 
@@ -63,12 +63,12 @@ class ExtensionAttributesFactory
 
         /** Ensure that proper return type of getExtensionAttributes() method is specified */
         $methodDocBlock = $methodReflection->getDocComment();
-        $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . "/";
+        $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . '/';
         if (!preg_match($pattern, $methodDocBlock)) {
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
                 . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
-                . "Concrete return type must be specified. Please fix :" . $interfaceName
+                . 'Concrete return type must be specified. Please fix :' . $interfaceName
             );
         }
 

@@ -28,14 +28,14 @@ class AssertGlobalSearchOrderId extends AbstractConstraint
     public function processAssert(Dashboard $dashboard, GlobalSearch $search, OrderIndex $orderIndex)
     {
         $order = $search->getDataFieldConfig('query')['source']->getEntity();
-        $orderId = "Order #" . $order->getId();
+        $orderId = 'Order #' . $order->getId();
         $isVisibleInResult = $dashboard->getAdminPanelHeader()->isSearchResultVisible($orderId);
         \PHPUnit\Framework\Assert::assertTrue(
             $isVisibleInResult,
             'Order Id ' . $order->getId() . ' is absent in search results'
         );
 
-        $dashboard->getAdminPanelHeader()->navigateToGrid("Orders");
+        $dashboard->getAdminPanelHeader()->navigateToGrid('Orders');
         $isOrderGridVisible = $orderIndex->getSalesOrderGrid()->isVisible();
 
         \PHPUnit\Framework\Assert::assertTrue(

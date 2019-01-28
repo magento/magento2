@@ -40,6 +40,6 @@ class AssertNewsletterForm extends AbstractAssertForm
      */
     public function toString()
     {
-        return "Newsletter template form data equals to data passed from fixture.";
+        return 'Newsletter template form data equals to data passed from fixture.';
     }
 }

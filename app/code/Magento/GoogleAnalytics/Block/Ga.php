@@ -86,7 +86,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      */
     public function getPageTrackingCode($accountId)
     {
-        $anonymizeIp = "";
+        $anonymizeIp = '';
         if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
             $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }

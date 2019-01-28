@@ -22,7 +22,7 @@ class Index extends GenericElement implements
     /**
      * Fulltext index type.
      */
-    const FULLTEXT_INDEX = "fulltext";
+    const FULLTEXT_INDEX = 'fulltext';
 
     /**
      * @var Table

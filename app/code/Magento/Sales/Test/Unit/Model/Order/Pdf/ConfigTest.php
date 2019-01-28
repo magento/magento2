@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->method(
             'get'
         )->with(
-            "renderers/page_type",
+            'renderers/page_type',
             []
         )->will(
             $this->returnValue($configuration)

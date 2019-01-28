@@ -106,7 +106,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('emulateAreaCode')
             ->with(
                 'frontend',
-                [$this->model, "emulateImageCreating"],
+                [$this->model, 'emulateImageCreating'],
                 [$product, $imageCode, 1, $image]
             )
             ->willReturn($imageHelper);

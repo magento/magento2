@@ -50,7 +50,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production']);
         $this->assertContains(
-            "production mode",
+            'production mode',
             $tester->getDisplay()
         );
     }
@@ -62,7 +62,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'developer']);
         $this->assertContains(
-            "developer mode",
+            'developer mode',
             $tester->getDisplay()
         );
     }
@@ -74,7 +74,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'default']);
         $this->assertContains(
-            "default mode",
+            'default mode',
             $tester->getDisplay()
         );
     }
@@ -86,7 +86,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production', '--skip-compilation' => true]);
         $this->assertContains(
-            "production mode",
+            'production mode',
             $tester->getDisplay()
         );
     }

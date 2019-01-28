@@ -96,7 +96,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {
             $this->_jsonDeserializer->deserialize($inputInvalidJson);
-            $this->fail("Exception is expected to be raised");
+            $this->fail('Exception is expected to be raised');
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertEquals('Decoding error.', $e->getMessage(), 'Exception message is invalid');
@@ -126,7 +126,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {
             $this->_jsonDeserializer->deserialize($inputInvalidJson);
-            $this->fail("Exception is expected to be raised");
+            $this->fail('Exception is expected to be raised');
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertContains('Decoding error:', $e->getMessage(), 'Exception message is invalid');

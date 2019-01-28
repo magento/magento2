@@ -91,7 +91,7 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
         $this->imageBuilderMock->expects($this->once())
             ->method('create')
             ->with($productMock, $imageId)
-            ->willThrowException(new \Exception("Image Builder Exception"));
+            ->willThrowException(new \Exception('Image Builder Exception'));
 
         $this->emulationMock->expects($this->once())->method('stopEnvironmentEmulation');
         $this->model->getImage($productMock, $imageId);

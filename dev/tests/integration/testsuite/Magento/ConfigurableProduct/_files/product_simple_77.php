@@ -36,7 +36,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setSku('simple_77')
     ->setPrice(10)
     ->setWeight(1)
-    ->setShortDescription("Short description")
+    ->setShortDescription('Short description')
     ->setTaxClassId(0)
     ->setTierPrice(
         [

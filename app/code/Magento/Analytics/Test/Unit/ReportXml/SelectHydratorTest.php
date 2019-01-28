@@ -96,11 +96,11 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
 
         $result = [];
         foreach ($selectParts as $part) {
-            $result[$part] = "Part";
+            $result[$part] = 'Part';
         }
         $this->selectMock->expects($this->any())
             ->method('getPart')
-            ->willReturn("Part");
+            ->willReturn('Part');
         $this->assertEquals($this->selectHydrator->extract($this->selectMock), $result);
     }
 

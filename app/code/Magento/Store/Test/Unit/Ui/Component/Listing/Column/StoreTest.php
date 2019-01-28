@@ -170,7 +170,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function prepareDataSourceDataProvider()
     {
-        $content = "website<br/>&nbsp;&nbsp;&nbsp;group<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store<br/>";
+        $content = 'website<br/>&nbsp;&nbsp;&nbsp;group<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store<br/>';
         return [
             'withoutStore' => [
                 'dataSource' => ['data' => ['items' => [['store_id' => null]]]],

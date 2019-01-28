@@ -93,7 +93,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
 
         $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
             $this->throwException(new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("Test Exception")
+                new \Magento\Framework\Phrase('Test Exception')
             ))
         );
 
@@ -137,7 +137,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $urlMock->expects($this->once())
             ->method('getUrl')
-            ->willReturn("urlstring");
+            ->willReturn('urlstring');
 
         $urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $urlFactoryMock->expects($this->once())

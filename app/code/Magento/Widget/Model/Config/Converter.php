@@ -66,7 +66,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                             );
                         }
                         break;
-                    case "#text":
+                    case '#text':
                         break;
                     case '#comment':
                         break;

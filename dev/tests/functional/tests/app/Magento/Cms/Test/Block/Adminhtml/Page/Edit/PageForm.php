@@ -19,14 +19,14 @@ class PageForm extends FormTabs
      *
      * @var string
      */
-    protected $toggleButton = "#togglepage_content";
+    protected $toggleButton = '#togglepage_content';
 
     /**
      * Content Editor form.
      *
      * @var string
      */
-    protected $contentForm = "#page_content";
+    protected $contentForm = '#page_content';
 
     /**
      * Cms page loader.

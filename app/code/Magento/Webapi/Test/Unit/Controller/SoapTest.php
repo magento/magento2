@@ -174,7 +174,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         );
         $wsdl = 'Some WSDL content';
         $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
-        $encoding = "utf-8";
+        $encoding = 'utf-8';
         $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
         $this->_soapController->dispatch($this->_requestMock);
 
@@ -221,7 +221,7 @@ EXPECTED_MESSAGE;
         )->will(
             $this->returnValue($exception)
         );
-        $encoding = "utf-8";
+        $encoding = 'utf-8';
         $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
 
         $this->_soapController->dispatch($this->_requestMock);

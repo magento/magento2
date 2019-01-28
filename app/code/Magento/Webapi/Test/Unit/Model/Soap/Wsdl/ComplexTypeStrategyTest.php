@@ -264,13 +264,13 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
     {
         $dom = new \DOMDocument();
         $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue($dom));
-        $annotationDoc = "test doc";
+        $annotationDoc = 'test doc';
         $complexType = $dom->createElement(Wsdl::XSD_NS . ':complexType');
         $complexType->setAttribute('name', 'testRequest');
         $this->_strategy->addAnnotation($complexType, $annotationDoc);
         $this->assertEquals(
             $annotationDoc,
-            $complexType->getElementsByTagName("xsd:documentation")->item(0)->nodeValue
+            $complexType->getElementsByTagName('xsd:documentation')->item(0)->nodeValue
         );
     }
 }

@@ -47,7 +47,7 @@ class Repository extends AbstractFactory
         $this->factoryContent .= "     */\n";
         $this->factoryContent .= "    public function get{$methodNameSuffix}(array \$defaultConfig = [], "
             . "array \$defaultData = [])\n";
-        $this->factoryContent .= "    {";
+        $this->factoryContent .= '    {';
 
         if (!empty($fallbackComment)) {
             $this->factoryContent .= $fallbackComment . "\n";

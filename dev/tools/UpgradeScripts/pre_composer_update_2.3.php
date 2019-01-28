@@ -199,7 +199,7 @@ try {
         throw $exception;
     }
 
-    output("\\n**** Executing Updates ****");
+    output('\\n**** Executing Updates ****');
 
     $composerBackup = findUnusedFilename($rootDir, 'composer.json.bak');
     output("\\nBacking up $composerFile to $composerBackup");

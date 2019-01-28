@@ -2679,7 +2679,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         } elseif (is_object($object)) {
             $data = (array)$object;
         } else {
-            throw new \InvalidArgumentException("Provided argument is not an object.");
+            throw new \InvalidArgumentException('Provided argument is not an object.');
         }
         foreach ($data as $key => $value) {
             if (is_object($value)) {

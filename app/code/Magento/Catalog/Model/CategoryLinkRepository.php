@@ -91,9 +91,9 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
                 __(
                     'Could not save product "%product" with position %position to category %category',
                     [
-                        "product" => $product->getId(),
-                        "position" => $backupPosition,
-                        "category" => $category->getId()
+                        'product' => $product->getId(),
+                        'position' => $backupPosition,
+                        'category' => $category->getId()
                     ]
                 ),
                 $e

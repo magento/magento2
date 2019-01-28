@@ -160,11 +160,11 @@ class Config
                 'XPD' => __('Worldwide Expedited'),
             ],
             'pickup' => [
-                'RDP' => ["label" => 'Regular Daily Pickup', "code" => "01"],
-                'OCA' => ["label" => 'On Call Air', "code" => "07"],
-                'OTP' => ["label" => 'One Time Pickup', "code" => "06"],
-                'LC' => ["label" => 'Letter Center', "code" => "19"],
-                'CC' => ["label" => 'Customer Counter', "code" => "03"],
+                'RDP' => ['label' => 'Regular Daily Pickup', 'code' => '01'],
+                'OCA' => ['label' => 'On Call Air', 'code' => '07'],
+                'OTP' => ['label' => 'One Time Pickup', 'code' => '06'],
+                'LC' => ['label' => 'Letter Center', 'code' => '19'],
+                'CC' => ['label' => 'Customer Counter', 'code' => '03'],
             ],
             'container' => [
                 'CP' => '00',

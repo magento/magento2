@@ -120,7 +120,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
             $methods[] = [
                 'name' => $setterName,
                 'parameters' => [$parameters],
-                'body' => "\$this->setData('{$attributeName}', \${$propertyName});" . PHP_EOL . "return \$this;",
+                'body' => "\$this->setData('{$attributeName}', \${$propertyName});" . PHP_EOL . 'return $this;',
                 'docblock' => [
                     'tags' => [
                         [

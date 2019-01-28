@@ -248,8 +248,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     public function isCustomerLockedDataProvider()
     {
         return [
-            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
-            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+            ['lockExpirationDate' => date('F j, Y', strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpirationDate' => date('F j, Y', strtotime('+1 days')), 'expectedResult' => true]
         ];
     }
 
@@ -337,7 +337,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->updateData($customer);
 
         foreach ($customerDataAttributes as $key => $value) {
-            $expectedResult[strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $key), '_'))] = $value;
+            $expectedResult[strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', '_$1', $key), '_'))] = $value;
         }
 
         $expectedResult[$attribute->getAttributeCode()] = $attribute->getValue();

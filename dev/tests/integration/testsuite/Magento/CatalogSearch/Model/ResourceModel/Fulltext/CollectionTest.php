@@ -55,14 +55,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->assertGreaterThan(
                 0,
                 count($items),
-                sprintf("Search #%s result must not be empty", $i)
+                sprintf('Search #%s result must not be empty', $i)
             );
 
             if ($previousResult) {
                 $this->assertEquals(
                     $previousResult,
                     array_keys($items),
-                    "Search result must be the same for the same requests"
+                    'Search result must be the same for the same requests'
                 );
             }
 

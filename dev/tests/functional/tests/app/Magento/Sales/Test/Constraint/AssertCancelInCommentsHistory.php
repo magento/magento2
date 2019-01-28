@@ -55,6 +55,6 @@ class AssertCancelInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about canceled amount is available in Comments History section.";
+        return 'Message about canceled amount is available in Comments History section.';
     }
 }

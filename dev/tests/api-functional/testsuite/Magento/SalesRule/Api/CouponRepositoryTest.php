@@ -13,7 +13,7 @@ class CouponRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'salesRuleCouponRepositoryV1';
     const RESOURCE_PATH = '/V1/coupons';
-    const SERVICE_VERSION = "V1";
+    const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface

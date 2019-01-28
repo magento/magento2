@@ -202,7 +202,7 @@ class ConsoleLogger extends AbstractLogger
             $bar = '';
             foreach ($bars as &$bar) {
                 if ($this->initialMaxBarSize > strlen($bar)) {
-                    $bar .= str_pad(" ", ($this->initialMaxBarSize - strlen($bar)));
+                    $bar .= str_pad(' ', ($this->initialMaxBarSize - strlen($bar)));
                 }
             }
             $bar = trim($bar);

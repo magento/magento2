@@ -64,6 +64,6 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MAP data in Shopping Cart is correct.";
+        return 'Displayed Product MAP data in Shopping Cart is correct.';
     }
 }

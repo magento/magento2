@@ -13,14 +13,14 @@ $userIds = [];
 
 /** @var $model \Magento\User\Model\User */
 $model = $objectManager->create(\Magento\User\Model\User::class);
-$model->setFirstname("John")
-    ->setLastname("Doe")
+$model->setFirstname('John')
+    ->setLastname('Doe')
     ->setUsername('adminUser1')
     ->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
     ->setEmail('adminUser1@example.com')
     ->setRoleType('G')
     ->setResourceId('Magento_Adminhtml::all')
-    ->setPrivileges("")
+    ->setPrivileges('')
     ->setAssertId(0)
     ->setRoleId(1)
     ->setPermission('allow');
@@ -29,14 +29,14 @@ $userIds[] = $model->getDataByKey('user_id');
 
 /** @var $model \Magento\User\Model\User */
 $model = $objectManager->create(\Magento\User\Model\User::class);
-$model->setFirstname("John")
-    ->setLastname("Doe")
+$model->setFirstname('John')
+    ->setLastname('Doe')
     ->setUsername('adminUser2')
     ->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
     ->setEmail('adminUser2@example.com')
     ->setRoleType('G')
     ->setResourceId('Magento_Adminhtml::all')
-    ->setPrivileges("")
+    ->setPrivileges('')
     ->setAssertId(0)
     ->setRoleId(1)
     ->setPermission('allow');

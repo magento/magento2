@@ -19,5 +19,5 @@ if (isset($_GET['command'])) {
     $output = new NullOutput();
     $cli->doRun($input, $output);
 } else {
-    throw new \InvalidArgumentException("Command GET parameter is not set.");
+    throw new \InvalidArgumentException('Command GET parameter is not set.');
 }

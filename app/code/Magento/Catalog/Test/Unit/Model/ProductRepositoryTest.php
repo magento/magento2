@@ -445,7 +445,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByIdForcedReload()
     {
-        $identifier = "23";
+        $identifier = '23';
         $editMode = false;
         $storeId = 0;
 
@@ -525,8 +525,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetForcedReload()
     {
-        $sku = "sku";
-        $id = "23";
+        $sku = 'sku';
+        $id = '23';
         $editMode = false;
         $storeId = 0;
 
@@ -878,26 +878,26 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         //there are two existing options, one will be updated and one will be deleted
         $newOptionsData = [
             [
-                "option_id" => 10,
-                "type" => "drop_down",
-                "values" => [
+                'option_id' => 10,
+                'type' => 'drop_down',
+                'values' => [
                     [
-                        "title" => "DropdownOptions_1",
-                        "option_type_id" => 8, //existing
-                        "price" => 3,
+                        'title' => 'DropdownOptions_1',
+                        'option_type_id' => 8, //existing
+                        'price' => 3,
                     ],
                     [ //new option value
-                        "title" => "DropdownOptions_3",
-                        "price" => 4,
+                        'title' => 'DropdownOptions_3',
+                        'price' => 4,
                     ],
                 ],
             ],
             [//new option
-                "type" => "checkbox",
-                "values" => [
+                'type' => 'checkbox',
+                'values' => [
                     [
-                        "title" => "CheckBoxValue2",
-                        "price" => 5,
+                        'title' => 'CheckBoxValue2',
+                        'price' => 5,
                     ],
                 ],
             ],
@@ -910,8 +910,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $existingOption1->setData(
             [
-                "option_id" => 10,
-                "type" => "drop_down",
+                'option_id' => 10,
+                'type' => 'drop_down',
             ]
         );
         /** @var \Magento\Catalog\Model\Product\Option\Value $existingOptionValue1 */
@@ -921,9 +921,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $existingOptionValue1->setData(
             [
-                "option_type_id" => "8",
-                "title" => "DropdownOptions_1",
-                "price" => 5,
+                'option_type_id' => '8',
+                'title' => 'DropdownOptions_1',
+                'price' => 5,
             ]
         );
         $existingOptionValue2 = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Value::class)
@@ -932,15 +932,15 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $existingOptionValue2->setData(
             [
-                "option_type_id" => "9",
-                "title" => "DropdownOptions_2",
-                "price" => 6,
+                'option_type_id' => '9',
+                'title' => 'DropdownOptions_2',
+                'price' => 6,
             ]
         );
         $existingOption1->setValues(
             [
-                "8" => $existingOptionValue1,
-                "9" => $existingOptionValue2,
+                '8' => $existingOptionValue1,
+                '9' => $existingOptionValue2,
             ]
         );
         $existingOption2 = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
@@ -949,52 +949,52 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $existingOption2->setData(
             [
-                "option_id" => 11,
-                "type" => "drop_down",
+                'option_id' => 11,
+                'type' => 'drop_down',
             ]
         );
         $data['scenario_1'] = [
             'new_options' => $newOptionsData,
             'existing_options' => [
-                "10" => $existingOption1,
-                "11" => $existingOption2,
+                '10' => $existingOption1,
+                '11' => $existingOption2,
             ],
             'expected_data' => [
                 [
-                    "option_id" => 10,
-                    "type" => "drop_down",
-                    "values" => [
+                    'option_id' => 10,
+                    'type' => 'drop_down',
+                    'values' => [
                         [
-                            "title" => "DropdownOptions_1",
-                            "option_type_id" => 8,
-                            "price" => 3,
+                            'title' => 'DropdownOptions_1',
+                            'option_type_id' => 8,
+                            'price' => 3,
                         ],
                         [
-                            "title" => "DropdownOptions_3",
-                            "price" => 4,
+                            'title' => 'DropdownOptions_3',
+                            'price' => 4,
                         ],
                         [
-                            "option_type_id" => 9,
-                            "title" => "DropdownOptions_2",
-                            "price" => 6,
-                            "is_delete" => 1,
-                        ],
-                    ],
-                ],
-                [
-                    "type" => "checkbox",
-                    "values" => [
-                        [
-                            "title" => "CheckBoxValue2",
-                            "price" => 5,
+                            'option_type_id' => 9,
+                            'title' => 'DropdownOptions_2',
+                            'price' => 6,
+                            'is_delete' => 1,
                         ],
                     ],
                 ],
                 [
-                    "option_id" => 11,
-                    "type" => "drop_down",
-                    "values" => [],
-                    "is_delete" => 1,
+                    'type' => 'checkbox',
+                    'values' => [
+                        [
+                            'title' => 'CheckBoxValue2',
+                            'price' => 5,
+                        ],
+                    ],
+                ],
+                [
+                    'option_id' => 11,
+                    'type' => 'drop_down',
+                    'values' => [],
+                    'is_delete' => 1,
 
                 ],
             ],
@@ -1024,7 +1024,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->resourceModel->expects($this->once())->method('save')
             ->with($this->initializedProduct)->willReturn(true);
 
-        $this->initializedProduct->setData("product_links", $existingLinks);
+        $this->initializedProduct->setData('product_links', $existingLinks);
 
         if (!empty($newLinks)) {
             $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
@@ -1032,7 +1032,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 ->method('getLinkTypes')
                 ->willReturn($linkTypes);
 
-            $this->initializedProduct->setData("ignore_links_flag", false);
+            $this->initializedProduct->setData('ignore_links_flag', false);
             $this->resourceModel
                 ->expects($this->any())->method('getProductsIdsBySkus')
                 ->willReturn([$newLinks['linked_product_sku'] => $newLinks['linked_product_sku']]);
@@ -1119,21 +1119,21 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         // No existing, new links
         $data['scenario_1'] = [
             'newLinks' => [
-                "product_sku" => "Simple Product 1",
-                "link_type" => "associated",
-                "linked_product_sku" => "Simple Product 2",
-                "linked_product_type" => "simple",
-                "position" => 0,
-                "qty" => 1,
+                'product_sku' => 'Simple Product 1',
+                'link_type' => 'associated',
+                'linked_product_sku' => 'Simple Product 2',
+                'linked_product_type' => 'simple',
+                'position' => 0,
+                'qty' => 1,
             ],
             'existingLinks' => [],
             'expectedData' => [[
-                "product_sku" => "Simple Product 1",
-                "link_type" => "associated",
-                "linked_product_sku" => "Simple Product 2",
-                "linked_product_type" => "simple",
-                "position" => 0,
-                "qty" => 1,
+                'product_sku' => 'Simple Product 1',
+                'link_type' => 'associated',
+                'linked_product_sku' => 'Simple Product 2',
+                'linked_product_type' => 'simple',
+                'position' => 0,
+                'qty' => 1,
             ]],
         ];
 
@@ -1142,11 +1142,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $data['scenario_2'] = [
             'newLinks' => [],
             'existingLinks' => [
-                "product_sku" => "Simple Product 1",
-                "link_type" => "related",
-                "linked_product_sku" => "Simple Product 2",
-                "linked_product_type" => "simple",
-                "position" => 0,
+                'product_sku' => 'Simple Product 1',
+                'link_type' => 'related',
+                'linked_product_sku' => 'Simple Product 2',
+                'linked_product_type' => 'simple',
+                'position' => 0,
             ],
             'expectedData' => [],
         ];
@@ -1155,26 +1155,26 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         // Existing and new links
         $data['scenario_3'] = [
             'newLinks' => [
-                "product_sku" => "Simple Product 1",
-                "link_type" => "related",
-                "linked_product_sku" => "Simple Product 2",
-                "linked_product_type" => "simple",
-                "position" => 0,
+                'product_sku' => 'Simple Product 1',
+                'link_type' => 'related',
+                'linked_product_sku' => 'Simple Product 2',
+                'linked_product_type' => 'simple',
+                'position' => 0,
             ],
             'existingLinks' => [
-                "product_sku" => "Simple Product 1",
-                "link_type" => "related",
-                "linked_product_sku" => "Simple Product 3",
-                "linked_product_type" => "simple",
-                "position" => 0,
+                'product_sku' => 'Simple Product 1',
+                'link_type' => 'related',
+                'linked_product_sku' => 'Simple Product 3',
+                'linked_product_type' => 'simple',
+                'position' => 0,
             ],
             'expectedData' => [
                 [
-                    "product_sku" => "Simple Product 1",
-                    "link_type" => "related",
-                    "linked_product_sku" => "Simple Product 2",
-                    "linked_product_type" => "simple",
-                    "position" => 0,
+                    'product_sku' => 'Simple Product 1',
+                    'link_type' => 'related',
+                    'linked_product_sku' => 'Simple Product 2',
+                    'linked_product_type' => 'simple',
+                    'position' => 0,
                 ],
             ],
         ];
@@ -1202,7 +1202,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             'images' => [
                     [
                         'value_id' => null,
-                        'label' => "label_text",
+                        'label' => 'label_text',
                         'position' => 10,
                         'disabled' => false,
                         'types' => ['image', 'small_image'],
@@ -1229,7 +1229,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->initializedProduct->setData('media_gallery', $newEntriesData);
         $this->initializedProduct->expects($this->any())
             ->method('getMediaAttributes')
-            ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
+            ->willReturn(['image' => 'imageAttribute', 'small_image' => 'small_image_attribute']);
 
         //setup media attribute backend
         $mediaTmpPath = '/tmp';
@@ -1262,7 +1262,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('processImageContent')
             ->willReturn($absolutePath);
 
-        $imageFileUri = "imageFileUri";
+        $imageFileUri = 'imageFileUri';
         $this->mediaGalleryProcessor->expects($this->once())->method('addImage')
             ->with($this->initializedProduct, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
             ->willReturn($imageFileUri);
@@ -1333,7 +1333,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $newEntries = [
             [
                 'value_id' => 5,
-                "label" => "new_label_text",
+                'label' => 'new_label_text',
                 'file' => 'filename1',
                 'position' => 10,
                 'disabled' => false,
@@ -1345,7 +1345,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             'images' => [
                 [
                     'value_id' => 5,
-                    "label" => "label_text",
+                    'label' => 'label_text',
                     'file' => 'filename1',
                     'position' => 10,
                     'disabled' => true,
@@ -1360,7 +1360,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [
             [
                 'value_id' => 5,
-                "label" => "new_label_text",
+                'label' => 'new_label_text',
                 'file' => 'filename1',
                 'position' => 10,
                 'disabled' => false,
@@ -1384,7 +1384,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->initializedProduct->setData('media_gallery', $existingMediaGallery);
         $this->initializedProduct->expects($this->any())
             ->method('getMediaAttributes')
-            ->willReturn(["image" => "filename1", "small_image" => "filename2"]);
+            ->willReturn(['image' => 'filename1', 'small_image' => 'filename2']);
 
         $this->mediaGalleryProcessor->expects($this->once())->method('clearMediaAttribute')
             ->with($this->initializedProduct, ['image', 'small_image']);

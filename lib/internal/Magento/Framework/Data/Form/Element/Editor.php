@@ -277,7 +277,7 @@ class Editor extends Textarea
                     'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('"
                         . $this->getPluginConfigOptions('magentowidget', 'window_url')
-                        . "widget_target_id/" . $this->getHtmlId() . "/')",
+                        . 'widget_target_id/' . $this->getHtmlId() . "/')",
                     'class' => 'action-add-widget plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -291,7 +291,7 @@ class Editor extends Textarea
                     'title' => $this->translate('Insert Image...'),
                     'onclick' => "MediabrowserUtility.openDialog('"
                         . $this->getConfig('files_browser_window_url')
-                        . "target_element_id/" . $this->getHtmlId() . "/"
+                        . 'target_element_id/' . $this->getHtmlId() . '/'
                         . (null !== $this->getConfig('store_id') ? 'store/'
                             . $this->getConfig('store_id') . '/' : '')
                         . "')",

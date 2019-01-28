@@ -561,7 +561,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
                         ''
                     )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where("e.entity_id = :entity_id")
+                    ->where('e.entity_id = :entity_id')
                     ->where('default_value.store_id = ?', 0);
 
                 $bind = ['entity_id' => $entityId];

@@ -31,7 +31,7 @@ class AssertShippingReportTotalResult extends AbstractAssertShippingReportResult
         \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $shipmentResult,
-            "Grand total Shipment result is not correct."
+            'Grand total Shipment result is not correct.'
         );
     }
 

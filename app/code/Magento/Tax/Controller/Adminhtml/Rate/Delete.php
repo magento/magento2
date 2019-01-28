@@ -25,12 +25,12 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
                 $this->_taxRateRepository->deleteById($rateId);
 
                 $this->messageManager->addSuccess(__('You deleted the tax rate.'));
-                return $resultRedirect->setPath("*/*/");
+                return $resultRedirect->setPath('*/*/');
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(
                     __('We can\'t delete this rate because of an incorrect rate ID.')
                 );
-                return $resultRedirect->setPath("tax/*/");
+                return $resultRedirect->setPath('tax/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -40,7 +40,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
             if ($this->getRequest()->getServer('HTTP_REFERER')) {
                 $resultRedirect->setRefererUrl();
             } else {
-                $resultRedirect->setPath("*/*/");
+                $resultRedirect->setPath('*/*/');
             }
             return $resultRedirect;
         }

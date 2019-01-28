@@ -42,8 +42,8 @@ class StoreSwitcherTest extends \PHPUnit\Framework\TestCase
      */
     public function testSwitch(): void
     {
-        $redirectUrl = "http://domain.com/?SID=e5h3e086dce3ckkqt9ia7avl27&___store=fixture_second_store";
-        $expectedUrl = "http://domain.com/";
+        $redirectUrl = 'http://domain.com/?SID=e5h3e086dce3ckkqt9ia7avl27&___store=fixture_second_store';
+        $expectedUrl = 'http://domain.com/';
         $fromStoreCode = 'test';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);

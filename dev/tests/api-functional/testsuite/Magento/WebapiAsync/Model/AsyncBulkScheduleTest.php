@@ -77,7 +77,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $this->logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt';
         $this->registry = $this->objectManager->get(Registry::class);
 
         $params = array_merge_recursive(
@@ -135,7 +135,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
                 [$products]
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->fail('Not all products were created');
         }
     }
 
@@ -164,7 +164,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
                 [$products]
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->fail('Not all products were created');
         }
     }
 
@@ -252,7 +252,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
             ->getSize();
 
         if ($size > 0) {
-            throw new Exception(new Phrase("Collection size after clearing the products: %size", ['size' => $size]));
+            throw new Exception(new Phrase('Collection size after clearing the products: %size', ['size' => $size]));
         }
     }
 

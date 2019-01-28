@@ -137,7 +137,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
-        $file = fopen($filePath, "wb");
+        $file = fopen($filePath, 'wb');
         fwrite($file, 'just a text');
 
         $_FILES['image'] = [
@@ -162,7 +162,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
-        $file = fopen($filePath, "wb");
+        $file = fopen($filePath, 'wb');
         fwrite($file, 'just a text');
 
         $_FILES['image'] = [

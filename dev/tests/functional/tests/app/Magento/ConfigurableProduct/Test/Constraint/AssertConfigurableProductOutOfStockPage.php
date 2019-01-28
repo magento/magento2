@@ -44,7 +44,7 @@ class AssertConfigurableProductOutOfStockPage extends AssertProductPage
             $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
 
             if ($fixturePrice != $formPrice) {
-                return "Displayed product price on product page (front-end) not equals passed from fixture. "
+                return 'Displayed product price on product page (front-end) not equals passed from fixture. '
                     . "Actual: {$formPrice}, expected: {$fixturePrice}.";
             }
         }

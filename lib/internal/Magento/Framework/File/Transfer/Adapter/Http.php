@@ -61,7 +61,7 @@ class Http
                 echo $buffer;
             }
             if (!feof($handle)) {
-                throw new \UnexpectedValueException("Unexpected end of file");
+                throw new \UnexpectedValueException('Unexpected end of file');
             }
             fclose($handle);
         }
@@ -83,7 +83,7 @@ class Http
         } elseif (is_array($options) && isset($options['filepath'])) {
             $filePath = $options['filepath'];
         } else {
-            throw new \InvalidArgumentException("Filename is not set.");
+            throw new \InvalidArgumentException('Filename is not set.');
         }
 
         return $filePath;

@@ -84,7 +84,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $expected = "expect";
+        $expected = 'expect';
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($expected);
         $this->assertEquals($expected, $this->repository->create());
     }

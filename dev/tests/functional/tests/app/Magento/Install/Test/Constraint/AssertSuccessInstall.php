@@ -101,6 +101,6 @@ class AssertSuccessInstall extends AbstractConstraint
      */
     public function toString()
     {
-        return "Install successfully finished.";
+        return 'Install successfully finished.';
     }
 }

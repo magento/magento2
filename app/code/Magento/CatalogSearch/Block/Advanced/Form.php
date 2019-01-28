@@ -274,7 +274,7 @@ class Form extends Template
         )->setTitle(
             $this->getAttributeLabel($attribute)
         )->setExtraParams(
-            ""
+            ''
         )->setValue(
             $this->getAttributeValue($attribute)
         )->setOptions(

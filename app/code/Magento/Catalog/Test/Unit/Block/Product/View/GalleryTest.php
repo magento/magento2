@@ -267,7 +267,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                 'label' => ($hasLabel ? 'test_label' : ''),
                 'position' => '2',
                 'media_type' => 'external-test_media_type',
-                "video_url" => 'test_video_url'
+                'video_url' => 'test_video_url'
             ]),
         ];
 

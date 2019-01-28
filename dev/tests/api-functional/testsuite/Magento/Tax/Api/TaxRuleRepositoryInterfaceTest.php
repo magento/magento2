@@ -20,9 +20,9 @@ use Magento\Webapi\Model\Rest\Config as HttpConstants;
  */
 class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "taxTaxRuleRepositoryV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/taxRules";
+    const SERVICE_NAME = 'taxTaxRuleRepositoryV1';
+    const SERVICE_VERSION = 'V1';
+    const RESOURCE_PATH = '/V1/taxRules';
 
     /** @var \Magento\Tax\Model\Calculation\Rate[] */
     private $fixtureTaxRates;
@@ -154,11 +154,11 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $taxRuleData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertArrayHasKey('id', $taxRuleData, "Tax rule ID is expected");
+        $this->assertArrayHasKey('id', $taxRuleData, 'Tax rule ID is expected');
         $this->assertGreaterThan(0, $taxRuleData['id']);
         $taxRuleId = $taxRuleData['id'];
         unset($taxRuleData['id']);
-        $this->assertEquals($requestData['rule'], $taxRuleData, "Tax rule is created with invalid data.");
+        $this->assertEquals($requestData['rule'], $taxRuleData, 'Tax rule is created with invalid data.');
         /** Ensure that tax rule was actually created in DB */
         /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
         $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
@@ -433,7 +433,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Exception does not contain expected message."
+                'Exception does not contain expected message.'
             );
         }
     }
@@ -545,7 +545,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Exception does not contain expected message."
+                'Exception does not contain expected message.'
             );
         }
     }
@@ -576,7 +576,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($fixtureRule->getId(), $searchResults['items'][0]["id"]);
+        $this->assertEquals($fixtureRule->getId(), $searchResults['items'][0]['id']);
         $this->assertEquals($fixtureRule->getCode(), $searchResults['items'][0]['code']);
     }
 

@@ -43,6 +43,6 @@ class AssertCategoryIncludeInNavigationMenu extends AbstractConstraint
      */
     public function toString()
     {
-        return "Category is visible in navigation menu";
+        return 'Category is visible in navigation menu';
     }
 }

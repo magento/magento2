@@ -22,6 +22,6 @@ class WordWrapper
     {
         return empty($words)
             ? $source
-            : preg_replace("/\\b(" . implode('|', $words) . ")\\b/", sprintf($format, '$1'), $source);
+            : preg_replace('/\\b(' . implode('|', $words) . ')\\b/', sprintf($format, '$1'), $source);
     }
 }

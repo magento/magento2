@@ -90,9 +90,9 @@ class UpdateCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteSuccess()
     {
-        $url = "old.localhost.com";
-        $configVal = "Config val";
-        $token = "Secret token!";
+        $url = 'old.localhost.com';
+        $configVal = 'Config val';
+        $token = 'Secret token!';
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);

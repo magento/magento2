@@ -25,7 +25,7 @@ class AssertAuthorizationLinkIsVisibleOnStoreFront extends AbstractConstraint
         $cmsIndex->open();
         \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getLinksBlock()->isAuthorizationVisible(),
-            "Authorization link is not visible on the Store Front."
+            'Authorization link is not visible on the Store Front.'
         );
     }
 
@@ -36,6 +36,6 @@ class AssertAuthorizationLinkIsVisibleOnStoreFront extends AbstractConstraint
      */
     public function toString()
     {
-        return "Authorization link is visible on the Store Front.";
+        return 'Authorization link is visible on the Store Front.';
     }
 }

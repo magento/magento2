@@ -50,6 +50,6 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message with appropriate notification status is available in Comments History section.";
+        return 'Message with appropriate notification status is available in Comments History section.';
     }
 }

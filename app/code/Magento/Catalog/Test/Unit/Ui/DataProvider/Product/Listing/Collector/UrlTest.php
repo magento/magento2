@@ -99,7 +99,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'some:url',
                 [
                     'product' => 1,
-                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => "%uenc%"
+                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '%uenc%'
                 ]
             )
             ->willReturn(['some cart url post data']);

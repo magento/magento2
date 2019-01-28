@@ -309,7 +309,7 @@ class Column extends Widget
     {
         if (!is_object($callback[0]) || !$callback[0] instanceof Widget) {
             throw new \InvalidArgumentException(
-                "Frame callback host must be instance of Magento\\Backend\\Block\\Widget"
+                'Frame callback host must be instance of Magento\\Backend\\Block\\Widget'
             );
         }
     }

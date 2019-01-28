@@ -141,7 +141,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $inputError = [];
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
             $paramName = $param[MethodsMap::METHOD_META_NAME];
-            $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
+            $snakeCaseParamName = strtolower(preg_replace('/(?<=\\w)(?=[A-Z])/', '_$1', $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
                 $paramValue = isset($inputArray[$paramName])
                     ? $inputArray[$paramName]
@@ -366,7 +366,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
-        if (substr($type, -2) === "[]") {
+        if (substr($type, -2) === '[]') {
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {

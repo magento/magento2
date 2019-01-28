@@ -120,7 +120,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
         $this->checkoutCart->open();
         \PHPUnit\Framework\Assert::assertFalse(
             $this->checkoutCart->getCrosssellBlock()->isVisible(),
-            "Cross-sell block is present."
+            'Cross-sell block is present.'
         );
     }
 

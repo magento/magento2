@@ -196,7 +196,7 @@ class PhpScanner implements ScannerInterface
         $namespace = '';
         for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
             if ($tokens[$tokenOffset][0] === T_STRING) {
-                $namespace .= "\\" . $tokens[$tokenOffset][1];
+                $namespace .= '\\' . $tokens[$tokenOffset][1];
             } elseif ($tokens[$tokenOffset] === '{' || $tokens[$tokenOffset] === ';') {
                 break;
             }
@@ -216,7 +216,7 @@ class PhpScanner implements ScannerInterface
         $classes = [];
         for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
             if ($tokens[$tokenOffset] === '{') {
-                $classes[] = $namespace . "\\" . $tokens[$tokenIterator + 2][1];
+                $classes[] = $namespace . '\\' . $tokens[$tokenIterator + 2][1];
             }
         }
         return $classes;

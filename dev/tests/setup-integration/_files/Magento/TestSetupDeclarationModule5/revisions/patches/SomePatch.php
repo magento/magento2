@@ -55,7 +55,7 @@ class SomePatch implements
     public function apply()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->insert('test_table', ['varchar' => "_ref", 'varbinary' => 0101010]);
+        $adapter->insert('test_table', ['varchar' => '_ref', 'varbinary' => 0101010]);
     }
 
     public function revert()

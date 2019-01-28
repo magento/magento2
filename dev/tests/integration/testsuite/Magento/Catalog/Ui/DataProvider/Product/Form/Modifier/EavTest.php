@@ -30,13 +30,13 @@ class EavTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $mappings = [
-            "text" => "input",
-            "hidden" => "input",
-            "boolean" => "checkbox",
-            "media_image" => "image",
-            "price" => "input",
-            "weight" => "input",
-            "gallery" => "image"
+            'text' => 'input',
+            'hidden' => 'input',
+            'boolean' => 'checkbox',
+            'media_image' => 'image',
+            'price' => 'input',
+            'weight' => 'input',
+            'gallery' => 'image'
         ];
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->locatorMock = $this->createMock(\Magento\Catalog\Model\Locator\LocatorInterface::class);

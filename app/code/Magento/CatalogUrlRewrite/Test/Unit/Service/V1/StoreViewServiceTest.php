@@ -99,7 +99,7 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->once())->method('join')->with(
             ['e_attr' => 'backend_table'],
-            "e.link_field = e_attr.link_field",
+            'e.link_field = e_attr.link_field',
             'store_id'
         )->will($this->returnSelf());
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));

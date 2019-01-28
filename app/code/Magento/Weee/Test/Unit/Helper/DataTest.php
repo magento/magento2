@@ -284,12 +284,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function dataProviderGetWeeeAttributesForBundle()
     {
         return [
-            [2, false, ["16.00", "15.00"]],
-            [2, true, ["15.00", "10.00"]],
-            [1, false, ["15.00", "10.00"]],
-            [1, true, ["15.00", "10.00"]],
-            [3, false, ["16.00", "15.00"]],
-            [3, true, ["15.00", "10.00"]],
+            [2, false, ['16.00', '15.00']],
+            [2, true, ['15.00', '10.00']],
+            [1, false, ['15.00', '10.00']],
+            [1, true, ['15.00', '10.00']],
+            [3, false, ['16.00', '15.00']],
+            [3, true, ['15.00', '10.00']],
         ];
     }
 

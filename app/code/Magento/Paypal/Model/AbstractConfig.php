@@ -145,7 +145,7 @@ abstract class AbstractConfig implements ConfigInterface
             case 'getDebugReplacePrivateDataKeys':
                 return $this->methodInstance->getDebugReplacePrivateDataKeys();
             default:
-                $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
+                $underscored = strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $key));
                 $path = $this->_getSpecificConfigPath($underscored);
                 if ($path !== null) {
                     $value = $this->_scopeConfig->getValue(

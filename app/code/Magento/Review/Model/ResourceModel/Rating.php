@@ -370,7 +370,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         $sumColumn = new \Zend_Db_Expr("SUM(rating_vote.{$connection->quoteIdentifier('percent')})");
-        $countColumn = new \Zend_Db_Expr("COUNT(*)");
+        $countColumn = new \Zend_Db_Expr('COUNT(*)');
 
         $select = $connection->select()->from(
             ['rating_vote' => $this->getTable('rating_option_vote')],

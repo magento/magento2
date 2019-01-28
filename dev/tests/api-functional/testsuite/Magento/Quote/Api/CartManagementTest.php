@@ -19,7 +19,7 @@ class CartManagementTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'quoteCartManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    const RESOURCE_PATH_CUSTOMER_TOKEN = '/V1/integration/customer/token';
 
     protected $createdQuotes = [];
 

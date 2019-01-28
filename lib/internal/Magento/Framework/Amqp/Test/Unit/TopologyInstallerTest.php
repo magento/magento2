@@ -56,7 +56,7 @@ class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
      */
     public function testInstallException()
     {
-        $exceptionMessage = "Exception message";
+        $exceptionMessage = 'Exception message';
 
         $this->topologyConfigMock
             ->expects($this->once())

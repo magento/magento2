@@ -313,7 +313,7 @@ QUERY;
 
             /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
             $links = $childProduct->getExtensionAttributes()->getCategoryLinks();
-            $this->assertCount(1, $links, "Precondition failed, incorrect number of categories.");
+            $this->assertCount(1, $links, 'Precondition failed, incorrect number of categories.');
             $id =$links[0]->getCategoryId();
 
             $actualValue
@@ -325,7 +325,7 @@ QUERY;
             $this->assertCount(
                 1,
                 $mediaGalleryEntries,
-                "Precondition failed since there are incorrect number of media gallery entries"
+                'Precondition failed since there are incorrect number of media gallery entries'
             );
             $this->assertTrue(
                 is_array(
@@ -338,7 +338,7 @@ QUERY;
             $this->assertCount(
                 1,
                 $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'],
-                "there must be 1 record in the media gallery"
+                'there must be 1 record in the media gallery'
             );
             $mediaGalleryEntry = $mediaGalleryEntries[0];
             $this->assertResponseFields(

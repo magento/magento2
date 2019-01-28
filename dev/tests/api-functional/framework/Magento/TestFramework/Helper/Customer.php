@@ -15,7 +15,7 @@ class Customer extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/customers';
     const SERVICE_NAME = 'customerAccountManagementV1';
-    const CUSTOMER_REPOSITORY_SERVICE_NAME = "customerCustomerRepositoryV1";
+    const CUSTOMER_REPOSITORY_SERVICE_NAME = 'customerCustomerRepositoryV1';
     const SERVICE_VERSION = 'V1';
 
     const CONFIRMATION = 'a4fg7h893e39d';
@@ -119,7 +119,7 @@ class Customer extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/" . $customerId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
                 'httpMethod' => RestRequest::HTTP_METHOD_PUT,
             ],
             'soap' => [

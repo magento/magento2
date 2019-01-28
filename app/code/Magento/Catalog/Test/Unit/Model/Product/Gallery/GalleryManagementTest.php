@@ -77,7 +77,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
             ->willReturn(false);
 
-        $this->model->create("sku", $this->mediaGalleryEntryMock);
+        $this->model->create('sku', $this->mediaGalleryEntryMock);
     }
 
     /**
@@ -203,7 +203,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$existingEntryMock, $existingSecondEntryMock]);
 
         $entryMock->expects($this->exactly(2))->method('getId')->willReturn($entryId);
-        $entryMock->expects($this->once())->method('getFile')->willReturn("base64");
+        $entryMock->expects($this->once())->method('getFile')->willReturn('base64');
         $entryMock->expects($this->once())->method('setId')->with(null);
         $entryMock->expects($this->exactly(2))->method('getTypes')->willReturn(['image']);
 

@@ -433,7 +433,7 @@ class General extends AbstractModifier
         }
 
         $value = (float)$value;
-        $precision = strlen(substr(strrchr($value, "."), 1));
+        $precision = strlen(substr(strrchr($value, '.'), 1));
         $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,

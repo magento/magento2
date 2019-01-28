@@ -52,6 +52,6 @@ class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about Signifyd guarantee cancel is available in Comments History section.";
+        return 'Message about Signifyd guarantee cancel is available in Comments History section.';
     }
 }

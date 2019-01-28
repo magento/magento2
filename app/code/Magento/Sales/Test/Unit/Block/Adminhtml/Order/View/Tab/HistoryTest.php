@@ -116,7 +116,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetItemCreatedAtEmpty()
     {
-        $item = ['title' => "Test" ];
+        $item = ['title' => 'Test' ];
 
         $this->localeDateMock->expects($this->never())->method('formatDateTime');
         $this->assertEquals('', $this->commentsHistory->getItemCreatedAt($item));

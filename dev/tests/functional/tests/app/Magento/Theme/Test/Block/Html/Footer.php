@@ -107,7 +107,7 @@ class Footer extends Block
      */
     public function selectStoreGroup(Store $store)
     {
-        $storeGroupName = explode("/", $store->getGroupId())[1];
+        $storeGroupName = explode('/', $store->getGroupId())[1];
         $storeGroup = $this->_rootElement->find(
             sprintf($this->storeGroupSelector, $storeGroupName),
             Locator::SELECTOR_XPATH
@@ -127,7 +127,7 @@ class Footer extends Block
      */
     public function isStoreGroupVisible(Store $store)
     {
-        $storeGroupName = explode("/", $store->getGroupId())[1];
+        $storeGroupName = explode('/', $store->getGroupId())[1];
         $this->_rootElement->find($this->storeGroupSwitch)->click();
         return $this->_rootElement->find(
             sprintf($this->storeGroupSelector, $storeGroupName),

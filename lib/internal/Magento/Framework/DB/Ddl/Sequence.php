@@ -25,10 +25,10 @@ class Sequence
         $columnType = Table::TYPE_INTEGER,
         $unsigned = true
     ) {
-        $format = "CREATE TABLE %s (
+        $format = 'CREATE TABLE %s (
                      sequence_value %s %s NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
-            ) AUTO_INCREMENT = %d ENGINE = INNODB";
+            ) AUTO_INCREMENT = %d ENGINE = INNODB';
 
         return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber);
     }
@@ -41,7 +41,7 @@ class Sequence
      */
     public function dropSequence($name)
     {
-        $format = "DROP TABLE %s";
+        $format = 'DROP TABLE %s';
         return sprintf($format, $name);
     }
 }

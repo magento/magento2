@@ -50,6 +50,6 @@ class AssertCouponReportResult extends AbstractConstraint
      */
     public function toString()
     {
-        return "Coupon info is correct on coupons report page.";
+        return 'Coupon info is correct on coupons report page.';
     }
 }

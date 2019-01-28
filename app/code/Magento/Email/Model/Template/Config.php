@@ -136,7 +136,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             'templateId' => $templateId,
             'theme' => null
         ];
-        $pattern = "#^(?<templateId>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)#i";
+        $pattern = '#^(?<templateId>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)#i';
         if (preg_match($pattern, $templateId, $matches)) {
             $parts['templateId'] = $matches['templateId'];
             $parts['theme'] = $matches['themeVendor'] . '/' . $matches['themeName'];

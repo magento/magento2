@@ -64,7 +64,7 @@ class AssertHttpsHeaderOptionsNotAvailable extends AbstractConstraint
                 ->isFieldVisible($tabName, $groupName, $fieldName);
             \PHPUnit\Framework\Assert::assertTrue(
                 !$isVisible,
-                $fieldName . " configuration is not visible."
+                $fieldName . ' configuration is not visible.'
             );
         }
     }

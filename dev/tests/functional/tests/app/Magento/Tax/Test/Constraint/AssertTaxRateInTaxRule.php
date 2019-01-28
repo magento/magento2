@@ -43,6 +43,6 @@ class AssertTaxRateInTaxRule extends AbstractConstraint
      */
     public function toString()
     {
-        return "Required tax rate is present on Tax Rule page.";
+        return 'Required tax rate is present on Tax Rule page.';
     }
 }

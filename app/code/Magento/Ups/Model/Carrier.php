@@ -536,7 +536,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $priceArr = [];
         if (strlen(trim($response)) > 0) {
             $rRows = explode("\n", $response);
-            $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+            $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
             foreach ($rRows as $rRow) {
                 $row = explode('%', $rRow);
                 switch (substr($row[0], -1)) {
@@ -662,10 +662,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 XMLRequest;
 
         if ($serviceCode !== null) {
-            $xmlParams .= "<Service>" .
+            $xmlParams .= '<Service>' .
                 "<Code>{$serviceCode}</Code>" .
                 "<Description>{$serviceDescription}</Description>" .
-                "</Service>";
+                '</Service>';
         }
 
         $xmlParams .= <<<XMLRequest
@@ -735,10 +735,10 @@ XMLRequest;
 XMLRequest;
 
         if ($this->getConfigFlag('negotiated_active')) {
-            $xmlParams .= "<RateInformation><NegotiatedRatesIndicator/></RateInformation>";
+            $xmlParams .= '<RateInformation><NegotiatedRatesIndicator/></RateInformation>';
         }
         if ($this->getConfigFlag('include_taxes')) {
-            $xmlParams .= "<TaxInformationIndicator/>";
+            $xmlParams .= '<TaxInformationIndicator/>';
         }
 
         $xmlParams .= <<<XMLRequest
@@ -818,14 +818,14 @@ XMLRequest;
         if (strlen(trim($xmlResponse)) > 0) {
             $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
-            $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()");
+            $arr = $xml->getXpath('//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()');
             $success = (int)$arr[0];
             if ($success === 1) {
-                $arr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment");
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                $arr = $xml->getXpath('//RatingServiceSelectionResponse/RatedShipment');
+                $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
 
                 // Negotiated rates
-                $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
+                $negotiatedArr = $xml->getXpath('//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates');
                 $negotiatedActive = $this->getConfigFlag('negotiated_active')
                     && $this->getConfigData('shipper_number')
                     && !empty($negotiatedArr);
@@ -838,8 +838,8 @@ XMLRequest;
                         // depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
                             $includeTaxesArr = $xml->getXpath(
-                                "//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates"
-                                . "/NetSummaryCharges/TotalChargesWithTaxes"
+                                '//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates'
+                                . '/NetSummaryCharges/TotalChargesWithTaxes'
                             );
                             $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
                             if ($includeTaxesActive) {
@@ -862,7 +862,7 @@ XMLRequest;
                             }
                         } else {
                             $includeTaxesArr = $xml->getXpath(
-                                "//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes"
+                                '//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes'
                             );
                             $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
                             if ($includeTaxesActive) {
@@ -904,7 +904,7 @@ XMLRequest;
                     }
                 }
             } else {
-                $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/Error/ErrorDescription/text()");
+                $arr = $xml->getXpath('//RatingServiceSelectionResponse/Response/Error/ErrorDescription/text()');
                 $errorTitle = (string)$arr[0][0];
                 $error = $this->_rateErrorFactory->create();
                 $error->setCarrier('ups');
@@ -1005,9 +1005,9 @@ XMLAuth;
             $status->setTracking($tracking);
             $status->setPopup(1);
             $status->setUrl(
-                "http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&error_carried=true" .
+                'http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&error_carried=true' .
                 "&tracknums_displayed=5&TypeOfInquiryNumber=T&loc=en_US&InquiryNumber1={$tracking}" .
-                "&AgreeToTermsAndConditions=yes"
+                '&AgreeToTermsAndConditions=yes'
             );
             $result->append($status);
         }
@@ -1078,25 +1078,25 @@ XMLAuth;
         if ($xmlResponse) {
             $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
-            $arr = $xml->getXpath("//TrackResponse/Response/ResponseStatusCode/text()");
+            $arr = $xml->getXpath('//TrackResponse/Response/ResponseStatusCode/text()');
             $success = (int)$arr[0][0];
 
             if ($success === 1) {
-                $arr = $xml->getXpath("//TrackResponse/Shipment/Service/Description/text()");
+                $arr = $xml->getXpath('//TrackResponse/Shipment/Service/Description/text()');
                 $resultArr['service'] = (string)$arr[0];
 
-                $arr = $xml->getXpath("//TrackResponse/Shipment/PickupDate/text()");
+                $arr = $xml->getXpath('//TrackResponse/Shipment/PickupDate/text()');
                 $resultArr['shippeddate'] = (string)$arr[0];
 
-                $arr = $xml->getXpath("//TrackResponse/Shipment/Package/PackageWeight/Weight/text()");
+                $arr = $xml->getXpath('//TrackResponse/Shipment/Package/PackageWeight/Weight/text()');
                 $weight = (string)$arr[0];
 
-                $arr = $xml->getXpath("//TrackResponse/Shipment/Package/PackageWeight/UnitOfMeasurement/Code/text()");
+                $arr = $xml->getXpath('//TrackResponse/Shipment/Package/PackageWeight/UnitOfMeasurement/Code/text()');
                 $unit = (string)$arr[0];
 
                 $resultArr['weight'] = "{$weight} {$unit}";
 
-                $activityTags = $xml->getXpath("//TrackResponse/Shipment/Package/Activity");
+                $activityTags = $xml->getXpath('//TrackResponse/Shipment/Package/Activity');
                 if ($activityTags) {
                     $index = 1;
                     foreach ($activityTags as $activityTag) {
@@ -1152,7 +1152,7 @@ XMLAuth;
                     $resultArr['progressdetail'] = $packageProgress;
                 }
             } else {
-                $arr = $xml->getXpath("//TrackResponse/Response/Error/ErrorDescription/text()");
+                $arr = $xml->getXpath('//TrackResponse/Response/Error/ErrorDescription/text()');
                 $errorTitle = (string)$arr[0][0];
             }
         }

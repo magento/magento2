@@ -277,13 +277,13 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertNotEquals(
             $customerId,
             $this->_address->getCustomerId(),
-            "Precondition failed: Customer ID was not set."
+            'Precondition failed: Customer ID was not set.'
         );
-        $this->assertNotEquals(1, $this->_address->getQuoteId(), "Precondition failed: Quote ID was not set.");
+        $this->assertNotEquals(1, $this->_address->getQuoteId(), 'Precondition failed: Quote ID was not set.');
         $this->assertNotEquals(
             $customerAddressId,
             $this->_address->getCustomerAddressId(),
-            "Precondition failed: Customer address ID was not set."
+            'Precondition failed: Customer address ID was not set.'
         );
 
         /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */

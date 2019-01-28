@@ -84,7 +84,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             $currency_code = $this->_getCurrencyCode($row);
             $data = (float)$data * $this->_getRate($row);
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $data > 0 ? '+' : '';
-            $data = sprintf("%f", $data);
+            $data = sprintf('%f', $data);
             $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
             return $sign . $data;
         }

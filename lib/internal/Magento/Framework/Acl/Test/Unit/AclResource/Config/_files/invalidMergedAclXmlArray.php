@@ -53,12 +53,12 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'test_Value::show_toolbar' is " .
-            "not accepted by the pattern" .
+            'not accepted by the pattern' .
             " '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': 'test_Value::show_toolbar' is not a valid value of the atomic type " .
             "'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
-            "the value was either invalid or " .
+            'the value was either invalid or ' .
             "something strange happend.\nLine: 1\n"
         ],
     ],
@@ -95,7 +95,7 @@ return [
             "Element 'resource', attribute 'id': '_Value::show_toolbar' " .
             "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid " .
+            'Warning: No precomputed value available, the value was either invalid ' .
             "or something strange happend.\nLine: 1\n"
         ],
     ],
@@ -108,7 +108,7 @@ return [
             "Element 'resource', attribute 'id': 'Value_::show_toolbar' " .
             "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid " .
+            'Warning: No precomputed value available, the value was either invalid ' .
             "or something strange happend.\nLine: 1\n"
         ],
     ],
@@ -121,7 +121,7 @@ return [
             "Element 'resource', attribute 'id': 'Test_value:show_toolbar' is not a valid value of the atomic " .
             "type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid " .
+            'Warning: No precomputed value available, the value was either invalid ' .
             "or something strange happend.\nLine: 1\n"
         ],
     ],
@@ -134,7 +134,7 @@ return [
             "Element 'resource', attribute 'id': 'Test_Value::' is not a valid value of the atomic type" .
             " 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid " .
+            'Warning: No precomputed value available, the value was either invalid ' .
             "or something strange happend.\nLine: 1\n"
         ],
     ],

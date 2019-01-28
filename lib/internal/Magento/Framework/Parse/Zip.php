@@ -54,7 +54,7 @@ class Zip
         $zipLength = 5;
         $zipPattern = [];
 
-        if (!preg_match("/^(.+)-(.+)$/", $zipRange, $zipParts)) {
+        if (!preg_match('/^(.+)-(.+)$/', $zipRange, $zipParts)) {
             return [$zipRange];
         }
 

@@ -372,7 +372,7 @@ class OrdersFixture extends Fixture
                         '%code%' => 'info_buyRequest',
                         '%value%' => $this->serializer->serialize([
                             'product' => $productId($entityId, $i, Type::TYPE_SIMPLE),
-                            'qty' => "1",
+                            'qty' => '1',
                             'uenc' => 'aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw'
                         ])
                     ]);
@@ -404,11 +404,11 @@ class OrdersFixture extends Fixture
                         ]);
                         $itemData['%productId%'] = $productChildId($entityId, $i, $type);
                         $this->query('quote_item_option', $itemData, [
-                            '%code%' => "product_qty_" . $productChildId($entityId, $i, $type),
-                            '%value%' => "1"
+                            '%code%' => 'product_qty_' . $productChildId($entityId, $i, $type),
+                            '%value%' => '1'
                         ]);
                         $this->query('quote_item_option', $itemData, [
-                            '%code%' => "simple_product",
+                            '%code%' => 'simple_product',
                             '%value%' => $productChildId($entityId, $i, $type)
                         ]);
                         $itemIdSequence->next();
@@ -427,11 +427,11 @@ class OrdersFixture extends Fixture
                         $this->query('sales_order_item', $order, $itemData);
                         $this->query('quote_item', $order, $itemData);
                         $this->query('quote_item_option', $itemData, [
-                            '%code%' => "info_buyRequest",
+                            '%code%' => 'info_buyRequest',
                             '%value%' => $productChildBuyRequest($entityId, $i, $type)['quote']
                         ]);
                         $this->query('quote_item_option', $itemData, [
-                            '%code%' => "parent_product_id",
+                            '%code%' => 'parent_product_id',
                             '%value%' => $productId($entityId, $i, $type)
                         ]);
                         $itemIdSequence->next();
@@ -472,7 +472,7 @@ class OrdersFixture extends Fixture
      */
     private function prepareQueryTemplates()
     {
-        $fileName = __DIR__ . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . "orders_fixture_data.json";
+        $fileName = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'orders_fixture_data.json';
         $templateData = json_decode(file_get_contents(realpath($fileName)), true);
         foreach ($templateData as $table => $template) {
             if (isset($template['_table'])) {
@@ -483,19 +483,19 @@ class OrdersFixture extends Fixture
                 $resource = $template['_resource'];
                 unset($template['_resource']);
             } else {
-                $resource = explode("_", $table);
+                $resource = explode('_', $table);
                 foreach ($resource as &$item) {
                     $item = ucfirst($item);
                 }
-                $resource = "Magento\\"
+                $resource = 'Magento\\'
                     . array_shift($resource)
-                    . "\\Model\\ResourceModel\\"
-                    . implode("\\", $resource);
+                    . '\\Model\\ResourceModel\\'
+                    . implode('\\', $resource);
             }
 
             $tableName = $this->getTableName($table, $resource);
 
-            $querySuffix = "";
+            $querySuffix = '';
             if (isset($template['_query_suffix'])) {
                 $querySuffix = $template['_query_suffix'];
                 unset($template['_query_suffix']);
@@ -528,7 +528,7 @@ class OrdersFixture extends Fixture
      */
     protected function query($table, ... $replacements)
     {
-        if (!$this->orderQuotesEnable && strpos($table, "quote") !== false) {
+        if (!$this->orderQuotesEnable && strpos($table, 'quote') !== false) {
             return;
         }
         $query = $this->queryTemplates[$table];
@@ -613,10 +613,10 @@ class OrdersFixture extends Fixture
             $productsResult[$key]['sku'] = $simpleProduct->getSku();
             $productsResult[$key]['name'] = $simpleProduct->getName();
             $productsResult[$key]['buyRequest'] = $this->serializer->serialize([
-                "info_buyRequest" => [
-                    "uenc" => "aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,",
-                    "product" => $simpleId,
-                    "qty" => "1"
+                'info_buyRequest' => [
+                    'uenc' => 'aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,',
+                    'product' => $simpleId,
+                    'qty' => '1'
                 ]
             ]);
         }
@@ -646,35 +646,35 @@ class OrdersFixture extends Fixture
             $superAttribute = [];
             foreach ($options as $option) {
                 $attributesInfo[] = [
-                    "label" => $option->getLabel(),
-                    "value" => $option['options']['0']['label'],
-                    "option_id" => $option->getAttributeId(),
-                    "option_value" => $option->getValues()[0]->getValueIndex()
+                    'label' => $option->getLabel(),
+                    'value' => $option['options']['0']['label'],
+                    'option_id' => $option->getAttributeId(),
+                    'option_value' => $option->getValues()[0]->getValueIndex()
                 ];
                 $superAttribute[$option->getAttributeId()] = $option->getValues()[0]->getValueIndex();
             }
 
             $configurableBuyRequest = [
-                "info_buyRequest" => [
-                    "uenc" => "aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw",
-                    "product" => $configurableId,
-                    "selected_configurable_option" => $simpleId,
-                    "related_product" => "",
-                    "super_attribute" => $superAttribute,
-                    "qty" => 1
+                'info_buyRequest' => [
+                    'uenc' => 'aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw',
+                    'product' => $configurableId,
+                    'selected_configurable_option' => $simpleId,
+                    'related_product' => '',
+                    'super_attribute' => $superAttribute,
+                    'qty' => 1
                 ],
-                "attributes_info" => $attributesInfo,
-                "simple_name" => $configurableChild->getName(),
-                "simple_sku" => $configurableChild->getSku(),
+                'attributes_info' => $attributesInfo,
+                'simple_name' => $configurableChild->getName(),
+                'simple_sku' => $configurableChild->getSku(),
             ];
             $simpleBuyRequest = [
-                "info_buyRequest" => [
-                    "uenc" => "aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,",
-                    "product" => $configurableId,
-                    "selected_configurable_option" => $simpleId,
-                    "related_product" => "",
-                    "super_attribute" => $superAttribute,
-                    "qty" => "1"
+                'info_buyRequest' => [
+                    'uenc' => 'aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,',
+                    'product' => $configurableId,
+                    'selected_configurable_option' => $simpleId,
+                    'related_product' => '',
+                    'super_attribute' => $superAttribute,
+                    'qty' => '1'
                 ]
             ];
 

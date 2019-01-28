@@ -92,8 +92,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $time = time();
         return [
-            [date("Y-m-d", $time + 48 * 60 * 60), date("Y-m-d", $time + 72 * 60 * 60), false],
-            [date("Y-m-d", $time - 48 * 60 * 60), date("Y-m-d", $time + 48 * 60 * 60), true],
+            [date('Y-m-d', $time + 48 * 60 * 60), date('Y-m-d', $time + 72 * 60 * 60), false],
+            [date('Y-m-d', $time - 48 * 60 * 60), date('Y-m-d', $time + 48 * 60 * 60), true],
             [null, null, false],
         ];
     }

@@ -49,6 +49,6 @@ class PageActions extends AbstractPageActions
     {
         $storeViews = $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
             ->getValues();
-        return in_array($store->getGroupId() . "/" . $store->getName(), $storeViews);
+        return in_array($store->getGroupId() . '/' . $store->getName(), $storeViews);
     }
 }

@@ -93,7 +93,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                 $constraints = $this->getStatus()->checkConstraints($isEnable, $modulesToChange);
                 if ($constraints) {
                     $output->writeln(
-                        "<error>Unable to change status of modules because of the following constraints:</error>"
+                        '<error>Unable to change status of modules because of the following constraints:</error>'
                     );
                     $output->writeln('<error>' . implode("</error>\n<error>", $constraints) . '</error>');
                     // we must have an exit code higher than zero to indicate something was wrong

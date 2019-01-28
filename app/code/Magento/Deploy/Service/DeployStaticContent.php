@@ -81,7 +81,7 @@ class DeployStaticContent
         $this->versionStorage->save($version);
 
         if ($this->isRefreshContentVersionOnly($options)) {
-            $this->logger->warning("New content version: " . $version);
+            $this->logger->warning('New content version: ' . $version);
             return;
         }
 

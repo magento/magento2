@@ -313,26 +313,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->linkTypeProviderMock->expects($this->once())->method('getLinkTypes')->willReturn($linkTypes);
 
         $inputRelatedLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
-        $inputRelatedLink->setProductSku("Simple Product 1");
-        $inputRelatedLink->setLinkType("related");
-        $inputRelatedLink->setData("sku", "Simple Product 2");
-        $inputRelatedLink->setData("type", "simple");
+        $inputRelatedLink->setProductSku('Simple Product 1');
+        $inputRelatedLink->setLinkType('related');
+        $inputRelatedLink->setData('sku', 'Simple Product 2');
+        $inputRelatedLink->setData('type', 'simple');
         $inputRelatedLink->setPosition(0);
 
-        $customData = ["attribute_code" => "qty", "value" => 1];
+        $customData = ['attribute_code' => 'qty', 'value' => 1];
         $inputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
-        $inputGroupLink->setProductSku("Simple Product 1");
-        $inputGroupLink->setLinkType("associated");
-        $inputGroupLink->setData("sku", "Simple Product 2");
-        $inputGroupLink->setData("type", "simple");
+        $inputGroupLink->setProductSku('Simple Product 1');
+        $inputGroupLink->setLinkType('associated');
+        $inputGroupLink->setData('sku', 'Simple Product 2');
+        $inputGroupLink->setData('type', 'simple');
         $inputGroupLink->setPosition(0);
-        $inputGroupLink["custom_attributes"] = [$customData];
+        $inputGroupLink['custom_attributes'] = [$customData];
 
         $outputRelatedLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
-        $outputRelatedLink->setProductSku("Simple Product 1");
-        $outputRelatedLink->setLinkType("related");
-        $outputRelatedLink->setLinkedProductSku("Simple Product 2");
-        $outputRelatedLink->setLinkedProductType("simple");
+        $outputRelatedLink->setProductSku('Simple Product 1');
+        $outputRelatedLink->setLinkType('related');
+        $outputRelatedLink->setLinkedProductSku('Simple Product 2');
+        $outputRelatedLink->setLinkedProductType('simple');
         $outputRelatedLink->setPosition(0);
 
         $groupExtension = $this->objectManagerHelper->getObject(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
@@ -342,10 +342,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
-        $outputGroupLink->setProductSku("Simple Product 1");
-        $outputGroupLink->setLinkType("associated");
-        $outputGroupLink->setLinkedProductSku("Simple Product 2");
-        $outputGroupLink->setLinkedProductType("simple");
+        $outputGroupLink->setProductSku('Simple Product 1');
+        $outputGroupLink->setLinkType('associated');
+        $outputGroupLink->setLinkedProductSku('Simple Product 2');
+        $outputGroupLink->setLinkedProductType('simple');
         $outputGroupLink->setPosition(0);
         $outputGroupLink->setExtensionAttributes($groupExtension);
 
@@ -368,9 +368,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
         $typeInstanceMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Simple::class)
-            ->setMethods(["getSku"])
+            ->setMethods(['getSku'])
             ->getMock();
-        $typeInstanceMock->expects($this->atLeastOnce())->method('getSku')->willReturn("Simple Product 1");
+        $typeInstanceMock->expects($this->atLeastOnce())->method('getSku')->willReturn('Simple Product 1');
         $this->model->setTypeInstance($typeInstanceMock);
 
         $productLink1 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);

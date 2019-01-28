@@ -84,7 +84,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     protected function _prepareLayout()
     {
-        $addUrl = $this->getUrl("*/*/add", ['_current' => false, 'id' => null, '_query' => false]);
+        $addUrl = $this->getUrl('*/*/add', ['_current' => false, 'id' => null, '_query' => false]);
         if ($this->getStore()->getId() == Store::DEFAULT_STORE_ID) {
             $this->addChild(
                 'add_sub_button',

@@ -133,7 +133,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $trackNum = "123456789";
+        $trackNum = '123456789';
         $trackData = [$trackNum];
         $tracks = [$this->trackMock];
         $appendComment = true;
@@ -179,7 +179,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->trackMock);
 
         if ($appendComment) {
-            $comment = "New comment!";
+            $comment = 'New comment!';
             $visibleOnFront = true;
             $this->commentMock->expects($this->exactly(2))
                 ->method('getComment')

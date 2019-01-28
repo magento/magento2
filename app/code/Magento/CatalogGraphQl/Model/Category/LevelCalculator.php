@@ -38,7 +38,7 @@ class LevelCalculator
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName('catalog_category_entity'), 'level')
-            ->where($this->resourceCategory->getLinkField() . " = ?", $rootCategoryId);
+            ->where($this->resourceCategory->getLinkField() . ' = ?', $rootCategoryId);
         return (int) $connection->fetchOne($select);
     }
 }

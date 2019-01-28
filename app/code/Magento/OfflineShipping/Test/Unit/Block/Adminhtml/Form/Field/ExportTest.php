@@ -15,7 +15,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $backendUrl = $this->createMock(\Magento\Backend\Model\UrlInterface::class);
-        $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);
+        $backendUrl->expects($this->once())->method('getUrl')->with('*/*/exportTablerates', ['website' => 1]);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $objectManager->getObject(

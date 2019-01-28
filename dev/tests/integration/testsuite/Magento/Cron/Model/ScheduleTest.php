@@ -37,9 +37,9 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function testTryLockJobNoLockedJobsSucceeds()
     {
         for ($i = 1; $i < 6; $i++) {
-            $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60 * $i);
+            $this->createSchedule('test_job', Schedule::STATUS_PENDING, 60 * $i);
         }
-        $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
+        $schedule = $this->createSchedule('test_job', Schedule::STATUS_PENDING);
 
         $this->assertTrue($schedule->tryLockJob());
     }
@@ -49,7 +49,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     public function testTryLockJobAlreadyLockedFails()
     {
-        $schedule = $this->createSchedule("test_job", Schedule::STATUS_RUNNING);
+        $schedule = $this->createSchedule('test_job', Schedule::STATUS_RUNNING);
 
         $this->assertFalse($schedule->tryLockJob());
     }
@@ -62,15 +62,15 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $offsetInThePast = 2*24*60*60;
 
         $oldSchedule = $this->scheduleFactory->create()
-            ->setCronExpr("* * * * *")
-            ->setJobCode("test_job")
+            ->setCronExpr('* * * * *')
+            ->setJobCode('test_job')
             ->setStatus(Schedule::STATUS_RUNNING)
             ->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp() - $offsetInThePast))
             ->setScheduledAt(strftime('%Y-%m-%d %H:%M', $this->dateTime->gmtTimestamp() - $offsetInThePast + 60))
             ->setExecutedAt(strftime('%Y-%m-%d %H:%M', $this->dateTime->gmtTimestamp() - $offsetInThePast + 61));
         $oldSchedule->save();
 
-        $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
+        $schedule = $this->createSchedule('test_job', Schedule::STATUS_PENDING);
 
         $this->assertTrue($schedule->tryLockJob());
     }
@@ -80,8 +80,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     public function testTryLockJobOtherLockedFails()
     {
-        $this->createSchedule("test_job", Schedule::STATUS_RUNNING);
-        $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60);
+        $this->createSchedule('test_job', Schedule::STATUS_RUNNING);
+        $schedule = $this->createSchedule('test_job', Schedule::STATUS_PENDING, 60);
 
         $this->assertFalse($schedule->tryLockJob());
     }
@@ -91,8 +91,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     public function testTryLockJobDifferentJobLocked()
     {
-        $this->createSchedule("test_job_other", Schedule::STATUS_RUNNING);
-        $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
+        $this->createSchedule('test_job_other', Schedule::STATUS_RUNNING);
+        $schedule = $this->createSchedule('test_job', Schedule::STATUS_PENDING);
 
         $this->assertTrue($schedule->tryLockJob());
     }
@@ -108,7 +108,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     private function createSchedule($jobCode, $status, $timeOffset = 0)
     {
         $schedule = $this->scheduleFactory->create()
-            ->setCronExpr("* * * * *")
+            ->setCronExpr('* * * * *')
             ->setJobCode($jobCode)
             ->setStatus($status)
             ->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))

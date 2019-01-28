@@ -61,9 +61,9 @@ abstract class AbstractIo implements IoInterface
             return './';
         }
 
-        $path = trim(preg_replace("/\\\\/", "/", (string)$path));
+        $path = trim(preg_replace('/\\\\/', '/', (string)$path));
 
-        if (!preg_match("/(\.\w{1,4})$/", $path) && !preg_match("/\?[^\\/]+$/", $path) && !preg_match("/\\/$/", $path)
+        if (!preg_match("/(\.\w{1,4})$/", $path) && !preg_match("/\?[^\\/]+$/", $path) && !preg_match('/\\/$/', $path)
         ) {
             $path .= '/';
         }
@@ -75,16 +75,16 @@ abstract class AbstractIo implements IoInterface
         $pathTokR = $matches[0][1];
         $pathTokP = $matches[0][2];
 
-        $pathTokP = preg_replace(["/^\\/+/", "/\\/+/"], ["", "/"], $pathTokP);
+        $pathTokP = preg_replace(['/^\\/+/', '/\\/+/'], ['', '/'], $pathTokP);
 
-        $pathParts = explode("/", $pathTokP);
+        $pathParts = explode('/', $pathTokP);
         $realPathParts = [];
 
         for ($i = 0, $realPathParts = []; $i < count($pathParts); $i++) {
             if ($pathParts[$i] == '.') {
                 continue;
             } elseif ($pathParts[$i] == '..') {
-                if (isset($realPathParts[0]) && $realPathParts[0] != '..' || $pathTokR != "") {
+                if (isset($realPathParts[0]) && $realPathParts[0] != '..' || $pathTokR != '') {
                     array_pop($realPathParts);
                     continue;
                 }

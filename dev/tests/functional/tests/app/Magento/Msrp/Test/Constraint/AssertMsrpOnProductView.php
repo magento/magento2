@@ -58,6 +58,6 @@ class AssertMsrpOnProductView extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MSRP data on product view page is correct.";
+        return 'Displayed Product MSRP data on product view page is correct.';
     }
 }

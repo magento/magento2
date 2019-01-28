@@ -46,7 +46,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'onclick' => "var cryptKey = jQuery('#crypt_key'); var cryptKeyBlock = cryptKey.parent().parent(); ".
                     "cryptKey.prop('disabled', this.value === '1'); " .
                     "if (cryptKey.prop('disabled')) { cryptKeyBlock.hide() } " .
-                    "else { cryptKeyBlock.show() }",
+                    'else { cryptKeyBlock.show() }',
                 'note' => __('The generated key will be displayed after changing.')
             ]
         );

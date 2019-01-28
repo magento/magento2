@@ -35,7 +35,7 @@ class AssertProductsIsPresentInCustomerBackendWishlist extends AbstractConstrain
         foreach ($products as $product) {
             \PHPUnit\Framework\Assert::assertTrue(
                 $wishlistGrid->isRowVisible(['product_name' => $product->getName()]),
-                $product->getName() . " is not visible in customer wishlist on backend."
+                $product->getName() . ' is not visible in customer wishlist on backend.'
             );
         }
     }
@@ -48,6 +48,6 @@ class AssertProductsIsPresentInCustomerBackendWishlist extends AbstractConstrain
      */
     public function toString()
     {
-        return "Products is visible in customer wishlist on backend in Customer Activities - Wishlist.";
+        return 'Products is visible in customer wishlist on backend in Customer Activities - Wishlist.';
     }
 }

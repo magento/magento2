@@ -210,7 +210,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveAddressAttributes()
     {
-        $this->markTestSkipped("to test _saveAddressAttributes attribute need to add custom address attribute");
+        $this->markTestSkipped('to test _saveAddressAttributes attribute need to add custom address attribute');
         // get attributes list
         $attributesReflection = new \ReflectionProperty($this->_testClassName, '_attributes');
         $attributesReflection->setAccessible(true);

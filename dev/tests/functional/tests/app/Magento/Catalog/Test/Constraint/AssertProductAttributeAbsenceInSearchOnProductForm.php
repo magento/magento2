@@ -48,6 +48,6 @@ class AssertProductAttributeAbsenceInSearchOnProductForm extends AbstractConstra
      */
     public function toString()
     {
-        return "Product Attribute is absent in Attribute Search form.";
+        return 'Product Attribute is absent in Attribute Search form.';
     }
 }

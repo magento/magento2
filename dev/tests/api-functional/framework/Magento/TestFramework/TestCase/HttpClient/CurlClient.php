@@ -29,7 +29,7 @@ class CurlClient
         $curlOpts = [];
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
         $resp = $this->invokeApi($url, $curlOpts, $headers);
-        return $resp["body"];
+        return $resp['body'];
     }
 
     /**
@@ -45,7 +45,7 @@ class CurlClient
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE;
 
         $resp = $this->invokeApi($url, $curlOpts, $headers);
-        return $resp["body"];
+        return $resp['body'];
     }
 
     /**
@@ -64,7 +64,7 @@ class CurlClient
         $curlOpts[CURLOPT_POSTFIELDS] = $data;
 
         $resp = $this->invokeApi($url, $curlOpts, $headers);
-        return $resp["body"];
+        return $resp['body'];
     }
 
     /**
@@ -83,7 +83,7 @@ class CurlClient
         $curlOpts[CURLOPT_POSTFIELDS] = $data;
 
         $resp = $this->invokeApi($url, $curlOpts, $headers);
-        return $resp["body"];
+        return $resp['body'];
     }
 
     /**
@@ -100,7 +100,7 @@ class CurlClient
         // initialize cURL
         $curl = curl_init($url);
         if ($curl === false) {
-            throw new \Exception("Error Initializing cURL for baseUrl: " . $url);
+            throw new \Exception('Error Initializing cURL for baseUrl: ' . $url);
         }
 
         // get cURL options
@@ -118,19 +118,19 @@ class CurlClient
 
         $resp = [];
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        $resp["header"] = substr($response, 0, $headerSize);
-        $resp["body"] = substr($response, $headerSize);
+        $resp['header'] = substr($response, 0, $headerSize);
+        $resp['body'] = substr($response, $headerSize);
 
-        $resp["meta"] = curl_getinfo($curl);
-        if ($resp["meta"] === false) {
+        $resp['meta'] = curl_getinfo($curl);
+        if ($resp['meta'] === false) {
             throw new \Exception(curl_error($curl));
         }
 
         curl_close($curl);
 
-        $meta = $resp["meta"];
+        $meta = $resp['meta'];
         if ($meta && $meta['http_code'] >= 400) {
-            throw new \Exception($resp["body"], $meta['http_code']);
+            throw new \Exception($resp['body'], $meta['http_code']);
         }
 
         return $resp;

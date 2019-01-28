@@ -47,5 +47,5 @@ function deleteDirectory($dir)
 
 function generateModuleSequence()
 {
-    require_once "generate/moduleSequence.php";
+    require_once 'generate/moduleSequence.php';
 }

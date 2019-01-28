@@ -32,8 +32,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManagerHelper->getObject(
             \Magento\Theme\Model\Design\Config\Validator::class,
             [
-                "templateFactory" => $this->templateFactoryMock,
-                "fields" => ["email_header_template", "no_reference"]
+                'templateFactory' => $this->templateFactoryMock,
+                'fields' => ['email_header_template', 'no_reference']
             ]
         );
     }

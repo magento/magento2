@@ -181,7 +181,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
 
         if (!empty($allowedCountries)) {
-            $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
+            $this->addFieldToFilter('country_id', ['in' => $allowedCountries]);
         }
 
         return $this;
@@ -252,9 +252,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         if (!empty($countryId)) {
             if (is_array($countryId)) {
-                $this->addFieldToFilter("country_id", ['in' => $countryId]);
+                $this->addFieldToFilter('country_id', ['in' => $countryId]);
             } else {
-                $this->addFieldToFilter("country_id", $countryId);
+                $this->addFieldToFilter('country_id', $countryId);
             }
         }
         return $this;

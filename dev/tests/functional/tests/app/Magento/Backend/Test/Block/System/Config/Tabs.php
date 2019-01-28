@@ -25,7 +25,7 @@ class Tabs extends Block
      *
      * @var string
      */
-    private $subTabs = "./following-sibling::ul";
+    private $subTabs = './following-sibling::ul';
 
     /**
      * Selector of specific sub tab name.

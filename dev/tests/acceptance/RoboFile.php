@@ -23,7 +23,7 @@ class RoboFile extends \Robo\Tasks
      */
     function buildProject()
     {
-        passthru($this->getBaseCmd("build:project"));
+        passthru($this->getBaseCmd('build:project'));
     }
 
     /**
@@ -41,7 +41,7 @@ class RoboFile extends \Robo\Tasks
         'tests' => null
     ])
     {
-        $baseCmd = $this->getBaseCmd("generate:tests");
+        $baseCmd = $this->getBaseCmd('generate:tests');
 
         $mftfArgNames = ['config', 'nodes', 'lines', 'tests'];
         // append arguments to the end of the command
@@ -69,9 +69,9 @@ class RoboFile extends \Robo\Tasks
     function generateSuite(array $args)
     {
         if (empty($args)) {
-            throw new Exception("Please provide suite name(s) after generate:suite command");
+            throw new Exception('Please provide suite name(s) after generate:suite command');
         }
-        $baseCmd = $this->getBaseCmd("generate:suite");
+        $baseCmd = $this->getBaseCmd('generate:suite');
         return $this->taskExec($baseCmd)->args($args)->run();
     }
 
@@ -84,7 +84,7 @@ class RoboFile extends \Robo\Tasks
     function group(array $args)
     {
         $args = array_merge($args, ['-k']);
-        $baseCmd = $this->getBaseCmd("run:group");
+        $baseCmd = $this->getBaseCmd('run:group');
         return $this->taskExec($baseCmd)->args($args)->run();
     }
 

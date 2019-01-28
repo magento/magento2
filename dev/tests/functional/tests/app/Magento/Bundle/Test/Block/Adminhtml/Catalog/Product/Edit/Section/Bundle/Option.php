@@ -20,7 +20,7 @@ class Option extends Form
      *
      * @var string
      */
-    protected $searchGridBlock = ".product_form_product_form_bundle-items_modal";
+    protected $searchGridBlock = '.product_form_product_form_bundle-items_modal';
 
     /**
      * Added product row.

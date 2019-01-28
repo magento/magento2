@@ -265,7 +265,7 @@ class SaveTest extends AttributeTest
     {
         $serializedOptions = '{"key":"value"}';
         $message = "The attribute couldn't be saved due to an error. Verify your information and try again. "
-            . "If the error persists, please try again later.";
+            . 'If the error persists, please try again later.';
 
         $this->requestMock->expects($this->any())
             ->method('getParam')

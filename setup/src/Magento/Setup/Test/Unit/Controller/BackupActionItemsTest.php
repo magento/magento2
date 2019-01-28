@@ -101,7 +101,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
     {
         $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
         $this->filesystem->expects($this->once())->method('validateAvailableDiscSpace')->will(
-            $this->throwException(new \Exception("Test error message"))
+            $this->throwException(new \Exception('Test error message'))
         );
         $jsonModel = $this->controller->checkAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
@@ -109,7 +109,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
         $this->assertArrayHasKey('error', $variables);
-        $this->assertEquals("Test error message", $variables['error']);
+        $this->assertEquals('Test error message', $variables['error']);
     }
 
     public function testCreateAction()

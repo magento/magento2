@@ -141,7 +141,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
             throw new LocalizedException(
                 __(
                     "Shipping labels can't be created. "
-                    . "Verify that the store information and settings are complete and try again."
+                    . 'Verify that the store information and settings are complete and try again.'
                 )
             );
         }

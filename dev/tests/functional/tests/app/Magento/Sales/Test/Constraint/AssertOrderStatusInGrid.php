@@ -21,7 +21,7 @@ class AssertOrderStatusInGrid extends AbstractConstraint
      *
      * @var array
      */
-    protected $stateMapping = ["Pending" => "new"];
+    protected $stateMapping = ['Pending' => 'new'];
 
     /**
      * Assert order status availability in Order Status grid

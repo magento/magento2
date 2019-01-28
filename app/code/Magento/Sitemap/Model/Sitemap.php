@@ -94,7 +94,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @var array
      */
-    private $_crlf = ["win" => "\r\n", "unix" => "\n", "mac" => "\r"];
+    private $_crlf = ['win' => "\r\n", 'unix' => "\n", 'mac' => "\r"];
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write

@@ -82,7 +82,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $item
             ->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue("1"));
+            ->will($this->returnValue('1'));
         $item
             ->expects($this->any())
             ->method('getProduct')
@@ -278,7 +278,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($address));
 
-        $addressData["cached_items_all"] = $items;
+        $addressData['cached_items_all'] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -297,38 +297,38 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $data = [
             'default' => [
                 'itemData' => [
-                    "qty" => 1, "price" => 100, "tax_percent" => 20, "product_type" => "simple",
-                    "code" => "sequence-1", "tax_calculation_item_id" => "sequence-1", "converted_price" => 100,
+                    'qty' => 1, 'price' => 100, 'tax_percent' => 20, 'product_type' => 'simple',
+                    'code' => 'sequence-1', 'tax_calculation_item_id' => 'sequence-1', 'converted_price' => 100,
                 ],
                 '$appliedRates' => [
                     [
-                        "rates" => [
+                        'rates' => [
                             [
-                                "code" => "US-NY-*-Rate ",
-                                "title" => "US-NY-*-Rate ",
-                                "percent" => 20,
-                                "rate_id" => 1,
+                                'code' => 'US-NY-*-Rate ',
+                                'title' => 'US-NY-*-Rate ',
+                                'percent' => 20,
+                                'rate_id' => 1,
                             ],
                         ],
-                        "percent" => 20,
-                        "id" => "US-NY-*-Rate 1",
+                        'percent' => 20,
+                        'id' => 'US-NY-*-Rate 1',
                     ],
                 ],
                 'taxDetailsData' => [
-                    "subtotal" => 100,
-                    "tax_amount" => 20,
-                    "discount_tax_compensation_amount" => 0,
-                    "applied_taxes" => [
-                        "_data" => [
-                            "amount" => 20,
-                            "percent" => 20,
-                            "rates" => ["_data" => ["percent" => 20]],
-                            "tax_rate_key" => "US-NY-*-Rate 1",
+                    'subtotal' => 100,
+                    'tax_amount' => 20,
+                    'discount_tax_compensation_amount' => 0,
+                    'applied_taxes' => [
+                        '_data' => [
+                            'amount' => 20,
+                            'percent' => 20,
+                            'rates' => ['_data' => ['percent' => 20]],
+                            'tax_rate_key' => 'US-NY-*-Rate 1',
                         ],
                     ],
                     'items' => [
-                        "sequence-1" => [
-                            "_data" => [
+                        'sequence-1' => [
+                            '_data' => [
                                 'code' => 'sequence-1',
                                 'type' => 'product',
                                 'row_tax' => 20,
@@ -336,25 +336,25 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                                 'price_incl_tax' => 120,
                                 'row_total' => 100,
                                 'row_total_incl_tax' => 120,
-                                'tax_calculation_item_id' => "sequence-1",
+                                'tax_calculation_item_id' => 'sequence-1',
                             ],
                         ],
                     ],
                 ],
                 'quoteDetailsData' => [
-                    "billing_address" => [
-                        "street" => ["123 Main Street"],
-                        "postcode" => "10012",
-                        "country_id" => "US",
-                        "region" => ["region_id" => 43],
-                        "city" => "New York",
+                    'billing_address' => [
+                        'street' => ['123 Main Street'],
+                        'postcode' => '10012',
+                        'country_id' => 'US',
+                        'region' => ['region_id' => 43],
+                        'city' => 'New York',
                     ],
                     'shipping_address' => [
-                        "street" => ["123 Main Street"],
-                        "postcode" => "10012",
-                        "country_id" => "US",
-                        "region" => ["region_id" => 43],
-                        "city" => "New York",
+                        'street' => ['123 Main Street'],
+                        'postcode' => '10012',
+                        'country_id' => 'US',
+                        'region' => ['region_id' => 43],
+                        'city' => 'New York',
                     ],
                     'customer_id' => '1',
                     'items' => [
@@ -363,23 +363,23 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                             'type' => 'product',
                             'quantity' => 1,
                             'unit_price' => 100,
-                            'tax_class_key' => ["_data" => ["type" => "id", "value" => 2]],
+                            'tax_class_key' => ['_data' => ['type' => 'id', 'value' => 2]],
                             'is_tax_included = false',
                         ],
                     ],
                 ],
                 'addressData' => [
-                    "address_id" => 2, "address_type" => "shipping", "street" => "123 Main Street",
-                    "city" => "New York", "region" => "New York", "region_id" => "43", "postcode" => "10012",
-                    "country_id" => "US", "telephone" => "111-111-1111", "same_as_billing" => "1",
-                    "shipping_method" => "freeshipping_freeshipping", "weight" => 1, "shipping_amount" => 0,
-                    "base_shipping_amount" => 0,
+                    'address_id' => 2, 'address_type' => 'shipping', 'street' => '123 Main Street',
+                    'city' => 'New York', 'region' => 'New York', 'region_id' => '43', 'postcode' => '10012',
+                    'country_id' => 'US', 'telephone' => '111-111-1111', 'same_as_billing' => '1',
+                    'shipping_method' => 'freeshipping_freeshipping', 'weight' => 1, 'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
                 ],
                 'verifyData' => [
-                    "tax_amount" => 20.0,
-                    "subtotal" => 100,
-                    "shipping_amount" => 0,
-                    "subtotal_incl_tax" => 120.0,
+                    'tax_amount' => 20.0,
+                    'subtotal' => 100,
+                    'shipping_amount' => 0,
+                    'subtotal_incl_tax' => 120.0,
                 ],
             ],
         ];
@@ -518,7 +518,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $item
             ->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue("1"));
+            ->will($this->returnValue('1'));
         $item
             ->expects($this->any())
             ->method('getProduct')
@@ -554,7 +554,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->method('getBillingAddress')
             ->will($this->returnValue($address));
 
-        $addressData["cached_items_all"] = $items;
+        $addressData['cached_items_all'] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -573,15 +573,15 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $data = [
             'default' => [
                 'itemData' => [
-                    "qty" => 1, "price" => 100, "tax_percent" => 20, "product_type" => "simple",
-                    "code" => "sequence-1", "tax_calculation_item_id" => "sequence-1",
+                    'qty' => 1, 'price' => 100, 'tax_percent' => 20, 'product_type' => 'simple',
+                    'code' => 'sequence-1', 'tax_calculation_item_id' => 'sequence-1',
                 ],
                 'addressData' => [
-                    "address_id" => 2, "address_type" => "shipping", "street" => "123 Main Street",
-                    "city" => "New York", "region" => "New York", "region_id" => "43", "postcode" => "10012",
-                    "country_id" => "US", "telephone" => "111-111-1111", "same_as_billing" => "1",
-                    "shipping_method" => "freeshipping_freeshipping", "weight" => 1, "shipping_amount" => 0,
-                    "base_shipping_amount" => 0,
+                    'address_id' => 2, 'address_type' => 'shipping', 'street' => '123 Main Street',
+                    'city' => 'New York', 'region' => 'New York', 'region_id' => '43', 'postcode' => '10012',
+                    'country_id' => 'US', 'telephone' => '111-111-1111', 'same_as_billing' => '1',
+                    'shipping_method' => 'freeshipping_freeshipping', 'weight' => 1, 'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
                 ],
             ],
         ];
@@ -690,7 +690,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomAttributesCodes')
             ->willReturn([]);
 
-        $addressData["cached_items_all"] = $items;
+        $addressData['cached_items_all'] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -734,11 +734,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             'default' => [
                 'appliedTaxesData' => $appliedDataString,
                 'addressData' => [
-                    "address_id" => 2, "address_type" => "shipping", "street" => "123 Main Street",
-                    "city" => "New York", "region" => "New York", "region_id" => "43", "postcode" => "10012",
-                    "country_id" => "US", "telephone" => "111-111-1111", "same_as_billing" => "1",
-                    "shipping_method" => "freeshipping_freeshipping", "weight" => 1, "shipping_amount" => 0,
-                    "base_shipping_amount" => 0,
+                    'address_id' => 2, 'address_type' => 'shipping', 'street' => '123 Main Street',
+                    'city' => 'New York', 'region' => 'New York', 'region_id' => '43', 'postcode' => '10012',
+                    'country_id' => 'US', 'telephone' => '111-111-1111', 'same_as_billing' => '1',
+                    'shipping_method' => 'freeshipping_freeshipping', 'weight' => 1, 'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
                 ],
             ],
         ];

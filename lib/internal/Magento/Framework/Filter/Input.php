@@ -254,7 +254,7 @@ class Input implements \Zend_Filter_Interface
         array $filterData
     ) {
         if (!isset($filterData['method']) || empty($filterData['method'])) {
-            throw new \Exception("Helper filtration method is not set");
+            throw new \Exception('Helper filtration method is not set');
         }
         if (!isset($filterData['args']) || empty($filterData['args'])) {
             $filterData['args'] = [];

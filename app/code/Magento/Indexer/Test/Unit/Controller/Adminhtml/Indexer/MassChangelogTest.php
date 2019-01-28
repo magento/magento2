@@ -129,7 +129,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
         $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
-        $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
+        $this->actionFlag->expects($this->any())->method('get')->willReturn($this->objectManager);
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\TestFramework\Unit\Helper\ObjectManager::class,
             ['get']
@@ -141,7 +141,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
+        $this->response->expects($this->any())->method('setRedirect')->willReturn(1);
         $this->page = $this->createMock(\Magento\Framework\View\Result\Page::class);
         $this->config = $this->createMock(\Magento\Framework\View\Result\Page::class);
         $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
@@ -157,13 +157,13 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
             ['get', 'setScheduled']
         );
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
-        $this->contextMock->expects($this->any())->method("getObjectManager")->willReturn($this->objectManager);
-        $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
-        $this->contextMock->expects($this->any())->method("getResponse")->willReturn($this->response);
-        $this->contextMock->expects($this->any())->method("getMessageManager")->willReturn($this->messageManager);
-        $this->contextMock->expects($this->any())->method("getSession")->willReturn($this->session);
-        $this->contextMock->expects($this->any())->method("getActionFlag")->willReturn($this->actionFlag);
-        $this->contextMock->expects($this->any())->method("getHelper")->willReturn($this->helper);
+        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->response);
+        $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
+        $this->contextMock->expects($this->any())->method('getSession')->willReturn($this->session);
+        $this->contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
+        $this->contextMock->expects($this->any())->method('getHelper')->willReturn($this->helper);
     }
 
     /**
@@ -218,8 +218,8 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->helper->expects($this->any())->method("getUrl")->willReturn("magento.com");
-        $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
+        $this->helper->expects($this->any())->method('getUrl')->willReturn('magento.com');
+        $this->response->expects($this->any())->method('setRedirect')->willReturn(1);
 
         $result = $this->model->execute();
         $this->assertNull($result);
@@ -233,23 +233,23 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
         return [
             'set1' => [
                 'idexers' => 1,
-                "exception" => null,
-                "expectsValues" => [0, 0, 0]
+                'exception' => null,
+                'expectsValues' => [0, 0, 0]
             ],
             'set2' => [
                 'idexers' => [1],
-                "exception" => null,
-                "expectsException" => [1, 0, 0]
+                'exception' => null,
+                'expectsException' => [1, 0, 0]
             ],
             'set3' => [
                 'idexers' => [1],
-                "exception" => new \Magento\Framework\Exception\LocalizedException(__('Test Phrase')),
-                "expectsException" => [0, 0, 1]
+                'exception' => new \Magento\Framework\Exception\LocalizedException(__('Test Phrase')),
+                'expectsException' => [0, 0, 1]
             ],
             'set4' => [
                 'idexers' => [1],
-                "exception" => new \Exception(),
-                "expectsException" => [0, 1, 0]
+                'exception' => new \Exception(),
+                'expectsException' => [0, 1, 0]
             ]
         ];
     }

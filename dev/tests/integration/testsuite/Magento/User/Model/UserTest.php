@@ -52,9 +52,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testCRUD()
     {
         $this->_model->setFirstname(
-            "John"
+            'John'
         )->setLastname(
-            "Doe"
+            'Doe'
         )->setUsername(
             'user2'
         )->setPassword(
@@ -197,7 +197,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $newuser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $newuser->setUserId(10);
-        $this->assertNull($newuser->getAclRole(), "User role was not initialized and is expected to be empty.");
+        $this->assertNull($newuser->getAclRole(), 'User role was not initialized and is expected to be empty.');
     }
 
     /**

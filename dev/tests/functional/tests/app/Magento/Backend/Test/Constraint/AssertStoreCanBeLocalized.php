@@ -37,7 +37,7 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
     ) {
         // Set locale options
         $systemConfig->open();
-        $systemConfig->getPageActions()->selectStore($store->getGroupId() . "/" . $store->getName());
+        $systemConfig->getPageActions()->selectStore($store->getGroupId() . '/' . $store->getName());
         $systemConfig->getModalBlock()->acceptAlert();
         $configGroup = $systemConfig->getForm()->getGroup('general', 'locale', 'code');
         $configGroup->setValue('general', 'locale', 'code', $locale);
@@ -61,7 +61,7 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getSearchBlock()->isPlaceholderContains($welcomeText),
-            "Locale not applied."
+            'Locale not applied.'
         );
     }
 

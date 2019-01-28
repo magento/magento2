@@ -56,11 +56,11 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $websiteIds = [1,2];
         $productId = 1;
         $this->dbSelect->expects($this->once())
-            ->method("from")
+            ->method('from')
             ->with('catalog_product_website', 'website_id')
             ->willReturn($this->dbSelect);
         $this->dbSelect->expects($this->once())
-            ->method("where")
+            ->method('where')
             ->with('product_id = ?', (int) $productId);
         $this->connection->expects($this->once())
             ->method('fetchCol')
@@ -79,11 +79,11 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($productId);
         $this->dbSelect->expects($this->once())
-            ->method("from")
+            ->method('from')
             ->with('catalog_product_website', 'website_id')
             ->willReturn($this->dbSelect);
         $this->dbSelect->expects($this->once())
-            ->method("where")
+            ->method('where')
             ->with('product_id = ?', (int) $productId);
         $this->connection->expects($this->once())
             ->method('fetchCol')

@@ -128,7 +128,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $simpleFilter = "customer[email,id]";
+        $simpleFilter = 'customer[email,id]';
 
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);

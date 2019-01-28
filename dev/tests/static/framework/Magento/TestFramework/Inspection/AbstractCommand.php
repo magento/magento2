@@ -131,7 +131,7 @@ abstract class AbstractCommand
     protected function _generateLastRunMessage()
     {
         if ($this->_lastExitCode === null) {
-            $this->_lastRunMessage = "Nothing was executed.";
+            $this->_lastRunMessage = 'Nothing was executed.';
         } elseif (!$this->_lastExitCode) {
             $this->_lastRunMessage = 'Success reported.';
         } elseif (file_exists($this->_reportFile)) {

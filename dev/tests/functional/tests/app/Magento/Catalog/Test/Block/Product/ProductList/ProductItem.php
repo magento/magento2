@@ -34,7 +34,7 @@ class ProductItem extends Block
      *
      * @var string
      */
-    protected $addToCard = "button.action.tocart";
+    protected $addToCard = 'button.action.tocart';
 
     /**
      * Product base image.

@@ -296,7 +296,7 @@ class AssociatedProducts
                         'name' => $this->escaper->escapeHtml($product->getName()),
                         'qty' => $this->getProductStockQty($product),
                         'price' => $price,
-                        'price_string' => $currency->toCurrency(sprintf("%f", $price)),
+                        'price_string' => $currency->toCurrency(sprintf('%f', $price)),
                         'price_currency' => $this->locator->getStore()->getBaseCurrency()->getCurrencySymbol(),
                         'configurable_attribute' => $this->getJsonConfigurableAttributes($variationOptions),
                         'weight' => $product->getWeight(),

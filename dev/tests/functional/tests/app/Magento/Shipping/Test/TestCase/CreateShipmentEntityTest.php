@@ -42,7 +42,7 @@ class CreateShipmentEntityTest extends Injectable
     {
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => "checkmo,flatrate"]
+            ['configData' => 'checkmo,flatrate']
         )->run();
     }
 

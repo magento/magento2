@@ -282,9 +282,9 @@ QUERY;
         $output = $response->toArray()['data']['__type'];
         $expectedResult =
             [
-                "name" =>"Query",
-                "kind" =>"OBJECT",
-                "fields" => [
+                'name' =>'Query',
+                'kind' =>'OBJECT',
+                'fields' => [
            [
             'name'=> 'deprecated',
             'type'=> [

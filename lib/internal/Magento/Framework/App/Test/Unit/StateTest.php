@@ -178,7 +178,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
     {
         new \Magento\Framework\App\State(
             $this->getMockForAbstractClass(\Magento\Framework\Config\ScopeInterface::class, [], '', false),
-            "unknown mode"
+            'unknown mode'
         );
     }
 

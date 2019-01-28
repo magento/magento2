@@ -39,8 +39,8 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $messageFormat = '%message%';
         $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
-        $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
-        $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
+        $this->assertEquals(empty($expectedErrors), $actualResult, 'Validation result is invalid.');
+        $this->assertEquals($expectedErrors, $actualErrors, 'Validation errors does not match.');
     }
 
     /**
@@ -95,7 +95,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                     <integration name="TestIntegration" />
                 </config>',
                 ["Element 'integration': Missing child element(s)." .
-                 " Expected is one of ( email, endpoint_url, identity_link_url, resources )."],
+                 ' Expected is one of ( email, endpoint_url, identity_link_url, resources ).'],
             ],
             'integration without email' => [
                 '<config>
@@ -242,7 +242,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                 </config>',
                 [
                     "Element 'resource': Element content is not allowed, " .
-                    "because the content type is a simple type definition."
+                    'because the content type is a simple type definition.'
                 ],
             ],
             /** Excessive attributes */

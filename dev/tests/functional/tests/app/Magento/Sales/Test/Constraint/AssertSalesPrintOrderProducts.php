@@ -46,6 +46,6 @@ class AssertSalesPrintOrderProducts extends AbstractConstraint
      */
     public function toString()
     {
-        return "Products were printed correctly.";
+        return 'Products were printed correctly.';
     }
 }

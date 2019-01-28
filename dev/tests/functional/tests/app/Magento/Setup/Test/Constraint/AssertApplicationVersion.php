@@ -38,6 +38,6 @@ class AssertApplicationVersion extends AbstractConstraint
      */
     public function toString()
     {
-        return "Application new version is correct.";
+        return 'Application new version is correct.';
     }
 }

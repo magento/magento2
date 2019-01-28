@@ -84,7 +84,7 @@ class Grid extends DataGrid
         $products = [];
         /** @var FixtureInterface $product */
         foreach ($items as $product) {
-            $products[] = ["sku" => $product->getSku()];
+            $products[] = ['sku' => $product->getSku()];
         }
         $this->massaction($products, 'Update attributes');
     }

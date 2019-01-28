@@ -307,7 +307,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
-        ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => "Value for multiselect attribute %s contains duplicated values",
+        ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
         ValidatorInterface::ERROR_NEW_TO_DATE => 'Make sure new_to_date is later than or the same as new_from_date',
     ];
     //@codingStandardsIgnoreEnd
@@ -319,7 +319,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $_fieldsMap = [
         'image' => 'base_image',
-        'image_label' => "base_image_label",
+        'image_label' => 'base_image_label',
         'thumbnail' => 'thumbnail_image',
         'thumbnail_label' => 'thumbnail_image_label',
         self::COL_MEDIA_IMAGE => 'additional_images',
@@ -2151,7 +2151,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     __('File directory \'%1\' is not readable.', $tmpPath)
                 );
             }
-            $destinationDir = "catalog/product";
+            $destinationDir = 'catalog/product';
             $destinationPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationPath);
@@ -2855,7 +2855,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ['request_path', 'store_id']
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
-                    "cpe.entity_id = url_rewrite.entity_id"
+                    'cpe.entity_id = url_rewrite.entity_id'
                 )->where('request_path IN (?)', array_keys($urlKeys))
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))

@@ -101,8 +101,8 @@ class SignUpCommand implements CommandInterface
                 ZendClient::POST,
                 $this->config->getValue($this->signUpUrlPath),
                 [
-                    "token" => $integrationToken->getData('token'),
-                    "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
+                    'token' => $integrationToken->getData('token'),
+                    'url' => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
                 ]
             );
 

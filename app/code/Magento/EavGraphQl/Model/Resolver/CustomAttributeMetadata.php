@@ -97,7 +97,7 @@ class CustomAttributeMetadata implements ResolverInterface
         $isEntitySet = isset($attribute['entity_type']);
         $messagePart = !$isCodeSet ? 'attribute_code' : 'entity_type';
         $messagePart .= !$isCodeSet && !$isEntitySet ? '/entity_type' : '';
-        $identifier = "Empty AttributeInput";
+        $identifier = 'Empty AttributeInput';
         if ($isCodeSet) {
             $identifier = 'attribute_code: ' . $attribute['attribute_code'];
         } elseif ($isEntitySet) {

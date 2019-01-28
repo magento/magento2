@@ -243,10 +243,10 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function isAllowedDataProvider()
     {
         return [
-            "Negative: User not defined" => [false, true, true, false],
-            "Negative: Acl not defined" => [true, false, true, false],
-            "Negative: Permission denied" => [true, true, false, false],
-            "Positive: Permission granted" => [true, true, false, false],
+            'Negative: User not defined' => [false, true, true, false],
+            'Negative: Acl not defined' => [true, false, true, false],
+            'Negative: Permission denied' => [true, true, false, false],
+            'Positive: Permission granted' => [true, true, false, false],
         ];
     }
 

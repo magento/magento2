@@ -203,7 +203,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         $themeFieldset->addField(
             'css_browse_image_button',
             'note',
-            ['label' => __("Images Assets"), 'text' => $imageButton->toHtml()]
+            ['label' => __('Images Assets'), 'text' => $imageButton->toHtml()]
         );
 
         /** @var $fontButton \Magento\Backend\Block\Widget\Button */
@@ -231,7 +231,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         $themeFieldset->addField(
             'css_browse_font_button',
             'note',
-            ['label' => __("Fonts Assets"), 'text' => $fontButton->toHtml()]
+            ['label' => __('Fonts Assets'), 'text' => $fontButton->toHtml()]
         );
 
         $themeFieldset->addField(

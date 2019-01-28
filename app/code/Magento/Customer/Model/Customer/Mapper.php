@@ -41,7 +41,7 @@ class Mapper
             [],
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        unset($flatArray["addresses"]);
+        unset($flatArray['addresses']);
         return ConvertArray::toFlatArray($flatArray);
     }
 }

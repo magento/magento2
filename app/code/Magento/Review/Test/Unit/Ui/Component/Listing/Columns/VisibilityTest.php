@@ -53,7 +53,7 @@ class VisibilityTest extends AbstractColumnTest
             ],
         ];
         $expectedVisibility =
-            "Test Website<br/>&nbsp;&nbsp;&nbsp;Test group<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test store<br/>";
+            'Test Website<br/>&nbsp;&nbsp;&nbsp;Test group<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test store<br/>';
         $expectedDataSource = [
             'data' => [
                 'items' => [

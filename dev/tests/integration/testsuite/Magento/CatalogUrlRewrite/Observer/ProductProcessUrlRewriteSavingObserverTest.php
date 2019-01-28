@@ -69,15 +69,15 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $expected = [
             [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'product-1.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => 1,
             ],
             [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'product-1.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => $testStore->getId(),
@@ -95,29 +95,29 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $expected = [
             [
-                'request_path' => "new-url.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'new-url.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => 1,
             ],
             [
-                'request_path' => "new-url.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'new-url.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => $testStore->getId(),
             ],
             [
-                'request_path' => "product-1.html",
-                'target_path' => "new-url.html",
+                'request_path' => 'product-1.html',
+                'target_path' => 'new-url.html',
                 'is_auto_generated' => 0,
                 'redirect_type' => 301,
                 'store_id' => 1,
             ],
             [
-                'request_path' => "product-1.html",
-                'target_path' => "new-url.html",
+                'request_path' => 'product-1.html',
+                'target_path' => 'new-url.html',
                 'is_auto_generated' => 0,
                 'redirect_type' => 301,
                 'store_id' => $testStore->getId(),
@@ -158,22 +158,22 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $expected = [
             [
-                'request_path' => "new-url.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'new-url.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => 1,
             ],
             [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'product-1.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => $testStore->getId(),
             ],
             [
-                'request_path' => "product-1.html",
-                'target_path' => "new-url.html",
+                'request_path' => 'product-1.html',
+                'target_path' => 'new-url.html',
                 'is_auto_generated' => 0,
                 'redirect_type' => 301,
                 'store_id' => 1,
@@ -214,15 +214,15 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $expected = [
             [
-                'request_path' => "new-url.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'new-url.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => 1,
             ],
             [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
+                'request_path' => 'product-1.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => $testStore->getId(),

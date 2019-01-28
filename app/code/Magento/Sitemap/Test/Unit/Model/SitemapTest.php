@@ -316,8 +316,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 $expectedSingleFile,
                 6,
                 [
-                    'robotsStart' => "User-agent: *",
-                    'robotsFinish' => "User-agent: *" . PHP_EOL . 'Sitemap: http://store.com/sitemap.xml',
+                    'robotsStart' => 'User-agent: *',
+                    'robotsFinish' => 'User-agent: *' . PHP_EOL . 'Sitemap: http://store.com/sitemap.xml',
                     'pushToRobots' => 1
                 ]
             ], // not empty robots file EOL

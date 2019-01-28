@@ -68,6 +68,6 @@ class AssertAwaitingSignifydGuaranteeInCommentsHistory extends AbstractConstrain
      */
     public function toString()
     {
-        return "Message about awaiting the Signifyd guarantee disposition is available in Comments History section.";
+        return 'Message about awaiting the Signifyd guarantee disposition is available in Comments History section.';
     }
 }

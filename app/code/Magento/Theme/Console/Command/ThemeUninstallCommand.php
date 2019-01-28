@@ -353,9 +353,9 @@ class ThemeUninstallCommand extends Command
             if (!empty($dependingPackages)) {
                 $messages[] =
                     '<error>' . $packageToPath[$package] .
-                    " has the following dependent package(s):</error>" .
+                    ' has the following dependent package(s):</error>' .
                     PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", $dependingPackages)
-                    . "</error>";
+                    . '</error>';
             }
         }
         return $messages;

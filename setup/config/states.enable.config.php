@@ -59,7 +59,7 @@ return [
             'id'          => 'root.start-updater-enable',
             'url'         => 'enable',
             'templateUrl' => "$base/start-updater",
-            'title'       => "Enable Module",
+            'title'       => 'Enable Module',
             'controller'  => 'startUpdaterController',
             'header'      => 'Step 3: Enable Module',
             'nav'         => true,

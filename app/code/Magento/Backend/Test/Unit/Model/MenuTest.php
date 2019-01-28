@@ -70,9 +70,9 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     public function testAddToItem()
     {
         $subMenu = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
-        $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
+        $subMenu->expects($this->once())->method('add')->with($this->_items['item2']);
 
-        $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->once())->method('getChildren')->will($this->returnValue($subMenu));
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2'], 'item1');
@@ -153,14 +153,14 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->_model->add($this->_items['item3']);
 
         $subMenu = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
-        $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
+        $subMenu->expects($this->once())->method('add')->with($this->_items['item3']);
 
-        $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->once())->method('getChildren')->will($this->returnValue($subMenu));
 
         $this->_model->move('item3', 'item1');
 
         $this->assertCount(2, $this->_model);
-        $this->assertFalse(isset($this->_model[2]), "ttt");
+        $this->assertFalse(isset($this->_model[2]), 'ttt');
     }
 
     /**
@@ -241,9 +241,9 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->_items['item1']->expects($this->any())->method("hasChildren")->will($this->returnValue(true));
+        $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
 
-        $this->_items['item1']->expects($this->any())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($subMenu));
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2'], 'item1', 10);

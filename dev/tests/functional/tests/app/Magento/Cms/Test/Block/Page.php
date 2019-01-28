@@ -26,14 +26,14 @@ class Page extends Block
      *
      * @var string
      */
-    protected $cmsPageContentClass = ".column.main";
+    protected $cmsPageContentClass = '.column.main';
 
     /**
      * Cms page title.
      *
      * @var string
      */
-    protected $cmsPageTitle = ".page-title-wrapper";
+    protected $cmsPageTitle = '.page-title-wrapper';
 
     /**
      * Cms page text locator.

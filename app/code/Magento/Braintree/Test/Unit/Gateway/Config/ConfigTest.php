@@ -192,7 +192,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         }
 
         if (empty($countryData)) {
-            static::assertEquals($data, "");
+            static::assertEquals($data, '');
         }
     }
 

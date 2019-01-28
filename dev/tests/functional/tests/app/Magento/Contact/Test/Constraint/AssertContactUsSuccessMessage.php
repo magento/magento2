@@ -17,7 +17,7 @@ class AssertContactUsSuccessMessage extends AbstractConstraint
     /**
      * Success sent comment message(the first part).
      */
-    const SUCCESS_MESSAGE_PART_1 = "Thanks for contacting us with your comments and questions. ";
+    const SUCCESS_MESSAGE_PART_1 = 'Thanks for contacting us with your comments and questions. ';
 
     /**
      * Success sent comment message(the second part).

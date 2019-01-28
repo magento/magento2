@@ -69,7 +69,7 @@ class WebsiteIds extends DataSource
     public function getData($key = null)
     {
         if (empty($this->fixtureData)) {
-            throw new \Exception("Data must be set");
+            throw new \Exception('Data must be set');
         }
 
         foreach ($this->fixtureData as $dataset) {

@@ -123,7 +123,7 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             throw new NoSuchEntityException(
                 __(
                     "The entity sequence profile wasn't added to the meta active profile. "
-                    . "Verify the profile and try again."
+                    . 'Verify the profile and try again.'
                 )
             );
         }

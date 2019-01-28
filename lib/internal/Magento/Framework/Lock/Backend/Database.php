@@ -82,7 +82,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         }
 
         $result = (bool)$this->resource->getConnection()->query(
-            "SELECT GET_LOCK(?, ?);",
+            'SELECT GET_LOCK(?, ?);',
             [(string)$name, (int)$timeout]
         )->fetchColumn();
 
@@ -105,7 +105,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         $name = $this->addPrefix($name);
 
         $result = (bool)$this->resource->getConnection()->query(
-            "SELECT RELEASE_LOCK(?);",
+            'SELECT RELEASE_LOCK(?);',
             [(string)$name]
         )->fetchColumn();
 
@@ -128,7 +128,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         $name = $this->addPrefix($name);
 
         return (bool)$this->resource->getConnection()->query(
-            "SELECT IS_USED_LOCK(?);",
+            'SELECT IS_USED_LOCK(?);',
             [(string)$name]
         )->fetchColumn();
     }

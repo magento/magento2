@@ -155,7 +155,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
     {
         $expectedCode = 42;
         $localizedException = new LocalizedException(
-            new Phrase("message %1", ['test']),
+            new Phrase('message %1', ['test']),
             new \Exception(),
             $expectedCode
         );

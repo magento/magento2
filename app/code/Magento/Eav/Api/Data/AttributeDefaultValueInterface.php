@@ -15,7 +15,7 @@ namespace Magento\Eav\Api\Data;
  */
 interface AttributeDefaultValueInterface
 {
-    const DEFAULT_VALUE = "default_value";
+    const DEFAULT_VALUE = 'default_value';
 
     /**
      * @param string $defaultValue

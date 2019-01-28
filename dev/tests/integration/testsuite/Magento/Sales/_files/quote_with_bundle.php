@@ -100,13 +100,13 @@ $product
             ],
         ]
     )->setCustomAttributes([
-        "price_type" => [
+        'price_type' => [
             'attribute_code' => 'price_type',
             'value' => \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
         ],
-        "price_view" => [
-            "attribute_code" => "price_view",
-            "value" => "1",
+        'price_view' => [
+            'attribute_code' => 'price_view',
+            'value' => '1',
         ],
     ])
     ->setCanSaveBundleSelections(true)

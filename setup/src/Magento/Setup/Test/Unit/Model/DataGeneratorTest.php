@@ -30,7 +30,7 @@ class DataGeneratorTest extends \PHPUnit\Framework\TestCase
             $found = (strpos($result, $word[0]) !== false) || $found;
         }
         $this->assertTrue($found);
-        $this->assertEquals($wordCount, count(explode(" ", $result)));
+        $this->assertEquals($wordCount, count(explode(' ', $result)));
     }
 
     public function testGenerateWithKey()
@@ -44,7 +44,7 @@ class DataGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $foundResult = $model->generate($wordCount, $wordCount, $key);
 
-        $this->assertEquals($wordCount, count(explode(" ", $result)));
+        $this->assertEquals($wordCount, count(explode(' ', $result)));
         $this->assertEquals($result, $foundResult);
     }
 }

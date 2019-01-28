@@ -65,7 +65,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
             $this->assertEquals($productData[$key], $response[$key]);
         }
-        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
+        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
     }
 
     /**
@@ -110,12 +110,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         try {
             $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
-            $this->fail("Expected throwing exception");
+            $this->fail('Expected throwing exception');
         } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "SoapFault does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
@@ -177,8 +177,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
         $this->assertEquals(
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
-            $websitesData["website_ids"]
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'],
+            $websitesData['website_ids']
         );
     }
 
@@ -196,8 +196,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
         $this->assertEquals(
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
-            $websitesData["website_ids"]
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'],
+            $websitesData['website_ids']
         );
     }
 
@@ -221,8 +221,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
         $this->assertEquals(
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
-            $websitesData["website_ids"]
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'],
+            $websitesData['website_ids']
         );
         $this->deleteProduct($productBuilder[ProductInterface::SKU]);
     }
@@ -248,8 +248,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
         $this->assertEquals(
-            $websitesData["website_ids"],
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
+            $websitesData['website_ids'],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
         );
         $this->deleteProduct($productBuilder[ProductInterface::SKU]);
     }
@@ -276,8 +276,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
         $this->assertEquals(
-            $websitesData["website_ids"],
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
+            $websitesData['website_ids'],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
         );
     }
 
@@ -299,8 +299,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $response[ProductInterface::NAME]
         );
         $this->assertEquals(
-            $originalProduct[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
+            $originalProduct[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
         );
     }
 
@@ -374,13 +374,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     public function testCreateInvalidPriceFormat()
     {
-        $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
+        $this->_markTestAsRestOnly('In case of SOAP type casting is handled by PHP SoapServer, no need to test it');
         $expectedMessage = 'Error occurred during "price" processing. '
             . 'The "invalid_format" value\'s type is invalid. The "float" type was expected. Verify and try again.';
 
         try {
             $this->saveProduct(['name' => 'simple', 'price' => 'invalid_format', 'sku' => 'simple']);
-            $this->fail("Expected exception was not raised");
+            $this->fail('Expected exception was not raised');
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
@@ -412,8 +412,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         // Create simple product
         $productData = [
-            ProductInterface::SKU => "product_simple_500",
-            ProductInterface::NAME => "Product Simple 500",
+            ProductInterface::SKU => 'product_simple_500',
+            ProductInterface::NAME => 'Product Simple 500',
             ProductInterface::VISIBILITY => 4,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
@@ -428,26 +428,26 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->saveProduct($productData);
 
         $productLinkData = [
-            "sku" => "product_simple_with_related_500",
-            "link_type" => "related",
-            "linked_product_sku" => "product_simple_500",
-            "linked_product_type" => "simple",
-            "position" => 0
+            'sku' => 'product_simple_with_related_500',
+            'link_type' => 'related',
+            'linked_product_sku' => 'product_simple_500',
+            'linked_product_type' => 'simple',
+            'position' => 0
         ];
         $productWithRelatedData = [
-            ProductInterface::SKU => "product_simple_with_related_500",
-            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::SKU => 'product_simple_with_related_500',
+            ProductInterface::NAME => 'Product Simple with Related 500',
             ProductInterface::VISIBILITY => 4,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            "product_links" => [$productLinkData]
+            'product_links' => [$productLinkData]
         ];
 
         $this->saveProduct($productWithRelatedData);
-        $response = $this->getProduct("product_simple_with_related_500");
+        $response = $this->getProduct('product_simple_with_related_500');
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
@@ -456,25 +456,25 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         // update link information
         $productLinkData = [
-            "sku" => "product_simple_with_related_500",
-            "link_type" => "upsell",
-            "linked_product_sku" => "product_simple_500",
-            "linked_product_type" => "simple",
-            "position" => 0
+            'sku' => 'product_simple_with_related_500',
+            'link_type' => 'upsell',
+            'linked_product_sku' => 'product_simple_500',
+            'linked_product_type' => 'simple',
+            'position' => 0
         ];
         $productWithUpsellData = [
-            ProductInterface::SKU => "product_simple_with_related_500",
-            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::SKU => 'product_simple_with_related_500',
+            ProductInterface::NAME => 'Product Simple with Related 500',
             ProductInterface::VISIBILITY => 4,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            "product_links" => [$productLinkData]
+            'product_links' => [$productLinkData]
         ];
 
         $this->saveProduct($productWithUpsellData);
-        $response = $this->getProduct("product_simple_with_related_500");
+        $response = $this->getProduct('product_simple_with_related_500');
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
@@ -483,24 +483,24 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         // Remove link
         $productWithNoLinkData = [
-            ProductInterface::SKU => "product_simple_with_related_500",
-            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::SKU => 'product_simple_with_related_500',
+            ProductInterface::NAME => 'Product Simple with Related 500',
             ProductInterface::VISIBILITY => 4,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            "product_links" => []
+            'product_links' => []
         ];
 
         $this->saveProduct($productWithNoLinkData);
-        $response = $this->getProduct("product_simple_with_related_500");
+        $response = $this->getProduct('product_simple_with_related_500');
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
         $this->assertEquals([], $links);
 
-        $this->deleteProduct("product_simple_500");
-        $this->deleteProduct("product_simple_with_related_500");
+        $this->deleteProduct('product_simple_500');
+        $this->deleteProduct('product_simple_with_related_500');
     }
 
     /**
@@ -511,32 +511,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         return [
             [
-                "product_sku" => $productSku,
-                "title" => "DropdownOption",
-                "type" => "drop_down",
-                "sort_order" => 0,
-                "is_require" => true,
-                "values" => [
+                'product_sku' => $productSku,
+                'title' => 'DropdownOption',
+                'type' => 'drop_down',
+                'sort_order' => 0,
+                'is_require' => true,
+                'values' => [
                     [
-                        "title" => "DropdownOption2_1",
-                        "sort_order" => 0,
-                        "price" => 3,
-                        "price_type" => "fixed",
+                        'title' => 'DropdownOption2_1',
+                        'sort_order' => 0,
+                        'price' => 3,
+                        'price_type' => 'fixed',
                     ],
                 ],
             ],
             [
-                "product_sku" => $productSku,
-                "title" => "CheckboxOption",
-                "type" => "checkbox",
-                "sort_order" => 1,
-                "is_require" => false,
-                "values" => [
+                'product_sku' => $productSku,
+                'title' => 'CheckboxOption',
+                'type' => 'checkbox',
+                'sort_order' => 1,
+                'is_require' => false,
+                'values' => [
                     [
-                        "title" => "CheckBoxValue1",
-                        "price" => 5,
-                        "price_type" => "fixed",
-                        "sort_order" => 1,
+                        'title' => 'CheckBoxValue1',
+                        'price' => 5,
+                        'price_type' => 'fixed',
+                        'sort_order' => 1,
                     ],
                 ],
             ],
@@ -560,23 +560,23 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         //update the product options, adding a value to option 1, delete an option and create a new option
         $options[0]['values'][] = [
-            "title" => "Value2",
-            "price" => 6,
-            "price_type" => "fixed",
+            'title' => 'Value2',
+            'price' => 6,
+            'price_type' => 'fixed',
             'sort_order' => 3,
         ];
         $options[1] = [
-            "product_sku" => $productData['sku'],
-            "title" => "DropdownOption2",
-            "type" => "drop_down",
-            "sort_order" => 3,
-            "is_require" => false,
-            "values" => [
+            'product_sku' => $productData['sku'],
+            'title' => 'DropdownOption2',
+            'type' => 'drop_down',
+            'sort_order' => 3,
+            'is_require' => false,
+            'values' => [
                 [
-                    "title" => "Value3",
-                    "price" => 7,
-                    "price_type" => "fixed",
-                    "sort_order" => 4,
+                    'title' => 'Value3',
+                    'price' => 7,
+                    'price_type' => 'fixed',
+                    'sort_order' => 4,
                 ],
             ],
         ];
@@ -735,7 +735,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $product['custom_attributes'][$i]['value'] = [''];
                 }
             }
         }
@@ -1104,7 +1104,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertNotTrue(isset($customAttributesData['tier_price']));
 
         //Set description
-        $descriptionValue = "new description";
+        $descriptionValue = 'new description';
         $customAttributesData['description'] = $descriptionValue;
         $response['custom_attributes'] = $this->convertAssociativeArrayToCustomAttributes($customAttributesData);
 
@@ -1156,7 +1156,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $product['custom_attributes'][$i]['value'] = [''];
                 }
             }
         }
@@ -1222,7 +1222,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
         $tierPrices = $response[self::KEY_TIER_PRICES];
-        $this->assertNotNull($tierPrices, "CREATE: expected to have tier prices");
+        $this->assertNotNull($tierPrices, 'CREATE: expected to have tier prices');
         $this->assertCount(2, $tierPrices, "CREATE: expected to have 2 'tier_prices' objects");
         $this->assertEquals(3.14, $tierPrices[0]['value']);
         $this->assertEquals(5, $tierPrices[0]['qty']);
@@ -1245,7 +1245,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
         $tierPrices = $response[self::KEY_TIER_PRICES];
-        $this->assertNotNull($tierPrices, "UPDATE 1: expected to have tier prices");
+        $this->assertNotNull($tierPrices, 'UPDATE 1: expected to have tier prices');
         $this->assertCount(2, $tierPrices, "UPDATE 1: expected to have 2 'tier_prices' objects");
         $this->assertEquals(3.33, $tierPrices[0]['value']);
         $this->assertEquals(6, $tierPrices[0]['qty']);
@@ -1261,7 +1261,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
         $tierPrices = $response[self::KEY_TIER_PRICES];
-        $this->assertNotNull($tierPrices, "UPDATE 2: expected to have tier prices");
+        $this->assertNotNull($tierPrices, 'UPDATE 2: expected to have tier prices');
         $this->assertCount(2, $tierPrices, "UPDATE 2: expected to have 2 'tier_prices' objects");
         $this->assertEquals(3.33, $tierPrices[0]['value']);
         $this->assertEquals(6, $tierPrices[0]['qty']);
@@ -1475,8 +1475,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         // Create simple product
         $productData = [
-            ProductInterface::SKU => "product_simple_502",
-            ProductInterface::NAME => "Product Simple 502",
+            ProductInterface::SKU => 'product_simple_502',
+            ProductInterface::NAME => 'Product Simple 502',
             ProductInterface::VISIBILITY => 4,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
@@ -1532,13 +1532,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         );
 
         $productData['custom_attributes'] = [
-            ['attribute_code' => $multiselectAttributeCode, 'value' => ""]
+            ['attribute_code' => $multiselectAttributeCode, 'value' => '']
         ];
         $this->saveProduct($productData, 'all');
         $this->assertMultiselectValue(
             $productData[ProductInterface::SKU],
             $multiselectAttributeCode,
-            ""
+            ''
         );
     }
 

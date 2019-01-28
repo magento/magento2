@@ -88,7 +88,7 @@ class GuestShipmentEstimationTest extends WebapiAbstract
         } else {
             $requestData = [
                 'address' => [
-                    'country_id' => "US",
+                    'country_id' => 'US',
                     'postcode' => null,
                     'region' => null,
                     'region_id' => null
@@ -102,7 +102,7 @@ class GuestShipmentEstimationTest extends WebapiAbstract
         $this->assertNotEmpty($result);
         $this->assertEquals(1, count($result));
         foreach ($result as $rate) {
-            $this->assertEquals("flatrate", $rate['carrier_code']);
+            $this->assertEquals('flatrate', $rate['carrier_code']);
             $this->assertEquals(0, $rate['amount']);
         }
     }

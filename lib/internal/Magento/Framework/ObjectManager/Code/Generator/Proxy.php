@@ -99,7 +99,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         ];
         $methods[] = [
             'name' => '__clone',
-            'body' => "\$this->_subject = clone \$this->_getSubject();",
+            'body' => '$this->_subject = clone $this->_getSubject();',
             'docblock' => ['shortDescription' => 'Clone proxied instance'],
         ];
 
@@ -111,7 +111,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 "        ? \$this->_objectManager->get(\$this->_instanceName)\n" .
                 "        : \$this->_objectManager->create(\$this->_instanceName);\n" .
                 "}\n" .
-                "return \$this->_subject;",
+                'return $this->_subject;',
             'docblock' => [
                 'shortDescription' => 'Get proxied instance',
                 'tags' => [['name' => 'return', 'description' => $this->getSourceClassName()]],
@@ -210,7 +210,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 ['name' => 'instanceName', 'defaultValue' => $this->getSourceClassName()],
                 ['name' => 'shared', 'defaultValue' => true],
             ],
-            'body' => "\$this->_objectManager = \$objectManager;" .
+            'body' => '$this->_objectManager = $objectManager;' .
                 "\n\$this->_instanceName = \$instanceName;" .
                 "\n\$this->_isShared = \$shared;",
             'docblock' => [

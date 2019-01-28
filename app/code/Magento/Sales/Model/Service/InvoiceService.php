@@ -249,8 +249,8 @@ class InvoiceService implements InvoiceManagementInterface
         /**
          * Check qty availability
          */
-        $qtyToInvoice = sprintf("%F", $item->getOrderItem()->getQtyToInvoice());
-        $qty = sprintf("%F", $qty);
+        $qtyToInvoice = sprintf('%F', $item->getOrderItem()->getQtyToInvoice());
+        $qty = sprintf('%F', $qty);
         if ($qty > $qtyToInvoice && !$item->getOrderItem()->isDummy()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid quantity to invoice item "%1".', $item->getName())

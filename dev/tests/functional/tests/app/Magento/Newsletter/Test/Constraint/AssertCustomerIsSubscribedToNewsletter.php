@@ -48,6 +48,6 @@ class AssertCustomerIsSubscribedToNewsletter extends AbstractConstraint
      */
     public function toString()
     {
-        return "Customer is subscribed to newsletter";
+        return 'Customer is subscribed to newsletter';
     }
 }

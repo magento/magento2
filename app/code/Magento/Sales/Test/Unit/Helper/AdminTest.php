@@ -367,7 +367,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
                 'allowedTags' => ['a']
             ],
             'Not replacement with placeholders' => [
-                "<a><script>alert(1)</script></a>",
+                '<a><script>alert(1)</script></a>',
                 '<a>&lt;script&gt;alert(1)&lt;/script&gt;</a>',
                 'allowedTags' => ['a']
             ],
@@ -377,22 +377,22 @@ class AdminTest extends \PHPUnit\Framework\TestCase
                 'allowedTags' => ['a']
             ],
             'Normal usage, url not escaped' => [
-                "<a href=http://example.com?foo=1&bar=2&baz[name]=BAZ>Foo</a>",
+                '<a href=http://example.com?foo=1&bar=2&baz[name]=BAZ>Foo</a>',
                 '<a href="http://example.com?foo=1&amp;bar=2&amp;baz[name]=BAZ">Foo</a>',
                 'allowedTags' => ['a']
             ],
             'XSS test' => [
-                "<a href=\"javascript&colon;alert(59)\">Foo</a>",
+                '<a href="javascript&colon;alert(59)">Foo</a>',
                 '<a href="#">Foo</a>',
                 'allowedTags' => ['a']
             ],
             'Additional regex test' => [
-                "<a href=\"http://example1.com\" href=\"http://example2.com\">Foo</a>",
+                '<a href="http://example1.com" href="http://example2.com">Foo</a>',
                 '<a href="http://example1.com">Foo</a>',
                 'allowedTags' => ['a']
             ],
             'Break of valid urls' => [
-                "<a href=\"http://example.com?foo=text with space\">Foo</a>",
+                '<a href="http://example.com?foo=text with space">Foo</a>',
                 '<a href="#">Foo</a>',
                 'allowedTags' => ['a']
             ],

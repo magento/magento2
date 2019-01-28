@@ -54,7 +54,7 @@ class LiteralNamespacesSniff implements Sniff
 
         if (preg_match($this->literalNamespacePattern, $content) === 1 && $this->classExists($content)) {
             $sourceFile->addError(
-                "Use ::class notation instead.",
+                'Use ::class notation instead.',
                 $stackPtr,
                 'LiteralClassUsage'
             );

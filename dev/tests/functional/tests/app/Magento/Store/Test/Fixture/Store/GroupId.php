@@ -34,7 +34,7 @@ class GroupId extends DataSource
 
         if (isset($data['storeGroup']) && $data['storeGroup'] instanceof StoreGroup) {
             $this->storeGroup = $data['storeGroup'];
-            $this->data = $data['storeGroup']->getWebsiteId() . "/" . $data['storeGroup']->getName();
+            $this->data = $data['storeGroup']->getWebsiteId() . '/' . $data['storeGroup']->getName();
             return;
         }
 
@@ -45,10 +45,10 @@ class GroupId extends DataSource
                 $storeGroup->persist();
             }
             $this->storeGroup = $storeGroup;
-            $this->data = $storeGroup->getWebsiteId() . "/" . $storeGroup->getName();
+            $this->data = $storeGroup->getWebsiteId() . '/' . $storeGroup->getName();
         } elseif (isset($data['fixture'])) {
             $this->storeGroup = $data['fixture'];
-            $this->data = $this->storeGroup->getWebsiteId() . "/" . $this->storeGroup->getName();
+            $this->data = $this->storeGroup->getWebsiteId() . '/' . $this->storeGroup->getName();
         }
 
         if (isset($data['value'])) {

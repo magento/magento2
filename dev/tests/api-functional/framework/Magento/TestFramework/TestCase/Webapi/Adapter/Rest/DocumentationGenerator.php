@@ -79,7 +79,7 @@ HTML;
         }
         if (is_array($response)) {
             $responseArrayKeys = array_keys($response);
-            $responseParameters = "Parameters should be specified manually.";
+            $responseParameters = 'Parameters should be specified manually.';
             foreach ($responseArrayKeys as $key) {
                 if (!is_int($key)) {
                     $responseParameters = '';

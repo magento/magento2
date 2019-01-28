@@ -32,7 +32,7 @@ class AssertSalesPrintOrderBillingAddress extends AbstractConstraint
         \PHPUnit\Framework\Assert::assertEquals(
             $expectedBillingAddress,
             $salesGuestPrint->getInfoBlock()->getBillingAddress(),
-            "Billing address was printed incorrectly."
+            'Billing address was printed incorrectly.'
         );
     }
 
@@ -43,6 +43,6 @@ class AssertSalesPrintOrderBillingAddress extends AbstractConstraint
      */
     public function toString()
     {
-        return "Billing address printed correctly.";
+        return 'Billing address printed correctly.';
     }
 }

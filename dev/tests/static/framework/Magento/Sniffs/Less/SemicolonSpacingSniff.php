@@ -63,7 +63,7 @@ class SemicolonSpacingSniff implements Sniff
 
         $semicolonPtr = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1));
         if ($tokens[$semicolonPtr]['line'] !== $tokens[$stackPtr]['line']) {
-            $semicolonPtr = $phpcsFile->findNext(T_STYLE, ($stackPtr + 1), null, false, ";");
+            $semicolonPtr = $phpcsFile->findNext(T_STYLE, ($stackPtr + 1), null, false, ';');
         }
 
         $this->validateSemicolon($phpcsFile, $stackPtr, $tokens, $semicolonPtr);

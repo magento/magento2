@@ -126,7 +126,7 @@ class SchemaBuilder
         if (!empty($errors)) {
             $messages = '';
             foreach ($errors as $error) {
-                $messages .= sprintf("%s%s", PHP_EOL, $error['message']);
+                $messages .= sprintf('%s%s', PHP_EOL, $error['message']);
             }
 
             throw new Exception(new Phrase($messages));

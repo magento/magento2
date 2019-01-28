@@ -82,7 +82,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $e = new \Magento\Framework\Exception\LocalizedException(
                 __(
                     "The order wasn't placed. "
-                    . "First, agree to the terms and conditions, then try placing your order again."
+                    . 'First, agree to the terms and conditions, then try placing your order again.'
                 )
             );
             $this->messageManager->addExceptionMessage(

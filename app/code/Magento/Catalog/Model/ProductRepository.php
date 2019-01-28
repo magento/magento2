@@ -527,7 +527,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $existingEntry['removed'] = true;
                 }
             }
-            $product->setData('media_gallery', ["images" => $existingMediaGallery]);
+            $product->setData('media_gallery', ['images' => $existingMediaGallery]);
         } else {
             $newEntries = $mediaGalleryEntries;
         }

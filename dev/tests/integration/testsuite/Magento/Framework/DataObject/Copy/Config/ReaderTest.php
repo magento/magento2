@@ -54,9 +54,9 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $expected = [
             'global' => [
                 'quote_convert_item' => [
-                    'event_id' => ['to_order_item' => "*"],
-                    'event_name' => ['to_order_item' => "*"],
-                    'event_description' => ['to_order_item' => "complexDescription"],
+                    'event_id' => ['to_order_item' => '*'],
+                    'event_name' => ['to_order_item' => '*'],
+                    'event_description' => ['to_order_item' => 'complexDescription'],
                 ],
             ],
         ];

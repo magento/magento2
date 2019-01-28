@@ -1869,7 +1869,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         //Ensure that existing address is not in use
         $this->addressRepository
             ->expects($this->atLeastOnce())
-            ->method("save")
+            ->method('save')
             ->withConsecutive(
                 [$this->logicalNot($this->identicalTo($existingAddress))],
                 [$this->identicalTo($nonExistingAddress)]
@@ -1877,12 +1877,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $existingAddress
             ->expects($this->any())
-            ->method("getId")
+            ->method('getId')
             ->willReturn($addressId);
         //Expects that id for existing address should be unset
         $existingAddress
             ->expects($this->once())
-            ->method("setId")
+            ->method('setId')
             ->with(null);
         //Handle Customer calls
         $customer = $this->getMockBuilder(Customer::class)->disableOriginalConstructor()->getMock();
@@ -1896,7 +1896,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeId);
         $customer
             ->expects($this->any())
-            ->method("getId")
+            ->method('getId')
             ->willReturn($customerId);
         //Return Customer from customer repository
         $this->customerRepository

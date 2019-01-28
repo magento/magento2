@@ -71,7 +71,7 @@ class BillingAddressManagementTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
         asort($data);
@@ -116,7 +116,7 @@ class BillingAddressManagementTest extends WebapiAbstract
             'fax' => '44332255',
         ];
         $requestData = [
-            "cartId" => $quote->getId(),
+            'cartId' => $quote->getId(),
             'address' => $addressData,
         ];
 

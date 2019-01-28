@@ -215,7 +215,7 @@ class TaxClassRepositoryTest extends WebapiAbstract
         try {
             $this->taxClassRegistry->remove($taxClassId);
             $this->taxClassRepository->get($taxClassId);
-            $this->fail("Tax class was not expected to be returned after being deleted.");
+            $this->fail('Tax class was not expected to be returned after being deleted.');
         } catch (NoSuchEntityException $e) {
             $this->assertEquals('No such entity with class_id = ' . $taxClassId, $e->getMessage());
         }
@@ -274,8 +274,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $filter4 = $this->filterBuilder->setField(ClassModel::KEY_TYPE)
             ->setValue($customerTaxClass[ClassModel::KEY_TYPE])
             ->create();
-        $sortOrder = $this->sortOrderBuilder->setField("class_type")
-            ->setDirection("ASC")->create();
+        $sortOrder = $this->sortOrderBuilder->setField('class_type')
+            ->setDirection('ASC')->create();
 
         /**
          * (class_name == 'Retail Customer' || class_name == 'Taxable Goods)

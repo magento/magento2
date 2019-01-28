@@ -64,7 +64,7 @@ class HandlerTest extends AbstractController
         self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseComment);
 
         self::assertEquals(
-            "Case Update: New score for the order is 384. Previous score was 553.",
+            'Case Update: New score for the order is 384. Previous score was 553.',
             $caseComment->getComment()
         );
 

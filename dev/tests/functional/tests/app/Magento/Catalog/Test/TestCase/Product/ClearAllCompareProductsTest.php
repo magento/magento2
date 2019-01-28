@@ -49,7 +49,7 @@ class ClearAllCompareProductsTest extends AbstractCompareProductsTest
         $this->cmsIndex->open();
         $this->loginCustomer();
         $this->addProducts($products);
-        $this->cmsIndex->getLinksBlock()->openLink("My Account");
+        $this->cmsIndex->getLinksBlock()->openLink('My Account');
         $customerAccountIndex->getCompareProductsBlock()->clickClearAll();
     }
 }

@@ -95,7 +95,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
             throw new NoSuchEntityException(
                 __(
                     "No item with the provided ID was found in the Order, or a gift message isn't allowed. "
-                    . "Verify and try again."
+                    . 'Verify and try again.'
                 )
             );
         }

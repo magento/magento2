@@ -19,7 +19,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('green_socks')
     ->setPrice(12)
     ->setWeight(1)
-    ->setShortDescription("Unisex green socks for some good peoples at one")
+    ->setShortDescription('Unisex green socks for some good peoples at one')
     ->setTaxClassId(0)
     ->setTierPrice(
         [
@@ -89,7 +89,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('white_shorts')
     ->setPrice(14)
     ->setWeight(2)
-    ->setShortDescription("Small white shorts for your children")
+    ->setShortDescription('Small white shorts for your children')
     ->setTaxClassId(0)
     ->setTierPrice(
         [
@@ -159,7 +159,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('red_trousers')
     ->setPrice(16)
     ->setWeight(3)
-    ->setShortDescription("Red pants for men")
+    ->setShortDescription('Red pants for men')
     ->setTaxClassId(0)
     ->setTierPrice(
         [
@@ -229,7 +229,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('blue_briefs')
     ->setPrice(18)
     ->setWeight(3)
-    ->setShortDescription("Blue briefs for Russian men")
+    ->setShortDescription('Blue briefs for Russian men')
     ->setTaxClassId(0)
     ->setTierPrice(
         [
@@ -282,7 +282,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('grey_shorts')
     ->setPrice(20)
     ->setWeight(3)
-    ->setShortDescription("Grey or green shorts for all peoples at one")
+    ->setShortDescription('Grey or green shorts for all peoples at one')
     ->setTaxClassId(0)
     ->setTierPrice(
         [

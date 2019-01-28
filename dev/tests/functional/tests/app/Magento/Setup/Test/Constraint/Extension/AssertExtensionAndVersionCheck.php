@@ -36,7 +36,7 @@ class AssertExtensionAndVersionCheck extends AbstractConstraint
         switch ($type) {
             case self::TYPE_INSTALL:
                 $message = "We're ready to install " . $extension->getExtensionName()
-                    . " to " . $extension->getVersion();
+                    . ' to ' . $extension->getVersion();
                 break;
 
             case self::TYPE_UNINSTALL:
@@ -45,7 +45,7 @@ class AssertExtensionAndVersionCheck extends AbstractConstraint
 
             case self::TYPE_UPDATE:
                 $message = "We're ready to update " . $extension->getExtensionName()
-                    . " to " . $extension->getVersionToUpdate();
+                    . ' to ' . $extension->getVersionToUpdate();
                 break;
 
             default:
@@ -66,6 +66,6 @@ class AssertExtensionAndVersionCheck extends AbstractConstraint
      */
     public function toString()
     {
-        return "Extension name and version check passed.";
+        return 'Extension name and version check passed.';
     }
 }

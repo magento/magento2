@@ -108,7 +108,7 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductEdit->getProductForm()->checkAttributeLabel($catalogProductAttribute),
-            "Product Attribute is absent on Product form."
+            'Product Attribute is absent on Product form.'
         );
     }
 

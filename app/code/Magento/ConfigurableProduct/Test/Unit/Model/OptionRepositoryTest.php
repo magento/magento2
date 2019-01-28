@@ -85,7 +85,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $optionId = 3;
-        $productSku = "configurable";
+        $productSku = 'configurable';
 
         $this->productMock->expects(self::once())
             ->method('getTypeId')
@@ -118,7 +118,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNotConfigurableProduct()
     {
-        $productSku = "configurable";
+        $productSku = 'configurable';
         $optionId = 3;
 
         $this->productMock->expects(self::once())
@@ -282,7 +282,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGetEmptyExtensionAttribute()
     {
         $optionId = 3;
-        $productSku = "configurable";
+        $productSku = 'configurable';
 
         $this->productMock->expects(self::once())
             ->method('getTypeId')
@@ -307,7 +307,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $productSku = "configurable";
+        $productSku = 'configurable';
 
         $this->productMock->expects(self::once())
             ->method('getTypeId')
@@ -334,7 +334,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetListNotConfigurableProduct()
     {
-        $productSku = "configurable";
+        $productSku = 'configurable';
 
         $this->productRepositoryMock->expects($this->once())
             ->method('get')

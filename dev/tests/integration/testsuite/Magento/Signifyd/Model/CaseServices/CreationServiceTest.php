@@ -198,7 +198,7 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderStatusHistoryInterface $orderHoldComment */
         $orderHoldComment = array_pop($histories);
         self::assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
-        self::assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
+        self::assertEquals('Awaiting the Signifyd guarantee disposition.', $orderHoldComment->getComment());
     }
 
     /**

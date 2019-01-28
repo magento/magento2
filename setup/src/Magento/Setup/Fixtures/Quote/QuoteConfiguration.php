@@ -113,7 +113,7 @@ class QuoteConfiguration extends \Magento\Framework\DataObject
 
         $this->setData(
             'fixture_data_filename',
-            dirname(__DIR__) . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . $this->fixtureDataFilename
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $this->fixtureDataFilename
         );
         $this->accumulateData();
 

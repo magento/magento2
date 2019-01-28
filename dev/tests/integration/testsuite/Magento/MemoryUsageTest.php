@@ -20,7 +20,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped("Test not relevant because no gc in HHVM.");
+            $this->markTestSkipped('Test not relevant because no gc in HHVM.');
         }
         $this->_helper = new \Magento\TestFramework\Helper\Memory(
             new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer())
@@ -45,7 +45,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
             $this->_getAllowedMemoryUsage(),
             $actualMemoryUsage,
             sprintf(
-                "Application reinitialization causes the memory leak of %u bytes per %u iterations.",
+                'Application reinitialization causes the memory leak of %u bytes per %u iterations.',
                 $actualMemoryUsage,
                 self::APP_REINITIALIZATION_LOOPS
             )

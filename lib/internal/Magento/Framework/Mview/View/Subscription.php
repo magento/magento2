@@ -200,11 +200,11 @@ class Subscription implements SubscriptionInterface
     {
         switch ($event) {
             case Trigger::EVENT_INSERT:
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
+                $trigger = 'INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);';
                 break;
             case Trigger::EVENT_UPDATE:
                 $tableName = $this->resource->getTableName($this->getTableName());
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
+                $trigger = 'INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);';
                 if ($this->connection->isTableExists($tableName) &&
                     $describe = $this->connection->describeTable($tableName)
                 ) {
@@ -219,7 +219,7 @@ class Subscription implements SubscriptionInterface
                             );
                         }
                         $trigger = sprintf(
-                            "IF (%s) THEN %s END IF;",
+                            'IF (%s) THEN %s END IF;',
                             implode(' OR ', $columns),
                             $trigger
                         );
@@ -227,7 +227,7 @@ class Subscription implements SubscriptionInterface
                 }
                 break;
             case Trigger::EVENT_DELETE:
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
+                $trigger = 'INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);';
                 break;
             default:
                 return '';

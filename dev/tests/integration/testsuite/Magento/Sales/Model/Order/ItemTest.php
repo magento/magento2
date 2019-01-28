@@ -27,11 +27,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 '{"option1":1,"option2":2}',
-                ["option1" => 1, "option2" => 2]
+                ['option1' => 1, 'option2' => 2]
             ],
             [
-                ["option1" => 1, "option2" => 2],
-                ["option1" => 1, "option2" => 2]
+                ['option1' => 1, 'option2' => 2],
+                ['option1' => 1, 'option2' => 2]
             ],
         ];
     }

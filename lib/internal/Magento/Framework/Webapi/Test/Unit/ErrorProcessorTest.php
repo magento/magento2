@@ -334,6 +334,6 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
             "Masked exception message is invalid: expected '{$expectedMessage}', " .
             "given '{$maskedException->getMessage()}'."
         );
-        $this->assertEquals($expectedDetails, $maskedException->getDetails(), "Masked exception details are invalid.");
+        $this->assertEquals($expectedDetails, $maskedException->getDetails(), 'Masked exception details are invalid.');
     }
 }

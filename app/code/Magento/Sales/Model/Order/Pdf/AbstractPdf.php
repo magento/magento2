@@ -589,11 +589,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "("
+            $totalShippingChargesText = '('
                 . __('Total Shipping Charges')
-                . " "
+                . ' '
                 . $order->formatPriceTxt($order->getShippingAmount())
-                . ")";
+                . ')';
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
@@ -793,7 +793,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $resultValue .= $value['title'];
 
             if (isset($value['price'])) {
-                $resultValue .= " " . $order->formatPrice($value['price']);
+                $resultValue .= ' ' . $order->formatPrice($value['price']);
             }
             return $resultValue;
         } else {

@@ -185,16 +185,16 @@ class Front extends Generic
             $this->getLayout()->createBlock(
                 \Magento\Backend\Block\Widget\Form\Element\Dependence::class
             )->addFieldMap(
-                "is_html_allowed_on_front",
+                'is_html_allowed_on_front',
                 'html_allowed_on_front'
             )->addFieldMap(
-                "frontend_input",
+                'frontend_input',
                 'frontend_input_type'
             )->addFieldMap(
-                "is_searchable",
+                'is_searchable',
                 'searchable'
             )->addFieldMap(
-                "is_visible_in_advanced_search",
+                'is_visible_in_advanced_search',
                 'advanced_search'
             )->addFieldDependence(
                 'advanced_search',

@@ -899,7 +899,7 @@ class Installer
     private function throwExceptionForNotWritablePaths(array $paths)
     {
         if ($paths) {
-            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $paths);
+            $errorMsg = 'Missing write permissions to the following paths:' . PHP_EOL . implode(PHP_EOL, $paths);
             throw new \Exception($errorMsg);
         }
     }

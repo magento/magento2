@@ -45,10 +45,10 @@ class DataProviderFromFile
         $annotations = $test->getAnnotations();
         //This annotation can be declared only on method level
         if (isset($annotations['method']['dataProviderFromFile']) && $test instanceof MutableDataInterface) {
-            $data = include TESTS_MODULES_PATH . "/" . $annotations['method']['dataProviderFromFile'][0];
+            $data = include TESTS_MODULES_PATH . '/' . $annotations['method']['dataProviderFromFile'][0];
             $test->setData($data);
         } else if (!$test instanceof MutableDataInterface) {
-            throw new \Exception("Test type do not supports @dataProviderFromFile annotation");
+            throw new \Exception('Test type do not supports @dataProviderFromFile annotation');
         }
     }
 

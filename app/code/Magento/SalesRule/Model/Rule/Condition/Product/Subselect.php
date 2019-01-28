@@ -122,7 +122,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     public function asHtml()
     {
         $html = $this->getTypeElement()->getHtml() . __(
-            "If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:",
+            'If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:',
             $this->getAttributeElement()->getHtml(),
             $this->getOperatorElement()->getHtml(),
             $this->getValueElement()->getHtml(),

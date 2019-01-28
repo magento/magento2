@@ -37,7 +37,7 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
         $basePath = "rest/{$storeCode}";
         $path = $basePath . '/V1/customerAccounts/createCustomer';
         $resultPath = $this->pathProcessor->process($path);
-        $this->assertEquals(str_replace($basePath, "", $path), $resultPath);
+        $this->assertEquals(str_replace($basePath, '', $path), $resultPath);
         $this->assertEquals($storeCode, $this->storeManager->getStore()->getCode());
     }
 

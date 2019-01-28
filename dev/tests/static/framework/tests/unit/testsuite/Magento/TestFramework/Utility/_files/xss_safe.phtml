@@ -14,12 +14,12 @@
 <input name="form_key" type="hidden" value="<?= $block->escapeJs('value') ?>" />
 <?= $block->escapeCss('value') ?>
 echo $var;
-<?= $block->getHtmlId("some value") ?>
-<?= $block->getIdHtml("some value") ?>
-<?= $block->getIdHtml("some value") ?>
-<?= "\$var1" ?>
+<?= $block->getHtmlId('some value') ?>
+<?= $block->getIdHtml('some value') ?>
+<?= $block->getIdHtml('some value') ?>
+<?= '$var1' ?>
 <?= '$var' ?>
-<?= "value" ?>
+<?= 'value' ?>
 <?= 'value' ?>
 <?= (int)$var ?>
 <?= (bool)$var ?>
@@ -28,7 +28,7 @@ echo $var;
 <?php pecho($var);?>
 <?= $object->methodHtml() .
     (bool)$var .
-    $block->escapeUrl("some value");
+    $block->escapeUrl('some value');
 ?>
 <?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>

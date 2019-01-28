@@ -23,7 +23,7 @@ class AssertAddProductToWishlistSuccessMessage extends AbstractConstraint
     /**
      * Success add message
      */
-    const SUCCESS_MESSAGE = "%s has been added to your Wish List. Click here to continue shopping.";
+    const SUCCESS_MESSAGE = '%s has been added to your Wish List. Click here to continue shopping.';
 
     /**
      * Assert that success message appears on My Wish List page after adding product to wishlist.

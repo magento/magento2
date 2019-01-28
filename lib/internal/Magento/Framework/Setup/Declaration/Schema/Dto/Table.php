@@ -297,7 +297,7 @@ class Table extends GenericElement implements
     public function getElementsByType($type)
     {
         if (!isset($this->{$type})) {
-            throw new \InvalidArgumentException(sprintf("Type %s is not defined", $type));
+            throw new \InvalidArgumentException(sprintf('Type %s is not defined', $type));
         }
 
         return $this->{$type};

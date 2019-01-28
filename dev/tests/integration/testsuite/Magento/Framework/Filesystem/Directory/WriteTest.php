@@ -57,10 +57,10 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     public function createProvider()
     {
         return [
-            ['newDir1', 0777, "newDir1"],
-            ['newDir1', 0777, "root_dir1/subdir1/subdir2"],
-            ['newDir2', 0777, "root_dir2/subdir"],
-            ['newDir1', 0777, "."]
+            ['newDir1', 0777, 'newDir1'],
+            ['newDir1', 0777, 'root_dir1/subdir1/subdir2'],
+            ['newDir2', 0777, 'root_dir2/subdir'],
+            ['newDir1', 0777, '.']
         ];
     }
 

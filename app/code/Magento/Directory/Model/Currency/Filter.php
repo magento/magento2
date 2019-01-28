@@ -93,7 +93,7 @@ class Filter implements \Zend_Filter_Interface
     {
         $value = $this->_localeFormat->getNumber($value);
         $value = $this->priceCurrency->round($this->_rate * $value);
-        $value = sprintf("%f", $value);
+        $value = sprintf('%f', $value);
         return $this->_currency->toCurrency($value);
     }
 }

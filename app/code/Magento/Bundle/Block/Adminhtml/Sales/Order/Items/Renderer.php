@@ -238,7 +238,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         if (!$this->isChildCalculated($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result .= " " . $this->getOrderItem()->getOrder()->formatPrice($attributes['price']);
+                $result .= ' ' . $this->getOrderItem()->getOrder()->formatPrice($attributes['price']);
             }
         }
         return $result;

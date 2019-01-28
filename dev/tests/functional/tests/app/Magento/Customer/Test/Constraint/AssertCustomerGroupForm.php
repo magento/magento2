@@ -78,7 +78,7 @@ class AssertCustomerGroupForm extends AbstractConstraint
                 continue;
             }
             if ($value !== $formData[$key]) {
-                $errorMessages[] = "Data in " . $key . " field is not equal."
+                $errorMessages[] = 'Data in ' . $key . ' field is not equal.'
                     . "\nExpected: " . $value
                     . "\nActual: " . $formData[$key];
             }

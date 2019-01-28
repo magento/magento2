@@ -38,7 +38,7 @@ class AssertBundleProductInCart extends AssertProductInCart
     {
         $checkoutData = $product->getCheckoutData();
         if (isset($checkoutData['cartItem']['subItemPrice'])) {
-            $this->fixtureActualPrice += $checkoutData["cartItem"]["subItemPrice"];
+            $this->fixtureActualPrice += $checkoutData['cartItem']['subItemPrice'];
         }
     }
 }

@@ -71,7 +71,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderTextWithDoubleQuotes()
     {
-        $translatedTextInDictionary = "That\"s translated text";
+        $translatedTextInDictionary = 'That"s translated text';
         $translatedTextInput = 'That\"s translated text';
         $translate = 'translate';
 

@@ -57,7 +57,7 @@ class AssertProductComparePage extends AbstractConstraint
         CmsIndex $cmsIndex
     ) {
         $cmsIndex->open();
-        $cmsIndex->getLinksBlock()->openLink("Compare Products");
+        $cmsIndex->getLinksBlock()->openLink('Compare Products');
         foreach ($products as $key => $product) {
             foreach ($this->attributeProduct as $attributeKey => $attribute) {
                 $value = $attribute;

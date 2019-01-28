@@ -51,7 +51,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             true,
             ['getMasterAttributeCode', 'validateRow', 'getEntityTypeCode']
         );
-        $model->expects($this->any())->method('getMasterAttributeCode')->will($this->returnValue("email"));
+        $model->expects($this->any())->method('getMasterAttributeCode')->will($this->returnValue('email'));
         $model->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $model->expects($this->any())->method('getEntityTypeCode')->will($this->returnValue('customer'));
 

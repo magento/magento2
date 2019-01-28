@@ -37,12 +37,12 @@ class ProcessableExceptionTest extends \PHPUnit\Framework\TestCase
             [
                 ProcessableException::API_INTERNAL_ERROR,
                 "I'm sorry - but we were not able to process your payment. "
-                . "Please try another payment method or contact us so we can assist you.",
+                . 'Please try another payment method or contact us so we can assist you.',
             ],
             [
                 ProcessableException::API_UNABLE_PROCESS_PAYMENT_ERROR_CODE,
                 "I'm sorry - but we were not able to process your payment. "
-                . "Please try another payment method or contact us so we can assist you."
+                . 'Please try another payment method or contact us so we can assist you.'
             ],
             [
                 ProcessableException::API_COUNTRY_FILTER_DECLINE,

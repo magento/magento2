@@ -66,7 +66,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
                 ['name' => 'subject'],
                 ['name' => 'log'],
             ],
-            'body' => "\$this->log = \$log;"
+            'body' => '$this->log = $log;'
                 . "\n\$this->subject = \$subject;"
         ];
     }
@@ -98,7 +98,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
         ];
         $methods[] = [
             'name' => '__clone',
-            'body' => "\$this->subject = clone \$this->subject;"
+            'body' => '$this->subject = clone $this->subject;'
                 . "\n\$this->log->add(\$this->subject);",
             'docblock' => [
                 'shortDescription' => 'Clone subject instance',
@@ -112,7 +112,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
 
         $methods[] = [
             'name' => '__wakeUp',
-            'body' => "\$this->log = \\Magento\\Framework\\ObjectManager\\Profiler\\Log::getInstance();"
+            'body' => '$this->log = \\Magento\\Framework\\ObjectManager\\Profiler\\Log::getInstance();'
                 . "\n\$this->log->add(\$this->subject);",
         ];
 
@@ -157,7 +157,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
-        $body = "\$args = func_get_args();";
+        $body = '$args = func_get_args();';
         foreach ($parameters as $key => $parameter) {
             if ($parameter['passedByReference']) {
                 $body .= "\$args[$key] = &\$" . $parameter['name'] . ';';

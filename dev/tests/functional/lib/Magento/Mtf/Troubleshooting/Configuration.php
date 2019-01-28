@@ -69,7 +69,7 @@ class Configuration extends \Symfony\Component\Console\Command\Command
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]
         );
-        $output->writeln("Applying Magento configuration...");
+        $output->writeln('Applying Magento configuration...');
         $this->state1->apply();
         $output->outputMessages(
             ['info' => ['Magento configuration was updated in order to run functional tests without errors '

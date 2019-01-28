@@ -162,7 +162,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             'custom_attributes' => [
                 [
                     'attribute_code' => 'description',
-                    'value' => "Update Category Description Test",
+                    'value' => 'Update Category Description Test',
                 ],
             ],
         ];
@@ -172,8 +172,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
         $category = $model->load($categoryId);
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
-        $this->assertEquals("Update Category Test", $category->getName());
-        $this->assertEquals("Update Category Description Test", $category->getDescription());
+        $this->assertEquals('Update Category Test', $category->getName());
+        $this->assertEquals('Update Category Description Test', $category->getDescription());
         // delete category to clean up auto-generated url rewrites
         $this->deleteCategory($categoryId);
     }

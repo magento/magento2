@@ -51,7 +51,7 @@ class CopyModules
             foreach ($moduleNames as $moduleName) {
                 $this->cliCommand->introduceModule($moduleName);
                 //Include module`s registration.php to load it
-                $path = MAGENTO_MODULES_PATH . explode("_", $moduleName)[1] . '/registration.php';
+                $path = MAGENTO_MODULES_PATH . explode('_', $moduleName)[1] . '/registration.php';
                 include $path;
             }
         }
@@ -70,7 +70,7 @@ class CopyModules
             foreach ($annotations['method']['moduleName'] as $moduleName) {
                 $path = MAGENTO_MODULES_PATH .
                     //Take only module name from Magento_ModuleName
-                    explode("_", $moduleName)[1];
+                    explode('_', $moduleName)[1];
                 File::rmdirRecursive($path);
                 $this->unsergisterModuleFromComponentRegistrar($moduleName);
             }

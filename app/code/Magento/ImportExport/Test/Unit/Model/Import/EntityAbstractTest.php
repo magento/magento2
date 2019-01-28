@@ -221,109 +221,109 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     public function dataProviderForTestGetBehaviorWithRowData()
     {
         return [
-            "add/update behavior and row with delete in action column" => [
+            'add/update behavior and row with delete in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "delete behavior and row with delete in action column" => [
+            'delete behavior and row with delete in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "custom behavior and row with delete in action column" => [
+            'custom behavior and row with delete in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "add/update behavior and row with update in action column" => [
+            'add/update behavior and row with update in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "delete behavior and row with update in action column" => [
+            'delete behavior and row with update in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "custom behavior and row with update in action column" => [
+            'custom behavior and row with update in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "add/update behavior and row with bogus string in action column" => [
+            'add/update behavior and row with bogus string in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "delete behavior and row with bogus string in action column" => [
+            'delete behavior and row with bogus string in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "custom behavior and row with bogus string in action column" => [
+            'custom behavior and row with bogus string in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "add/update behavior and row with null in action column" => [
+            'add/update behavior and row with null in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "delete behavior and row with null in action column" => [
+            'delete behavior and row with null in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "custom behavior and row with null in action column" => [
+            'custom behavior and row with null in action column' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "add/update behavior and empty row" => [
+            'add/update behavior and empty row' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
                 '$rowData' => null,
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "delete behavior and empty row" => [
+            'delete behavior and empty row' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$rowData' => null,
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "custom behavior and empty row" => [
+            'custom behavior and empty row' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => null,
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
             ],
-            "add/update behavior and row is empty array" => [
+            'add/update behavior and row is empty array' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
                 '$rowData' => [],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             ],
-            "delete behavior and empty row is empty array" => [
+            'delete behavior and empty row is empty array' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$rowData' => [],
                 '$expectedBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
             ],
-            "custom behavior and empty row is empty array" => [
+            'custom behavior and empty row is empty array' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [],
                 '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
             ],
-            "custom behavior and row with delete in action column and empty available behaviors" => [
+            'custom behavior and row with delete in action column and empty available behaviors' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
@@ -331,13 +331,13 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
                 '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
                 '$availableBehaviors' => [],
             ],
-            "custom behavior and row with update in action column and empty available behaviors" => [
+            'custom behavior and row with update in action column and empty available behaviors' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
                 '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
                 '$availableBehaviors' => [],
             ],
-            "custom behavior and row with bogus string in action column and empty available behaviors" => [
+            'custom behavior and row with bogus string in action column and empty available behaviors' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
@@ -345,7 +345,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
                 '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
                 '$availableBehaviors' => [],
             ],
-            "custom behavior and row with null in action column and empty available behaviors" => [
+            'custom behavior and row with null in action column and empty available behaviors' => [
                 '$inputBehavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
                 '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
                 '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),

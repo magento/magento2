@@ -219,7 +219,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->dateTimeFactory->expects(static::once())
             ->method('create')
-            ->with("now", new \DateTimeZone('UTC'))
+            ->with('now', new \DateTimeZone('UTC'))
             ->willReturn($date);
         $date->expects(static::once())
             ->method('format')
@@ -294,7 +294,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->dateTimeFactory->expects(static::once())
             ->method('create')
-            ->with("now", new \DateTimeZone('UTC'))
+            ->with('now', new \DateTimeZone('UTC'))
             ->willReturn($date);
         $date->expects(static::once())
             ->method('format')

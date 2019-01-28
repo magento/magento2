@@ -114,7 +114,7 @@ class Memory
         $pow = $unitSymbol ? strpos(self::MEMORY_UNITS, $unitSymbol) : 0;
         $is32Bit = PHP_INT_SIZE == 4;
         if ($is32Bit && $pow >= 4) {
-            throw new \OutOfBoundsException("A 32-bit system is unable to process such a number.");
+            throw new \OutOfBoundsException('A 32-bit system is unable to process such a number.');
         }
         if ($unitSymbol) {
             $result *= pow(1024, $pow);

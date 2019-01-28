@@ -327,7 +327,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             $this->quote->getCustomerGroupId(),
-            "Customer group ID is invalid"
+            'Customer group ID is invalid'
         );
     }
 
@@ -341,7 +341,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setCustomerGroupId($customerGroupId);
 
         /** SUT execution */
-        $this->assertEquals($customerGroupId, $this->quote->getCustomerGroupId(), "Customer group ID is invalid");
+        $this->assertEquals($customerGroupId, $this->quote->getCustomerGroupId(), 'Customer group ID is invalid');
     }
 
     /**

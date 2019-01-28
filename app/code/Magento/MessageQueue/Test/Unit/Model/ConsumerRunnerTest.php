@@ -92,7 +92,7 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with($consumerName)
-            ->willThrowException(new LocalizedException(new Phrase("Some exception")));
+            ->willThrowException(new LocalizedException(new Phrase('Some exception')));
 
         $this->consumerRunner->$consumerName();
     }

@@ -245,7 +245,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
-        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
+        $countSelect->columns(new \Zend_Db_Expr(('COUNT(DISTINCT '.implode(', ', $group).')')));
         return $countSelect;
     }
 
@@ -884,7 +884,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 return $tableAlias;
             }
         }
-        throw new \LogicException("Main table cannot be identified.");
+        throw new \LogicException('Main table cannot be identified.');
     }
 
     /**

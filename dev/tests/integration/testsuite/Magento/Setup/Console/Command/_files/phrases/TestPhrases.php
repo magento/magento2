@@ -71,21 +71,21 @@ class TestPhrases
 
         $doubleQuoteTranslateFunctions = [
             // Single concatenation
-            __("first part" . " second part"),
-            __("first part" . " second part" . " third part"),
+            __('first part' . ' second part'),
+            __('first part' . ' second part' . ' third part'),
 
             // Multiple concatenation
-            __("first part" . " second part with one string literal placeholder %1", "arg"),
-            __("first part of concat" . " second part with one variable placeholder %1", $str1),
-            __("first part of concat" . " second part with two placeholders %1, %2", $str1, $str2),
-            __("first part of concat" . " second part" . " third part with one placeholder %1", "arg"),
-            __("first part of concat" . " second part" . " third part with two placeholders %1, %2", $str1, $str2),
+            __('first part' . ' second part with one string literal placeholder %1', 'arg'),
+            __('first part of concat' . ' second part with one variable placeholder %1', $str1),
+            __('first part of concat' . ' second part with two placeholders %1, %2', $str1, $str2),
+            __('first part of concat' . ' second part' . ' third part with one placeholder %1', 'arg'),
+            __('first part of concat' . ' second part' . ' third part with two placeholders %1, %2', $str1, $str2),
 
             // Escaped quotes
             __("string with 'single quotes'"),
-            __("string with placeholder in single quotes '%1'", "arg"),
-            __("string with escaped \"double quotes\""),
-            __("string with placeholder in escaped double quotes \"%1\"", "arg"),
+            __("string with placeholder in single quotes '%1'", 'arg'),
+            __('string with escaped "double quotes"'),
+            __('string with placeholder in escaped double quotes "%1"', 'arg'),
         ];
 
         $unclosedApostrophePhrase = __('string that\'s got an unclosed single quote in it');

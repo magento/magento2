@@ -108,7 +108,7 @@ class Transaction
 
         $payment = $this->paymentManagement->get($quote->getId());
         if (!$payment instanceof Payment) {
-            throw new \InvalidArgumentException("Variable must contain instance of \\Quote\\Payment.");
+            throw new \InvalidArgumentException('Variable must contain instance of \\Quote\\Payment.');
         }
 
         $payment->setData(OrderPaymentInterface::CC_TYPE, $response->getData(OrderPaymentInterface::CC_TYPE));

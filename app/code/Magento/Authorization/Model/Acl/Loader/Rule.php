@@ -104,7 +104,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
             return $this->serializer->unserialize($rulesCachedData);
         }
 
-        $ruleTable = $this->_resource->getTableName("authorization_rule");
+        $ruleTable = $this->_resource->getTableName('authorization_rule');
         $connection = $this->_resource->getConnection();
         $select = $connection->select()
             ->from(['r' => $ruleTable]);

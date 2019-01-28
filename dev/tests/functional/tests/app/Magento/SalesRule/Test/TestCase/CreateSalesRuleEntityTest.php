@@ -130,7 +130,7 @@ class CreateSalesRuleEntityTest extends Injectable
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
 
-        if ($salesRule->getCouponType() == "Auto") {
+        if ($salesRule->getCouponType() == 'Auto') {
             $this->promoQuoteNew->getFormPageActions()->saveAndContinue();
             $form = $this->promoQuoteEdit->getSalesRuleForm();
             $form->openSection('manage_coupon_code');
@@ -141,7 +141,7 @@ class CreateSalesRuleEntityTest extends Injectable
             $couponCode = $section->getGeneratedCouponCode();
             $this->promoQuoteEdit->getFormPageActions()->save();
 
-            return ["couponCode" => $couponCode];
+            return ['couponCode' => $couponCode];
         } else {
             $this->promoQuoteNew->getFormPageActions()->save();
         }

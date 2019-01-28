@@ -104,7 +104,7 @@ class DataObjectProcessor
 
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
                 $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
-            } elseif ($key === "extension_attributes") {
+            } elseif ($key === 'extension_attributes') {
                 $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
                 if (empty($value)) {
                     continue;

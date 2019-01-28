@@ -53,7 +53,7 @@ class RefBicPatch implements
      */
     public function apply()
     {
-        throw new \Exception("This patch can`t be applied, as it was created to test BIC");
+        throw new \Exception('This patch can`t be applied, as it was created to test BIC');
     }
 
     public function revert()

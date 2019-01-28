@@ -61,7 +61,7 @@ class ZeroUnitsSniff implements Sniff
         $nextToken = $tokens[$stackPtr + 1];
 
         if (T_LNUMBER === $tokenCode
-            && "0" === $tokenContent
+            && '0' === $tokenContent
             && T_STRING === $nextToken['code']
             && in_array($nextToken['content'], $this->units)
         ) {
@@ -69,7 +69,7 @@ class ZeroUnitsSniff implements Sniff
         }
 
         if ((T_DNUMBER === $tokenCode)
-            && 0 === strpos($tokenContent, "0")
+            && 0 === strpos($tokenContent, '0')
             && ((float)$tokenContent < 1)
         ) {
             $phpcsFile->addError('Values starts from "0"', $stackPtr, 'ZeroUnitFound');

@@ -57,7 +57,7 @@ class MinifyTemplatesTest extends \PHPUnit\Framework\TestCase
      */
     public function testMinifyTemplates()
     {
-        $templateMock = "template.phtml";
+        $templateMock = 'template.phtml';
         $templatesMock = [$templateMock];
 
         $this->filesUtils->expects($this->once())

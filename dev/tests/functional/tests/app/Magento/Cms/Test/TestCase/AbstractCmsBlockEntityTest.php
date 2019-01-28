@@ -105,7 +105,7 @@ abstract class AbstractCmsBlockEntityTest extends Injectable
             if (in_array($store, $this->skippedStores)) {
                 continue;
             }
-            $tmp = explode("/", $store);
+            $tmp = explode('/', $store);
             $filter['store_title'] = end($tmp);
             $this->storeIndex->open();
             $this->storeIndex->getStoreGrid()->searchAndOpen($filter);

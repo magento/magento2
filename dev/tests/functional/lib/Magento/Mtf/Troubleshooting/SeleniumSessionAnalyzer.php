@@ -58,7 +58,7 @@ class SeleniumSessionAnalyzer extends \Symfony\Component\Console\Command\Command
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]
         );
-        $output->writeln("Verifying selenium server session...");
+        $output->writeln('Verifying selenium server session...');
         try {
             $driver = $this->objectManager->create(Driver::class);
             $driver->closeWindow();

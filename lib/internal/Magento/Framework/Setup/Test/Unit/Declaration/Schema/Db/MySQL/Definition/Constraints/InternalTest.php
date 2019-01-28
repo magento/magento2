@@ -99,13 +99,13 @@ class InternalTest extends \PHPUnit\Framework\TestCase
                 'name' => 'constraint_name_primary',
                 'type' => 'primary',
                 'columns' => ['id', 'parent_id'],
-                'expectedExpression' => "CONSTRAINT  PRIMARY KEY (`id`,`parent_id`)"
+                'expectedExpression' => 'CONSTRAINT  PRIMARY KEY (`id`,`parent_id`)'
             ],
             [
                 'name' => 'constraint_name_unique',
                 'type' => 'unique',
                 'columns' => ['id', 'parent_id'],
-                'expectedExpression' => "CONSTRAINT `constraint_name_unique` UNIQUE KEY (`id`,`parent_id`)"
+                'expectedExpression' => 'CONSTRAINT `constraint_name_unique` UNIQUE KEY (`id`,`parent_id`)'
             ],
         ];
     }

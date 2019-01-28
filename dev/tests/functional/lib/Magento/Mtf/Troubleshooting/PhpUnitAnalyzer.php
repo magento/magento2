@@ -57,7 +57,7 @@ class PhpUnitAnalyzer extends \Symfony\Component\Console\Command\Command
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]
         );
-        $output->writeln("Checking phpunit.xml file availability...");
+        $output->writeln('Checking phpunit.xml file availability...');
         $messages = [];
         $configFileExists = false;
         if (file_exists(MTF_PHPUNIT_FILE)) {
@@ -77,6 +77,6 @@ class PhpUnitAnalyzer extends \Symfony\Component\Console\Command\Command
             $messages['error'][] = 'Cannot define phpunit configuration path.';
         }
         $output->outputMessages($messages);
-        $output->writeln("phpunit.xml check finished.");
+        $output->writeln('phpunit.xml check finished.');
     }
 }

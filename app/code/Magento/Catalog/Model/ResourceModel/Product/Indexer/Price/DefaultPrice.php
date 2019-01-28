@@ -615,13 +615,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $minPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
         $minPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
         $minPriceMin = new \Zend_Db_Expr("MIN({$minPriceExpr})");
-        $minPrice = $connection->getCheckSql("MIN(o.is_require) = 1", $minPriceMin, '0');
+        $minPrice = $connection->getCheckSql('MIN(o.is_require) = 1', $minPriceMin, '0');
 
         $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
         $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
         $tierPriceMin = new \Zend_Db_Expr("MIN({$tierPriceExpr})");
-        $tierPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
-        $tierPrice = $connection->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPriceValue = $connection->getCheckSql('MIN(o.is_require) > 0', $tierPriceMin, 0);
+        $tierPrice = $connection->getCheckSql('MIN(i.base_tier) IS NOT NULL', $tierPriceValue, 'NULL');
 
         $maxPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
         $maxPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
@@ -687,7 +687,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
         $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
         $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require = 1", $tierPriceExpr, 0);
-        $tierPrice = $connection->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPrice = $connection->getCheckSql('i.base_tier IS NOT NULL', $tierPriceValue, 'NULL');
 
         $select->columns(
             [

@@ -93,7 +93,7 @@ class SimpleDataObjectConverter
     public function convertStdObjectToArray($input, $removeItemNode = false)
     {
         if (!is_object($input) && !is_array($input)) {
-            throw new \InvalidArgumentException("Input argument must be an array or object");
+            throw new \InvalidArgumentException('Input argument must be an array or object');
         }
         // @codingStandardsIgnoreStart
         if ($removeItemNode && (isset($input->item) || isset($input->Map))) {
@@ -172,6 +172,6 @@ class SimpleDataObjectConverter
      */
     public static function camelCaseToSnakeCase($name)
     {
-        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+        return strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $name));
     }
 }

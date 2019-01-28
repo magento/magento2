@@ -228,7 +228,7 @@ class ReadinessCheck
             $phpSettingsCheckResult['responseType'] == ResponseTypeInterface::RESPONSE_TYPE_ERROR) {
             foreach ($phpSettingsCheckResult['data'] as $valueArray) {
                 if ($valueArray['error'] == true) {
-                    $messages[] = preg_replace('/\s+/S', " ", $valueArray['message']);
+                    $messages[] = preg_replace('/\s+/S', ' ', $valueArray['message']);
                 }
             }
         }

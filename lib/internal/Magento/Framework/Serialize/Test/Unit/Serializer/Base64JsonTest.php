@@ -71,7 +71,7 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
             ['{"a":"b","d":123}', ['a' => 'b', 'd' => 123]],
             ['123', 123],
             ['10.56', 10.56],
-            ["IiI=", ''],
+            ['IiI=', ''],
             ['InN0cmluZyI=', 'string'],
             ['bnVsbA==', null],
             ['ZmFsc2U=', false],

@@ -250,7 +250,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(
             $originalQuantity,
             $quoteItem->getQty(),
-            "Precondition failed: invalid quote item quantity"
+            'Precondition failed: invalid quote item quantity'
         );
 
         /** Execute SUT */
@@ -261,7 +261,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load($checkoutSession->getQuote()->getId());
         $quoteItem = $this->_getQuoteItemIdByProductId($quote, $product->getId());
-        $this->assertEquals($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
+        $this->assertEquals($updatedQuantity, $quoteItem->getQty(), 'Invalid quote item quantity');
     }
 
     /**

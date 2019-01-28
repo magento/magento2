@@ -38,6 +38,6 @@ class AssertSuccessMessage
      */
     public function toString()
     {
-        return "Success message is correct.";
+        return 'Success message is correct.';
     }
 }

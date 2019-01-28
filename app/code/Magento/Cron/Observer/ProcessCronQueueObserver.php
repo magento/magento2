@@ -262,7 +262,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
             $this->logger->warning(
                 sprintf(
-                    "Could not acquire lock for cron group: %s, skipping run",
+                    'Could not acquire lock for cron group: %s, skipping run',
                     $groupId
                 )
             );

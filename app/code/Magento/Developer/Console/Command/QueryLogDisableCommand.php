@@ -23,7 +23,7 @@ class QueryLogDisableCommand extends Command
     /**
      * Success message
      */
-    const SUCCESS_MESSAGE = "DB query logging disabled.";
+    const SUCCESS_MESSAGE = 'DB query logging disabled.';
 
     /**
      * @var Writer
@@ -63,6 +63,6 @@ class QueryLogDisableCommand extends Command
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_DISABLED];
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
-        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        $output->writeln('<info>'. self::SUCCESS_MESSAGE . '</info>');
     }
 }

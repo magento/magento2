@@ -107,7 +107,7 @@ class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
     {
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->will($this->throwException(new \Exception('Test error message')));
         $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();

@@ -72,8 +72,8 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getContent')->willReturn('{}');
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
-        $this->uninstallCollector->expects($this->never())->method('collectUninstall')->with(["some_module"]);
-        $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
+        $this->uninstallCollector->expects($this->never())->method('collectUninstall')->with(['some_module']);
+        $this->assertFalse($this->controller->hasUninstallAction()->getVariable('hasUninstall'));
     }
 
     /**
@@ -91,10 +91,10 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
         $this->uninstallCollector
             ->expects($this->once())
             ->method('collectUninstall')
-            ->with(["some_module"])
+            ->with(['some_module'])
             ->willReturn($expected);
 
-        $this->assertSame($result, $this->controller->hasUninstallAction()->getVariable("hasUninstall"));
+        $this->assertSame($result, $this->controller->hasUninstallAction()->getVariable('hasUninstall'));
     }
 
     /**

@@ -41,10 +41,10 @@ class AssertCmsBlockInGrid extends AbstractConstraint
         }
         // add creation_time & update_time to filter if there are ones
         if (isset($data['creation_time'])) {
-            $filter['creation_time_from'] = date("M j, Y", strtotime($cmsBlock->getCreationTime()));
+            $filter['creation_time_from'] = date('M j, Y', strtotime($cmsBlock->getCreationTime()));
         }
         if (isset($data['update_time'])) {
-            $filter['update_time_from'] = date("M j, Y", strtotime($cmsBlock->getUpdateTime()));
+            $filter['update_time_from'] = date('M j, Y', strtotime($cmsBlock->getUpdateTime()));
         }
 
         $cmsBlockIndex->getCmsBlockGrid()->search($filter);

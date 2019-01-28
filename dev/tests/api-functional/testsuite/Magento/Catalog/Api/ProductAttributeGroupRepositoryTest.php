@@ -35,7 +35,7 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/groups/" . $group->getId(),
+                'resourcePath' => self::RESOURCE_PATH . '/groups/' . $group->getId(),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [

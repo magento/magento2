@@ -51,6 +51,6 @@ class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about Signifyd Case is available in Comments History section.";
+        return 'Message about Signifyd Case is available in Comments History section.';
     }
 }

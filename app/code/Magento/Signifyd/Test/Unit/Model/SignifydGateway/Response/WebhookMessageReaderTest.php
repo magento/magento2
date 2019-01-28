@@ -67,7 +67,7 @@ class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
     {
         $rawBody = 'body';
         $topic = 'topic';
-        $decodedData = ['status' => "DISMISSED", 'orderId' => '19418'];
+        $decodedData = ['status' => 'DISMISSED', 'orderId' => '19418'];
 
         $this->webhookRequest->expects($this->once())
             ->method('getBody')

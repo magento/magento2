@@ -25,7 +25,7 @@ class BundlePrice implements ProductRenderCollectorInterface
     /**
      * Product type code
      */
-    const PRODUCT_TYPE = "bundle";
+    const PRODUCT_TYPE = 'bundle';
 
     /**
      * @var PriceCurrencyInterface

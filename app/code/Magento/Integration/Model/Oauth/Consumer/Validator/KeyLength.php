@@ -21,7 +21,7 @@ class KeyLength extends \Zend_Validate_StringLength
      * @var array
      */
     protected $_messageTemplates = [
-        self::INVALID   => "Invalid type given for %name%. String expected",
+        self::INVALID   => 'Invalid type given for %name%. String expected',
         self::TOO_SHORT => "%name% '%value%' is less than %min% characters long",
         self::TOO_LONG  => "%name% '%value%' is more than %max% characters long",
     ];

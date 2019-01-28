@@ -28,16 +28,16 @@ class ComponentRegistrarTest extends \PHPUnit\Framework\TestCase
      */
     public function testWithInvalidType()
     {
-        ComponentRegistrar::register('some_type', "test_module_one", "some/path/name/one");
+        ComponentRegistrar::register('some_type', 'test_module_one', 'some/path/name/one');
     }
 
     public function testGetPathsForModule()
     {
-        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/one");
-        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_two", "some/path/name/two");
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, 'test_module_one', 'some/path/name/one');
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, 'test_module_two', 'some/path/name/two');
         $expected = [
-            'test_module_one' => "some/path/name/one",
-            'test_module_two' => "some/path/name/two",
+            'test_module_one' => 'some/path/name/one',
+            'test_module_two' => 'some/path/name/two',
         ];
         $this->assertContains($expected['test_module_one'], $this->object->getPaths(ComponentRegistrar::MODULE));
         $this->assertContains($expected['test_module_two'], $this->object->getPaths(ComponentRegistrar::MODULE));
@@ -48,12 +48,12 @@ class ComponentRegistrarTest extends \PHPUnit\Framework\TestCase
      */
     public function testRegistrarWithExceptionForModules()
     {
-        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/onemore");
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, 'test_module_one', 'some/path/name/onemore');
     }
 
     public function testGetPath()
     {
-        $this->assertSame("some/path/name/one", $this->object->getPath(ComponentRegistrar::MODULE, 'test_module_one'));
-        $this->assertSame("some/path/name/two", $this->object->getPath(ComponentRegistrar::MODULE, 'test_module_two'));
+        $this->assertSame('some/path/name/one', $this->object->getPath(ComponentRegistrar::MODULE, 'test_module_one'));
+        $this->assertSame('some/path/name/two', $this->object->getPath(ComponentRegistrar::MODULE, 'test_module_two'));
     }
 }

@@ -85,7 +85,7 @@ class TierPrice extends DataSource
     public function getData($key = null)
     {
         if (!isset($this->fixtureData['dataset'])) {
-            throw new \Exception("Data must be set");
+            throw new \Exception('Data must be set');
         }
         $this->data = $this->repositoryFactory->get($this->params['repository'])->get($this->fixtureData['dataset']);
         if (!empty($this->fixtureData['data']['website'])) {

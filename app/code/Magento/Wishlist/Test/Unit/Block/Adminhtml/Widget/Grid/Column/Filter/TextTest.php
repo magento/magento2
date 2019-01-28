@@ -22,8 +22,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCondition()
     {
-        $value = "test";
+        $value = 'test';
         $this->textFilterBlock->setValue($value);
-        $this->assertSame(["like" => $value], $this->textFilterBlock->getCondition());
+        $this->assertSame(['like' => $value], $this->textFilterBlock->getCondition());
     }
 }

@@ -58,6 +58,6 @@ class AssertVersionOnGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return "Version of extension is correct.";
+        return 'Version of extension is correct.';
     }
 }

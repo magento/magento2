@@ -59,13 +59,13 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
             [
                 'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('px'),
                 'expectedResult' => [
-                    "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.",
+                    'Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.',
                 ]
             ],
             [
                 'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('abracadabra'),
                 'expectedResult' => [
-                    "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.",
+                    'Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.',
                 ]
             ],
         ];

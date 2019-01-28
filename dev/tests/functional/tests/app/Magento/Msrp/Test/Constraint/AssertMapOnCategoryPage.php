@@ -58,6 +58,6 @@ class AssertMapOnCategoryPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MAP data on category page is correct.";
+        return 'Displayed Product MAP data on category page is correct.';
     }
 }

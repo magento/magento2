@@ -54,7 +54,7 @@ class AssertAdvancedSearchProductResult extends AbstractConstraint
     {
         $expectedResult = [];
         foreach ($isVisibleInAdvancedSearch as $key => $value) {
-            if ($value == "Yes") {
+            if ($value == 'Yes') {
                 $expectedResult[] = sprintf(self::FOUNDED_PRODUCT_MESSAGE, $products[$key]->getName());
             }
         }

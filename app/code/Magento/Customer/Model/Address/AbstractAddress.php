@@ -628,7 +628,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function unsRegion()
     {
-        return $this->unsetData("region");
+        return $this->unsetData('region');
     }
 
     /**

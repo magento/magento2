@@ -201,9 +201,9 @@ QUERY;
             $this->assertResponseFields(
                 $attributeMetaData[$itemsIndex][0],
                 [
-                  "attribute_code" => $expectedAttributeCodes[$itemsIndex],
-                  "attribute_type" =>$attributeTypes[0],
-                  "entity_type" => $entityTypes[$itemsIndex]
+                  'attribute_code' => $expectedAttributeCodes[$itemsIndex],
+                  'attribute_type' =>$attributeTypes[0],
+                  'entity_type' => $entityTypes[$itemsIndex]
                 ]
             );
         }
@@ -224,9 +224,9 @@ QUERY;
             $this->assertResponseFields(
                 $attributeMetaDataItems[$itemIndex][0],
                 [
-                    "attribute_code" => $expectedAttributeCodes[$itemIndex],
-                    "attribute_type" =>$attributeTypes[$itemIndex],
-                    "entity_type" => $entityTypes[$itemIndex]
+                    'attribute_code' => $expectedAttributeCodes[$itemIndex],
+                    'attribute_type' =>$attributeTypes[$itemIndex],
+                    'entity_type' => $entityTypes[$itemIndex]
                 ]
             );
         }

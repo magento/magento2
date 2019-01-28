@@ -144,7 +144,7 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
                     . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
                     . "Magento_Module1 schema: current version - none, required version - 4.4.4\n"
-                    . "Magento_Module2 data: current version - 2.8.7, required version - 5.1.6"
+                    . 'Magento_Module2 data: current version - 2.8.7, required version - 5.1.6'
             ],
             'module versions too high' => [
                 'errors' => [
@@ -161,11 +161,11 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
                         DbVersionInfo::KEY_REQUIRED => '1.0.9'
                     ],
                 ],
-                'expectedMessage' => "Please update your modules: "
+                'expectedMessage' => 'Please update your modules: '
                     . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
                     . "Magento_Module3 schema: code version - 1.0.0, database version - 2.0.0\n"
-                    . "Magento_Module4 data: code version - 1.0.9, database version - 1.0.10",
+                    . 'Magento_Module4 data: code version - 1.0.9, database version - 1.0.10',
             ],
             'some versions too high, some too low' => [
                 'errors' => [
@@ -182,10 +182,10 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
                         DbVersionInfo::KEY_REQUIRED => '1.0.0'
                     ],
                 ],
-                'expectedMessage' => "Please update your modules: "
+                'expectedMessage' => 'Please update your modules: '
                     . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
-                    . "Magento_Module1 schema: code version - 1.0.0, database version - 2.0.0"
+                    . 'Magento_Module1 schema: code version - 1.0.0, database version - 2.0.0'
             ]
         ];
     }

@@ -59,7 +59,7 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
                 $value['qty']
             ) . ' x ' . $this->escapeHtml(
                 $value['title']
-            ) . " " . $this->getItem()->getOrder()->formatPrice(
+            ) . ' ' . $this->getItem()->getOrder()->formatPrice(
                 $value['price']
             );
         } else {

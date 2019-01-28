@@ -405,7 +405,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 $messages[] =
                     "<error>Cannot uninstall module '$module' because the following module(s) depend on it:</error>" .
                     PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", array_keys($dependingModules)) .
-                    "</error>";
+                    '</error>';
             }
         }
         return $messages;

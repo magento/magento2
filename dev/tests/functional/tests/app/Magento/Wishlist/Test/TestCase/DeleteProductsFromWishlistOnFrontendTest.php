@@ -46,7 +46,7 @@ class DeleteProductsFromWishlistOnFrontendTest extends AbstractWishlistTest
         $this->addToWishlist($products);
 
         // Steps
-        $this->cmsIndex->getLinksBlock()->openLink("My Wish List");
+        $this->cmsIndex->getLinksBlock()->openLink('My Wish List');
         $removeProducts = $this->removeProducts($products, $removedProductsIndex);
 
         return ['products' => $removeProducts, 'customer' => $customer];

@@ -105,14 +105,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
         $payment = $this->createPartialMock(
             \Magento\Sales\Model\Order\Payment::class,
-            ["setParentTransactionId", "getParentTransactionId", "getTransactionId"]
+            ['setParentTransactionId', 'getParentTransactionId', 'getTransactionId']
         );
         $payment->expects($this->atLeastOnce())->method('getTransactionId')->willReturn($transactionId);
 
         if (!$parentTransactionId && !$transactionId && $transactionBasedTxnId) {
             $transactionBasedOn = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
             $transactionBasedOn->expects($this->once())->method('getTxnId')->willReturn($transactionBasedTxnId);
-            $payment->expects($this->once())->method("setParentTransactionId")->with($transactionBasedTxnId);
+            $payment->expects($this->once())->method('setParentTransactionId')->with($transactionBasedTxnId);
         }
         $payment->expects($this->exactly(2))->method('getParentTransactionId')->willReturnOnConsecutiveCalls(
             $parentTransactionId,
@@ -136,7 +136,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                 'parentTransactionId' => 2,
                 'transactionBasedOnId' => 1,
                 'type' => Transaction::TYPE_REFUND,
-                'expectedResult' => "2-" . Transaction::TYPE_REFUND
+                'expectedResult' => '2-' . Transaction::TYPE_REFUND
             ],
             'withTransactionId' => [
                 'transactionId' => 33,
@@ -150,7 +150,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                 'parentTransactionId' => null,
                 'transactionBasedOnId' => 4,
                 'type' => Transaction::TYPE_REFUND,
-                'expectedResult' => "4-" . Transaction::TYPE_REFUND
+                'expectedResult' => '4-' . Transaction::TYPE_REFUND
             ],
         ];
     }
@@ -161,9 +161,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     public function isTransactionExistsDataProvider()
     {
         return [
-            'withTransactionIdAndTransaction' => ["100-refund", true, true],
+            'withTransactionIdAndTransaction' => ['100-refund', true, true],
             'withoutTransactionIdAndWithTransaction' => [null, true, false],
-            'withTransactionIdAndWithoutTransaction' => ["100-refund", false, false],
+            'withTransactionIdAndWithoutTransaction' => ['100-refund', false, false],
             'withoutTransactionIdAndWithoutTransaction' => [null, false, false],
         ];
     }

@@ -51,6 +51,6 @@ class AssertCurrencySymbolOnProductPageCustomWebsite extends AbstractConstraint
      */
     public function toString()
     {
-        return "Correct Currency Symbol displayed on Product page on Custom website.";
+        return 'Correct Currency Symbol displayed on Product page on Custom website.';
     }
 }

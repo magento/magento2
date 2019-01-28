@@ -235,7 +235,7 @@ abstract class AbstractAction
                 if ($productIds !== null) {
                     $cond = [
                         $this->_connection->quoteInto("{$relation->getChildFieldName()} IN(?)", $productIds),
-                        $this->_connection->quoteInto("entity_table.entity_id IN(?)", $productIds),
+                        $this->_connection->quoteInto('entity_table.entity_id IN(?)', $productIds),
                     ];
 
                     $select->where(implode(' OR ', $cond));
@@ -281,7 +281,7 @@ abstract class AbstractAction
                     [$relation->getParentFieldName() => 'entity_table.entity_id']
                 );
                 $joinLeftCond = [
-                    "e.entity_id = entity_table.entity_id",
+                    'e.entity_id = entity_table.entity_id',
                     "e.child_id = t.{$relation->getChildFieldName()}",
                 ];
                 if ($relation->getWhere() !== null) {

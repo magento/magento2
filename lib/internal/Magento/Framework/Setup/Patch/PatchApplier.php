@@ -150,7 +150,7 @@ class PatchApplier
             );
             if (!$dataPatch instanceof DataPatchInterface) {
                 throw new Exception(
-                    new Phrase("Patch %1 should implement DataPatchInterface", [get_class($dataPatch)])
+                    new Phrase('Patch %1 should implement DataPatchInterface', [get_class($dataPatch)])
                 );
             }
             if ($dataPatch instanceof NonTransactionableInterface) {

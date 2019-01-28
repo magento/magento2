@@ -78,9 +78,9 @@ return [
                 'type' => 'text',
                 'visible' => '1',
                 'label' => 'Cache Lifetime (Seconds)',
-                'description' => "86400 by default, if not set. To refresh instantly, clear the Blocks HTML
+                'description' => '86400 by default, if not set. To refresh instantly, clear the Blocks HTML
                     Output cache.
-                ",
+                ',
             ],
             'title' => ['type' => 'text', 'visible' => '0', 'label' => 'Anchor Custom Title'],
         ],

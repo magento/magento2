@@ -98,9 +98,9 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     public function profileQueryDataProvider()
     {
         return [
-            ["SELECT * FROM %s", \Magento\Framework\DB\Profiler::SELECT],
+            ['SELECT * FROM %s', \Magento\Framework\DB\Profiler::SELECT],
             [
-                "INSERT INTO %s (module, schema_version, data_version) " .
+                'INSERT INTO %s (module, schema_version, data_version) ' .
                 "VALUES ('" .
                 self::$_testResourceName .
                 "', '1.1', '1.1')",

@@ -81,6 +81,6 @@ class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implemen
      */
     public function toString()
     {
-        return "Assert that displayed special price on product page equals passed from fixture.";
+        return 'Assert that displayed special price on product page equals passed from fixture.';
     }
 }

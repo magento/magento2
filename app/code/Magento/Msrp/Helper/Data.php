@@ -114,7 +114,7 @@ class Data extends AbstractHelper
      */
     public function getMsrpPriceMessage($product)
     {
-        $message = "";
+        $message = '';
         if ($this->canApplyMsrp($product, Type::TYPE_IN_CART)) {
             $message = __('To see product price, add this item to your cart. You can always remove it later.');
         } elseif ($this->canApplyMsrp($product, Type::TYPE_BEFORE_ORDER_CONFIRM)) {

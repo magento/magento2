@@ -180,7 +180,7 @@ class Price implements DimensionalIndexerInterface
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['dl' => $dlType->getBackend()->getTable()],
-            "dl.{$linkField} = i.entity_id AND dl.attribute_id = {$dlType->getAttributeId()}" . " AND dl.store_id = 0",
+            "dl.{$linkField} = i.entity_id AND dl.attribute_id = {$dlType->getAttributeId()}" . ' AND dl.store_id = 0',
             []
         )->join(
             ['dll' => $this->getTable('downloadable_link')],

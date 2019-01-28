@@ -32,7 +32,7 @@ class AssertCmsBlockNotInGrid extends AbstractConstraint
         $data['is_active'] = $data['is_active'] == 'Yes' ?  'Enabled' : 'Disabled';
         if (isset($data['stores'])) {
             $storeId = is_array($data['stores']) ? reset($data['stores']) : $data['stores'];
-            $parts = explode("/", $storeId);
+            $parts = explode('/', $storeId);
         }
 
         $filter = [
@@ -44,10 +44,10 @@ class AssertCmsBlockNotInGrid extends AbstractConstraint
 
         // add creation_time & update_time to filter if there are ones
         if (isset($data['creation_time'])) {
-            $filter['creation_time_from'] = date("M j, Y", strtotime($cmsBlock->getCreationTime()));
+            $filter['creation_time_from'] = date('M j, Y', strtotime($cmsBlock->getCreationTime()));
         }
         if (isset($data['update_time'])) {
-            $filter['update_time_from'] = date("M j, Y", strtotime($cmsBlock->getUpdateTime()));
+            $filter['update_time_from'] = date('M j, Y', strtotime($cmsBlock->getUpdateTime()));
         }
 
         \PHPUnit\Framework\Assert::assertFalse(

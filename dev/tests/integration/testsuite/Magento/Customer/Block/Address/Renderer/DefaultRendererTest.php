@@ -61,7 +61,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             [
                 $addressAttributes,
                 AttributeDataFactory::OUTPUT_FORMAT_ONELINE,
-                "John Smith, Green str, 67, CityM, Alabama 75477, United States"
+                'John Smith, Green str, 67, CityM, Alabama 75477, United States'
             ],
             [
                 $addressAttributes,
@@ -118,7 +118,7 @@ United States|\nT: 3468676|\n|\n|"
             [
                 $address,
                 AttributeDataFactory::OUTPUT_FORMAT_ONELINE,
-                "John Smith, Green str, 67, CityM, Alabama 75477, United States"
+                'John Smith, Green str, 67, CityM, Alabama 75477, United States'
             ],
             [
                 $address,

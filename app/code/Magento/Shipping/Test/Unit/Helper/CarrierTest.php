@@ -98,10 +98,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'general/country/eu_countries',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
-            $this->returnValue("GB")
+            $this->returnValue('GB')
         );
 
-        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
-        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
+        $this->assertEquals(true, $this->helper->isCountryInEU('GB'));
+        $this->assertEquals(false, $this->helper->isCountryInEU('US'));
     }
 }

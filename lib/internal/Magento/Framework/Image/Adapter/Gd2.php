@@ -17,7 +17,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @var array
      */
-    protected $_requiredExtensions = ["gd"];
+    protected $_requiredExtensions = ['gd'];
 
     /**
      * Image output callbacks by type

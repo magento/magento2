@@ -510,7 +510,7 @@ class ConditionsElement extends SimpleElement
     {
         do {
             if (!isset($this->mapParams[$this->findKeyParam])) {
-                throw new \Exception("Empty map of params");
+                throw new \Exception('Empty map of params');
             }
             $param = $this->mapParams[$this->findKeyParam];
             $element = $context->find(sprintf($this->param, strlen($param), $param), Locator::SELECTOR_XPATH);

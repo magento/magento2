@@ -53,6 +53,6 @@ class AssertWidgetProductLink extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget link on frontend system redirects to Product page defined in widget.";
+        return 'Widget link on frontend system redirects to Product page defined in widget.';
     }
 }

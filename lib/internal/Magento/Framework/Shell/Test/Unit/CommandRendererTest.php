@@ -32,7 +32,7 @@ class CommandRendererTest extends \PHPUnit\Framework\TestCase
         $testArgument  = 'argument';
         $testArgument2 = 'argument2';
 
-        $expectedCommand = "php -r %s 2>&1 | grep %s 2>&1";
+        $expectedCommand = 'php -r %s 2>&1 | grep %s 2>&1';
         $expectedCommandArgs = "php -r '" . $testArgument . "' 2>&1 | grep '" . $testArgument2 . "' 2>&1";
 
         return [

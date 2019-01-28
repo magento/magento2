@@ -52,6 +52,6 @@ class AssertTaxRuleIsApplied extends AssertTaxRuleApplying
      */
     public function toString()
     {
-        return "Tax rule applied on product in shopping cart.";
+        return 'Tax rule applied on product in shopping cart.';
     }
 }

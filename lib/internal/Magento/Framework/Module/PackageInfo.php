@@ -99,7 +99,7 @@ class PackageInfo
                     } catch (\InvalidArgumentException $e) {
                         throw new \InvalidArgumentException(
                             sprintf(
-                                "%s composer.json error: %s",
+                                '%s composer.json error: %s',
                                 $moduleName,
                                 $e->getMessage()
                             )

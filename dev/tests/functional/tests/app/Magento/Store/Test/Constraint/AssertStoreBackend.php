@@ -27,7 +27,7 @@ class AssertStoreBackend extends AbstractConstraint
     {
         $systemConfig->open();
         $isStoreVisible = $systemConfig->getPageActions()->isStoreVisible($store);
-        \PHPUnit\Framework\Assert::assertTrue($isStoreVisible, "Store view is not visible in dropdown on config page");
+        \PHPUnit\Framework\Assert::assertTrue($isStoreVisible, 'Store view is not visible in dropdown on config page');
     }
 
     /**

@@ -42,7 +42,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
             if ($unsupportedTypes) {
                 throw new \InvalidArgumentException(
                     "The following requested index types are not supported: '" . join("', '", $unsupportedTypes)
-                    . "'." . PHP_EOL . 'Supported types: ' . join(", ", array_keys($availableIndexers))
+                    . "'." . PHP_EOL . 'Supported types: ' . join(', ', array_keys($availableIndexers))
                 );
             }
             $indexers = array_intersect_key($availableIndexers, array_flip($requestedTypes));

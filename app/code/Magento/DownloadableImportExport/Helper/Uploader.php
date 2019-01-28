@@ -93,7 +93,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
                 __('File directory \'%1\' is not readable.', $tmpPath)
             );
         }
-        $destinationDir = "downloadable/files/" . $type;
+        $destinationDir = 'downloadable/files/' . $type;
         $destinationPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath($destinationDir);
 
         $this->mediaDirectory->create($destinationPath);

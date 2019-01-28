@@ -59,11 +59,11 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$fieldName])) {
                     $item['price_number'] = $currency->toCurrency(
-                        sprintf("%f", $item[$fieldName]),
+                        sprintf('%f', $item[$fieldName]),
                         ['display' => false]
                     );
                     $item['price_currency'] = $store->getBaseCurrency()->getCurrencySymbol();
-                    $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName]));
+                    $item[$fieldName] = $currency->toCurrency(sprintf('%f', $item[$fieldName]));
                 }
             }
         }

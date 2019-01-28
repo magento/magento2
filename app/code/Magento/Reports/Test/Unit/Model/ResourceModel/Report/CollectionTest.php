@@ -191,7 +191,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $dateStart = $args[0];
 
         $formatter = new \IntlDateFormatter(
-            "en_US",
+            'en_US',
             \IntlDateFormatter::SHORT,
             \IntlDateFormatter::SHORT,
             new \DateTimeZone('America/Los_Angeles')

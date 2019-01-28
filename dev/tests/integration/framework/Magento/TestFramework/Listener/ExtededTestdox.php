@@ -302,7 +302,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
                 0 ? ' (skipped)' : '') . ($data['time'] > 1 ? ' - ' . number_format(
                     $data['time'],
                     2
-                ) . "s" : '')
+                ) . 's' : '')
             );
         }
 

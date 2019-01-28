@@ -31,7 +31,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Curren
         }
 
         $data = (float)$data * $this->_getRate($row);
-        $data = sprintf("%f", $data);
+        $data = sprintf('%f', $data);
         $data = $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
         return $data;
     }

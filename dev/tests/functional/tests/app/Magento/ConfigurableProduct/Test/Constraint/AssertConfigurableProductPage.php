@@ -56,7 +56,7 @@ class AssertConfigurableProductPage extends AssertProductPage
         $fixturePrice = $this->getLowestConfigurablePrice();
 
         if ($fixturePrice != number_format($formPrice, $this->priceFormat)) {
-            return "Displayed product price on product page(front-end) not equals passed from fixture. "
+            return 'Displayed product price on product page(front-end) not equals passed from fixture. '
             . "Actual: {$formPrice}, expected: {$fixturePrice}.";
         }
         return null;
@@ -164,13 +164,13 @@ class AssertConfigurableProductPage extends AssertProductPage
         $priceBlock = $this->productView->getPriceBlock($this->product);
 
         if (!$priceBlock->getPriceLabel()->isVisible()) {
-            return "Product price label should be displayed.";
+            return 'Product price label should be displayed.';
         } else {
             $expectedPriceLabel = 'As low as';
             $actualPriceLabel = $priceBlock->getPriceLabel()->getText();
 
             if ($expectedPriceLabel !== $actualPriceLabel) {
-                return "Displayed product price label on product page (front-end) not equals passed from fixture. "
+                return 'Displayed product price label on product page (front-end) not equals passed from fixture. '
                     . "Actual: {$actualPriceLabel}, expected: {$expectedPriceLabel}.";
             }
         }

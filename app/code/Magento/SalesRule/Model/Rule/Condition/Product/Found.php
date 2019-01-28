@@ -40,7 +40,7 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     public function asHtml()
     {
         $html = $this->getTypeElement()->getHtml() . __(
-            "If an item is %1 in the cart with %2 of these conditions true:",
+            'If an item is %1 in the cart with %2 of these conditions true:',
             $this->getValueElement()->getHtml(),
             $this->getAggregatorElement()->getHtml()
         );

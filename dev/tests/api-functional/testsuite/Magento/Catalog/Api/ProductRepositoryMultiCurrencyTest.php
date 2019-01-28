@@ -110,9 +110,9 @@ class ProductRepositoryMultiCurrencyTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "productWebsiteLink" => [
-                "websiteId" => $websiteId,
-                "sku" => $sku
+            'productWebsiteLink' => [
+                'websiteId' => $websiteId,
+                'sku' => $sku
             ]
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));

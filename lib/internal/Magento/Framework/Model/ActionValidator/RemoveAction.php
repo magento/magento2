@@ -61,7 +61,7 @@ class RemoveAction
      */
     protected function getBaseClassName($object)
     {
-        $className = ltrim(get_class($object), "\\");
+        $className = ltrim(get_class($object), '\\');
         $className = str_replace(['\Interceptor', '\Proxy'], [''], $className);
 
         return $className;

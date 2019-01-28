@@ -81,7 +81,7 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         } catch (NoSuchEntityException $e) {
             $isFound = false;
         }
-        $this->assertFalse($isFound, "Tax Class was found when it should have been deleted.");
+        $this->assertFalse($isFound, 'Tax Class was found when it should have been deleted.');
     }
 
     /**

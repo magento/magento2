@@ -61,16 +61,16 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getSelect($productId, $columns = [])
     {
         return $this->getConnection()->select()->from(
-            ["bo" => $this->getTable('catalog_product_bundle_option')],
+            ['bo' => $this->getTable('catalog_product_bundle_option')],
             ['type', 'option_id']
         )->where(
-            "bo.parent_id = ?",
+            'bo.parent_id = ?',
             $productId
         )->where(
-            "bo.required = 1"
+            'bo.required = 1'
         )->joinLeft(
-            ["bs" => $this->getTable('catalog_product_bundle_selection')],
-            "bs.option_id = bo.option_id AND bs.parent_product_id = bo.parent_id",
+            ['bs' => $this->getTable('catalog_product_bundle_selection')],
+            'bs.option_id = bo.option_id AND bs.parent_product_id = bo.parent_id',
             $columns
         );
     }
@@ -83,7 +83,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getSelectionsData($productId)
     {
-        return $this->getConnection()->fetchAll($this->_getSelect($productId, ["*"]));
+        return $this->getConnection()->fetchAll($this->_getSelect($productId, ['*']));
     }
 
     /**

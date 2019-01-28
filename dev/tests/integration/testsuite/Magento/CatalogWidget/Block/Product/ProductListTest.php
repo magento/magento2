@@ -75,7 +75,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             1,
             $productCollection->count(),
-            "Product collection was not filtered according to the widget condition."
+            'Product collection was not filtered according to the widget condition.'
         );
     }
 
@@ -128,7 +128,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $count,
             $productCollection->count(),
-            "Product collection was not filtered according to the widget condition."
+            'Product collection was not filtered according to the widget condition.'
         );
     }
 
@@ -151,7 +151,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             1,
             $productCollection->count(),
-            "Product collection was not filtered according to the widget condition."
+            'Product collection was not filtered according to the widget condition.'
         );
         $this->assertEquals($sku, $productCollection->getFirstItem()->getSku());
     }

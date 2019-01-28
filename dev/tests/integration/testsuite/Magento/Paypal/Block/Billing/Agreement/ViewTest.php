@@ -72,11 +72,11 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $registry->register('current_billing_agreement', $billingAgreement);
 
         $relatedOrders = $this->_block->getRelatedOrders();
-        $this->assertEquals(1, $relatedOrders->count(), "Only one order must be returned.");
+        $this->assertEquals(1, $relatedOrders->count(), 'Only one order must be returned.');
         $this->assertEquals(
             $orderA->getId(),
             $relatedOrders->getFirstItem()->getId(),
-            "Invalid order returned as associated with billing agreement."
+            'Invalid order returned as associated with billing agreement.'
         );
     }
 }

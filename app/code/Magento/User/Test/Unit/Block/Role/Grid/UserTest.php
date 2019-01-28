@@ -129,7 +129,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
+        $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn('');
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
         $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
@@ -156,7 +156,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
+        $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn('');
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
         $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
@@ -181,7 +181,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
+        $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn('');
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
         $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 

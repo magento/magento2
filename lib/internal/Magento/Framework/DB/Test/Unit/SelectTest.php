@@ -88,7 +88,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (field LIKE '%value?%')", $select->assemble());
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->from('test')->where("id IN (?)", [1, 2, 4, 8]);
+        $select->from('test')->where('id IN (?)', [1, 2, 4, 8]);
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
     }
 

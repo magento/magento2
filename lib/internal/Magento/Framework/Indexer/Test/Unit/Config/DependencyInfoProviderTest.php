@@ -69,7 +69,7 @@ class DependencyInfoProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getIndexer')
             ->willReturn([]);
         $this->expectException(NoSuchEntityException::class);
-        $this->expectExceptionMessage((string)__("%1 indexer does not exist.", $indexerId));
+        $this->expectExceptionMessage((string)__('%1 indexer does not exist.', $indexerId));
         $this->dependencyInfoProvider->getIndexerIdsToRunBefore($indexerId);
     }
 
@@ -138,7 +138,7 @@ class DependencyInfoProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getIndexer')
             ->willReturn([]);
         $this->expectException(NoSuchEntityException::class);
-        $this->expectExceptionMessage((string)__("%1 indexer does not exist.", $indexerId));
+        $this->expectExceptionMessage((string)__('%1 indexer does not exist.', $indexerId));
         $this->dependencyInfoProvider->getIndexerIdsToRunAfter($indexerId);
     }
 

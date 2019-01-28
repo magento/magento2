@@ -103,10 +103,10 @@ class Multiline extends Text
                 $output = $values;
                 break;
             case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_HTML:
-                $output = implode("<br />", $values);
+                $output = implode('<br />', $values);
                 break;
             case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_ONELINE:
-                $output = implode(" ", $values);
+                $output = implode(' ', $values);
                 break;
             default:
                 $output = implode("\n", $values);

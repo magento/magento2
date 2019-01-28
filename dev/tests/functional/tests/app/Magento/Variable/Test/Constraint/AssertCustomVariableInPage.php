@@ -83,8 +83,8 @@ class AssertCustomVariableInPage extends AbstractConstraint
     protected function getHtmlValue(SystemVariable $customVariable, SystemVariable $customVariableOrigin)
     {
         $data = array_merge($customVariableOrigin->getData(), $customVariable->getData());
-        if ($customVariable->getHtmlValue() == "" && $customVariableOrigin->getHtmlValue() == "") {
-            $htmlValue = ($data['plain_value'] == "")
+        if ($customVariable->getHtmlValue() == '' && $customVariableOrigin->getHtmlValue() == '') {
+            $htmlValue = ($data['plain_value'] == '')
                 ? $customVariableOrigin->getPlainValue()
                 : $data['plain_value'];
         } else {

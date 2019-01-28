@@ -43,7 +43,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $attributesGrid = $variationsSection->getAttributeBlock()->getAttributesGrid();
         \PHPUnit\Framework\Assert::assertTrue(
             $attributesGrid->isRowVisible(['frontend_label' => $attribute->getFrontendLabel()]),
-            "Product attribute is absent on the product page."
+            'Product attribute is absent on the product page.'
         );
     }
 

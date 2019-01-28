@@ -57,7 +57,7 @@ class NoteTest extends \PHPUnit\Framework\TestCase
         $this->_model->setValue('Note Text');
         $html = $this->_model->getElementHtml();
         $this->assertEquals(
-            "note_before<div id=\"note_id\" class=\"control-value admin__field-value\"></div>note_after",
+            'note_before<div id="note_id" class="control-value admin__field-value"></div>note_after',
             $html
         );
     }

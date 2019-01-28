@@ -30,9 +30,9 @@ class MatchTest extends \PHPUnit\Framework\TestCase
     public function testBuildQuery($conditionType, $expectedSuffix)
     {
         $conditionPattern = "(LEAST((MATCH (data_index) AGAINST ('%ssomeValue*' IN BOOLEAN MODE)), 1000000)"
-            . " * POW(2, %s)) AS score";
+            . ' * POW(2, %s)) AS score';
         $expectedScoreCondition = sprintf($conditionPattern, $expectedSuffix, ScoreBuilder::WEIGHT_FIELD);
-        $expectedSql = "SELECT `someTable`.* FROM `someTable` WHERE (MATCH (data_index) " .
+        $expectedSql = 'SELECT `someTable`.* FROM `someTable` WHERE (MATCH (data_index) ' .
             "AGAINST ('{$expectedSuffix}someValue*' IN BOOLEAN MODE))";
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $scoreBuilder */

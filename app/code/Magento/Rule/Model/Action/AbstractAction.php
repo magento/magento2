@@ -91,18 +91,18 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
      */
     public function asXml()
     {
-        $xml = "<type>" .
+        $xml = '<type>' .
             $this->getType() .
-            "</type>" .
-            "<attribute>" .
+            '</type>' .
+            '<attribute>' .
             $this->getAttribute() .
-            "</attribute>" .
-            "<operator>" .
+            '</attribute>' .
+            '<operator>' .
             $this->getOperator() .
-            "</operator>" .
-            "<value>" .
+            '</operator>' .
+            '<value>' .
             $this->getValue() .
-            "</value>";
+            '</value>';
         return $xml;
     }
 
@@ -348,7 +348,7 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
      */
     public function asString($format = '')
     {
-        return "";
+        return '';
     }
 
     /**

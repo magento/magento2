@@ -62,8 +62,8 @@ class Request extends AuthorizenetRequest
         $fpTimestamp
     ) {
         return hash_hmac(
-            "md5",
-            $merchantApiLoginId . "^" . $fpSequence . "^" . $fpTimestamp . "^" . $amount . "^" . $currencyCode,
+            'md5',
+            $merchantApiLoginId . '^' . $fpSequence . '^' . $fpTimestamp . '^' . $amount . '^' . $currencyCode,
             $merchantTransactionKey
         );
     }

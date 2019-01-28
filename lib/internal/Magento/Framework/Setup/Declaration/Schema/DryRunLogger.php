@@ -66,7 +66,7 @@ class DryRunLogger
         }
 
         if (!$this->fileDriver->isDirectory($logFolderPath)) {
-            throw new \Exception(sprintf("Can`t create log directory: %s", $logFolderPath));
+            throw new \Exception(sprintf('Can`t create log directory: %s', $logFolderPath));
         }
     }
 
@@ -81,7 +81,7 @@ class DryRunLogger
         }
 
         if (!$this->fileDriver->isExists($fileName)) {
-            throw new \Exception(sprintf("Can`t create file %s", $fileName));
+            throw new \Exception(sprintf('Can`t create file %s', $fileName));
         }
     }
 

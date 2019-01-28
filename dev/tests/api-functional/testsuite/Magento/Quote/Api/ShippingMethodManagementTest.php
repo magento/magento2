@@ -46,7 +46,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
 
-        $this->assertEquals([], $this->_webApiCall($this->getListServiceInfo($cartId), ["cartId" => $cartId]));
+        $this->assertEquals([], $this->_webApiCall($this->getListServiceInfo($cartId), ['cartId' => $cartId]));
     }
 
     /**
@@ -66,7 +66,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $expectedData = $this->convertRates($expectedRates, $quote->getQuoteCurrencyCode());
 
-        $requestData = ["cartId" => $cartId];
+        $requestData = ['cartId' => $cartId];
 
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
         $this->assertEquals($expectedData, $returnedRates);

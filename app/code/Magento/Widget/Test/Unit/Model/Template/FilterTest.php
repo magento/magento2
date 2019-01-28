@@ -170,7 +170,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 'type' => 'Widget\Link',
                 'preConfigId' => 1,
                 'params' => ['id' => '1'],
-                'preconfigure' => ['widget_type' => "Widget\\Link", 'parameters' => ['id' => '1']],
+                'preconfigure' => ['widget_type' => 'Widget\\Link', 'parameters' => ['id' => '1']],
                 'widgetXml' => 'some xml',
                 'widgetBlock' => $this->getBlockMock('widget text'),
                 'expectedResult' => 'widget text'

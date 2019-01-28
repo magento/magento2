@@ -33,7 +33,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         $request->setParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_LIST_WSDL, true);
         $response = $this->soapController->dispatch($request);
         $decoded_wsdl = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey("customerAccountManagementV1", $decoded_wsdl);
-        $this->assertArrayHasKey("integrationAdminTokenServiceV1", $decoded_wsdl);
+        $this->assertArrayHasKey('customerAccountManagementV1', $decoded_wsdl);
+        $this->assertArrayHasKey('integrationAdminTokenServiceV1', $decoded_wsdl);
     }
 }

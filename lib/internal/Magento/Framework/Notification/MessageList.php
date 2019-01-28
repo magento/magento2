@@ -58,7 +58,7 @@ class MessageList
             if ($message instanceof \Magento\Framework\Notification\MessageInterface) {
                 $this->_messages[$message->getIdentity()] = $message;
             } else {
-                throw new \UnexpectedValueException("Message class has to implement the message interface.");
+                throw new \UnexpectedValueException('Message class has to implement the message interface.');
             }
         }
     }

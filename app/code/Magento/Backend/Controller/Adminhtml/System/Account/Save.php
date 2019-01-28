@@ -101,6 +101,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath("*/*/");
+        return $resultRedirect->setPath('*/*/');
     }
 }

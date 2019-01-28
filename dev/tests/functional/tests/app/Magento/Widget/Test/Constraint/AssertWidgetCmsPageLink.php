@@ -66,6 +66,6 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget with type CmsPageLink is present on Home page and on Advanced Search.";
+        return 'Widget with type CmsPageLink is present on Home page and on Advanced Search.';
     }
 }

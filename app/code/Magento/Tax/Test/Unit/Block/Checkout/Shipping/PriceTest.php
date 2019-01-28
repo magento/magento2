@@ -99,7 +99,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     {
         $shippingPrice = 5;
         $shippingPriceExclTax = 4.5;
-        $convertedPrice = "$4.50";
+        $convertedPrice = '$4.50';
 
         $shippingRateMock = $this->setupShippingRate($shippingPrice);
 
@@ -120,7 +120,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     {
         $shippingPrice = 5;
         $shippingPriceInclTax = 5.5;
-        $convertedPrice = "$5.50";
+        $convertedPrice = '$5.50';
 
         $shippingRateMock = $this->setupShippingRate($shippingPrice);
 

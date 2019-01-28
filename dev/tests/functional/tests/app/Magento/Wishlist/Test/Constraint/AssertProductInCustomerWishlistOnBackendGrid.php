@@ -85,6 +85,6 @@ class AssertProductInCustomerWishlistOnBackendGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return "Product is visible in Customer Wish List on Backend.";
+        return 'Product is visible in Customer Wish List on Backend.';
     }
 }

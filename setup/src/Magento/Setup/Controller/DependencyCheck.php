@@ -142,8 +142,8 @@ class DependencyCheck extends AbstractActionController
             $data = [];
 
             if ($constraints) {
-                $data['errorMessage'] = "Unable to change status of modules because of the following constraints: "
-                    . implode("<br>", $constraints);
+                $data['errorMessage'] = 'Unable to change status of modules because of the following constraints: '
+                    . implode('<br>', $constraints);
                 $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             }
         } catch (\Exception $e) {

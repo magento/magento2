@@ -192,7 +192,7 @@ class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $detailId = $connection->fetchOne($select, [':review_id' => $object->getId()]);
 
         if ($detailId) {
-            $condition = ["detail_id = ?" => $detailId];
+            $condition = ['detail_id = ?' => $detailId];
             $connection->update($this->_reviewDetailTable, $detail, $condition);
         } else {
             $detail['store_id'] = $object->getStoreId();

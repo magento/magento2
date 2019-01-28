@@ -45,6 +45,6 @@ class AssertCityBasedShippingRateChanged extends AbstractConstraint
      */
     public function toString()
     {
-        return "Shipping rate has been changed.";
+        return 'Shipping rate has been changed.';
     }
 }

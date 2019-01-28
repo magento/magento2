@@ -232,7 +232,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
             ->create([
                 'expression' => "MIN({$minPriceExpr})"
             ]);
-        $minPrice = $connection->getCheckSql("MIN(o.is_require) = 1", $minPriceMin, '0');
+        $minPrice = $connection->getCheckSql('MIN(o.is_require) = 1', $minPriceMin, '0');
 
         $tierPriceRound = $this->columnValueExpressionFactory
             ->create([
@@ -243,8 +243,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
             ->create([
                 'expression' => "MIN({$tierPriceExpr})"
             ]);
-        $tierPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
-        $tierPrice = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPriceValue = $connection->getCheckSql('MIN(o.is_require) > 0', $tierPriceMin, 0);
+        $tierPrice = $connection->getCheckSql('MIN(i.tier_price) IS NOT NULL', $tierPriceValue, 'NULL');
 
         $maxPriceRound = $this->columnValueExpressionFactory
             ->create([
@@ -331,7 +331,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
             ]);
         $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
         $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require = 1", $tierPriceExpr, 0);
-        $tierPrice = $connection->getCheckSql("i.tier_price IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPrice = $connection->getCheckSql('i.tier_price IS NOT NULL', $tierPriceValue, 'NULL');
 
         $select->columns(
             [

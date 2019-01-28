@@ -40,7 +40,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     {
         if ($color) {
             if (is_array($color)) {
-                $color = "rgb(" . join(',', $color) . ")";
+                $color = 'rgb(' . join(',', $color) . ')';
             }
 
             $pixel = new \ImagickPixel();
@@ -202,7 +202,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         // compatibility with GD2 adapter
         $angle = 360 - $angle;
         $pixel = new \ImagickPixel();
-        $pixel->setColor("rgb(" . $this->imageBackgroundColor . ")");
+        $pixel->setColor('rgb(' . $this->imageBackgroundColor . ')');
 
         $this->_imageHandler->rotateImage($pixel, $angle);
         $this->refreshImageDimensions();

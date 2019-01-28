@@ -85,7 +85,7 @@ class DbStatusCommand extends AbstractSetupCommand
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln(
-                "<info>No information is available: the Magento application is not installed.</info>"
+                '<info>No information is available: the Magento application is not installed.</info>'
             );
             return Cli::RETURN_FAILURE;
         }
