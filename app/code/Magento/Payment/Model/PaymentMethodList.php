@@ -55,7 +55,7 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
         @uasort(
             $methodsInstances,
             function (MethodInterface $a, MethodInterface $b) use ($storeId) {
-                return (int)$a->getConfigData('sort_order', $storeId) - (int)$b->getConfigData('sort_order', $storeId);
+                return (int) $a->getConfigData('sort_order', $storeId) - (int) $b->getConfigData('sort_order', $storeId);
             }
         );
 
@@ -63,10 +63,10 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
             function (MethodInterface $methodInstance) use ($storeId) {
 
                 return $this->methodFactory->create([
-                    'code' => (string)$methodInstance->getCode(),
-                    'title' => (string)$methodInstance->getTitle(),
-                    'storeId' => (int)$storeId,
-                    'isActive' => (bool)$methodInstance->isActive($storeId)
+                    'code' => (string) $methodInstance->getCode(),
+                    'title' => (string) $methodInstance->getTitle(),
+                    'storeId' => (int) $storeId,
+                    'isActive' => (bool) $methodInstance->isActive($storeId)
                 ]);
             },
             $methodsInstances

@@ -18,7 +18,7 @@ class Used extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        $value = (int)$row->getData($this->getColumn()->getIndex());
+        $value = (int) $row->getData($this->getColumn()->getIndex());
         return empty($value) ? __('No') : __('Yes');
     }
 }

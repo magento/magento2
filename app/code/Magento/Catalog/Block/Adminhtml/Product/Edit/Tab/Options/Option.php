@@ -287,7 +287,7 @@ class Option extends Widget
         if (!$this->_values || $this->getIgnoreCaching()) {
             $showPrice = $this->getCanReadPrice();
             $values = [];
-            $scope = (int)$this->_scopeConfig->getValue(
+            $scope = (int) $this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );

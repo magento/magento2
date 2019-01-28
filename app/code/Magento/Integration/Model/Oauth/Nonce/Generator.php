@@ -75,7 +75,7 @@ class Generator implements NonceGeneratorInterface
     public function validateNonce(ConsumerInterface $consumer, $nonce, $timestamp)
     {
         try {
-            $timestamp = (int)$timestamp;
+            $timestamp = (int) $timestamp;
             if ($timestamp <= 0 || $timestamp > time() + self::TIME_DEVIATION) {
                 throw new \Magento\Framework\Oauth\OauthInputException(
                     __('Incorrect timestamp value in the oauth_timestamp parameter')

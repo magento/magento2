@@ -35,6 +35,6 @@ class ImageUploadConfig implements ArgumentInterface
      */
     public function getIsResizeEnabled(): int
     {
-        return (int)$this->imageUploadConfig->isResizeEnabled();
+        return (int) $this->imageUploadConfig->isResizeEnabled();
     }
 }

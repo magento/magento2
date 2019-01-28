@@ -169,6 +169,6 @@ class ListCompare extends \Magento\Framework\DataObject
      */
     public function hasItems($customerId, $visitorId)
     {
-        return (bool)$this->_catalogProductCompareItem->getCount($customerId, $visitorId);
+        return (bool) $this->_catalogProductCompareItem->getCount($customerId, $visitorId);
     }
 }

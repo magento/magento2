@@ -42,7 +42,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
             $lastId = substr($lastId, strlen($this->getPrefix()));
         }
 
-        $lastId = str_pad((string)$lastId, $this->getPadLength(), $this->getPadChar(), STR_PAD_LEFT);
+        $lastId = str_pad((string) $lastId, $this->getPadLength(), $this->getPadChar(), STR_PAD_LEFT);
 
         $nextId = '';
         $bumpNextChar = true;

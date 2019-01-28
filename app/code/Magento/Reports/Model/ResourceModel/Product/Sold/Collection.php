@@ -92,7 +92,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
     public function setStoreIds($storeIds)
     {
         if ($storeIds) {
-            $this->getSelect()->where('order_items.store_id IN (?)', (array)$storeIds);
+            $this->getSelect()->where('order_items.store_id IN (?)', (array) $storeIds);
         }
         return $this;
     }

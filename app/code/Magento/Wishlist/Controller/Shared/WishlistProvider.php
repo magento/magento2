@@ -55,7 +55,7 @@ class WishlistProvider implements WishlistProviderInterface
         if ($this->wishlist) {
             return $this->wishlist;
         }
-        $code = (string)$this->request->getParam('code');
+        $code = (string) $this->request->getParam('code');
         if (empty($code)) {
             return false;
         }

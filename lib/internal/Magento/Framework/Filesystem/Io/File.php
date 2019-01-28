@@ -190,7 +190,7 @@ class File extends AbstractIo
          */
         foreach ($row as $key => $value) {
             if (!is_string($value)) {
-                $value = (string)$value;
+                $value = (string) $value;
             }
             if (isset($value[0]) && in_array($value[0], ['=', '+', '-'])) {
                 $row[$key] = ' ' . $value;

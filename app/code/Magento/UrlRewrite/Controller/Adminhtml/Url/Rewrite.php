@@ -57,7 +57,7 @@ abstract class Rewrite extends Action
     {
         if (!$this->_category) {
             $this->_category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
-            $categoryId = (int)$this->getRequest()->getParam('category', 0);
+            $categoryId = (int) $this->getRequest()->getParam('category', 0);
             $urlRewrite = $this->_getUrlRewrite();
             if (!$categoryId && $urlRewrite->getId()) {
                 $metaData = $urlRewrite->getMetadata();
@@ -83,7 +83,7 @@ abstract class Rewrite extends Action
     {
         if (!$this->_product) {
             $this->_product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
-            $productId = (int)$this->getRequest()->getParam('product', 0);
+            $productId = (int) $this->getRequest()->getParam('product', 0);
             $urlRewrite = $this->_getUrlRewrite();
             if (!$productId && $urlRewrite->getId() && $urlRewrite->getEntityType() === self::ENTITY_TYPE_PRODUCT) {
                 $productId = $this->_getUrlRewrite()->getEntityId();
@@ -104,7 +104,7 @@ abstract class Rewrite extends Action
     {
         if (!$this->_cmsPage) {
             $this->_cmsPage = $this->_objectManager->create(\Magento\Cms\Model\Page::class);
-            $cmsPageId = (int)$this->getRequest()->getParam('cms_page', 0);
+            $cmsPageId = (int) $this->getRequest()->getParam('cms_page', 0);
             $urlRewrite = $this->_getUrlRewrite();
             if (!$cmsPageId && $urlRewrite->getId() && $urlRewrite->getEntityType() === self::ENTITY_TYPE_CMS_PAGE) {
                 $cmsPageId = $this->_getUrlRewrite()->getEntityId();
@@ -125,7 +125,7 @@ abstract class Rewrite extends Action
     {
         if (!$this->_urlRewrite) {
             $this->_urlRewrite = $this->_objectManager->create(\Magento\UrlRewrite\Model\UrlRewrite::class);
-            $urlRewriteId = (int)$this->getRequest()->getParam('id', 0);
+            $urlRewriteId = (int) $this->getRequest()->getParam('id', 0);
             if ($urlRewriteId) {
                 $this->_urlRewrite->load($urlRewriteId);
             }

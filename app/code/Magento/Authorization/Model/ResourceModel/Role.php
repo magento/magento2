@@ -77,7 +77,7 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     "{$this->getIdFieldName()} = :pid"
                 );
 
-                $binds = ['pid' => (int)$role->getPid()];
+                $binds = ['pid' => (int) $role->getPid()];
 
                 $treeLevel = $this->getConnection()->fetchOne($select, $binds);
             }
@@ -115,9 +115,9 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
 
-        $connection->delete($this->getMainTable(), ['parent_id = ?' => (int)$role->getId()]);
+        $connection->delete($this->getMainTable(), ['parent_id = ?' => (int) $role->getId()]);
 
-        $connection->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
+        $connection->delete($this->_ruleTable, ['role_id = ?' => (int) $role->getId()]);
 
         return $this;
     }

@@ -127,9 +127,9 @@ class SearchTermDescriptionGeneratorFactory
     private function updateSearchTermConfig(&$searchTermsConfig)
     {
         if (null !== $searchTermsConfig) {
-            $websitesCount = (bool)$this->fixtureConfig->getValue('assign_entities_to_all_websites', false)
+            $websitesCount = (bool) $this->fixtureConfig->getValue('assign_entities_to_all_websites', false)
                 ? 1
-                : (int)$this->fixtureConfig->getValue('websites', 1);
+                : (int) $this->fixtureConfig->getValue('websites', 1);
             array_walk(
                 $searchTermsConfig,
                 function (&$searchTerm, $key, $websitesCount) {

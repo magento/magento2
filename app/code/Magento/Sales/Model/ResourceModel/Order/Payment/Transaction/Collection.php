@@ -118,7 +118,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      */
     public function addOrderIdFilter($orderId)
     {
-        $this->_orderId = (int)$orderId;
+        $this->_orderId = (int) $orderId;
         return $this;
     }
 
@@ -135,7 +135,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
         if (is_object($payment)) {
             $id = $payment->getId();
         }
-        $this->_paymentId = (int)$id;
+        $this->_paymentId = (int) $id;
         return $this;
     }
 
@@ -147,7 +147,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      */
     public function addParentIdFilter($parentId)
     {
-        $this->_parentId = (int)$parentId;
+        $this->_parentId = (int) $parentId;
         return $this;
     }
 

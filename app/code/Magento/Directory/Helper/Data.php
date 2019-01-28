@@ -363,7 +363,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
             $regions[$region->getCountryId()][$region->getRegionId()] = [
                 'code' => $region->getCode(),
-                'name' => (string)__($region->getName()),
+                'name' => (string) __($region->getName()),
             ];
         }
         return $regions;
@@ -376,7 +376,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getTopCountryCodes()
     {
-        $configValue = (string)$this->scopeConfig->getValue(
+        $configValue = (string) $this->scopeConfig->getValue(
             self::XML_PATH_TOP_COUNTRIES,
             ScopeInterface::SCOPE_STORE
         );

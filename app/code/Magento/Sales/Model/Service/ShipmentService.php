@@ -78,7 +78,7 @@ class ShipmentService implements ShipmentManagementInterface
      */
     public function getLabel($id)
     {
-        return (string)$this->repository->get($id)->getShippingLabel();
+        return (string) $this->repository->get($id)->getShippingLabel();
     }
 
     /**

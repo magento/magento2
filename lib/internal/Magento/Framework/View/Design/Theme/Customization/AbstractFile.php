@@ -159,7 +159,7 @@ abstract class AbstractFile implements
     protected function _prepareSortOrder(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
         $customFiles = $file->getTheme()->getCustomization()->getFilesByType($this->getType());
-        $sortOrderIndex = (int)$file->getData('sort_order');
+        $sortOrderIndex = (int) $file->getData('sort_order');
         foreach ($customFiles as $customFile) {
             $prevSortOrderIndex = $customFile->getData('sort_order');
             if ($prevSortOrderIndex > $sortOrderIndex) {

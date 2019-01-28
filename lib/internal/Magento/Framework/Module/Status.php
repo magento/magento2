@@ -146,9 +146,9 @@ class Status
         foreach ($this->getAllModules($modules) as $name) {
             $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
-                $result[$name] = (int)$isEnabled;
+                $result[$name] = (int) $isEnabled;
             } else {
-                $result[$name] = (int)$currentStatus;
+                $result[$name] = (int) $currentStatus;
             }
         }
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);

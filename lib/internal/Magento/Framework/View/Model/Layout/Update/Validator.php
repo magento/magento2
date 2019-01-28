@@ -99,16 +99,16 @@ class Validator extends \Zend_Validate_Abstract
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = [
-                self::HELPER_ARGUMENT_TYPE => (string)new \Magento\Framework\Phrase(
+                self::HELPER_ARGUMENT_TYPE => (string) new \Magento\Framework\Phrase(
                     'Helper arguments should not be used in custom layout updates.'
                 ),
-                self::UPDATER_MODEL => (string)new \Magento\Framework\Phrase(
+                self::UPDATER_MODEL => (string) new \Magento\Framework\Phrase(
                     'Updater model should not be used in custom layout updates.'
                 ),
-                self::XML_INVALID => (string)new \Magento\Framework\Phrase(
+                self::XML_INVALID => (string) new \Magento\Framework\Phrase(
                     'Please correct the XML data and try again. %value%'
                 ),
-                self::XSD_INVALID => (string)new \Magento\Framework\Phrase(
+                self::XSD_INVALID => (string) new \Magento\Framework\Phrase(
                     'Please correct the XSD data and try again. %value%'
                 ),
             ];

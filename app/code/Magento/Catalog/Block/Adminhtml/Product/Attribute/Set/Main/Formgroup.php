@@ -88,9 +88,9 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _getSetId()
     {
-        return (int)(
+        return (int) (
             $this->getRequest()->getParam('id')
-        ) > 0 ? (int)(
+        ) > 0 ? (int) (
             $this->getRequest()->getParam('id')
         ) : $this->_typeFactory->create()->load(
             $this->_coreRegistry->registry('entityType')

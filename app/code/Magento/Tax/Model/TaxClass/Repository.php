@@ -118,7 +118,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         try {
             $this->taxClassResource->save($taxClass);
         } catch (ModelException $e) {
-            if (strpos($e->getMessage(), (string)__('Class name and class type')) !== false) {
+            if (strpos($e->getMessage(), (string) __('Class name and class type')) !== false) {
                 throw new InputException(
                     __(
                         'A class with the same name already exists for ClassType %1.',

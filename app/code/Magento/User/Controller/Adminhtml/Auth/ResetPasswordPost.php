@@ -41,10 +41,10 @@ class ResetPasswordPost extends Auth
      */
     public function execute()
     {
-        $passwordResetToken = (string)$this->getRequest()->getQuery('token');
-        $userId = (int)$this->getRequest()->getQuery('id');
-        $password = (string)$this->getRequest()->getPost('password');
-        $passwordConfirmation = (string)$this->getRequest()->getPost('confirmation');
+        $passwordResetToken = (string) $this->getRequest()->getQuery('token');
+        $userId = (int) $this->getRequest()->getQuery('id');
+        $password = (string) $this->getRequest()->getPost('password');
+        $passwordConfirmation = (string) $this->getRequest()->getPost('confirmation');
 
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);

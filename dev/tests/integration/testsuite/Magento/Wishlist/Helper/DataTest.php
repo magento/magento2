@@ -48,8 +48,8 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $this->objectManager->get(\Magento\Catalog\Model\Product::class);
         $product->setId(11);
         $json = $this->_wishlistHelper->getAddParams($product);
-        $params = (array)json_decode($json);
-        $data = (array)$params['data'];
+        $params = (array) json_decode($json);
+        $data = (array) $params['data'];
         $this->assertEquals('11', $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith('wishlist/index/add/', $params['action']);
@@ -58,8 +58,8 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testGetMoveFromCartParams()
     {
         $json = $this->_wishlistHelper->getMoveFromCartParams(11);
-        $params = (array)json_decode($json);
-        $data = (array)$params['data'];
+        $params = (array) json_decode($json);
+        $data = (array) $params['data'];
         $this->assertEquals('11', $data['item']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith('wishlist/index/fromcart/', $params['action']);
@@ -71,8 +71,8 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
         $product->setId(11);
         $product->setWishlistItemId(15);
         $json = $this->_wishlistHelper->getUpdateParams($product);
-        $params = (array)json_decode($json);
-        $data = (array)$params['data'];
+        $params = (array) json_decode($json);
+        $data = (array) $params['data'];
         $this->assertEquals('11', $data['product']);
         $this->assertEquals('15', $data['id']);
         $this->assertArrayHasKey('uenc', $data);

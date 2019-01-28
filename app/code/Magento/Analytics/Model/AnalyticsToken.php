@@ -87,6 +87,6 @@ class AnalyticsToken
      */
     public function isTokenExist()
     {
-        return (bool)$this->getToken();
+        return (bool) $this->getToken();
     }
 }

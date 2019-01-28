@@ -117,7 +117,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'popularity ' . \Magento\Framework\DB\Select::SQL_DESC
         );
         if ($this->getStoreId()) {
-            $this->getSelect()->where('store_id = ?', (int)$this->getStoreId());
+            $this->getSelect()->where('store_id = ?', (int) $this->getStoreId());
         }
         return $this;
     }

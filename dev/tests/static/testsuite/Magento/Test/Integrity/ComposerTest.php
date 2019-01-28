@@ -283,7 +283,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertConsistentModuleName(\SimpleXMLElement $xml, $packageName)
     {
         if (!in_array($packageName, self::$moduleNameBlacklist)) {
-            $moduleName = (string)$xml->module->attributes()->name;
+            $moduleName = (string) $xml->module->attributes()->name;
             $expectedPackageName = $this->convertModuleToPackageName($moduleName);
             $this->assertEquals(
                 $expectedPackageName,
@@ -373,7 +373,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $name = $json->name;
         $errors = [];
-        foreach (array_keys((array)$json->require) as $depName) {
+        foreach (array_keys((array) $json->require) as $depName) {
             if ($depName == 'magento/magento-composer-installer') {
                 // Magento Composer Installer is not needed for already existing components
                 continue;
@@ -478,10 +478,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         if (strpos(self::$rootJson['name'], 'magento/project-') !== 0) {
             $this->assertArrayHasKey(
                 'replace',
-                (array)self::$rootJson,
+                (array) self::$rootJson,
                 'No "replace" section found in root composer.json'
             );
-            foreach (array_keys((array)self::$rootJson['replace']) as $key) {
+            foreach (array_keys((array) self::$rootJson['replace']) as $key) {
                 if (MagentoComponent::matchMagentoComponent($key)) {
                     $dependenciesListed[] = $key;
                 }

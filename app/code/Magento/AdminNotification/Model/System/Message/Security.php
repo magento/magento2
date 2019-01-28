@@ -86,7 +86,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
             return true;
         }
 
-        $adminSessionLifetime = (int)$this->_backendConfig->getValue('admin/security/session_lifetime');
+        $adminSessionLifetime = (int) $this->_backendConfig->getValue('admin/security/session_lifetime');
         $this->_cache->save(true, self::VERIFICATION_RESULT_CACHE_KEY, [], $adminSessionLifetime);
         return false;
     }

@@ -197,7 +197,7 @@ class Page extends AbstractDb
         if ($object->getStoreId()) {
             $storeIds = [
                 Store::DEFAULT_STORE_ID,
-                (int)$object->getStoreId(),
+                (int) $object->getStoreId(),
             ];
             $select->join(
                 ['cms_page_store' => $this->getTable('cms_page_store')],
@@ -297,7 +297,7 @@ class Page extends AbstractDb
     {
         $stores = [Store::DEFAULT_STORE_ID];
         if ($this->_store) {
-            $stores[] = (int)$this->getStore()->getId();
+            $stores[] = (int) $this->getStore()->getId();
         }
 
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores);
@@ -324,7 +324,7 @@ class Page extends AbstractDb
             ->from($this->getMainTable(), 'title')
             ->where($entityMetadata->getIdentifierField() . ' = :page_id');
 
-        return $connection->fetchOne($select, ['page_id' => (int)$id]);
+        return $connection->fetchOne($select, ['page_id' => (int) $id]);
     }
 
     /**
@@ -342,7 +342,7 @@ class Page extends AbstractDb
             ->from($this->getMainTable(), 'identifier')
             ->where($entityMetadata->getIdentifierField() . ' = :page_id');
 
-        return $connection->fetchOne($select, ['page_id' => (int)$id]);
+        return $connection->fetchOne($select, ['page_id' => (int) $id]);
     }
 
     /**
@@ -367,7 +367,7 @@ class Page extends AbstractDb
             )
             ->where('cp.' . $entityMetadata->getIdentifierField() . ' = :page_id');
 
-        return $connection->fetchCol($select, ['page_id' => (int)$pageId]);
+        return $connection->fetchCol($select, ['page_id' => (int) $pageId]);
     }
 
     /**

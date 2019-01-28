@@ -58,7 +58,7 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
     {
         $connection = $this->getConnection();
         $childrenIds = [];
-        $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
+        $bind = [':product_id' => (int) $parentId, ':link_type_id' => (int) $typeId];
         $select = $connection->select()->from(
             ['l' => $this->getMainTable()],
             ['linked_product_id']

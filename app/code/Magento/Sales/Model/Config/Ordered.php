@@ -137,7 +137,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      */
     protected function _prepareConfigArray($code, $totalConfig)
     {
-        $totalConfig = (array)$totalConfig;
+        $totalConfig = (array) $totalConfig;
         $totalConfig['_code'] = $code;
         return $totalConfig;
     }

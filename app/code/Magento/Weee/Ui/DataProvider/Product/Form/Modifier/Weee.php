@@ -155,7 +155,7 @@ class Weee extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
-                        'required' => (bool)$attributeConfig['arguments']['data']['config']['required'],
+                        'required' => (bool) $attributeConfig['arguments']['data']['config']['required'],
                     ],
                 ],
             ],

@@ -484,7 +484,7 @@ abstract class Form
         if (!$validator->isValid($this->getEntity())) {
             $messages = [];
             foreach ($validator->getMessages() as $errorMessages) {
-                $messages = array_merge($messages, (array)$errorMessages);
+                $messages = array_merge($messages, (array) $errorMessages);
             }
             return $messages;
         }
@@ -573,7 +573,7 @@ abstract class Form
      */
     public function setIsAjaxRequest($flag = true)
     {
-        $this->_isAjax = (bool)$flag;
+        $this->_isAjax = (bool) $flag;
         return $this;
     }
 
@@ -616,7 +616,7 @@ abstract class Form
     public function ignoreInvisible($setValue = null)
     {
         if (null !== $setValue) {
-            $this->_ignoreInvisible = (bool)$setValue;
+            $this->_ignoreInvisible = (bool) $setValue;
             return $this;
         }
         return $this->_ignoreInvisible;

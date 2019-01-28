@@ -49,12 +49,12 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
         if (!isset($this->secureUrlsCache[$url])) {
             $this->secureUrlsCache[$url] = false;
             foreach ($this->excludedUrlsList as $match) {
-                if (strpos($url, (string)$match) === 0) {
+                if (strpos($url, (string) $match) === 0) {
                     return $this->secureUrlsCache[$url];
                 }
             }
             foreach ($this->secureUrlsList as $match) {
-                if (strpos($url, (string)$match) === 0) {
+                if (strpos($url, (string) $match) === 0) {
                     $this->secureUrlsCache[$url] = true;
                     break;
                 }

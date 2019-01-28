@@ -81,7 +81,7 @@ class Telephone extends AbstractWidget
      */
     protected function _showConfig($key)
     {
-        return (bool)$this->getConfig($key);
+        return (bool) $this->getConfig($key);
     }
 
     /**
@@ -152,7 +152,7 @@ class Telephone extends AbstractWidget
     private function _isAttributeVisible($attributeCode)
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
-        return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
+        return $attributeMetadata ? (bool) $attributeMetadata->isVisible() : false;
     }
 
     /**
@@ -162,7 +162,7 @@ class Telephone extends AbstractWidget
      */
     public function isEnabled()
     {
-        return $this->_getAttribute(self::ATTRIBUTE_CODE) ? (bool)$this->_getAttribute(self::ATTRIBUTE_CODE)->isVisible(
+        return $this->_getAttribute(self::ATTRIBUTE_CODE) ? (bool) $this->_getAttribute(self::ATTRIBUTE_CODE)->isVisible(
         ) : false;
     }
 
@@ -173,7 +173,7 @@ class Telephone extends AbstractWidget
      */
     public function isRequired()
     {
-        return $this->_getAttribute(self::ATTRIBUTE_CODE) ? (bool)$this->_getAttribute(self::ATTRIBUTE_CODE)
+        return $this->_getAttribute(self::ATTRIBUTE_CODE) ? (bool) $this->_getAttribute(self::ATTRIBUTE_CODE)
             ->isRequired() : false;
     }
 }

@@ -104,7 +104,7 @@ class Config extends \Magento\Framework\DataObject
             return;
         }
         foreach ($structureElementIterator as $structureElement) {
-            if (mb_stripos((string)$structureElement->getLabel(), $searchTerm) !== false) {
+            if (mb_stripos((string) $structureElement->getLabel(), $searchTerm) !== false) {
                 $this->resultBuilder->add($structureElement, $pathLabel);
             }
             $elementPathLabel = $pathLabel . ' / ' . $structureElement->getLabel();

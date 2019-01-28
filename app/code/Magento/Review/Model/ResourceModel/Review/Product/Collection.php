@@ -252,7 +252,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         } else {
             $select->join(
                 ['store' => $this->_reviewStoreTable],
-                $connection->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int)$storesIds),
+                $connection->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int) $storesIds),
                 []
             );
         }

@@ -55,6 +55,6 @@ class MaskedQuoteIdToQuoteId implements MaskedQuoteIdToQuoteIdInterface
 
         $cart = $this->cartRepository->get($quoteIdMask->getQuoteId());
 
-        return (int)$cart->getId();
+        return (int) $cart->getId();
     }
 }

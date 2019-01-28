@@ -44,7 +44,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         $entityId = $this->_request->getParam('id');
-        if ((int)$entityId <= 0) {
+        if ((int) $entityId <= 0) {
             return '';
         }
 

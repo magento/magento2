@@ -64,7 +64,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
         try {
             return $statement->execute();
         } catch (\PDOException $e) {
-            throw new \Zend_Db_Statement_Exception($e->getMessage(), (int)$e->getCode(), $e);
+            throw new \Zend_Db_Statement_Exception($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 

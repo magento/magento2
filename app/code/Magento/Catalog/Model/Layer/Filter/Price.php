@@ -275,7 +275,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         $algorithm = $this->algorithmFactory->create();
 
         return $algorithm->getItemsData(
-            (array)$this->dataProvider->getInterval(),
+            (array) $this->dataProvider->getInterval(),
             $this->dataProvider->getAdditionalRequestData()
         );
     }

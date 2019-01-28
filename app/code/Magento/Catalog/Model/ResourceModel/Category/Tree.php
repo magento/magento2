@@ -145,7 +145,7 @@ class Tree extends Dbp
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = (int)$storeId;
+        $this->_storeId = (int) $storeId;
         return $this;
     }
 
@@ -474,7 +474,7 @@ class Tree extends Dbp
             $ids = [$ids];
         }
         foreach ($ids as $key => $id) {
-            $ids[$key] = (int)$id;
+            $ids[$key] = (int) $id;
         }
 
         // collect paths of specified IDs and prepare to collect all their parents and neighbours
@@ -483,7 +483,7 @@ class Tree extends Dbp
 
         foreach ($this->_conn->fetchAll($select) as $item) {
             $pathIds = explode('/', $item['path']);
-            $level = (int)$item['level'];
+            $level = (int) $item['level'];
             while ($level > 0) {
                 $pathIds[count($pathIds) - 1] = '%';
                 $path = implode('/', $pathIds);
@@ -564,7 +564,7 @@ class Tree extends Dbp
     protected function _updateAnchorProductCount(&$data)
     {
         foreach ($data as $key => $row) {
-            if (0 === (int)$row['is_anchor']) {
+            if (0 === (int) $row['is_anchor']) {
                 $data[$key]['product_count'] = $row['self_product_count'];
             }
         }

@@ -199,7 +199,7 @@ class ViewFileReferenceTest extends \PHPUnit\Framework\TestCase
     {
         $result = [];
         foreach (self::_getFilesToProcess() as $file) {
-            $file = (string)$file;
+            $file = (string) $file;
 
             $modulePattern = '[A-Z][a-z]+_[A-Z][a-z]+';
             $filePattern = '[[:alnum:]_/-]+\\.[[:alnum:]_./-]+';

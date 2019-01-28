@@ -187,7 +187,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
                 // possible bug: index_priority is not defined for each type
                 $priority = 0;
             } else {
-                $priority = (int)$type['index_priority'];
+                $priority = (int) $type['index_priority'];
             }
             // non-composite must be before composite
             if (1 != $type['composite']) {

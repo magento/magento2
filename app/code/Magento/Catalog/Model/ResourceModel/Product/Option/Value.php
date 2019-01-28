@@ -113,7 +113,7 @@ class Value extends AbstractDb
         $priceTable = $this->getTable('catalog_product_option_type_price');
         $formattedPrice = $this->getLocaleFormatter()->getNumber($objectPrice);
 
-        $price = (float)sprintf('%F', $formattedPrice);
+        $price = (float) sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
         if (isset($objectPrice) && $priceType) {
@@ -123,7 +123,7 @@ class Value extends AbstractDb
                 'option_type_id'
             )->where(
                 'option_type_id = ?',
-                (int)$object->getId()
+                (int) $object->getId()
             )->where(
                 'store_id = ?',
                 Store::DEFAULT_STORE_ID
@@ -142,7 +142,7 @@ class Value extends AbstractDb
                 }
             } else {
                 $bind = [
-                    'option_type_id' => (int)$object->getId(),
+                    'option_type_id' => (int) $object->getId(),
                     'store_id' => Store::DEFAULT_STORE_ID,
                     'price' => $price,
                     'price_type' => $priceType,
@@ -151,7 +151,7 @@ class Value extends AbstractDb
             }
         }
 
-        $scope = (int)$this->_config->getValue(
+        $scope = (int) $this->_config->getValue(
             Store::XML_PATH_PRICE_SCOPE,
             ScopeInterface::SCOPE_STORE
         );
@@ -191,22 +191,22 @@ class Value extends AbstractDb
                         'option_type_id'
                     )->where(
                         'option_type_id = ?',
-                        (int)$object->getId()
+                        (int) $object->getId()
                     )->where(
                         'store_id = ?',
-                        (int)$storeId
+                        (int) $storeId
                     );
                     $optionTypeId = $this->getConnection()->fetchOne($select);
 
                     if ($optionTypeId) {
                         $bind = ['price' => $newPrice, 'price_type' => $priceType];
-                        $where = ['option_type_id = ?' => (int)$optionTypeId, 'store_id = ?' => (int)$storeId];
+                        $where = ['option_type_id = ?' => (int) $optionTypeId, 'store_id = ?' => (int) $storeId];
 
                         $this->getConnection()->update($priceTable, $bind, $where);
                     } else {
                         $bind = [
-                            'option_type_id' => (int)$object->getId(),
-                            'store_id' => (int)$storeId,
+                            'option_type_id' => (int) $object->getId(),
+                            'store_id' => (int) $storeId,
                             'price' => $newPrice,
                             'price_type' => $priceType,
                         ];
@@ -223,7 +223,7 @@ class Value extends AbstractDb
                 $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
                 foreach ($storeIds as $storeId) {
                     $where = [
-                        'option_type_id = ?' => (int)$object->getId(),
+                        'option_type_id = ?' => (int) $object->getId(),
                         'store_id = ?' => $storeId,
                     ];
                     $this->getConnection()->delete($priceTable, $where);
@@ -248,13 +248,13 @@ class Value extends AbstractDb
                 ['option_type_id']
             )->where(
                 'option_type_id = ?',
-                (int)$object->getId()
+                (int) $object->getId()
             )->where(
                 'store_id = ?',
-                (int)$storeId
+                (int) $storeId
             );
             $optionTypeId = $this->getConnection()->fetchOne($select);
-            $existInCurrentStore = $this->getOptionIdFromOptionTable($titleTable, (int)$object->getId(), (int)$storeId);
+            $existInCurrentStore = $this->getOptionIdFromOptionTable($titleTable, (int) $object->getId(), (int) $storeId);
 
             if ($storeId != Store::DEFAULT_STORE_ID && $object->getData('is_delete_store_title')) {
                 $object->unsetData('title');
@@ -265,7 +265,7 @@ class Value extends AbstractDb
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
                         $where = [
-                            'option_type_id = ?' => (int)$optionTypeId,
+                            'option_type_id = ?' => (int) $optionTypeId,
                             'store_id = ?' => $storeId,
                         ];
                         $bind = ['title' => $object->getTitle()];
@@ -274,7 +274,7 @@ class Value extends AbstractDb
                 } else {
                     $existInDefaultStore = $this->getOptionIdFromOptionTable(
                         $titleTable,
-                        (int)$object->getId(),
+                        (int) $object->getId(),
                         Store::DEFAULT_STORE_ID
                     );
                     // we should insert record into not default store only of if it does not exist in default store
@@ -282,7 +282,7 @@ class Value extends AbstractDb
                         || ($storeId != Store::DEFAULT_STORE_ID && !$existInCurrentStore)
                     ) {
                         $bind = [
-                            'option_type_id' => (int)$object->getId(),
+                            'option_type_id' => (int) $object->getId(),
                             'store_id' => $storeId,
                             'title' => $object->getTitle(),
                         ];
@@ -295,7 +295,7 @@ class Value extends AbstractDb
                     && $object->getStoreId() > Store::DEFAULT_STORE_ID
                 ) {
                     $where = [
-                        'option_type_id = ?' => (int)$optionTypeId,
+                        'option_type_id = ?' => (int) $optionTypeId,
                         'store_id = ?' => $storeId,
                     ];
                     $this->getConnection()->delete($titleTable, $where);
@@ -323,7 +323,7 @@ class Value extends AbstractDb
             $optionId
         )->where(
             'store_id = ?',
-            (int)$storeId
+            (int) $storeId
         );
         return $connection->fetchOne($select);
     }

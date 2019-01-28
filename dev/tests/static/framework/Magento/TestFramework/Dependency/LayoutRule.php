@@ -233,7 +233,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $area = $this->_getAreaByFile($file);
 
         $result = [];
-        foreach ((array)$xml->xpath('/layout/child::*') as $element) {
+        foreach ((array) $xml->xpath('/layout/child::*') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, $element->getName());
             $modules = isset($check['module']) ? $check['module'] : null;
             if ($modules) {
@@ -271,8 +271,8 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $area = $this->_getAreaByFile($file);
 
         $result = [];
-        foreach ((array)$xml->xpath('/layout/child::*/@parent') as $element) {
-            $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string)$element);
+        foreach ((array) $xml->xpath('/layout/child::*/@parent') as $element) {
+            $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string) $element);
             $modules = isset($check['module']) ? $check['module'] : null;
             if ($modules) {
                 if (!is_array($modules)) {
@@ -281,7 +281,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
                 foreach ($modules as $module) {
                     $result[$module] = [
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
-                        'source' => (string)$element,
+                        'source' => (string) $element,
                     ];
                 }
             }
@@ -309,8 +309,8 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $area = $this->_getAreaByFile($file);
 
         $result = [];
-        foreach ((array)$xml->xpath('//update/@handle') as $element) {
-            $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string)$element);
+        foreach ((array) $xml->xpath('//update/@handle') as $element) {
+            $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string) $element);
             $modules = isset($check['module']) ? $check['module'] : null;
             if ($modules) {
                 if (!is_array($modules)) {
@@ -319,7 +319,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
                 foreach ($modules as $module) {
                     $result[$module] = [
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => (string)$element,
+                        'source' => (string) $element,
                     ];
                 }
             }
@@ -347,13 +347,13 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $area = $this->_getAreaByFile($file);
 
         $result = [];
-        foreach ((array)$xml->xpath('//reference/@name') as $element) {
-            $check = $this->_checkDependencyLayoutBlock($currentModule, $area, (string)$element);
+        foreach ((array) $xml->xpath('//reference/@name') as $element) {
+            $check = $this->_checkDependencyLayoutBlock($currentModule, $area, (string) $element);
             $module = isset($check['module']) ? $check['module'] : null;
             if ($module) {
                 $result[$module] = [
                     'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
-                    'source' => (string)$element,
+                    'source' => (string) $element,
                 ];
             }
         }

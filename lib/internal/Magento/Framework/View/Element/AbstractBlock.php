@@ -434,7 +434,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $args = func_get_args();
             $alias = array_shift($args);
             $callback = array_shift($args);
-            $result = (string)array_shift($args);
+            $result = (string) array_shift($args);
             if (!is_array($params)) {
                 $params = $args;
             }
@@ -952,7 +952,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl((string)$string);
+        return $this->_escaper->escapeUrl((string) $string);
     }
 
     /**
@@ -1077,7 +1077,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             return null;
         }
 
-        return (int)$cacheLifetime;
+        return (int) $cacheLifetime;
     }
 
     /**

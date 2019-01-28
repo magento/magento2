@@ -126,7 +126,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function checkIsLive($range)
     {
-        $this->_isLive = (bool)(!$this->_scopeConfig->getValue(
+        $this->_isLive = (bool) (!$this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ));
@@ -458,8 +458,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     )
                 );
-                $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
-                $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
+                $startMonth = isset($startMonthDay[0]) ? (int) $startMonthDay[0] : 1;
+                $startDay = isset($startMonthDay[1]) ? (int) $startMonthDay[1] : 1;
                 $dateStart->setDate($dateStart->format('Y'), $startMonth, $startDay);
                 if ($range == '2y') {
                     $dateStart->modify('-1 year');

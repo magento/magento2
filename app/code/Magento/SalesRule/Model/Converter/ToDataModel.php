@@ -161,7 +161,7 @@ class ToDataModel
     {
         if ($dataModel->getCouponType()) {
             $mappedValue = '';
-            switch ((int)$dataModel->getCouponType()) {
+            switch ((int) $dataModel->getCouponType()) {
                 case \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON:
                     $mappedValue = RuleInterface::COUPON_TYPE_NO_COUPON;
                     break;

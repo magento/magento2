@@ -302,11 +302,11 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
             $i++;
             $data[] = [
-                'product_id' => (int)$row['entity_id'],
-                'website_id' => (int)$row['website_id'],
+                'product_id' => (int) $row['entity_id'],
+                'website_id' => (int) $row['website_id'],
                 'stock_id' => Stock::DEFAULT_STOCK_ID,
-                'qty' => (float)$row['qty'],
-                'stock_status' => (int)$row['status'],
+                'qty' => (float) $row['qty'],
+                'stock_status' => (int) $row['status'],
             ];
             if ($i % 1000 == 0) {
                 $this->_updateIndexTable($data);

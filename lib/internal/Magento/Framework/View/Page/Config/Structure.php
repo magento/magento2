@@ -84,7 +84,7 @@ class Structure
         if (empty($attributeValue)) {
             $this->removeElementAttributes[$element][] = $attributeName;
         } else {
-            $this->elementAttributes[$element][$attributeName] = (string)$attributeValue;
+            $this->elementAttributes[$element][$attributeName] = (string) $attributeValue;
         }
         return $this;
     }
@@ -142,7 +142,7 @@ class Structure
      */
     public function setTitle($title)
     {
-        $this->title = (string)$title;
+        $this->title = (string) $title;
         return $this;
     }
 
@@ -161,7 +161,7 @@ class Structure
      */
     public function setMetadata($name, $content)
     {
-        $this->metadata[$name] = (string)$content;
+        $this->metadata[$name] = (string) $content;
         return $this;
     }
 

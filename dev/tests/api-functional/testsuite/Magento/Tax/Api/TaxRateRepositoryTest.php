@@ -533,9 +533,9 @@ class TaxRateRepositoryTest extends WebapiAbstract
 
         $expectedRuleData = [
             [
-                'id' => (int)$rates['codeUs12']->getId(),
+                'id' => (int) $rates['codeUs12']->getId(),
                 'tax_country_id' => $rates['codeUs12']->getTaxCountryId(),
-                'tax_region_id' => (int)$rates['codeUs12']->getTaxRegionId(),
+                'tax_region_id' => (int) $rates['codeUs12']->getTaxRegionId(),
                 'region_name' => 'CA',
                 'tax_postcode' => $rates['codeUs12']->getTaxPostcode(),
                 'code' =>  $rates['codeUs12']->getCode(),
@@ -594,7 +594,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
 
         $expectedRuleData = [
             [
-                'id' => (int)$rates['codeCz2']->getId(),
+                'id' => (int) $rates['codeCz2']->getId(),
                 'tax_country_id' => $rates['codeCz2']->getTaxCountryId(),
                 'tax_postcode' => $rates['codeCz2']->getTaxPostcode(),
                 'code' =>  $rates['codeCz2']->getCode(),
@@ -603,7 +603,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 'titles' => [],
             ],
             [
-                'id' => (int)$rates['codeCz1']->getId(),
+                'id' => (int) $rates['codeCz1']->getId(),
                 'tax_country_id' => $rates['codeCz1']->getTaxCountryId(),
                 'tax_postcode' => $rates['codeCz1']->getTaxPostcode(),
                 'code' => $rates['codeCz1']->getCode(),
@@ -625,7 +625,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         if ($this->fixtureTaxRates === null) {
             $this->fixtureTaxRates = [];
             if ($this->getFixtureTaxRules()) {
-                $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
+                $taxRateIds = (array) $this->getFixtureTaxRules()[0]->getRates();
                 foreach ($taxRateIds as $taxRateId) {
                     /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
                     $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
@@ -647,8 +647,8 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->fixtureTaxClasses = [];
             if ($this->getFixtureTaxRules()) {
                 $taxClassIds = array_merge(
-                    (array)$this->getFixtureTaxRules()[0]->getCustomerTaxClasses(),
-                    (array)$this->getFixtureTaxRules()[0]->getProductTaxClasses()
+                    (array) $this->getFixtureTaxRules()[0]->getCustomerTaxClasses(),
+                    (array) $this->getFixtureTaxRules()[0]->getProductTaxClasses()
                 );
                 foreach ($taxClassIds as $taxClassId) {
                     /** @var \Magento\Tax\Model\ClassModel $taxClass */

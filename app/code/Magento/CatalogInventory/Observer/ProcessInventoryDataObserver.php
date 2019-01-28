@@ -121,7 +121,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      */
     private function setStockDataToProduct(Product $product, Item $stockItem, array $quantityAndStockStatus)
     {
-        $stockData = array_replace((array)$product->getData('stock_data'), $quantityAndStockStatus);
+        $stockData = array_replace((array) $product->getData('stock_data'), $quantityAndStockStatus);
         if ($stockItem->hasDataChanges()) {
             $stockData = array_replace($stockData, $stockItem->getData());
         }

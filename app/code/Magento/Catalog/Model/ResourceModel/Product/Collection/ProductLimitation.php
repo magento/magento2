@@ -133,7 +133,7 @@ class ProductLimitation implements \ArrayAccess
      */
     public function isUsingPriceIndex()
     {
-        return $this->offsetExists('use_price_index') ? (bool)$this->offsetGet('use_price_index') : false;
+        return $this->offsetExists('use_price_index') ? (bool) $this->offsetGet('use_price_index') : false;
     }
 
     /**
@@ -143,7 +143,7 @@ class ProductLimitation implements \ArrayAccess
      */
     public function setUsePriceIndex($value)
     {
-        $this->offsetSet('use_price_index', (bool)$value);
+        $this->offsetSet('use_price_index', (bool) $value);
     }
 
     /**

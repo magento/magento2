@@ -107,7 +107,7 @@ var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
 Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {
     idLabel : '<?= /* @escapeNotVerified */ $block->getFieldId() ?>',
-    scopePrice : <?= (int)$block->isUsedWebsitePrice() ?>,
+    scopePrice : <?= (int) $block->isUsedWebsitePrice() ?>,
     templateBox : '',
     templateRow : '',
     itemsCount : 0,

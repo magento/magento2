@@ -26,5 +26,5 @@ $configWriter = $objectManager->get(WriterInterface::class);
 /** @var StoreRepositoryInterface $storeRepository */
 $storeRepository = $objectManager->get(StoreRepositoryInterface::class);
 $store = $storeRepository->get('test');
-$deleteConfigData($configWriter, $configData, ScopeInterface::SCOPE_STORES, (int)$store->getId());
+$deleteConfigData($configWriter, $configData, ScopeInterface::SCOPE_STORES, (int) $store->getId());
 require __DIR__ . '/../../Store/_files/store_rollback.php';

@@ -152,7 +152,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
             $data = $configData[$path];
             $inherit = false;
         } else {
-            $data = (int)(string)$this->getForm()->getConfigValue($path);
+            $data = (int) (string) $this->getForm()->getConfigValue($path);
             $inherit = true;
         }
 

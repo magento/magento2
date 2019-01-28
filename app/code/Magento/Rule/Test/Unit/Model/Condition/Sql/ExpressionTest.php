@@ -16,6 +16,6 @@ class ExpressionTest extends \PHPUnit\Framework\TestCase
             \Magento\Rule\Model\Condition\Sql\Expression::class,
             ['expression' => 'SQL_EXPRESSION']
         );
-        $this->assertEquals('(SQL_EXPRESSION)', (string)$expression);
+        $this->assertEquals('(SQL_EXPRESSION)', (string) $expression);
     }
 }

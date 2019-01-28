@@ -229,7 +229,7 @@ class Block implements Layout\GeneratorInterface
             $block->setTemplate($attributes['template']);
         }
         if (!empty($attributes['ttl'])) {
-            $ttl = (int)$attributes['ttl'];
+            $ttl = (int) $attributes['ttl'];
             $block->setTtl($ttl);
         }
         return $block;

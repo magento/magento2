@@ -107,7 +107,7 @@ class SimpleDataObjectConverter
         }
         // @codingStandardsIgnoreEnd
         $result = [];
-        foreach ((array)$input as $key => $value) {
+        foreach ((array) $input as $key => $value) {
             if (is_object($value) || is_array($value)) {
                 $result[$key] = $this->convertStdObjectToArray($value, $removeItemNode);
             } else {

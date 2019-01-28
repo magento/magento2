@@ -132,10 +132,10 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'catalog_category_product',
             'position',
             'product_id=entity_id',
-            'category_id=' . (int)$this->getRequest()->getParam('id', 0),
+            'category_id=' . (int) $this->getRequest()->getParam('id', 0),
             'left'
         );
-        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
         if ($storeId > 0) {
             $collection->addStoreFilter($storeId);
         }
@@ -209,7 +209,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Price'),
                 'type' => 'currency',
-                'currency_code' => (string)$this->_scopeConfig->getValue(
+                'currency_code' => (string) $this->_scopeConfig->getValue(
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ),

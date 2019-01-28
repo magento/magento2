@@ -142,7 +142,7 @@ abstract class AbstractExpress extends AppAction implements
             $this->getResponse()->setStatusHeader(403, '1.1', 'Forbidden');
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize Express Checkout.'));
         }
-        if (!(float)$quote->getGrandTotal()) {
+        if (!(float) $quote->getGrandTotal()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'PayPal can\'t process orders with a zero balance due. '

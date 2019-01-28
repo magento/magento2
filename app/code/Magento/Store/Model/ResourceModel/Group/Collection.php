@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setLoadDefault($loadDefault)
     {
-        return $this->setFlag('load_default_store_group', (bool)$loadDefault);
+        return $this->setFlag('load_default_store_group', (bool) $loadDefault);
     }
 
     /**

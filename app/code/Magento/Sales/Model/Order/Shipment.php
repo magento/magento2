@@ -196,7 +196,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getProtectCode()
     {
-        return (string)$this->getOrder()->getProtectCode();
+        return (string) $this->getOrder()->getProtectCode();
     }
 
     /**

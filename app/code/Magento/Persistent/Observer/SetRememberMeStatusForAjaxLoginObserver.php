@@ -76,7 +76,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
                 $requestData = $this->serializer->unserialize($content);
             }
             $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
-            $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
+            $this->_persistentSession->setRememberMeChecked((bool) $isRememberMeChecked);
         }
     }
 }

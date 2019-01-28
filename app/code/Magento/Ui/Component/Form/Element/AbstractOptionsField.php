@@ -61,7 +61,7 @@ abstract class AbstractOptionsField extends AbstractElement
             }
             $config['options'] = array_values(array_merge_recursive($config['options'], $options));
         }
-        $this->setData('config', (array)$config);
+        $this->setData('config', (array) $config);
         parent::prepare();
     }
 
@@ -86,7 +86,7 @@ abstract class AbstractOptionsField extends AbstractElement
     {
         array_walk($options, function (&$value) {
             if (isset($value['value']) && is_scalar($value['value'])) {
-                $value['value'] = (string)$value['value'];
+                $value['value'] = (string) $value['value'];
             }
         });
         return $options;

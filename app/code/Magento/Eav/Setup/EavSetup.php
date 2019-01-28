@@ -287,7 +287,7 @@ class EavSetup
         if (is_numeric($id)) {
             $this->setup->deleteTableRow('eav_entity_type', 'entity_type_id', $id);
         } else {
-            $this->setup->deleteTableRow('eav_entity_type', 'entity_type_code', (string)$id);
+            $this->setup->deleteTableRow('eav_entity_type', 'entity_type_code', (string) $id);
         }
 
         return $this;
@@ -769,7 +769,7 @@ class EavSetup
     private function _getValue($array, $key, $default = null)
     {
         if (isset($array[$key]) && is_bool($array[$key])) {
-            $array[$key] = (int)$array[$key];
+            $array[$key] = (int) $array[$key];
         }
         return isset($array[$key]) ? $array[$key] : $default;
     }
@@ -888,7 +888,7 @@ class EavSetup
 
         if (isset($option['value'])) {
             foreach ($option['value'] as $optionId => $values) {
-                $intOptionId = (int)$optionId;
+                $intOptionId = (int) $optionId;
                 if (!empty($option['delete'][$optionId])) {
                     if ($intOptionId) {
                         $condition = ['option_id =?' => $intOptionId];

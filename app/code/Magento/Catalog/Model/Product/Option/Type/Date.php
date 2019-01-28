@@ -305,7 +305,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function useCalendar()
     {
-        return (bool)$this->getConfigData('use_calendar');
+        return (bool) $this->getConfigData('use_calendar');
     }
 
     /**
@@ -315,7 +315,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function is24hTimeFormat()
     {
-        return (bool)($this->getConfigData('time_format') == '24h');
+        return (bool) ($this->getConfigData('time_format') == '24h');
     }
 
     /**

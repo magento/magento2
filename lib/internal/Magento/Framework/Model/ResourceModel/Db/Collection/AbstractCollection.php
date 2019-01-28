@@ -551,7 +551,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function setResetItemsDataChanged($flag)
     {
-        $this->_resetItemsDataChanged = (bool)$flag;
+        $this->_resetItemsDataChanged = (bool) $flag;
         return $this;
     }
 

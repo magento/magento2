@@ -44,7 +44,7 @@ class Build
      */
     public function setEntityTypeId($entityTypeId)
     {
-        $this->entityTypeId = (int)$entityTypeId;
+        $this->entityTypeId = (int) $entityTypeId;
         return $this;
     }
 
@@ -54,7 +54,7 @@ class Build
      */
     public function setSkeletonId($skeletonId)
     {
-        $this->skeletonId = (int)$skeletonId;
+        $this->skeletonId = (int) $skeletonId;
         return $this;
     }
 

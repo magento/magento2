@@ -151,7 +151,7 @@ class Http extends File
         $port = 80;
 
         if (isset($urlProp['port'])) {
-            $port = (int)$urlProp['port'];
+            $port = (int) $urlProp['port'];
         }
 
         $path = '/';

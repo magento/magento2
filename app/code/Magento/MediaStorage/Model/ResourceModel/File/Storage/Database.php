@@ -325,7 +325,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         );
 
         $data = $connection->fetchRow($select);
-        return (bool)$data;
+        return (bool) $data;
     }
 
     /**

@@ -141,7 +141,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
         $result = $this->ccConfig->hasVerification();
         $configData = $this->methods[$methodCode]->getConfigData('useccv');
         if ($configData !== null) {
-            $result = (bool)$configData;
+            $result = (bool) $configData;
         }
         return $result;
     }

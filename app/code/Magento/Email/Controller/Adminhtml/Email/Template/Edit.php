@@ -42,7 +42,7 @@ class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template implements
                     ]
                 ]
             )->setEditMode(
-                (bool)$this->getRequest()->getParam('id')
+                (bool) $this->getRequest()->getParam('id')
             )
         );
         $this->_view->renderLayout();

@@ -148,7 +148,7 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
                 $quote = $this->quoteAddressFactory->create()
                     ->load($quoteAddressId);
                 if ($quote && $quote->getId()) {
-                    return (bool)(int)$quote->getData('save_in_address_book');
+                    return (bool) (int) $quote->getData('save_in_address_book');
                 }
             }
 

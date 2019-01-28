@@ -385,7 +385,7 @@ class TypeProcessor
      */
     public function isArrayType($type)
     {
-        return (bool)preg_match('/(\[\]$|^ArrayOf)/', $type);
+        return (bool) preg_match('/(\[\]$|^ArrayOf)/', $type);
     }
 
     /**
@@ -487,7 +487,7 @@ class TypeProcessor
                 throw new SerializationException(
                     new Phrase(
                         'The "%value" value\'s type is invalid. The "%type" type was expected. Verify and try again.',
-                        ['value' => (string)$value, 'type' => $type]
+                        ['value' => (string) $value, 'type' => $type]
                     )
                 );
             }

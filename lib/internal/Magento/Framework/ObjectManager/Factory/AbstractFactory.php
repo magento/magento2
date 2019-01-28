@@ -143,7 +143,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function resolveArgument(&$argument, $paramType, $paramDefault, $paramName, $requestedType)
     {
         if ($paramType && $argument !== $paramDefault && !is_object($argument)) {
-            if (!isset($argument['instance']) || $argument !== (array)$argument) {
+            if (!isset($argument['instance']) || $argument !== (array) $argument) {
                 throw new \UnexpectedValueException(
                     'Invalid parameter configuration provided for $' . $paramName . ' argument of ' . $requestedType
                 );
@@ -161,7 +161,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             } else {
                 $argument = $this->objectManager->create($argumentType);
             }
-        } elseif ($argument === (array)$argument) {
+        } elseif ($argument === (array) $argument) {
             if (isset($argument['argument'])) {
                 if (isset($this->globalArguments[$argument['argument']])) {
                     $argument = $this->globalArguments[$argument['argument']];
@@ -184,7 +184,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function parseArray(&$array)
     {
         foreach ($array as $key => $item) {
-            if ($item === (array)$item) {
+            if ($item === (array) $item) {
                 if (isset($item['instance'])) {
                     if (isset($item['shared'])) {
                         $isShared = $item['shared'];

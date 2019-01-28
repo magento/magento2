@@ -103,7 +103,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['rstore' => $this->getTable('review_store')],
             $this->getConnection()->quoteInto(
                 'main_table.review_id=rstore.review_id AND rstore.store_id=?',
-                (int)$storeId
+                (int) $storeId
             ),
             []
         );
@@ -128,7 +128,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['title' => $this->getTable('rating_title')],
             $connection->quoteInto(
                 'main_table.rating_id=title.rating_id AND title.store_id = ?',
-                (int)$this->_storeManager->getStore()->getId()
+                (int) $this->_storeManager->getStore()->getId()
             ),
             ['rating_code' => $ratingCodeCond]
         );

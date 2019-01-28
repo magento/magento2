@@ -124,7 +124,7 @@ class Info extends \Magento\Framework\View\Element\Template
     public function getIsSecureMode()
     {
         if ($this->hasIsSecureMode()) {
-            return (bool)(int)$this->_getData('is_secure_mode');
+            return (bool) (int) $this->_getData('is_secure_mode');
         }
 
         $method = $this->getMethod();

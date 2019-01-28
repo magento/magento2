@@ -78,7 +78,7 @@ class Theme extends \Magento\Framework\App\Helper\AbstractHelper
 
         $result = [];
         foreach ($elements as $fileId) {
-            $fileId = (string)$fileId;
+            $fileId = (string) $fileId;
             $result[$fileId] = $this->_assetRepo->createAsset($fileId, $params);
         }
         ksort($result);

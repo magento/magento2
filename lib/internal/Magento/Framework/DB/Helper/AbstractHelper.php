@@ -30,7 +30,7 @@ abstract class AbstractHelper
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix)
     {
         $this->_resource = $resource;
-        $this->_modulePrefix = (string)$modulePrefix;
+        $this->_modulePrefix = (string) $modulePrefix;
     }
 
     /**

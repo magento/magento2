@@ -61,7 +61,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
 
         /** @var $scopeConfig \Magento\Framework\App\Config\ScopeConfigInterface */
         $scopeConfig = $this->_objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $defaultStatus = (string)$scopeConfig->getValue(
+        $defaultStatus = (string) $scopeConfig->getValue(
             'payment/checkmo/order_status',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -77,7 +77,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
 
         $this->_resetConfig();
 
-        $newStatus = (string)$scopeConfig->getValue(
+        $newStatus = (string) $scopeConfig->getValue(
             'payment/checkmo/order_status',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -119,7 +119,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
 
         /** @var $scopeConfig \Magento\Framework\App\Config\ScopeConfigInterface */
         $scopeConfig = $this->_objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $unassignedStatus = (string)$scopeConfig->getValue(
+        $unassignedStatus = (string) $scopeConfig->getValue(
             'payment/checkmo/order_status',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

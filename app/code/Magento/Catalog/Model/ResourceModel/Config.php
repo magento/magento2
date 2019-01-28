@@ -75,7 +75,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = (int)$storeId;
+        $this->_storeId = (int) $storeId;
         return $this;
     }
 
@@ -88,7 +88,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getStoreId()
     {
         if ($this->_storeId === null) {
-            $this->_storeId = (int)$this->_storeManager->getStore()->getId();
+            $this->_storeId = (int) $this->_storeManager->getStore()->getId();
         }
         return $this->_storeId;
     }
@@ -101,7 +101,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getEntityTypeId()
     {
         if ($this->_entityTypeId === null) {
-            $this->_entityTypeId = (int)$this->_eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
+            $this->_entityTypeId = (int) $this->_eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
                 ->getId();
         }
         return $this->_entityTypeId;
@@ -124,7 +124,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'main_table.attribute_id = additional_table.attribute_id'
         )->joinLeft(
             ['al' => $this->getTable('eav_attribute_label')],
-            'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int)$this->getStoreId(),
+            'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int) $this->getStoreId(),
             ['store_label' => $storeLabelExpr]
         )->where(
             'main_table.entity_type_id = ?',

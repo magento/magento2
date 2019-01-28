@@ -422,7 +422,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             if (is_array($preConfiguredQtys) && isset($preConfiguredQtys[$selectionId])) {
                 $selection['qty'] = $preConfiguredQtys[$selectionId];
             } else {
-                if ((int)$preConfiguredQtys > 0) {
+                if ((int) $preConfiguredQtys > 0) {
                     $selection['qty'] = $preConfiguredQtys;
                 }
             }

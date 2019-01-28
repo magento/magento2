@@ -79,11 +79,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($products as $product) {
             /** @var \Magento\Catalog\Model\Product $product */
             foreach ($categories as $categoryId) {
-                $this->assertTrue((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
+                $this->assertTrue((bool) $this->productResource->canBeShowInCategory($product, $categoryId));
             }
 
             $this->assertTrue(
-                (bool)$this->productResource->canBeShowInCategory($product, $categoryThird->getParentId())
+                (bool) $this->productResource->canBeShowInCategory($product, $categoryThird->getParentId())
             );
         }
     }
@@ -127,10 +127,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($products as $product) {
             /** @var \Magento\Catalog\Model\Product $product */
             foreach ($categories as $categoryId) {
-                $this->assertTrue((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
+                $this->assertTrue((bool) $this->productResource->canBeShowInCategory($product, $categoryId));
             }
 
-            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($product, $categoryThird->getId()));
+            $this->assertFalse((bool) $this->productResource->canBeShowInCategory($product, $categoryThird->getId()));
         }
     }
 
@@ -155,10 +155,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($products as $product) {
             /** @var \Magento\Catalog\Model\Product $product */
             foreach ($categories as $categoryId) {
-                $this->assertFalse((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
+                $this->assertFalse((bool) $this->productResource->canBeShowInCategory($product, $categoryId));
             }
             $this->assertTrue(
-                (bool)$this->productResource->canBeShowInCategory($product, self::DEFAULT_ROOT_CATEGORY)
+                (bool) $this->productResource->canBeShowInCategory($product, self::DEFAULT_ROOT_CATEGORY)
             );
         }
     }
@@ -200,12 +200,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
+            $this->assertTrue((bool) $this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
 
         $categories = [$categorySecond->getId()];
         foreach ($categories as $categoryId) {
-            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
+            $this->assertFalse((bool) $this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
     }
 
@@ -215,7 +215,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testCatalogCategoryProductIndexInvalidateAfterDelete()
     {
-        $indexerShouldBeValid = (bool)$this->indexer->isInvalid();
+        $indexerShouldBeValid = (bool) $this->indexer->isInvalid();
 
         $categories = $this->getCategories(1);
         $this->categoryRepository->delete(array_pop($categories));

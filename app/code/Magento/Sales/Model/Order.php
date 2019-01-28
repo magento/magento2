@@ -431,7 +431,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function setActionFlag($action, $flag)
     {
-        $this->_actionFlag[$action] = (bool)$flag;
+        $this->_actionFlag[$action] = (bool) $flag;
         return $this;
     }
 
@@ -454,7 +454,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function setCanSendNewEmailFlag($flag)
     {
-        $this->_canSendNewEmailFlag = (bool)$flag;
+        $this->_canSendNewEmailFlag = (bool) $flag;
         return $this;
     }
 
@@ -1893,7 +1893,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasInvoices()
     {
-        return (bool)$this->getInvoiceCollection()->count();
+        return (bool) $this->getInvoiceCollection()->count();
     }
 
     /**
@@ -1903,7 +1903,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasShipments()
     {
-        return (bool)$this->getShipmentsCollection()->count();
+        return (bool) $this->getShipmentsCollection()->count();
     }
 
     /**
@@ -1913,7 +1913,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasCreditmemos()
     {
-        return (bool)$this->getCreditmemosCollection()->count();
+        return (bool) $this->getCreditmemosCollection()->count();
     }
 
     /**
@@ -1938,7 +1938,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if ($this->getCustomerFirstname()) {
             $customerName = $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
         } else {
-            $customerName = (string)__('Guest');
+            $customerName = (string) __('Guest');
         }
         return $customerName;
     }

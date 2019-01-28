@@ -70,7 +70,7 @@ class Builder
         $this->results[] = [
             'id'          => $structureElement->getPath(),
             'type'        => null,
-            'name'        => (string)$structureElement->getLabel(),
+            'name'        => (string) $structureElement->getLabel(),
             'description' => $elementPathLabel,
             'url'         => $this->urlBuilder->getUrl('*/system_config/edit', $urlParams),
         ];

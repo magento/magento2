@@ -108,16 +108,16 @@ class Container implements Layout\ReaderInterface
             $keys = array_keys($elementData['attributes']);
             foreach ($keys as $key) {
                 if (isset($currentElement[$key])) {
-                    $elementData['attributes'][$key] = (string)$currentElement[$key];
+                    $elementData['attributes'][$key] = (string) $currentElement[$key];
                 }
             }
         } else {
             $elementData['attributes'] = [
-                self::CONTAINER_OPT_HTML_TAG   => (string)$currentElement[self::CONTAINER_OPT_HTML_TAG],
-                self::CONTAINER_OPT_HTML_ID    => (string)$currentElement[self::CONTAINER_OPT_HTML_ID],
-                self::CONTAINER_OPT_HTML_CLASS => (string)$currentElement[self::CONTAINER_OPT_HTML_CLASS],
-                self::CONTAINER_OPT_LABEL      => (string)$currentElement[self::CONTAINER_OPT_LABEL],
-                self::CONTAINER_OPT_DISPLAY    => (string)$currentElement[self::CONTAINER_OPT_DISPLAY],
+                self::CONTAINER_OPT_HTML_TAG   => (string) $currentElement[self::CONTAINER_OPT_HTML_TAG],
+                self::CONTAINER_OPT_HTML_ID    => (string) $currentElement[self::CONTAINER_OPT_HTML_ID],
+                self::CONTAINER_OPT_HTML_CLASS => (string) $currentElement[self::CONTAINER_OPT_HTML_CLASS],
+                self::CONTAINER_OPT_LABEL      => (string) $currentElement[self::CONTAINER_OPT_LABEL],
+                self::CONTAINER_OPT_DISPLAY    => (string) $currentElement[self::CONTAINER_OPT_DISPLAY],
             ];
         }
         $scheduledStructure->setStructureElementData($containerName, $elementData);

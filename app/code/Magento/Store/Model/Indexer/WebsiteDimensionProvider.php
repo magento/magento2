@@ -52,7 +52,7 @@ class WebsiteDimensionProvider implements DimensionProviderInterface
     public function getIterator(): \Traversable
     {
         foreach ($this->getWebsites() as $website) {
-            yield $this->dimensionFactory->create(self::DIMENSION_NAME, (string)$website);
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, (string) $website);
         }
     }
 

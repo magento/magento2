@@ -59,7 +59,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $rows = $object->getRows();
         if (is_array($rows)) {
             $connection = $this->getConnection();
-            $reportId = (int)$object->getId();
+            $reportId = (int) $object->getId();
             try {
                 $connection->beginTransaction();
                 if ($reportId) {
@@ -77,7 +77,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     /*
                      * Converting numeric
                      */
-                    $rows[$key]['fee_amount'] = (float)$rows[$key]['fee_amount'];
+                    $rows[$key]['fee_amount'] = (float) $rows[$key]['fee_amount'];
                     /*
                      * Setting reportId
                      */

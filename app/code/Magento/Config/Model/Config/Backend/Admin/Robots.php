@@ -76,7 +76,7 @@ class Robots extends \Magento\Framework\App\Config\Value
      */
     protected function _afterLoad()
     {
-        if (!(string)$this->getValue()) {
+        if (!(string) $this->getValue()) {
             $this->setValue($this->_getDefaultValue());
         }
 

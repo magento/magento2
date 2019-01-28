@@ -59,8 +59,8 @@ class Discount extends AbstractTotal
                 continue;
             }
 
-            $orderItemDiscount = (float)$orderItem->getDiscountInvoiced();
-            $baseOrderItemDiscount = (float)$orderItem->getBaseDiscountInvoiced();
+            $orderItemDiscount = (float) $orderItem->getDiscountInvoiced();
+            $baseOrderItemDiscount = (float) $orderItem->getBaseDiscountInvoiced();
             $orderItemQty = $orderItem->getQtyInvoiced();
 
             if ($orderItemDiscount && $orderItemQty) {
@@ -100,10 +100,10 @@ class Discount extends AbstractTotal
      */
     private function getBaseShippingAmount(\Magento\Sales\Model\Order\Creditmemo $creditmemo): float
     {
-        $baseShippingAmount = (float)$creditmemo->getBaseShippingAmount();
+        $baseShippingAmount = (float) $creditmemo->getBaseShippingAmount();
         if (!$baseShippingAmount) {
-            $baseShippingInclTax = (float)$creditmemo->getBaseShippingInclTax();
-            $baseShippingTaxAmount = (float)$creditmemo->getBaseShippingTaxAmount();
+            $baseShippingInclTax = (float) $creditmemo->getBaseShippingInclTax();
+            $baseShippingTaxAmount = (float) $creditmemo->getBaseShippingTaxAmount();
             $baseShippingAmount = $baseShippingInclTax - $baseShippingTaxAmount;
         }
         return $baseShippingAmount;

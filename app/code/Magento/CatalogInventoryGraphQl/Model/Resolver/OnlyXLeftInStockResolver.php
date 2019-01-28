@@ -69,7 +69,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
      */
     private function getOnlyXLeftQty(ProductInterface $product): ?float
     {
-        $thresholdQty = (float)$this->scopeConfig->getValue(
+        $thresholdQty = (float) $this->scopeConfig->getValue(
             Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
             ScopeInterface::SCOPE_STORE
         );
@@ -86,13 +86,13 @@ class OnlyXLeftInStockResolver implements ResolverInterface
 
         $stockLeft = $stockCurrentQty - $stockItem->getMinQty();
 
-        $thresholdQty = (float)$this->scopeConfig->getValue(
+        $thresholdQty = (float) $this->scopeConfig->getValue(
             Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
             ScopeInterface::SCOPE_STORE
         );
 
         if ($stockCurrentQty > 0 && $stockLeft <= $thresholdQty) {
-            return (float)$stockLeft;
+            return (float) $stockLeft;
         }
 
         return null;

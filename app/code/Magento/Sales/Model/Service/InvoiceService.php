@@ -92,7 +92,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     public function setCapture($id)
     {
-        return (bool)$this->repository->get($id)->capture();
+        return (bool) $this->repository->get($id)->capture();
     }
 
     /**
@@ -121,7 +121,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     public function setVoid($id)
     {
-        return (bool)$this->repository->get($id)->void();
+        return (bool) $this->repository->get($id)->void();
     }
 
     /**

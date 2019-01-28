@@ -124,7 +124,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     public function getCurrentPage()
     {
-        return abs((int)$this->getRequest()->getParam($this->getData('page_var_name')));
+        return abs((int) $this->getRequest()->getParam($this->getData('page_var_name')));
     }
 
     /**
@@ -194,7 +194,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         if (!$this->hasData('show_pager')) {
             $this->setData('show_pager', self::DEFAULT_SHOW_PAGER);
         }
-        return (bool)$this->getData('show_pager');
+        return (bool) $this->getData('show_pager');
     }
 
     /**

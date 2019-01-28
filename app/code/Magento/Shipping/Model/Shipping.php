@@ -335,7 +335,7 @@ class Shipping implements RateCollectorInterface
         $allItems = $request->getAllItems();
         $fullItems = [];
 
-        $maxWeight = (float)$carrier->getConfigData('max_package_weight');
+        $maxWeight = (float) $carrier->getConfigData('max_package_weight');
 
         /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($allItems as $item) {
@@ -446,18 +446,18 @@ class Shipping implements RateCollectorInterface
                         unset($items[$key]);
                         $sumWeight += $weight;
                     } elseif ($sumWeight + $weight > $maxWeight) {
-                        $pieces[] = (string)(float)$sumWeight;
+                        $pieces[] = (string) (float) $sumWeight;
                         break;
                     } else {
                         unset($items[$key]);
-                        $pieces[] = (string)(float)($sumWeight + $weight);
+                        $pieces[] = (string) (float) ($sumWeight + $weight);
                         $sumWeight = 0;
                         break;
                     }
                 }
             }
             if ($sumWeight > 0) {
-                $pieces[] = (string)(float)$sumWeight;
+                $pieces[] = (string) (float) $sumWeight;
             }
             $pieces = array_count_values($pieces);
         }

@@ -152,7 +152,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
     {
         $this->config->setMethod(Config::METHOD_EXPRESS);
 
-        return (bool)(int) $this->config->getValue('in_context');
+        return (bool) (int) $this->config->getValue('in_context');
     }
 
     /**

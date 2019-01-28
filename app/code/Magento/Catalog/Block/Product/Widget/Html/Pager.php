@@ -64,7 +64,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     public function getCurrentPage()
     {
         if (null === $this->_currentPage) {
-            $page = abs((int)$this->getRequest()->getParam($this->getPageVarName()));
+            $page = abs((int) $this->getRequest()->getParam($this->getPageVarName()));
             if ($page > $this->getLastPageNum()) {
                 $this->_currentPage = $this->getLastPageNum();
             } elseif ($page > 0) {

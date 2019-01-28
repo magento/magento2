@@ -184,7 +184,7 @@ class CategoriesFixture extends Fixture
             foreach ($this->storeManager->getGroups() as $storeGroup) {
                 $this->rootCategoriesIds[] = $storeGroup->getRootCategoryId();
                 // in this case root category will be the same for all store groups
-                if ((bool)$this->fixtureModel->getValue('assign_entities_to_all_websites', false)) {
+                if ((bool) $this->fixtureModel->getValue('assign_entities_to_all_websites', false)) {
                     break;
                 }
             }

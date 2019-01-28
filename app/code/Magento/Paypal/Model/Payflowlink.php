@@ -224,7 +224,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     public function isActive($storeId = null)
     {
-        return (bool)(int)$this->getConfigData('active', $storeId);
+        return (bool) (int) $this->getConfigData('active', $storeId);
     }
 
     /**
@@ -324,7 +324,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $fraudMessage = $response->getData('respmsg');
             if ($response->getData('fps_prexmldata')) {
                 $xml = new \SimpleXMLElement($response->getData('fps_prexmldata'));
-                $fraudMessage = (string)$xml->rule->triggeredMessage;
+                $fraudMessage = (string) $xml->rule->triggeredMessage;
             }
             $payment->setAdditionalInformation(
                 Info::PAYPAL_FRAUD_FILTERS,
@@ -449,7 +449,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     {
         $response = $this->getResponse();
         if ($response->getData('user1')) {
-            return (int)$response->getData('user1');
+            return (int) $response->getData('user1');
         }
         return $this->storeManager->getStore($this->getStore())->getId();
     }

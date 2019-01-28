@@ -307,7 +307,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getConditionName(\Magento\Framework\DataObject $object)
     {
         if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
-            $conditionName = (string)$this->coreConfig->getValue('carriers/tablerate/condition_name', 'default');
+            $conditionName = (string) $this->coreConfig->getValue('carriers/tablerate/condition_name', 'default');
         } else {
             $conditionName = $object->getData('groups/tablerate/fields/condition_name/value');
         }

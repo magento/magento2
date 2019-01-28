@@ -236,7 +236,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->cacheLimit = (int)$cacheLimit;
+        $this->cacheLimit = (int) $cacheLimit;
         $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ReadExtensions::class);
     }
@@ -532,7 +532,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
-        $images = (array)$product->getMediaGallery('images');
+        $images = (array) $product->getMediaGallery('images');
         $images = $this->determineImageRoles($product, $images);
 
         $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
@@ -602,7 +602,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
             $productLinks = $product->getProductLinks();
         }
-        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        $productDataArray['store_id'] = (int) $this->storeManager->getStore()->getId();
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);

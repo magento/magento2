@@ -55,7 +55,7 @@ class DataObject
             if ($obj instanceof \Magento\Framework\DataObject) {
                 $data = $obj->getData();
             } else {
-                $data = (array)$obj;
+                $data = (array) $obj;
             }
         } elseif (is_array($obj)) {
             $data = $obj;

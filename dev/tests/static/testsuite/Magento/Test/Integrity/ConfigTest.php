@@ -21,10 +21,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 $nodes = $config->xpath('/config/default/payment/*/model') ?: [];
                 $formalModuleName = str_replace('_', '\\', $moduleName);
                 foreach ($nodes as $node) {
-                    if (!Classes::isVirtual((string)$node)) {
+                    if (!Classes::isVirtual((string) $node)) {
                         $this->assertStringStartsWith(
                             $formalModuleName . '\Model\\',
-                            (string)$node,
+                            (string) $node,
                             "'{$node}' payment method is declared in '{$configFile}' module, " .
                             "but doesn't belong to '{$moduleName}' module"
                         );

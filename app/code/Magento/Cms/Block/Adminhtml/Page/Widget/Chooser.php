@@ -96,7 +96,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         );
 
         if ($element->getValue()) {
-            $page = $this->_pageFactory->create()->load((int)$element->getValue());
+            $page = $this->_pageFactory->create()->load((int) $element->getValue());
             if ($page->getId()) {
                 $chooser->setLabel($this->escapeHtml($page->getTitle()));
             }

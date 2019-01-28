@@ -32,7 +32,7 @@ class Content implements ElementInterface
     ) {
         $name = $node->getAttribute('name');
         /** @var UiComponentInterface $processedObject */
-        $content = (string)$processedObject->renderChildComponent($name);
+        $content = (string) $processedObject->renderChildComponent($name);
         $name .= '_' . sprintf('%x', crc32(spl_object_hash($context)));
         if (!empty($content)) {
             $compiler->setPostprocessingData($name, $content);

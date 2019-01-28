@@ -40,16 +40,16 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $expectedCustomer = $this->_customerSession->getCustomerDataObject();
         $actualCustomer = $this->_block->getWishlistCustomer();
         $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $actualCustomer);
-        $this->assertEquals((int)$expectedCustomer->getId(), (int)$actualCustomer->getId());
-        $this->assertEquals((int)$expectedCustomer->getWebsiteId(), (int)$actualCustomer->getWebsiteId());
-        $this->assertEquals((int)$expectedCustomer->getStoreId(), (int)$actualCustomer->getStoreId());
-        $this->assertEquals((int)$expectedCustomer->getGroupId(), (int)$actualCustomer->getGroupId());
+        $this->assertEquals((int) $expectedCustomer->getId(), (int) $actualCustomer->getId());
+        $this->assertEquals((int) $expectedCustomer->getWebsiteId(), (int) $actualCustomer->getWebsiteId());
+        $this->assertEquals((int) $expectedCustomer->getStoreId(), (int) $actualCustomer->getStoreId());
+        $this->assertEquals((int) $expectedCustomer->getGroupId(), (int) $actualCustomer->getGroupId());
         $this->assertEquals($expectedCustomer->getCustomAttributes(), $actualCustomer->getCustomAttributes());
         $this->assertEquals($expectedCustomer->getFirstname(), $actualCustomer->getFirstname());
         $this->assertEquals($expectedCustomer->getLastname(), $actualCustomer->getLastname());
         $this->assertEquals($expectedCustomer->getEmail(), $actualCustomer->getEmail());
         $this->assertEquals($expectedCustomer->getEmail(), $actualCustomer->getEmail());
-        $this->assertEquals((int)$expectedCustomer->getDefaultBilling(), (int)$actualCustomer->getDefaultBilling());
-        $this->assertEquals((int)$expectedCustomer->getDefaultShipping(), (int)$actualCustomer->getDefaultShipping());
+        $this->assertEquals((int) $expectedCustomer->getDefaultBilling(), (int) $actualCustomer->getDefaultBilling());
+        $this->assertEquals((int) $expectedCustomer->getDefaultShipping(), (int) $actualCustomer->getDefaultShipping());
     }
 }

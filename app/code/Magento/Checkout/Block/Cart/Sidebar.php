@@ -156,7 +156,7 @@ class Sidebar extends AbstractCart
      */
     public function getIsNeedToDisplaySideBar()
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY,
             ScopeInterface::SCOPE_STORE
         );
@@ -205,7 +205,7 @@ class Sidebar extends AbstractCart
      */
     private function getMiniCartMaxItemsCount()
     {
-        return (int)$this->_scopeConfig->getValue('checkout/sidebar/count', ScopeInterface::SCOPE_STORE);
+        return (int) $this->_scopeConfig->getValue('checkout/sidebar/count', ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -216,7 +216,7 @@ class Sidebar extends AbstractCart
      */
     private function getMaxItemsToDisplay()
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             'checkout/sidebar/max_items_display_count',
             ScopeInterface::SCOPE_STORE
         );

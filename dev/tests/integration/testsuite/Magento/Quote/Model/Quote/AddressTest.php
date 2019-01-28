@@ -107,7 +107,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $shippingAddress->setSameAsBilling(0);
         $shippingAddress->save();
-        $this->assertEquals((int)$unsetId, $shippingAddress->getSameAsBilling());
+        $this->assertEquals((int) $unsetId, $shippingAddress->getSameAsBilling());
     }
 
     /**
@@ -126,7 +126,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $shippingAddress->setSameAsBilling(0)
             ->setCustomerAddressData(null)
             ->save();
-        $this->assertEquals((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertEquals((int) $unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**
@@ -153,7 +153,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_quote->setCustomer($this->_customer);
         $this->_setCustomerAddressAndSave($unsetId);
         $sameAsBilling = $this->_quote->getShippingAddress()->getSameAsBilling();
-        $this->assertEquals((int)$unsetId, $sameAsBilling);
+        $this->assertEquals((int) $unsetId, $sameAsBilling);
     }
 
     /**
@@ -167,7 +167,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $this->_quote->setCustomer($this->_customer);
         $this->_setCustomerAddressAndSave($unsetId);
-        $this->assertEquals((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertEquals((int) $unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**

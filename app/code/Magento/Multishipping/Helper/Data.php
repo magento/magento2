@@ -57,7 +57,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMaximumQty()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

@@ -155,7 +155,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'template' => 'Magento_Catalog/form/element/input',
                 'prefixName' => 'option.value',
                 'prefixElementName' => 'option_',
-                'suffixName' => (string)$storeId,
+                'suffixName' => (string) $storeId,
                 'label' => $store->getName(),
                 'sortOrder' => $sortOrder,
                 'componentType' => Field::NAME,

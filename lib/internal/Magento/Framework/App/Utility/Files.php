@@ -1117,7 +1117,7 @@ class Files
      */
     public function getPhtmlFiles($withMetaInfo = false, $asDataSet = true)
     {
-        $key = __METHOD__ . (int)$withMetaInfo;
+        $key = __METHOD__ . (int) $withMetaInfo;
         if (!isset(self::$_cache[$key])) {
             $result = [];
             $this->accumulateModuleTemplateFiles($withMetaInfo, $result);

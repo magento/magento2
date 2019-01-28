@@ -184,21 +184,21 @@ class TransactionTest extends WebapiAbstract
             $additionalInfo[] = $value;
         }
 
-        $expectedData = ['transaction_id' => (int)$transaction->getId()];
+        $expectedData = ['transaction_id' => (int) $transaction->getId()];
 
         if ($transaction->getParentId() !== null) {
-            $expectedData['parent_id'] = (int)$transaction->getParentId();
+            $expectedData['parent_id'] = (int) $transaction->getParentId();
         }
 
         $expectedData = array_merge(
             $expectedData,
             [
-                'order_id' => (int)$transaction->getOrderId(),
-                'payment_id' => (int)$transaction->getPaymentId(),
+                'order_id' => (int) $transaction->getOrderId(),
+                'payment_id' => (int) $transaction->getPaymentId(),
                 'txn_id' => $transaction->getTxnId(),
-                'parent_txn_id' => ($transaction->getParentTxnId() ? (string)$transaction->getParentTxnId() : null),
+                'parent_txn_id' => ($transaction->getParentTxnId() ? (string) $transaction->getParentTxnId() : null),
                 'txn_type' => $transaction->getTxnType(),
-                'is_closed' => (int)$transaction->getIsClosed(),
+                'is_closed' => (int) $transaction->getIsClosed(),
                 'additional_information' => ['data'],
                 'created_at' => $transaction->getCreatedAt(),
                 'child_transactions' => [],

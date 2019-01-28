@@ -77,7 +77,7 @@ class AddSimpleProductsToCart implements ResolverInterface
         }
 
         $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute((string)$cartHash, $currentUserId);
+        $cart = $this->getCartForUser->execute((string) $cartHash, $currentUserId);
 
         $this->addProductsToCart->execute($cart, $cartItems);
         $cartData = $this->extractDataFromCart->execute($cart);

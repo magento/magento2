@@ -83,7 +83,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
                 $value = $attribute->getFrontend()->getValue($product);
 
                 if ($value instanceof Phrase) {
-                    $value = (string)$value;
+                    $value = (string) $value;
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }

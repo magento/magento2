@@ -172,8 +172,8 @@ class FlatTableBuilder
             $columnLength = isset($fieldProp['length']) ? $fieldProp['length'] : null;
 
             $columnDefinition = [
-                'nullable' => isset($fieldProp['nullable']) ? (bool)$fieldProp['nullable'] : false,
-                'unsigned' => isset($fieldProp['unsigned']) ? (bool)$fieldProp['unsigned'] : false,
+                'nullable' => isset($fieldProp['nullable']) ? (bool) $fieldProp['nullable'] : false,
+                'unsigned' => isset($fieldProp['unsigned']) ? (bool) $fieldProp['unsigned'] : false,
                 'default' => isset($fieldProp['default']) ? $fieldProp['default'] : false,
                 'primary' => false,
             ];
@@ -223,7 +223,7 @@ class FlatTableBuilder
         $entityTableName = $this->_productIndexerHelper->getTable('catalog_product_entity');
         $entityTemporaryTableName = $this->_getTemporaryTableName($entityTableName);
         $columnsList = array_keys($tables[$entityTableName]);
-        $websiteId = (int)$this->_storeManager->getStore($storeId)->getWebsiteId();
+        $websiteId = (int) $this->_storeManager->getStore($storeId)->getWebsiteId();
 
         unset($tables[$entityTableName]);
 
@@ -238,8 +238,8 @@ class FlatTableBuilder
         $statusTable = $this->_getTemporaryTableName($status->getBackendTable());
         $statusConditions = [
             sprintf('e.%s = dstatus.%s', $linkField, $linkField),
-            'dstatus.store_id = ' . (int)$storeId,
-            'dstatus.attribute_id = ' . (int)$status->getId(),
+            'dstatus.store_id = ' . (int) $storeId,
+            'dstatus.attribute_id = ' . (int) $status->getId(),
         ];
         $statusExpression = $this->_connection->getIfNullSql(
             'dstatus.value',

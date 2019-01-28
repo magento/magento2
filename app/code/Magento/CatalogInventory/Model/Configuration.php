@@ -221,7 +221,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getMinQty($store = null)
     {
-        return (float)$this->scopeConfig->getValue(
+        return (float) $this->scopeConfig->getValue(
             self::XML_PATH_MIN_QTY,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -237,7 +237,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getMinSaleQty($store = null, $customerGroupId = null)
     {
-        return (float)$this->minsaleqtyHelper->getConfigValue($customerGroupId, $store);
+        return (float) $this->minsaleqtyHelper->getConfigValue($customerGroupId, $store);
     }
 
     /**
@@ -248,7 +248,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getMaxSaleQty($store = null)
     {
-        return (float)$this->scopeConfig->getValue(
+        return (float) $this->scopeConfig->getValue(
             self::XML_PATH_MAX_SALE_QTY,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -294,7 +294,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getQtyIncrements($store = null)
     {
-        return (float)$this->scopeConfig->getValue(
+        return (float) $this->scopeConfig->getValue(
             self::XML_PATH_QTY_INCREMENTS,
             ScopeInterface::SCOPE_STORE,
             $store

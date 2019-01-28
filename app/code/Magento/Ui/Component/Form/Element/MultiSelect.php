@@ -21,7 +21,7 @@ class MultiSelect extends AbstractOptionsField
     public function prepare()
     {
         $config['size'] = self::DEFAULT_SIZE;
-        $this->setData('config', array_replace_recursive((array)$this->getData('config'), $config));
+        $this->setData('config', array_replace_recursive((array) $this->getData('config'), $config));
         parent::prepare();
     }
 

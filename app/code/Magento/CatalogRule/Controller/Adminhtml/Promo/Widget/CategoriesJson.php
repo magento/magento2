@@ -39,8 +39,8 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
      */
     protected function _initCategory()
     {
-        $categoryId = (int)$this->getRequest()->getParam('id', false);
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $categoryId = (int) $this->getRequest()->getParam('id', false);
+        $storeId = (int) $this->getRequest()->getParam('store');
 
         $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
@@ -73,7 +73,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
      */
     public function execute()
     {
-        $categoryId = (int)$this->getRequest()->getPost('id');
+        $categoryId = (int) $this->getRequest()->getPost('id');
         if ($categoryId) {
             $this->getRequest()->setParam('id', $categoryId);
 

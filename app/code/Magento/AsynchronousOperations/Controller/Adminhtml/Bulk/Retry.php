@@ -68,11 +68,11 @@ class Retry extends Action
     {
         $bulkUuid = $this->getRequest()->getParam('uuid');
         $isAjax = $this->getRequest()->getParam('isAjax');
-        $operationsToRetry = (array)$this->getRequest()->getParam('operations_to_retry', []);
+        $operationsToRetry = (array) $this->getRequest()->getParam('operations_to_retry', []);
         $errorCodes = [];
         foreach ($operationsToRetry as $operationData) {
             if (isset($operationData['error_code'])) {
-                $errorCodes[] = (int)$operationData['error_code'];
+                $errorCodes[] = (int) $operationData['error_code'];
             }
         }
 

@@ -40,7 +40,7 @@ class ProductConfigReader implements ConfigReaderInterface
      */
     public function getPriority($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PRIORITY,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -52,7 +52,7 @@ class ProductConfigReader implements ConfigReaderInterface
      */
     public function getChangeFrequency($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_CHANGE_FREQUENCY,
             ScopeInterface::SCOPE_STORE,
             $storeId

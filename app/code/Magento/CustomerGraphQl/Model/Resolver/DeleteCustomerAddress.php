@@ -66,7 +66,7 @@ class DeleteCustomerAddress implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        return $this->deleteCustomerAddress((int)$currentUserId, (int)$args['id']);
+        return $this->deleteCustomerAddress((int) $currentUserId, (int) $args['id']);
     }
 
     /**

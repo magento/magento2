@@ -96,7 +96,7 @@ class SitemapConfigReader implements SitemapConfigReaderInterface
      */
     public function getProductImageIncludePolicy($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_IMAGES_INCLUDE,
             ScopeInterface::SCOPE_STORE,
             $storeId

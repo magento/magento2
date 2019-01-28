@@ -410,7 +410,7 @@ class Price
             $extensionAttributes = $price->getExtensionAttributes();
             $priceWebsiteId = $websiteId;
             if (isset($extensionAttributes) && is_numeric($extensionAttributes->getWebsiteId())) {
-                $priceWebsiteId = (string)$extensionAttributes->getWebsiteId();
+                $priceWebsiteId = (string) $extensionAttributes->getWebsiteId();
             }
             $prices[] = [
                 'website_id' => $priceWebsiteId,

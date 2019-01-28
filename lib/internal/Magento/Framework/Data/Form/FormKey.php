@@ -64,7 +64,7 @@ class FormKey
      */
     public function isPresent()
     {
-        return (bool)$this->session->getData(self::FORM_KEY);
+        return (bool) $this->session->getData(self::FORM_KEY);
     }
 
     /**

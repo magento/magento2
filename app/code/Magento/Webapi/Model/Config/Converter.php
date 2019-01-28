@@ -85,7 +85,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
             $method = $route->attributes->getNamedItem('method')->nodeValue;
             $secureNode = $route->attributes->getNamedItem('secure');
-            $secure = $secureNode ? (bool)trim($secureNode->nodeValue) : false;
+            $secure = $secureNode ? (bool) trim($secureNode->nodeValue) : false;
             $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
 
             // We could handle merging here by checking if the route already exists
@@ -127,7 +127,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             $name = $parameter->attributes->getNamedItem('name')->nodeValue;
             $forceNode = $parameter->attributes->getNamedItem('force');
-            $force = $forceNode ? (bool)$forceNode->nodeValue : false;
+            $force = $forceNode ? (bool) $forceNode->nodeValue : false;
             $value = $parameter->nodeValue;
             $data[$name] = [
                 self::KEY_FORCE => $force,

@@ -50,10 +50,10 @@ class SaveHandler implements ExtensionInterface
 
         $connection = $entityMetadata->getEntityConnection();
 
-        $oldStores = $this->resourcePage->lookupStoreIds((int)$entity->getId());
-        $newStores = (array)$entity->getStores();
+        $oldStores = $this->resourcePage->lookupStoreIds((int) $entity->getId());
+        $newStores = (array) $entity->getStores();
         if (empty($newStores)) {
-            $newStores = (array)$entity->getStoreId();
+            $newStores = (array) $entity->getStoreId();
         }
 
         $table = $this->resourcePage->getTable('cms_page_store');
@@ -61,7 +61,7 @@ class SaveHandler implements ExtensionInterface
         $delete = array_diff($oldStores, $newStores);
         if ($delete) {
             $where = [
-                $linkField . ' = ?' => (int)$entity->getData($linkField),
+                $linkField . ' = ?' => (int) $entity->getData($linkField),
                 'store_id IN (?)' => $delete,
             ];
             $connection->delete($table, $where);
@@ -72,8 +72,8 @@ class SaveHandler implements ExtensionInterface
             $data = [];
             foreach ($insert as $storeId) {
                 $data[] = [
-                    $linkField => (int)$entity->getData($linkField),
-                    'store_id' => (int)$storeId
+                    $linkField => (int) $entity->getData($linkField),
+                    'store_id' => (int) $storeId
                 ];
             }
             $connection->insertMultiple($table, $data);

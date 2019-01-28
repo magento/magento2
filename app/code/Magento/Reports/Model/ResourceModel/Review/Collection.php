@@ -35,7 +35,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      */
     public function addProductFilter($productId)
     {
-        $this->addFieldToFilter('entity_pk_value', ['eq' => (int)$productId]);
+        $this->addFieldToFilter('entity_pk_value', ['eq' => (int) $productId]);
 
         return $this;
     }

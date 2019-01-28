@@ -216,7 +216,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function hasChildThemes()
     {
-        return (bool)$this->getCollection()->addTypeFilter(
+        return (bool) $this->getCollection()->addTypeFilter(
             self::TYPE_VIRTUAL
         )->addFieldToFilter(
             'parent_id',
@@ -298,7 +298,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getCode()
     {
-        return (string)$this->getData('code');
+        return (string) $this->getData('code');
     }
 
     /**

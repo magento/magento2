@@ -177,8 +177,8 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     protected function initProduct()
     {
         $this->_eventManager->dispatch('review_controller_product_init_before', ['controller_action' => $this]);
-        $categoryId = (int)$this->getRequest()->getParam('category', false);
-        $productId = (int)$this->getRequest()->getParam('id');
+        $categoryId = (int) $this->getRequest()->getParam('category', false);
+        $productId = (int) $this->getRequest()->getParam('id');
 
         $product = $this->loadProduct($productId);
         if (!$product) {

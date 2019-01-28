@@ -34,7 +34,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function loadByOrder($order)
     {
         $orderId = $order->getId();
-        $this->getSelect()->where('main_table.order_id = ?', (int)$orderId)->order('process');
+        $this->getSelect()->where('main_table.order_id = ?', (int) $orderId)->order('process');
         return $this->load();
     }
 }

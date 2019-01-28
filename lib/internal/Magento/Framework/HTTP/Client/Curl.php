@@ -114,7 +114,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     public function setTimeout($value)
     {
-        $this->_timeout = (int)$value;
+        $this->_timeout = (int) $value;
     }
 
     /**
@@ -441,7 +441,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             if (count($line) < 2) {
                 $this->doError("Invalid response line returned from server: " . $data);
             }
-            $this->_responseStatus = (int)$line[1];
+            $this->_responseStatus = (int) $line[1];
         } else {
             $name = $value = '';
             $out = explode(": ", trim($data), 2);

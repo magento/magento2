@@ -260,7 +260,7 @@ class General extends AbstractModifier
                             'value' => 0
                         ],
                     ],
-                    'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+                    'value' => (int) $this->locator->getProduct()->getTypeInstance()->hasWeight(),
                     'disabled' => $disabled,
                 ]
             );
@@ -432,7 +432,7 @@ class General extends AbstractModifier
             return null;
         }
 
-        $value = (float)$value;
+        $value = (float) $value;
         $precision = strlen(substr(strrchr($value, "."), 1));
         $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());

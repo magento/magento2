@@ -208,7 +208,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $linkField
             );
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id = ?', (int)$linkFieldId);
+                $this->getSelect()->where('links.product_id = ?', (int) $linkFieldId);
             } else {
                 $joinType = 'joinLeft';
                 $joinCondition[] = $connection->quoteInto('links.product_id = ?', $linkFieldId);

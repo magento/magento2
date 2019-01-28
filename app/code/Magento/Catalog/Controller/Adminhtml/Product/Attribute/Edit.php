@@ -62,7 +62,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute imple
         $resultPage->getConfig()->getTitle()->prepend($id ? $model->getName() : __('New Product Attribute'));
         $resultPage->getLayout()
             ->getBlock('attribute_edit_js')
-            ->setIsPopup((bool)$this->getRequest()->getParam('popup'));
+            ->setIsPopup((bool) $this->getRequest()->getParam('popup'));
         return $resultPage;
     }
 }

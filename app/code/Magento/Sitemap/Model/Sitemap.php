@@ -771,7 +771,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _isEnabledSubmissionRobots()
     {
         $storeId = $this->getStoreId();
-        return (bool)$this->configReader->getEnableSubmissionRobots($storeId);
+        return (bool) $this->configReader->getEnableSubmissionRobots($storeId);
     }
 
     /**

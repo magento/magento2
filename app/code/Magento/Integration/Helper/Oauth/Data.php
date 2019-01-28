@@ -65,7 +65,7 @@ class Data
     public function isCleanupProbability()
     {
         // Safe get cleanup probability value from system configuration
-        $configValue = (int)$this->_scopeConfig->getValue(self::XML_PATH_CLEANUP_PROBABILITY);
+        $configValue = (int) $this->_scopeConfig->getValue(self::XML_PATH_CLEANUP_PROBABILITY);
         return $configValue > 0 ? 1 == \Magento\Framework\Math\Random::getRandomNumber(1, $configValue) : false;
     }
 
@@ -76,7 +76,7 @@ class Data
      */
     public function getCleanupExpirationPeriod()
     {
-        $minutes = (int)$this->_scopeConfig->getValue(self::XML_PATH_CLEANUP_EXPIRATION_PERIOD);
+        $minutes = (int) $this->_scopeConfig->getValue(self::XML_PATH_CLEANUP_EXPIRATION_PERIOD);
         return $minutes > 0 ? $minutes : self::CLEANUP_EXPIRATION_PERIOD_DEFAULT;
     }
 
@@ -87,7 +87,7 @@ class Data
      */
     public function getConsumerExpirationPeriod()
     {
-        $seconds = (int)$this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_EXPIRATION_PERIOD);
+        $seconds = (int) $this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_EXPIRATION_PERIOD);
         return $seconds > 0 ? $seconds : self::CONSUMER_EXPIRATION_PERIOD_DEFAULT;
     }
 
@@ -98,7 +98,7 @@ class Data
      */
     public function getConsumerPostMaxRedirects()
     {
-        $redirects = (int)$this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_POST_MAXREDIRECTS);
+        $redirects = (int) $this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_POST_MAXREDIRECTS);
         return $redirects > 0 ? $redirects : 0;
     }
 
@@ -109,7 +109,7 @@ class Data
      */
     public function getConsumerPostTimeout()
     {
-        $seconds = (int)$this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_POST_TIMEOUT);
+        $seconds = (int) $this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_POST_TIMEOUT);
         return $seconds > 0 ? $seconds : self::CONSUMER_POST_TIMEOUT_DEFAULT;
     }
 
@@ -120,7 +120,7 @@ class Data
      */
     public function getCustomerTokenLifetime()
     {
-        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
+        $hours = (int) $this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
         return $hours > 0 ? $hours : 0;
     }
 
@@ -131,7 +131,7 @@ class Data
      */
     public function getAdminTokenLifetime()
     {
-        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
+        $hours = (int) $this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
         return $hours > 0 ? $hours : 0;
     }
 }

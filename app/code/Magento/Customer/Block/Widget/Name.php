@@ -73,7 +73,7 @@ class Name extends AbstractWidget
      */
     protected function _showConfig($key)
     {
-        return (bool)$this->getConfig($key);
+        return (bool) $this->getConfig($key);
     }
 
     /**
@@ -255,7 +255,7 @@ class Name extends AbstractWidget
     private function _isAttributeRequired($attributeCode)
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
-        return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
+        return $attributeMetadata ? (bool) $attributeMetadata->isRequired() : false;
     }
 
     /**
@@ -265,6 +265,6 @@ class Name extends AbstractWidget
     private function _isAttributeVisible($attributeCode)
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
-        return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
+        return $attributeMetadata ? (bool) $attributeMetadata->isVisible() : false;
     }
 }

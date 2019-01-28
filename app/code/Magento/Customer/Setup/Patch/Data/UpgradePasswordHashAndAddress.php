@@ -87,7 +87,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
             }
 
             $bind = ['password_hash' => $newHash];
-            $where = ['entity_id = ?' => (int)$customer['entity_id']];
+            $where = ['entity_id = ?' => (int) $customer['entity_id']];
             $this->moduleDataSetup->getConnection()->update($customerEntityTable, $bind, $where);
         }
     }

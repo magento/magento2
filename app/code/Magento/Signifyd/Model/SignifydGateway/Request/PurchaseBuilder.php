@@ -134,7 +134,7 @@ class PurchaseBuilder
                 'itemId' => $orderItem->getSku(),
                 'itemName' => $orderItem->getName(),
                 'itemPrice' => $orderItem->getPrice(),
-                'itemQuantity' => (int)$orderItem->getQtyOrdered(),
+                'itemQuantity' => (int) $orderItem->getQtyOrdered(),
                 'itemUrl' => $orderItem->getProduct()->getProductUrl(),
                 'itemWeight' => $orderItem->getProduct()->getWeight()
             ];

@@ -106,6 +106,6 @@ class Improved implements AlgorithmInterface
      */
     private function getIntervalDivisionLimit()
     {
-        return (int)$this->scopeConfig->getValue(self::XML_PATH_INTERVAL_DIVISION_LIMIT, ScopeInterface::SCOPE_STORE);
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_INTERVAL_DIVISION_LIMIT, ScopeInterface::SCOPE_STORE);
     }
 }

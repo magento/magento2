@@ -13,7 +13,7 @@ class Template extends \Magento\Framework\View\Element\Template
     public function getCacheKeyInfo()
     {
         return array_merge(
-            (array)$this->getData(),
+            (array) $this->getData(),
             [
                 'MESSAGE',
                 $this->getTemplate(),

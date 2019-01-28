@@ -90,7 +90,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(0, $filters);
         $this->assertEquals(
             '<span class="price">$100.00</span> - <span class="price">$199.99</span>',
-            (string)$filters[0]->getLabel()
+            (string) $filters[0]->getLabel()
         );
     }
 

@@ -26,7 +26,7 @@ class TemplateFilesTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\View\Element\Template $block */
         $block = $blockFactory->createBlock($class);
         $this->assertInstanceOf(\Magento\Framework\View\Element\Template::class, $block);
-        $block->setTemplate((string)$template);
+        $block->setTemplate((string) $template);
         $this->assertFileExists($block->getTemplateFile());
     }
 
@@ -61,7 +61,7 @@ class TemplateFilesTest extends \PHPUnit\Framework\TestCase
                     $templates = $config['parameters']['template']['values'];
                     foreach ($templates as $template) {
                         if (isset($template['value'])) {
-                            $result[] = [$class, (string)$template['value']];
+                            $result[] = [$class, (string) $template['value']];
                         }
                     }
                 }

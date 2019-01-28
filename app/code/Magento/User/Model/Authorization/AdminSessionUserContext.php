@@ -34,7 +34,7 @@ class AdminSessionUserContext implements UserContextInterface
      */
     public function getUserId()
     {
-        return $this->_adminSession->hasUser() ? (int)$this->_adminSession->getUser()->getId() : null;
+        return $this->_adminSession->hasUser() ? (int) $this->_adminSession->getUser()->getId() : null;
     }
 
     /**

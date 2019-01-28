@@ -165,7 +165,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function isWebsiteSwitchEnabled()
     {
-        return (bool)$this->getData('switch_websites');
+        return (bool) $this->getData('switch_websites');
     }
 
     /**
@@ -184,9 +184,9 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getWebsiteVarName()
     {
         if ($this->hasData('website_var_name')) {
-            return (string)$this->getData('website_var_name');
+            return (string) $this->getData('website_var_name');
         } else {
-            return (string)$this->_defaultWebsiteVarName;
+            return (string) $this->_defaultWebsiteVarName;
         }
     }
 
@@ -205,7 +205,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getWebsiteId()
     {
         if (!$this->hasData('website_id')) {
-            $this->setData('website_id', (int)$this->getRequest()->getParam($this->getWebsiteVarName()));
+            $this->setData('website_id', (int) $this->getRequest()->getParam($this->getWebsiteVarName()));
         }
         return $this->getData('website_id');
     }
@@ -243,7 +243,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function isStoreGroupSwitchEnabled()
     {
-        return (bool)$this->getData('switch_store_groups');
+        return (bool) $this->getData('switch_store_groups');
     }
 
     /**
@@ -262,9 +262,9 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreGroupVarName()
     {
         if ($this->hasData('store_group_var_name')) {
-            return (string)$this->getData('store_group_var_name');
+            return (string) $this->getData('store_group_var_name');
         } else {
-            return (string)$this->_defaultStoreGroupVarName;
+            return (string) $this->_defaultStoreGroupVarName;
         }
     }
 
@@ -283,7 +283,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreGroupId()
     {
         if (!$this->hasData('store_group_id')) {
-            $this->setData('store_group_id', (int)$this->getRequest()->getParam($this->getStoreGroupVarName()));
+            $this->setData('store_group_id', (int) $this->getRequest()->getParam($this->getStoreGroupVarName()));
         }
         return $this->getData('store_group_id');
     }
@@ -333,7 +333,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreId()
     {
         if (!$this->hasData('store_id')) {
-            $this->setData('store_id', (int)$this->getRequest()->getParam($this->getStoreVarName()));
+            $this->setData('store_id', (int) $this->getRequest()->getParam($this->getStoreVarName()));
         }
         return $this->getData('store_id');
     }
@@ -344,7 +344,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function isStoreSelected(\Magento\Store\Model\Store $store)
     {
-        return $this->getStoreId() !== null && (int)$this->getStoreId() === (int)$store->getId();
+        return $this->getStoreId() !== null && (int) $this->getStoreId() === (int) $store->getId();
     }
 
     /**
@@ -354,7 +354,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function isStoreSwitchEnabled()
     {
-        return (bool)$this->getData('switch_store_views');
+        return (bool) $this->getData('switch_store_views');
     }
 
     /**
@@ -373,9 +373,9 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreVarName()
     {
         if ($this->hasData('store_var_name')) {
-            return (string)$this->getData('store_var_name');
+            return (string) $this->getData('store_var_name');
         } else {
-            return (string)$this->_defaultStoreVarName;
+            return (string) $this->_defaultStoreVarName;
         }
     }
 
@@ -561,7 +561,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function isUsingIframe()
     {
         if ($this->hasData('is_using_iframe')) {
-            return (bool)$this->getData('is_using_iframe');
+            return (bool) $this->getData('is_using_iframe');
         }
         return false;
     }

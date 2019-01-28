@@ -41,8 +41,8 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
-        $categoryId = (int)$this->getRequest()->getParam('id');
+        $storeId = (int) $this->getRequest()->getParam('store');
+        $categoryId = (int) $this->getRequest()->getParam('id');
 
         if ($storeId) {
             if (!$categoryId) {
@@ -70,12 +70,12 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
             'parameters' => [
                 'text' => $block->buildNodeName($root),
                 'draggable' => false,
-                'allowDrop' => (bool)$root->getIsVisible(),
-                'id' => (int)$root->getId(),
-                'expanded' => (int)$block->getIsWasExpanded(),
-                'store_id' => (int)$block->getStore()->getId(),
-                'category_id' => (int)$category->getId(),
-                'root_visible' => (int)$root->getIsVisible(),
+                'allowDrop' => (bool) $root->getIsVisible(),
+                'id' => (int) $root->getId(),
+                'expanded' => (int) $block->getIsWasExpanded(),
+                'store_id' => (int) $block->getStore()->getId(),
+                'category_id' => (int) $category->getId(),
+                'root_visible' => (int) $root->getIsVisible(),
             ],
         ]);
     }

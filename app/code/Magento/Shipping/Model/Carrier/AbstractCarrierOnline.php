@@ -335,7 +335,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             return $this;
         }
 
-        $maxAllowedWeight = (float)$this->getConfigData('max_package_weight');
+        $maxAllowedWeight = (float) $this->getConfigData('max_package_weight');
         $errorMsg = '';
         $configErrorMsg = $this->getConfigData('specificerrmsg');
         $defaultErrorMsg = __('The shipping module is not available.');
@@ -445,7 +445,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
-        $name = html_entity_decode((string)$name);
+        $name = html_entity_decode((string) $name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
         return trim($name);
@@ -694,7 +694,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     public function canCollectRates()
     {
-        return (bool)$this->getConfigFlag($this->_activeFlag);
+        return (bool) $this->getConfigFlag($this->_activeFlag);
     }
 
     /**

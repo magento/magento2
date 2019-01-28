@@ -66,7 +66,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect->setPath('*/*/');
         }
 
-        $id = (int)$this->getRequest()->getParam('item');
+        $id = (int) $this->getRequest()->getParam('item');
         /** @var Item $item */
         $item = $this->_objectManager->create(Item::class)->load($id);
         if (!$item->getId()) {

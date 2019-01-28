@@ -200,7 +200,7 @@ class UrlRewrite extends AbstractSimpleObject
      */
     public function getRedirectType()
     {
-        return (int)$this->_get(self::REDIRECT_TYPE);
+        return (int) $this->_get(self::REDIRECT_TYPE);
     }
 
     /**

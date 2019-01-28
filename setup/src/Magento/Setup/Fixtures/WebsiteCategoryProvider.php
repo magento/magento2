@@ -118,7 +118,7 @@ class WebsiteCategoryProvider
      */
     private function isAssignToAllWebsites()
     {
-        return (bool)$this->fixtureConfig->getValue('assign_entities_to_all_websites', false);
+        return (bool) $this->fixtureConfig->getValue('assign_entities_to_all_websites', false);
     }
 
     /**

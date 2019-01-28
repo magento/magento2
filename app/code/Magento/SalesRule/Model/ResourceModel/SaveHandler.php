@@ -51,7 +51,7 @@ class SaveHandler implements AttributeInterface
         if (isset($entityData['website_ids'])) {
             $websiteIds = $entityData['website_ids'];
             if (!is_array($websiteIds)) {
-                $websiteIds = explode(',', (string)$websiteIds);
+                $websiteIds = explode(',', (string) $websiteIds);
             }
             $this->ruleResource->bindRuleToEntity($entityData[$linkField], $websiteIds, 'website');
         }
@@ -59,7 +59,7 @@ class SaveHandler implements AttributeInterface
         if (isset($entityData['customer_group_ids'])) {
             $customerGroupIds = $entityData['customer_group_ids'];
             if (!is_array($customerGroupIds)) {
-                $customerGroupIds = explode(',', (string)$customerGroupIds);
+                $customerGroupIds = explode(',', (string) $customerGroupIds);
             }
             $this->ruleResource->bindRuleToEntity($entityData[$linkField], $customerGroupIds, 'customer_group');
         }

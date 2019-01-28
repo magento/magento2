@@ -271,7 +271,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $options = $this->_toOptionArray('country_id', 'name', ['title' => 'iso2_code']);
         $sort = [];
         foreach ($options as $data) {
-            $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
+            $name = (string) $this->_localeLists->getCountryTranslation($data['value']);
             if (!empty($name)) {
                 $sort[$name] = $data['value'];
             }
@@ -282,7 +282,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             unset($sort[$name]);
             $sort = [$name => $foregroundCountry] + $sort;
         }
-        $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
+        $isRegionVisible = (bool) $this->helperData->isShowNonRequiredState();
 
         $options = [];
         foreach ($sort as $label => $value) {
@@ -343,7 +343,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (empty($foregroundCountries)) {
             return $this;
         }
-        $this->_foregroundCountries = (array)$foregroundCountries;
+        $this->_foregroundCountries = (array) $foregroundCountries;
         return $this;
     }
 

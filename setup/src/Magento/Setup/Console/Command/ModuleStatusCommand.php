@@ -57,7 +57,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $moduleName = (string)$input->getArgument('module');
+        $moduleName = (string) $input->getArgument('module');
         if ($moduleName) {
             return $this->showSpecificModule($moduleName, $output);
         }

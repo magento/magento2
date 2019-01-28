@@ -101,7 +101,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function addRowToSkip($rowNumber)
     {
-        $rowNumber = (int)$rowNumber;
+        $rowNumber = (int) $rowNumber;
         if (!in_array($rowNumber, $this->skippedRows)) {
             $this->skippedRows[] = $rowNumber;
         }
@@ -116,7 +116,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     protected function processInvalidRow($rowNumber)
     {
         if (null !== $rowNumber) {
-            $rowNumber = (int)$rowNumber;
+            $rowNumber = (int) $rowNumber;
             if (!in_array($rowNumber, $this->invalidRows)) {
                 $this->invalidRows[] = $rowNumber;
             }
@@ -143,7 +143,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function isRowInvalid($rowNumber)
     {
-        return in_array((int)$rowNumber, array_merge($this->invalidRows, $this->skippedRows));
+        return in_array((int) $rowNumber, array_merge($this->invalidRows, $this->skippedRows));
     }
 
     /**
@@ -172,7 +172,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
             );
         }
         $this->validationStrategy = $validationStrategy;
-        $this->allowedErrorsCount = (int)$allowedErrorCount;
+        $this->allowedErrorsCount = (int) $allowedErrorCount;
 
         return $this;
     }
@@ -207,7 +207,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function hasFatalExceptions()
     {
-        return (bool)$this->getErrorsCount([ProcessingError::ERROR_LEVEL_CRITICAL]);
+        return (bool) $this->getErrorsCount([ProcessingError::ERROR_LEVEL_CRITICAL]);
     }
 
     /**
@@ -356,7 +356,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     protected function getErrorMessage($errorCode, $errorMessage, $columnName)
     {
         if (null === $errorMessage && isset($this->messageTemplate[$errorCode])) {
-            $errorMessage = (string)__($this->messageTemplate[$errorCode]);
+            $errorMessage = (string) __($this->messageTemplate[$errorCode]);
         }
         if ($columnName && $errorMessage) {
             $errorMessage = sprintf($errorMessage, $columnName);

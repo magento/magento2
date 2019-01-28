@@ -103,6 +103,6 @@ class Xml extends AbstractContentType
      */
     protected function objectToXml(\Magento\Framework\DataObject $object)
     {
-        return (string)$object;
+        return (string) $object;
     }
 }

@@ -70,6 +70,6 @@ class UiComponent extends Template implements ContainerInterface
         }
 
         $result = $this->component->render();
-        return (string)$result;
+        return (string) $result;
     }
 }

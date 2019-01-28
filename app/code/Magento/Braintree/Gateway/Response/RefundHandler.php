@@ -18,6 +18,6 @@ class RefundHandler extends VoidHandler
      */
     protected function shouldCloseParentTransaction(Payment $orderPayment)
     {
-        return !(bool)$orderPayment->getCreditmemo()->getInvoice()->canRefund();
+        return !(bool) $orderPayment->getCreditmemo()->getInvoice()->canRefund();
     }
 }

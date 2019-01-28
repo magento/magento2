@@ -59,7 +59,7 @@ abstract class AbstractHandler implements ExtensionInterface
     protected function getPercentage(array $priceRow): ?float
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? (float)$priceRow['percentage_value']
+            ? (float) $priceRow['percentage_value']
             : null;
     }
 
@@ -72,13 +72,13 @@ abstract class AbstractHandler implements ExtensionInterface
      */
     protected function prepareTierPrice(array $data): array
     {
-        $useForAllGroups = (int)$data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
+        $useForAllGroups = (int) $data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
         $customerGroupId = $useForAllGroups ? 0 : $data['cust_group'];
         $tierPrice = array_merge(
             $this->getAdditionalFields($data),
             [
                 'website_id' => $data['website_id'],
-                'all_groups' => (int)$useForAllGroups,
+                'all_groups' => (int) $useForAllGroups,
                 'customer_group_id' => $customerGroupId,
                 'value' => $data['price'] ?? null,
                 'qty' => $this->parseQty($data['price_qty']),

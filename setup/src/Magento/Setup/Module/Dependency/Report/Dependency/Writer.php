@@ -43,8 +43,8 @@ class Writer extends AbstractWriter
                         $data[] = [
                             ' -- ' . $dependency->getModule(),
                             '',
-                            (int)$dependency->isHard(),
-                            (int)(!$dependency->isHard()),
+                            (int) $dependency->isHard(),
+                            (int) (!$dependency->isHard()),
                         ];
                     }
                     $data[] = [];

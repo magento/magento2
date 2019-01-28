@@ -157,7 +157,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         } elseif ($this->getRequest()->getParam('group')) {
             $storeIds = $this->_storeManager->getGroup($this->getRequest()->getParam('group'))->getStoreIds();
         } elseif ($this->getRequest()->getParam('store')) {
-            $storeIds = [(int)$this->getRequest()->getParam('store')];
+            $storeIds = [(int) $this->getRequest()->getParam('store')];
         } else {
             $storeIds = [];
         }

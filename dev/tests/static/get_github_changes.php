@@ -34,7 +34,7 @@ $fileExtensions = explode(',', isset($options['file-extensions']) ? $options['fi
 
 include_once __DIR__ . '/framework/autoload.php';
 
-$mainline = 'mainline_' . (string)rand(0, 9999);
+$mainline = 'mainline_' . (string) rand(0, 9999);
 $repo = getRepo($options, $mainline);
 $branches = $repo->getBranches('--remotes');
 generateBranchesList($options['output-file'], $branches, $options['branch']);

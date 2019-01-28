@@ -36,7 +36,7 @@ class UrlInput extends \Magento\Ui\Component\Form\Element\AbstractElement
             $links = $config['urlTypes']->getConfig();
             $config['urlTypes'] = $links;
         }
-        $this->setData('config', (array)$config);
+        $this->setData('config', (array) $config);
         parent::prepare();
     }
 }

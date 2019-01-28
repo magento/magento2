@@ -263,7 +263,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function showInDefault()
     {
-        return isset($this->_data['showInDefault']) && (int)$this->_data['showInDefault'];
+        return isset($this->_data['showInDefault']) && (int) $this->_data['showInDefault'];
     }
 
     /**
@@ -273,7 +273,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function showInWebsite()
     {
-        return isset($this->_data['showInWebsite']) && (int)$this->_data['showInWebsite'];
+        return isset($this->_data['showInWebsite']) && (int) $this->_data['showInWebsite'];
     }
 
     /**
@@ -283,7 +283,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function showInStore()
     {
-        return isset($this->_data['showInStore']) && (int)$this->_data['showInStore'];
+        return isset($this->_data['showInStore']) && (int) $this->_data['showInStore'];
     }
 
     /**
@@ -294,7 +294,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function canRestore()
     {
-        return isset($this->_data['canRestore']) && (int)$this->_data['canRestore'];
+        return isset($this->_data['canRestore']) && (int) $this->_data['canRestore'];
     }
 
     /**

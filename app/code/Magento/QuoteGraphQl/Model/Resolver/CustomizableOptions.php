@@ -56,7 +56,7 @@ class CustomizableOptions implements ResolverInterface
         foreach ($customizableOptionIds as $customizableOptionId) {
             $customizableOption = $this->customizableOption->getData(
                 $cartItem,
-                (int)$customizableOptionId
+                (int) $customizableOptionId
             );
             $customizableOptionsData[] = $customizableOption;
         }

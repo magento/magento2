@@ -70,7 +70,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
      */
     public function execute()
     {
-        $taxClass = (int)$this->getRequest()->getParam('tax_class');
+        $taxClass = (int) $this->getRequest()->getParam('tax_class');
 
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
         $customerGroup = null;
@@ -78,9 +78,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             $id = $this->getRequest()->getParam('id');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
+                $customerGroupCode = (string) $this->getRequest()->getParam('code');
                 if ($id !== null) {
-                    $customerGroup = $this->groupRepository->getById((int)$id);
+                    $customerGroup = $this->groupRepository->getById((int) $id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
                 } else {
                     $customerGroup = $this->groupDataFactory->create();

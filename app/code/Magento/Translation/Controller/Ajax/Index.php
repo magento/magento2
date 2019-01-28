@@ -33,7 +33,7 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $translate = (array)$this->getRequest()->getPost('translate');
+        $translate = (array) $this->getRequest()->getPost('translate');
 
         try {
             $response = $this->inlineParser->processAjaxPost($translate);

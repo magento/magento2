@@ -106,7 +106,7 @@ class AdvancedInventory extends AbstractModifier
         }
         if (isset($stockData['is_in_stock'])) {
             $data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode]['is_in_stock'] =
-                (int)$stockData['is_in_stock'];
+                (int) $stockData['is_in_stock'];
         }
 
         if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
@@ -146,18 +146,18 @@ class AdvancedInventory extends AbstractModifier
     {
         $result = $stockItem->getData();
 
-        $result[StockItemInterface::MANAGE_STOCK] = (int)$stockItem->getManageStock();
-        $result[StockItemInterface::QTY] = (float)$stockItem->getQty();
-        $result[StockItemInterface::MIN_QTY] = (float)$stockItem->getMinQty();
-        $result[StockItemInterface::MIN_SALE_QTY] = (float)$stockItem->getMinSaleQty();
-        $result[StockItemInterface::MAX_SALE_QTY] = (float)$stockItem->getMaxSaleQty();
-        $result[StockItemInterface::IS_QTY_DECIMAL] = (int)$stockItem->getIsQtyDecimal();
-        $result[StockItemInterface::IS_DECIMAL_DIVIDED]= (int)$stockItem->getIsDecimalDivided();
-        $result[StockItemInterface::BACKORDERS] = (int)$stockItem->getBackorders();
-        $result[StockItemInterface::NOTIFY_STOCK_QTY] = (float)$stockItem->getNotifyStockQty();
-        $result[StockItemInterface::ENABLE_QTY_INCREMENTS] = (int)$stockItem->getEnableQtyIncrements();
-        $result[StockItemInterface::QTY_INCREMENTS] = (float)$stockItem->getQtyIncrements();
-        $result[StockItemInterface::IS_IN_STOCK] = (int)$stockItem->getIsInStock();
+        $result[StockItemInterface::MANAGE_STOCK] = (int) $stockItem->getManageStock();
+        $result[StockItemInterface::QTY] = (float) $stockItem->getQty();
+        $result[StockItemInterface::MIN_QTY] = (float) $stockItem->getMinQty();
+        $result[StockItemInterface::MIN_SALE_QTY] = (float) $stockItem->getMinSaleQty();
+        $result[StockItemInterface::MAX_SALE_QTY] = (float) $stockItem->getMaxSaleQty();
+        $result[StockItemInterface::IS_QTY_DECIMAL] = (int) $stockItem->getIsQtyDecimal();
+        $result[StockItemInterface::IS_DECIMAL_DIVIDED]= (int) $stockItem->getIsDecimalDivided();
+        $result[StockItemInterface::BACKORDERS] = (int) $stockItem->getBackorders();
+        $result[StockItemInterface::NOTIFY_STOCK_QTY] = (float) $stockItem->getNotifyStockQty();
+        $result[StockItemInterface::ENABLE_QTY_INCREMENTS] = (int) $stockItem->getEnableQtyIncrements();
+        $result[StockItemInterface::QTY_INCREMENTS] = (float) $stockItem->getQtyIncrements();
+        $result[StockItemInterface::IS_IN_STOCK] = (int) $stockItem->getIsInStock();
 
         return $result;
     }

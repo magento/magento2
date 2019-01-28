@@ -136,7 +136,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     public function execute()
     {
         if ($this->getRequest()->isPost() && $this->getRequest()->getPost('email')) {
-            $email = (string)$this->getRequest()->getPost('email');
+            $email = (string) $this->getRequest()->getPost('email');
 
             try {
                 $this->validateEmailFormat($email);

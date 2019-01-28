@@ -247,7 +247,7 @@ class ArrayManager
         $maxResults = null,
         $delimiter = self::DEFAULT_PATH_DELIMITER
     ) {
-        $indexes = (array)$indexes;
+        $indexes = (array) $indexes;
         $startPath = is_array($startPath) ? implode($delimiter, $startPath) : $startPath;
         $internalPath = is_array($internalPath) ? implode($delimiter, $internalPath) : $internalPath;
         $data = $startPath !== null ? $this->get($startPath, $data, [], $delimiter) : $data;

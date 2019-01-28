@@ -107,7 +107,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturnOnConsecutiveCalls(...$calls);
 
-        $this->assertFalse((bool)$this->collection->isLoaded());
+        $this->assertFalse((bool) $this->collection->isLoaded());
         $this->assertInstanceOf(Collection::class, $this->collection->loadData());
         $itemIds = [];
         foreach ($this->collection->getItems() as $item) {

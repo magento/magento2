@@ -34,7 +34,7 @@ class Config
      */
     public function getMaxFailuresCount()
     {
-        return (int)$this->storeConfig->getValue('oauth/authentication_lock/max_failures_count');
+        return (int) $this->storeConfig->getValue('oauth/authentication_lock/max_failures_count');
     }
 
     /**
@@ -44,6 +44,6 @@ class Config
      */
     public function getLockTimeout()
     {
-        return (int)$this->storeConfig->getValue('oauth/authentication_lock/timeout');
+        return (int) $this->storeConfig->getValue('oauth/authentication_lock/timeout');
     }
 }

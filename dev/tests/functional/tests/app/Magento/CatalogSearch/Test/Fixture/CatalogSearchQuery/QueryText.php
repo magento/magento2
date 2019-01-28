@@ -42,7 +42,7 @@ class QueryText extends DataSource
 
         $this->data = array_key_exists('search_query', $data) ? $data['search_query'] : null;
 
-        $this->products = $this->createProducts($fixtureFactory, (array)$data['value']);
+        $this->products = $this->createProducts($fixtureFactory, (array) $data['value']);
     }
 
     /**
@@ -70,7 +70,7 @@ class QueryText extends DataSource
 
                 $products[] = $product;
             } elseif ($this->data === null) {
-                $this->data = (string)$productData;
+                $this->data = (string) $productData;
             }
         }
 

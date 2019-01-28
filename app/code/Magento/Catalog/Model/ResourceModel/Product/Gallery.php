@@ -196,7 +196,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     $mainTableAlias . '.value_id = value.value_id',
-                    $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId),
+                    $this->getConnection()->quoteInto('value.store_id = ?', (int) $storeId),
                     'value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),

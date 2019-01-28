@@ -259,7 +259,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                     ' AND customer_group_ids.' .
                     $entityInfo['entity_id_field'] .
                     ' = ?',
-                    (int)$customerGroupId
+                    (int) $customerGroupId
                 ),
                 []
             );

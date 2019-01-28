@@ -55,7 +55,7 @@ abstract class AbstractIncrement extends \Magento\Framework\DataObject implement
     public function format($id)
     {
         $result = $this->getPrefix();
-        $result .= str_pad((string)$id, $this->getPadLength(), $this->getPadChar(), STR_PAD_LEFT);
+        $result .= str_pad((string) $id, $this->getPadLength(), $this->getPadChar(), STR_PAD_LEFT);
         return $result;
     }
 

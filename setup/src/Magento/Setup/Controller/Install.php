@@ -153,7 +153,7 @@ class Install extends AbstractActionController
                 $json->setVariable('isSampleDataError', true);
             }
         } catch (\Exception $e) {
-            $contents = [(string)$e];
+            $contents = [(string) $e];
         }
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
     }

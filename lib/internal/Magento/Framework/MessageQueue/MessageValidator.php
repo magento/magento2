@@ -67,7 +67,7 @@ class MessageValidator
             $this->validateMessage($message, $messageDataType, $topic);
         } else {
             /** Validate message according to the method signature associated with the message topic */
-            $message = (array)$message;
+            $message = (array) $message;
             $isIndexedArray = array_keys($message) === range(0, count($message) - 1);
             foreach ($topicSchema['schema_value'] as $methodParameterMeta) {
                 $paramName = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_NAME];

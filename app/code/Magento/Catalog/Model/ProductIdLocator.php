@@ -58,7 +58,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     ) {
         $this->metadataPool = $metadataPool;
         $this->collectionFactory = $collectionFactory;
-        $this->idsLimit = (int)$idsLimit;
+        $this->idsLimit = (int) $idsLimit;
         $this->batchSize = $batchSize;
     }
 

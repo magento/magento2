@@ -92,7 +92,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $items = [];
             $ninProductIds = $this->_getCartProductIds();
             if ($ninProductIds) {
-                $lastAdded = (int)$this->_getLastAddedProductId();
+                $lastAdded = (int) $this->_getLastAddedProductId();
                 if ($lastAdded) {
                     $collection = $this->_getCollection()->addProductFilter($lastAdded);
                     if (!empty($ninProductIds)) {

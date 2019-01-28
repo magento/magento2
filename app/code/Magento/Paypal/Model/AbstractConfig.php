@@ -126,7 +126,7 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = (int)$storeId;
+        $this->_storeId = (int) $storeId;
         return $this;
     }
 

@@ -81,9 +81,9 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
             );
         }
 
-        $result = (bool)$this->resource->getConnection()->query(
+        $result = (bool) $this->resource->getConnection()->query(
             "SELECT GET_LOCK(?, ?);",
-            [(string)$name, (int)$timeout]
+            [(string) $name, (int) $timeout]
         )->fetchColumn();
 
         if ($result === true) {
@@ -104,9 +104,9 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         $name = $this->addPrefix($name);
 
-        $result = (bool)$this->resource->getConnection()->query(
+        $result = (bool) $this->resource->getConnection()->query(
             "SELECT RELEASE_LOCK(?);",
-            [(string)$name]
+            [(string) $name]
         )->fetchColumn();
 
         if ($result === true) {
@@ -127,9 +127,9 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         $name = $this->addPrefix($name);
 
-        return (bool)$this->resource->getConnection()->query(
+        return (bool) $this->resource->getConnection()->query(
             "SELECT IS_USED_LOCK(?);",
-            [(string)$name]
+            [(string) $name]
         )->fetchColumn();
     }
 
@@ -161,7 +161,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     private function getPrefix(): string
     {
         if ($this->prefix === null) {
-            $this->prefix = (string)$this->deploymentConfig->get(
+            $this->prefix = (string) $this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
                 . '/'
                 . ConfigOptionsListConstants::KEY_NAME,

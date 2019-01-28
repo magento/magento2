@@ -74,7 +74,7 @@ class Signature
      */
     protected function isUrlSignatureEnabled()
     {
-        return (bool)$this->config->getValue(self::XML_PATH_STATIC_FILE_SIGNATURE);
+        return (bool) $this->config->getValue(self::XML_PATH_STATIC_FILE_SIGNATURE);
     }
 
     /**

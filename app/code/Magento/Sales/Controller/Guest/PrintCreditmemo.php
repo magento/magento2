@@ -59,7 +59,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
             return $result;
         }
 
-        $creditmemoId = (int)$this->getRequest()->getParam('creditmemo_id');
+        $creditmemoId = (int) $this->getRequest()->getParam('creditmemo_id');
         if ($creditmemoId) {
             $creditmemo = $this->creditmemoRepository->get($creditmemoId);
             $order = $creditmemo->getOrder();

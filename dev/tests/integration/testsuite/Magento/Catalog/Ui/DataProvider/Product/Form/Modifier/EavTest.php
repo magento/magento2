@@ -115,7 +115,7 @@ class EavTest extends \PHPUnit\Framework\TestCase
                 continue;
             }
             if ($item instanceof \Magento\Framework\Phrase) {
-                $item = (string)$item;
+                $item = (string) $item;
             } elseif (is_array($item)) {
                 $this->prepareDataForComparison($item, $expectedData[$key]);
             } elseif ($key === 'price_id' || $key === 'sortOrder') {

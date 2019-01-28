@@ -199,7 +199,7 @@ class Vault implements VaultPaymentInterface
      */
     public function setStore($storeId)
     {
-        $this->storeId = (int)$storeId;
+        $this->storeId = (int) $storeId;
     }
 
     /**

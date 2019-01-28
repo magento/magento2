@@ -70,7 +70,7 @@ class DataObject implements \ArrayAccess
      */
     public function setData($key, $value = null)
     {
-        if ($key === (array)$key) {
+        if ($key === (array) $key) {
             $this->_data = $key;
         } else {
             $this->_data[$key] = $value;
@@ -92,7 +92,7 @@ class DataObject implements \ArrayAccess
             if (isset($this->_data[$key]) || array_key_exists($key, $this->_data)) {
                 unset($this->_data[$key]);
             }
-        } elseif ($key === (array)$key) {
+        } elseif ($key === (array) $key) {
             foreach ($key as $element) {
                 $this->unsetData($element);
             }
@@ -129,7 +129,7 @@ class DataObject implements \ArrayAccess
         }
 
         if ($index !== null) {
-            if ($data === (array)$data) {
+            if ($data === (array) $data) {
                 $data = isset($data[$index]) ? $data[$index] : null;
             } elseif (is_string($data)) {
                 $data = explode(PHP_EOL, $data);
@@ -157,7 +157,7 @@ class DataObject implements \ArrayAccess
 
         $data = $this->_data;
         foreach ($keys as $key) {
-            if ((array)$data === $data && isset($data[$key])) {
+            if ((array) $data === $data && isset($data[$key])) {
                 $data = $data[$key];
             } elseif ($data instanceof \Magento\Framework\DataObject) {
                 $data = $data->getDataByKey($key);

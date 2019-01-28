@@ -74,7 +74,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 $data = $this->_processNestedGroups($group);
                 if (!empty($data)) {
                     if (!empty($groups[$groupName])) {
-                        $groups[$groupName] = array_merge_recursive((array)$groups[$groupName], $data);
+                        $groups[$groupName] = array_merge_recursive((array) $groups[$groupName], $data);
                     } else {
                         $groups[$groupName] = $data;
                     }

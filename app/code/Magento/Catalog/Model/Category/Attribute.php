@@ -144,7 +144,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      */
     public function getIsUsedInGrid()
     {
-        return (bool)$this->_getData(self::IS_USED_IN_GRID);
+        return (bool) $this->_getData(self::IS_USED_IN_GRID);
     }
 
     /**
@@ -152,7 +152,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      */
     public function getIsVisibleInGrid()
     {
-        return (bool)$this->_getData(self::IS_VISIBLE_IN_GRID);
+        return (bool) $this->_getData(self::IS_VISIBLE_IN_GRID);
     }
 
     /**
@@ -160,7 +160,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      */
     public function getIsFilterableInGrid()
     {
-        return (bool)$this->_getData(self::IS_FILTERABLE_IN_GRID);
+        return (bool) $this->_getData(self::IS_FILTERABLE_IN_GRID);
     }
 
     /**

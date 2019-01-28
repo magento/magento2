@@ -110,7 +110,7 @@ class View extends \Magento\Framework\View\Element\Template
                 '*'
             )->addFieldToFilter(
                 'customer_id',
-                (int)$this->_customerSession->getCustomerId()
+                (int) $this->_customerSession->getCustomerId()
             )->addFieldToFilter(
                 'status',
                 ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]

@@ -22,13 +22,13 @@ class AddQuantityFilterToCollection implements AddFilterToCollectionInterface
         if (isset($condition['gteq'])) {
             $collection->getSelect()->where(
                 AbstractCollection::ATTRIBUTE_TABLE_ALIAS_PREFIX . 'qty.qty >= ?',
-                (float)$condition['gteq']
+                (float) $condition['gteq']
             );
         }
         if (isset($condition['lteq'])) {
             $collection->getSelect()->where(
                 AbstractCollection::ATTRIBUTE_TABLE_ALIAS_PREFIX . 'qty.qty <= ?',
-                (float)$condition['lteq']
+                (float) $condition['lteq']
             );
         }
     }

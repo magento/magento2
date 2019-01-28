@@ -90,6 +90,6 @@ class DeleteOutdatedPriceValues
             return false;
         }
 
-        return (int)$priceScope === Store::PRICE_SCOPE_GLOBAL;
+        return (int) $priceScope === Store::PRICE_SCOPE_GLOBAL;
     }
 }

@@ -211,7 +211,7 @@ class Quote extends AbstractDb
      */
     public function subtractProductFromQuotes($product)
     {
-        $productId = (int)$product->getId();
+        $productId = (int) $product->getId();
         if (!$productId) {
             return $this;
         }

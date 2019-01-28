@@ -23,7 +23,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
             return $resultRedirect->setRefererUrl();
         }
 
-        $productId = (int)$this->getRequest()->getParam('product');
+        $productId = (int) $this->getRequest()->getParam('product');
         if ($productId && ($this->_customerVisitor->getId() || $this->_customerSession->isLoggedIn())) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {

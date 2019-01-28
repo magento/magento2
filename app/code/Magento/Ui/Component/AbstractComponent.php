@@ -94,7 +94,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         if (isset($config['value']) && $config['value'] instanceof ValueSourceInterface) {
             $config['value'] = $config['value']->getValue($this->getName());
         }
-        $this->setData('config', (array)$config);
+        $this->setData('config', (array) $config);
 
         $jsConfig = $this->getJsConfig($this);
         if (isset($jsConfig['provider'])) {
@@ -223,7 +223,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getConfiguration()
     {
-        return (array)$this->getData('config');
+        return (array) $this->getData('config');
     }
 
     /**
@@ -235,7 +235,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getJsConfig(UiComponentInterface $component)
     {
-        $jsConfig = (array)$component->getData('js_config');
+        $jsConfig = (array) $component->getData('js_config');
         if (!isset($jsConfig['extends'])) {
             $jsConfig['extends'] = $component->getContext()->getNamespace();
         }

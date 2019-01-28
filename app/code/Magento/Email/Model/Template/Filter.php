@@ -260,7 +260,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
-        $this->plainTemplateMode = (bool)$plainTemplateMode;
+        $this->plainTemplateMode = (bool) $plainTemplateMode;
         return $this;
     }
 
@@ -282,7 +282,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->isChildTemplate = (bool)$isChildTemplate;
+        $this->isChildTemplate = (bool) $isChildTemplate;
         return $this;
     }
 

@@ -114,7 +114,7 @@ class Bundle
             $product->setExtensionAttributes($extension);
         }
 
-        $affectProductSelections = (bool)$this->request->getPost('affect_bundle_product_selections');
+        $affectProductSelections = (bool) $this->request->getPost('affect_bundle_product_selections');
         $product->setCanSaveBundleSelections($affectProductSelections && !$compositeReadonly);
         return $product;
     }
@@ -170,7 +170,7 @@ class Bundle
      */
     protected function processDynamicOptionsData(\Magento\Catalog\Model\Product $product)
     {
-        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+        if ((int) $product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
             return;
         }
 
@@ -187,7 +187,7 @@ class Bundle
         }
         $newOptions = $product->getOptions();
         foreach ($customOptions as $customOptionData) {
-            if ((bool)$customOptionData['is_delete']) {
+            if ((bool) $customOptionData['is_delete']) {
                 continue;
             }
             $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
@@ -209,7 +209,7 @@ class Bundle
     ) {
         $link = $this->linkFactory->create(['data' => $linkData]);
 
-        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+        if ((int) $product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
             if (array_key_exists('selection_price_value', $linkData)) {
                 $link->setPrice($linkData['selection_price_value']);
             }

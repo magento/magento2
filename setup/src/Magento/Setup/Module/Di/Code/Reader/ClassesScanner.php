@@ -69,7 +69,7 @@ class ClassesScanner implements ClassesScannerInterface
         if (!$isGeneration && isset($this->fileResults[$realPath])) {
             return $this->fileResults[$realPath];
         }
-        if (!(bool)$realPath) {
+        if (!(bool) $realPath) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('The "%1" path is invalid. Verify the path and try again.', [$path])
             );
@@ -140,7 +140,7 @@ class ClassesScanner implements ClassesScannerInterface
     private function isExclude($fileItemPath, $patterns)
     {
         if (!is_array($patterns)) {
-            $patterns = (array)$patterns;
+            $patterns = (array) $patterns;
         }
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, str_replace('\\', '/', $fileItemPath))) {

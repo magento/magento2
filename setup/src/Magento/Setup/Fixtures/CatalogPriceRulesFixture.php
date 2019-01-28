@@ -134,7 +134,7 @@ class CatalogPriceRulesFixture extends Fixture
             unset($data['rule']);
 
             $model->loadPost($data);
-            $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+            $useAutoGeneration = (int) !empty($data['use_auto_generation']);
             $model->setUseAutoGeneration($useAutoGeneration);
             $model->save();
         }

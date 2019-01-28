@@ -191,7 +191,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT,
             \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
         ];
-        $type = (string)$this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
+        $type = (string) $this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
         if (!in_array($type, $allowedTypes)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type'));
         }

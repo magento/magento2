@@ -2589,7 +2589,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
             || $rowData[self::COL_VISIBILITY]
-            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
+            !== (string) Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
     }
 
     /**
@@ -3072,7 +3072,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
             }
-            $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
+            $row['stock_status_changed_auto'] = (int) !$this->stockStateProvider->verifyStock($stockItemDo);
         } else {
             $row['qty'] = 0;
         }

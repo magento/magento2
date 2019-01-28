@@ -52,7 +52,7 @@ class JsonProductInfo extends ProductController implements HttpGetActionInterfac
     {
         $response = new DataObject();
         $id = $this->getRequest()->getParam('id');
-        if ((int)$id > 0) {
+        if ((int) $id > 0) {
             $product = $this->productRepository->getById($id);
             $response->setId($id);
             $response->addData($product->getData());

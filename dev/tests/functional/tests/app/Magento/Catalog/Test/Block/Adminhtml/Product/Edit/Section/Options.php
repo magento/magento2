@@ -198,7 +198,7 @@ class Options extends Section
             : $this->staticDataRow;
         foreach ($options as $key => $option) {
             if (isset($option['sort_order'])) {
-                $currentSortOrder = (int)$option['sort_order'];
+                $currentSortOrder = (int) $option['sort_order'];
                 unset($option['sort_order']);
             } else {
                 $currentSortOrder = 0;
@@ -307,7 +307,7 @@ class Options extends Section
             : $this->staticDataRow;
         foreach ($options as $key => $option) {
             if (isset($option['sort_order'])) {
-                $currentSortOrder = (int)$option['sort_order'];
+                $currentSortOrder = (int) $option['sort_order'];
                 unset($option['sort_order']);
             }
             $formDataItem['options'][$key] = $optionsForm->getDataOptions(

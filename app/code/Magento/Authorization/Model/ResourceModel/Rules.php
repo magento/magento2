@@ -84,7 +84,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $connection->beginTransaction();
             $roleId = $rule->getRoleId();
 
-            $condition = ['role_id = ?' => (int)$roleId];
+            $condition = ['role_id = ?' => (int) $roleId];
 
             $connection->delete($this->getMainTable(), $condition);
 

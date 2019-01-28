@@ -111,7 +111,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      */
     public function isDisplayed()
     {
-        return (bool)$this->_getConfigUrl();
+        return (bool) $this->_getConfigUrl();
     }
 
     /**

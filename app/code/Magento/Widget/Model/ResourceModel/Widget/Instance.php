@@ -39,7 +39,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getTable('widget_instance_page')
         )->where(
             'instance_id = ?',
-            (int)$object->getId()
+            (int) $object->getId()
         );
         $result = $connection->fetchAll($select);
         $object->setData('page_groups', $result);
@@ -58,7 +58,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $pageLayoutTable = $this->getTable('widget_instance_page_layout');
         $connection = $this->getConnection();
 
-        $select = $connection->select()->from($pageTable, 'page_id')->where('instance_id = ?', (int)$object->getId());
+        $select = $connection->select()->from($pageTable, 'page_id')->where('instance_id = ?', (int) $object->getId());
         $pageIds = $connection->fetchCol($select);
 
         $removePageIds = array_diff($pageIds, $object->getData('page_group_ids'));
@@ -87,7 +87,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ];
             $pageId = $pageGroup['page_id'];
             if (in_array($pageGroup['page_id'], $pageIds)) {
-                $connection->update($pageTable, $data, ['page_id = ?' => (int)$pageId]);
+                $connection->update($pageTable, $data, ['page_id = ?' => (int) $pageId]);
             } else {
                 $connection->insert($pageTable, array_merge(['instance_id' => $object->getId()], $data));
                 $pageId = $connection->lastInsertId($pageTable);
@@ -245,7 +245,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_ids'
         )->where(
             "{$this->getIdFieldName()} = ?",
-            (int)$id
+            (int) $id
         );
         $storeIds = $connection->fetchOne($select);
         return $storeIds ? explode(',', $storeIds) : [];

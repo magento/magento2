@@ -169,7 +169,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
         $crypt = new SodiumChachaIetf(self::CRYPT_KEY_1);
         // Verify decrypted matches original data
-        $this->assertEquals($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
+        $this->assertEquals($data, $crypt->decrypt(base64_decode((string) $encryptedData)));
     }
 
     public function testDecrypt()

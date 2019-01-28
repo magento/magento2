@@ -57,7 +57,7 @@ class EncryptionUpdate
                 $connection->update(
                     $table,
                     ['cc_number_enc' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
-                    ['entity_id = ?' => (int)$valueId, 'cc_number_enc = ?' => (string)$value]
+                    ['entity_id = ?' => (int) $valueId, 'cc_number_enc = ?' => (string) $value]
                 );
             }
         }

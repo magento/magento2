@@ -155,7 +155,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isShownToLoggedInUser()
     {
-        $forms = (array)$this->captchaData->getConfig('shown_to_logged_in_user');
+        $forms = (array) $this->captchaData->getConfig('shown_to_logged_in_user');
         foreach ($forms as $formId => $isShownToLoggedIn) {
             if ($isShownToLoggedIn && $this->formId == $formId) {
                 return true;
@@ -182,7 +182,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function getAllowedAttemptsForSameLogin()
     {
-        return (int)$this->captchaData->getConfig('failed_attempts_login');
+        return (int) $this->captchaData->getConfig('failed_attempts_login');
     }
 
     /**
@@ -192,7 +192,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function getAllowedAttemptsFromSameIp()
     {
-        return (int)$this->captchaData->getConfig('failed_attempts_ip');
+        return (int) $this->captchaData->getConfig('failed_attempts_ip');
     }
 
     /**
@@ -238,7 +238,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isCaseSensitive()
     {
-        return (string)$this->captchaData->getConfig('case_sensitive');
+        return (string) $this->captchaData->getConfig('case_sensitive');
     }
 
     /**
@@ -248,7 +248,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function getFont()
     {
-        $font = (string)$this->captchaData->getConfig('font');
+        $font = (string) $this->captchaData->getConfig('font');
         $fonts = $this->captchaData->getFonts();
 
         if (isset($fonts[$font])) {
@@ -273,7 +273,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
              * as "timeout" configuration parameter specifies timeout in minutes - we multiply it on 60 to set
              * expiration in seconds
              */
-            $this->expiration = (int)$this->captchaData->getConfig('timeout') * 60;
+            $this->expiration = (int) $this->captchaData->getConfig('timeout') * 60;
         }
         return $this->expiration;
     }
@@ -398,7 +398,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function getSymbols()
     {
-        return str_split((string)$this->captchaData->getConfig('symbols'));
+        return str_split((string) $this->captchaData->getConfig('symbols'));
     }
 
     /**
@@ -412,15 +412,15 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     {
         $from = 0;
         $to = 0;
-        $length = (string)$this->captchaData->getConfig('length');
+        $length = (string) $this->captchaData->getConfig('length');
         if (!is_numeric($length)) {
             if (preg_match('/(\d+)-(\d+)/', $length, $matches)) {
-                $from = (int)$matches[1];
-                $to = (int)$matches[2];
+                $from = (int) $matches[1];
+                $to = (int) $matches[2];
             }
         } else {
-            $from = (int)$length;
-            $to = (int)$length;
+            $from = (int) $length;
+            $to = (int) $length;
         }
 
         if ($to < $from || $from < 1 || $to < 1) {
@@ -438,7 +438,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function isShowAlways()
     {
-        $captchaMode = (string)$this->captchaData->getConfig('mode');
+        $captchaMode = (string) $this->captchaData->getConfig('mode');
 
         if ($captchaMode === Data::MODE_ALWAYS) {
             return true;
@@ -467,7 +467,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function isEnabled()
     {
-        return (string)$this->captchaData->getConfig('enable');
+        return (string) $this->captchaData->getConfig('enable');
     }
 
     /**
@@ -479,7 +479,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function getTargetForms()
     {
-        $formsString = (string)$this->captchaData->getConfig('forms');
+        $formsString = (string) $this->captchaData->getConfig('forms');
         return explode(',', $formsString);
     }
 

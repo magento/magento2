@@ -66,10 +66,10 @@ class Options implements ResolverInterface
             return $this->valueFactory->create($result);
         }
 
-        $this->optionCollection->addProductId((int)$value[$linkField]);
+        $this->optionCollection->addProductId((int) $value[$linkField]);
 
         $result = function () use ($value, $linkField) {
-            return $this->optionCollection->getAttributesByProductId((int)$value[$linkField]);
+            return $this->optionCollection->getAttributesByProductId((int) $value[$linkField]);
         };
 
         return $this->valueFactory->create($result);

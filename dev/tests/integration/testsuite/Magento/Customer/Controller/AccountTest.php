@@ -165,7 +165,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
         $text = $response->getBody();
-        $this->assertFalse((bool)preg_match('/' . $token . '/m', $text));
+        $this->assertFalse((bool) preg_match('/' . $token . '/m', $text));
         $this->assertRedirect(
             $this->stringContains('customer/account/createpassword')
         );
@@ -199,7 +199,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $response = $this->getResponse();
         $text = $response->getBody();
-        $this->assertTrue((bool)preg_match('/' . $token . '/m', $text));
+        $this->assertTrue((bool) preg_match('/' . $token . '/m', $text));
     }
 
     /**

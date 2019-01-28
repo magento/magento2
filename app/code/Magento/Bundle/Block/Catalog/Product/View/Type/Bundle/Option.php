@@ -124,7 +124,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             $canChangeQty = $selectedSelection->getSelectionCanChangeQty();
         } elseif (!$this->showSingle() || $inPreConfigured) {
             $defaultQty = $this->_getSelectedQty();
-            $canChangeQty = (bool)$defaultQty;
+            $canChangeQty = (bool) $defaultQty;
         } else {
             $defaultQty = $selections[0]->getSelectionQty() * 1;
             $canChangeQty = $selections[0]->getSelectionCanChangeQty();
@@ -203,7 +203,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     protected function _getSelectedQty()
     {
         if ($this->getProduct()->hasPreconfiguredValues()) {
-            $selectedQty = (float)$this->getProduct()->getPreconfiguredValues()->getData(
+            $selectedQty = (float) $this->getProduct()->getPreconfiguredValues()->getData(
                 'bundle_option_qty/' . $this->getOption()->getId()
             );
             if ($selectedQty < 0) {

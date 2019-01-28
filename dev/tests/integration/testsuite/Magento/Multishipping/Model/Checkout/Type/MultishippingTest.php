@@ -229,7 +229,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
         $this->model->createOrders();
 
-        $orderList = $this->getOrderList((int)$quote->getId());
+        $orderList = $this->getOrderList((int) $quote->getId());
         self::assertCount(3, $orderList);
 
         /**
@@ -335,7 +335,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(
             $this->findAddressInQuote(
                 [
-                    'id' => (string)$shippingFailedAddressId,
+                    'id' => (string) $shippingFailedAddressId,
                     'street' => ['Second Division 2'],
                     'city' => 'Denver',
                     'region' => 'Colorado',
@@ -349,7 +349,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(
             $this->findAddressInQuote(
                 [
-                    'id' => (string)$billingFailedAddressId,
+                    'id' => (string) $billingFailedAddressId,
                     'street' => ['Third Division 1'],
                     'city' => 'New York',
                     'region' => 'New York',

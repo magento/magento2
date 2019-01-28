@@ -21,6 +21,6 @@ class Configure extends \Magento\Review\Block\Form
      */
     public function getProductId()
     {
-        return (int)$this->getRequest()->getParam('product_id', false);
+        return (int) $this->getRequest()->getParam('product_id', false);
     }
 }

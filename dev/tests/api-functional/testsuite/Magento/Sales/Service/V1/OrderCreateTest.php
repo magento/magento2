@@ -227,11 +227,11 @@ class OrderCreateTest extends WebapiAbstract
         /** @var \Magento\Sales\Model\Order $model */
         $model = $this->objectManager->get(\Magento\Sales\Model\Order::class);
         $model->load($order['customer_email'], 'customer_email');
-        $this->assertTrue((bool)$model->getId());
+        $this->assertTrue((bool) $model->getId());
         $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());
         $this->assertEquals($order['grand_total'], $model->getGrandTotal());
         $this->assertNotNull($model->getShippingAddress());
-        $this->assertTrue((bool)$model->getShippingAddress()->getId());
+        $this->assertTrue((bool) $model->getShippingAddress()->getId());
         $this->assertEquals('Flat Rate - Fixed', $model->getShippingDescription());
         $shippingMethod = $model->getShippingMethod(true);
         $this->assertEquals('flatrate', $shippingMethod['carrier_code']);

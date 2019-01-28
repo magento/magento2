@@ -73,7 +73,7 @@ class OrderLoader implements OrderLoaderInterface
      */
     public function load(RequestInterface $request)
     {
-        $orderId = (int)$request->getParam('order_id');
+        $orderId = (int) $request->getParam('order_id');
         if (!$orderId) {
             /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
             $resultForward = $this->resultForwardFactory->create();

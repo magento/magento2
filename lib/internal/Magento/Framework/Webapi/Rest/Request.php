@@ -138,7 +138,7 @@ class Request extends \Magento\Framework\Webapi\Request
             $this->_bodyParams = [];
             //avoid JSON decoding with empty string
             if ($this->getContent()) {
-                $this->_bodyParams = (array)$this->_getDeserializer()->deserialize((string)$this->getContent());
+                $this->_bodyParams = (array) $this->_getDeserializer()->deserialize((string) $this->getContent());
             }
         }
         return $this->_bodyParams;

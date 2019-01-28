@@ -61,7 +61,7 @@ class Popup extends AbstractAction
      */
     public function execute()
     {
-        $productId = (int)$this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('id');
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->factory->create();
@@ -82,7 +82,7 @@ class Popup extends AbstractAction
             }
         }
 
-        $setId = (int)$this->getRequest()->getParam('set');
+        $setId = (int) $this->getRequest()->getParam('set');
         if ($setId) {
             $product->setAttributeSetId($setId);
         }

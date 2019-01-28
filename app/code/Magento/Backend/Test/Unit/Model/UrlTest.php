@@ -211,7 +211,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStartupPageUrl()
     {
-        $this->assertEquals('adminhtml/user_role', (string)$this->_model->getStartupPageUrl());
+        $this->assertEquals('adminhtml/user_role', (string) $this->_model->getStartupPageUrl());
     }
 
     public function testGetAreaFrontName()

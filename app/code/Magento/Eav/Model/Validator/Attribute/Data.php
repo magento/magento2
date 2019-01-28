@@ -130,7 +130,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
             }
             $result = $dataModel->validateValue($data[$attributeCode]);
             if (true !== $result) {
-                $this->_addErrorMessages($attributeCode, (array)$result);
+                $this->_addErrorMessages($attributeCode, (array) $result);
             }
         }
         return count($this->_messages) == 0;

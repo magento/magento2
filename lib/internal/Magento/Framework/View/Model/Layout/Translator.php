@@ -82,7 +82,7 @@ class Translator
      */
     protected function _getNodeNamesToTranslate(Element $node)
     {
-        return explode(' ', (string)$node['translate']);
+        return explode(' ', (string) $node['translate']);
     }
 
     /**
@@ -104,7 +104,7 @@ class Translator
      */
     protected function _isSelfTranslatable(Element $node)
     {
-        return $this->_isNodeTranslatable($node) && 'true' == (string)$node['translate'];
+        return $this->_isNodeTranslatable($node) && 'true' == (string) $node['translate'];
     }
 
     /**
@@ -115,7 +115,7 @@ class Translator
      */
     protected function _getNodeValue(Element $node)
     {
-        return trim((string)$node);
+        return trim((string) $node);
     }
 
     /**
@@ -126,6 +126,6 @@ class Translator
      */
     protected function _translateValue($value)
     {
-        return (string)new \Magento\Framework\Phrase($value);
+        return (string) new \Magento\Framework\Phrase($value);
     }
 }

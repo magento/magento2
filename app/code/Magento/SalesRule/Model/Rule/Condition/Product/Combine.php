@@ -97,7 +97,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         }
 
         $all = $this->getAggregator() === 'all';
-        $true = (bool)$this->getValue();
+        $true = (bool) $this->getValue();
 
         foreach ($this->getConditions() as $cond) {
             if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
@@ -123,7 +123,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     private function validateEntity($cond, \Magento\Framework\Model\AbstractModel $entity)
     {
-        $true = (bool)$this->getValue();
+        $true = (bool) $this->getValue();
         $validated = !$true;
         foreach ($this->retrieveValidateEntities($cond->getAttributeScope(), $entity) as $validateEntity) {
             $validated = $cond->validate($validateEntity);

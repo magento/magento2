@@ -87,7 +87,7 @@ class Button extends Template implements ShortcutInterface
      */
     private function isInContext()
     {
-        return (bool)(int) $this->config->getValue('in_context');
+        return (bool) (int) $this->config->getValue('in_context');
     }
 
     /**
@@ -97,7 +97,7 @@ class Button extends Template implements ShortcutInterface
      */
     private function isVisibleOnCart()
     {
-        return (bool)(int) $this->config->getValue('visible_on_cart');
+        return (bool) (int) $this->config->getValue('visible_on_cart');
     }
 
     /**

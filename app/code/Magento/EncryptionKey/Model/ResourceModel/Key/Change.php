@@ -160,7 +160,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getConnection()->update(
                     $table,
                     ['value' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
-                    ['config_id = ?' => (int)$configId]
+                    ['config_id = ?' => (int) $configId]
                 );
             }
         }
@@ -182,7 +182,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->update(
                 $table,
                 ['cc_number_enc' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
-                ['entity_id = ?' => (int)$valueId]
+                ['entity_id = ?' => (int) $valueId]
             );
         }
     }

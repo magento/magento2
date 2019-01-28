@@ -55,7 +55,7 @@ class Customer implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        $currentUserId = (int)$currentUserId;
+        $currentUserId = (int) $currentUserId;
         $data = $this->customerDataProvider->getCustomerById($currentUserId);
         return $data;
     }

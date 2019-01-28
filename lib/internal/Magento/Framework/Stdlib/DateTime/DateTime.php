@@ -49,7 +49,7 @@ class DateTime
             $result = date_default_timezone_set($timezone);
         }
         if ($result === true) {
-            $offset = (int)date('Z');
+            $offset = (int) date('Z');
         }
         if ($timezone !== null) {
             date_default_timezone_set($oldZone);
@@ -103,7 +103,7 @@ class DateTime
     public function gmtTimestamp($input = null)
     {
         if ($input === null) {
-            return (int)gmdate('U');
+            return (int) gmdate('U');
         } elseif (is_numeric($input)) {
             $result = $input;
         } elseif ($input instanceof \DateTimeInterface) {

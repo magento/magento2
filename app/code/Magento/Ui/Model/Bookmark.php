@@ -116,7 +116,7 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      */
     public function isCurrent()
     {
-        return (bool)$this->getData(self::CURRENT);
+        return (bool) $this->getData(self::CURRENT);
     }
 
     /**

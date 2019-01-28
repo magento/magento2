@@ -101,7 +101,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $mediaGallery = $this->getTargetSimpleProduct()->getData('media_gallery');
         $image = array_shift($mediaGallery['images']);
-        return (int)$image['value_id'];
+        return (int) $image['value_id'];
     }
 
     /**
@@ -529,7 +529,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'label' => $image['label'],
             'media_type' => $image['media_type'],
             'position' => $image['position'],
-            'disabled' => (bool)$image['disabled'],
+            'disabled' => (bool) $image['disabled'],
             'file' => $image['file'],
             'types' => ['image', 'small_image', 'thumbnail'],
         ];
@@ -550,13 +550,13 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'entryId' => $imageId,
         ];
         $data = $this->_webApiCall($serviceInfo, $requestData);
-        $actual = (array)$data;
+        $actual = (array) $data;
         $this->assertEquals($expected['label'], $actual['label']);
         $this->assertEquals($expected['position'], $actual['position']);
         $this->assertEquals($expected['file'], $actual['file']);
         $this->assertEquals($expected['types'], $actual['types']);
         $this->assertEquals($expected['media_type'], $actual['media_type']);
-        $this->assertEquals($expected['disabled'], (bool)$actual['disabled']);
+        $this->assertEquals($expected['disabled'], (bool) $actual['disabled']);
     }
 
     /**

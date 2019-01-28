@@ -92,7 +92,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      */
     public function getEscapedValue($index = null)
     {
-        return $this->escapeHtml((string)$this->getValue($index));
+        return $this->escapeHtml((string) $this->getValue($index));
     }
 
     /**

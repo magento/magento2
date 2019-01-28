@@ -636,7 +636,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setId($id);
         $result = $this->quote->getAddressById($addressId);
 
-        $this->assertEquals((bool)$expected, (bool)$result);
+        $this->assertEquals((bool) $expected, (bool) $result);
     }
 
     /**
@@ -680,7 +680,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setId($id);
         $result = $this->quote->getAddressByCustomerAddressId($id);
 
-        $this->assertEquals((bool)$expected, (bool)$result);
+        $this->assertEquals((bool) $expected, (bool) $result);
     }
 
     /**
@@ -729,7 +729,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->quote->setId($id);
 
         $result = $this->quote->getShippingAddressByCustomerAddressId($id);
-        $this->assertEquals($expected, (bool)$result);
+        $this->assertEquals($expected, (bool) $result);
     }
 
     /**

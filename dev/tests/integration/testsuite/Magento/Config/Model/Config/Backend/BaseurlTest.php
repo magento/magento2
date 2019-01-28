@@ -23,7 +23,7 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
             \Magento\Config\Model\Config\Backend\Baseurl::class
         );
         $model->setPath($path)->setValue($value)->save();
-        $this->assertNotEmpty((int)$model->getId());
+        $this->assertNotEmpty((int) $model->getId());
     }
 
     /**

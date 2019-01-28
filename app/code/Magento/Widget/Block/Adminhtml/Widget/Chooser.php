@@ -126,7 +126,7 @@ class Chooser extends \Magento\Backend\Block\Template
      */
     public function getHiddenEnabled()
     {
-        return $this->hasData('hidden_enabled') ? (bool)$this->_getData('hidden_enabled') : true;
+        return $this->hasData('hidden_enabled') ? (bool) $this->_getData('hidden_enabled') : true;
     }
 
     /**

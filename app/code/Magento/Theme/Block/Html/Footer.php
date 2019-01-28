@@ -72,7 +72,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
         return [
             'PAGE_FOOTER',
             $this->_storeManager->getStore()->getId(),
-            (int)$this->_storeManager->getStore()->isCurrentlySecure(),
+            (int) $this->_storeManager->getStore()->isCurrentlySecure(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(Context::CONTEXT_AUTH),
             $this->getTemplateFile(),

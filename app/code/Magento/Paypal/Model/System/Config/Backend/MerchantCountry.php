@@ -56,7 +56,7 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
      */
     protected function _afterLoad()
     {
-        $value = (string)$this->getValue();
+        $value = (string) $this->getValue();
         if (empty($value)) {
             if ($this->getWebsite()) {
                 $defaultCountry = $this->_storeManager->getWebsite(

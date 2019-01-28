@@ -56,11 +56,11 @@ class StockDataFilter
         if ($stockData['use_config_manage_stock'] == 1 && !isset($stockData['manage_stock'])) {
             $stockData['manage_stock'] = $this->stockConfiguration->getManageStock();
         }
-        if (isset($stockData['qty']) && (float)$stockData['qty'] > self::MAX_QTY_VALUE) {
+        if (isset($stockData['qty']) && (float) $stockData['qty'] > self::MAX_QTY_VALUE) {
             $stockData['qty'] = self::MAX_QTY_VALUE;
         }
 
-        if (isset($stockData['min_qty']) && (int)$stockData['min_qty'] < 0) {
+        if (isset($stockData['min_qty']) && (int) $stockData['min_qty'] < 0) {
             $stockData['min_qty'] = 0;
         }
 

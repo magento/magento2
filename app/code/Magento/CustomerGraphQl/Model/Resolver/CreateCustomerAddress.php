@@ -95,7 +95,7 @@ class CreateCustomerAddress implements ResolverInterface
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
         $this->customerAddressCreateDataValidator->validate($args['input']);
 
-        $address = $this->createCustomerAddress((int)$currentUserId, $args['input']);
+        $address = $this->createCustomerAddress((int) $currentUserId, $args['input']);
         return $this->customerAddressDataProvider->getAddressData($address);
     }
 

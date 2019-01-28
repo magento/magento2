@@ -123,7 +123,7 @@ class TableResolver
         $storeKey = $this->httpContext->getValue(StoreManagerInterface::CONTEXT_STORE);
         return $this->dimensionFactory->create(
             WebsiteDimensionProvider::DIMENSION_NAME,
-            (string)$this->storeManager->getStore($storeKey)->getWebsiteId()
+            (string) $this->storeManager->getStore($storeKey)->getWebsiteId()
         );
     }
 
@@ -134,7 +134,7 @@ class TableResolver
     {
         return $this->dimensionFactory->create(
             CustomerGroupDimensionProvider::DIMENSION_NAME,
-            (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
+            (string) $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
         );
     }
 }

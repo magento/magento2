@@ -30,7 +30,7 @@ class BackendModel extends Value
      */
     public function beforeSave()
     {
-        $value = (int)$this->getValue();
+        $value = (int) $this->getValue();
         if ($value > self::MAX_LIFETIME) {
             throw new LocalizedException(
                 __(

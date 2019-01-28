@@ -86,7 +86,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         $optionId = null;
         if (strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
             $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $option->getCode());
-            if ((int)$optionId != $optionId) {
+            if ((int) $optionId != $optionId) {
                 $optionId = null;
             }
         }

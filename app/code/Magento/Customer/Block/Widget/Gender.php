@@ -68,7 +68,7 @@ class Gender extends AbstractWidget
      */
     public function isEnabled()
     {
-        return $this->_getAttribute('gender') ? (bool)$this->_getAttribute('gender')->isVisible() : false;
+        return $this->_getAttribute('gender') ? (bool) $this->_getAttribute('gender')->isVisible() : false;
     }
 
     /**
@@ -77,7 +77,7 @@ class Gender extends AbstractWidget
      */
     public function isRequired()
     {
-        return $this->_getAttribute('gender') ? (bool)$this->_getAttribute('gender')->isRequired() : false;
+        return $this->_getAttribute('gender') ? (bool) $this->_getAttribute('gender')->isRequired() : false;
     }
 
     /**

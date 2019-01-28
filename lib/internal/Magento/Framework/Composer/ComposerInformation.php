@@ -274,7 +274,7 @@ class ComposerInformation
     {
         $rootPackage = $this->getComposer()->getPackage();
 
-        return (bool)preg_match('/magento\/magento2...?/', $rootPackage->getName());
+        return (bool) preg_match('/magento\/magento2...?/', $rootPackage->getName());
     }
 
     /**

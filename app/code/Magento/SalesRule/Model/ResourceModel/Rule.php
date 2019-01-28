@@ -105,7 +105,7 @@ class Rule extends AbstractResource
     public function loadCustomerGroupIds(AbstractModel $object)
     {
         if (!$this->customerGroupIds) {
-            $this->customerGroupIds = (array)$this->getCustomerGroupIds($object->getId());
+            $this->customerGroupIds = (array) $this->getCustomerGroupIds($object->getId());
         }
         $object->setData('customer_group_ids', $this->customerGroupIds);
     }
@@ -118,7 +118,7 @@ class Rule extends AbstractResource
     public function loadWebsiteIds(AbstractModel $object)
     {
         if (!$this->websiteIds) {
-            $this->websiteIds = (array)$this->getWebsiteIds($object->getId());
+            $this->websiteIds = (array) $this->getWebsiteIds($object->getId());
         }
 
         $object->setData('website_ids', $this->websiteIds);

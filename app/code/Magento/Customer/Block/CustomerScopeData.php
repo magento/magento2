@@ -58,7 +58,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      */
     public function getWebsiteId()
     {
-        return (int)$this->_storeManager->getStore()->getWebsiteId();
+        return (int) $this->_storeManager->getStore()->getWebsiteId();
     }
 
     /**

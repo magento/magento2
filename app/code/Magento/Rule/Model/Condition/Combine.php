@@ -356,7 +356,7 @@ class Combine extends AbstractCondition
         }
 
         $all = $this->getAggregator() === 'all';
-        $true = (bool)$this->getValue();
+        $true = (bool) $this->getValue();
 
         foreach ($this->getConditions() as $cond) {
             if ($entity instanceof \Magento\Framework\Model\AbstractModel) {

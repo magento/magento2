@@ -567,7 +567,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             if ($attributeData) {
                 if ($attributeMetadata->getFrontendInput() === Multiline::NAME) {
                     $attributeData = \is_array($attributeData) ? $attributeData : explode("\n", $attributeData);
-                    $attributeData = (object)$attributeData;
+                    $attributeData = (object) $attributeData;
                 }
                 if ($attributeMetadata->isUserDefined()) {
                     $addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][$attributeCode] = $attributeData;
@@ -609,7 +609,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function isCustomerLoggedIn()
     {
-        return (bool)$this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+        return (bool) $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
     }
 
     /**

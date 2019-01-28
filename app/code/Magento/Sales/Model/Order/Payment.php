@@ -246,7 +246,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function setIsTransactionClosed($isClosed)
     {
-        $this->setData('is_transaction_closed', (bool)$isClosed);
+        $this->setData('is_transaction_closed', (bool) $isClosed);
 
         return $this;
     }
@@ -565,10 +565,10 @@ class Payment extends Info implements OrderPaymentInterface
     public function canVoid()
     {
         if (null === $this->_canVoidLookup) {
-            $this->_canVoidLookup = (bool)$this->getMethodInstance()->canVoid();
+            $this->_canVoidLookup = (bool) $this->getMethodInstance()->canVoid();
             if ($this->_canVoidLookup) {
                 $authTransaction = $this->getAuthorizationTransaction();
-                $this->_canVoidLookup = (bool)$authTransaction && !(int)$authTransaction->getIsClosed();
+                $this->_canVoidLookup = (bool) $authTransaction && !(int) $authTransaction->getIsClosed();
             }
         }
 
@@ -880,7 +880,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function canReviewPayment()
     {
-        return (bool)$this->getMethodInstance()->canReviewPayment();
+        return (bool) $this->getMethodInstance()->canReviewPayment();
     }
 
     /**
@@ -888,7 +888,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function canFetchTransactionInfo()
     {
-        return (bool)$this->getMethodInstance()->canFetchTransactionInfo();
+        return (bool) $this->getMethodInstance()->canFetchTransactionInfo();
     }
 
     /**
@@ -940,7 +940,7 @@ class Payment extends Info implements OrderPaymentInterface
 
             $result = $method->denyPayment($this);
         } else {
-            $result = (bool)$this->getNotificationResult();
+            $result = (bool) $this->getNotificationResult();
         }
 
         if ($result) {
@@ -1146,7 +1146,7 @@ class Payment extends Info implements OrderPaymentInterface
             0 == $this->getBaseAmountCanceled()
         ) {
             if ($authTransaction->canVoidAuthorizationCompletely()) {
-                $amount = (float)$order->getBaseGrandTotal();
+                $amount = (float) $order->getBaseGrandTotal();
             }
         }
 
@@ -1298,7 +1298,7 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $amount = $this->priceCurrency->round($amount);
 
-        return !$asFloat ? (string)$amount : $amount;
+        return !$asFloat ? (string) $amount : $amount;
     }
 
     /**
@@ -2439,7 +2439,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function setIsTransactionPending($flag)
     {
-        $this->setData('is_transaction_pending', (bool)$flag);
+        $this->setData('is_transaction_pending', (bool) $flag);
 
         return $this;
     }
@@ -2452,7 +2452,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getIsTransactionPending()
     {
-        return (bool)$this->getData('is_transaction_pending');
+        return (bool) $this->getData('is_transaction_pending');
     }
 
     /**
@@ -2463,7 +2463,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function setIsFraudDetected($flag)
     {
-        $this->setData('is_fraud_detected', (bool)$flag);
+        $this->setData('is_fraud_detected', (bool) $flag);
 
         return $this;
     }
@@ -2476,7 +2476,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getIsFraudDetected()
     {
-        return (bool)$this->getData('is_fraud_detected');
+        return (bool) $this->getData('is_fraud_detected');
     }
 
     /**
@@ -2487,7 +2487,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function setShouldCloseParentTransaction($flag)
     {
-        $this->setData('should_close_parent_transaction', (bool)$flag);
+        $this->setData('should_close_parent_transaction', (bool) $flag);
 
         return $this;
     }
@@ -2500,7 +2500,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getShouldCloseParentTransaction()
     {
-        return (bool)$this->getData('should_close_parent_transaction');
+        return (bool) $this->getData('should_close_parent_transaction');
     }
 
     /**

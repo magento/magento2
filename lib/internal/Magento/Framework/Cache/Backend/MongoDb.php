@@ -214,7 +214,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     {
         $time = time();
         $condition = ['_id' => $this->_quoteString($cacheId), 'expire' => ['$gt' => $time]];
-        $update = ['$set' => ['mtime' => $time], '$inc' => ['expire' => (int)$extraLifetime]];
+        $update = ['$set' => ['mtime' => $time], '$inc' => ['expire' => (int) $extraLifetime]];
         return $this->_getCollection()->update($condition, $update);
     }
 
@@ -349,7 +349,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
         switch ($mode) {
             case \Zend_Cache::CLEANING_MODE_ALL:
                 $result = $this->_getCollection()->drop();
-                $result = (bool)$result['ok'];
+                $result = (bool) $result['ok'];
                 break;
             case \Zend_Cache::CLEANING_MODE_OLD:
                 $query = ['expire' => ['$ne' => self::EXPIRATION_TIME_INFINITE, '$lte' => time()]];
@@ -357,7 +357,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
             case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
             case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
             case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
-                $query = $this->_getQueryMatchingTags((array)$tags, $mode);
+                $query = $this->_getQueryMatchingTags((array) $tags, $mode);
                 break;
             default:
                 \Zend_Cache::throwException('Unsupported cleaning mode: ' . $mode);
@@ -377,6 +377,6 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      */
     protected function _quoteString($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 }

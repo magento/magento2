@@ -84,7 +84,7 @@ $connection->delete(
  */
 /** @var \Magento\Store\Model\Website $website */
 $website = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
-$website->load((int)$websiteId);
+$website->load((int) $websiteId);
 $website->delete();
 
 /**

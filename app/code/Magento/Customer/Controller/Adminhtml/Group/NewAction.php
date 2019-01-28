@@ -51,7 +51,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Group implements 
         }
 
         $resultPage->getLayout()->addBlock(\Magento\Customer\Block\Adminhtml\Group\Edit::class, 'group', 'content')
-            ->setEditMode((bool)$groupId);
+            ->setEditMode((bool) $groupId);
 
         return $resultPage;
     }

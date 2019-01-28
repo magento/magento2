@@ -212,7 +212,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 foreach ($users as $usrid) {
                     $jsonUsers[$usrid] = 0;
                 }
-                return $this->_jsonEncoder->encode((object)$jsonUsers);
+                return $this->_jsonEncoder->encode((object) $jsonUsers);
             } else {
                 return array_values($users);
             }

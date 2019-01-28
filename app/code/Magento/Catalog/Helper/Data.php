@@ -421,7 +421,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             self::XML_PATH_PRICE_SCOPE,
             ScopeInterface::SCOPE_STORE
         );
-        return isset($priceScope) ? (int)$priceScope : null;
+        return isset($priceScope) ? (int) $priceScope : null;
     }
 
     /**

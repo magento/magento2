@@ -37,9 +37,9 @@ class Tax extends AbstractTotal
             if ($orderItem->isDummy() || $item->getQty() <= 0) {
                 continue;
             }
-            $orderItemTax = (float)$orderItem->getTaxInvoiced();
-            $baseOrderItemTax = (float)$orderItem->getBaseTaxInvoiced();
-            $orderItemQty = (float)$orderItem->getQtyInvoiced();
+            $orderItemTax = (float) $orderItem->getTaxInvoiced();
+            $baseOrderItemTax = (float) $orderItem->getBaseTaxInvoiced();
+            $orderItemQty = (float) $orderItem->getQtyInvoiced();
 
             if ($orderItemTax && $orderItemQty) {
                 /**
@@ -75,7 +75,7 @@ class Tax extends AbstractTotal
         }
 
         $isPartialShippingRefunded = false;
-        $baseOrderShippingAmount = (float)$order->getBaseShippingAmount();
+        $baseOrderShippingAmount = (float) $order->getBaseShippingAmount();
         if ($invoice = $creditmemo->getInvoice()) {
             //recalculate tax amounts in case if refund shipping value was changed
             if ($baseOrderShippingAmount && $creditmemo->getBaseShippingAmount() !== null) {

@@ -303,7 +303,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addRequiredFilter($required = true)
     {
-        $this->addFieldToFilter('main_table.is_require', (int)$required);
+        $this->addFieldToFilter('main_table.is_require', (int) $required);
         return $this;
     }
 

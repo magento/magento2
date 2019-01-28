@@ -479,7 +479,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $originalProductOptions = $customOptionRepository->getProductOptions($simpleProduct);
         $optionValues = [];
         foreach ($originalProductOptions as $productOption) {
-            foreach ((array)$productOption->getValues() as $optionValue) {
+            foreach ((array) $productOption->getValues() as $optionValue) {
                 $optionValues[$productOption->getOptionId()][$optionValue->getOptionTypeId()]
                     = $optionValue->getTitle();
             }
@@ -2111,7 +2111,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Eav\Model\Config::class);
 
-        $entityTypeId = (int)$eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
+        $entityTypeId = (int) $eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
             ->getId();
 
         foreach ($products as $product) {

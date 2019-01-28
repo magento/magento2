@@ -329,8 +329,8 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
         );
 
         // fixture
-        $this->assertFalse((bool)$this->_model->canBeShowInCategory(6));
-        $this->assertTrue((bool)$this->_model->canBeShowInCategory(3));
+        $this->assertFalse((bool) $this->_model->canBeShowInCategory(6));
+        $this->assertTrue((bool) $this->_model->canBeShowInCategory(3));
     }
 
     public function testGetAvailableInCategories()

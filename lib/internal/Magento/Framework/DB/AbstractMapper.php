@@ -289,7 +289,7 @@ abstract class AbstractMapper implements MapperInterface
     {
         if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
             throw new \InvalidArgumentException(
-                (string)new \Magento\Framework\Phrase(
+                (string) new \Magento\Framework\Phrase(
                     'dbModel read resource does not implement \Magento\Framework\DB\Adapter\AdapterInterface'
                 )
             );

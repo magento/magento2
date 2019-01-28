@@ -108,7 +108,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIdBySku()
     {
-        $this->assertGreaterThan(0, (int)$this->_model->getIdBySku('simple')); // fixture
+        $this->assertGreaterThan(0, (int) $this->_model->getIdBySku('simple')); // fixture
     }
 
     public function testGetAttributes()

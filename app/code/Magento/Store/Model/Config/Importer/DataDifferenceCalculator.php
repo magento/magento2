@@ -130,7 +130,7 @@ class DataDifferenceCalculator
     {
         $runtimeData = $this->runtimeConfigSource->get();
 
-        return (array)$runtimeData[$scope];
+        return (array) $runtimeData[$scope];
     }
 
     /**

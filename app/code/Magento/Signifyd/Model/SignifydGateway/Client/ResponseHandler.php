@@ -78,7 +78,7 @@ class ResponseHandler
             throw new ApiCallException($errorMessage);
         }
 
-        $responseBody = (string)$response->getBody();
+        $responseBody = (string) $response->getBody();
 
         if (self::$phpVersionId < 70000 && empty($responseBody)) {
             /*

@@ -35,7 +35,7 @@ class Details extends \Magento\Framework\View\Element\Template
 
         foreach ($groupChildNames as $childName) {
             $alias = $layout->getElementAlias($childName);
-            $sortOrder = (int)$this->getChildData($alias, 'sort_order') ?? 0;
+            $sortOrder = (int) $this->getChildData($alias, 'sort_order') ?? 0;
 
             $childNamesSortOrder[$sortOrder] = $childName;
         }

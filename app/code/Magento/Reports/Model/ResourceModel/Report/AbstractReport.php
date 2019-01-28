@@ -253,7 +253,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         }
 
         static $selectResultCache = [];
-        $cacheKey = (string)$select;
+        $cacheKey = (string) $select;
 
         if (!array_key_exists($cacheKey, $selectResultCache)) {
             try {

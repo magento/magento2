@@ -106,7 +106,7 @@ class ConditionsToSearchCriteriaMapper
 
             // This required to solve cases when condition is configured like:
             // "If ALL/ANY of these conditions are FALSE" - we need to reverse SQL operator for this "FALSE"
-            if ((bool)$combinedCondition->getValue() === false) {
+            if ((bool) $combinedCondition->getValue() === false) {
                 $this->reverseSqlOperatorInFilter($filter);
             }
 

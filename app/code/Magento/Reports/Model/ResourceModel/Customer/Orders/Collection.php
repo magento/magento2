@@ -56,7 +56,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
     public function setStoreIds($storeIds)
     {
         if ($storeIds) {
-            $this->addAttributeToFilter('store_id', ['in' => (array)$storeIds]);
+            $this->addAttributeToFilter('store_id', ['in' => (array) $storeIds]);
             $this->addSumAvgTotals(1)->orderByOrdersCount();
         } else {
             $this->addSumAvgTotals()->orderByOrdersCount();

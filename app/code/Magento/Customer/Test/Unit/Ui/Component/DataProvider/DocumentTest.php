@@ -184,7 +184,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $value = $attribute->getValue();
         static::assertInstanceOf(Phrase::class, $value);
-        static::assertEquals('Confirmed', (string)$value);
+        static::assertEquals('Confirmed', (string) $value);
     }
 
     /**
@@ -198,7 +198,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $value = $attribute->getValue();
         static::assertInstanceOf(Phrase::class, $value);
-        static::assertEquals('Unlocked', (string)$value);
+        static::assertEquals('Unlocked', (string) $value);
     }
 
     /**

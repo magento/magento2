@@ -170,7 +170,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setProductEntityId($entityId)
     {
-        $this->_productEntityId = (int)$entityId;
+        $this->_productEntityId = (int) $entityId;
         return $this;
     }
 
@@ -312,7 +312,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $eventTypes = $this->_eventTypeFactory->create()->getCollection();
         foreach ($eventTypes as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
-                $productViewEvent = (int)$eventType->getId();
+                $productViewEvent = (int) $eventType->getId();
                 break;
             }
         }

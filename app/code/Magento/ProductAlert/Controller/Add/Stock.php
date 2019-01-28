@@ -57,7 +57,7 @@ class Stock extends AddController implements HttpPostActionInterface
     public function execute()
     {
         $backUrl = $this->getRequest()->getParam(Action::PARAM_NAME_URL_ENCODED);
-        $productId = (int)$this->getRequest()->getParam('product_id');
+        $productId = (int) $this->getRequest()->getParam('product_id');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$backUrl || !$productId) {

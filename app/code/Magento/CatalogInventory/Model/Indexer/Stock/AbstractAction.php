@@ -302,7 +302,7 @@ abstract class AbstractAction
     public function useIdxTable($value = null)
     {
         if ($value !== null) {
-            $this->_isNeedUseIdxTable = (bool)$value;
+            $this->_isNeedUseIdxTable = (bool) $value;
         }
         return $this->_isNeedUseIdxTable;
     }

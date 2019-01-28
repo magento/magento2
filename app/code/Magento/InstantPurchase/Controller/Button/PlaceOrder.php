@@ -122,12 +122,12 @@ class PlaceOrder extends Action
             return $this->createResponse($this->createGenericErrorMessage(), false);
         }
 
-        $paymentTokenPublicHash = (string)$request->getParam('instant_purchase_payment_token');
-        $shippingAddressId = (int)$request->getParam('instant_purchase_shipping_address');
-        $billingAddressId = (int)$request->getParam('instant_purchase_billing_address');
-        $carrierCode = (string)$request->getParam('instant_purchase_carrier');
-        $shippingMethodCode = (string)$request->getParam('instant_purchase_shipping');
-        $productId = (int)$request->getParam('product');
+        $paymentTokenPublicHash = (string) $request->getParam('instant_purchase_payment_token');
+        $shippingAddressId = (int) $request->getParam('instant_purchase_shipping_address');
+        $billingAddressId = (int) $request->getParam('instant_purchase_billing_address');
+        $carrierCode = (string) $request->getParam('instant_purchase_carrier');
+        $shippingMethodCode = (string) $request->getParam('instant_purchase_shipping');
+        $productId = (int) $request->getParam('product');
         $productRequest = $this->getRequestUnknownParams($request);
 
         try {
@@ -177,7 +177,7 @@ class PlaceOrder extends Action
      */
     private function createGenericErrorMessage(): string
     {
-        return (string)__('Something went wrong while processing your order. Please try again later.');
+        return (string) __('Something went wrong while processing your order. Please try again later.');
     }
 
     /**

@@ -162,7 +162,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderItemCssClass($menuItem, $level)
     {
-        $isLast = 0 == $level && (bool)$this->getMenuModel()->isLast($menuItem) ? 'last' : '';
+        $isLast = 0 == $level && (bool) $this->getMenuModel()->isLast($menuItem) ? 'last' : '';
         $isItemActive = $this->menuItemChecker->isItemActive(
             $this->getActiveItemModel(),
             $menuItem,

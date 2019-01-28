@@ -536,9 +536,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData(self::STORE_ID)) {
-            return (int)$this->getData(self::STORE_ID);
+            return (int) $this->getData(self::STORE_ID);
         }
-        return (int)$this->_storeManager->getStore()->getId();
+        return (int) $this->_storeManager->getStore()->getId();
     }
 
     /**
@@ -911,9 +911,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
          * Set true, if any
          * Set false, ONLY if options have been affected by Options tab and Type instance tab
          */
-        if ($hasOptions || (bool)$this->getTypeHasOptions()) {
+        if ($hasOptions || (bool) $this->getTypeHasOptions()) {
             $this->setHasOptions(true);
-            if ($hasRequiredOptions || (bool)$this->getTypeHasRequiredOptions()) {
+            if ($hasRequiredOptions || (bool) $this->getTypeHasRequiredOptions()) {
                 $this->setRequiredOptions(true);
             } elseif ($this->canAffectOptions()) {
                 $this->setRequiredOptions(false);
@@ -993,7 +993,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getQty()
     {
-        return (float)$this->getData('qty');
+        return (float) $this->getData('qty');
     }
 
     /**
@@ -1665,7 +1665,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setIsDuplicable($value)
     {
-        $this->_isDuplicable = (bool)$value;
+        $this->_isDuplicable = (bool) $value;
         return $this;
     }
 
@@ -1965,7 +1965,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function addOption(Product\Option $option)
     {
-        $options = (array)$this->getData('options');
+        $options = (array) $this->getData('options');
         $options[] = $option;
         $option->setProduct($this);
         $this->setData('options', $options);

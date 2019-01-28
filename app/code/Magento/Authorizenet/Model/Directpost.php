@@ -651,7 +651,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             case self::RESPONSE_CODE_ERROR:
                 $errorMessage = $this->dataHelper->wrapGatewayError($this->getResponse()->getXResponseReasonText());
                 $order = $this->getOrderFromResponse();
-                $this->paymentFailures->handle((int)$order->getQuoteId(), $errorMessage);
+                $this->paymentFailures->handle((int) $order->getQuoteId(), $errorMessage);
                 throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -764,7 +764,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 return $this;
             }
 
-            $fdsFilterAction = (string)$fraudDetailsResponse->getFdsFilterAction();
+            $fdsFilterAction = (string) $fraudDetailsResponse->getFdsFilterAction();
             if ($this->fdsFilterActionIsReportOnly($fdsFilterAction) === false) {
                 $payment->setIsFraudDetected(true);
             }
@@ -788,8 +788,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         try {
             $transactionId = $this->getResponse()->getXTransId();
             $data = $this->transactionService->getTransactionDetails($this, $transactionId);
-            $transactionStatus = (string)$data->transaction->transactionStatus;
-            $fdsFilterAction = (string)$data->transaction->FDSFilterAction;
+            $transactionStatus = (string) $data->transaction->transactionStatus;
+            $fdsFilterAction = (string) $data->transaction->FDSFilterAction;
 
             if ($payment->getIsTransactionPending()) {
                 $message = 'Amount of %1 is pending approval on the gateway.<br/>'
@@ -884,7 +884,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     public function setIsInitializeNeeded($isInitializeNeeded = true)
     {
-        $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
+        $this->_isInitializeNeeded = (bool) $isInitializeNeeded;
     }
 
     /**
@@ -1000,9 +1000,9 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         $responseXmlDocument = $this->transactionService->getTransactionDetails($this, $transactionId);
 
         $response = new \Magento\Framework\DataObject();
-        $response->setXResponseCode((string)$responseXmlDocument->transaction->responseCode)
-            ->setXResponseReasonCode((string)$responseXmlDocument->transaction->responseReasonCode)
-            ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
+        $response->setXResponseCode((string) $responseXmlDocument->transaction->responseCode)
+            ->setXResponseReasonCode((string) $responseXmlDocument->transaction->responseReasonCode)
+            ->setTransactionStatus((string) $responseXmlDocument->transaction->transactionStatus);
 
         return $response;
     }
@@ -1061,6 +1061,6 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     private function fdsFilterActionIsReportOnly($fdsFilterAction)
     {
-        return $fdsFilterAction === (string)$this->dataHelper->getFdsFilterActionLabel('report');
+        return $fdsFilterAction === (string) $this->dataHelper->getFdsFilterActionLabel('report');
     }
 }

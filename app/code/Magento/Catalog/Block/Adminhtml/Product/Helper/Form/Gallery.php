@@ -119,7 +119,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     {
         $images = $this->getDataObject()->getData('media_gallery') ?: null;
         if ($images === null) {
-            $images = ((array)$this->dataPersistor->get('catalog_product'))['product']['media_gallery'] ?? null;
+            $images = ((array) $this->dataPersistor->get('catalog_product'))['product']['media_gallery'] ?? null;
         }
 
         return $images;
@@ -133,7 +133,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getImageValue(string $type)
     {
-        $product = (array)$this->dataPersistor->get('catalog_product');
+        $product = (array) $this->dataPersistor->get('catalog_product');
         return $product['product'][$type] ?? null;
     }
 

@@ -81,8 +81,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->collection->load();
         $selectOrders = $select->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertEquals(['select_field', 'ASC'], array_shift($selectOrders));
-        $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
-        $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
+        $this->assertEquals('some_field ASC', (string) array_shift($selectOrders));
+        $this->assertEquals('other_field DESC', (string) array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
     }
 
@@ -101,8 +101,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
 
         $this->collection->load();
         $selectOrders = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
-        $this->assertEquals('other_field ASC', (string)array_shift($selectOrders));
-        $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
+        $this->assertEquals('other_field ASC', (string) array_shift($selectOrders));
+        $this->assertEquals('some_field ASC', (string) array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
     }
 

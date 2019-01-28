@@ -77,7 +77,7 @@ class Interception implements OperationInterface
         $classesList = [];
         foreach ($this->data['intercepted_paths'] as $paths) {
             if (!is_array($paths)) {
-                $paths = (array)$paths;
+                $paths = (array) $paths;
             }
             foreach ($paths as $path) {
                 $classesList = array_merge($classesList, $this->classesScanner->getList($path));

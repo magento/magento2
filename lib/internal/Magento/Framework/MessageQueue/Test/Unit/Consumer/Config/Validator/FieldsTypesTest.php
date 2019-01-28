@@ -116,7 +116,7 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                     'consumer1' => [
                         'name' => 'consumer1',
                         'queue' => 'queue1',
-                        'consumerInstance' => (object)[],
+                        'consumerInstance' => (object) [],
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',

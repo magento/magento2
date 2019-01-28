@@ -100,7 +100,7 @@ class Factory
             // Pass translations to \Magento\Framework\TranslateInterface from validators
             $translatorCallback = function () {
                 $argc = func_get_args();
-                return (string)new \Magento\Framework\Phrase(array_shift($argc), $argc);
+                return (string) new \Magento\Framework\Phrase(array_shift($argc), $argc);
             };
             /** @var \Magento\Framework\Translate\Adapter $translator */
             $translator = $this->_objectManager->create(\Magento\Framework\Translate\Adapter::class);

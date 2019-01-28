@@ -17,7 +17,7 @@ class ViewCart extends \Magento\Customer\Controller\Adminhtml\Index
         $this->initCurrentCustomer();
         $resultLayout = $this->resultLayoutFactory->create();
         $resultLayout->getLayout()->getBlock('admin.customer.view.cart')->setWebsiteId(
-            (int)$this->getRequest()->getParam('website_id')
+            (int) $this->getRequest()->getParam('website_id')
         );
         return $resultLayout;
     }

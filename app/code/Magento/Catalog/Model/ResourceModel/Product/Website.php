@@ -100,7 +100,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     }
                     $this->getConnection()->insert(
                         $this->getMainTable(),
-                        ['product_id' => (int)$productId, 'website_id' => (int)$websiteId]
+                        ['product_id' => (int) $productId, 'website_id' => (int) $websiteId]
                     );
                 }
             }

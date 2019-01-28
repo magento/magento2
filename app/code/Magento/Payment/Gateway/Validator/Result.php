@@ -34,7 +34,7 @@ class Result implements ResultInterface
         array $failsDescription = [],
         array $errorCodes = []
     ) {
-        $this->isValid = (bool)$isValid;
+        $this->isValid = (bool) $isValid;
         $this->failsDescription = $failsDescription;
         $this->errorCodes = $errorCodes;
     }

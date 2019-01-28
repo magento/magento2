@@ -105,7 +105,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return (array)$this->getSerializer()->unserialize($rules);
+            return (array) $this->getSerializer()->unserialize($rules);
         }
         return [];
     }

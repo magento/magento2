@@ -46,7 +46,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setLoadDefault($loadDefault)
     {
-        $this->setFlag('load_default_store', (bool)$loadDefault);
+        $this->setFlag('load_default_store', (bool) $loadDefault);
         return $this;
     }
 

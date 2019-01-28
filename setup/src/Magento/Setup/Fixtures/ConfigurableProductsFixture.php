@@ -319,7 +319,7 @@ class ConfigurableProductsFixture extends Fixture
             $attributeSetAmount = count(array_keys($defaultAttributeSets));
             mt_srand($index);
 
-            return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
+            return $attributeSetAmount > ($index - 1) % (int) $this->fixtureModel->getValue('categories', 30)
                 ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
                 : 'Default';
         };
@@ -515,7 +515,7 @@ class ConfigurableProductsFixture extends Fixture
         foreach ($configurableProductConfig as $i => &$config) {
             $attributeSet = $config['attributeSet'];
             $attributes = $config['attributes'];
-            $options = (int)$config['options'];
+            $options = (int) $config['options'];
             if ($attributeSet && isset($defaultAttributeSets[$attributeSet])) {
                 // process default attribute sets
                 $attributeSet = $defaultAttributeSets[$attributeSet];
@@ -526,7 +526,7 @@ class ConfigurableProductsFixture extends Fixture
                 $options = array_column($attributes, 'options');
                 $attributes = count($attributes);
             } elseif ($attributes && $options) {
-                $attributes  = (int)$attributes;
+                $attributes  = (int) $attributes;
                 // convert attributes and options to array for process custom attribute set creation
                 $attributesData = array_map(function ($options) use ($config) {
                     return ['options' => $options, 'swatches' => $config['swatches']];
@@ -570,7 +570,7 @@ class ConfigurableProductsFixture extends Fixture
     private function prepareConfigurableConfig($defaultAttributeSets)
     {
         $configurableConfigs = $this->fixtureModel->getValue('configurable_products', []);
-        $configurableConfigs = is_array($configurableConfigs) ? $configurableConfigs : (int)$configurableConfigs;
+        $configurableConfigs = is_array($configurableConfigs) ? $configurableConfigs : (int) $configurableConfigs;
         if (is_int($configurableConfigs)) {
             $configurableConfigs = $this->getDefaultAttributeSetsConfig($defaultAttributeSets, $configurableConfigs);
         } elseif (isset($configurableConfigs['config'])) {

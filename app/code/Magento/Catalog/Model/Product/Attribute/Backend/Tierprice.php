@@ -133,7 +133,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     {
         $attribute = $this->getAttribute();
         $priceRows = $object->getData($attribute->getName());
-        $priceRows = array_filter((array)$priceRows);
+        $priceRows = array_filter((array) $priceRows);
 
         foreach ($priceRows as $priceRow) {
             $percentage = $this->getPercentage($priceRow);

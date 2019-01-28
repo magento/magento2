@@ -173,7 +173,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      */
     public function hasSplit()
     {
-        return $this->hasData('has_split') ? (bool)$this->getData('has_split') : true;
+        return $this->hasData('has_split') ? (bool) $this->getData('has_split') : true;
     }
 
     /**

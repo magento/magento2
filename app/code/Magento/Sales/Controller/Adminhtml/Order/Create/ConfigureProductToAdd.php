@@ -15,7 +15,7 @@ class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Cr
     public function execute()
     {
         // Prepare data
-        $productId = (int)$this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('id');
 
         $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setOk(true);

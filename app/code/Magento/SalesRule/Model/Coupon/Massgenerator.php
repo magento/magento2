@@ -112,8 +112,8 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
 
         $code = '';
         $charsetSize = count($charset);
-        $split = max(0, (int)$this->getDash());
-        $length = max(1, (int)$this->getLength());
+        $split = max(0, (int) $this->getDash());
+        $length = max(1, (int) $this->getLength());
         for ($i = 0; $i < $length; ++$i) {
             $char = $charset[\Magento\Framework\Math\Random::getRandomNumber(0, $charsetSize - 1)];
             if (($split > 0) && (($i % $split) === 0) && ($i !== 0)) {
@@ -200,7 +200,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         $maxProbability = $this->getMaxProbability() ? $this->getMaxProbability() : self::MAX_PROBABILITY_OF_GUESSING;
         $chars = count($this->salesRuleCoupon->getCharset($this->getFormat()));
         $size = $this->getQty();
-        $length = (int)$this->getLength();
+        $length = (int) $this->getLength();
         $maxCodes = pow($chars, $length);
         $probability = $size / $maxCodes;
 
@@ -227,9 +227,9 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         && !empty($data['rule_id'])
         && !empty($data['length'])
         && !empty($data['format'])
-        && (int)$data['qty'] > 0
-        && (int)$data['rule_id'] > 0
-        && (int)$data['length'] > 0;
+        && (int) $data['qty'] > 0
+        && (int) $data['rule_id'] > 0
+        && (int) $data['length'] > 0;
     }
 
     /**

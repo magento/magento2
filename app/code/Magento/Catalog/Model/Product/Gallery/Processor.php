@@ -217,7 +217,7 @@ class Processor
             'file' => $fileName,
             'position' => $position,
             'label' => '',
-            'disabled' => (int)$exclude,
+            'disabled' => (int) $exclude,
             'media_type' => 'image',
             'types' => $mediaAttribute,
             'content' => [
@@ -501,7 +501,7 @@ class Processor
     public function getAffectedFields($object)
     {
         $data = [];
-        $images = (array)$object->getData($this->getAttribute()->getName());
+        $images = (array) $object->getData($this->getAttribute()->getName());
         $tableName = $this->resourceModel->getMainTable();
         foreach ($images['images'] as $value) {
             if (empty($value['value_id'])) {

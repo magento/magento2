@@ -14,8 +14,8 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber
      */
     public function execute()
     {
-        $id = (int)$this->getRequest()->getParam('id');
-        $code = (string)$this->getRequest()->getParam('code');
+        $id = (int) $this->getRequest()->getParam('id');
+        $code = (string) $this->getRequest()->getParam('code');
 
         if ($id && $code) {
             /** @var \Magento\Newsletter\Model\Subscriber $subscriber */

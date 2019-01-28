@@ -20,7 +20,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $rateId = (int)$this->getRequest()->getParam('id');
+        $rateId = (int) $this->getRequest()->getParam('id');
         try {
             /* @var \Magento\Tax\Api\Data\TaxRateInterface */
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);

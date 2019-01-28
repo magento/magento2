@@ -619,7 +619,7 @@ class Checkout
         $this->ignoreAddressValidation();
 
         // check if we came from the Express Checkout button
-        $isButton = (bool)$quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
+        $isButton = (bool) $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
 
         // import shipping address
         $exportedShippingAddress = $this->_getApi()->getExportedShippingAddress();
@@ -654,7 +654,7 @@ class Checkout
         }
 
         // import billing address
-        $requireBillingAddress = (int)$this->_config->getValue(
+        $requireBillingAddress = (int) $this->_config->getValue(
             'requireBillingAddress'
         ) === \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
@@ -983,7 +983,7 @@ class Checkout
 
         foreach ($address->getGroupedAllShippingRates() as $group) {
             foreach ($group as $rate) {
-                $amount = (float)$rate->getPrice();
+                $amount = (float) $rate->getPrice();
                 if ($rate->getErrorMessage()) {
                     continue;
                 }

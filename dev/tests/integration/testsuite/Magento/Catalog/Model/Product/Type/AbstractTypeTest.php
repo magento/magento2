@@ -158,7 +158,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
         $product->loadByAttribute('sku', 'simple');
         // fixture
-        $this->assertTrue((bool)$this->_model->isSalable($product));
+        $this->assertTrue((bool) $this->_model->isSalable($product));
     }
 
     /**

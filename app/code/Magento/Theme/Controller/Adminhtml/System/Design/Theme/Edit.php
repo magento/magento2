@@ -19,7 +19,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      */
     public function execute()
     {
-        $themeId = (int)$this->getRequest()->getParam('id');
+        $themeId = (int) $this->getRequest()->getParam('id');
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $theme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         try {

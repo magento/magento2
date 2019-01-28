@@ -398,7 +398,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected function _populateBeforeSaveData()
     {
         if ($this->getQuote()) {
-            $this->_dataSaveAllowed = (bool)$this->getQuote()->getId();
+            $this->_dataSaveAllowed = (bool) $this->getQuote()->getId();
 
             if ($this->getQuote()->getId()) {
                 $this->setQuoteId($this->getQuote()->getId());
@@ -413,7 +413,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             }
 
             if (!$this->getId()) {
-                $this->setSameAsBilling((int)$this->_isSameAsBilling());
+                $this->setSameAsBilling((int) $this->_isSameAsBilling());
             }
         }
     }

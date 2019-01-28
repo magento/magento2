@@ -79,7 +79,7 @@ class Links extends Form
             }
 
             if (isset($link['sort_order'])) {
-                $currentSortOrder = (int)$link['sort_order'] - 1;
+                $currentSortOrder = (int) $link['sort_order'] - 1;
                 unset($link['sort_order']);
             } else {
                 $currentSortOrder = 0;

@@ -95,7 +95,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!is_object($refField)) {
             /** @var $refField \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
             $refField = $this->_fieldFactory->create(
-                ['fieldData' => ['value' => (string)$refField], 'fieldPrefix' => '']
+                ['fieldData' => ['value' => (string) $refField], 'fieldPrefix' => '']
             );
         }
         $this->_depends[$fieldName][$fieldNameFrom] = $refField;

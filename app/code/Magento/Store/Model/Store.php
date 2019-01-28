@@ -615,7 +615,7 @@ class Store extends AbstractExtensibleModel implements
     {
         $cacheKey = $type . '/' . ($secure === null ? 'null' : ($secure ? 'true' : 'false'));
         if (!isset($this->_baseUrlCache[$cacheKey])) {
-            $secure = $secure === null ? $this->isCurrentlySecure() : (bool)$secure;
+            $secure = $secure === null ? $this->isCurrentlySecure() : (bool) $secure;
             switch ($type) {
                 case UrlInterface::URL_TYPE_WEB:
                     $path = $secure
@@ -1249,7 +1249,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function isActive()
     {
-        return (bool)$this->_getData('is_active');
+        return (bool) $this->_getData('is_active');
     }
 
     /**
@@ -1319,7 +1319,7 @@ class Store extends AbstractExtensibleModel implements
     public function isReadOnly($value = null)
     {
         if (null !== $value) {
-            $this->_isReadOnly = (bool)$value;
+            $this->_isReadOnly = (bool) $value;
         }
         return $this->_isReadOnly;
     }
@@ -1333,7 +1333,7 @@ class Store extends AbstractExtensibleModel implements
     public function getFrontendName()
     {
         if (null === $this->_frontendName) {
-            $storeGroupName = (string)$this->_config
+            $storeGroupName = (string) $this->_config
                 ->getValue(Information::XML_PATH_STORE_INFO_NAME, ScopeInterface::SCOPE_STORE, $this);
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();
         }

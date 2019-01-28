@@ -65,7 +65,7 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         );
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -122,7 +122,7 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         );
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -147,7 +147,7 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
             'test_order_1',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $shippingAddressId = '-20';
 
         $query = $this->prepareMutationQuery(
@@ -175,7 +175,7 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         );
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = $this->prepareMutationQuery(
             $maskedQuoteId,

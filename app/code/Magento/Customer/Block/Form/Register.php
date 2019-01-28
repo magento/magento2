@@ -137,7 +137,7 @@ class Register extends \Magento\Directory\Block\Data
                 $data->setCustomerData(1);
             }
             if (isset($data['region_id'])) {
-                $data['region_id'] = (int)$data['region_id'];
+                $data['region_id'] = (int) $data['region_id'];
             }
             $this->setData('form_data', $data);
         }

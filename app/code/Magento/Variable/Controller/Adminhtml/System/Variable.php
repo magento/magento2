@@ -92,7 +92,7 @@ abstract class Variable extends Action
     protected function _initVariable()
     {
         $variableId = $this->getRequest()->getParam('variable_id', null);
-        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
         /* @var $variable \Magento\Variable\Model\Variable */
         $variable = $this->_objectManager->create(\Magento\Variable\Model\Variable::class);
         if ($variableId) {

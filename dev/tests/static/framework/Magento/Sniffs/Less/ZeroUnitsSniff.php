@@ -70,7 +70,7 @@ class ZeroUnitsSniff implements Sniff
 
         if ((T_DNUMBER === $tokenCode)
             && 0 === strpos($tokenContent, "0")
-            && ((float)$tokenContent < 1)
+            && ((float) $tokenContent < 1)
         ) {
             $phpcsFile->addError('Values starts from "0"', $stackPtr, 'ZeroUnitFound');
         }

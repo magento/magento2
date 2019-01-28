@@ -53,7 +53,7 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
             }
 
             $selectionsCollection = $typeInstance->getSelectionsCollection(
-                [(int)$option->getOptionId()],
+                [(int) $option->getOptionId()],
                 $bundleProduct
             );
             $selectionsCollection->removeAttributeToSelect();

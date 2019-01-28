@@ -109,7 +109,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     {
         parent::_prepareLayout();
         if ($this->isPagerDisplayedOnPage()) {
-            $availableLimit = (int)$this->_scopeConfig->getValue(
+            $availableLimit = (int) $this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
@@ -166,7 +166,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     private function isPagerDisplayedOnPage()
     {
         if (!$this->isPagerDisplayed) {
-            $availableLimit = (int)$this->_scopeConfig->getValue(
+            $availableLimit = (int) $this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );

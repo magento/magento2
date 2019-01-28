@@ -19,8 +19,8 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements H
      */
     public function execute()
     {
-        $id = (int)$this->getRequest()->getParam('id');
-        $code = (string)$this->getRequest()->getParam('code');
+        $id = (int) $this->getRequest()->getParam('id');
+        $code = (string) $this->getRequest()->getParam('code');
 
         if ($id && $code) {
             try {

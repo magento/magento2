@@ -85,6 +85,6 @@ class CancelResponseValidator extends AbstractValidator
         /** @var Validation $error */
         $error = array_pop($errors);
 
-        return (int)$error->code === self::$acceptableTransactionCode;
+        return (int) $error->code === self::$acceptableTransactionCode;
     }
 }

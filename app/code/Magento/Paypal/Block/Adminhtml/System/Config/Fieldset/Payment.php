@@ -63,7 +63,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
         $isPaymentEnabled = false;
         foreach ($activityPaths as $activityPath) {
             $isPaymentEnabled = $isPaymentEnabled
-                || (bool)(string)$this->_backendConfig->getConfigDataValue($activityPath);
+                || (bool) (string) $this->_backendConfig->getConfigDataValue($activityPath);
         }
 
         return $isPaymentEnabled;

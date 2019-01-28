@@ -508,7 +508,7 @@ class Config
      */
     public function addRss($title, $href)
     {
-        $remoteAsset = $this->assetRepo->createRemoteAsset((string)$href, 'unknown');
+        $remoteAsset = $this->assetRepo->createRemoteAsset((string) $href, 'unknown');
         $this->pageAssets->add(
             "link/{$href}",
             $remoteAsset,

@@ -59,7 +59,7 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
             $storeIds = $this->_storeManager->getGroup($this->getParam('group'))->getStoreIds();
             $storeId = array_pop($storeIds);
         } else {
-            $storeId = (int)$this->getParam('store');
+            $storeId = (int) $this->getParam('store');
         }
         $collection = $this->_productsFactory->create()->addAttributeToSelect(
             '*'
@@ -92,8 +92,8 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
             [
                 'header' => __('Price'),
                 'type' => 'currency',
-                'currency_code' => (string)$this->_storeManager->getStore(
-                    (int)$this->getParam('store')
+                'currency_code' => (string) $this->_storeManager->getStore(
+                    (int) $this->getParam('store')
                 )->getBaseCurrencyCode(),
                 'sortable' => false,
                 'index' => 'price'

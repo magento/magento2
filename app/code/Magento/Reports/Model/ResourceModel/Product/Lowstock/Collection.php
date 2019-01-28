@@ -282,7 +282,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         $this->joinInventoryItem();
         $manageStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_manage_stock') . ' = 1',
-            (int)$this->stockConfiguration->getManageStock($storeId),
+            (int) $this->stockConfiguration->getManageStock($storeId),
             $this->_getInventoryItemField('manage_stock')
         );
         $this->getSelect()->where($manageStockExpr . ' = ?', 1);
@@ -300,7 +300,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         $this->joinInventoryItem(['qty']);
         $notifyStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_notify_stock_qty') . ' = 1',
-            (int)$this->stockConfiguration->getNotifyStockQty($storeId),
+            (int) $this->stockConfiguration->getNotifyStockQty($storeId),
             $this->_getInventoryItemField('notify_stock_qty')
         );
         $this->getSelect()->where($this->_getInventoryItemField('qty') . ' < ?', $notifyStockExpr);

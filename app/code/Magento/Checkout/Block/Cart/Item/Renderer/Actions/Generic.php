@@ -58,6 +58,6 @@ class Generic extends Template
      */
     public function isVirtual()
     {
-        return (bool)$this->getItem()->getIsVirtual();
+        return (bool) $this->getItem()->getIsVirtual();
     }
 }

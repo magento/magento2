@@ -119,6 +119,6 @@ class SignUpCommand implements CommandInterface
             }
         }
 
-        return (bool)$result;
+        return (bool) $result;
     }
 }

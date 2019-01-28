@@ -68,7 +68,7 @@ class Phrase implements \JsonSerializable
      */
     public function __construct($text, array $arguments = [])
     {
-        $this->text = (string)$text;
+        $this->text = (string) $text;
         $this->arguments = $arguments;
     }
 

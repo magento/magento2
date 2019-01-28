@@ -313,15 +313,15 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getStatusId()
     {
-        $backordered = (float)$this->getQtyBackordered();
+        $backordered = (float) $this->getQtyBackordered();
         if (!$backordered && $this->getHasChildren()) {
-            $backordered = (float)$this->_getQtyChildrenBackordered();
+            $backordered = (float) $this->_getQtyChildrenBackordered();
         }
-        $canceled = (float)$this->getQtyCanceled();
-        $invoiced = (float)$this->getQtyInvoiced();
-        $ordered = (float)$this->getQtyOrdered();
-        $refunded = (float)$this->getQtyRefunded();
-        $shipped = (float)$this->getQtyShipped();
+        $canceled = (float) $this->getQtyCanceled();
+        $invoiced = (float) $this->getQtyInvoiced();
+        $ordered = (float) $this->getQtyOrdered();
+        $refunded = (float) $this->getQtyRefunded();
+        $shipped = (float) $this->getQtyShipped();
 
         $actuallyOrdered = $ordered - $canceled - $refunded;
 
@@ -364,7 +364,7 @@ class Item extends AbstractModel implements OrderItemInterface
     {
         $backordered = null;
         foreach ($this->_children as $childItem) {
-            $backordered += (float)$childItem->getQtyBackordered();
+            $backordered += (float) $childItem->getQtyBackordered();
         }
 
         return $backordered;

@@ -56,7 +56,7 @@ class Xml implements ParserInterface
      */
     protected function extractModuleName($config)
     {
-        return $this->prepareModuleName((string)$config->attributes()->name);
+        return $this->prepareModuleName((string) $config->attributes()->name);
     }
 
     /**

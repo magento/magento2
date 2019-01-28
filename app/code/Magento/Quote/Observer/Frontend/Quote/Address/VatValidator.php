@@ -64,7 +64,7 @@ class VatValidator
             );
 
             // Store validation results in corresponding quote address
-            $quoteAddress->setVatIsValid((int)$validationResult->getIsValid());
+            $quoteAddress->setVatIsValid((int) $validationResult->getIsValid());
             $quoteAddress->setVatRequestId($validationResult->getRequestIdentifier());
             $quoteAddress->setVatRequestDate($validationResult->getRequestDate());
             $quoteAddress->setVatRequestSuccess($validationResult->getRequestSuccess());
@@ -75,10 +75,10 @@ class VatValidator
             // Restore validation results from corresponding quote address
             $validationResult = new \Magento\Framework\DataObject(
                 [
-                    'is_valid' => (int)$quoteAddress->getVatIsValid(),
-                    'request_identifier' => (string)$quoteAddress->getVatRequestId(),
-                    'request_date' => (string)$quoteAddress->getVatRequestDate(),
-                    'request_success' => (bool)$quoteAddress->getVatRequestSuccess(),
+                    'is_valid' => (int) $quoteAddress->getVatIsValid(),
+                    'request_identifier' => (string) $quoteAddress->getVatRequestId(),
+                    'request_date' => (string) $quoteAddress->getVatRequestDate(),
+                    'request_success' => (bool) $quoteAddress->getVatRequestSuccess(),
                 ]
             );
         }

@@ -20,7 +20,7 @@ class ValidatorResult implements ValidatorResultInterface
      */
     public function addMessage($message)
     {
-        $this->messages[] = (string)$message;
+        $this->messages[] = (string) $message;
     }
 
     /**

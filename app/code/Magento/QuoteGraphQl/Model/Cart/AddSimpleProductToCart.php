@@ -94,7 +94,7 @@ class AddSimpleProductToCart
         if (!isset($sku)) {
             throw new GraphQlInputException(__('Missing key "sku" in cart item data'));
         }
-        return (string)$sku;
+        return (string) $sku;
     }
 
     /**
@@ -110,7 +110,7 @@ class AddSimpleProductToCart
         if (!isset($qty)) {
             throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
         }
-        return (float)$qty;
+        return (float) $qty;
     }
 
     /**

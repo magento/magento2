@@ -263,7 +263,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getLastPageNumber()
     {
-        $collectionSize = (int)$this->getSize();
+        $collectionSize = (int) $this->getSize();
         if (0 === $collectionSize) {
             return 1;
         } elseif ($this->_pageSize) {
@@ -294,7 +294,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($this->_totalRecords === null) {
             $this->_totalRecords = count($this->getItems());
         }
-        return (int)$this->_totalRecords;
+        return (int) $this->_totalRecords;
     }
 
     /**

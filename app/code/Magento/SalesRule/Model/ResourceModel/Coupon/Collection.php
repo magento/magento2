@@ -38,7 +38,7 @@ class Collection extends AbstractCollection
         if ($rule instanceof Rule) {
             $ruleId = $rule->getId();
         } else {
-            $ruleId = (int)$rule;
+            $ruleId = (int) $rule;
         }
 
         $this->addFieldToFilter('rule_id', $ruleId);

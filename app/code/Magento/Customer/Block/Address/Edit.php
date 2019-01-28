@@ -305,7 +305,7 @@ class Edit extends \Magento\Directory\Block\Data
      */
     public function isDefaultBilling()
     {
-        return (bool)$this->getAddress()->isDefaultBilling();
+        return (bool) $this->getAddress()->isDefaultBilling();
     }
 
     /**
@@ -315,7 +315,7 @@ class Edit extends \Magento\Directory\Block\Data
      */
     public function isDefaultShipping()
     {
-        return (bool)$this->getAddress()->isDefaultShipping();
+        return (bool) $this->getAddress()->isDefaultShipping();
     }
 
     /**

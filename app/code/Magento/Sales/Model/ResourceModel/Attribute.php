@@ -99,7 +99,7 @@ class Attribute
                     $this->getConnection()->update(
                         $object->getResource()->getMainTable(),
                         $data,
-                        [$object->getResource()->getIdFieldName() . '= ?' => (int)$object->getId()]
+                        [$object->getResource()->getIdFieldName() . '= ?' => (int) $object->getId()]
                     );
                     $object->addData($data);
                 }

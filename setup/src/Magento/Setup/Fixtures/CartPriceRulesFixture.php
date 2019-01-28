@@ -238,7 +238,7 @@ class CartPriceRulesFixture extends Fixture
 
             $model = $ruleFactory->create();
             $model->loadPost($data);
-            $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+            $useAutoGeneration = (int) !empty($data['use_auto_generation']);
             $model->setUseAutoGeneration($useAutoGeneration);
             $model->save();
         }
@@ -429,7 +429,7 @@ class CartPriceRulesFixture extends Fixture
 
             $model = $ruleFactory->create();
             $model->loadPost($data);
-            $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+            $useAutoGeneration = (int) !empty($data['use_auto_generation']);
             $model->setUseAutoGeneration($useAutoGeneration);
             $model->save();
         }

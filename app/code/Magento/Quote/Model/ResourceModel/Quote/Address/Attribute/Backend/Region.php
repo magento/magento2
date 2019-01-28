@@ -32,7 +32,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function beforeSave($object)
     {
         if (is_numeric($object->getRegion())) {
-            $region = $this->_regionFactory->create()->load((int)$object->getRegion());
+            $region = $this->_regionFactory->create()->load((int) $object->getRegion());
             if ($region) {
                 $object->setRegionId($region->getId());
                 $object->setRegion($region->getCode());

@@ -56,8 +56,8 @@ class Configure extends \Magento\Checkout\Controller\Cart implements HttpGetActi
     public function execute()
     {
         // Extract item and product to configure
-        $id = (int)$this->getRequest()->getParam('id');
-        $productId = (int)$this->getRequest()->getParam('product_id');
+        $id = (int) $this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('product_id');
         $quoteItem = null;
         if ($id) {
             $quoteItem = $this->cart->getQuote()->getItemById($id);

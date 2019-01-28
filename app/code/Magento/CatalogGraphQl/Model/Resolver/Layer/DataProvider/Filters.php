@@ -43,14 +43,14 @@ class Filters
         foreach ($this->filtersProvider->getFilters($layerType) as $filter) {
             if ($filter->getItemsCount()) {
                 $filterGroup = [
-                    'name' => (string)$filter->getName(),
+                    'name' => (string) $filter->getName(),
                     'filter_items_count' => $filter->getItemsCount(),
                     'request_var' => $filter->getRequestVar(),
                 ];
                 /** @var \Magento\Catalog\Model\Layer\Filter\Item $filterItem */
                 foreach ($filter->getItems() as $filterItem) {
                     $filterGroup['filter_items'][] = [
-                        'label' => (string)$filterItem->getLabel(),
+                        'label' => (string) $filterItem->getLabel(),
                         'value_string' => $filterItem->getValueString(),
                         'items_count' => $filterItem->getCount(),
                     ];

@@ -87,7 +87,7 @@ class CategoryProcessor
                 if ($pathSize > 1) {
                     $path = [];
                     for ($i = 1; $i < $pathSize; $i++) {
-                        $name = $collection->getItemById((int)$structure[$i])->getName();
+                        $name = $collection->getItemById((int) $structure[$i])->getName();
                         $path[] = $this->quoteDelimiter($name);
                     }
                     /** @var string $index */

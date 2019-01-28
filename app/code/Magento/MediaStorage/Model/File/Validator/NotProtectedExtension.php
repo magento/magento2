@@ -84,7 +84,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
             foreach ($extensions as &$ext) {
                 $ext = strtolower(trim($ext));
             }
-            $this->_protectedFileExtensions = (array)$extensions;
+            $this->_protectedFileExtensions = (array) $extensions;
         }
         return $this;
     }

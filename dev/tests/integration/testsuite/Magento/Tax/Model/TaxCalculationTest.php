@@ -2677,7 +2677,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         if ($object instanceof \Magento\Framework\DataObject) {
             $data = $object->getData();
         } elseif (is_object($object)) {
-            $data = (array)$object;
+            $data = (array) $object;
         } else {
             throw new \InvalidArgumentException("Provided argument is not an object.");
         }

@@ -63,7 +63,7 @@ class Collection extends ConfigCollection
      */
     public function addScopeIdFilter($scopeId)
     {
-        $this->addFieldToFilter('scope_id', (int)$scopeId);
+        $this->addFieldToFilter('scope_id', (int) $scopeId);
         return $this;
     }
 

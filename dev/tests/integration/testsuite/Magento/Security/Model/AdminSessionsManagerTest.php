@@ -98,7 +98,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         );
         $sessionId = $this->authSession->getSessionId();
         $this->adminSessionInfo->load($sessionId, 'session_id');
-        $this->assertGreaterThanOrEqual(1, (int)$this->adminSessionInfo->getId());
+        $this->assertGreaterThanOrEqual(1, (int) $this->adminSessionInfo->getId());
         $this->auth->logout();
     }
 

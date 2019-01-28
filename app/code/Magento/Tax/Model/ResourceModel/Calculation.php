@@ -71,7 +71,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function deleteByRuleId($ruleId)
     {
         $conn = $this->getConnection();
-        $where = $conn->quoteInto('tax_calculation_rule_id = ?', (int)$ruleId);
+        $where = $conn->quoteInto('tax_calculation_rule_id = ?', (int) $ruleId);
         $conn->delete($this->getMainTable(), $where);
 
         return $this;
@@ -87,7 +87,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getCalculationsById($field, $ruleId)
     {
         $select = $this->getConnection()->select();
-        $select->from($this->getMainTable(), $field)->where('tax_calculation_rule_id = ?', (int)$ruleId);
+        $select->from($this->getMainTable(), $field)->where('tax_calculation_rule_id = ?', (int) $ruleId);
 
         return $this->getConnection()->fetchCol($select);
     }
@@ -276,7 +276,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $productClassId = $request->getProductClassId();
         $ids = is_array($productClassId) ? $productClassId : [$productClassId];
         foreach ($ids as $key => $val) {
-            $ids[$key] = (int)$val; // Make it integer for equal cache keys even in case of null/false/0 values
+            $ids[$key] = (int) $val; // Make it integer for equal cache keys even in case of null/false/0 values
         }
         $ids = array_unique($ids);
         sort($ids);
@@ -301,7 +301,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ]
             )->where(
                 'customer_tax_class_id = ?',
-                (int)$customerClassId
+                (int) $customerClassId
             );
             if ($productClassId) {
                 $select->where('product_tax_class_id IN (?)', $productClassId);
@@ -337,7 +337,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $countryId
             )->where(
                 "rate.tax_region_id IN(?)",
-                [0, (int)$regionId]
+                [0, (int) $regionId]
             );
             $postcodeIsNumeric = is_numeric($postcode);
             $postcodeIsRange = false;

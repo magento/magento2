@@ -72,7 +72,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMaxRecipients($store = null)
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_MAX_RECIPIENTS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -87,7 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMaxEmailPerPeriod($store = null)
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_MAX_PER_HOUR,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -112,7 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLimitBy($store = null)
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_LIMIT_BY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

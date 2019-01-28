@@ -139,7 +139,7 @@ class UiComponent implements ReaderInterface
     {
         $attributes = [];
         foreach ($this->attributes as $attributeName) {
-            $attributes[$attributeName] = (string)$element->getAttribute($attributeName);
+            $attributes[$attributeName] = (string) $element->getAttribute($attributeName);
         }
 
         return $attributes;

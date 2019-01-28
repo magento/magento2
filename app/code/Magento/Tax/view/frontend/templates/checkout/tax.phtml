@@ -52,12 +52,12 @@
                 <th class="mark" style="<?= /* @escapeNotVerified */ $_style ?>" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" scope="row">
                     <?= $block->escapeHtml($rate['title']) ?>
                     <?php if (!is_null($rate['percent'])): ?>
-                        (<?= (float)$rate['percent'] ?>%)
+                        (<?= (float) $rate['percent'] ?>%)
                     <?php endif; ?>
                 </th>
                 <?php if ($isFirst): ?>
                     <td style="<?= /* @escapeNotVerified */ $_style ?>" class="amount" rowspan="<?= count($rates) ?>"
-                       data-th="<?= $block->escapeHtml($rate['title']) ?><?php if (!is_null($rate['percent'])): ?>(<?= (float)$rate['percent'] ?>%)<?php endif; ?>">
+                       data-th="<?= $block->escapeHtml($rate['title']) ?><?php if (!is_null($rate['percent'])): ?>(<?= (float) $rate['percent'] ?>%)<?php endif; ?>">
                         <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount) ?>
                     </td>
                 <?php endif; ?>

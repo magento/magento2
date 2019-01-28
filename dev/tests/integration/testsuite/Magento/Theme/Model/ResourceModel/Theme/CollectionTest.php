@@ -174,7 +174,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $parentIdActual = $collection->clear()->getThemeByFullPath($fullPath)->getParentId();
             if ($themeData['parent_id']) {
                 $parentFullPath = trim($themeData['parent_id'], '{}');
-                $parentIdExpected = (int)$collection->clear()->getThemeByFullPath($parentFullPath)->getId();
+                $parentIdExpected = (int) $collection->clear()->getThemeByFullPath($parentFullPath)->getId();
                 $this->assertEquals(
                     $parentIdActual,
                     $parentIdExpected,

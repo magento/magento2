@@ -61,7 +61,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         }
 
         if (!is_string($value)) {
-            return (float)$value;
+            return (float) $value;
         }
 
         //trim spaces and apostrophes
@@ -80,7 +80,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             $value = str_replace(',', '.', $value);
         }
 
-        return (float)$value;
+        return (float) $value;
     }
 
     /**

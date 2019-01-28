@@ -53,8 +53,8 @@ class Search extends \Magento\Backend\App\Action
     public function execute() : \Magento\Framework\Controller\ResultInterface
     {
         $searchKey = $this->getRequest()->getParam('searchKey');
-        $pageNum = (int)$this->getRequest()->getParam('page');
-        $limit = (int)$this->getRequest()->getParam('limit');
+        $pageNum = (int) $this->getRequest()->getParam('page');
+        $limit = (int) $this->getRequest()->getParam('limit');
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->productSearch->prepareCollection($searchKey, $pageNum, $limit);

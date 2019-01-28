@@ -58,10 +58,10 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
      */
     public function execute()
     {
-        $resetPasswordToken = (string)$this->getRequest()->getParam('token');
+        $resetPasswordToken = (string) $this->getRequest()->getParam('token');
         $isDirectLink = $resetPasswordToken != '';
         if (!$isDirectLink) {
-            $resetPasswordToken = (string)$this->session->getRpToken();
+            $resetPasswordToken = (string) $this->session->getRpToken();
         }
 
         try {

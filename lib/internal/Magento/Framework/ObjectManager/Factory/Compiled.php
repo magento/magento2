@@ -120,7 +120,7 @@ class Compiled extends AbstractFactory
     protected function parseArray(&$array)
     {
         foreach ($array as $key => &$argument) {
-            if ($argument === (array)$argument) {
+            if ($argument === (array) $argument) {
                 if (isset($argument['_i_'])) {
                     $argument = $this->get($argument['_i_']);
                 } elseif (isset($argument['_ins_'])) {

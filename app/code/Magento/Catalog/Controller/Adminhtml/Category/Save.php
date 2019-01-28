@@ -229,7 +229,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
             }
         }
 
-        $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+        $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
 

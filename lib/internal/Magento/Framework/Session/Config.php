@@ -161,7 +161,7 @@ class Config implements ConfigInterface
 
         $domain = $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_DOMAIN, $this->_scopeType);
         $domain = empty($domain) ? $this->_httpRequest->getHttpHost() : $domain;
-        $this->setCookieDomain((string)$domain, $this->_httpRequest->getHttpHost());
+        $this->setCookieDomain((string) $domain, $this->_httpRequest->getHttpHost());
 
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
@@ -262,7 +262,7 @@ class Config implements ConfigInterface
      */
     public function setName($name, $default = null)
     {
-        $name = (string)$name;
+        $name = (string) $name;
         $name = empty($name) ? $default : $name;
         if (!empty($name)) {
             $this->setOption('session.name', $name);
@@ -278,7 +278,7 @@ class Config implements ConfigInterface
      */
     public function getName()
     {
-        return (string)$this->getOption('session.name');
+        return (string) $this->getOption('session.name');
     }
 
     /**
@@ -300,7 +300,7 @@ class Config implements ConfigInterface
      */
     public function getSavePath()
     {
-        return (string)$this->getOption('session.save_path');
+        return (string) $this->getOption('session.save_path');
     }
 
     /**
@@ -317,9 +317,9 @@ class Config implements ConfigInterface
             \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
         );
         if ($validator->isValid($cookieLifetime)) {
-            $this->setOption('session.cookie_lifetime', (int)$cookieLifetime);
+            $this->setOption('session.cookie_lifetime', (int) $cookieLifetime);
         } elseif (null !== $default && $validator->isValid($default)) {
-            $this->setOption('session.cookie_lifetime', (int)$default);
+            $this->setOption('session.cookie_lifetime', (int) $default);
         }
 
         return $this;
@@ -332,7 +332,7 @@ class Config implements ConfigInterface
      */
     public function getCookieLifetime()
     {
-        return (int)$this->getOption('session.cookie_lifetime');
+        return (int) $this->getOption('session.cookie_lifetime');
     }
 
     /**
@@ -344,7 +344,7 @@ class Config implements ConfigInterface
      */
     public function setCookiePath($cookiePath, $default = null)
     {
-        $cookiePath = (string)$cookiePath;
+        $cookiePath = (string) $cookiePath;
         $validator = $this->_validatorFactory->create(
             [],
             \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
@@ -365,7 +365,7 @@ class Config implements ConfigInterface
      */
     public function getCookiePath()
     {
-        return (string)$this->getOption('session.cookie_path');
+        return (string) $this->getOption('session.cookie_path');
     }
 
     /**
@@ -397,7 +397,7 @@ class Config implements ConfigInterface
      */
     public function getCookieDomain()
     {
-        return (string)$this->getOption('session.cookie_domain');
+        return (string) $this->getOption('session.cookie_domain');
     }
 
     /**
@@ -408,7 +408,7 @@ class Config implements ConfigInterface
      */
     public function setCookieSecure($cookieSecure)
     {
-        $this->setOption('session.cookie_secure', (bool)$cookieSecure);
+        $this->setOption('session.cookie_secure', (bool) $cookieSecure);
         return $this;
     }
 
@@ -420,7 +420,7 @@ class Config implements ConfigInterface
      */
     public function getCookieSecure()
     {
-        return (bool)$this->getOption('session.cookie_secure');
+        return (bool) $this->getOption('session.cookie_secure');
     }
 
     /**
@@ -431,7 +431,7 @@ class Config implements ConfigInterface
      */
     public function setCookieHttpOnly($cookieHttpOnly)
     {
-        $this->setOption('session.cookie_httponly', (bool)$cookieHttpOnly);
+        $this->setOption('session.cookie_httponly', (bool) $cookieHttpOnly);
         return $this;
     }
 
@@ -443,7 +443,7 @@ class Config implements ConfigInterface
      */
     public function getCookieHttpOnly()
     {
-        return (bool)$this->getOption('session.cookie_httponly');
+        return (bool) $this->getOption('session.cookie_httponly');
     }
 
     /**
@@ -454,7 +454,7 @@ class Config implements ConfigInterface
      */
     public function setUseCookies($useCookies)
     {
-        $this->setOption('session.use_cookies', (bool)$useCookies);
+        $this->setOption('session.use_cookies', (bool) $useCookies);
         return $this;
     }
 
@@ -466,7 +466,7 @@ class Config implements ConfigInterface
      */
     public function getUseCookies()
     {
-        return (bool)$this->getOption('session.use_cookies');
+        return (bool) $this->getOption('session.use_cookies');
     }
 
     /**
@@ -479,7 +479,7 @@ class Config implements ConfigInterface
     {
         $value = ini_get($option);
         if (in_array($option, $this->booleanOptions)) {
-            $value = (bool)$value;
+            $value = (bool) $value;
         }
 
         return $value;

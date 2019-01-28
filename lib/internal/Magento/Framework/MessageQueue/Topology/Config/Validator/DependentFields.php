@@ -19,7 +19,7 @@ class DependentFields implements ValidatorInterface
     {
         $errors = [];
         foreach ($configData as $name => $data) {
-            foreach ((array)$data['bindings'] as $binding) {
+            foreach ((array) $data['bindings'] as $binding) {
                 if (isset($data['type']) && $data['type'] == 'topic' && !isset($binding['topic'])) {
                     $errors[] = 'Topic name is required for topic based exchange: ' . $name;
                 }

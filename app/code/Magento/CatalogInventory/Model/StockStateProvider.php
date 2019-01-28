@@ -91,7 +91,7 @@ class StockStateProvider implements StockStateProviderInterface
      */
     public function verifyNotification(StockItemInterface $stockItem)
     {
-        return (float)$stockItem->getQty() < $stockItem->getNotifyStockQty();
+        return (float) $stockItem->getQty() < $stockItem->getNotifyStockQty();
     }
 
     /**
@@ -180,7 +180,7 @@ class StockStateProvider implements StockStateProviderInterface
 
                         $result->setItemBackorders($backOrderQty);
                     } else {
-                        $orderedItems = (int)$stockItem->getOrderedItems();
+                        $orderedItems = (int) $stockItem->getOrderedItems();
 
                         // Available item qty in stock excluding item qty in other quotes
                         $qtyAvailable = ($stockItem->getQty() - ($summaryQty - $qty)) * 1;
@@ -224,7 +224,7 @@ class StockStateProvider implements StockStateProviderInterface
                 }
             } else {
                 if (!$stockItem->getIsChildItem()) {
-                    $stockItem->setOrderedItems($qty + (int)$stockItem->getOrderedItems());
+                    $stockItem->setOrderedItems($qty + (int) $stockItem->getOrderedItems());
                 }
             }
         }
@@ -276,7 +276,7 @@ class StockStateProvider implements StockStateProviderInterface
             return $qty;
         }
 
-        $qtyIncrements = (int)$stockItem->getQtyIncrements();
+        $qtyIncrements = (int) $stockItem->getQtyIncrements();
         // Currently only integer increments supported
         if ($qtyIncrements < 2) {
             return $qty;
@@ -367,7 +367,7 @@ class StockStateProvider implements StockStateProviderInterface
                     }
                 }
             }
-            $stockQty = (float)$stockQty;
+            $stockQty = (float) $stockQty;
             if ($stockQty < 0 || !$stockItem->getManageStock() || !$stockItem->getIsInStock()
                 || !$product->isSaleable()
             ) {
@@ -375,7 +375,7 @@ class StockStateProvider implements StockStateProviderInterface
             }
             $stockItem->setStockQty($stockQty);
         }
-        return (float)$stockItem->getData('stock_qty');
+        return (float) $stockItem->getData('stock_qty');
     }
 
     /**

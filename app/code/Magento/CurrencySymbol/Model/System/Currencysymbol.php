@@ -273,7 +273,7 @@ class Currencysymbol
     protected function _unserializeStoreConfig($configPath, $storeId = null)
     {
         $result = [];
-        $configData = (string)$this->_scopeConfig->getValue(
+        $configData = (string) $this->_scopeConfig->getValue(
             $configPath,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId

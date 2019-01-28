@@ -335,7 +335,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                             $websiteId
                         );
                     }
-                    $item->setProductCount((int)$this->_conn->fetchOne($select, $bind));
+                    $item->setProductCount((int) $this->_conn->fetchOne($select, $bind));
                 } else {
                     $item->setProductCount(0);
                 }
@@ -467,7 +467,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addNavigationMaxDepthFilter()
     {
-        $navigationMaxDepth = (int)$this->scopeConfig->getValue(
+        $navigationMaxDepth = (int) $this->scopeConfig->getValue(
             'catalog/navigation/max_depth',
             ScopeInterface::SCOPE_STORE
         );

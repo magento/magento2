@@ -142,7 +142,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
                 throw new \Magento\Framework\Exception\LocalizedException(__($configureResult->getMessage()));
             }
 
-            $currentStoreId = (int)$configureResult->getCurrentStoreId();
+            $currentStoreId = (int) $configureResult->getCurrentStoreId();
             if (!$currentStoreId) {
                 $currentStoreId = $this->_storeManager->getStore()->getId();
             }
@@ -153,7 +153,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_coreRegistry->register('product', $product);
 
             // Register customer we're working with
-            $customerId = (int)$configureResult->getCurrentCustomerId();
+            $customerId = (int) $configureResult->getCurrentCustomerId();
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
             // Prepare buy request values

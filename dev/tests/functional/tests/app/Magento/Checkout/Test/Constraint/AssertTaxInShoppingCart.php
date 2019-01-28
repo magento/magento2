@@ -33,7 +33,7 @@ class AssertTaxInShoppingCart extends AbstractConstraint
             $checkoutCart->open();
         }
 
-        $fixtureTaxAmount = number_format((float)$cart->getTaxAmount(), 2);
+        $fixtureTaxAmount = number_format((float) $cart->getTaxAmount(), 2);
         $pageTaxAmount = $checkoutCart->getTotalsBlock()->getTax();
         \PHPUnit\Framework\Assert::assertEquals(
             $fixtureTaxAmount,

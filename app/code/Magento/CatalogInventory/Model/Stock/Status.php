@@ -118,7 +118,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getStockStatus(): int
     {
-        return (int)$this->getData(self::KEY_STOCK_STATUS);
+        return (int) $this->getData(self::KEY_STOCK_STATUS);
     }
 
     //@codeCoverageIgnoreEnd

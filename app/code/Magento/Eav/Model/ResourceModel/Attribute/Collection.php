@@ -161,7 +161,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
             $extraColumns[$columnName] = $columnName;
         }
 
-        $this->addBindParam('mt_entity_type_id', (int)$entityType->getId());
+        $this->addBindParam('mt_entity_type_id', (int) $entityType->getId());
         $select->join(
             ['additional_table' => $this->getTable($extraTable)],
             'additional_table.attribute_id = main_table.attribute_id',
@@ -204,7 +204,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
             'scope_table.attribute_id = main_table.attribute_id AND scope_table.website_id = :scope_website_id',
             $scopeColumns
         );
-        $websiteId = $this->getWebsite() ? (int)$this->getWebsite()->getId() : 0;
+        $websiteId = $this->getWebsite() ? (int) $this->getWebsite()->getId() : 0;
         $this->addBindParam('scope_website_id', $websiteId);
 
         return $this;

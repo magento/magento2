@@ -104,7 +104,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
                 $creditmemo->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
-                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline']);
+                $creditmemoManagement->refund($creditmemo, (bool) $data['do_offline']);
 
                 if (!empty($data['send_email'])) {
                     $this->creditmemoSender->send($creditmemo);

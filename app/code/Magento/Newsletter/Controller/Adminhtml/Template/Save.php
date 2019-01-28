@@ -26,7 +26,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
         }
         $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class);
 
-        $id = (int)$request->getParam('id');
+        $id = (int) $request->getParam('id');
         if ($id) {
             $template->load($id);
         }

@@ -129,10 +129,10 @@ class Save extends Action implements HttpPostActionInterface
             );
             $addressToSave->setCustomerId($customer->getId());
             $addressToSave->setIsDefaultBilling(
-                (bool)$this->getRequest()->getParam('default_billing', false)
+                (bool) $this->getRequest()->getParam('default_billing', false)
             );
             $addressToSave->setIsDefaultShipping(
-                (bool)$this->getRequest()->getParam('default_shipping', false)
+                (bool) $this->getRequest()->getParam('default_shipping', false)
             );
             if ($addressId) {
                 $addressToSave->setId($addressId);

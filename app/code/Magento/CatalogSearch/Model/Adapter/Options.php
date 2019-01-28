@@ -40,16 +40,16 @@ class Options implements OptionsInterface
     public function get()
     {
         return [
-            'interval_division_limit' => (int)$this->scopeConfig->getValue(
+            'interval_division_limit' => (int) $this->scopeConfig->getValue(
                 self::XML_PATH_INTERVAL_DIVISION_LIMIT,
                 ScopeInterface::SCOPE_STORE
             ),
-            'range_step' => (float)$this->scopeConfig->getValue(
+            'range_step' => (float) $this->scopeConfig->getValue(
                 self::XML_PATH_RANGE_STEP,
                 ScopeInterface::SCOPE_STORE
             ),
             'min_range_power' => 10,
-            'max_intervals_number' => (int)$this->scopeConfig->getValue(
+            'max_intervals_number' => (int) $this->scopeConfig->getValue(
                 self::XML_PATH_RANGE_MAX_INTERVALS,
                 ScopeInterface::SCOPE_STORE
             )

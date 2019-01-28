@@ -68,9 +68,9 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resetPasswordToken = (string)$this->getRequest()->getQuery('token');
-        $password = (string)$this->getRequest()->getPost('password');
-        $passwordConfirmation = (string)$this->getRequest()->getPost('password_confirmation');
+        $resetPasswordToken = (string) $this->getRequest()->getQuery('token');
+        $password = (string) $this->getRequest()->getPost('password');
+        $passwordConfirmation = (string) $this->getRequest()->getPost('password_confirmation');
 
         if ($password !== $passwordConfirmation) {
             $this->messageManager->addError(__("New Password and Confirm New Password values didn't match."));

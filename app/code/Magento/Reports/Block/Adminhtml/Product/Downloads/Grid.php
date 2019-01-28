@@ -55,7 +55,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             $storeIds = $this->_storeManager->getGroup($this->getRequest()->getParam('group'))->getStoreIds();
             $storeId = array_pop($storeIds);
         } elseif ($this->getRequest()->getParam('store')) {
-            $storeId = (int)$this->getRequest()->getParam('store');
+            $storeId = (int) $this->getRequest()->getParam('store');
         } else {
             $storeId = '';
         }

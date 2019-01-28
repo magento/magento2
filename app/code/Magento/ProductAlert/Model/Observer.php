@@ -441,7 +441,7 @@ class Observer
     {
         $alertStoreId = $alert->getStoreId();
         if ($alertStoreId) {
-            $email->setStoreId((int)$alertStoreId);
+            $email->setStoreId((int) $alertStoreId);
         }
 
         return $this;

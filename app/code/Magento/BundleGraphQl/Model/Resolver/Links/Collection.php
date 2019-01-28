@@ -117,11 +117,11 @@ class Collection
                 'price' => $link->getSelectionPriceValue(),
                 'position' => $link->getPosition(),
                 'id' => $link->getSelectionId(),
-                'qty' => (int)$link->getSelectionQty(),
-                'is_default' => (bool)$link->getIsDefault(),
+                'qty' => (int) $link->getSelectionQty(),
+                'is_default' => (bool) $link->getIsDefault(),
                 'price_type' => $this->enumLookup->getEnumValueFromField(
                     'PriceTypeEnum',
-                    (string)$link->getSelectionPriceType()
+                    (string) $link->getSelectionPriceType()
                 ) ?: 'DYNAMIC',
                 'can_change_quantity' => $link->getSelectionCanChangeQty(),
             ];

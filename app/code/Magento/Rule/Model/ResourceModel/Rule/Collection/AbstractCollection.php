@@ -120,7 +120,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     public function addIsActiveFilter($isActive = 1)
     {
         if (!$this->getFlag('is_active_filter')) {
-            $this->addFieldToFilter('is_active', (int)$isActive ? 1 : 0);
+            $this->addFieldToFilter('is_active', (int) $isActive ? 1 : 0);
             $this->setFlag('is_active_filter', true);
         }
         return $this;

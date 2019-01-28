@@ -36,7 +36,7 @@ $stores = $block->getStoresSortedBySortOrder();
             <tbody data-role="options-container" class="ignore-validate"></tbody>
             <tfoot>
             <tr>
-                <th colspan="<?= (int)$storetotal ?>" class="validation">
+                <th colspan="<?= (int) $storetotal ?>" class="validation">
                     <input type="hidden" class="required-dropdown-attribute-entry" name="dropdown_attribute_validation"/>
                     <input type="hidden" class="required-dropdown-attribute-unique" name="dropdown_attribute_validation_unique"/>
                 </th>
@@ -98,8 +98,8 @@ $stores = $block->getStoresSortedBySortOrder();
             "*": {
                 "Magento_Catalog/js/options": {
                     "attributesData": <?= /* @noEscape */ json_encode($values, JSON_HEX_QUOT) ?>,
-                    "isSortable":  <?= (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
-                    "isReadOnly": <?= (int)$block->getReadOnly() ?>
+                    "isSortable":  <?= (int) (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
+                    "isReadOnly": <?= (int) $block->getReadOnly() ?>
                 },
                 "Magento_Catalog/catalog/product/attribute/unique-validate": {
                     "element": "required-dropdown-attribute-unique",

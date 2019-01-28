@@ -20,10 +20,10 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      */
     public function execute()
     {
-        $redirectBack = (bool)$this->getRequest()->getParam('back', false);
+        $redirectBack = (bool) $this->getRequest()->getParam('back', false);
         $themeData = $this->getRequest()->getParam('theme');
         $customCssData = $this->getRequest()->getParam('custom_css_content');
-        $removeJsFiles = (array)$this->getRequest()->getParam('js_removed_files');
+        $removeJsFiles = (array) $this->getRequest()->getParam('js_removed_files');
         $reorderJsFiles = array_keys($this->getRequest()->getParam('js_order', []));
 
         /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */

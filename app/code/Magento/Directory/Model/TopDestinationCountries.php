@@ -36,7 +36,7 @@ class TopDestinationCountries
      */
     public function getTopDestinations()
     {
-        $destinations = (string)$this->scopeConfig->getValue(
+        $destinations = (string) $this->scopeConfig->getValue(
             self::CONFIG_DESTINATIONS_PATH,
             ScopeInterface::SCOPE_STORE
         );

@@ -158,14 +158,14 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected function _getNodesArray($node)
     {
         $result = [
-            'id' => (int)$node->getId(),
-            'parent_id' => (int)$node->getParentId(),
-            'children_count' => (int)$node->getChildrenCount(),
-            'is_active' => (bool)$node->getIsActive(),
+            'id' => (int) $node->getId(),
+            'parent_id' => (int) $node->getParentId(),
+            'children_count' => (int) $node->getChildrenCount(),
+            'is_active' => (bool) $node->getIsActive(),
             // Scrub names for raw js output
             'name' => $this->escapeHtml($node->getName()),
-            'level' => (int)$node->getLevel(),
-            'product_count' => (int)$node->getProductCount(),
+            'level' => (int) $node->getLevel(),
+            'product_count' => (int) $node->getProductCount(),
         ];
 
         if ($node->getParentId() == Category::TREE_ROOT_ID && !in_array($result['id'], $this->_allowedCategoryIds)) {

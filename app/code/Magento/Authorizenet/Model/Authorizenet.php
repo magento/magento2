@@ -221,11 +221,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         }
 
         $response->setFdsFilterAction(
-            $this->dataHelper->getFdsFilterActionLabel((string)$responseXmlDocument->transaction->FDSFilterAction)
+            $this->dataHelper->getFdsFilterActionLabel((string) $responseXmlDocument->transaction->FDSFilterAction)
         );
-        $response->setAvsResponse((string)$responseXmlDocument->transaction->AVSResponse);
-        $response->setCardCodeResponse((string)$responseXmlDocument->transaction->cardCodeResponse);
-        $response->setCavvResponse((string)$responseXmlDocument->transaction->CAVVResponse);
+        $response->setAvsResponse((string) $responseXmlDocument->transaction->AVSResponse);
+        $response->setCardCodeResponse((string) $responseXmlDocument->transaction->cardCodeResponse);
+        $response->setCavvResponse((string) $responseXmlDocument->transaction->CAVVResponse);
         $response->setFraudFilters($this->getFraudFilters($responseXmlDocument->transaction->FDSFilters));
 
         return $response;
@@ -243,8 +243,8 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         foreach ($fraudFilters->FDSFilter as $filer) {
             $result[] = [
-                'name' => (string)$filer->name,
-                'action' => $this->dataHelper->getFdsFilterActionLabel((string)$filer->action)
+                'name' => (string) $filer->name,
+                'action' => $this->dataHelper->getFdsFilterActionLabel((string) $filer->action)
             ];
         }
 
@@ -412,8 +412,8 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         $r = explode(self::RESPONSE_DELIM_CHAR, $responseBody);
         if ($r) {
-            $result->setXResponseCode((int)str_replace('"', '', $r[0]))
-                ->setXResponseReasonCode((int)str_replace('"', '', $r[2]))
+            $result->setXResponseCode((int) str_replace('"', '', $r[0]))
+                ->setXResponseReasonCode((int) str_replace('"', '', $r[2]))
                 ->setXResponseReasonText($r[3])
                 ->setXAvsCode($r[5])
                 ->setXTransId($r[6])

@@ -107,11 +107,11 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
                 [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE]
             );
         $this->configWriterMock
-            ->expects($this->exactly((int)$isExecuted))
+            ->expects($this->exactly((int) $isExecuted))
             ->method('delete')
             ->with(SubscriptionUpdateHandler::UPDATE_CRON_STRING_PATH);
         $this->reinitableConfigMock
-            ->expects($this->exactly((int)$isExecuted))
+            ->expects($this->exactly((int) $isExecuted))
             ->method('reinit')
             ->with();
     }

@@ -59,7 +59,7 @@ class Labels extends \Magento\Backend\Block\Template
      */
     public function getLabelValues()
     {
-        $values = (array)$this->getAttributeObject()->getFrontend()->getLabel();
+        $values = (array) $this->getAttributeObject()->getFrontend()->getLabel();
         $storeLabels = $this->getAttributeObject()->getStoreLabels();
         foreach ($this->getStores() as $store) {
             if ($store->getId() != 0) {

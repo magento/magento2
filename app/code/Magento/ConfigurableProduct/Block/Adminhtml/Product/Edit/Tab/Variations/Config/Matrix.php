@@ -188,8 +188,8 @@ class Matrix extends \Magento\Backend\Block\Template
     protected function getAttributes()
     {
         if (!$this->hasData('attributes')) {
-            $attributes = (array)$this->_configurableType->getConfigurableAttributesAsArray($this->getProduct());
-            $productData = (array)$this->getRequest()->getParam('product');
+            $attributes = (array) $this->_configurableType->getConfigurableAttributesAsArray($this->getProduct());
+            $productData = (array) $this->getRequest()->getParam('product');
             if (isset($productData['configurable_attributes_data'])) {
                 $configurableData = $productData['configurable_attributes_data'];
                 foreach ($attributes as $key => $attribute) {

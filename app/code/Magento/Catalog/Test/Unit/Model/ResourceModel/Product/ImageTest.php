@@ -129,7 +129,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->willReturn($this->getVisibleImagesSelectMock());
 
-        $batchCount = (int)ceil($imagesCount / $batchSize);
+        $batchCount = (int) ceil($imagesCount / $batchSize);
         $fetchResultsCallback = $this->getFetchResultCallbackForBatches($imagesCount, $batchSize);
         $this->connectionMock->expects($this->exactly($batchCount))
             ->method('fetchAll')

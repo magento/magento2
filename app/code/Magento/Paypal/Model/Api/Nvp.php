@@ -1288,7 +1288,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
          * must not fails place order. The old Paypal interface does not lock 'Send' button
          * it may result to re-send data.
          */
-        if (in_array((string)ProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED, $this->_callErrors)) {
+        if (in_array((string) ProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED, $this->_callErrors)) {
             return;
         }
 

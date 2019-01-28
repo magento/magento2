@@ -100,7 +100,7 @@ class Head implements Layout\ReaderInterface
     {
         $attributes = [];
         foreach ($element->attributes() as $attrName => $attrValue) {
-            $attributes[$attrName] = (string)$attrValue;
+            $attributes[$attrName] = (string) $attrValue;
         }
         return $attributes;
     }

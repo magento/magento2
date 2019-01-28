@@ -73,8 +73,8 @@ class Visual extends AbstractSwatch
         $data = [
             'attributesData' => $values,
             'uploadActionUrl' => $this->getUrl('swatches/iframe/show'),
-            'isSortable' => (int)(!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
-            'isReadOnly' => (int)$this->getReadOnly()
+            'isSortable' => (int) (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
+            'isReadOnly' => (int) $this->getReadOnly()
         ];
 
         return json_encode($data);

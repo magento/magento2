@@ -51,7 +51,7 @@ class PayflowConfig extends Config
      */
     public function getTransactionUrl($testMode = null)
     {
-        $testMode = $testMode === null ? $this->getValue('sandbox_flag') : (bool)$testMode;
+        $testMode = $testMode === null ? $this->getValue('sandbox_flag') : (bool) $testMode;
         if ($testMode) {
             return $this->methodInstance->getConfigData('transaction_url_test_mode');
         }

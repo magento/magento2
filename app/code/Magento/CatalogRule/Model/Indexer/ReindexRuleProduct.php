@@ -87,7 +87,7 @@ class ReindexRuleProduct
         $fromTime = strtotime($rule->getFromDate());
         $toTime = strtotime($rule->getToDate());
         $toTime = $toTime ? $toTime + \Magento\CatalogRule\Model\Indexer\IndexBuilder::SECONDS_IN_DAY - 1 : 0;
-        $sortOrder = (int)$rule->getSortOrder();
+        $sortOrder = (int) $rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();

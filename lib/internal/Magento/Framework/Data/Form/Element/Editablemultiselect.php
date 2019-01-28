@@ -122,7 +122,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         $html = '<option value="' . $this->_escape($option['value']) . '"';
         $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
         $html .= isset($option['style']) ? 'style="' . $option['style'] . '"' : '';
-        if (in_array((string)$option['value'], $selected)) {
+        if (in_array((string) $option['value'], $selected)) {
             $html .= ' selected="selected"';
         }
 

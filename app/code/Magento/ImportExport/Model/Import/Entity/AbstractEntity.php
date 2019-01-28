@@ -476,7 +476,7 @@ abstract class AbstractEntity
         $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL,
         $errorDescription = null
     ) {
-        $errorCode = (string)$errorCode;
+        $errorCode = (string) $errorCode;
         $this->getErrorAggregator()->addError(
             $errorCode,
             $errorLevel,
@@ -656,7 +656,7 @@ abstract class AbstractEntity
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode]);
-                $valid = (float)$val == $val;
+                $valid = (float) $val == $val;
                 break;
             case 'select':
             case 'multiselect':
@@ -664,7 +664,7 @@ abstract class AbstractEntity
                 break;
             case 'int':
                 $val = trim($rowData[$attrCode]);
-                $valid = (int)$val == $val;
+                $valid = (int) $val == $val;
                 break;
             case 'datetime':
                 $val = trim($rowData[$attrCode]);
@@ -688,7 +688,7 @@ abstract class AbstractEntity
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = true;
         }
-        return (bool)$valid;
+        return (bool) $valid;
     }
 
     /**

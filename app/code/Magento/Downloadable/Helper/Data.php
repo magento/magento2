@@ -29,7 +29,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         switch ($link->getIsShareable()) {
             case Link::LINK_SHAREABLE_YES:
             case Link::LINK_SHAREABLE_NO:
-                $shareable = (bool)$link->getIsShareable();
+                $shareable = (bool) $link->getIsShareable();
                 break;
             case Link::LINK_SHAREABLE_CONFIG:
                 $shareable = $this->scopeConfig->isSetFlag(

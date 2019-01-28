@@ -102,7 +102,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function getBlockName()
     {
-        $tagName = (string)$this->getName();
+        $tagName = (string) $this->getName();
         $isThisBlock = empty($this['name']) || !in_array(
             $tagName,
             [self::TYPE_BLOCK, self::TYPE_REFERENCE_BLOCK]
@@ -111,7 +111,7 @@ class Element extends \Magento\Framework\Simplexml\Element
         if ($isThisBlock) {
             return false;
         }
-        return (string)$this['name'];
+        return (string) $this['name'];
     }
 
     /**
@@ -161,7 +161,7 @@ class Element extends \Magento\Framework\Simplexml\Element
     {
         $parent = $this->getParent();
         if (isset($parent['name']) && !isset($this['parent'])) {
-            $this->addAttribute('parent', (string)$parent['name']);
+            $this->addAttribute('parent', (string) $parent['name']);
         }
 
         return $this;
@@ -185,7 +185,7 @@ class Element extends \Magento\Framework\Simplexml\Element
     public function prepareAction()
     {
         $parent = $this->getParent();
-        $this->addAttribute('block', (string)$parent['name']);
+        $this->addAttribute('block', (string) $parent['name']);
 
         return $this;
     }
@@ -207,6 +207,6 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function isCacheable()
     {
-        return !(bool)count($this->xpath('//' . self::TYPE_BLOCK . '[@cacheable="false"]'));
+        return !(bool) count($this->xpath('//' . self::TYPE_BLOCK . '[@cacheable="false"]'));
     }
 }

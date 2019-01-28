@@ -69,7 +69,7 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
             ->with($this->quote->getId())
             ->willReturn($this->quote);
 
-        $this->paymentFailures->handle((int)$this->quote->getId(), $errorMessage->render());
+        $this->paymentFailures->handle((int) $this->quote->getId(), $errorMessage->render());
 
         $paymentReflection = new \ReflectionClass($this->paymentFailures);
         $templateTimeMethod = $paymentReflection->getMethod('getLocaleDate');

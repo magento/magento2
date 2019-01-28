@@ -160,7 +160,7 @@ class Topmenu
             'name' => $category->getName(),
             'id' => 'category-node-' . $category->getId(),
             'url' => $this->catalogCategory->getCategoryUrl($category),
-            'has_active' => in_array((string)$category->getId(), explode('/', $currentCategory->getPath()), true),
+            'has_active' => in_array((string) $category->getId(), explode('/', $currentCategory->getPath()), true),
             'is_active' => $category->getId() == $currentCategory->getId(),
             'is_category' => true,
             'is_parent_active' => $isParentActive

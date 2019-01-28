@@ -364,7 +364,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addSetInfo($flag = true)
     {
-        $this->_addSetInfoFlag = (bool)$flag;
+        $this->_addSetInfoFlag = (bool) $flag;
         return $this;
     }
 
@@ -463,7 +463,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $connection = $this->getConnection();
         $joinExpression = $connection->quoteInto(
             'al.attribute_id = main_table.attribute_id AND al.store_id = ?',
-            (int)$storeId
+            (int) $storeId
         );
         $this->getSelect()->joinLeft(
             ['al' => $this->getTable('eav_attribute_label')],

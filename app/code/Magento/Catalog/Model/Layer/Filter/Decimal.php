@@ -75,8 +75,8 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         }
 
         list($index, $range) = $filter;
-        if ((int)$index && (int)$range) {
-            $this->dataProvider->setRange((int)$range);
+        if ((int) $index && (int) $range) {
+            $this->dataProvider->setRange((int) $range);
 
             $this->dataProvider->getResource()->applyFilterToCollection($this, $range, $index);
             $this->getLayer()->getState()->addFilter(

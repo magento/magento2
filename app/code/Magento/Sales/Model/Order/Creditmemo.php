@@ -509,7 +509,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         $amount = trim($amount);
         if (substr($amount, -1) == '%') {
-            $amount = (float)substr($amount, 0, -1);
+            $amount = (float) substr($amount, 0, -1);
             $amount = $this->getOrder()->getGrandTotal() * $amount / 100;
         }
 
@@ -531,7 +531,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         $amount = trim($amount);
         if (substr($amount, -1) == '%') {
-            $amount = (float)substr($amount, 0, -1);
+            $amount = (float) substr($amount, 0, -1);
             $amount = $this->getOrder()->getGrandTotal() * $amount / 100;
         }
 

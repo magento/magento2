@@ -54,6 +54,6 @@ class DelegateCreate extends Action implements HttpGetActionInterface
             return $this->resultRedirectFactory->create()->setPath('/');
         }
 
-        return $this->delegateService->delegateNew((int)$orderId);
+        return $this->delegateService->delegateNew((int) $orderId);
     }
 }

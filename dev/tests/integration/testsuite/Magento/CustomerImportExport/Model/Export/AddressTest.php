@@ -117,7 +117,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 foreach ($defaultAddressMap as $exportCode => $code) {
                     $this->assertEquals(
                         $address->getData($code),
-                        (int)$data['data'][$address->getId()][$exportCode],
+                        (int) $data['data'][$address->getId()][$exportCode],
                         'Attribute "' . $code . '" is not equal'
                     );
                 }

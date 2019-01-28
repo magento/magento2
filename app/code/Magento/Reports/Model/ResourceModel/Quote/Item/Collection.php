@@ -174,9 +174,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $productConnection = $this->productResource->getConnection();
         $productAttrName = $this->productResource->getAttribute('name');
-        $productAttrNameId = (int)$productAttrName->getAttributeId();
+        $productAttrNameId = (int) $productAttrName->getAttributeId();
         $productAttrPrice = $this->productResource->getAttribute('price');
-        $productAttrPriceId = (int)$productAttrPrice->getAttributeId();
+        $productAttrPriceId = (int) $productAttrPrice->getAttributeId();
 
         $linkField = $this->productResource->getEntity()->getLinkField();
         $select = clone $this->productResource->getSelect();

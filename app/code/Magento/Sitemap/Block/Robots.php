@@ -81,8 +81,8 @@ class Robots extends AbstractBlock implements IdentityInterface
 
         $storeIds = [];
         foreach ($website->getStoreIds() as $storeId) {
-            if ((bool)$this->sitemapHelper->getEnableSubmissionRobots($storeId)) {
-                $storeIds[] = (int)$storeId;
+            if ((bool) $this->sitemapHelper->getEnableSubmissionRobots($storeId)) {
+                $storeIds[] = (int) $storeId;
             }
         }
 

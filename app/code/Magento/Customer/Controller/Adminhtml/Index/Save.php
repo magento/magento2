@@ -250,7 +250,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 // Done Saving customer, finish save action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
-                $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
+                $returnToEdit = (bool) $this->getRequest()->getParam('back', false);
             } catch (\Magento\Framework\Validator\Exception $exception) {
                 $messages = $exception->getMessages();
                 if (empty($messages)) {

@@ -45,7 +45,7 @@ class ChildrenValidationLocator
     {
         $type = $item->getProduct()->getTypeId();
         if (isset($this->productTypeChildrenValidationMap[$type])) {
-            return (bool)$this->productTypeChildrenValidationMap[$type];
+            return (bool) $this->productTypeChildrenValidationMap[$type];
         }
 
         return true;

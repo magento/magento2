@@ -219,7 +219,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
-        return (int)$this->_totalRecords;
+        return (int) $this->_totalRecords;
     }
 
     /**
@@ -310,7 +310,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     private function _setOrder($field, $direction, $unshift = false)
     {
         $this->_isOrdersRendered = false;
-        $field = (string)$this->_getMappedField($field);
+        $field = (string) $this->_getMappedField($field);
         $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
 
         unset($this->_orders[$field]);

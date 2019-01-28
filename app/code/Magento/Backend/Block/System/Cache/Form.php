@@ -71,7 +71,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'name' => 'enable[' . $type . ']',
                     'label' => __($label),
                     'value' => 1,
-                    'checked' => (int)$this->_cacheState->isEnabled($type)
+                    'checked' => (int) $this->_cacheState->isEnabled($type)
                 ]
             );
         }

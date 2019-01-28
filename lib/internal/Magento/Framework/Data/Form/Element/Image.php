@@ -48,7 +48,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $html = '';
 
-        if ((string)$this->getValue()) {
+        if ((string) $this->getValue()) {
             $url = $this->_getUrl();
 
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
@@ -95,7 +95,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $html = '';
         if ($this->getValue()) {
-            $label = (string)new \Magento\Framework\Phrase('Delete Image');
+            $label = (string) new \Magento\Framework\Phrase('Delete Image');
             $html .= '<span class="delete-image">';
             $html .= '<input type="checkbox"' .
                 ' name="' .

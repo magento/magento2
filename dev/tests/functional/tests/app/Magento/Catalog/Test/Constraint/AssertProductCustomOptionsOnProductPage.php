@@ -154,7 +154,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
          * It is needed because sorting in db begins from 1, but when selenium driver gets value from form it starts
          * calculate from 0. So this operation checks this case
          */
-        if ((int)$value === (int)$formValue + 1) {
+        if ((int) $value === (int) $formValue + 1) {
             return '';
         }
         if (is_array($value)) {
@@ -202,7 +202,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
     private function verifyDataForErrors($formValue, $key, $errors, $value)
     {
         if (is_numeric($formValue)) {
-            $formValue = (float)$formValue;
+            $formValue = (float) $formValue;
         }
         if (null === $formValue) {
             $errors[] = '- field "' . $key . '" is absent in form';

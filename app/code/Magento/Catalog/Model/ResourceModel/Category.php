@@ -424,9 +424,9 @@ class Category extends AbstractResource
             $data = [];
             foreach ($insert as $productId => $position) {
                 $data[] = [
-                    'category_id' => (int)$id,
-                    'product_id' => (int)$productId,
-                    'position' => (int)$position,
+                    'category_id' => (int) $id,
+                    'product_id' => (int) $productId,
+                    'position' => (int) $position,
                 ];
             }
             $connection->insertMultiple($this->getCategoryProductTable(), $data);
@@ -447,7 +447,7 @@ class Category extends AbstractResource
 
             foreach ($newPositions as $delta => $productIds) {
                 $bind = ['position' => new \Zend_Db_Expr("position + ({$delta})")];
-                $where = ['category_id = ?' => (int)$id, 'product_id IN (?)' => $productIds];
+                $where = ['category_id = ?' => (int) $id, 'product_id IN (?)' => $productIds];
                 $connection->update($this->getCategoryProductTable(), $bind, $where);
             }
         }
@@ -500,7 +500,7 @@ class Category extends AbstractResource
                 $websiteId
             );
         }
-        $bind = ['category_id' => (int)$category->getId()];
+        $bind = ['category_id' => (int) $category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -615,7 +615,7 @@ class Category extends AbstractResource
     public function getIsActiveAttributeId()
     {
         if ($this->_isActiveAttributeId === null) {
-            $this->_isActiveAttributeId = (int)$this->_eavConfig
+            $this->_isActiveAttributeId = (int) $this->_eavConfig
                 ->getAttribute($this->getEntityType(), 'is_active')
                 ->getAttributeId();
         }
@@ -677,7 +677,7 @@ class Category extends AbstractResource
             'main_table.category_id = :category_id'
         );
 
-        $bind = ['category_id' => (int)$category->getId()];
+        $bind = ['category_id' => (int) $category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
         return (int) $counts;
@@ -914,7 +914,7 @@ class Category extends AbstractResource
         )->where(
             'entity_id = :entity_id'
         );
-        $bind = ['entity_id' => (int)$categoryId];
+        $bind = ['entity_id' => (int) $categoryId];
 
         return $this->getConnection()->fetchOne($select, $bind);
     }
@@ -1048,7 +1048,7 @@ class Category extends AbstractResource
         $connection = $this->getConnection();
         $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
-        return (int)$connection->fetchOne($select);
+        return (int) $connection->fetchOne($select);
     }
 
     /**

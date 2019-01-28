@@ -101,7 +101,7 @@ class Data extends \Magento\Framework\View\Element\Template
      */
     protected function getTopDestinations()
     {
-        $destinations = (string)$this->_scopeConfig->getValue(
+        $destinations = (string) $this->_scopeConfig->getValue(
             'general/country/destinations',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -196,7 +196,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            (int)$this->getRegionId()
+            (int) $this->getRegionId()
         )->setOptions(
             $options
         )->getHtml();

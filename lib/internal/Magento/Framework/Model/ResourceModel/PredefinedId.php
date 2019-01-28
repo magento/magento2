@@ -35,7 +35,7 @@ trait PredefinedId
             ->from($this->getMainTable(), [$this->getIdFieldName()])
             ->where($this->getIdFieldName() . ' = ?', $object->getId())
             ->limit(1);
-        return (bool)$connection->fetchOne($select);
+        return (bool) $connection->fetchOne($select);
     }
 
     /**

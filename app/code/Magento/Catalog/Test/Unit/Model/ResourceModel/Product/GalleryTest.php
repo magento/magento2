@@ -431,9 +431,9 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
 
         $this->connection->expects($this->exactly(3))->method('quoteInto')->withConsecutive(
-            ['value_id = ?', (int)$valueId],
-            ['entity_id = ?', (int)$entityId],
-            ['store_id = ?', (int)$storeId]
+            ['value_id = ?', (int) $valueId],
+            ['entity_id = ?', (int) $entityId],
+            ['store_id = ?', (int) $storeId]
         )->willReturnOnConsecutiveCalls(
             'value_id = ' . $valueId,
             'entity_id = ' . $entityId,

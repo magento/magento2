@@ -69,7 +69,7 @@ class StartConsumerCommand extends Command
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
-        $batchSize = (int)$input->getOption(self::OPTION_BATCH_SIZE);
+        $batchSize = (int) $input->getOption(self::OPTION_BATCH_SIZE);
         $areaCode = $input->getOption(self::OPTION_AREACODE);
         $pidFilePath = $input->getOption(self::PID_FILE_PATH);
 

@@ -429,7 +429,7 @@ class ProductDataMapper implements DataMapperInterface
         if (array_key_exists($productId, $categoryIndexData)) {
             $indexData = $categoryIndexData[$productId];
             foreach ($indexData as $categoryData) {
-                $categoryIds[] = (int)$categoryData['id'];
+                $categoryIds[] = (int) $categoryData['id'];
             }
             if (count($categoryIds)) {
                 $result = ['category_ids' => implode(' ', $categoryIds)];

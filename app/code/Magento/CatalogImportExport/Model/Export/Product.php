@@ -806,7 +806,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             // Maximal Products limit
             $maxProductsLimit = 5000;
 
-            $this->_itemsPerPage = (int)(
+            $this->_itemsPerPage = (int) (
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
             );
             if ($this->_itemsPerPage < $minProductsLimit) {
@@ -1225,7 +1225,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $additionalImageLabels = [];
                 $additionalImageIsDisabled = [];
                 foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
-                    if ((int)$mediaItem['_media_store_id'] === Store::DEFAULT_STORE_ID) {
+                    if ((int) $mediaItem['_media_store_id'] === Store::DEFAULT_STORE_ID) {
                         $additionalImages[] = $mediaItem['_media_image'];
                         $additionalImageLabels[] = $mediaItem['_media_label'];
 
@@ -1269,7 +1269,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $additionalImageIsDisabled = [];
             if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
                 foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
-                    if ((int)$mediaItem['_media_store_id'] === $storeId) {
+                    if ((int) $mediaItem['_media_store_id'] === $storeId) {
                         if ($mediaItem['_media_is_disabled'] == true) {
                             $additionalImageIsDisabled[] = $mediaItem['_media_image'];
                         }

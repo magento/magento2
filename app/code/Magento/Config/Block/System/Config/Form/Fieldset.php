@@ -117,7 +117,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             '-state" name="config_state[' .
             $element->getId() .
             ']" type="hidden" value="' .
-            (int)$this->_isCollapseState(
+            (int) $this->_isCollapseState(
                 $element
             ) . '" />';
         $html .= '<fieldset class="' . $this->_getFieldsetCss() . '" id="' . $element->getHtmlId() . '">';

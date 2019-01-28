@@ -158,7 +158,7 @@ class FieldsFilter
         $arrayIntersect = null;
         //Check if its a sequential array. Presence of sequential arrays mean that the filed is a collection
         //and the filtering will be applied to all the collection items
-        if (!(bool)count(array_filter(array_keys($responseArray), 'is_string'))) {
+        if (!(bool) count(array_filter(array_keys($responseArray), 'is_string'))) {
             foreach ($responseArray as $key => &$item) {
                 $arrayIntersect[$key] = $this->recursiveArrayIntersectKey($item, $filter);
             }

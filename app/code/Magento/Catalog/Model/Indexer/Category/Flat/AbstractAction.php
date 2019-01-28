@@ -205,7 +205,7 @@ class AbstractAction
                 case \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT:
                 case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
                 case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:
-                    $isUnsigned = (bool)$column['UNSIGNED'];
+                    $isUnsigned = (bool) $column['UNSIGNED'];
                     if ($column['DEFAULT'] === '') {
                         $column['DEFAULT'] = null;
                     }
@@ -275,7 +275,7 @@ class AbstractAction
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label'],
+                        'comment' => (string) $attribute['frontend_label'],
                     ];
                     break;
                 case 'int':
@@ -284,7 +284,7 @@ class AbstractAction
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label'],
+                        'comment' => (string) $attribute['frontend_label'],
                     ];
                     break;
                 case 'text':
@@ -293,7 +293,7 @@ class AbstractAction
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label'],
+                        'comment' => (string) $attribute['frontend_label'],
                     ];
                     break;
                 case 'datetime':
@@ -302,7 +302,7 @@ class AbstractAction
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label'],
+                        'comment' => (string) $attribute['frontend_label'],
                     ];
                     break;
                 case 'decimal':
@@ -311,7 +311,7 @@ class AbstractAction
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label'],
+                        'comment' => (string) $attribute['frontend_label'],
                     ];
                     break;
             }

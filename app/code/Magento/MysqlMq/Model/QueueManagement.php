@@ -202,7 +202,7 @@ class QueueManagement
      */
     private function getCompletedMessageLifetime()
     {
-        return 60 * (int)$this->scopeConfig->getValue(
+        return 60 * (int) $this->scopeConfig->getValue(
             self::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -217,7 +217,7 @@ class QueueManagement
      */
     private function getErrorMessageLifetime()
     {
-        return  60 * (int)$this->scopeConfig->getValue(
+        return  60 * (int) $this->scopeConfig->getValue(
             self::XML_PATH_FAILED_MESSAGES_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -232,7 +232,7 @@ class QueueManagement
      */
     private function getInProgressRetryAfter()
     {
-        return 60 * (int)$this->scopeConfig->getValue(
+        return 60 * (int) $this->scopeConfig->getValue(
             self::XML_PATH_RETRY_IN_PROGRESS_AFTER,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -247,7 +247,7 @@ class QueueManagement
      */
     private function getNewMessageLifetime()
     {
-        return  60 * (int)$this->scopeConfig->getValue(
+        return  60 * (int) $this->scopeConfig->getValue(
             self::XML_PATH_NEW_MESSAGES_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

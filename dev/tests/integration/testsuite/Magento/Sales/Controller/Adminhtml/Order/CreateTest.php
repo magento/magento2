@@ -108,7 +108,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         );
 
         $website = $this->getWebsite('test');
-        $customer = $this->getCustomer('customer.web@example.com', (int)$website->getId());
+        $customer = $this->getCustomer('customer.web@example.com', (int) $website->getId());
         $quote = $this->getQuoteById('0000032134');
         $session = $this->_objectManager->get(SessionQuote::class);
         $session->setQuoteId($quote->getId());

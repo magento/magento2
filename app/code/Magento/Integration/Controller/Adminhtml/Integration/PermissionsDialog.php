@@ -18,7 +18,7 @@ class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integr
      */
     public function execute()
     {
-        $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
+        $integrationId = (int) $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         if ($integrationId) {
             try {
                 $integrationData = $this->_integrationService->get($integrationId)->getData();
@@ -46,7 +46,7 @@ class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integr
         $handles = [];
         if (is_array($handleNodes)) {
             foreach ($handleNodes as $node) {
-                $handles[] = (string)$node;
+                $handles[] = (string) $node;
             }
         }
         $this->_view->loadLayout($handles);

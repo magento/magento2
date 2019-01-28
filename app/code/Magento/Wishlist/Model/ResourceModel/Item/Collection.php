@@ -413,7 +413,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setVisibilityFilter($flag = true)
     {
-        $this->_productVisible = (bool)$flag;
+        $this->_productVisible = (bool) $flag;
         return $this;
     }
 
@@ -427,7 +427,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setSalableFilter($flag = true)
     {
-        $this->_productSalable = (bool)$flag;
+        $this->_productSalable = (bool) $flag;
         return $this;
     }
 
@@ -441,7 +441,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setInStockFilter($flag = true)
     {
-        $this->_productInStock = (bool)$flag;
+        $this->_productInStock = (bool) $flag;
         return $this;
     }
 
@@ -481,7 +481,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         if (isset($constraints['to'])) {
             $firstDay = new \DateTime();
-            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)($constraints['to']) + 1) . ' day');
+            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int) ($constraints['to']) + 1) . ' day');
             $filter['from'] = $firstDay;
         }
 
@@ -566,7 +566,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
         }
 
-        return (int)$this->_itemsQty;
+        return (int) $this->_itemsQty;
     }
 
     /**
@@ -579,14 +579,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         parent::_afterLoadData();
 
         if ($this->_addDaysInWishlist) {
-            $gmtOffset = (int)$this->_date->getGmtOffset();
+            $gmtOffset = (int) $this->_date->getGmtOffset();
             $nowTimestamp = $this->_date->timestamp();
 
             foreach ($this as $wishlistItem) {
                 $wishlistItemTimestamp = $this->_date->timestamp($wishlistItem->getAddedAt());
 
                 $wishlistItem->setDaysInWishlist(
-                    (int)(($nowTimestamp - $gmtOffset - $wishlistItemTimestamp) / 24 / 60 / 60)
+                    (int) (($nowTimestamp - $gmtOffset - $wishlistItemTimestamp) / 24 / 60 / 60)
                 );
             }
         }

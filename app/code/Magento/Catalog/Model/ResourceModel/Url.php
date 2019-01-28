@@ -454,7 +454,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $rootCategoryPath = $this->getStores($storeId)->getRootCategoryPath();
             $rootCategoryPathLength = strlen($rootCategoryPath);
         }
-        $bind = ['attribute_id' => (int)$isActiveAttribute->getId(), 'store_id' => (int)$storeId];
+        $bind = ['attribute_id' => (int) $isActiveAttribute->getId(), 'store_id' => (int) $storeId];
 
         $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
@@ -551,7 +551,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $productIds = [$productIds];
             }
         }
-        $bind = ['website_id' => (int)$websiteId, 'entity_id' => (int)$entityId];
+        $bind = ['website_id' => (int) $websiteId, 'entity_id' => (int) $entityId];
         $select = $connection->select()->useStraightJoin(
             true
         )->from(

@@ -156,6 +156,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 sprintf('%s <> %s', $connection->quoteIdentifier('code'), $connection->quote('admin'))
             );
         }
-        return (int)$connection->fetchOne($select);
+        return (int) $connection->fetchOne($select);
     }
 }

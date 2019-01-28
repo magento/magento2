@@ -274,7 +274,7 @@ class Info
         $label = __('Last Transaction ID');
         $value = $payment->getLastTransId();
         if ($labelValuesOnly) {
-            $result[(string)$label] = $value;
+            $result[(string) $label] = $value;
         } else {
             $result['last_trans_id'] = ['label' => $label, 'value' => $value];
         }
@@ -566,7 +566,7 @@ class Info
                     $this->_paymentMapFull[$key]['value'] = false;
                 } else {
                     $value = $payment->getAdditionalInformation($key);
-                    $this->_paymentMapFull[$key]['label'] = (string)$this->_getLabel($key);
+                    $this->_paymentMapFull[$key]['label'] = (string) $this->_getLabel($key);
                     $this->_paymentMapFull[$key]['value'] = $this->_getValue($value, $key);
                 }
             }

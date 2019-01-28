@@ -121,7 +121,7 @@ class Fallback implements PostProcessorInterface
         array $websitesConfig
     ) {
         $result = [];
-        foreach ((array)$this->websiteData as $website) {
+        foreach ((array) $this->websiteData as $website) {
             $code = $website['code'];
             $id = $website['website_id'];
             $websiteConfig = isset($websitesConfig[$code]) ? $websitesConfig[$code] : [];
@@ -146,7 +146,7 @@ class Fallback implements PostProcessorInterface
     ) {
         $result = [];
 
-        foreach ((array)$this->storeData as $store) {
+        foreach ((array) $this->storeData as $store) {
             $code = $store['code'];
             $id = $store['store_id'];
             $websiteConfig = [];
@@ -169,7 +169,7 @@ class Fallback implements PostProcessorInterface
      */
     private function getWebsiteConfig(array $websites, $id)
     {
-        foreach ((array)$this->websiteData as $website) {
+        foreach ((array) $this->websiteData as $website) {
             if ($website['website_id'] == $id) {
                 $code = $website['code'];
                 return isset($websites[$code]) ? $websites[$code] : [];

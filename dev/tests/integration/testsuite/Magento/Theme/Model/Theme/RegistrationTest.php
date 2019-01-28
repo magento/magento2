@@ -113,7 +113,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
         $this->registerThemes();
         $testTheme->load($testTheme->getId());
         $this->assertNotEquals(
-            (int)$testTheme->getType(),
+            (int) $testTheme->getType(),
             \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
         );
     }

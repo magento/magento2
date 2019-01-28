@@ -49,7 +49,7 @@ class BundlePrice extends AbstractModifier
             $this->arrayManager->findPath(static::CODE_PRICE_TYPE, $meta, null, 'children') . static::META_CONFIG_PATH,
             $meta,
             [
-                'disabled' => (bool)$this->locator->getProduct()->getId(),
+                'disabled' => (bool) $this->locator->getProduct()->getId(),
                 'valueMap' => [
                     'false' => '1',
                     'true' => '0'

@@ -72,7 +72,7 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect->setPath('*/*/');
         }
 
-        $productId = (int)$this->getRequest()->getParam('product');
+        $productId = (int) $this->getRequest()->getParam('product');
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;
@@ -91,7 +91,7 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         try {
-            $id = (int)$this->getRequest()->getParam('id');
+            $id = (int) $this->getRequest()->getParam('id');
             /* @var \Magento\Wishlist\Model\Item */
             $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
             $item->load($id);

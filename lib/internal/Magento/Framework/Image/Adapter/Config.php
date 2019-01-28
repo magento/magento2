@@ -48,7 +48,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      */
     public function getAdapterAlias()
     {
-        return (string)$this->config->getValue(self::XML_PATH_IMAGE_ADAPTER);
+        return (string) $this->config->getValue(self::XML_PATH_IMAGE_ADAPTER);
     }
 
     /**
@@ -70,7 +70,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      */
     public function getMaxWidth(): int
     {
-        return (int)$this->config->getValue(self::XML_PATH_MAX_WIDTH_IMAGE);
+        return (int) $this->config->getValue(self::XML_PATH_MAX_WIDTH_IMAGE);
     }
 
     /**
@@ -82,6 +82,6 @@ class Config implements ConfigInterface, UploadConfigInterface
      */
     public function getMaxHeight(): int
     {
-        return (int)$this->config->getValue(self::XML_PATH_MAX_HEIGHT_IMAGE);
+        return (int) $this->config->getValue(self::XML_PATH_MAX_HEIGHT_IMAGE);
     }
 }

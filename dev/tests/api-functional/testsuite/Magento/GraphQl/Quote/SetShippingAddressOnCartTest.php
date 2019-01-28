@@ -53,7 +53,7 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = <<<QUERY
 mutation {
@@ -111,7 +111,7 @@ QUERY;
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = <<<QUERY
 mutation {
@@ -153,7 +153,7 @@ QUERY;
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = <<<QUERY
 mutation {
@@ -198,7 +198,7 @@ QUERY;
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = <<<QUERY
 mutation {
@@ -254,7 +254,7 @@ QUERY;
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
 
         $query = <<<QUERY
 mutation {
@@ -297,7 +297,7 @@ QUERY;
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -366,7 +366,7 @@ QUERY;
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',

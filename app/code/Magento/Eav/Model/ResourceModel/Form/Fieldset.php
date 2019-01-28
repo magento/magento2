@@ -65,8 +65,8 @@ class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                         continue;
                     }
                     $data[] = [
-                        'fieldset_id' => (int)$object->getId(),
-                        'store_id' => (int)$storeId,
+                        'fieldset_id' => (int) $object->getId(),
+                        'store_id' => (int) $storeId,
                         'label' => $label,
                     ];
                 }
@@ -138,7 +138,7 @@ class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['store_label' => $this->getTable('eav_form_fieldset_label')],
             $this->getMainTable() .
             '.fieldset_id = store_label.fieldset_id AND default_label.store_id=' .
-            (int)$object->getStoreId(),
+            (int) $object->getStoreId(),
             ['label' => $labelExpr]
         );
 

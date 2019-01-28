@@ -192,7 +192,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getDefaultGroupId($setId)
     {
         $connection = $this->getConnection();
-        $bind = ['attribute_set_id' => (int)$setId];
+        $bind = ['attribute_set_id' => (int) $setId];
         $select = $connection->select()->from(
             $this->getTable('eav_attribute_group'),
             'attribute_group_id'

@@ -162,14 +162,14 @@ class GetToken extends AbstractExpress implements HttpGetActionInterface
         }
 
         // billing agreement
-        $isBaRequested = (bool)$this->getRequest()
+        $isBaRequested = (bool) $this->getRequest()
             ->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
         if ($customerData->getId()) {
             $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
         }
 
         // Bill Me Later
-        $this->_checkout->setIsBml((bool)$this->getRequest()->getParam('bml'));
+        $this->_checkout->setIsBml((bool) $this->getRequest()->getParam('bml'));
 
         // giropay
         $this->_checkout->prepareGiropayUrls(

@@ -95,7 +95,7 @@ class Config
     {
         $methods = [];
         foreach ($this->_scopeConfig->getValue('payment', ScopeInterface::SCOPE_STORE, null) as $code => $data) {
-            if (isset($data['active'], $data['model']) && (bool)$data['active']) {
+            if (isset($data['active'], $data['model']) && (bool) $data['active']) {
                 /** @var MethodInterface $methodModel Actually it's wrong interface */
                 $methodModel = $this->_paymentMethodFactory->create($data['model']);
                 $methodModel->setStore(null);
@@ -168,7 +168,7 @@ class Config
     public function getYears()
     {
         $years = [];
-        $first = (int)$this->_date->date('Y');
+        $first = (int) $this->_date->date('Y');
         for ($index = 0; $index <= self::YEARS_RANGE; $index++) {
             $year = $first + $index;
             $years[$year] = $year;

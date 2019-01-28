@@ -41,7 +41,7 @@ abstract class Wishlist extends \Magento\Backend\App\Action
      */
     protected function _initData()
     {
-        $wishlistItemId = (int)$this->getRequest()->getParam('id');
+        $wishlistItemId = (int) $this->getRequest()->getParam('id');
         if (!$wishlistItemId) {
             throw new CoreException(__('Please define Wish List item ID.'));
         }

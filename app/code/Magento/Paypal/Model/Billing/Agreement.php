@@ -310,7 +310,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     protected function _saveOrderRelations()
     {
         foreach ($this->_relatedOrders as $order) {
-            $orderId = $order instanceof \Magento\Sales\Model\Order ? $order->getId() : (int)$order;
+            $orderId = $order instanceof \Magento\Sales\Model\Order ? $order->getId() : (int) $order;
             $this->getResource()->addOrderRelation($this->getId(), $orderId);
         }
     }

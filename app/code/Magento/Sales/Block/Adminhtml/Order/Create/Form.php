@@ -187,7 +187,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $currency = $this->_localeCurrency->getCurrency($this->getStore()->getCurrentCurrencyCode());
             $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
             $data['currency_symbol'] = $symbol;
-            $data['shipping_method_reseted'] = !(bool)$this->getQuote()->getShippingAddress()->getShippingMethod();
+            $data['shipping_method_reseted'] = !(bool) $this->getQuote()->getShippingAddress()->getShippingMethod();
             $data['payment_method'] = $this->getQuote()->getPayment()->getMethod();
         }
         $data['quote_id'] = $this->_sessionQuote->getQuoteId();

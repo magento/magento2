@@ -49,6 +49,6 @@ class PageSizeProvider
             $pageSize = $this->pageSizeBySearchEngine[$searchEngine];
         }
 
-        return (int)$pageSize;
+        return (int) $pageSize;
     }
 }

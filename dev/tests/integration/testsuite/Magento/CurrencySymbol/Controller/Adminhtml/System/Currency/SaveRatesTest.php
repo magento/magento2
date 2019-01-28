@@ -55,7 +55,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains((string)__('All valid rates have been saved.')),
+            $this->contains((string) __('All valid rates have been saved.')),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
@@ -89,7 +89,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         $this->assertSessionMessages(
             $this->contains(
-                (string)__('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
+                (string) __('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );

@@ -33,7 +33,7 @@ class WebhookRequest
      */
     public function getHash()
     {
-        return (string)$this->request->getHeader('X-SIGNIFYD-SEC-HMAC-SHA256');
+        return (string) $this->request->getHeader('X-SIGNIFYD-SEC-HMAC-SHA256');
     }
 
     /**
@@ -43,7 +43,7 @@ class WebhookRequest
      */
     public function getEventTopic()
     {
-        return (string)$this->request->getHeader('X-SIGNIFYD-TOPIC');
+        return (string) $this->request->getHeader('X-SIGNIFYD-TOPIC');
     }
 
     /**
@@ -53,6 +53,6 @@ class WebhookRequest
      */
     public function getBody()
     {
-        return (string)$this->request->getContent();
+        return (string) $this->request->getContent();
     }
 }

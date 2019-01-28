@@ -139,11 +139,11 @@ class LocationDirectory
         /** @var $collection \Magento\Directory\Model\ResourceModel\Region\Collection */
         $collection = $this->_regionCollectionFactory->create();
         foreach ($collection->getData() as $row) {
-            $this->regions[$row['country_id']][$row['code']] = (int)$row['region_id'];
+            $this->regions[$row['country_id']][$row['code']] = (int) $row['region_id'];
             if (empty($this->regionsByCode[$row['country_id']][$row['code']])) {
                 $this->regionsByCode[$row['country_id']][$row['code']] = [];
             }
-            $this->regionsByCode[$row['country_id']][$row['code']][] = (int)$row['region_id'];
+            $this->regionsByCode[$row['country_id']][$row['code']][] = (int) $row['region_id'];
         }
 
         return $this;

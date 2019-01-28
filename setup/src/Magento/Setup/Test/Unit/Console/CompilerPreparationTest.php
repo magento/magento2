@@ -92,7 +92,7 @@ class CompilerPreparationTest extends \PHPUnit\Framework\TestCase
             $this->filesystemDriverMock->expects($this->exactly(2))
                 ->method('isExists')
                 ->willReturn($dirExists);
-            $this->filesystemDriverMock->expects($this->exactly(((int)$dirExists) * 2))
+            $this->filesystemDriverMock->expects($this->exactly(((int) $dirExists) * 2))
                 ->method('deleteDirectory');
         } else {
             $this->filesystemDriverMock->expects($this->never())

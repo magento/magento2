@@ -83,7 +83,7 @@ class CustomerGroup
         $isGroupNew = !$group->getId();
         $group = $proceed($group);
         if ($isGroupNew) {
-            foreach ($this->getAffectedDimensions((string)$group->getId()) as $dimensions) {
+            foreach ($this->getAffectedDimensions((string) $group->getId()) as $dimensions) {
                 $this->tableMaintainer->createTablesForDimensions($dimensions);
             }
         }

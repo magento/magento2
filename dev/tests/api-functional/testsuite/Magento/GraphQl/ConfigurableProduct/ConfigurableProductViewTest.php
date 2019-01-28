@@ -347,7 +347,7 @@ QUERY;
                 ['product']
                 ['media_gallery_entries'][0],
                 [
-                    'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
+                    'disabled' => (bool) $mediaGalleryEntry->isDisabled(),
                     'file' => $mediaGalleryEntry->getFile(),
                     'id' => $mediaGalleryEntry->getId(),
                     'label' => $mediaGalleryEntry->getLabel(),
@@ -411,8 +411,8 @@ QUERY;
                 $hasAssertion = false;
                 foreach ($configurableOptions as $option) {
                     foreach ($option['options'] as $value) {
-                        if ((int)$value['value_index'] === (int)$attribute['value_index']) {
-                            $this->assertEquals((int)$attribute['value_index'], (int)$value['value_index']);
+                        if ((int) $value['value_index'] === (int) $attribute['value_index']) {
+                            $this->assertEquals((int) $attribute['value_index'], (int) $value['value_index']);
                             $this->assertEquals($attribute['label'], $value['label']);
                             $hasAssertion = true;
                         }
@@ -441,7 +441,7 @@ QUERY;
         );
         $this->assertEquals(
             $actualResponse['configurable_options'][0]['use_default'],
-            (bool)$configurableAttributeOption['use_default']
+            (bool) $configurableAttributeOption['use_default']
         );
         $this->assertEquals(
             $actualResponse['configurable_options'][0]['attribute_id'],
@@ -481,8 +481,8 @@ QUERY;
                 $configurableAttributeOption['options'][$key]['use_default_value']
             );
             $this->assertEquals(
-                (int)$value['value_index'],
-                (int)$configurableAttributeOption['options'][$key]['value_index']
+                (int) $value['value_index'],
+                (int) $configurableAttributeOption['options'][$key]['value_index']
             );
         }
     }

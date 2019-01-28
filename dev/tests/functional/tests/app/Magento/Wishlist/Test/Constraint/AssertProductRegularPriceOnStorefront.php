@@ -68,8 +68,8 @@ class AssertProductRegularPriceOnStorefront extends AbstractConstraint
             ->getItemProduct($product);
 
         $wishListProductRegularPrice = $product instanceof BundleProduct
-            ? (float)$productItem->getPrice()
-            : (float)$productItem->getRegularPrice();
+            ? (float) $productItem->getPrice()
+            : (float) $productItem->getRegularPrice();
 
         if (!$product instanceof BundleProduct) {
             \PHPUnit\Framework\Assert::assertEquals(

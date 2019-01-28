@@ -33,7 +33,7 @@ class TemplatesTest extends \PHPUnit\Framework\TestCase
             $blocks = $xml->xpath('//block[@template]') ?: [];
             $fileTemplates = [];
             foreach ($blocks as $block) {
-                $fileTemplates[] = ['class' => (string)$block['class'], 'file' => (string)$block['template']];
+                $fileTemplates[] = ['class' => (string) $block['class'], 'file' => (string) $block['template']];
             }
             if (!empty($fileTemplates)) {
                 self::$templates[$file] = $fileTemplates;

@@ -46,11 +46,11 @@ class Config
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig
     ) {
-        $emailLimitInConfig = (int)$scopeConfig->getValue(
+        $emailLimitInConfig = (int) $scopeConfig->getValue(
             self::XML_PATH_SHARING_EMAIL_LIMIT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $textLimitInConfig = (int)$scopeConfig->getValue(
+        $textLimitInConfig = (int) $scopeConfig->getValue(
             self::XML_PATH_SHARING_TEXT_LIMIT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

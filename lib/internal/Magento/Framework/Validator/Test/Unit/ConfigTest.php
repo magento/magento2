@@ -296,7 +296,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateInvalidConfigFiles($configFile)
     {
-        $this->_initConfig((array)$configFile);
+        $this->_initConfig((array) $configFile);
     }
 
     /**

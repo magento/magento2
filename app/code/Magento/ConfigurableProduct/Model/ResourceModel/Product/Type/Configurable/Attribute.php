@@ -81,7 +81,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_id = :store_id'
         );
         $bind = [
-            'product_super_attribute_id' => (int)$attribute->getId(),
+            'product_super_attribute_id' => (int) $attribute->getId(),
             'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
         ];
         $valueId = $connection->fetchOne($select, $bind);
@@ -90,9 +90,9 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $connection->insertOnDuplicate(
                 $this->_labelTable,
                 [
-                    'product_super_attribute_id' => (int)$attribute->getId(),
-                    'store_id' => (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId(),
-                    'use_default' => (int)$attribute->getUseDefault(),
+                    'product_super_attribute_id' => (int) $attribute->getId(),
+                    'store_id' => (int) $attribute->getStoreId() ?: $this->_storeManager->getStore()->getId(),
+                    'use_default' => (int) $attribute->getUseDefault(),
                     'value' => $attribute->getLabel(),
                 ],
                 ['value', 'use_default']
@@ -102,9 +102,9 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $connection->insert(
                 $this->_labelTable,
                 [
-                    'product_super_attribute_id' => (int)$attribute->getId(),
+                    'product_super_attribute_id' => (int) $attribute->getId(),
                     'store_id' => Store::DEFAULT_STORE_ID,
-                    'use_default' => (int)$attribute->getUseDefault(),
+                    'use_default' => (int) $attribute->getUseDefault(),
                     'value' => $attribute->getLabel(),
                 ]
             );
@@ -207,7 +207,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function loadLabel(ConfigurableAttribute $object)
     {
-        $storeId = (int)$this->_storeManager->getStore()->getId();
+        $storeId = (int) $this->_storeManager->getStore()->getId();
         $connection = $this->getConnection();
         $useDefaultCheck = $connection
             ->getCheckSql('store.use_default IS NULL', 'def.use_default', 'store.use_default');

@@ -161,7 +161,7 @@ class MessageEncoder
             }
         } else {
             /** Convert message according to the method signature associated with the message topic */
-            $message = (array)$message;
+            $message = (array) $message;
             $isIndexedArray = array_keys($message) === range(0, count($message) - 1);
             $convertedMessage = [];
             /** Message schema type is defined by method signature */

@@ -46,7 +46,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 
         if (!isset($linkTypes[$type])) {
             throw new NoSuchEntityException(
-                __('The "%1" link type is unknown. Verify the type and try again.', (string)$type)
+                __('The "%1" link type is unknown. Verify the type and try again.', (string) $type)
             );
         }
         $product = $this->productRepository->get($sku);

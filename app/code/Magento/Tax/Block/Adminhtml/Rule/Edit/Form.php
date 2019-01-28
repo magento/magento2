@@ -110,7 +110,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
-        $sessionFormValues = (array)$this->_coreRegistry->registry('tax_rule_form_data');
+        $sessionFormValues = (array) $this->_coreRegistry->registry('tax_rule_form_data');
         $taxRuleData = isset($taxRule) ? $this->extractTaxRuleData($taxRule) : [];
         $formValues = array_merge($taxRuleData, $sessionFormValues);
 

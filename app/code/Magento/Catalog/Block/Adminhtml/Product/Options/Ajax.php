@@ -72,7 +72,7 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
             foreach ($products as $productId) {
                 $product = $this->_productFactory->create();
                 $product->setStoreId($this->getRequest()->getParam('store', Store::DEFAULT_STORE_ID));
-                $product->load((int)$productId);
+                $product->load((int) $productId);
                 if (!$product->getId()) {
                     continue;
                 }

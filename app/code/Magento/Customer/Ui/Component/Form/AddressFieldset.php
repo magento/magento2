@@ -41,6 +41,6 @@ class AddressFieldset extends \Magento\Ui\Component\Form\Fieldset implements Com
     public function isComponentVisible(): bool
     {
         $customerId = $this->context->getRequestParam('id');
-        return (bool)$customerId;
+        return (bool) $customerId;
     }
 }

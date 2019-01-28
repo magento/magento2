@@ -35,7 +35,7 @@ class ChildrenCategoriesProvider
      */
     public function getChildrenIds(Category $category, $recursive = false)
     {
-        $cacheKey = $category->getId() . '_' . (int)$recursive;
+        $cacheKey = $category->getId() . '_' . (int) $recursive;
         if (!isset($this->childrenIds[$cacheKey])) {
             $connection = $category->getResource()->getConnection();
             $select = $connection->select()

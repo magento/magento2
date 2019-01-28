@@ -370,7 +370,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function setAllowUsedFlat($flag)
     {
-        $this->_allowUsedFlat = (bool)$flag;
+        $this->_allowUsedFlat = (bool) $flag;
         return $this;
     }
 

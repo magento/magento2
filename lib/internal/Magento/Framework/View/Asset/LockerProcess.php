@@ -98,7 +98,7 @@ class LockerProcess implements LockerProcessInterface
     {
         if ($this->tmpDirectory->isExist($this->lockFilePath)) {
             try {
-                $lockTime = (int)$this->tmpDirectory->readFile($this->lockFilePath);
+                $lockTime = (int) $this->tmpDirectory->readFile($this->lockFilePath);
                 if ((time() - $lockTime) >= self::MAX_LOCK_TIME) {
                     $this->tmpDirectory->delete($this->lockFilePath);
 

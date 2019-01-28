@@ -221,8 +221,8 @@ MUTATION;
             ['response_field' => 'prefix', 'expected_value' => $address->getPrefix()],
             ['response_field' => 'suffix', 'expected_value' => $address->getSuffix()],
             ['response_field' => 'vat_id', 'expected_value' => $address->getVatId()],
-            ['response_field' => 'default_shipping', 'expected_value' => (bool)$address->isDefaultShipping()],
-            ['response_field' => 'default_billing', 'expected_value' => (bool)$address->isDefaultBilling()],
+            ['response_field' => 'default_shipping', 'expected_value' => (bool) $address->isDefaultShipping()],
+            ['response_field' => 'default_billing', 'expected_value' => (bool) $address->isDefaultBilling()],
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
         $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");

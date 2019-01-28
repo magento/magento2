@@ -342,7 +342,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $rootForStores = in_array($node->getEntityId(), $this->getRootIds());
 
         $item['id'] = $node->getId();
-        $item['store'] = (int)$this->getStore()->getId();
+        $item['store'] = (int) $this->getStore()->getId();
         $item['path'] = $node->getData('path');
 
         $item['cls'] = 'folder ' . ($node->getIsActive() ? 'active-category' : 'no-active-category');
@@ -352,7 +352,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         // disallow drag if it's first level and category is root of a store
         $item['allowDrag'] = $allowMove && ($node->getLevel() == 1 && $rootForStores ? false : true);
 
-        if ((int)$node->getChildrenCount() > 0) {
+        if ((int) $node->getChildrenCount() > 0) {
             $item['children'] = [];
         }
 
@@ -425,7 +425,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function isClearEdit()
     {
-        return (bool)$this->getRequest()->getParam('clear');
+        return (bool) $this->getRequest()->getParam('clear');
     }
 
     /**

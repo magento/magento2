@@ -22,7 +22,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public function testSetGetUseSession()
     {
-        $this->assertTrue((bool)$this->model->getUseSession());
+        $this->assertTrue((bool) $this->model->getUseSession());
         $this->model->setUseSession(false);
         $this->assertFalse($this->model->getUseSession());
     }

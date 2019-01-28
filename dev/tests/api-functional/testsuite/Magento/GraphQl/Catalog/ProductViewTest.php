@@ -667,7 +667,7 @@ QUERY;
         $this->assertResponseFields(
             $actualResponse['media_gallery_entries'][0],
             [
-                'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
+                'disabled' => (bool) $mediaGalleryEntry->isDisabled(),
                 'file' => $mediaGalleryEntry->getFile(),
                 'id' => $mediaGalleryEntry->getId(),
                 'label' => $mediaGalleryEntry->getLabel(),

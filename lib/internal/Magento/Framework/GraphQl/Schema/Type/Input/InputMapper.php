@@ -73,13 +73,13 @@ class InputMapper
         if ($this->scalarTypes->isScalarType($typeName) && $argument->hasDefaultValue()) {
             switch ($argument->getTypeName()) {
                 case 'Int':
-                    $calculatedArgument['defaultValue'] = (int)$argument->getDefaultValue();
+                    $calculatedArgument['defaultValue'] = (int) $argument->getDefaultValue();
                     break;
                 case 'Float':
-                    $calculatedArgument['defaultValue'] = (float)$argument->getDefaultValue();
+                    $calculatedArgument['defaultValue'] = (float) $argument->getDefaultValue();
                     break;
                 case 'Boolean':
-                    $calculatedArgument['defaultValue'] = (bool)$argument->getDefaultValue();
+                    $calculatedArgument['defaultValue'] = (bool) $argument->getDefaultValue();
                     break;
                 default:
                     $calculatedArgument['defaultValue'] = $argument->getDefaultValue();

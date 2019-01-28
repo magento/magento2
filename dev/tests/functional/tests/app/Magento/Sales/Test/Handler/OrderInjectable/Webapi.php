@@ -68,7 +68,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
 
         /** @var OrderInjectable $fixture */
         $this->createQuote($fixture);
-        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote  : 'carts/' . (int)$this->quote;
+        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote  : 'carts/' . (int) $this->quote;
         $this->url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($fixture) . '/V1/' . $url;
 
         $this->setProducts($fixture);
@@ -140,7 +140,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
                 $data['cartItem']['product_option'] = $this->$methodName($product);
             }
             $this->webapiTransport->write($url, $data);
-            $response = (array)json_decode($this->webapiTransport->read(), true);
+            $response = (array) json_decode($this->webapiTransport->read(), true);
             $this->webapiTransport->close();
             if (isset($response['message'])) {
                 $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);

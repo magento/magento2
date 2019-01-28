@@ -276,7 +276,7 @@ abstract class AbstractCalculator
      */
     protected function isSameRateAsStore($rate, $storeRate)
     {
-        if ((bool)$this->config->crossBorderTradeEnabled($this->storeId)) {
+        if ((bool) $this->config->crossBorderTradeEnabled($this->storeId)) {
             return true;
         } else {
             return (abs($rate - $storeRate) < 0.00001);
@@ -406,7 +406,7 @@ abstract class AbstractCalculator
     protected function deltaRound($price, $rate, $direction, $type = self::KEY_REGULAR_DELTA_ROUNDING, $round = true)
     {
         if ($price) {
-            $rate = (string)$rate;
+            $rate = (string) $rate;
             $type = $type . $direction;
             // initialize the delta to a small number to avoid non-deterministic behavior with rounding of 0.5
             $delta = isset($this->roundingDeltas[$type][$rate]) ?

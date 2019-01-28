@@ -258,7 +258,7 @@ abstract class Index extends \Magento\Backend\App\Action
      */
     protected function initCurrentCustomer()
     {
-        $customerId = (int)$this->getRequest()->getParam('id');
+        $customerId = (int) $this->getRequest()->getParam('id');
 
         if ($customerId) {
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
@@ -288,7 +288,7 @@ abstract class Index extends \Magento\Backend\App\Action
      */
     protected function _addSessionErrorMessages($messages)
     {
-        $messages = (array)$messages;
+        $messages = (array) $messages;
         $session = $this->_getSession();
 
         $callback = function ($error) use ($session) {

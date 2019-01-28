@@ -136,7 +136,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     public function afterSave()
     {
-        if ($this->isObjectNew() && (bool)$this->getData(EavAttributeInterface::IS_USED_IN_GRID)) {
+        if ($this->isObjectNew() && (bool) $this->getData(EavAttributeInterface::IS_USED_IN_GRID)) {
             $this->_getResource()->addCommitCallback([$this, 'invalidate']);
         } elseif (!$this->isObjectNew() && $this->dataHasChangedFor(EavAttributeInterface::IS_USED_IN_GRID)) {
             $this->_getResource()->addCommitCallback([$this, 'invalidate']);

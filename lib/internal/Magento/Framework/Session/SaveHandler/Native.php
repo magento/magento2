@@ -19,6 +19,6 @@ class Native extends \SessionHandler
      */
     public function read($sessionId)
     {
-        return (string)parent::read($sessionId);
+        return (string) parent::read($sessionId);
     }
 }

@@ -78,11 +78,11 @@ class UpdateCustomer implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        $currentUserId = (int)$currentUserId;
+        $currentUserId = (int) $currentUserId;
         $this->updateCustomerData->execute($currentUserId, $args['input']);
 
         if (isset($args['input']['is_subscribed'])) {
-            $this->changeSubscriptionStatus->execute($currentUserId, (bool)$args['input']['is_subscribed']);
+            $this->changeSubscriptionStatus->execute($currentUserId, (bool) $args['input']['is_subscribed']);
         }
 
         $data = $this->customerDataProvider->getCustomerById($currentUserId);

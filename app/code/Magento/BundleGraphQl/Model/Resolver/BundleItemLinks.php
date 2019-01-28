@@ -50,9 +50,9 @@ class BundleItemLinks implements ResolverInterface
             throw new LocalizedException(__('"option_id" and "parent_id" values should be specified'));
         }
 
-        $this->linkCollection->addIdFilters((int)$value['option_id'], (int)$value['parent_id']);
+        $this->linkCollection->addIdFilters((int) $value['option_id'], (int) $value['parent_id']);
         $result = function () use ($value) {
-            return $this->linkCollection->getLinksForOptionId((int)$value['option_id']);
+            return $this->linkCollection->getLinksForOptionId((int) $value['option_id']);
         };
 
         return $this->valueFactory->create($result);

@@ -74,7 +74,7 @@ class Save extends Action
 
         $resultRedirect = $this->resultRedirectFactory->create();
         $scope = $this->getRequest()->getParam('scope');
-        $scopeId = (int)$this->getRequest()->getParam('scope_id');
+        $scopeId = (int) $this->getRequest()->getParam('scope_id');
         $data = $this->getRequestData();
 
         try {
@@ -84,7 +84,7 @@ class Save extends Action
 
             $this->dataPersistor->clear('theme_design_config');
 
-            $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
+            $returnToEdit = (bool) $this->getRequest()->getParam('back', false);
             $resultRedirect->setPath('theme/design_config/');
             if ($returnToEdit) {
                 $resultRedirect->setPath('theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]);

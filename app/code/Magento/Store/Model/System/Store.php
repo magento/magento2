@@ -243,7 +243,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     public function getWebsiteOptionHash($withDefault = false, $attribute = 'name')
     {
         $options = [];
-        foreach ($this->_storeManager->getWebsites((bool)$withDefault && $this->_isAdminScopeAllowed) as $website) {
+        foreach ($this->_storeManager->getWebsites((bool) $withDefault && $this->_isAdminScopeAllowed) as $website) {
             $options[$website->getId()] = $website->getDataUsingMethod($attribute);
         }
         return $options;
@@ -259,7 +259,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     public function getStoreOptionHash($withDefault = false, $attribute = 'name')
     {
         $options = [];
-        foreach ($this->_storeManager->getStores((bool)$withDefault && $this->_isAdminScopeAllowed) as $store) {
+        foreach ($this->_storeManager->getStores((bool) $withDefault && $this->_isAdminScopeAllowed) as $store) {
             $options[$store->getId()] = $store->getDataUsingMethod($attribute);
         }
         return $options;
@@ -460,7 +460,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      */
     public function setIsAdminScopeAllowed($value)
     {
-        $this->_isAdminScopeAllowed = (bool)$value;
+        $this->_isAdminScopeAllowed = (bool) $value;
         return $this;
     }
 

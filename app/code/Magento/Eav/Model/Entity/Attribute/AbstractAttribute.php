@@ -813,7 +813,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             if ($this->isStatic()) {
                 $this->_dataTable = $this->getEntityType()->getValueTablePrefix();
             } else {
-                $backendTable = trim((string)$this->_getData('backend_table'));
+                $backendTable = trim((string) $this->_getData('backend_table'));
                 if (empty($backendTable)) {
                     $entityTable = [$this->getEntityType()->getEntityTablePrefix(), $this->getBackendType()];
                     $backendTable = $this->getResource()->getTable($entityTable);

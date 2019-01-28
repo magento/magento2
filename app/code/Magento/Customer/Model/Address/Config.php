@@ -130,11 +130,11 @@ class Config extends ConfigData
                 }
 
                 $type->setCode($typeCode)
-                    ->setTitle((string)$typeConfig['title'])
+                    ->setTitle((string) $typeConfig['title'])
                     ->setDefaultFormat($this->_scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $store))
                     ->setEscapeHtml($escapeHtml);
 
-                $renderer = isset($typeConfig['renderer']) ? (string)$typeConfig['renderer'] : null;
+                $renderer = isset($typeConfig['renderer']) ? (string) $typeConfig['renderer'] : null;
                 if (!$renderer) {
                     $renderer = self::DEFAULT_ADDRESS_RENDERER;
                 }

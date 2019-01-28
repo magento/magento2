@@ -37,7 +37,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
     public function testAddGroupConcatColumn()
     {
-        $select = (string)$this->_model->addGroupConcatColumn($this->_select, 'test_alias', 'store_id');
+        $select = (string) $this->_model->addGroupConcatColumn($this->_select, 'test_alias', 'store_id');
         $this->assertContains('GROUP_CONCAT', $select);
         $this->assertContains('test_alias', $select);
     }
@@ -46,13 +46,13 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     {
         $diff = $this->_model->getDateDiff('2011-01-01', '2011-01-01');
         $this->assertInstanceOf('Zend_Db_Expr', $diff);
-        $this->assertContains('TO_DAYS', (string)$diff);
+        $this->assertContains('TO_DAYS', (string) $diff);
     }
 
     public function testAddLikeEscape()
     {
         $value = $this->_model->addLikeEscape('test');
         $this->assertInstanceOf('Zend_Db_Expr', $value);
-        $this->assertContains('test', (string)$value);
+        $this->assertContains('test', (string) $value);
     }
 }

@@ -346,7 +346,7 @@ class Dom
         $result = $format;
         foreach ($errorInfo as $field => $value) {
             $placeholder = '%' . $field . '%';
-            $value = trim((string)$value);
+            $value = trim((string) $value);
             $result = str_replace($placeholder, $value, $result);
         }
         if (strpos($result, '%') !== false) {

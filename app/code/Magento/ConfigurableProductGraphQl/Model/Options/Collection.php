@@ -113,7 +113,7 @@ class Collection
 
         /** @var Attribute $attribute */
         foreach ($attributeCollection->getItems() as $attribute) {
-            $productId = (int)$attribute->getProductId();
+            $productId = (int) $attribute->getProductId();
             if (!isset($this->attributeMap[$productId])) {
                 $this->attributeMap[$productId] = [];
             }

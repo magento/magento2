@@ -744,7 +744,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if (!$this->hasStoreId()) {
             return $this->_storeManager->getStore()->getId();
         }
-        return (int)$this->_getData(self::KEY_STORE_ID);
+        return (int) $this->_getData(self::KEY_STORE_ID);
     }
 
     /**
@@ -752,7 +752,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setStoreId($storeId)
     {
-        $this->setData(self::KEY_STORE_ID, (int)$storeId);
+        $this->setData(self::KEY_STORE_ID, (int) $storeId);
         return $this;
     }
 
@@ -869,7 +869,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($customer instanceof \Magento\Customer\Model\Customer || $customer instanceof CustomerInterface) {
             $customerId = $customer->getId();
         } else {
-            $customerId = (int)$customer;
+            $customerId = (int) $customer;
         }
         $this->_getResource()->loadByCustomerId($this, $customerId);
         $this->_afterLoad();
@@ -1041,7 +1041,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function addCustomerAddress(\Magento\Customer\Api\Data\AddressInterface $address)
     {
-        $addresses = (array)$this->getCustomer()->getAddresses();
+        $addresses = (array) $this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
         $this->updateCustomerData($this->getCustomer());
@@ -1624,7 +1624,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          * Error message
          */
         if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
-            return (string)$cartCandidates;
+            return (string) $cartCandidates;
         }
 
         /**
@@ -2339,7 +2339,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getIsVirtual()
     {
-        return (int)$this->isVirtual();
+        return (int) $this->isVirtual();
     }
 
     /**

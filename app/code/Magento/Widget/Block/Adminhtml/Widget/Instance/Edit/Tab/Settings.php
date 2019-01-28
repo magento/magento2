@@ -84,7 +84,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function canShowTab()
     {
-        return !(bool)$this->getWidgetInstance()->isCompleteToCreate();
+        return !(bool) $this->getWidgetInstance()->isCompleteToCreate();
     }
 
     /**

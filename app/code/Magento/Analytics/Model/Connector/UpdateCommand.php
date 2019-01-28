@@ -109,6 +109,6 @@ class UpdateCommand implements CommandInterface
             }
         }
 
-        return (bool)$result;
+        return (bool) $result;
     }
 }

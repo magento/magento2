@@ -196,38 +196,38 @@ class OrdersFixture extends Fixture
      */
     public function execute()
     {
-        $orderSimpleCountFrom = (int)$this->fixtureModel->getValue(
+        $orderSimpleCountFrom = (int) $this->fixtureModel->getValue(
             'order_simple_product_count_from',
             self::ORDER_SIMPLE_PRODUCT_COUNT_FROM
         );
-        $orderSimpleCountTo = (int)$this->fixtureModel->getValue(
+        $orderSimpleCountTo = (int) $this->fixtureModel->getValue(
             'order_simple_product_count_to',
             self::ORDER_SIMPLE_PRODUCT_COUNT_TO
         );
-        $orderConfigurableCountFrom = (int)$this->fixtureModel->getValue(
+        $orderConfigurableCountFrom = (int) $this->fixtureModel->getValue(
             'order_configurable_product_count_from',
             self::ORDER_CONFIGURABLE_PRODUCT_COUNT_FROM
         );
-        $orderConfigurableCountTo = (int)$this->fixtureModel->getValue(
+        $orderConfigurableCountTo = (int) $this->fixtureModel->getValue(
             'order_configurable_product_count_to',
             self::ORDER_CONFIGURABLE_PRODUCT_COUNT_TO
         );
-        $orderBigConfigurableCountFrom = (int)$this->fixtureModel->getValue(
+        $orderBigConfigurableCountFrom = (int) $this->fixtureModel->getValue(
             'order_big_configurable_product_count_from',
             self::ORDER_BIG_CONFIGURABLE_PRODUCT_COUNT_FROM
         );
-        $orderBigConfigurableCountTo = (int)$this->fixtureModel->getValue(
+        $orderBigConfigurableCountTo = (int) $this->fixtureModel->getValue(
             'order_big_configurable_product_count_to',
             self::ORDER_BIG_CONFIGURABLE_PRODUCT_COUNT_TO
         );
-        $this->orderQuotesEnable = (bool)$this->fixtureModel->getValue('order_quotes_enable', true);
+        $this->orderQuotesEnable = (bool) $this->fixtureModel->getValue('order_quotes_enable', true);
 
         $entityId = $this->getMaxEntityId(
             'sales_order',
             \Magento\Sales\Model\ResourceModel\Order::class,
             'entity_id'
         );
-        $requestedOrders = (int)$this->fixtureModel->getValue('orders', 0);
+        $requestedOrders = (int) $this->fixtureModel->getValue('orders', 0);
         if ($requestedOrders - $entityId < 1) {
             return;
         }
@@ -560,7 +560,7 @@ class OrdersFixture extends Fixture
         /** @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb $resource */
         $resource = $this->fixtureModel->getObjectManager()->get($resourceName);
         $connection = $resource->getConnection();
-        return (int)$connection->query("SELECT MAX(`{$column}`) FROM `{$tableName}`;")->fetchColumn(0);
+        return (int) $connection->query("SELECT MAX(`{$column}`) FROM `{$tableName}`;")->fetchColumn(0);
     }
 
     /**

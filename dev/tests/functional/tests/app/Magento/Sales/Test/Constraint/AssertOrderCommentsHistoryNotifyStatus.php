@@ -39,7 +39,7 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertContains(
             $latestComment['is_customer_notified'],
-            (bool)$sendMail ? 'Customer Notified' : 'Customer Not Notified'
+            (bool) $sendMail ? 'Customer Notified' : 'Customer Not Notified'
         );
     }
 

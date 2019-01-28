@@ -160,10 +160,10 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $expectedCustomerDetails['addresses'][0]['id'] =
-            (int)$expectedCustomerDetails['addresses'][0]['id'];
+            (int) $expectedCustomerDetails['addresses'][0]['id'];
 
         $expectedCustomerDetails['addresses'][1]['id'] =
-            (int)$expectedCustomerDetails['addresses'][1]['id'];
+            (int) $expectedCustomerDetails['addresses'][1]['id'];
 
         $serviceInfo = [
             'rest' => [

@@ -62,7 +62,7 @@ class Base implements AmountInterface
             return $this->amount;
         } else {
             if (!is_array($exclude)) {
-                $exclude = [(string)$exclude];
+                $exclude = [(string) $exclude];
             }
             $amount = $this->amount;
             foreach ($exclude as $code) {

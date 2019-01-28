@@ -119,7 +119,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function _getMaxSortOrder(AbstractModel $object)
     {
-        if ((int)$object->getAttributeGroupId() > 0) {
+        if ((int) $object->getAttributeGroupId() > 0) {
             $connection = $this->getConnection();
             $bind = [
                 ':attribute_set_id' => $object->getAttributeSetId(),
@@ -313,10 +313,10 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $attributeGroupId = null,
         $attributeSortOrder = null
     ) {
-        $attributeId = $attributeEntityId === null ? (int)$object->getId() : (int)$attributeEntityId;
-        $setId = $attributeSetId === null ? (int)$object->getAttributeSetId() : (int)$attributeSetId;
-        $groupId = $attributeGroupId === null ? (int)$object->getAttributeGroupId() : (int)$attributeGroupId;
-        $attributeSortOrder = $attributeSortOrder === null ? (int)$object->getSortOrder() : (int)$attributeSortOrder;
+        $attributeId = $attributeEntityId === null ? (int) $object->getId() : (int) $attributeEntityId;
+        $setId = $attributeSetId === null ? (int) $object->getAttributeSetId() : (int) $attributeSetId;
+        $groupId = $attributeGroupId === null ? (int) $object->getAttributeGroupId() : (int) $attributeGroupId;
+        $attributeSortOrder = $attributeSortOrder === null ? (int) $object->getSortOrder() : (int) $attributeSortOrder;
 
         if ($setId && $groupId && $object->getEntityTypeId()) {
             $connection = $this->getConnection();
@@ -452,7 +452,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $table = $this->getTable('eav_attribute_option');
         // ignore strings that start with a number
-        $intOptionId = is_numeric($optionId) ? (int)$optionId : 0;
+        $intOptionId = is_numeric($optionId) ? (int) $optionId : 0;
 
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
@@ -539,7 +539,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getTable('eav_entity_attribute')
         )->where(
             'entity_attribute_id = ?',
-            (int)$entityAttributeId
+            (int) $entityAttributeId
         );
         return $this->getConnection()->fetchRow($select);
     }

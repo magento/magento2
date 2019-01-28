@@ -97,7 +97,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setCustomerIdFilter($customerId)
     {
-        $this->_customerId = (int)$customerId;
+        $this->_customerId = (int) $customerId;
         return $this;
     }
 

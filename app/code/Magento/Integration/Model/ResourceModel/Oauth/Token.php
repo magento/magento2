@@ -159,8 +159,8 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $select = $connection->select()
             ->from($this->getMainTable())
-            ->where('consumer_id = ?', (int)$consumerId)
-            ->where('user_type = ?', (int)$userType);
+            ->where('consumer_id = ?', (int) $consumerId)
+            ->where('user_type = ?', (int) $userType);
         return $connection->fetchRow($select);
     }
 

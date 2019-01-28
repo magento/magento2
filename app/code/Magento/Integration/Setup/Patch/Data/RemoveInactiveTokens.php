@@ -100,7 +100,7 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
         $admins = $this->moduleDataSetup->getConnection()->fetchAll($select);
         foreach ($admins as $admin) {
             if ($admin['is_active'] == 0) {
-                $where = ['admin_id = ?' => (int)$admin['user_id']];
+                $where = ['admin_id = ?' => (int) $admin['user_id']];
                 $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
             }
         }
@@ -124,7 +124,7 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
         $admins = $this->moduleDataSetup->getConnection()->fetchAll($select);
         foreach ($admins as $admin) {
             if ($admin['is_active'] == 0) {
-                $where = ['customer_id = ?' => (int)$admin['entity_id']];
+                $where = ['customer_id = ?' => (int) $admin['entity_id']];
                 $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
             }
         }

@@ -22,10 +22,10 @@
             <?php if ($block->showSingle()): ?>
                 <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
                 <input type="hidden"
-                    class="bundle-option-<?= (int)$_option->getId() ?>  product bundle option"
-                    name="bundle_option[<?= (int)$_option->getId() ?>]"
-                    value="<?= (int)$_selections[0]->getSelectionId() ?>"
-                    id="bundle-option-<?= (int)$_option->getId() ?>-<?= (int)$_selections[0]->getSelectionId() ?>"
+                    class="bundle-option-<?= (int) $_option->getId() ?>  product bundle option"
+                    name="bundle_option[<?= (int) $_option->getId() ?>]"
+                    value="<?= (int) $_selections[0]->getSelectionId() ?>"
+                    id="bundle-option-<?= (int) $_option->getId() ?>-<?= (int) $_selections[0]->getSelectionId() ?>"
                     checked="checked"
                 />
             <?php else:?>

@@ -87,7 +87,7 @@ class AttributeMetadataConverter
             }
         }
         $validationRules = [];
-        foreach ((array)$attribute->getValidateRules() as $name => $value) {
+        foreach ((array) $attribute->getValidateRules() as $name => $value) {
             $validationRule = $this->validationRuleFactory->create()
                 ->setName($name)
                 ->setValue($value);
@@ -102,21 +102,21 @@ class AttributeMetadataConverter
 
         return $attributeMetaData->setAttributeCode($attribute->getAttributeCode())
             ->setFrontendInput($attribute->getFrontendInput())
-            ->setInputFilter((string)$attribute->getInputFilter())
+            ->setInputFilter((string) $attribute->getInputFilter())
             ->setStoreLabel($attribute->getStoreLabel())
             ->setValidationRules($validationRules)
-            ->setIsVisible((bool)$attribute->getIsVisible())
-            ->setIsRequired((bool)$attribute->getIsRequired())
-            ->setMultilineCount((int)$attribute->getMultilineCount())
-            ->setDataModel((string)$attribute->getDataModel())
+            ->setIsVisible((bool) $attribute->getIsVisible())
+            ->setIsRequired((bool) $attribute->getIsRequired())
+            ->setMultilineCount((int) $attribute->getMultilineCount())
+            ->setDataModel((string) $attribute->getDataModel())
             ->setOptions($options)
             ->setFrontendClass($attribute->getFrontend()->getClass())
             ->setFrontendLabel($attribute->getFrontendLabel())
-            ->setNote((string)$attribute->getNote())
-            ->setIsSystem((bool)$attribute->getIsSystem())
-            ->setIsUserDefined((bool)$attribute->getIsUserDefined())
+            ->setNote((string) $attribute->getNote())
+            ->setIsSystem((bool) $attribute->getIsSystem())
+            ->setIsUserDefined((bool) $attribute->getIsUserDefined())
             ->setBackendType($attribute->getBackendType())
-            ->setSortOrder((int)$attribute->getSortOrder())
+            ->setSortOrder((int) $attribute->getSortOrder())
             ->setIsUsedInGrid($attribute->getIsUsedInGrid())
             ->setIsVisibleInGrid($attribute->getIsVisibleInGrid())
             ->setIsFilterableInGrid($attribute->getIsFilterableInGrid())

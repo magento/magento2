@@ -67,14 +67,14 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
         $formId = 'backend_forgotpassword';
         $captchaModel = $this->_helper->getCaptcha($formId);
         $controller = $observer->getControllerAction();
-        $email = (string)$observer->getControllerAction()->getRequest()->getParam('email');
+        $email = (string) $observer->getControllerAction()->getRequest()->getParam('email');
         $params = $observer->getControllerAction()->getRequest()->getParams();
         if (!empty($email)
             && !empty($params)
             && $captchaModel->isRequired()
             && !$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
         ) {
-            $this->_session->setEmail((string)$controller->getRequest()->getPost('email'));
+            $this->_session->setEmail((string) $controller->getRequest()->getPost('email'));
             $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
             $this->messageManager->addError(__('Incorrect CAPTCHA'));
             $controller->getResponse()->setRedirect(

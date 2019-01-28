@@ -144,7 +144,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFdsFilterActionLabel($code, $expected)
     {
-        $this->assertSame($expected, (string)$this->dataHelper->getFdsFilterActionLabel($code));
+        $this->assertSame($expected, (string) $this->dataHelper->getFdsFilterActionLabel($code));
     }
 
     /**
@@ -169,7 +169,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTransactionStatusLabel($code, $expected)
     {
-        $this->assertSame($expected, (string)$this->dataHelper->getTransactionStatusLabel($code));
+        $this->assertSame($expected, (string) $this->dataHelper->getTransactionStatusLabel($code));
     }
 
     /**

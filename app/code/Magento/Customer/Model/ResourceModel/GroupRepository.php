@@ -117,7 +117,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         /** @var \Magento\Customer\Model\Group $groupModel */
         $groupModel = null;
-        if ($group->getId() || (string)$group->getId() === '0') {
+        if ($group->getId() || (string) $group->getId() === '0') {
             $this->_verifyTaxClassModel($group->getTaxClassId(), $group);
             $groupModel = $this->groupRegistry->retrieve($group->getId());
             $groupDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
@@ -143,7 +143,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
              * Would like a better way to determine this error condition but
              *  difficult to do without imposing more database calls
              */
-            if ($e->getMessage() == (string)__('Customer Group already exists.')) {
+            if ($e->getMessage() == (string) __('Customer Group already exists.')) {
                 throw new InvalidTransitionException(__('Customer Group already exists.'));
             }
             throw $e;

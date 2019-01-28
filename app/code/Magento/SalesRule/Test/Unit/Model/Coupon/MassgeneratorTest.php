@@ -23,7 +23,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->charset = str_split(md5((string)time()));
+        $this->charset = str_split(md5((string) time()));
     }
 
     /**

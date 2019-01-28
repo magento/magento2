@@ -107,7 +107,7 @@ class Structure extends DataStructure
     public function reorderChildElement($parentName, $childName, $offsetOrSibling, $after = true)
     {
         if (is_numeric($offsetOrSibling)) {
-            $offset = (int)abs($offsetOrSibling) * ($after ? 1 : -1);
+            $offset = (int) abs($offsetOrSibling) * ($after ? 1 : -1);
             $this->reorderChild($parentName, $childName, $offset);
         } elseif (null === $offsetOrSibling) {
             $this->reorderChild($parentName, $childName, null);

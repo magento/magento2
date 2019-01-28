@@ -35,7 +35,7 @@ class Converter
             'aggregator' => $dataModel->getAggregator()
         ];
 
-        foreach ((array)$dataModel->getConditions() as $condition) {
+        foreach ((array) $dataModel->getConditions() as $condition) {
             $conditionArray['conditions'][] = $this->dataModelToArray($condition);
         }
 

@@ -392,7 +392,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         if (!$this->hasCustomerGroupIds()) {
             $customerGroupIds = $this->_getResource()->getCustomerGroupIds($this->getId());
-            $this->setData('customer_group_ids', (array)$customerGroupIds);
+            $this->setData('customer_group_ids', (array) $customerGroupIds);
         }
         return $this->_getData('customer_group_ids');
     }
@@ -406,7 +406,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getStoreLabel($store = null)
     {
         $storeId = $this->_storeManager->getStore($store)->getId();
-        $labels = (array)$this->getStoreLabels();
+        $labels = (array) $this->getStoreLabels();
 
         if (isset($labels[$storeId])) {
             return $labels[$storeId];

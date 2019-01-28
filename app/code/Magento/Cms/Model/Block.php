@@ -96,7 +96,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     public function getIdentifier()
     {
-        return (string)$this->getData(self::IDENTIFIER);
+        return (string) $this->getData(self::IDENTIFIER);
     }
 
     /**
@@ -146,7 +146,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     public function isActive()
     {
-        return (bool)$this->getData(self::IS_ACTIVE);
+        return (bool) $this->getData(self::IS_ACTIVE);
     }
 
     /**

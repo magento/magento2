@@ -101,7 +101,7 @@ class TaxClass extends DataSource
             throw new \Exception('Product tax class id ' . $taxClassName . ' undefined!');
         }
 
-        $this->taxClassId = (int)$matches[1];
+        $this->taxClassId = (int) $matches[1];
     }
 
     /**
@@ -121,6 +121,6 @@ class TaxClass extends DataSource
      */
     public function getTaxClassId()
     {
-        return (int)$this->taxClassId;
+        return (int) $this->taxClassId;
     }
 }

@@ -125,11 +125,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             'email = :email'
         );
         if ($customer->getSharingConfig()->isWebsiteScope()) {
-            $bind['website_id'] = (int)$customer->getWebsiteId();
+            $bind['website_id'] = (int) $customer->getWebsiteId();
             $select->where('website_id = :website_id');
         }
         if ($customer->getId()) {
-            $bind['entity_id'] = (int)$customer->getId();
+            $bind['entity_id'] = (int) $customer->getId();
             $select->where('entity_id != :entity_id');
         }
 
@@ -217,7 +217,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     {
         $select = parent::_getLoadRowSelect($object, $rowId);
         if ($object->getWebsiteId() && $object->getSharingConfig()->isWebsiteScope()) {
-            $select->where('website_id =?', (int)$object->getWebsiteId());
+            $select->where('website_id =?', (int) $object->getWebsiteId());
         }
 
         return $select;
@@ -248,7 +248,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
                     __("A customer website ID wasn't specified. The ID must be specified to use the website scope.")
                 );
             }
-            $bind['website_id'] = (int)$customer->getWebsiteId();
+            $bind['website_id'] = (int) $customer->getWebsiteId();
             $select->where('website_id = :website_id');
         }
 
@@ -309,7 +309,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     public function checkCustomerId($customerId)
     {
         $connection = $this->getConnection();
-        $bind = ['entity_id' => (int)$customerId];
+        $bind = ['entity_id' => (int) $customerId];
         $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             'entity_id'
@@ -335,7 +335,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     public function getWebsiteId($customerId)
     {
         $connection = $this->getConnection();
-        $bind = ['entity_id' => (int)$customerId];
+        $bind = ['entity_id' => (int) $customerId];
         $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             'website_id'

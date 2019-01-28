@@ -116,7 +116,7 @@ class ProductForm extends FormSections
                     ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
                     : [$category];
                 foreach ($categories as $category) {
-                    if ((int)$category->getId()) {
+                    if ((int) $category->getId()) {
                         $sections['product-details']['category_ids']['value'][] = $category->getName();
                     } else {
                         $this->getNewCategoryModalForm()->addNewCategory($category);

@@ -108,7 +108,7 @@ class Gateway
             throw new GatewayException('Expected field "investigationId" missed.');
         }
 
-        return (int)$caseCreationResult['investigationId'];
+        return (int) $caseCreationResult['investigationId'];
     }
 
     /**

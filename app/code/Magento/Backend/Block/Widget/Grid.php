@@ -181,10 +181,10 @@ class Grid extends \Magento\Backend\Block\Widget
         }
 
         $this->setPagerVisibility(
-            $this->hasData('pager_visibility') ? (bool)$this->getData('pager_visibility') : true
+            $this->hasData('pager_visibility') ? (bool) $this->getData('pager_visibility') : true
         );
 
-        $this->setData('use_ajax', $this->hasData('use_ajax') ? (bool)$this->getData('use_ajax') : false);
+        $this->setData('use_ajax', $this->hasData('use_ajax') ? (bool) $this->getData('use_ajax') : false);
     }
 
     /**
@@ -359,7 +359,7 @@ class Grid extends \Magento\Backend\Block\Widget
 
             if (is_string($filter)) {
                 $data = $this->_backendHelper->prepareFilterString($filter);
-                $data = array_merge($data, (array)$this->getRequest()->getPost($this->getVarNameFilter()));
+                $data = array_merge($data, (array) $this->getRequest()->getPost($this->getVarNameFilter()));
                 $this->_setFilterValues($data);
             } elseif ($filter && is_array($filter)) {
                 $this->_setFilterValues($filter);
@@ -384,8 +384,8 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     protected function _preparePage()
     {
-        $this->getCollection()->setPageSize((int)$this->getParam($this->getVarNameLimit(), $this->_defaultLimit));
-        $this->getCollection()->setCurPage((int)$this->getParam($this->getVarNamePage(), $this->_defaultPage));
+        $this->getCollection()->setPageSize((int) $this->getParam($this->getVarNameLimit(), $this->_defaultLimit));
+        $this->getCollection()->setCurPage((int) $this->getParam($this->getVarNamePage(), $this->_defaultPage));
     }
 
     /**

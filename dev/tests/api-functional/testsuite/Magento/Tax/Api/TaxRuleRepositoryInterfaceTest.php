@@ -590,7 +590,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         if ($this->fixtureTaxRates === null) {
             $this->fixtureTaxRates = [];
             if ($this->getFixtureTaxRules()) {
-                $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
+                $taxRateIds = (array) $this->getFixtureTaxRules()[0]->getRates();
                 foreach ($taxRateIds as $taxRateId) {
                     /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
                     $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
@@ -612,8 +612,8 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->fixtureTaxClasses = [];
             if ($this->getFixtureTaxRules()) {
                 $taxClassIds = array_merge(
-                    (array)$this->getFixtureTaxRules()[0]->getCustomerTaxClasses(),
-                    (array)$this->getFixtureTaxRules()[0]->getProductTaxClasses()
+                    (array) $this->getFixtureTaxRules()[0]->getCustomerTaxClasses(),
+                    (array) $this->getFixtureTaxRules()[0]->getProductTaxClasses()
                 );
                 foreach ($taxClassIds as $taxClassId) {
                     /** @var \Magento\Tax\Model\ClassModel $taxClass */

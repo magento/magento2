@@ -57,7 +57,7 @@ class Preview extends \Magento\Backend\Block\Widget
         /* @var $template \Magento\Newsletter\Model\Template */
         $template = $this->_templateFactory->create();
 
-        if ($id = (int)$this->getRequest()->getParam('id')) {
+        if ($id = (int) $this->getRequest()->getParam('id')) {
             $this->loadTemplate($template, $id);
         } else {
             $previewData = $this->getPreviewData();
@@ -125,7 +125,7 @@ class Preview extends \Magento\Backend\Block\Widget
      */
     protected function getStoreId()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $storeId = (int) $this->getRequest()->getParam('store');
         if ($storeId) {
             return $storeId;
         }

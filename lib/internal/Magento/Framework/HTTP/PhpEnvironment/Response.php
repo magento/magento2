@@ -73,7 +73,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      */
     public function setHeader($name, $value, $replace = false)
     {
-        $value = (string)$value;
+        $value = (string) $value;
 
         if ($replace) {
             $this->clearHeader($name);

@@ -311,7 +311,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function pageHandleExists($handleName)
     {
-        return (bool)$this->_getPageHandleNode($handleName);
+        return (bool) $this->_getPageHandleNode($handleName);
     }
 
     /**
@@ -398,7 +398,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $name = $node->getAttribute('id');
             $info = [
                 'name' => $name,
-                'label' => (string)new \Magento\Framework\Phrase((string)$node->getAttribute('label')),
+                'label' => (string) new \Magento\Framework\Phrase((string) $node->getAttribute('label')),
                 'design_abstraction' => $node->getAttribute('design_abstraction'),
             ];
             $result[$name] = $info;
@@ -456,7 +456,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $layout = $this->asString();
         $this->_validateMergedLayout($cacheId, $layout);
         $this->_saveCache($layout, $cacheId, $this->getHandles());
-        $this->_saveCache((string)$this->pageLayout, $cacheIdPageLayout, $this->getHandles());
+        $this->_saveCache((string) $this->pageLayout, $cacheIdPageLayout, $this->getHandles());
         return $this;
     }
 
@@ -480,7 +480,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $message = reset($messages);
             $this->logger->info(
                 'Cache file with merged layout: ' . $cacheId
-                . ' and handles ' . implode(', ', (array)$this->getHandles()) . ': ' . $message
+                . ' and handles ' . implode(', ', (array) $this->getHandles()) . ': ' . $message
             );
             if ($this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
                 throw $e;
@@ -585,7 +585,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->addUpdate($updateInnerXml);
 
         \Magento\Framework\Profiler::stop($_profilerKey);
-        return (bool)$updateStr;
+        return (bool) $updateStr;
     }
 
     /**
@@ -650,11 +650,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     {
         foreach ($updateXml->children() as $child) {
             if (strtolower($child->getName()) == 'update' && isset($child['handle'])) {
-                $this->_merge((string)$child['handle']);
+                $this->_merge((string) $child['handle']);
             }
         }
         if (isset($updateXml['layout'])) {
-            $this->pageLayout = (string)$updateXml['layout'];
+            $this->pageLayout = (string) $updateXml['layout'];
         }
         return $this;
     }
@@ -862,7 +862,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         foreach ($containerNodes as $oneContainerNode) {
             $label = $oneContainerNode->getAttribute('label');
             if ($label) {
-                $result[$oneContainerNode->getAttribute('name')] = (string)new \Magento\Framework\Phrase($label);
+                $result[$oneContainerNode->getAttribute('name')] = (string) new \Magento\Framework\Phrase($label);
             }
         }
         return $result;

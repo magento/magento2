@@ -27,7 +27,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index implements HttpG
         $customerData['account'] = [];
         $customerData['address'] = [];
         $customer = null;
-        $isExistingCustomer = (bool)$customerId;
+        $isExistingCustomer = (bool) $customerId;
         if ($isExistingCustomer) {
             try {
                 $customer = $this->_customerRepository->getById($customerId);

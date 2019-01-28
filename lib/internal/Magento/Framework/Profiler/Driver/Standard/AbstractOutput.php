@@ -49,7 +49,7 @@ abstract class AbstractOutput implements OutputInterface
         }
         if (!empty($config['thresholds']) && is_array($config['thresholds'])) {
             foreach ($config['thresholds'] as $fetchKey => $minAllowedValue) {
-                $this->setThreshold($fetchKey, (int)$minAllowedValue);
+                $this->setThreshold($fetchKey, (int) $minAllowedValue);
             }
         }
     }
@@ -121,7 +121,7 @@ abstract class AbstractOutput implements OutputInterface
                 $result = number_format($value, 6);
                 break;
             default:
-                $result = number_format((string)$value);
+                $result = number_format((string) $value);
         }
         return $result;
     }

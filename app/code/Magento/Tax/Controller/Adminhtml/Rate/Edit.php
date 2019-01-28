@@ -19,7 +19,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $rateId = (int)$this->getRequest()->getParam('rate');
+        $rateId = (int) $this->getRequest()->getParam('rate');
         $this->_coreRegistry->register(RegistryConstants::CURRENT_TAX_RATE_ID, $rateId);
         try {
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);

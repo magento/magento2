@@ -97,7 +97,7 @@ abstract class Tree extends SimpleElement
      */
     public function setValue($path)
     {
-        $this->eventManager->dispatchEvent(['set_value'], [(string)$this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['set_value'], [(string) $this->getAbsoluteSelector()]);
         $elementSelector = $this->prepareElementSelector($path);
         $elements = $this->getElements('.' . $elementSelector . $this->input, Locator::SELECTOR_XPATH);
         foreach ($elements as $element) {
@@ -112,7 +112,7 @@ abstract class Tree extends SimpleElement
      */
     public function getValue()
     {
-        $this->eventManager->dispatchEvent(['get_value'], [(string)$this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['get_value'], [(string) $this->getAbsoluteSelector()]);
         $checkboxes = $this->getElements($this->selectedLabels, Locator::SELECTOR_XPATH);
 
         return $this->prepareValues($checkboxes);

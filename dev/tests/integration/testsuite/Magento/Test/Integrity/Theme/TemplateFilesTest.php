@@ -73,8 +73,8 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             $attributes = $block->attributes();
             if (isset($attributes['template'])) {
                 $module = $this->_getBlockModule($block);
-                if (!$this->_isTemplateForDisabledModule($module, (string)$attributes['template'])) {
-                    $templates[] = [$module, (string)$attributes['template'], $block->asXML()];
+                if (!$this->_isTemplateForDisabledModule($module, (string) $attributes['template'])) {
+                    $templates[] = [$module, (string) $attributes['template'], $block->asXML()];
                 }
             }
         }
@@ -87,21 +87,21 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 case 'setTemplate':
                     $parent = $action[0]->xpath("parent::*");
                     $attributes = $parent[0]->attributes();
-                    $referenceName = (string)$attributes['name'];
+                    $referenceName = (string) $attributes['name'];
                     $block = $layoutXml->xpath(
                         "//block[@name='{$referenceName}'] | //referenceBlock[@name='{$referenceName}']"
                     );
                     $module = $this->_getBlockModule($block[0]);
-                    if (!$template->attributes() && !$this->_isTemplateForDisabledModule($module, (string)$template)) {
-                        $templates[] = [$module, (string)$template, $parent[0]->asXml()];
+                    if (!$template->attributes() && !$this->_isTemplateForDisabledModule($module, (string) $template)) {
+                        $templates[] = [$module, (string) $template, $parent[0]->asXml()];
                     }
                     break;
                 case 'addInformationRenderer':
                 case 'addMergeSettingsBlockType':
                     $blockType = $action[0]->xpath('block');
                     $module = $this->_getBlockModule($blockType[0]);
-                    if (!$this->_isTemplateForDisabledModule($module, (string)$template)) {
-                        $templates[] = [$module, (string)$template, $action[0]->asXml()];
+                    if (!$this->_isTemplateForDisabledModule($module, (string) $template)) {
+                        $templates[] = [$module, (string) $template, $action[0]->asXml()];
                     }
                     break;
                 default:
@@ -121,9 +121,9 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
     {
         $attributes = $xmlNode->attributes();
         if (isset($attributes['type'])) {
-            $class = (string)$attributes['type'];
+            $class = (string) $attributes['type'];
         } else {
-            $class = (string)$xmlNode;
+            $class = (string) $xmlNode;
         }
         $blockModule = substr($class, 0, strpos($class, '_Block'));
         return $blockModule;

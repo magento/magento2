@@ -52,11 +52,11 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
 
         $params = [];
 
-        $params['minAllowed'] = (float)$stockItem->getMinSaleQty();
+        $params['minAllowed'] = (float) $stockItem->getMinSaleQty();
         if ($stockItem->getMaxSaleQty()) {
-            $params['maxAllowed'] = (float)$stockItem->getMaxSaleQty();
+            $params['maxAllowed'] = (float) $stockItem->getMaxSaleQty();
         } else {
-            $params['maxAllowed'] = (float)StockDataFilter::MAX_QTY_VALUE;
+            $params['maxAllowed'] = (float) StockDataFilter::MAX_QTY_VALUE;
         }
 
         return $params;

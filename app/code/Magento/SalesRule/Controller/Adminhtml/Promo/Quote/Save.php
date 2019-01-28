@@ -110,7 +110,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 unset($data['rule']);
                 $model->loadPost($data);
 
-                $useAutoGeneration = (int)(
+                $useAutoGeneration = (int) (
                     !empty($data['use_auto_generation']) && $data['use_auto_generation'] !== 'false'
                 );
                 $model->setUseAutoGeneration($useAutoGeneration);
@@ -128,7 +128,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-                $id = (int)$this->getRequest()->getParam('rule_id');
+                $id = (int) $this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
                     $this->_redirect('sales_rule/*/edit', ['id' => $id]);
                 } else {

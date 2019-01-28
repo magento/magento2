@@ -81,7 +81,7 @@ class Logger
      */
     private function isDebugOn()
     {
-        return $this->config && (bool)$this->config->getValue('debug');
+        return $this->config && (bool) $this->config->getValue('debug');
     }
 
     /**

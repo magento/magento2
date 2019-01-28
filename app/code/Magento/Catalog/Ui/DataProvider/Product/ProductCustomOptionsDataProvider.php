@@ -89,7 +89,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     public function getData()
     {
         if (!$this->getCollection()->isLoaded()) {
-            $currentProductId = (int)$this->request->getParam('current_product_id');
+            $currentProductId = (int) $this->request->getParam('current_product_id');
 
             if (0 !== $currentProductId) {
                 $this->getCollection()->getSelect()->where('e.entity_id != ?', $currentProductId);

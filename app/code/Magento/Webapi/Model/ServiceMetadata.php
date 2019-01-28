@@ -116,7 +116,7 @@ class ServiceMetadata
                 foreach ($serviceData[Converter::KEY_METHODS] as $methodName => $methodMetadata) {
                     $services[$serviceName][self::KEY_SERVICE_METHODS][$methodName] = [
                         self::KEY_METHOD => $methodName,
-                        self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
+                        self::KEY_IS_REQUIRED => (bool) $methodMetadata[Converter::KEY_SECURE],
                         self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
                         self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
                     ];

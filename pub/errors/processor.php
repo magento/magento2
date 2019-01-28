@@ -155,7 +155,7 @@ class Processor
             }
         }
 
-        $reportId = (isset($_GET['id'])) ? (int)$_GET['id'] : null;
+        $reportId = (isset($_GET['id'])) ? (int) $_GET['id'] : null;
         if ($reportId) {
             $this->loadReport($reportId);
         }
@@ -352,27 +352,27 @@ class Processor
         $config->skin           = self::DEFAULT_SKIN;
 
         //combine xml data to one object
-        if ($design !== null && (string)$design->skin) {
-            $this->_setSkin((string)$design->skin, $config);
+        if ($design !== null && (string) $design->skin) {
+            $this->_setSkin((string) $design->skin, $config);
         }
         if ($local !== null) {
-            if ((string)$local->report->action) {
+            if ((string) $local->report->action) {
                 $config->action = $local->report->action;
             }
-            if ((string)$local->report->subject) {
+            if ((string) $local->report->subject) {
                 $config->subject = $local->report->subject;
             }
-            if ((string)$local->report->email_address) {
+            if ((string) $local->report->email_address) {
                 $config->email_address = $local->report->email_address;
             }
-            if ((string)$local->report->trash) {
+            if ((string) $local->report->trash) {
                 $config->trash = $local->report->trash;
             }
-            if ((string)$local->skin) {
-                $this->_setSkin((string)$local->skin, $config);
+            if ((string) $local->skin) {
+                $this->_setSkin((string) $local->skin, $config);
             }
         }
-        if ((string)$config->email_address == '' && (string)$config->action == 'email') {
+        if ((string) $config->email_address == '' && (string) $config->action == 'email') {
             $config->action = '';
         }
 
@@ -478,7 +478,7 @@ class Processor
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
-        $this->reportId   = abs((int)(microtime(true) * random_int(100, 1000)));
+        $this->reportId   = abs((int) (microtime(true) * random_int(100, 1000)));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 
@@ -546,8 +546,8 @@ class Processor
                     $msg .= "Comment: {$this->postData['comment']}\n";
                 }
 
-                $subject = sprintf('%s [%s]', (string)$this->_config->subject, $this->reportId);
-                @mail((string)$this->_config->email_address, $subject, $msg);
+                $subject = sprintf('%s [%s]', (string) $this->_config->subject, $this->reportId);
+                @mail((string) $this->_config->email_address, $subject, $msg);
 
                 $this->showSendForm = false;
                 $this->showSentMsg  = true;
@@ -563,8 +563,8 @@ class Processor
                 . "Error:\n{$this->reportData[0]}\n\n"
                 . "Trace:\n{$this->reportData[1]}";
 
-            $subject = sprintf('%s [%s]', (string)$this->_config->subject, $this->reportId);
-            @mail((string)$this->_config->email_address, $subject, $msg);
+            $subject = sprintf('%s [%s]', (string) $this->_config->subject, $this->reportId);
+            @mail((string) $this->_config->email_address, $subject, $msg);
 
             if ($this->_config->trash == 'delete') {
                 @unlink($this->_reportFile);

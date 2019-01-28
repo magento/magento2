@@ -98,7 +98,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         if (empty($this->_storeId)) {
             $defaultStore = $this->_storeManager->getDefaultStoreView();
             if ($defaultStore) {
-                $this->_storeId = (int)$defaultStore->getId();
+                $this->_storeId = (int) $defaultStore->getId();
             }
         }
         return $this;

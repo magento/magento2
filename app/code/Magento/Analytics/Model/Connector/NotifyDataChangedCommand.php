@@ -88,6 +88,6 @@ class NotifyDataChangedCommand implements CommandInterface
             );
             $result = $this->responseResolver->getResult($response);
         }
-        return (bool)$result;
+        return (bool) $result;
     }
 }

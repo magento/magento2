@@ -83,7 +83,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
      */
     public function execute()
     {
-        $email = (string)$this->getRequest()->getParam('email');
+        $email = (string) $this->getRequest()->getParam('email');
         $params = $this->getRequest()->getParams();
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

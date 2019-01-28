@@ -108,7 +108,7 @@ class Column extends Widget
     public function _construct()
     {
         if ($this->hasData('grouped')) {
-            $this->_isGrouped = (bool)$this->getData('grouped');
+            $this->_isGrouped = (bool) $this->getData('grouped');
         }
 
         parent::_construct();
@@ -239,7 +239,7 @@ class Column extends Widget
      */
     public function getSortable()
     {
-        return $this->hasData('sortable') ? (bool)$this->getData('sortable') : true;
+        return $this->hasData('sortable') ? (bool) $this->getData('sortable') : true;
     }
 
     /**
@@ -484,7 +484,7 @@ class Column extends Widget
     {
         if ($this->_filter === null) {
             $filterClass = $this->getData('filter');
-            if (false === (bool)$filterClass && false === ($filterClass === null)) {
+            if (false === (bool) $filterClass && false === ($filterClass === null)) {
                 return false;
             }
             if (!$filterClass) {

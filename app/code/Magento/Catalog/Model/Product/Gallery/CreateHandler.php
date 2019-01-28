@@ -259,11 +259,11 @@ class CreateHandler implements ExtensionInterface
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
                 $data['label'] = isset($image['label']) ? $image['label'] : '';
-                $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
-                $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
-                $data['store_id'] = (int)$product->getStoreId();
+                $data['position'] = isset($image['position']) ? (int) $image['position'] : 0;
+                $data['disabled'] = isset($image['disabled']) ? (int) $image['disabled'] : 0;
+                $data['store_id'] = (int) $product->getStoreId();
 
-                $data[$this->metadata->getLinkField()] = (int)$product->getData($this->metadata->getLinkField());
+                $data[$this->metadata->getLinkField()] = (int) $product->getData($this->metadata->getLinkField());
 
                 $this->resourceModel->insertGalleryValueInStore($data);
             }

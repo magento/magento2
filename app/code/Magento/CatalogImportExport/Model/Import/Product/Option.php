@@ -547,7 +547,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['page_size'])) {
             $this->_pageSize = $data['page_size'];
         } else {
-            $this->_pageSize = self::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
+            $this->_pageSize = self::XML_PATH_PAGE_SIZE ? (int) $this->_scopeConfig->getValue(
                 self::XML_PATH_PAGE_SIZE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ) : 0;
@@ -835,7 +835,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _validateMainRowAdditionalData(array $rowData, $rowNumber)
     {
-        if (!empty($rowData[self::COLUMN_SORT_ORDER]) && !ctype_digit((string)$rowData[self::COLUMN_SORT_ORDER])) {
+        if (!empty($rowData[self::COLUMN_SORT_ORDER]) && !ctype_digit((string) $rowData[self::COLUMN_SORT_ORDER])) {
             $this->_productEntity->addRowError(self::ERROR_INVALID_SORT_ORDER, $rowNumber);
         } else {
             return true;
@@ -922,7 +922,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         } elseif (!empty($rowData[self::COLUMN_ROW_PRICE]) && !is_numeric(rtrim($rowData[self::COLUMN_ROW_PRICE], '%'))
         ) {
             $this->_productEntity->addRowError(self::ERROR_INVALID_ROW_PRICE, $rowNumber);
-        } elseif (!empty($rowData[self::COLUMN_ROW_SORT]) && !ctype_digit((string)$rowData[self::COLUMN_ROW_SORT])) {
+        } elseif (!empty($rowData[self::COLUMN_ROW_SORT]) && !ctype_digit((string) $rowData[self::COLUMN_ROW_SORT])) {
             $this->_productEntity->addRowError(self::ERROR_INVALID_ROW_SORT, $rowNumber);
         } else {
             if (isset($this->_productsSkuToId[$this->_rowProductSku])) {
@@ -1017,7 +1017,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 return false;
             }
         } elseif ($typeParameter == 'max_characters') {
-            if (!empty($rowData[$fieldName]) && !ctype_digit((string)$rowData[$fieldName])) {
+            if (!empty($rowData[$fieldName]) && !ctype_digit((string) $rowData[$fieldName])) {
                 $this->_productEntity->addRowError(self::ERROR_INVALID_MAX_CHARACTERS, $rowNumber);
                 return false;
             }
@@ -1767,7 +1767,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ('%' == substr($data, -1)) {
                 $priceData['price_type'] = 'percent';
             }
-            $priceData['price'] = (float)rtrim($data, '%');
+            $priceData['price'] = (float) rtrim($data, '%');
 
             return $priceData;
         }
@@ -1797,7 +1797,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
             if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
                 $priceData = [
-                    'price' => (float)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
+                    'price' => (float) rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
                     'price_type' => 'fixed',
                 ];
                 if ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) {

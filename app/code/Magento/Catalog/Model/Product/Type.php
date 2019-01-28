@@ -180,7 +180,7 @@ class Type implements OptionSourceInterface
     {
         $options = [];
         foreach ($this->getTypes() as $typeId => $type) {
-            $options[$typeId] = (string)$type['label'];
+            $options[$typeId] = (string) $type['label'];
         }
         return $options;
     }

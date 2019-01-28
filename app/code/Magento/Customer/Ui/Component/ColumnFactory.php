@@ -67,7 +67,7 @@ class ColumnFactory
             'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
             'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
             'align' => 'left',
-            'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
+            'visible' => (bool) $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
             'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
         ], $config);
         if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {

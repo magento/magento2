@@ -127,7 +127,7 @@ class Processor
                     continue;
                 }
 
-                $data = (array)$this->deploymentConfig->getConfigData($section);
+                $data = (array) $this->deploymentConfig->getConfigData($section);
                 $this->validateSectionData($section, $data);
 
                 /** @var ImporterInterface $importer */

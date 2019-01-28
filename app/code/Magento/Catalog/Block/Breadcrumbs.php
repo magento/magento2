@@ -41,7 +41,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      */
     public function getTitleSeparator($store = null)
     {
-        $separator = (string)$this->_scopeConfig->getValue(
+        $separator = (string) $this->_scopeConfig->getValue(
             'catalog/seo/title_separator',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

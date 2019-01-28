@@ -121,7 +121,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLanguageCodes()
     {
-        return (array)$this->scopeConfig->getValue(self::XML_PATH_LANGUAGES, 'default');
+        return (array) $this->scopeConfig->getValue(self::XML_PATH_LANGUAGES, 'default');
     }
 
     /**
@@ -132,7 +132,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function convertLanguageCodeToLocaleCode($language)
     {
-        $convertArray = (array)$this->scopeConfig->getValue(self::XML_PATH_LANGUAGE_CONVERT, 'default');
+        $convertArray = (array) $this->scopeConfig->getValue(self::XML_PATH_LANGUAGE_CONVERT, 'default');
         return isset($convertArray[$language]) ? $convertArray[$language] : $language;
     }
 
@@ -143,7 +143,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionJsSrc()
     {
-        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
+        return (string) $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
     }
 
     /**
@@ -167,7 +167,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionId()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -255,7 +255,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionValueConstant()
     {
-        return (float)$this->scopeConfig->getValue(
+        return (float) $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -269,7 +269,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getConversionValue()
     {
         if ($this->isDynamicConversionValue()) {
-            $conversionValue = (float)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
+            $conversionValue = (float) $this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
         } else {
             $conversionValue = $this->getConversionValueConstant();
         }

@@ -130,12 +130,12 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attributeCode = $attribute->getAttributeCode();
         $value = $object->getData($attributeCode);
         // $value may be passed as null to unset the attribute
-        if ($value === null || (float)$value > 0) {
+        if ($value === null || (float) $value > 0) {
             if ($attribute->isScopeWebsite() && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                 if ($this->isUseDefault($object)) {
                     $value = null;
                 }
-                foreach ((array)$object->getWebsiteStoreIds() as $storeId) {
+                foreach ((array) $object->getWebsiteStoreIds() as $storeId) {
                     $object->addAttributeUpdate($attributeCode, $value, $storeId);
                 }
             }

@@ -248,7 +248,7 @@ class Builder
     ): void {
         $this->_connection = $collection->getResource()->getConnection();
         $this->_joinTablesToCollection($collection, $combine);
-        $whereExpression = (string)$this->_getMappedSqlCombination($combine);
+        $whereExpression = (string) $this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);

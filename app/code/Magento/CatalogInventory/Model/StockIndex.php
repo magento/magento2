@@ -184,7 +184,7 @@ class StockIndex implements StockIndexInterface
                     }
                     $websiteStatus = $websiteStatus && $optionStatus;
                 }
-                $statuses[$websiteId] = (int)$websiteStatus;
+                $statuses[$websiteId] = (int) $websiteStatus;
             }
         }
         foreach ($statuses as $websiteId => $websiteStatus) {

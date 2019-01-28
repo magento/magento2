@@ -133,7 +133,7 @@ class Request
      */
     protected function _isProtocolParameter($attrName)
     {
-        return (bool)preg_match('/oauth_[a-z_-]+/', $attrName);
+        return (bool) preg_match('/oauth_[a-z_-]+/', $attrName);
     }
 
     /**

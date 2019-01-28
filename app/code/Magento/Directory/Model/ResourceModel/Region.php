@@ -140,7 +140,7 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCode(\Magento\Directory\Model\Region $region, $regionCode, $countryId)
     {
-        return $this->_loadByCountry($region, $countryId, (string)$regionCode, 'code');
+        return $this->_loadByCountry($region, $countryId, (string) $regionCode, 'code');
     }
 
     /**
@@ -153,6 +153,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByName(\Magento\Directory\Model\Region $region, $regionName, $countryId)
     {
-        return $this->_loadByCountry($region, $countryId, (string)$regionName, 'default_name');
+        return $this->_loadByCountry($region, $countryId, (string) $regionName, 'default_name');
     }
 }

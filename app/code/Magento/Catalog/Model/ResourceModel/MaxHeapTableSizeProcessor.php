@@ -55,7 +55,7 @@ class MaxHeapTableSizeProcessor
             throw new \InvalidArgumentException('Wrong max_heap_table_size parameter');
         }
 
-        $this->currentMaxHeapTableSize = (int)$this->connection->fetchOne('SELECT @@session.max_heap_table_size');
+        $this->currentMaxHeapTableSize = (int) $this->connection->fetchOne('SELECT @@session.max_heap_table_size');
         if (!$this->currentMaxHeapTableSize) {
             throw new \RuntimeException('Can not extract max_heap_table_size');
         }

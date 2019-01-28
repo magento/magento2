@@ -158,7 +158,7 @@ class Config
         if (null !== $this->_priceIncludesTax) {
             return $this->_priceIncludesTax;
         }
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -176,7 +176,7 @@ class Config
         if (null === $value) {
             $this->_priceIncludesTax = null;
         } else {
-            $this->_priceIncludesTax = (bool)$value;
+            $this->_priceIncludesTax = (bool) $value;
         }
         return $this;
     }
@@ -189,7 +189,7 @@ class Config
      */
     public function applyTaxAfterDiscount($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -207,7 +207,7 @@ class Config
      */
     public function getPriceDisplayType($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -222,7 +222,7 @@ class Config
      */
     public function discountTax($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_DISCOUNT_TAX,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -300,7 +300,7 @@ class Config
      */
     public function getShippingTaxClass($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_SHIPPING_TAX_CLASS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -315,7 +315,7 @@ class Config
      */
     public function getShippingPriceDisplayType($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_DISPLAY_SHIPPING,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -331,7 +331,7 @@ class Config
     public function shippingPriceIncludesTax($store = null)
     {
         if ($this->_shippingPriceIncludeTax === null) {
-            $this->_shippingPriceIncludeTax = (bool)$this->_scopeConfig->getValue(
+            $this->_shippingPriceIncludeTax = (bool) $this->_scopeConfig->getValue(
                 self::CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
@@ -517,7 +517,7 @@ class Config
      */
     public function displayCartTaxWithGrandTotal($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_GRANDTOTAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -530,7 +530,7 @@ class Config
      */
     public function displayCartFullSummary($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_FULL_SUMMARY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -543,7 +543,7 @@ class Config
      */
     public function displayCartZeroTax($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_ZERO_TAX,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -715,7 +715,7 @@ class Config
      */
     public function displaySalesTaxWithGrandTotal($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_GRANDTOTAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -728,7 +728,7 @@ class Config
      */
     public function displaySalesFullSummary($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_FULL_SUMMARY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -741,7 +741,7 @@ class Config
      */
     public function displaySalesZeroTax($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_ZERO_TAX,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -756,7 +756,7 @@ class Config
      */
     public function crossBorderTradeEnabled($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -775,7 +775,7 @@ class Config
      */
     public function isWrongApplyDiscountSettingIgnored($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -790,7 +790,7 @@ class Config
      */
     public function isWrongDisplaySettingsIgnored($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -805,7 +805,7 @@ class Config
      */
     public function isWrongDiscountSettingsIgnored($store = null)
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -820,7 +820,7 @@ class Config
      */
     public function getInfoUrl($store = null)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string) $this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_INFO_URL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

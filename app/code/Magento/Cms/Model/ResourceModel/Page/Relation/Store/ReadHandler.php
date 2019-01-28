@@ -45,7 +45,7 @@ class ReadHandler implements ExtensionInterface
     public function execute($entity, $arguments = [])
     {
         if ($entity->getId()) {
-            $stores = $this->resourcePage->lookupStoreIds((int)$entity->getId());
+            $stores = $this->resourcePage->lookupStoreIds((int) $entity->getId());
             $entity->setData('store_id', $stores);
         }
         return $entity;

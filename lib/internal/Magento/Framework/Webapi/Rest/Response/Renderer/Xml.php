@@ -86,7 +86,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
         } elseif ($data instanceof \Magento\Framework\DataObject) {
             $data = $data->toArray();
         } else {
-            $data = (array)$data;
+            $data = (array) $data;
         }
         $isAssoc = !preg_match('/^\d+$/', implode(array_keys($data), ''));
 

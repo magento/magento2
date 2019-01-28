@@ -104,10 +104,10 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
             return $this;
         }
         if (!is_array($ruleIds)) {
-            $ruleIds = [(int)$ruleIds];
+            $ruleIds = [(int) $ruleIds];
         }
         if (!is_array($entityIds)) {
-            $entityIds = [(int)$entityIds];
+            $entityIds = [(int) $entityIds];
         }
         $data = [];
         $count = 0;
@@ -164,10 +164,10 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
         if (!is_array($entityIds)) {
-            $entityIds = [(int)$entityIds];
+            $entityIds = [(int) $entityIds];
         }
         if (!is_array($ruleIds)) {
-            $ruleIds = [(int)$ruleIds];
+            $ruleIds = [(int) $ruleIds];
         }
 
         $where = [];

@@ -337,7 +337,7 @@ abstract class AbstractEntity
      */
     public function addRowError($errorCode, $errorRowNum)
     {
-        $errorCode = (string)$errorCode;
+        $errorCode = (string) $errorCode;
         $this->_errors[$errorCode][] = $errorRowNum + 1;
         // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
@@ -428,7 +428,7 @@ abstract class AbstractEntity
                     foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
                         if (strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
-                            $options[$innerOption['value']] = (string)$innerOption[$index];
+                            $options[$innerOption['value']] = (string) $innerOption[$index];
                         }
                     }
                 }

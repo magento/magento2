@@ -624,8 +624,8 @@ class Onepage
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
         $customer = $this->customerRepository->getById($this->getCustomerSession()->getCustomerId());
-        $hasDefaultBilling = (bool)$customer->getDefaultBilling();
-        $hasDefaultShipping = (bool)$customer->getDefaultShipping();
+        $hasDefaultBilling = (bool) $customer->getDefaultBilling();
+        $hasDefaultShipping = (bool) $customer->getDefaultShipping();
 
         if ($shipping && !$shipping->getSameAsBilling() &&
             (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())

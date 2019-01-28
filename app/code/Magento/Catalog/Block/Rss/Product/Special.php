@@ -210,7 +210,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      */
     protected function getStoreId()
     {
-        $storeId = (int)$this->getRequest()->getParam('store_id');
+        $storeId = (int) $this->getRequest()->getParam('store_id');
         if ($storeId == null) {
             $storeId = $this->storeManager->getStore()->getId();
         }

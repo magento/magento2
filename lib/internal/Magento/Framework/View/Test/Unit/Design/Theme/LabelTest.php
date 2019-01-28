@@ -32,7 +32,7 @@ class LabelTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-        $defaultLabel = (string)new \Magento\Framework\Phrase('-- No Theme --');
+        $defaultLabel = (string) new \Magento\Framework\Phrase('-- No Theme --');
         $data = [
             'value' => '1',
             'label' => 'Label1',
@@ -51,7 +51,7 @@ class LabelTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLabelsCollectionForSystemConfiguration()
     {
-        $defaultLabel = (string)new \Magento\Framework\Phrase('-- No Theme --');
+        $defaultLabel = (string) new \Magento\Framework\Phrase('-- No Theme --');
         $data = [
             'value' => '1',
             'label' => 'Label1',

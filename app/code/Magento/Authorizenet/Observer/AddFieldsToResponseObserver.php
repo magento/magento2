@@ -88,7 +88,7 @@ class AddFieldsToResponseObserver implements ObserverInterface
                 ->getControllerName()
         );
         $requestToAuthorizenet->setIsSecure(
-            (string)$this->storeManager->getStore()
+            (string) $this->storeManager->getStore()
                 ->isCurrentlySecure()
         );
 

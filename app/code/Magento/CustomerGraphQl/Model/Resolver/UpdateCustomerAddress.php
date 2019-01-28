@@ -93,7 +93,7 @@ class UpdateCustomerAddress implements ResolverInterface
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
         $this->customerAddressUpdateDataValidator->validate($args['input']);
 
-        $address = $this->updateCustomerAddress((int)$currentUserId, (int)$args['id'], $args['input']);
+        $address = $this->updateCustomerAddress((int) $currentUserId, (int) $args['id'], $args['input']);
         return $this->customerAddressDataProvider->getAddressData($address);
     }
 

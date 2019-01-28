@@ -95,7 +95,7 @@ class Authentication implements AuthenticationInterface
         if (!($lockThreshold && $maxFailures)) {
             return;
         }
-        $failuresNum = (int)$customerSecure->getFailuresNum() + 1;
+        $failuresNum = (int) $customerSecure->getFailuresNum() + 1;
 
         $firstFailureDate = $customerSecure->getFirstFailure();
         if ($firstFailureDate) {

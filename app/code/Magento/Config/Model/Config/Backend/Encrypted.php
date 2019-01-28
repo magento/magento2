@@ -75,7 +75,7 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      */
     protected function _afterLoad()
     {
-        $value = (string)$this->getValue();
+        $value = (string) $this->getValue();
         if (!empty($value) && ($decrypted = $this->_encryptor->decrypt($value))) {
             $this->setValue($decrypted);
         }
@@ -89,7 +89,7 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
     public function beforeSave()
     {
         $this->_dataSaveAllowed = false;
-        $value = (string)$this->getValue();
+        $value = (string) $this->getValue();
         // don't save value, if an obscured value was received. This indicates that data was not changed.
         if (!preg_match('/^\*+$/', $value) && !empty($value)) {
             $this->_dataSaveAllowed = true;

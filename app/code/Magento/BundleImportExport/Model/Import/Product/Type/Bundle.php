@@ -217,7 +217,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
                 $this->_cachedOptionSelectQuery[] =
                     $this->connection->quoteInto(
-                        '(parent_id = ' . (int)$entityId . ' AND title = ?)',
+                        '(parent_id = ' . (int) $entityId . ' AND title = ?)',
                         $option['name']
                     );
             }
@@ -331,15 +331,15 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
         $populatedSelection = [
             'selection_id' => null,
-            'option_id' => (int)$optionId,
-            'parent_product_id' => (int)$parentId,
-            'product_id' => (int)$productId,
-            'position' => (int)$index,
+            'option_id' => (int) $optionId,
+            'parent_product_id' => (int) $parentId,
+            'product_id' => (int) $productId,
+            'position' => (int) $index,
             'is_default' => (isset($selection['default']) && $selection['default']) ? 1 : 0,
             'selection_price_type' => (isset($selection['price_type']) && $selection['price_type'] == self::VALUE_FIXED)
                 ? self::SELECTION_PRICE_TYPE_FIXED : self::SELECTION_PRICE_TYPE_PERCENT,
-            'selection_price_value' => (isset($selection['price'])) ? (float)$selection['price'] : 0.0,
-            'selection_qty' => (isset($selection['default_qty'])) ? (float)$selection['default_qty'] : 1.0,
+            'selection_price_value' => (isset($selection['price'])) ? (float) $selection['price'] : 0.0,
+            'selection_qty' => (isset($selection['default_qty'])) ? (float) $selection['default_qty'] : 1.0,
             'selection_can_change_qty' => isset($selection['can_change_qty'])
                 ? ($selection['can_change_qty'] ? 1 : 0) : 1,
         ];

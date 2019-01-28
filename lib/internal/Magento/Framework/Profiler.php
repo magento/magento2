@@ -148,7 +148,7 @@ class Profiler
     private static function _getTimerId($timerName = null)
     {
         if (!self::$_currentPath) {
-            return (string)$timerName;
+            return (string) $timerName;
         } elseif ($timerName) {
             return implode(self::NESTING_SEPARATOR, self::$_currentPath) . self::NESTING_SEPARATOR . $timerName;
         } else {
@@ -165,7 +165,7 @@ class Profiler
     private static function _getTags(array $tags = null)
     {
         if (self::$_defaultTags) {
-            return (array)$tags + self::$_defaultTags;
+            return (array) $tags + self::$_defaultTags;
         } else {
             return $tags;
         }
@@ -363,9 +363,9 @@ class Profiler
             $config = array_merge($config, $profilerConfig);
         }
 
-        $driverConfigs = (array)(isset($config['drivers']) ? $config['drivers'] : []);
+        $driverConfigs = (array) (isset($config['drivers']) ? $config['drivers'] : []);
         $driverFactory = isset($config['driverFactory']) ? $config['driverFactory'] : new Factory();
-        $tagFilters = (array)(isset($config['tagFilters']) ? $config['tagFilters'] : []);
+        $tagFilters = (array) (isset($config['tagFilters']) ? $config['tagFilters'] : []);
 
         $result = [
             'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $config['baseDir']),

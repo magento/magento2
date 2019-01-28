@@ -30,7 +30,7 @@ class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         $data = parent::_getValue($row);
         if ($data !== null) {
             $value = $data * 1;
-            $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $value > 0 ? '+' : '';
+            $sign = (bool) (int) $this->getColumn()->getShowNumberSign() && $value > 0 ? '+' : '';
             if ($sign) {
                 $value = $sign . $value;
             }

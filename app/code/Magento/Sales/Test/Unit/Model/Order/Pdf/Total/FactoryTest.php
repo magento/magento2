@@ -32,7 +32,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate($class, $arguments, $expectedClassName)
     {
         $createdModel = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class)
-            ->setMockClassName((string)$class)
+            ->setMockClassName((string) $class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->_objectManager->expects(

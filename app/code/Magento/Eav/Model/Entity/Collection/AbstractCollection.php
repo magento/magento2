@@ -504,7 +504,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 throw new LocalizedException(
                     __(
                         'The "%1" attribute requested is invalid. Verify the attribute and try again.',
-                        (string)$attribute
+                        (string) $attribute
                     )
                 );
             }

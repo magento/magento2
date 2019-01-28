@@ -121,7 +121,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         /**
          * Add shipping
          */
-        if (!$source->getIsVirtual() && ((float)$source->getShippingAmount() || $source->getShippingDescription())) {
+        if (!$source->getIsVirtual() && ((float) $source->getShippingAmount() || $source->getShippingDescription())) {
             $this->_totals['shipping'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
@@ -135,7 +135,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         /**
          * Add discount
          */
-        if ((float)$this->getSource()->getDiscountAmount() != 0) {
+        if ((float) $this->getSource()->getDiscountAmount() != 0) {
             if ($this->getSource()->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $source->getDiscountDescription());
             } else {
@@ -314,9 +314,9 @@ class Totals extends \Magento\Framework\View\Element\Template
         if ($area === null) {
             $totals = $this->_totals;
         } else {
-            $area = (string)$area;
+            $area = (string) $area;
             foreach ($this->_totals as $total) {
-                $totalArea = (string)$total->getArea();
+                $totalArea = (string) $total->getArea();
                 if ($totalArea == $area) {
                     $totals[] = $total;
                 }

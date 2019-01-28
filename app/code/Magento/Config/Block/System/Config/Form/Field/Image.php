@@ -28,7 +28,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
         /* @var $config array */
         if (isset($config['base_url'])) {
             $element = $config['base_url'];
-            $urlType = empty($element['type']) ? 'link' : (string)$element['type'];
+            $urlType = empty($element['type']) ? 'link' : (string) $element['type'];
             $url = $this->_urlBuilder->getBaseUrl(['_type' => $urlType]) . $element['value'] . '/' . $url;
         }
         return $url;

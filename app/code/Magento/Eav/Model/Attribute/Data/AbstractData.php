@@ -152,7 +152,7 @@ abstract class AbstractData
      */
     public function setRequestScopeOnly($flag)
     {
-        $this->_requestScopeOnly = (bool)$flag;
+        $this->_requestScopeOnly = (bool) $flag;
         return $this;
     }
 
@@ -483,7 +483,7 @@ abstract class AbstractData
      */
     public function setIsAjaxRequest($flag = true)
     {
-        $this->_isAjax = (bool)$flag;
+        $this->_isAjax = (bool) $flag;
         return $this;
     }
 

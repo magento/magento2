@@ -189,17 +189,17 @@ class Block implements Layout\ReaderInterface
             $keys = array_keys($elementData['attributes']);
             foreach ($keys as $key) {
                 if (isset($currentElement[$key])) {
-                    $elementData['attributes'][$key] = (string)$currentElement[$key];
+                    $elementData['attributes'][$key] = (string) $currentElement[$key];
                 }
             }
         } else {
             $elementData['attributes'] = [
-                self::ATTRIBUTE_CLASS    => (string)$currentElement[self::ATTRIBUTE_CLASS],
-                self::ATTRIBUTE_GROUP    => (string)$currentElement[self::ATTRIBUTE_GROUP],
-                self::ATTRIBUTE_TEMPLATE => (string)$currentElement[self::ATTRIBUTE_TEMPLATE],
-                self::ATTRIBUTE_TTL      => (string)$currentElement[self::ATTRIBUTE_TTL],
-                self::ATTRIBUTE_DISPLAY  => (string)$currentElement[self::ATTRIBUTE_DISPLAY],
-                self::ATTRIBUTE_ACL  => (string)$currentElement[self::ATTRIBUTE_ACL],
+                self::ATTRIBUTE_CLASS    => (string) $currentElement[self::ATTRIBUTE_CLASS],
+                self::ATTRIBUTE_GROUP    => (string) $currentElement[self::ATTRIBUTE_GROUP],
+                self::ATTRIBUTE_TEMPLATE => (string) $currentElement[self::ATTRIBUTE_TEMPLATE],
+                self::ATTRIBUTE_TTL      => (string) $currentElement[self::ATTRIBUTE_TTL],
+                self::ATTRIBUTE_DISPLAY  => (string) $currentElement[self::ATTRIBUTE_DISPLAY],
+                self::ATTRIBUTE_ACL  => (string) $currentElement[self::ATTRIBUTE_ACL],
             ];
         }
         return $elementData['attributes'];
@@ -215,7 +215,7 @@ class Block implements Layout\ReaderInterface
     private function replaceDeprecatedAclKey($data)
     {
         if (isset($data[$this->deprecatedAttributeAcl])) {
-            $data[self::ATTRIBUTE_ACL] = (string)$data[$this->deprecatedAttributeAcl];
+            $data[self::ATTRIBUTE_ACL] = (string) $data[$this->deprecatedAttributeAcl];
         }
 
         return $data;
@@ -277,7 +277,7 @@ class Block implements Layout\ReaderInterface
     {
         $attributes = [];
         foreach ($this->attributes as $attributeName) {
-            $attributes[$attributeName] = (string)$blockElement->getAttribute($attributeName);
+            $attributes[$attributeName] = (string) $blockElement->getAttribute($attributeName);
         }
         return $attributes;
     }

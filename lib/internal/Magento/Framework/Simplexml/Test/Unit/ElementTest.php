@@ -90,7 +90,7 @@ XML;
         $this->assertEmpty($xml->xpath('/root/node1/node2'));
         $xml->setNode($path, $value);
         $this->assertNotEmpty($xml->xpath('/root/node1/node2'));
-        $this->assertEquals($value, (string)$xml->xpath('/root/node1/node2')[0]);
+        $this->assertEquals($value, (string) $xml->xpath('/root/node1/node2')[0]);
     }
 
     /**

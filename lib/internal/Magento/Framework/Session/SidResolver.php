@@ -138,7 +138,7 @@ class SidResolver implements SidResolverInterface
      */
     public function setUseSessionVar($var)
     {
-        $this->_useSessionVar = (bool)$var;
+        $this->_useSessionVar = (bool) $var;
         return $this;
     }
 
@@ -161,7 +161,7 @@ class SidResolver implements SidResolverInterface
      */
     public function setUseSessionInUrl($flag = true)
     {
-        $this->_useSessionInUrl = (bool)$flag;
+        $this->_useSessionInUrl = (bool) $flag;
         return $this;
     }
 

@@ -22,7 +22,7 @@ class Msrp
      */
     public function setCanApplyMsrp($quoteId, $canApply)
     {
-        $this->canApplyMsrpData[$quoteId] = (bool)$canApply;
+        $this->canApplyMsrpData[$quoteId] = (bool) $canApply;
         return $this;
     }
 
@@ -34,7 +34,7 @@ class Msrp
     public function getCanApplyMsrp($quoteId)
     {
         if (isset($this->canApplyMsrpData[$quoteId])) {
-            return (bool)$this->canApplyMsrpData[$quoteId];
+            return (bool) $this->canApplyMsrpData[$quoteId];
         }
         return false;
     }

@@ -454,6 +454,6 @@ class AssociatedProducts
      */
     protected function getAttributes()
     {
-        return (array)$this->configurableType->getConfigurableAttributesAsArray($this->locator->getProduct());
+        return (array) $this->configurableType->getConfigurableAttributesAsArray($this->locator->getProduct());
     }
 }

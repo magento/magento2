@@ -67,12 +67,12 @@ class StorePathInfoValidator
         $storeCode = $this->getStoreCode($pathInfo);
         if (!empty($storeCode)
             && $storeCode != Store::ADMIN_CODE
-            && (bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
+            && (bool) $this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
         ) {
             try {
                 $this->storeRepository->getActiveStoreByCode($storeCode);
 
-                if ((bool)$this->config->getValue(
+                if ((bool) $this->config->getValue(
                     \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $storeCode

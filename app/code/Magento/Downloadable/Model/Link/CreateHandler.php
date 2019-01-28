@@ -44,7 +44,7 @@ class CreateHandler implements ExtensionInterface
         $links = $entity->getExtensionAttributes()->getDownloadableProductLinks() ?: [];
         foreach ($links as $link) {
             $link->setId(null);
-            $this->linkRepository->save($entity->getSku(), $link, !(bool)$entity->getStoreId());
+            $this->linkRepository->save($entity->getSku(), $link, !(bool) $entity->getStoreId());
         }
         
         return $entity;

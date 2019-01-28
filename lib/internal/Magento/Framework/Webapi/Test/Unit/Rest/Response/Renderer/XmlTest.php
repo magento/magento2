@@ -67,7 +67,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                 'Invalid XML render of associated array data.'
             ],
             [
-                (object)['key' => 'value'],
+                (object) ['key' => 'value'],
                 '<?xml version="1.0"?><response><key>value</key></response>',
                 'Invalid XML render of object data.'
             ],

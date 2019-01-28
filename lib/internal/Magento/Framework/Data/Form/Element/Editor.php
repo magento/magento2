@@ -447,7 +447,7 @@ class Editor extends Textarea
      */
     public function translate($string)
     {
-        return (string)new \Magento\Framework\Phrase($string);
+        return (string) new \Magento\Framework\Phrase($string);
     }
 
     /**

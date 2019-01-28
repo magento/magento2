@@ -355,7 +355,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $lifetime = $this->_coreConfig->getValue(
             \Magento\Persistent\Helper\Data::XML_PATH_LIFE_TIME,
             'website',
-            (int)$websiteId
+            (int) $websiteId
         );
 
         if ($lifetime) {

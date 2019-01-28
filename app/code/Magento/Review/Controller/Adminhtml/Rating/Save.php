@@ -26,9 +26,9 @@ class Save extends RatingController implements HttpPostActionInterface
                 /** @var \Magento\Review\Model\Rating $ratingModel */
                 $ratingModel = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
                 $stores = $this->getRequest()->getParam('stores');
-                $position = (int)$this->getRequest()->getParam('position');
+                $position = (int) $this->getRequest()->getParam('position');
                 $stores[] = 0;
-                $isActive = (bool)$this->getRequest()->getParam('is_active');
+                $isActive = (bool) $this->getRequest()->getParam('is_active');
 
                 $ratingModel->setRatingCode($this->getRequest()->getParam('rating_code'))
                     ->setRatingCodes($this->getRequest()->getParam('rating_codes'))

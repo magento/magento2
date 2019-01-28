@@ -105,7 +105,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     public function getThresholdQty()
     {
         if (!$this->hasData('threshold_qty')) {
-            $qty = (float)$this->_scopeConfig->getValue(
+            $qty = (float) $this->_scopeConfig->getValue(
                 self::XML_PATH_STOCK_THRESHOLD_QTY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );

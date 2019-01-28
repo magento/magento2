@@ -36,7 +36,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         }
         $this->_validators[] = [
             'instance' => $validator,
-            'breakChainOnFailure' => (bool)$breakChainOnFailure,
+            'breakChainOnFailure' => (bool) $breakChainOnFailure,
         ];
         return $this;
     }

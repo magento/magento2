@@ -442,7 +442,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'Address' => [
                         'PostalCode' => $r->getDestPostal(),
                         'CountryCode' => $r->getDestCountry(),
-                        'Residential' => (bool)$this->getConfigData('residence_delivery'),
+                        'Residential' => (bool) $this->getConfigData('residence_delivery'),
                     ],
                 ],
                 'ShippingChargesPayment' => [
@@ -458,7 +458,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'RequestedPackageLineItems' => [
                     '0' => [
                         'Weight' => [
-                            'Value' => (float)$r->getWeight(),
+                            'Value' => (float) $r->getWeight(),
                             'Units' => $this->getConfigData('unit_of_measure'),
                         ],
                         'GroupPackageCount' => 1,
@@ -480,7 +480,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if ($purpose == self::RATE_REQUEST_SMARTPOST) {
                 $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
                 $ratesRequest['RequestedShipment']['SmartPostDetail'] = [
-                    'Indicia' => (float)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                    'Indicia' => (float) $r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                     'HubId' => $this->getConfigData('smartpost_hubid'),
                 ];
             }
@@ -568,16 +568,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if ($response->HighestSeverity == 'FAILURE' || $response->HighestSeverity == 'ERROR') {
                 if (is_array($response->Notifications)) {
                     $notification = array_pop($response->Notifications);
-                    $errorTitle = (string)$notification->Message;
+                    $errorTitle = (string) $notification->Message;
                 } else {
-                    $errorTitle = (string)$response->Notifications->Message;
+                    $errorTitle = (string) $response->Notifications->Message;
                 }
             } elseif (isset($response->RateReplyDetails)) {
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
 
                 if (is_array($response->RateReplyDetails)) {
                     foreach ($response->RateReplyDetails as $rate) {
-                        $serviceName = (string)$rate->ServiceType;
+                        $serviceName = (string) $rate->ServiceType;
                         if (in_array($serviceName, $allowedMethods)) {
                             $amount = $this->_getRateAmountOriginBased($rate);
                             $costArr[$serviceName] = $amount;
@@ -587,7 +587,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     asort($priceArr);
                 } else {
                     $rate = $response->RateReplyDetails;
-                    $serviceName = (string)$rate->ServiceType;
+                    $serviceName = (string) $rate->ServiceType;
                     if (in_array($serviceName, $allowedMethods)) {
                         $amount = $this->_getRateAmountOriginBased($rate);
                         $costArr[$serviceName] = $amount;
@@ -635,8 +635,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (is_object($rate)) {
             // The "RATED..." rates are expressed in the currency of the origin country
             foreach ($rate->RatedShipmentDetails as $ratedShipmentDetail) {
-                $netAmount = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Amount;
-                $rateType = (string)$ratedShipmentDetail->ShipmentRateDetail->RateType;
+                $netAmount = (string) $ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Amount;
+                $rateType = (string) $ratedShipmentDetail->ShipmentRateDetail->RateType;
                 $rateTypeAmounts[$rateType] = $netAmount;
             }
 
@@ -648,7 +648,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
 
             if ($amount === null) {
-                $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
+                $amount = (string) $rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
             }
         }
 
@@ -767,9 +767,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (is_object($xml)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
-                    $errorTitle = (string)$xml->Error->Message;
+                    $errorTitle = (string) $xml->Error->Message;
                 } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
-                    $errorTitle = (string)$xml->SoftError->Message;
+                    $errorTitle = (string) $xml->SoftError->Message;
                 } else {
                     $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
                 }
@@ -777,14 +777,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
 
                 foreach ($xml->Entry as $entry) {
-                    if (in_array((string)$entry->Service, $allowedMethods)) {
-                        $costArr[(string)$entry->Service] = (string)$entry
+                    if (in_array((string) $entry->Service, $allowedMethods)) {
+                        $costArr[(string) $entry->Service] = (string) $entry
                             ->EstimatedCharges
                             ->DiscountedCharges
                             ->NetCharge;
-                        $priceArr[(string)$entry->Service] = $this->getMethodPrice(
-                            (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge,
-                            (string)$entry->Service
+                        $priceArr[(string) $entry->Service] = $this->getMethodPrice(
+                            (string) $entry->EstimatedCharges->DiscountedCharges->NetCharge,
+                            (string) $entry->Service
                         );
                     }
                 }
@@ -1307,7 +1307,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'StateOrProvinceCode' => $request->getRecipientAddressStateOrProvinceCode(),
                         'PostalCode' => $request->getRecipientAddressPostalCode(),
                         'CountryCode' => $request->getRecipientAddressCountryCode(),
-                        'Residential' => (bool)$this->getConfigData('residence_delivery'),
+                        'Residential' => (bool) $this->getConfigData('residence_delivery'),
                     ],
                 ],
                 'ShippingChargesPayment' => [
@@ -1377,7 +1377,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST) {
             $requestClient['RequestedShipment']['SmartPostDetail'] = [
-                'Indicia' => (float)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'Indicia' => (float) $request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                 'HubId' => $this->getConfigData('smartpost_hubid'),
             ];
         }

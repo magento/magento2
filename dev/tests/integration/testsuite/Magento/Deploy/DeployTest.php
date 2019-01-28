@@ -228,7 +228,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         /** @var \SplFileInfo $file */
         foreach ($iterator as $file) {
             if ($file->isFile()) {
-                $size = (int)$file->getSize() / 1024;
+                $size = (int) $file->getSize() / 1024;
                 $this->assertLessThan($expectedSize, $size);
             }
         }

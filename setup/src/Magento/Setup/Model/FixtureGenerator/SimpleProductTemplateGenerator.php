@@ -73,7 +73,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
                 'price' => 10,
                 'visibility' => Visibility::VISIBILITY_BOTH,
                 'status' => Status::STATUS_ENABLED,
-                'website_ids' => (array)$this->fixture['website_ids'](1, 0),
+                'website_ids' => (array) $this->fixture['website_ids'](1, 0),
                 'category_ids' => isset($this->fixture['category_ids']) ? [2] : null,
                 'weight' => 1,
                 'description' => 'description',

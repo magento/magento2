@@ -27,7 +27,7 @@ class AssertMinicartItemsQty extends AbstractConstraint
     ) {
         $cmsIndex->open();
         \PHPUnit\Framework\Assert::assertSame(
-            (int)$expectedItemsQty,
+            (int) $expectedItemsQty,
             $cmsIndex->getCartSidebarBlock()->getItemsQty(),
             'The quantity of items in shopping cart is not correct.'
         );

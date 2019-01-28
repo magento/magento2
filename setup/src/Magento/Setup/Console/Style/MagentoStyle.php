@@ -79,7 +79,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         $this->input = $input;
         $this->bufferedOutput = new BufferedOutput($output->getVerbosity(), false, clone $output->getFormatter());
         // Windows cmd wraps lines as soon as the terminal width is reached, whether there are following chars or not.
-        $currentLength = $this->getTerminalWidth() - (int)(DIRECTORY_SEPARATOR === '\\');
+        $currentLength = $this->getTerminalWidth() - (int) (DIRECTORY_SEPARATOR === '\\');
         $this->lineLength = min($currentLength, self::MAX_LINE_LENGTH);
         parent::__construct($output);
     }
@@ -375,7 +375,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
             }
             $argumentValue = $this->input->getArgument($argument);
             $validated = (is_callable($validator) ? $validator($argumentValue) : $argumentValue);
-            if ((bool)($comment ?? $this->isDebug())) {
+            if ((bool) ($comment ?? $this->isDebug())) {
                 $this->comment(sprintf($commentFormat, $argument, $validated));
             }
         } catch (InputValidationException $e) {
@@ -419,7 +419,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
             }
             $optionValue = $this->input->getOption($option);
             $validated = (is_callable($validator) ? $validator($optionValue) : $optionValue);
-            if ((bool)($comment ?? $this->isDebug())) {
+            if ((bool) ($comment ?? $this->isDebug())) {
                 $this->comment(sprintf($commentFormat, $option, $validated));
             }
         } catch (InputValidationException $e) {
@@ -528,7 +528,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         // Preserve the last 4 chars inserted (PHP_EOL on windows is two chars) in the history buffer
         return array_map(function ($value) {
             return substr($value, -4);
-        }, array_merge([$this->bufferedOutput->fetch()], (array)$messages));
+        }, array_merge([$this->bufferedOutput->fetch()], (array) $messages));
     }
 
     /**

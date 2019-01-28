@@ -502,7 +502,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      */
     protected function _filterInt($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 
     /**
@@ -586,7 +586,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      */
     protected function _filterQty($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 
     /**
@@ -599,8 +599,8 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     {
         $this->customLogger->debug(
             $debugData,
-            (array)$this->getDebugReplacePrivateDataKeys(),
-            (bool)$this->getDebugFlag()
+            (array) $this->getDebugReplacePrivateDataKeys(),
+            (bool) $this->getDebugFlag()
         );
     }
 
@@ -623,7 +623,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      */
     public function getUseCertAuthentication()
     {
-        return (bool)$this->_config->getValue('apiAuthentication');
+        return (bool) $this->_config->getValue('apiAuthentication');
     }
 
     /**

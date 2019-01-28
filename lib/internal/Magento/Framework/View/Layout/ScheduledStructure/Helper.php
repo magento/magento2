@@ -74,11 +74,11 @@ class Helper
         Layout\Element $parentNode
     ) {
         // if it hasn't a name it must be generated
-        if (!(string)$currentNode->getAttribute('name')) {
+        if (!(string) $currentNode->getAttribute('name')) {
             $name = $this->_generateAnonymousName($parentNode->getElementName() . '_schedule_block');
             $currentNode->setAttribute('name', $name);
         }
-        $path = $name = (string)$currentNode->getAttribute('name');
+        $path = $name = (string) $currentNode->getAttribute('name');
 
         // Prepare scheduled element with default parameters [type, alias, parentName, siblingName, isAfter]
         $row = [
@@ -92,7 +92,7 @@ class Helper
         $parentName = $parentNode->getElementName();
         //if this element has a parent element, there must be reset [alias, parentName, siblingName, isAfter]
         if ($parentName) {
-            $row[self::SCHEDULED_STRUCTURE_INDEX_ALIAS] = (string)$currentNode->getAttribute('as');
+            $row[self::SCHEDULED_STRUCTURE_INDEX_ALIAS] = (string) $currentNode->getAttribute('as');
             $row[self::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME] = $parentName;
 
             list($row[self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME],
@@ -144,9 +144,9 @@ class Helper
     {
         $result = [null, true];
         if (isset($node['after'])) {
-            $result[0] = (string)$node['after'];
+            $result[0] = (string) $node['after'];
         } elseif (isset($node['before'])) {
-            $result[0] = (string)$node['before'];
+            $result[0] = (string) $node['before'];
             $result[1] = false;
         }
         return $result;

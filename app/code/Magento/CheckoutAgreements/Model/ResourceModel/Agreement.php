@@ -75,7 +75,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['agreement_id = ?' => $object->getId()]
         );
 
-        foreach ((array)$object->getData('stores') as $storeId) {
+        foreach ((array) $object->getData('stores') as $storeId) {
             $storeArray = [
                 'agreement_id' => $object->getId(),
                 'store_id' => $storeId

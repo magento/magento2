@@ -60,7 +60,7 @@ class Classes
         $result = [];
         $nodes = $xml->xpath($xPath) ?: [];
         foreach ($nodes as $node) {
-            $result[] = (string)$node;
+            $result[] = (string) $node;
         }
         return $result;
     }
@@ -95,7 +95,7 @@ class Classes
         $result = [];
         $nodes = $xml->xpath($xPath) ?: [];
         foreach ($nodes as $node) {
-            $node = (array)$node;
+            $node = (array) $node;
             if (isset($node['@attributes'][$attributeName])) {
                 $result[] = $node['@attributes'][$attributeName];
             }

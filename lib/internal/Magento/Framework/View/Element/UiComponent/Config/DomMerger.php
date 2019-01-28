@@ -371,7 +371,7 @@ class DomMerger implements DomMergerInterface
     {
         $result = static::ERROR_FORMAT_DEFAULT;
         foreach ($errorInfo as $field => $value) {
-            $result = str_replace('%' . $field . '%', trim((string)$value), $result);
+            $result = str_replace('%' . $field . '%', trim((string) $value), $result);
         }
         if (strpos($result, '%') !== false) {
             throw new \Magento\Framework\Exception\LocalizedException(

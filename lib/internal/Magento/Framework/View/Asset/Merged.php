@@ -184,7 +184,7 @@ class Merged implements \Iterator
     public function valid()
     {
         $this->initialize();
-        return (bool)current($this->assets);
+        return (bool) current($this->assets);
     }
 
     /**

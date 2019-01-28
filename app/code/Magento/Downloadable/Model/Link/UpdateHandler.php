@@ -48,7 +48,7 @@ class UpdateHandler implements ExtensionInterface
             if ($link->getId()) {
                 $updatedLinks[$link->getId()] = true;
             }
-            $this->linkRepository->save($entity->getSku(), $link, !(bool)$entity->getStoreId());
+            $this->linkRepository->save($entity->getSku(), $link, !(bool) $entity->getStoreId());
         }
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($oldLinks as $link) {

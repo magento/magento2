@@ -107,7 +107,7 @@ class Category extends AbstractHelper
 
         $recursionLevel = max(
             0,
-            (int)$this->scopeConfig->getValue(
+            (int) $this->scopeConfig->getValue(
                 'catalog/navigation/max_depth',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )

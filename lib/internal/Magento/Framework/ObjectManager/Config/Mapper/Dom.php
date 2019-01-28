@@ -109,7 +109,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
                                 $pluginSortOrderNode = $pluginAttributes->getNamedItem('sortOrder');
                                 $pluginTypeNode = $pluginAttributes->getNamedItem('type');
                                 $pluginData = [
-                                    'sortOrder' => $pluginSortOrderNode ? (int)$pluginSortOrderNode->nodeValue : 0,
+                                    'sortOrder' => $pluginSortOrderNode ? (int) $pluginSortOrderNode->nodeValue : 0,
                                 ];
                                 if ($pluginDisabledNode) {
                                     $pluginData['disabled'] = $this->booleanUtils->toBoolean(

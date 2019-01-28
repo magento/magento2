@@ -107,6 +107,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
     public function isTestMode()
     {
         $mode = $this->_paymentData->getMethodInstance($this->_paymentMethodCode)->getConfigData('sandbox_flag');
-        return (bool)$mode;
+        return (bool) $mode;
     }
 }

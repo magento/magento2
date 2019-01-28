@@ -60,7 +60,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('special_price', $collectedAttributes);
-        $query = (string)$collection->getSelect();
+        $query = (string) $collection->getSelect();
         $this->assertContains('special_price', $query);
         $this->assertEquals('at_special_price.value', $this->conditionProduct->getMappedSqlField());
     }
@@ -77,7 +77,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
-        $query = (string)$collection->getSelect();
+        $query = (string) $collection->getSelect();
         $this->assertNotContains('visibility', $query);
         $this->assertEquals('', $this->conditionProduct->getMappedSqlField());
         $this->assertFalse($this->conditionProduct->hasValueParsed());
@@ -96,7 +96,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
-        $query = (string)$collection->getSelect();
+        $query = (string) $collection->getSelect();
         $this->assertNotContains('visibility', $query);
         $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }

@@ -20,7 +20,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
      */
     public function execute()
     {
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $params = $this->getRequest()->getParams();
 
         if (!isset($params['options'])) {

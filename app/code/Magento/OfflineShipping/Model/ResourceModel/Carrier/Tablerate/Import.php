@@ -94,7 +94,7 @@ class Import
      */
     public function hasErrors()
     {
-        return (bool)count($this->getErrors());
+        return (bool) count($this->getErrors());
     }
 
     /**

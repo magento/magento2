@@ -51,14 +51,14 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
+        $invoiceId = (int) $this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {
             $invoice = $this->_objectManager->create(
                 \Magento\Sales\Api\InvoiceRepositoryInterface::class
             )->get($invoiceId);
             $order = $invoice->getOrder();
         } else {
-            $orderId = (int)$this->getRequest()->getParam('order_id');
+            $orderId = (int) $this->getRequest()->getParam('order_id');
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         }
 

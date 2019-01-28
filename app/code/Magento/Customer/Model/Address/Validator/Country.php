@@ -89,7 +89,7 @@ class Country implements ValidatorInterface
         $countryModel = $address->getCountryModel();
         $regionCollection = $countryModel->getRegionCollection();
         $region = $address->getRegion();
-        $regionId = (string)$address->getRegionId();
+        $regionId = (string) $address->getRegionId();
         $allowedRegions = $regionCollection->getAllIds();
         $isRegionRequired = $this->directoryData->isRegionRequired($countryId);
         if ($isRegionRequired && empty($allowedRegions) && !\Zend_Validate::is($region, 'NotEmpty')) {

@@ -103,7 +103,7 @@ class SetRememberMeCheckedStatusObserverTest extends \PHPUnit\Framework\TestCase
         $this->sessionHelperMock
             ->expects($this->once())
             ->method('setRememberMeChecked')
-            ->with((bool)$rememberMeCheckbox);
+            ->with((bool) $rememberMeCheckbox);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
@@ -111,7 +111,7 @@ class SetRememberMeCheckedStatusObserverTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSessionMock
             ->expects($this->once())
             ->method('setRememberMeChecked')
-            ->with((bool)$rememberMeCheckbox);
+            ->with((bool) $rememberMeCheckbox);
         $this->model->execute($this->observerMock);
     }
 
@@ -142,7 +142,7 @@ class SetRememberMeCheckedStatusObserverTest extends \PHPUnit\Framework\TestCase
         $this->sessionHelperMock
             ->expects($this->once())
             ->method('setRememberMeChecked')
-            ->with((bool)$rememberMeCheckbox);
+            ->with((bool) $rememberMeCheckbox);
         $this->requestMock
             ->expects($this->exactly(2))
             ->method('getFullActionName')

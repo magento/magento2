@@ -17,7 +17,7 @@ class CustomerGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreemen
      */
     protected function initCurrentCustomer()
     {
-        $customerId = (int)$this->getRequest()->getParam('id');
+        $customerId = (int) $this->getRequest()->getParam('id');
         if ($customerId) {
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         }

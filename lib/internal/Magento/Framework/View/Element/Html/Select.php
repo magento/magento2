@@ -147,7 +147,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
 
         $values = $this->getValue();
         if (!is_array($values)) {
-            $values = (array)$values;
+            $values = (array) $values;
         }
 
         $isArrayOption = true;
@@ -155,12 +155,12 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             $optgroupName = '';
             if ($isArrayOption && is_array($option)) {
                 $value = $option['value'];
-                $label = (string)$option['label'];
+                $label = (string) $option['label'];
                 $optgroupName = isset($option['optgroup-name']) ? $option['optgroup-name'] : $label;
                 $params = !empty($option['params']) ? $option['params'] : [];
             } else {
-                $value = (string)$key;
-                $label = (string)$option;
+                $value = (string) $key;
+                $label = (string) $option;
                 $isArrayOption = false;
                 $params = [];
             }

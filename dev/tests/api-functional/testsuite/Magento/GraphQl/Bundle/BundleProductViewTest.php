@@ -86,12 +86,12 @@ QUERY;
         $bundleProduct->setId(
             $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
-        if ((bool)$bundleProduct->getShipmentType()) {
+        if ((bool) $bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
             $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
         }
-        if ((bool)$bundleProduct->getPriceView()) {
+        if ((bool) $bundleProduct->getPriceView()) {
             $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
         } else {
             $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
@@ -185,12 +185,12 @@ QUERY;
         $bundleProduct->setId(
             $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
-        if ((bool)$bundleProduct->getShipmentType()) {
+        if ((bool) $bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
             $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
         }
-        if ((bool)$bundleProduct->getPriceView()) {
+        if ((bool) $bundleProduct->getPriceView()) {
             $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
         } else {
             $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
@@ -217,9 +217,9 @@ QUERY;
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
              ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
-            ['response_field' => 'dynamic_price', 'expected_value' => !(bool)$product->getPriceType()],
-            ['response_field' => 'dynamic_weight', 'expected_value' => !(bool)$product->getWeightType()],
-            ['response_field' => 'dynamic_sku', 'expected_value' => !(bool)$product->getSkuType()]
+            ['response_field' => 'dynamic_price', 'expected_value' => !(bool) $product->getPriceType()],
+            ['response_field' => 'dynamic_weight', 'expected_value' => !(bool) $product->getWeightType()],
+            ['response_field' => 'dynamic_sku', 'expected_value' => !(bool) $product->getSkuType()]
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
@@ -256,7 +256,7 @@ QUERY;
             [
                 'option_id' => $option->getOptionId(),
                 'title' => $option->getTitle(),
-                'required' =>(bool)$option->getRequired(),
+                'required' =>(bool) $option->getRequired(),
                 'type' => $option->getType(),
                 'position' => $option->getPosition(),
                 'sku' => $option->getSku()
@@ -266,9 +266,9 @@ QUERY;
             $actualResponse['items'][0]['options'][0],
             [
                 'id' => $bundleProductLink->getId(),
-                'qty' => (int)$bundleProductLink->getQty(),
+                'qty' => (int) $bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
-                'is_default' => (bool)$bundleProductLink->getIsDefault(),
+                'is_default' => (bool) $bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
                 'label' => $childProduct->getName()

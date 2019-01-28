@@ -66,7 +66,7 @@ $orderItemsRepository = $objectManager->create(\Magento\Sales\Api\OrderItemRepos
 $orderItemsRepository->save($orderConfigurableItem);
 
 if ($configurableProduct->getExtensionAttributes()
-    && (array)$configurableProduct->getExtensionAttributes()->getConfigurableProductLinks()
+    && (array) $configurableProduct->getExtensionAttributes()->getConfigurableProductLinks()
 ) {
     $simpleProductId = current($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
     /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */

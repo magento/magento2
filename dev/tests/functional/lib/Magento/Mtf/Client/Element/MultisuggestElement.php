@@ -52,7 +52,7 @@ class MultisuggestElement extends SuggestElement
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->clear();
-        foreach ((array)$values as $value) {
+        foreach ((array) $values as $value) {
             if (!$this->isChoice($value)) {
                 parent::setValue($value);
             }

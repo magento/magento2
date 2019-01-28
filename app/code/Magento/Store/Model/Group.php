@@ -457,7 +457,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function isReadOnly($value = null)
     {
         if (null !== $value) {
-            $this->_isReadOnly = (bool)$value;
+            $this->_isReadOnly = (bool) $value;
         }
         return $this->_isReadOnly;
     }

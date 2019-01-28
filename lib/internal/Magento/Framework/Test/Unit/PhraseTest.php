@@ -93,7 +93,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
             ->with([$text], $arguments)
             ->willReturn($result);
 
-        $this->assertEquals($result, (string)$phrase);
+        $this->assertEquals($result, (string) $phrase);
     }
 
     /**
@@ -135,7 +135,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->willThrowException($exception);
 
-        $this->assertEquals($text, (string)$phrase);
+        $this->assertEquals($text, (string) $phrase);
     }
 
     /**

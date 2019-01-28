@@ -75,7 +75,7 @@ class Dob extends AbstractWidget
     public function isEnabled()
     {
         $attributeMetadata = $this->_getAttribute('dob');
-        return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
+        return $attributeMetadata ? (bool) $attributeMetadata->isVisible() : false;
     }
 
     /**
@@ -84,7 +84,7 @@ class Dob extends AbstractWidget
     public function isRequired()
     {
         $attributeMetadata = $this->_getAttribute('dob');
-        return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
+        return $attributeMetadata ? (bool) $attributeMetadata->isRequired() : false;
     }
 
     /**
@@ -314,7 +314,7 @@ class Dob extends AbstractWidget
      */
     public function getFirstDay()
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             'general/locale/firstday',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

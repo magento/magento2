@@ -107,8 +107,8 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($row) {
             $bind = ['qty' => $qty, 'stock_status' => $status];
             $where = [
-                $connection->quoteInto('product_id=?', (int)$row['product_id']),
-                $connection->quoteInto('website_id=?', (int)$row['website_id']),
+                $connection->quoteInto('product_id=?', (int) $row['product_id']),
+                $connection->quoteInto('website_id=?', (int) $row['website_id']),
             ];
             $connection->update($this->getMainTable(), $bind, $where);
         } else {

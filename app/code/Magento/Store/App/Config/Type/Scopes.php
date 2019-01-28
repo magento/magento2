@@ -87,7 +87,7 @@ class Scopes implements ConfigTypeInterface
         list($scopePool, $scopeId) = $patchChunks;
         if (!isset($this->idCodeMap[$scopePool]) || !array_key_exists($scopeId, $this->idCodeMap[$scopePool])) {
             $scopeData = $this->data->getData($scopePool);
-            foreach ((array)$scopeData as $scopeEntity) {
+            foreach ((array) $scopeData as $scopeEntity) {
                 if (!isset($scopeEntity[$this->scopeIdField[$scopePool]])) {
                     continue;
                 }

@@ -65,8 +65,8 @@ class Mode extends \Magento\Framework\App\Config\Value
      */
     public function processValue()
     {
-        if ((bool)$this->getValue() != (bool)$this->getOldValue()) {
-            if ((bool)$this->getValue()) {
+        if ((bool) $this->getValue() != (bool) $this->getOldValue()) {
+            if ((bool) $this->getValue()) {
                 $this->indexerState->loadByIndexer(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID);
                 $this->indexerState->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
                 $this->indexerState->save();

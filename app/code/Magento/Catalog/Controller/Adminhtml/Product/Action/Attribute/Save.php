@@ -133,7 +133,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         $attributesData[$attributeCode] = $value;
                     } elseif ($attribute->getFrontendInput() == 'multiselect') {
                         // Check if 'Change' checkbox has been checked by admin for this attribute
-                        $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
+                        $isChanged = (bool) $this->getRequest()->getPost('toggle_' . $attributeCode);
                         if (!$isChanged) {
                             unset($attributesData[$attributeCode]);
                             continue;

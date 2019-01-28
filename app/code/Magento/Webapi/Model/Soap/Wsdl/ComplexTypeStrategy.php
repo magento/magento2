@@ -311,7 +311,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     protected function _processDefaultValueAnnotation($elementType, $default, \DOMElement $appInfoNode)
     {
         if ($elementType == 'boolean') {
-            $default = (bool)$default ? 'true' : 'false';
+            $default = (bool) $default ? 'true' : 'false';
         }
         if ($default) {
             $defaultNode = $this->_getDom()->createElement(self::APP_INF_NS . ':default');

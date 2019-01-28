@@ -47,7 +47,7 @@ class Dropdown implements CustomizableOptionValueInterface
 
         $selectedValue = $selectedOption->getValue();
         $optionValue = $option->getValueById($selectedValue);
-        $optionPriceType = (string)$optionValue->getPriceType();
+        $optionPriceType = (string) $optionValue->getPriceType();
         $priceValueUnits = $this->priceUnitLabel->getData($optionPriceType);
 
         $selectedOptionValueData = [

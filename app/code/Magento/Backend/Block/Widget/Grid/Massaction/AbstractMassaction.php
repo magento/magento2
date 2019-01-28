@@ -347,7 +347,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function setUseSelectAll($flag)
     {
-        $this->setData('use_select_all', (bool)$flag);
+        $this->setData('use_select_all', (bool) $flag);
         return $this;
     }
 

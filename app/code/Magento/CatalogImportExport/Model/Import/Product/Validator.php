@@ -120,7 +120,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     {
         $val = trim($this->_rowData[$attrCode]);
         if ($type == 'int') {
-            $valid = (string)(int)$val === $val;
+            $valid = (string) (int) $val === $val;
         } else {
             $valid = is_numeric($val);
         }
@@ -262,7 +262,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $this->setInvalidAttribute($attrCode);
         }
 
-        return (bool)$valid;
+        return (bool) $valid;
     }
 
     /**

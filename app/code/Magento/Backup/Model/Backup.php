@@ -149,7 +149,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
         $this->addData(
             [
                 'id' => $filePath . '/' . $fileName,
-                'time' => (int)$backupData->getTime(),
+                'time' => (int) $backupData->getTime(),
                 'path' => $filePath,
                 'extension' => $this->_helper->getExtensionByType($backupData->getType()),
                 'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),

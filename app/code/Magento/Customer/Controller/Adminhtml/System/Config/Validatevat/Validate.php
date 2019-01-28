@@ -38,7 +38,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Vali
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([
-            'valid' => (int)$result->getIsValid(),
+            'valid' => (int) $result->getIsValid(),
             'message' => $result->getRequestMessage(),
         ]);
     }

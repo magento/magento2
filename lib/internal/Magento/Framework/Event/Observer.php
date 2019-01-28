@@ -42,7 +42,7 @@ class Observer extends \Magento\Framework\DataObject
         if (is_object($callback[0])) {
             $_profilerKey .= get_class($callback[0]);
         } else {
-            $_profilerKey .= (string)$callback[0];
+            $_profilerKey .= (string) $callback[0];
         }
         $_profilerKey .= ' -> ' . $callback[1];
 

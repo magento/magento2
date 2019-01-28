@@ -37,12 +37,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } else {
             $productId = $product;
         }
-        $select = $connection->select()->from($this->getMainTable())->where('product_id = ?', (int)$productId);
+        $select = $connection->select()->from($this->getMainTable())->where('product_id = ?', (int) $productId);
 
         if ($object->getCustomerId()) {
-            $select->where('customer_id = ?', (int)$object->getCustomerId());
+            $select->where('customer_id = ?', (int) $object->getCustomerId());
         } else {
-            $select->where('visitor_id = ?', (int)$object->getVisitorId());
+            $select->where('visitor_id = ?', (int) $object->getVisitorId());
         }
 
         $data = $connection->fetchRow($select);
@@ -66,7 +66,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getCount($customerId, $visitorId)
     {
-        $bind = ['visitore_id' => (int)$visitorId];
+        $bind = ['visitore_id' => (int) $visitorId];
         $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             'COUNT(*)'
@@ -74,7 +74,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'visitor_id = :visitore_id'
         );
         if ($customerId) {
-            $bind['customer_id'] = (int)$customerId;
+            $bind['customer_id'] = (int) $customerId;
             $select->where('customer_id = :customer_id');
         }
         return $this->getConnection()->fetchOne($select, $bind);
@@ -229,11 +229,11 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $where = [];
         if ($customerId) {
-            $customerId = (int)$customerId;
+            $customerId = (int) $customerId;
             $where[] = $this->getConnection()->quoteInto('customer_id = ?', $customerId);
         }
         if ($visitorId) {
-            $visitorId = (int)$visitorId;
+            $visitorId = (int) $visitorId;
             $where[] = $this->getConnection()->quoteInto('visitor_id = ?', $visitorId);
         }
         if (!$where) {

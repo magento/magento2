@@ -58,7 +58,7 @@ class Json implements ParserInterface
      */
     protected function extractModuleName($package)
     {
-        return $this->prepareModuleName((string)$package->get('name'));
+        return $this->prepareModuleName((string) $package->get('name'));
     }
 
     /**

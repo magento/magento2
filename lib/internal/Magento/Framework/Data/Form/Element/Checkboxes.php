@@ -121,13 +121,13 @@ class Checkboxes extends AbstractElement
             return;
         }
         if (!is_array($checked)) {
-            $checked = [(string)$checked];
+            $checked = [(string) $checked];
         } else {
             foreach ($checked as $k => $v) {
-                $checked[$k] = (string)$v;
+                $checked[$k] = (string) $v;
             }
         }
-        if (in_array((string)$value, $checked)) {
+        if (in_array((string) $value, $checked)) {
             return 'checked';
         }
         return;
@@ -141,13 +141,13 @@ class Checkboxes extends AbstractElement
     {
         if ($disabled = $this->getData('disabled')) {
             if (!is_array($disabled)) {
-                $disabled = [(string)$disabled];
+                $disabled = [(string) $disabled];
             } else {
                 foreach ($disabled as $k => $v) {
-                    $disabled[$k] = (string)$v;
+                    $disabled[$k] = (string) $v;
                 }
             }
-            if (in_array((string)$value, $disabled)) {
+            if (in_array((string) $value, $disabled)) {
                 return 'disabled';
             }
         }

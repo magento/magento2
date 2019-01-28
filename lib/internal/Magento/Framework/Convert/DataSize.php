@@ -22,7 +22,7 @@ class DataSize
     {
         if (!is_numeric($size)) {
             $type = strtoupper(substr($size, -1));
-            $size = (int)$size;
+            $size = (int) $size;
 
             switch ($type) {
                 case 'K':
@@ -41,6 +41,6 @@ class DataSize
                     break;
             }
         }
-        return (int)$size;
+        return (int) $size;
     }
 }

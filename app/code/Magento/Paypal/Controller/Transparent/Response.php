@@ -124,7 +124,7 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();
-            $this->paymentFailures->handle((int)$this->sessionTransparent->getQuoteId(), $parameters['error_msg']);
+            $this->paymentFailures->handle((int) $this->sessionTransparent->getQuoteId(), $parameters['error_msg']);
         }
 
         $this->coreRegistry->register(Iframe::REGISTRY_KEY, $parameters);

@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class
         );
         $collection->setClassTypeFilter($classType, $elementId);
-        $this->assertRegExp($expected, (string)$collection->getSelect());
+        $this->assertRegExp($expected, (string) $collection->getSelect());
     }
 
     public function setClassTypeFilterDataProvider()

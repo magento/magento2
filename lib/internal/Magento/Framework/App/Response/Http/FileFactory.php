@@ -68,7 +68,7 @@ class FileFactory
                 $isFile = true;
                 $file = $content['value'];
                 if (!$dir->isFile($file)) {
-                    throw new \Exception((string)new \Magento\Framework\Phrase('File not found'));
+                    throw new \Exception((string) new \Magento\Framework\Phrase('File not found'));
                 }
                 $contentLength = $dir->stat($file)['size'];
             }

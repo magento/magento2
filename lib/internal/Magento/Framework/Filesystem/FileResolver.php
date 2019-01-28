@@ -42,7 +42,7 @@ class FileResolver
      */
     public static function addIncludePath($path, $prepend = true)
     {
-        $includePathExtra = implode(PATH_SEPARATOR, (array)$path);
+        $includePathExtra = implode(PATH_SEPARATOR, (array) $path);
         $includePath = get_include_path();
         $pathSeparator = $includePath && $includePathExtra ? PATH_SEPARATOR : '';
         if ($prepend) {

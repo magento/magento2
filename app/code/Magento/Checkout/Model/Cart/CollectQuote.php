@@ -77,7 +77,7 @@ class CollectQuote
                     $estimatedAddress = $this->estimatedAddressFactory->create();
                     $estimatedAddress->setCountryId($address->getCountryId());
                     $estimatedAddress->setPostcode($address->getPostcode());
-                    $estimatedAddress->setRegion((string)$address->getRegion()->getRegion());
+                    $estimatedAddress->setRegion((string) $address->getRegion()->getRegion());
                     $estimatedAddress->setRegionId($address->getRegionId());
                     $this->shippingMethodManager->estimateByAddress($quote->getId(), $estimatedAddress);
                     $this->quoteRepository->save($quote);

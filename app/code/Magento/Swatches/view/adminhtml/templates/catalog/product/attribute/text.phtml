@@ -34,13 +34,13 @@ $stores = $block->getStoresSortedBySortOrder();
             <tbody data-role="swatch-text-options-container" class="ignore-validate"></tbody>
             <tfoot>
             <tr>
-                <th colspan="<?= (int)$colTotal ?>">
+                <th colspan="<?= (int) $colTotal ?>">
                     <input type="hidden" class="required-text-swatch-entry" name="text_swatch_validation"/>
                     <input type="hidden" class="required-text-swatch-unique" name="text_swatch_validation_unique"/>
                 </th>
             </tr>
             <tr>
-                <th colspan="<?= (int)$colTotal ?>" class="col-actions-add">
+                <th colspan="<?= (int) $colTotal ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
                         <button id="add_new_swatch_text_option_button"
                                 title="<?= $block->escapeHtml(__('Add Swatch')) ?>"
@@ -74,7 +74,7 @@ $stores = $block->getStoresSortedBySortOrder();
                        value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
             </td>
             <?php foreach ($stores as $_store): ?>
-                <?php $storeId = (int)$_store->getId(); ?>
+                <?php $storeId = (int) $_store->getId(); ?>
                 <td class="col-swatch col-swatch-min-width col-<%- data.id %>">
                     <input class="input-text
                         swatch-text-field-<?= /* @noEscape */ $storeId ?>

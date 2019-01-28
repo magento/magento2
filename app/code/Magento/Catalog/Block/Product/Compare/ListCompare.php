@@ -205,7 +205,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
         } else {
             $value = $product->getData($attribute->getAttributeCode());
         }
-        return (string)$value == '' ? __('No') : $value;
+        return (string) $value == '' ? __('No') : $value;
     }
 
     /**

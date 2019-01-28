@@ -101,7 +101,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         try {
-            $itemId = (int)$this->getRequest()->getParam('item');
+            $itemId = (int) $this->getRequest()->getParam('item');
             $item = $this->cart->getQuote()->getItemById($itemId);
             if (!$item) {
                 throw new LocalizedException(

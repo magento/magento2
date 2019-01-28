@@ -36,7 +36,7 @@ class OptgroupselectElement extends SelectElement
      */
     public function getValue()
     {
-        $this->eventManager->dispatchEvent(['get_value'], [(string)$this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['get_value'], [(string) $this->getAbsoluteSelector()]);
 
         $selectedLabel = parent::getValue();
         if ($selectedLabel == '') {

@@ -18,7 +18,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
      */
     public function execute()
     {
-        $classId = (int)$this->getRequest()->getParam('class_id');
+        $classId = (int) $this->getRequest()->getParam('class_id');
         try {
             $this->taxClassRepository->deleteById($classId);
             $responseContent = ['success' => true, 'error_message' => ''];

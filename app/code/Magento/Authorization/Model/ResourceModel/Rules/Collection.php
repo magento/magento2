@@ -34,7 +34,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function getByRoles($roleId)
     {
-        $this->addFieldToFilter('role_id', (int)$roleId);
+        $this->addFieldToFilter('role_id', (int) $roleId);
         return $this;
     }
 

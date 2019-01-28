@@ -13,7 +13,7 @@ class SetStore extends \Magento\Backend\Controller\Adminhtml\System
      */
     public function execute()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $storeId = (int) $this->getRequest()->getParam('store');
         if ($storeId) {
             $this->_session->setStoreId($storeId);
         }

@@ -77,7 +77,7 @@ class Copy
 
             $value = $this->_getFieldsetFieldValue($source, $code);
 
-            $targetCode = (string)$node[$aspect];
+            $targetCode = (string) $node[$aspect];
             $targetCode = $targetCode == '*' ? $code : $targetCode;
 
             $target = $this->_setFieldsetFieldValue($target, $targetCode, $value);
@@ -144,7 +144,7 @@ class Copy
 
             $value = $this->_getFieldsetFieldValue($source, $code);
 
-            $targetCode = (string)$node[$aspect];
+            $targetCode = (string) $node[$aspect];
             $targetCode = $targetCode == '*' ? $code : $targetCode;
             $data[$targetCode] = $value;
         }

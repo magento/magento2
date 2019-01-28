@@ -101,7 +101,7 @@ class Downloadable
             if (isset($downloadable['sample']) && is_array($downloadable['sample'])) {
                 $samples = [];
                 foreach ($downloadable['sample'] as $sampleData) {
-                    if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
+                    if (!$sampleData || (isset($sampleData['is_delete']) && (bool) $sampleData['is_delete'])) {
                         continue;
                     } else {
                         $samples[] = $this->sampleBuilder->setData(

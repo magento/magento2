@@ -81,7 +81,7 @@ class Pool implements \Iterator, \ArrayAccess
      */
     public function valid()
     {
-        return (bool)$this->key();
+        return (bool) $this->key();
     }
 
     /**

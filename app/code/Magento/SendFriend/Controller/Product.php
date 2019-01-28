@@ -96,7 +96,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     protected function _initProduct()
     {
-        $productId = (int)$this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('id');
         if (!$productId) {
             return false;
         }

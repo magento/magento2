@@ -34,9 +34,9 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     public function testPrepareData()
     {
         $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $select = (string)$collection->getSelect();
+        $select = (string) $collection->getSelect();
         $this->model->prepareData($collection, [1, 2, 3, 4]);
-        $this->assertEquals($select, (string)$collection->getSelect());
+        $this->assertEquals($select, (string) $collection->getSelect());
         $result = $this->model->addData([], 1);
         $this->assertArrayHasKey('configurable_variations', $result);
         $this->assertArrayHasKey('configurable_variation_labels', $result);

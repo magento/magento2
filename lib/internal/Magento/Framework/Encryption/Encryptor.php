@@ -127,7 +127,7 @@ class Encryptor implements EncryptorInterface
         $this->random = $random;
 
         // load all possible keys
-        $this->keys = preg_split('/\s+/s', trim((string)$deploymentConfig->get(self::PARAM_CRYPT_KEY)));
+        $this->keys = preg_split('/\s+/s', trim((string) $deploymentConfig->get(self::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
     }
 
@@ -149,9 +149,9 @@ class Encryptor implements EncryptorInterface
             self::CIPHER_AEAD_CHACHA20POLY1305,
         ];
 
-        $version = (int)$version;
+        $version = (int) $version;
         if (!in_array($version, $types, true)) {
-            throw new \Exception((string)new \Magento\Framework\Phrase('Not supported cipher version'));
+            throw new \Exception((string) new \Magento\Framework\Phrase('Not supported cipher version'));
         }
         return $version;
     }
@@ -186,7 +186,7 @@ class Encryptor implements EncryptorInterface
      */
     public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
-        return hash($this->hashVersionMap[$version], (string)$data);
+        return hash($this->hashVersionMap[$version], (string) $data);
     }
 
     /**
@@ -251,7 +251,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getPasswordHash()
     {
-        return (string)$this->passwordHashMap[self::PASSWORD_HASH];
+        return (string) $this->passwordHashMap[self::PASSWORD_HASH];
     }
 
     /**
@@ -261,7 +261,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getPasswordSalt()
     {
-        return (string)$this->passwordHashMap[self::PASSWORD_SALT];
+        return (string) $this->passwordHashMap[self::PASSWORD_SALT];
     }
 
     /**
@@ -275,7 +275,7 @@ class Encryptor implements EncryptorInterface
             'intval',
             explode(
                 self::DELIMITER,
-                (string)$this->passwordHashMap[self::PASSWORD_VERSION]
+                (string) $this->passwordHashMap[self::PASSWORD_VERSION]
             )
         );
     }
@@ -333,18 +333,18 @@ class Encryptor implements EncryptorInterface
             if (4 === $partsCount) {
                 list($keyVersion, $cryptVersion, $iv, $data) = $parts;
                 $initVector = $iv ? $iv : null;
-                $keyVersion = (int)$keyVersion;
+                $keyVersion = (int) $keyVersion;
                 $cryptVersion = self::CIPHER_RIJNDAEL_256;
                 // specified key, specified crypt
             } elseif (3 === $partsCount) {
                 list($keyVersion, $cryptVersion, $data) = $parts;
-                $keyVersion = (int)$keyVersion;
-                $cryptVersion = (int)$cryptVersion;
+                $keyVersion = (int) $keyVersion;
+                $cryptVersion = (int) $cryptVersion;
                 // no key version = oldest key, specified crypt
             } elseif (2 === $partsCount) {
                 list($cryptVersion, $data) = $parts;
                 $keyVersion = 0;
-                $cryptVersion = (int)$cryptVersion;
+                $cryptVersion = (int) $cryptVersion;
                 // no key version = oldest key, no crypt version = oldest crypt
             } elseif (1 === $partsCount) {
                 $keyVersion = 0;
@@ -361,7 +361,7 @@ class Encryptor implements EncryptorInterface
             if (null === $crypt) {
                 return '';
             }
-            return trim($crypt->decrypt(base64_decode((string)$data)));
+            return trim($crypt->decrypt(base64_decode((string) $data)));
         }
         return '';
     }
@@ -375,7 +375,7 @@ class Encryptor implements EncryptorInterface
     public function validateKey($key)
     {
         if (preg_match('/\s/s', $key)) {
-            throw new \Exception((string)new \Magento\Framework\Phrase('The encryption key format is invalid.'));
+            throw new \Exception((string) new \Magento\Framework\Phrase('The encryption key format is invalid.'));
         }
     }
 

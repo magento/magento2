@@ -94,7 +94,7 @@ class Group extends AbstractComposite
      */
     public function isExpanded()
     {
-        return (bool)(isset($this->_data['expanded']) ? (int)$this->_data['expanded'] : false);
+        return (bool) (isset($this->_data['expanded']) ? (int) $this->_data['expanded'] : false);
     }
 
     /**

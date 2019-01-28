@@ -144,7 +144,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         }
 
         preg_match('#http://.+/id/(\d+).+store/#m', $response, $matches);
-        $id = isset($matches[1]) ? (int)$matches[1] : null;
+        $id = isset($matches[1]) ? (int) $matches[1] : null;
         return ['id' => $id];
     }
 
@@ -252,7 +252,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         $response = $curl->read();
         $curl->close();
         preg_match('~\{"value":"(\d+)","label":"' . preg_quote($landingName) . '"\}~', $response, $matches);
-        $id = isset($matches[1]) ? (int)$matches[1] : null;
+        $id = isset($matches[1]) ? (int) $matches[1] : null;
 
         return $id;
     }

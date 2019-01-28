@@ -139,7 +139,7 @@ class Search extends Block
         }
 
         $rootElement = $this->_rootElement;
-        return (bool)$this->_rootElement->waitUntil(
+        return (bool) $this->_rootElement->waitUntil(
             function () use ($rootElement, $searchAutocomplete) {
                 return $rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }

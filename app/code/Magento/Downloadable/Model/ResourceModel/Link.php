@@ -95,10 +95,10 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'link_id=:link_id AND store_id=:store_id'
         );
-        $bind = [':link_id' => $linkObject->getId(), ':store_id' => (int)$linkObject->getStoreId()];
+        $bind = [':link_id' => $linkObject->getId(), ':store_id' => (int) $linkObject->getStoreId()];
 
         if ($connection->fetchOne($select, $bind)) {
-            $where = ['link_id = ?' => $linkObject->getId(), 'store_id = ?' => (int)$linkObject->getStoreId()];
+            $where = ['link_id = ?' => $linkObject->getId(), 'store_id = ?' => (int) $linkObject->getStoreId()];
             if ($linkObject->getUseDefaultTitle()) {
                 $connection->delete($linkTitleTable, $where);
             } else {
@@ -111,7 +111,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $linkTitleTable,
                     [
                         'link_id' => $linkObject->getId(),
-                        'store_id' => (int)$linkObject->getStoreId(),
+                        'store_id' => (int) $linkObject->getStoreId(),
                         'title' => $linkObject->getTitle()
                     ]
                 );
@@ -119,7 +119,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $select = $connection->select()->from($linkPriceTable)->where('link_id=:link_id AND website_id=:website_id');
-        $bind = [':link_id' => $linkObject->getId(), ':website_id' => (int)$linkObject->getWebsiteId()];
+        $bind = [':link_id' => $linkObject->getId(), ':website_id' => (int) $linkObject->getWebsiteId()];
         if ($connection->fetchOne($select, $bind)) {
             $where = ['link_id = ?' => $linkObject->getId(), 'website_id = ?' => $linkObject->getWebsiteId()];
             if ($linkObject->getUseDefaultPrice()) {
@@ -131,8 +131,8 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if (!$linkObject->getUseDefaultPrice()) {
                 $dataToInsert[] = [
                     'link_id' => $linkObject->getId(),
-                    'website_id' => (int)$linkObject->getWebsiteId(),
-                    'price' => (float)$linkObject->getPrice(),
+                    'website_id' => (int) $linkObject->getWebsiteId(),
+                    'price' => (float) $linkObject->getPrice(),
                 ];
                 if ($linkObject->getOrigData('link_id') != $linkObject->getLinkId()) {
                     $_isNew = true;
@@ -157,7 +157,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                         $newPrice = $linkObject->getPrice() * $rate;
                         $dataToInsert[] = [
                             'link_id' => $linkObject->getId(),
-                            'website_id' => (int)$websiteId,
+                            'website_id' => (int) $websiteId,
                             'price' => $newPrice,
                         ];
                     }
@@ -222,7 +222,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'cpe.entity_id=:product_id'
         );
-        $bind = [':store_id' => (int)$storeId, ':product_id' => $productId];
+        $bind = [':store_id' => (int) $storeId, ':product_id' => $productId];
 
         return $connection->fetchCol($select, $bind);
     }

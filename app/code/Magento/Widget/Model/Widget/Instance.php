@@ -508,9 +508,9 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             $configTemplates = $widgetConfig['parameters']['template'];
             if (isset($configTemplates['values'])) {
                 foreach ($configTemplates['values'] as $name => $template) {
-                    $templates[(string)$name] = [
+                    $templates[(string) $name] = [
                         'value' => $template['value'],
-                        'label' => __((string)$template['label']),
+                        'label' => __((string) $template['label']),
                     ];
                 }
             }
@@ -531,7 +531,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             $configNodes = $widgetConfig['supported_containers'];
             foreach ($configNodes as $node) {
                 if (isset($node['container_name'])) {
-                    $containers[] = (string)$node['container_name'];
+                    $containers[] = (string) $node['container_name'];
                 }
             }
         }
@@ -555,12 +555,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             }
             $configNodes = $widgetConfig['supported_containers'];
             foreach ($configNodes as $node) {
-                if (isset($node['container_name']) && (string)$node['container_name'] == $containerName) {
+                if (isset($node['container_name']) && (string) $node['container_name'] == $containerName) {
                     if (isset($node['template'])) {
                         $templateChildren = $node['template'];
                         foreach ($templateChildren as $template) {
-                            if (isset($widgetTemplates[(string)$template])) {
-                                $templates[] = $widgetTemplates[(string)$template];
+                            if (isset($widgetTemplates[(string) $template])) {
+                                $templates[] = $widgetTemplates[(string) $template];
                             }
                         }
                     }
@@ -613,7 +613,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             }
-            if ($name && strlen((string)$value)) {
+            if ($name && strlen((string) $value)) {
                 $value = html_entity_decode($value);
                 $xml .= '<action method="setData">' .
                     '<argument name="name" xsi:type="string">' .

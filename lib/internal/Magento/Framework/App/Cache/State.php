@@ -77,7 +77,7 @@ class State implements StateInterface
     public function isEnabled($cacheType)
     {
         $this->load();
-        return (bool)($this->statuses[$cacheType] ?? false);
+        return (bool) ($this->statuses[$cacheType] ?? false);
     }
 
     /**
@@ -90,7 +90,7 @@ class State implements StateInterface
     public function setEnabled($cacheType, $isEnabled)
     {
         $this->load();
-        $this->statuses[$cacheType] = (int)$isEnabled;
+        $this->statuses[$cacheType] = (int) $isEnabled;
     }
 
     /**

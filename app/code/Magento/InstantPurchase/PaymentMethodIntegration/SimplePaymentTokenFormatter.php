@@ -34,6 +34,6 @@ class SimplePaymentTokenFormatter implements PaymentTokenFormatterInterface
         $integration = $this->integrationsManager->getByTokenForCurrentStore($paymentToken);
         $paymentMethod = $integration->getPaymentMethod();
         $paymentMethodTitle = $paymentMethod->getTitle();
-        return (string)$paymentMethodTitle;
+        return (string) $paymentMethodTitle;
     }
 }

@@ -96,7 +96,7 @@ class RouterList implements RouterListInterface
      */
     public function valid()
     {
-        return (bool)current($this->routerList);
+        return (bool) current($this->routerList);
     }
 
     /**
@@ -119,6 +119,6 @@ class RouterList implements RouterListInterface
      */
     protected function compareRoutersSortOrder($routerDataFirst, $routerDataSecond)
     {
-        return (int)$routerDataFirst['sortOrder'] <=> (int)$routerDataSecond['sortOrder'];
+        return (int) $routerDataFirst['sortOrder'] <=> (int) $routerDataSecond['sortOrder'];
     }
 }

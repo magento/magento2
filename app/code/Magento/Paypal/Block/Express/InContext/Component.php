@@ -66,7 +66,7 @@ class Component extends Template
      */
     private function isInContext()
     {
-        return (bool)(int) $this->config->getValue('in_context');
+        return (bool) (int) $this->config->getValue('in_context');
     }
 
     /**

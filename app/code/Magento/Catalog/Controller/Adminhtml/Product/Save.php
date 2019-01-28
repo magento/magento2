@@ -247,7 +247,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         if (!empty($data['product']['copy_to_stores'])) {
             foreach ($data['product']['copy_to_stores'] as $websiteId => $group) {
                 if (isset($data['product']['website_ids'][$websiteId])
-                    && (bool)$data['product']['website_ids'][$websiteId]) {
+                    && (bool) $data['product']['website_ids'][$websiteId]) {
                     foreach ($group as $store) {
                         if (isset($store['copy_from'])) {
                             $copyFrom = $store['copy_from'];

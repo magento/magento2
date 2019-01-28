@@ -57,7 +57,7 @@ class Plugin
         if (!isset($this->configurableAttributes[$setId])) {
             $this->configurableAttributes[$setId] = $this->attributeFactory->create()->getUsedAttributes($setId);
         }
-        $result['is_configurable'] = (int)in_array(
+        $result['is_configurable'] = (int) in_array(
             $attribute->getAttributeId(),
             $this->configurableAttributes[$setId]
         );

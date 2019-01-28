@@ -51,23 +51,23 @@ class TypeCaster
         }
 
         if ($type === "int" || $type === "integer") {
-            return (int)$value;
+            return (int) $value;
         }
 
         if ($type === "string") {
-            return (string)$value;
+            return (string) $value;
         }
 
         if ($type === "bool" || $type === "boolean" || $type === "true" || $type == "false") {
-            return (bool)$value;
+            return (bool) $value;
         }
 
         if ($type === "float") {
-            return (float)$value;
+            return (float) $value;
         }
 
         if ($type === "double") {
-            return (float)$value;
+            return (float) $value;
         }
 
         return $value;

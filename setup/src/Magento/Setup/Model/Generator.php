@@ -46,7 +46,7 @@ class Generator extends AbstractSource
             }
         }
         $this->_pattern = $rowPattern;
-        $this->_limit = (int)$limit;
+        $this->_limit = (int) $limit;
         parent::__construct(array_keys($rowPattern));
     }
 

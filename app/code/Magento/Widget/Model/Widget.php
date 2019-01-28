@@ -199,7 +199,7 @@ class Widget
     protected function prepareDropDownValues(array $data, $key, $sortOrder)
     {
         $data['key'] = $key;
-        $data['sort_order'] = isset($data['sort_order']) ? (int)$data['sort_order'] : $sortOrder;
+        $data['sort_order'] = isset($data['sort_order']) ? (int) $data['sort_order'] : $sortOrder;
 
         $values = [];
         if (isset($data['values']) && is_array($data['values'])) {
@@ -252,7 +252,7 @@ class Widget
             foreach ($widgets as $code => $widget) {
                 try {
                     foreach ($filters as $field => $value) {
-                        if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
+                        if (!isset($widget[$field]) || (string) $widget[$field] != $value) {
                             throw new \Exception();
                         }
                     }
@@ -278,10 +278,10 @@ class Widget
             $result = [];
             foreach ($this->getWidgets($filters) as $code => $widget) {
                 $result[$widget['name']] = [
-                    'name' => __((string)$widget['name']),
+                    'name' => __((string) $widget['name']),
                     'code' => $code,
                     'type' => $widget['@']['type'],
-                    'description' => __((string)$widget['description']),
+                    'description' => __((string) $widget['description']),
                 ];
             }
             usort($result, [$this, "sortWidgets"]);
@@ -350,7 +350,7 @@ class Widget
     private function getWidgetPageVarName($params = [])
     {
         $pageVarName = '';
-        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+        if (array_key_exists('show_pager', $params) && (bool) $params['show_pager']) {
             $pageVarName = sprintf(
                 ' %s="%s"',
                 'page_var_name',
@@ -371,7 +371,7 @@ class Widget
         $placeholder = false;
         $widget = $this->getWidgetByClassType($type);
         if (is_array($widget) && isset($widget['placeholder_image'])) {
-            $placeholder = (string)$widget['placeholder_image'];
+            $placeholder = (string) $widget['placeholder_image'];
         }
         if ($placeholder) {
             $asset = $this->assetRepo->createAsset($placeholder);
@@ -458,8 +458,8 @@ class Widget
      */
     protected function sortParameters($firstElement, $secondElement)
     {
-        $aOrder = (int)$firstElement->getData('sort_order');
-        $bOrder = (int)$secondElement->getData('sort_order');
+        $aOrder = (int) $firstElement->getData('sort_order');
+        $bOrder = (int) $secondElement->getData('sort_order');
         return $aOrder < $bOrder ? -1 : ($aOrder > $bOrder ? 1 : 0);
     }
 }

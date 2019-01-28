@@ -476,7 +476,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      */
     protected function _isCrossBorderTradeEnabled($store = null)
     {
-        return (bool)$this->_config->crossBorderTradeEnabled($store);
+        return (bool) $this->_config->crossBorderTradeEnabled($store);
     }
 
     /**

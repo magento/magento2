@@ -155,6 +155,6 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!$includeDefault) {
             $select->where('website_id <> ?', 0);
         }
-        return (int)$connection->fetchOne($select);
+        return (int) $connection->fetchOne($select);
     }
 }

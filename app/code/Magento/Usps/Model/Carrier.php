@@ -568,14 +568,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     if ($this->_isUSCountry($r->getDestCountryId())) {
                         if (is_object($xml->Package) && is_object($xml->Package->Postage)) {
                             foreach ($xml->Package->Postage as $postage) {
-                                $serviceName = $this->_filterServiceName((string)$postage->MailService);
+                                $serviceName = $this->_filterServiceName((string) $postage->MailService);
                                 $_serviceCode = $this->getCode('method_to_code', $serviceName);
-                                $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
+                                $serviceCode = $_serviceCode ? $_serviceCode : (string) $postage->attributes()->CLASSID;
                                 $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
                                 if (in_array($serviceCode, $allowedMethods)) {
-                                    $costArr[$serviceCode] = (string)$postage->Rate;
+                                    $costArr[$serviceCode] = (string) $postage->Rate;
                                     $priceArr[$serviceCode] = $this->getMethodPrice(
-                                        (string)$postage->Rate,
+                                        (string) $postage->Rate,
                                         $serviceCode
                                     );
                                 }
@@ -588,16 +588,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                          */
                         if (is_object($xml->Package) && is_object($xml->Package->Service)) {
                             foreach ($xml->Package->Service as $service) {
-                                $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
-                                $serviceCode = 'INT_' . (string)$service->attributes()->ID;
+                                $serviceName = $this->_filterServiceName((string) $service->SvcDescription);
+                                $serviceCode = 'INT_' . (string) $service->attributes()->ID;
                                 $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
                                 if (!$this->isServiceAvailable($service)) {
                                     continue;
                                 }
                                 if (in_array($serviceCode, $allowedMethods)) {
-                                    $costArr[$serviceCode] = (string)$service->Postage;
+                                    $costArr[$serviceCode] = (string) $service->Postage;
                                     $priceArr[$serviceCode] = $this->getMethodPrice(
-                                        (string)$service->Postage,
+                                        (string) $service->Postage,
                                         $serviceCode
                                     );
                                 }
@@ -1079,14 +1079,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if (strpos(trim($response), '<?xml') === 0) {
                 $xml = $this->parseXml($response);
                 if (is_object($xml)) {
-                    if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
-                        $errorTitle = (string)$xml->Description;
+                    if (isset($xml->Number) && isset($xml->Description) && (string) $xml->Description != '') {
+                        $errorTitle = (string) $xml->Description;
                     } elseif (isset($xml->TrackInfo)
                         && isset($xml->TrackInfo->Error)
                         && isset($xml->TrackInfo->Error->Description)
-                        && (string)$xml->TrackInfo->Error->Description != ''
+                        && (string) $xml->TrackInfo->Error->Description != ''
                     ) {
-                        $errorTitle = (string)$xml->TrackInfo->Error->Description;
+                        $errorTitle = (string) $xml->TrackInfo->Error->Description;
                     } else {
                         $errorTitle = __(
                             'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.'
@@ -1094,7 +1094,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     }
 
                     if (isset($xml->TrackInfo) && isset($xml->TrackInfo->TrackSummary)) {
-                        $resultArr['tracksummary'] = (string)$xml->TrackInfo->TrackSummary;
+                        $resultArr['tracksummary'] = (string) $xml->TrackInfo->TrackSummary;
                     }
                 }
             }
@@ -1417,7 +1417,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _filterServiceName($name)
     {
-        $name = (string)preg_replace(
+        $name = (string) preg_replace(
             ['~<[^/!][^>]+>.*</[^>]+>~sU', '~\<!--.*--\>~isU', '~<[^>]+>~is'],
             '',
             html_entity_decode($name)
@@ -1445,7 +1445,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
                 $this->_carrierHelper->convertMeasureWeight(
-                    (float)$request->getPackageWeight(),
+                    (float) $request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
                 )
@@ -1539,7 +1539,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
                 $this->_carrierHelper->convertMeasureWeight(
-                    (float)$request->getPackageWeight(),
+                    (float) $request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
                 )
@@ -1624,7 +1624,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
             $packageWeight = $this->_carrierHelper->convertMeasureWeight(
-                (float)$request->getPackageWeight(),
+                (float) $request->getPackageWeight(),
                 $packageParams->getWeightUnits(),
                 \Zend_Measure_Weight::POUND
             );
@@ -1632,21 +1632,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
             $length = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    (float)$packageParams->getLength(),
+                    (float) $packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $width = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    (float)$packageParams->getWidth(),
+                    (float) $packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $height = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    (float)$packageParams->getHeight(),
+                    (float) $packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
@@ -1655,7 +1655,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
             $girth = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    (float)$packageParams->getGirth(),
+                    (float) $packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
@@ -1928,14 +1928,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->setErrors($debugData['result']['error']);
             } else {
                 if ($recipientUSCountry && $service == 'Priority Express') {
-                    $labelContent = base64_decode((string)$response->EMLabel);
-                    $trackingNumber = (string)$response->EMConfirmationNumber;
+                    $labelContent = base64_decode((string) $response->EMLabel);
+                    $trackingNumber = (string) $response->EMConfirmationNumber;
                 } elseif ($recipientUSCountry) {
-                    $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
-                    $trackingNumber = (string)$response->SignatureConfirmationNumber;
+                    $labelContent = base64_decode((string) $response->SignatureConfirmationLabel);
+                    $trackingNumber = (string) $response->SignatureConfirmationNumber;
                 } else {
-                    $labelContent = base64_decode((string)$response->LabelImage);
-                    $trackingNumber = (string)$response->BarcodeNumber;
+                    $labelContent = base64_decode((string) $response->LabelImage);
+                    $trackingNumber = (string) $response->BarcodeNumber;
                 }
                 $result->setShippingLabelContent($labelContent);
                 $result->setTrackingNumber($trackingNumber);

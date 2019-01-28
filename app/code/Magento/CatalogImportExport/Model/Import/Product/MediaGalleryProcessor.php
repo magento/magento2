@@ -141,7 +141,7 @@ class MediaGalleryProcessor
         }
         $newMediaValues = $this->connection->fetchAssoc($newMediaSelect);
         foreach ($mediaGalleryData as $storeId => $storeMediaGalleryData) {
-            $this->processMediaPerStore((int)$storeId, $storeMediaGalleryData, $newMediaValues, $valueToProductId);
+            $this->processMediaPerStore((int) $storeId, $storeMediaGalleryData, $newMediaValues, $valueToProductId);
         }
     }
 

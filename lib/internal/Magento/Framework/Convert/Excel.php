@@ -143,7 +143,7 @@ class Excel
              * @var $value string|\Magento\Framework\Phrase
              */
             if (!is_string($value)) {
-                $value = (string)$value;
+                $value = (string) $value;
             }
             if (isset($value[0]) && in_array($value[0], ['=', '+', '-'])) {
                 $value = ' ' . $value;

@@ -90,7 +90,7 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(count($indexersData)))
             ->method('get')
             ->willReturnMap($calls);
-        $this->assertFalse((bool)$this->dataCollection->isLoaded());
+        $this->assertFalse((bool) $this->dataCollection->isLoaded());
         foreach ($this->dataCollection->getItems() as $item) {
             $this->assertEmpty(
                 array_diff(

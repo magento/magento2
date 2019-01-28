@@ -422,7 +422,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     public function hasChildTransaction($whetherHasChild = null)
     {
         if (null !== $whetherHasChild) {
-            $this->_hasChild = (bool)$whetherHasChild;
+            $this->_hasChild = (bool) $whetherHasChild;
             return $this;
         } elseif (null === $this->_hasChild) {
             if ($this->getChildTransactions()) {
@@ -610,7 +610,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         if (null === $setFailsafe) {
             return $this->_isFailsafe;
         }
-        $this->_isFailsafe = (bool)$setFailsafe;
+        $this->_isFailsafe = (bool) $setFailsafe;
         return $this;
     }
 
@@ -702,7 +702,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     protected function _isVoided()
     {
         $this->_verifyThisTransactionExists();
-        return self::TYPE_AUTH === $this->getTxnType() && (bool)count($this->getChildTransactions(self::TYPE_VOID));
+        return self::TYPE_AUTH === $this->getTxnType() && (bool) count($this->getChildTransactions(self::TYPE_VOID));
     }
 
     /**
@@ -739,7 +739,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     public function getOrderWebsiteId()
     {
         if ($this->_orderWebsiteId === null) {
-            $this->_orderWebsiteId = (int)$this->getResource()->getOrderWebsiteId($this->getOrderId());
+            $this->_orderWebsiteId = (int) $this->getResource()->getOrderWebsiteId($this->getOrderId());
         }
         return $this->_orderWebsiteId;
     }

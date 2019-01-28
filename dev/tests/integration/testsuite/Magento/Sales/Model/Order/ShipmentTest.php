@@ -94,7 +94,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->create($order, $items);
         $shipment->addTrack($track);
         $this->shipmentRepository->save($shipment);
-        $saved = $this->shipmentRepository->get((int)$shipment->getEntityId());
+        $saved = $this->shipmentRepository->get((int) $shipment->getEntityId());
         self::assertNotEmpty($saved->getTracks());
     }
 

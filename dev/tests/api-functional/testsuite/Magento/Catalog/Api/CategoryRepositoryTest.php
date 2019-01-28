@@ -171,7 +171,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         /** @var \Magento\Catalog\Model\Category $model */
         $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
         $category = $model->load($categoryId);
-        $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
+        $this->assertFalse((bool) $category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
         // delete category to clean up auto-generated url rewrites

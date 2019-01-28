@@ -51,7 +51,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                     $this->connection->getTableName($this->getTableName('catalog_category_entity'))
                 )->where(
                     'path = ?',
-                    (string)$rootId
+                    (string) $rootId
                 )->orWhere(
                     'path = ?',
                     "{$rootId}/{$store->getRootCategoryId()}"

@@ -225,7 +225,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $dependenceBlock->addFieldMap($field->getId(), $fieldName);
         if ($parameter->getDepends()) {
             foreach ($parameter->getDepends() as $from => $row) {
-                $values = isset($row['values']) ? array_values($row['values']) : (string)$row['value'];
+                $values = isset($row['values']) ? array_values($row['values']) : (string) $row['value'];
                 $dependenceBlock->addFieldDependence($fieldName, $from, $values);
             }
         }

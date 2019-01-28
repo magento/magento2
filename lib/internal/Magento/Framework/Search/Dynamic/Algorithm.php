@@ -120,8 +120,8 @@ class Algorithm
      */
     public function setLimits($lowerLimit = null, $upperLimit = null)
     {
-        $this->_lowerLimit = empty($lowerLimit) ? null : (float)$lowerLimit;
-        $this->_upperLimit = empty($upperLimit) ? null : (float)$upperLimit;
+        $this->_lowerLimit = empty($lowerLimit) ? null : (float) $lowerLimit;
+        $this->_upperLimit = empty($upperLimit) ? null : (float) $upperLimit;
 
         return $this;
     }
@@ -154,7 +154,7 @@ class Algorithm
             $intervalsNumber = $valueRange * pow($count, 1 / 3) / (3.5 * $standardDeviation);
         }
         $this->_intervalsNumber = max(ceil($intervalsNumber), self::MIN_INTERVALS_NUMBER);
-        $this->_intervalsNumber = (int)min($this->_intervalsNumber, self::MAX_INTERVALS_NUMBER);
+        $this->_intervalsNumber = (int) min($this->_intervalsNumber, self::MAX_INTERVALS_NUMBER);
 
         return $this;
     }

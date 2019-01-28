@@ -293,9 +293,9 @@ class ShipmentFactory
     private function castQty(\Magento\Sales\Model\Order\Item $item, $qty)
     {
         if ($item->getIsQtyDecimal()) {
-            $qty = (float)$qty;
+            $qty = (float) $qty;
         } else {
-            $qty = (int)$qty;
+            $qty = (int) $qty;
         }
 
         return $qty > 0 ? $qty : 0;

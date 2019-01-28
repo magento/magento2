@@ -103,7 +103,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _getStore()
     {
-        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
         return $this->_storeManager->getStore($storeId);
     }
 

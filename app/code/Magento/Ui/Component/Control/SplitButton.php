@@ -199,7 +199,7 @@ class SplitButton extends Button
      */
     public function hasSplit()
     {
-        return $this->hasData('has_split') ? (bool)$this->getData('has_split') : true;
+        return $this->hasData('has_split') ? (bool) $this->getData('has_split') : true;
     }
 
     /**

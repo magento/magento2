@@ -52,11 +52,11 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      */
     public function execute()
     {
-        $country = (string)$this->getRequest()->getParam('country_id');
-        $postcode = (string)$this->getRequest()->getParam('estimate_postcode');
-        $city = (string)$this->getRequest()->getParam('estimate_city');
-        $regionId = (string)$this->getRequest()->getParam('region_id');
-        $region = (string)$this->getRequest()->getParam('region');
+        $country = (string) $this->getRequest()->getParam('country_id');
+        $postcode = (string) $this->getRequest()->getParam('estimate_postcode');
+        $city = (string) $this->getRequest()->getParam('estimate_city');
+        $regionId = (string) $this->getRequest()->getParam('region_id');
+        $region = (string) $this->getRequest()->getParam('region');
 
         $this->cart->getQuote()->getShippingAddress()
             ->setCountryId($country)

@@ -54,7 +54,7 @@ class Select extends DefaultValidator
             $storeId = $option->getProduct()->getStoreId();
         }
         foreach ($values as $value) {
-            if (isset($value['is_delete']) && (bool)$value['is_delete']) {
+            if (isset($value['is_delete']) && (bool) $value['is_delete']) {
                 continue;
             }
             $type = isset($value['price_type']) ? $value['price_type'] : null;

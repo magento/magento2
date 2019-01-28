@@ -27,7 +27,7 @@ class PathInfo
 
         $requestUri = $this->removeRepeatedSlashes($requestUri);
         $parsedRequestUri = explode('?', $requestUri, 2);
-        $pathInfo = (string)substr(current($parsedRequestUri), (int)strlen($baseUrl));
+        $pathInfo = (string) substr(current($parsedRequestUri), (int) strlen($baseUrl));
 
         if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
             $pathInfo = \Magento\Framework\App\Router\Base::NO_ROUTE;
@@ -57,7 +57,7 @@ class PathInfo
      */
     private function removeRepeatedSlashes($pathInfo) : string
     {
-        $firstChar = (string)substr($pathInfo, 0, 1);
+        $firstChar = (string) substr($pathInfo, 0, 1);
         if ($firstChar == '/') {
             $pathInfo = '/' . ltrim($pathInfo, '/');
         }
@@ -74,7 +74,7 @@ class PathInfo
      */
     private function isNoRouteUri($baseUrl, $pathInfo) : bool
     {
-        $firstChar = (string)substr($pathInfo, 0, 1);
+        $firstChar = (string) substr($pathInfo, 0, 1);
         return $baseUrl !== '' && !in_array($firstChar, ['/', '']);
     }
 }

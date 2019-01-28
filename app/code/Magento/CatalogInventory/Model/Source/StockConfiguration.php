@@ -32,6 +32,6 @@ class StockConfiguration implements ValueSourceInterface
     public function getValue($name)
     {
         $value= $this->stockConfiguration->getDefaultConfigValue($name);
-        return is_numeric($value) ? (float)$value : $value;
+        return is_numeric($value) ? (float) $value : $value;
     }
 }

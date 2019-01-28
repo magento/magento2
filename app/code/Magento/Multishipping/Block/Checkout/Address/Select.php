@@ -103,7 +103,7 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
                     ->setValue($this->_multishipping->getCustomer()->getId())
                     ->setConditionType('eq')
                     ->create();
-                $addresses = (array)($this->addressRepository->getList(
+                $addresses = (array) ($this->addressRepository->getList(
                     $this->searchCriteriaBuilder->addFilters([$filter])->create()
                 )->getItems());
             } catch (NoSuchEntityException $e) {

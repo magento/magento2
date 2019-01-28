@@ -94,9 +94,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'fixed_product_attribute');
 
         $entityEavAttributeRow = $this->getEavEntityAttributeRow(
-            (int)$attribute->getEntityTypeId(),
+            (int) $attribute->getEntityTypeId(),
             4,
-            (int)$attribute->getId()
+            (int) $attribute->getId()
         );
         $this->assertNotEmpty(
             $entityEavAttributeRow['entity_attribute_id'],
@@ -107,9 +107,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->model->deleteEntity($attribute);
 
         $entityEavAttributeRow = $this->getEavEntityAttributeRow(
-            (int)$attribute->getEntityTypeId(),
+            (int) $attribute->getEntityTypeId(),
             4,
-            (int)$attribute->getId()
+            (int) $attribute->getId()
         );
         $this->assertEmpty(
             $entityEavAttributeRow,

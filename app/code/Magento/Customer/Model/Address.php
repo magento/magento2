@@ -283,7 +283,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function getRegionId()
     {
-        return (int)$this->getData('region_id');
+        return (int) $this->getData('region_id');
     }
 
     /**
@@ -294,7 +294,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function setRegionId($regionId)
     {
-        $this->setData('region_id', (int)$regionId);
+        $this->setData('region_id', (int) $regionId);
         return $this;
     }
 

@@ -98,6 +98,6 @@ class CheckCustomerAccount
         if (null === $customerId || null === $customerType) {
             return true;
         }
-        return 0 === (int)$customerId || (int)$customerType === UserContextInterface::USER_TYPE_GUEST;
+        return 0 === (int) $customerId || (int) $customerType === UserContextInterface::USER_TYPE_GUEST;
     }
 }

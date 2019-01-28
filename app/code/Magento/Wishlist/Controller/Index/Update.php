@@ -80,7 +80,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                 }
 
                 // Extract new values
-                $description = (string)$description;
+                $description = (string) $description;
 
                 if ($description == $this->_objectManager->get(
                     \Magento\Wishlist\Helper\Data::class

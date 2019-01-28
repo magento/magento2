@@ -183,7 +183,7 @@ class Sidebar extends Block
      */
     public function getItemsQty()
     {
-        return (int)$this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
+        return (int) $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

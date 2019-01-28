@@ -27,7 +27,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Message', $translator->translate('Message'));
         $this->assertEquals(
             'Message with "placeholder one" and "placeholder two"',
-            (string)new \Magento\Framework\Phrase('Message with "%1" and "%2"', ['placeholder one', 'placeholder two'])
+            (string) new \Magento\Framework\Phrase('Message with "%1" and "%2"', ['placeholder one', 'placeholder two'])
         );
     }
 }

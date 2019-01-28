@@ -121,7 +121,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT. */
         $this->assertEquals(
             ['result' => $serviceResponse],
-            $this->_handler->__call($operationName, [(object)['field' => 1]])
+            $this->_handler->__call($operationName, [(object) ['field' => 1]])
         );
     }
 }

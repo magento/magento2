@@ -266,7 +266,7 @@ class AttributeMerger
     {
         $lines = [];
         unset($attributeConfig['validation']['required-entry']);
-        for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
+        for ($lineIndex = 0; $lineIndex < (int) $attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
             $line = [
                 'component' => 'Magento_Ui/js/form/element/abstract',
@@ -280,7 +280,7 @@ class AttributeMerger
                 'provider' => $providerName,
                 'validation' => $isFirstLine
                     ? array_merge(
-                        ['required-entry' => (bool)$attributeConfig['required']],
+                        ['required-entry' => (bool) $attributeConfig['required']],
                         $attributeConfig['validation']
                     )
                     : $attributeConfig['validation'],
@@ -295,7 +295,7 @@ class AttributeMerger
         return [
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => $attributeConfig['label'],
-            'required' => (bool)$attributeConfig['required'],
+            'required' => (bool) $attributeConfig['required'],
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'provider' => $providerName,
             'sortOrder' => $attributeConfig['sortOrder'],

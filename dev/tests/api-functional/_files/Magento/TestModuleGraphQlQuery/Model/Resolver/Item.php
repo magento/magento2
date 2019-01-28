@@ -26,7 +26,7 @@ class Item implements ResolverInterface
         $id = 0;
         foreach ($args as $key => $argValue) {
             if ($key === "id") {
-                $id = (int)$argValue;
+                $id = (int) $argValue;
             }
         }
         $itemData = [

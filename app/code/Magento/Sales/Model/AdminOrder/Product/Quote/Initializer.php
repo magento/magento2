@@ -43,7 +43,7 @@ class Initializer
         if ($stockItem->getIsQtyDecimal()) {
             $product->setIsQtyDecimal(1);
         } else {
-            $config->setQty((int)$config->getQty());
+            $config->setQty((int) $config->getQty());
         }
 
         $product->setCartQty($config->getQty());

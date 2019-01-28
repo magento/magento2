@@ -169,7 +169,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             ['store_id', 'items_qty', 'items_count']
         );
         if ($productId) {
-            $this->getSelect()->where('qi.product_id = ?', (int)$productId);
+            $this->getSelect()->where('qi.product_id = ?', (int) $productId);
         }
         return $this;
     }
@@ -193,7 +193,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
                 $item->setQuote($this->_quote);
             }
             // Collect quote products ids
-            $productIds[] = (int)$item->getProductId();
+            $productIds[] = (int) $item->getProductId();
         }
         $this->_productIds = array_merge($this->_productIds, $productIds);
         $this->removeItemsWithAbsentProducts();
@@ -330,7 +330,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     private function isValidProduct(ProductInterface $product): bool
     {
-        $result = ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED);
+        $result = ($product && (int) $product->getStatus() !== ProductStatus::STATUS_DISABLED);
 
         return $result;
     }

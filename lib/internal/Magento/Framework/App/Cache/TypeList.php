@@ -124,7 +124,7 @@ class TypeList implements TypeListInterface
                     'cache_type' => $node['label'],
                     'description' => $node['description'],
                     'tags' => $typeTags,
-                    'status' => (int)$this->_cacheState->isEnabled($type),
+                    'status' => (int) $this->_cacheState->isEnabled($type),
                 ]
             );
         }

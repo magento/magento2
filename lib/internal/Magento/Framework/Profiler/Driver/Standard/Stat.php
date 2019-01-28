@@ -159,7 +159,7 @@ class Stat
         if (!$thresholds && !$filterPattern) {
             return $timerIds;
         }
-        $thresholds = (array)$thresholds;
+        $thresholds = (array) $thresholds;
         $result = [];
         foreach ($timerIds as $timerId) {
             /* Filter by pattern */

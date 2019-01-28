@@ -99,7 +99,7 @@ class Csv implements ReportProcessorInterface
     public function retrieveErrorMessagesByRowNumber($rowNumber, ProcessingErrorAggregatorInterface $errorAggregator)
     {
         $messages = '';
-        foreach ($errorAggregator->getErrorByRowNumber((int)$rowNumber) as $error) {
+        foreach ($errorAggregator->getErrorByRowNumber((int) $rowNumber) as $error) {
             $messages .= $error->getErrorMessage() . ',';
         }
         $messages = rtrim($messages, ',');

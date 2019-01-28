@@ -314,9 +314,9 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     public function getLifetime()
     {
         if ($this->appState->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
-            return (int)$this->scopeConfig->getValue(self::XML_PATH_ADMIN_SESSION_LIFETIME);
+            return (int) $this->scopeConfig->getValue(self::XML_PATH_ADMIN_SESSION_LIFETIME);
         }
-        return (int)$this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_STORE);
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_STORE);
     }
 
     /**

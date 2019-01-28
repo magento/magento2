@@ -127,7 +127,7 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
                 && $this->_persistentData->isRememberMeCheckedDefault();
         }
 
-        return (bool)$this->_isRememberMeChecked;
+        return (bool) $this->_isRememberMeChecked;
     }
 
     /**

@@ -140,7 +140,7 @@ class Storage
         $forCustomersIds = array_unique($forCustomersIds);
         $customerIdsToUse = [];
         foreach ($forCustomersIds as $customerId) {
-            if (!array_key_exists((string)$customerId, $this->addresses)) {
+            if (!array_key_exists((string) $customerId, $this->addresses)) {
                 $customerIdsToUse[] = $customerId;
             }
         }

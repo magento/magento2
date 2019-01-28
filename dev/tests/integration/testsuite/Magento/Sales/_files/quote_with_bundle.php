@@ -115,7 +115,7 @@ $product
 if ($product->getBundleOptionsData()) {
     $options = [];
     foreach ($product->getBundleOptionsData() as $key => $optionData) {
-        if (!(bool)$optionData['delete']) {
+        if (!(bool) $optionData['delete']) {
             $option = $objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
                 ->create(['data' => $optionData]);
             $option->setSku($product->getSku());
@@ -125,7 +125,7 @@ if ($product->getBundleOptionsData()) {
             $bundleLinks = $product->getBundleSelectionsData();
             if (!empty($bundleLinks[$key])) {
                 foreach ($bundleLinks[$key] as $linkData) {
-                    if (!(bool)$linkData['delete']) {
+                    if (!(bool) $linkData['delete']) {
                         /** @var \Magento\Bundle\Api\Data\LinkInterface$link */
                         $link = $objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
                             ->create(['data' => $linkData]);

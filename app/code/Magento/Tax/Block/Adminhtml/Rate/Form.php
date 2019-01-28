@@ -134,7 +134,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             /* tax rate not found */
         }
 
-        $sessionFormValues = (array)$this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_FORM_DATA);
+        $sessionFormValues = (array) $this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_FORM_DATA);
         $formData = isset($taxRateDataObject)
             ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject)
             : [];

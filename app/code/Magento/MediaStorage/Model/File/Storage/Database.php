@@ -202,8 +202,8 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      */
     public function exportFiles($offset = 0, $count = 100)
     {
-        $offset = (int)$offset >= 0 ? (int)$offset : 0;
-        $count = (int)$count >= 1 ? (int)$count : 1;
+        $offset = (int) $offset >= 0 ? (int) $offset : 0;
+        $count = (int) $count >= 1 ? (int) $count : 1;
 
         $result = $this->_getResource()->getFiles($offset, $count);
         if (empty($result)) {

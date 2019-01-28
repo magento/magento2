@@ -192,7 +192,7 @@ class Builder implements BuilderInterface
                 ->isFailsafe($this->failSafe);
 
             if ($this->payment->hasIsTransactionClosed()) {
-                $transaction->setIsClosed((int)$this->payment->getIsTransactionClosed());
+                $transaction->setIsClosed((int) $this->payment->getIsTransactionClosed());
             }
             if ($this->transactionAdditionalInfo) {
                 foreach ($this->transactionAdditionalInfo as $key => $value) {

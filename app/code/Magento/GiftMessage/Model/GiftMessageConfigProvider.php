@@ -111,7 +111,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         );
         if ($orderLevelGiftMsg) {
             $orderMessages = $this->getOrderLevelGiftMessages();
-            $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
+            $configuration['isOrderLevelGiftOptionsEnabled'] = (bool) $this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
 
@@ -138,7 +138,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      */
     private function isCustomerLoggedIn()
     {
-        return (bool)$this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+        return (bool) $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
     }
 
     /**
@@ -188,7 +188,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $isMessageAvailable = $item->getProduct()->getGiftMessageAvailable();
             // use gift message product setting if it is available
             if ($isMessageAvailable !== null && $isMessageAvailable != Boolean::VALUE_USE_CONFIG) {
-                $itemLevelConfig[$itemId]['is_available'] = (bool)$isMessageAvailable;
+                $itemLevelConfig[$itemId]['is_available'] = (bool) $isMessageAvailable;
             }
             $message = $this->itemRepository->get($quote->getId(), $itemId);
             if ($message) {

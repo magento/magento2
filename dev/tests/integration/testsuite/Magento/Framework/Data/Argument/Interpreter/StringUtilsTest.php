@@ -65,7 +65,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     public function testEvaluate($input, $expected)
     {
         $actual = $this->model->evaluate($input);
-        $this->assertSame($expected, (string)$actual);
+        $this->assertSame($expected, (string) $actual);
     }
 
     /**

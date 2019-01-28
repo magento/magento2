@@ -13,7 +13,7 @@ $groupPriceAttribute = $attributeRepository->get('tier_price')
     ->setScope(Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE);
 $attributeRepository->save($groupPriceAttribute);
 
-$productModel->setWebsiteIds(array_merge($productModel->getWebsiteIds(), [(int)$website->getId()]));
+$productModel->setWebsiteIds(array_merge($productModel->getWebsiteIds(), [(int) $website->getId()]));
 $productModel->setTierPrice(
     [
         [

@@ -93,8 +93,8 @@ class DashboardTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $addresses);
         $address = $addresses[0];
         $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $address);
-        $this->assertEquals((int)$customer->getDefaultBilling(), $address->getId());
-        $this->assertEquals((int)$customer->getDefaultShipping(), $address->getId());
+        $this->assertEquals((int) $customer->getDefaultBilling(), $address->getId());
+        $this->assertEquals((int) $customer->getDefaultShipping(), $address->getId());
     }
 
     /**

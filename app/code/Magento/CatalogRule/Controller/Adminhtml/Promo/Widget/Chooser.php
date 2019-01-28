@@ -30,7 +30,7 @@ class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
                 $ids = $request->getParam('selected', []);
                 if (is_array($ids)) {
                     foreach ($ids as $key => &$id) {
-                        $id = (int)$id;
+                        $id = (int) $id;
                         if ($id <= 0) {
                             unset($ids[$key]);
                         }

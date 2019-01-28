@@ -89,7 +89,7 @@ class SaveHandler extends AbstractHandler
 
             // prepare and save data
             foreach ($priceRows as $data) {
-                $isPriceWebsiteGlobal = (int)$data['website_id'] === 0;
+                $isPriceWebsiteGlobal = (int) $data['website_id'] === 0;
                 if ($isGlobal === $isPriceWebsiteGlobal
                     || !empty($data['price_qty'])
                     || isset($data['cust_group'])

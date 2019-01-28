@@ -124,7 +124,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             1
         );
         $data = $connection->fetchOne($select, $bind);
-        return abs((int)str_replace($value, '', $data));
+        return abs((int) str_replace($value, '', $data));
     }
 
     /**

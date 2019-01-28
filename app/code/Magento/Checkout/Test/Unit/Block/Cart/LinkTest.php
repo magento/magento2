@@ -79,7 +79,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ['cartHelper' => $helper]
         );
         $helper->expects($this->any())->method('getSummaryCount')->will($this->returnValue($productCount));
-        $this->assertSame($label, (string)$block->getLabel());
+        $this->assertSame($label, (string) $block->getLabel());
     }
 
     /**

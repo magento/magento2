@@ -77,7 +77,7 @@ class DataProviderPlugin
                 if ($filterGroup['request_var'] === $swatchFilter->getRequestVar()) {
                     $swatchData = $this->renderLayered->setSwatchFilter($swatchFilter)->getSwatchData();
                     foreach ($filterGroup['filter_items'] as $itemKey => $filterItem) {
-                        foreach ((array)$swatchData['swatches'] as $swatchKey => $swatchDataItem) {
+                        foreach ((array) $swatchData['swatches'] as $swatchKey => $swatchDataItem) {
                             if ($filterItem['value_string'] == $swatchKey) {
                                 $filtersData[$groupKey]['filter_items'][$itemKey]['swatch_data'] = [
                                     'type' => $swatchDataItem['type'],

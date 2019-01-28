@@ -54,7 +54,7 @@ class Cryptographer
     {
         if (!is_string($source)) {
             try {
-                $source = (string)$source;
+                $source = (string) $source;
             } catch (\Exception $e) {
                 throw new LocalizedException(
                     __(

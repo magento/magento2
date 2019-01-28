@@ -48,9 +48,9 @@ class Move implements Layout\ReaderInterface
      */
     protected function scheduleMove(Layout\ScheduledStructure $scheduledStructure, Layout\Element $currentElement)
     {
-        $elementName = (string)$currentElement->getAttribute('element');
-        $destination = (string)$currentElement->getAttribute('destination');
-        $alias = (string)$currentElement->getAttribute('as') ?: '';
+        $elementName = (string) $currentElement->getAttribute('element');
+        $destination = (string) $currentElement->getAttribute('destination');
+        $alias = (string) $currentElement->getAttribute('as') ?: '';
         if ($elementName && $destination) {
             list($siblingName, $isAfter) = $this->beforeAfterToSibling($currentElement);
             $scheduledStructure->setElementToMove(
@@ -75,9 +75,9 @@ class Move implements Layout\ReaderInterface
     {
         $result = [null, true];
         if (isset($node['after'])) {
-            $result[0] = (string)$node['after'];
+            $result[0] = (string) $node['after'];
         } elseif (isset($node['before'])) {
-            $result[0] = (string)$node['before'];
+            $result[0] = (string) $node['before'];
             $result[1] = false;
         }
         return $result;

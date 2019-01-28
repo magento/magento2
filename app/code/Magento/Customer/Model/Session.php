@@ -380,7 +380,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function isLoggedIn()
     {
-        return (bool)$this->getCustomerId()
+        return (bool) $this->getCustomerId()
             && $this->checkCustomerId($this->getId())
             && !$this->getIsCustomerEmulated();
     }

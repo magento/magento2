@@ -41,7 +41,7 @@ class Layout
         /** @var \Magento\Framework\View\File\Factory $fileFactory */
         $fileFactory = $objectManager->get(\Magento\Framework\View\File\Factory::class);
         $files = [];
-        foreach ((array)$layoutUpdatesFile as $filename) {
+        foreach ((array) $layoutUpdatesFile as $filename) {
             $files[] = $fileFactory->create($filename, 'Magento_View');
         }
         $fileSource = $this->_testCase

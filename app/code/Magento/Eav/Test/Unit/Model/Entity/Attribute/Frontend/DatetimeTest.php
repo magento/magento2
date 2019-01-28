@@ -79,7 +79,7 @@ class DatetimeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attributeCode);
 
         $this->assertInstanceOf(\Magento\Framework\Phrase::class, $this->model->getLocalizedLabel());
-        $this->assertSame($expectedResult, (string)$this->model->getLocalizedLabel());
+        $this->assertSame($expectedResult, (string) $this->model->getLocalizedLabel());
     }
 
     /**

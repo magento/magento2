@@ -137,7 +137,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = (int)$storeId;
+        $this->_storeId = (int) $storeId;
         return $this;
     }
 
@@ -149,7 +149,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     public function getStoreId()
     {
         if ($this->_storeId === null) {
-            return (int)$this->_storeManager->getStore()->getId();
+            return (int) $this->_storeManager->getStore()->getId();
         }
         return $this->_storeId;
     }
@@ -481,9 +481,9 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             $category->getPath() . '/%'
         )->where(
             "{$_table}.is_active = ?",
-            (int)$isActiveFlag
+            (int) $isActiveFlag
         );
-        return (int)$this->getConnection()->fetchOne($select);
+        return (int) $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -503,7 +503,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         )->group(
             "{$this->getTable('catalog_category_product')}.category_id"
         );
-        return (int)$this->getConnection()->fetchOne($select);
+        return (int) $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -713,7 +713,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
                 $websiteId
             );
         }
-        $bind = ['category_id' => (int)$category->getId()];
+        $bind = ['category_id' => (int) $category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }

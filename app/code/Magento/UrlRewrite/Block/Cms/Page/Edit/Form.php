@@ -110,7 +110,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
 
         // showing websites that only associated to CMS page
         if ($this->_getCmsPage()->getId()) {
-            $entityStores = (array)$cmsPage->getResource()->lookupStoreIds($cmsPage->getId());
+            $entityStores = (array) $cmsPage->getResource()->lookupStoreIds($cmsPage->getId());
             $this->_requireStoresFilter = !in_array(0, $entityStores);
 
             if (!$entityStores) {

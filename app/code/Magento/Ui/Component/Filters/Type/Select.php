@@ -78,8 +78,8 @@ class Select extends AbstractFilter
         $this->setData(
             'config',
             array_replace_recursive(
-                (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
+                (array) $this->wrappedComponent->getData('config'),
+                (array) $this->getData('config')
             )
         );
 

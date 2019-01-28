@@ -105,7 +105,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      */
     public function getContactUsEnabled()
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool) $this->_scopeConfig->getValue(
             'contacts/contacts/enabled',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

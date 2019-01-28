@@ -154,7 +154,7 @@ class DataProvider implements SuggestedQueriesInterface
      */
     private function getSearchRecommendationsCount()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::CONFIG_RESULTS_COUNT,
             ScopeInterface::SCOPE_STORE
         );

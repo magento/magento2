@@ -53,7 +53,7 @@ abstract class AbstractAssertForm extends AbstractConstraint
             }
             $formValue = isset($formData[$key]) ? $formData[$key] : null;
             if (is_numeric($formValue)) {
-                $formValue = (float)$formValue;
+                $formValue = (float) $formValue;
             }
 
             if (null === $formValue) {
@@ -199,7 +199,7 @@ abstract class AbstractAssertForm extends AbstractConstraint
         $result = [];
         foreach ($data as $key => $value) {
             if (isset($value[$orderKey])) {
-                $key = is_numeric($value[$orderKey]) ? (int)$value[$orderKey] : $value[$orderKey];
+                $key = is_numeric($value[$orderKey]) ? (int) $value[$orderKey] : $value[$orderKey];
             }
             $result[$key] = $value;
         }

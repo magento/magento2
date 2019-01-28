@@ -76,7 +76,7 @@ class CustomerGroupConfigTest extends WebapiAbstract
                 $e->getMessage(),
                 "Exception does not contain expected message."
             );
-            $this->assertContains((string)$customerGroupId, $e->getMessage());
+            $this->assertContains((string) $customerGroupId, $e->getMessage());
         }
     }
 }

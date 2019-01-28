@@ -17,7 +17,7 @@ class Edit extends \Magento\Backend\Controller\Adminhtml\System\Design
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Backend::system_design_schedule');
         $resultPage->getConfig()->getTitle()->prepend(__('Store Design'));
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $design = $this->_objectManager->create(\Magento\Framework\App\DesignInterface::class);
 
         if ($id) {

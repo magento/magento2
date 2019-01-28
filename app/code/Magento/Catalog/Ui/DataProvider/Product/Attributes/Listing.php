@@ -48,7 +48,7 @@ class Listing extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getData()
     {
-        $this->collection->setExcludeSetFilter((int)$this->request->getParam('template_id', 0));
+        $this->collection->setExcludeSetFilter((int) $this->request->getParam('template_id', 0));
         $this->collection->getSelect()->setPart('order', []);
 
         $items = [];

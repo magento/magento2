@@ -79,7 +79,7 @@ class AttributeOptions implements ResolverInterface
             throw new LocalizedException(__('"Entity type should be specified'));
         }
 
-        return (int)$value['entity_type'];
+        return (int) $value['entity_type'];
     }
 
     /**

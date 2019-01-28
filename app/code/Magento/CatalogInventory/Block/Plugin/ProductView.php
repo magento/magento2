@@ -38,12 +38,12 @@ class ProductView
         );
 
         $params = [];
-        $params['minAllowed']  = (float)$stockItem->getMinSaleQty();
+        $params['minAllowed']  = (float) $stockItem->getMinSaleQty();
         if ($stockItem->getMaxSaleQty()) {
-            $params['maxAllowed'] = (float)$stockItem->getMaxSaleQty();
+            $params['maxAllowed'] = (float) $stockItem->getMaxSaleQty();
         }
         if ($stockItem->getQtyIncrements() > 0) {
-            $params['qtyIncrements'] = (float)$stockItem->getQtyIncrements();
+            $params['qtyIncrements'] = (float) $stockItem->getQtyIncrements();
         }
         $validators['validate-item-quantity'] = $params;
 

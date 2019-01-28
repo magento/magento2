@@ -295,7 +295,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getQty()
     {
-        if (!$this->_strictQtyMode && (string)$this->getItem()->getQty() == '') {
+        if (!$this->_strictQtyMode && (string) $this->getItem()->getQty() == '') {
             return '';
         }
         return $this->getItem()->getQty() * 1;

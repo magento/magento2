@@ -110,7 +110,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addFilterByRevoked($flag)
     {
-        $this->addFilter('main_table.revoked', (int)$flag, 'public');
+        $this->addFilter('main_table.revoked', (int) $flag, 'public');
         return $this;
     }
 }

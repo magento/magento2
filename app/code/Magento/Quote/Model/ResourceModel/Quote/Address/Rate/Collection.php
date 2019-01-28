@@ -89,7 +89,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     public function setFixedOnlyFilter($value)
     {
-        $this->_allowFixedOnly = (bool)$value;
+        $this->_allowFixedOnly = (bool) $value;
         return $this;
     }
 

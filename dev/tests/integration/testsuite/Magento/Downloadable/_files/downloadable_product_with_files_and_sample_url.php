@@ -127,7 +127,7 @@ $extension = $product->getExtensionAttributes();
 $samples = [];
 $sampleFactory = $objectManager->create(\Magento\Downloadable\Api\Data\SampleInterfaceFactory::class);
 foreach ($downloadableData['sample'] as $sampleData) {
-    if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
+    if (!$sampleData || (isset($sampleData['is_delete']) && (bool) $sampleData['is_delete'])) {
         continue;
     } else {
         unset($sampleData['sample_id']);

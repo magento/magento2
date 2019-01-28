@@ -414,7 +414,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame('', (string)$this->_block->getStoreLabel('attributeCode'));
+        $this->assertSame('', (string) $this->_block->getStoreLabel('attributeCode'));
     }
 
     /**

@@ -185,7 +185,7 @@ class Create implements ProcessorInterface
 
             $group->getResource()->save($group);
             $group->getResource()->addCommitCallback(function () use ($data, $group, $website) {
-                $store = $this->detectStoreById($data, (int)$group->getDefaultStoreId());
+                $store = $this->detectStoreById($data, (int) $group->getDefaultStoreId());
                 $group->setDefaultStoreId($store->getStoreId());
                 $group->setWebsite($website);
                 $group->getResource()->save($group);

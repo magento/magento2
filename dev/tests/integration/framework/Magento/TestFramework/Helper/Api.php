@@ -158,11 +158,11 @@ class Api
                         $result[$arrKey][] = self::simpleXmlToArray($nodeValue, $keyTrimmer);
                     }
                 } else {
-                    $result[$arrKey] = (string)$node;
+                    $result[$arrKey] = (string) $node;
                 }
             }
         } else {
-            $result = (string)$xml;
+            $result = (string) $xml;
         }
         return $result;
     }

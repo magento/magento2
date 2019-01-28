@@ -60,7 +60,7 @@ class Preview extends \Magento\Backend\Block\Widget
         /** @var $template \Magento\Email\Model\Template */
         $template = $this->_emailFactory->create();
 
-        if ($id = (int)$this->getRequest()->getParam('id')) {
+        if ($id = (int) $this->getRequest()->getParam('id')) {
             $template->load($id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));

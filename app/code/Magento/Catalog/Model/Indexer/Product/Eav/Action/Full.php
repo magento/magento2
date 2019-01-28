@@ -158,6 +158,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        return (bool)$eavIndexerStatus;
+        return (bool) $eavIndexerStatus;
     }
 }

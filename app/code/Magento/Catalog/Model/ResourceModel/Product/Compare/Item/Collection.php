@@ -150,7 +150,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setCustomerId($customerId)
     {
-        $this->_customerId = (int)$customerId;
+        $this->_customerId = (int) $customerId;
         $this->_addJoinToSelect();
         return $this;
     }
@@ -163,7 +163,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setVisitorId($visitorId)
     {
-        $this->_visitorId = (int)$visitorId;
+        $this->_visitorId = (int) $visitorId;
         $this->_addJoinToSelect();
         return $this;
     }
@@ -247,7 +247,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         // prepare website filter
-        $websiteId = (int)$this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
+        $websiteId = (int) $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         $websiteConds = [
             'website.product_id = entity.entity_id',
             $this->getConnection()->quoteInto('website.website_id = ?', $websiteId),
@@ -311,7 +311,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     'additional_table.attribute_id=main_table.attribute_id'
                 )->joinLeft(
                     ['al' => $this->getTable('eav_attribute_label')],
-                    'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int)$this->getStoreId(),
+                    'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int) $this->getStoreId(),
                     [
                         'store_label' => $this->getConnection()->getCheckSql(
                             'al.value IS NULL',

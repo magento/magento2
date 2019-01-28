@@ -82,7 +82,7 @@ class Render extends AbstractAction
             $component = $this->factory->create($this->getRequest()->getParam('namespace'));
             if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
                 $this->prepareComponent($component);
-                $this->getResponse()->appendBody((string)$component->render());
+                $this->getResponse()->appendBody((string) $component->render());
 
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);

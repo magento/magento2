@@ -141,7 +141,7 @@ class SodiumChachaPatch implements DataPatchInterface
                     $this->moduleDataSetup->getConnection()->update(
                         $table,
                         ['value' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
-                        ['config_id = ?' => (int)$configId]
+                        ['config_id = ?' => (int) $configId]
                     );
                 }
             }

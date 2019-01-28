@@ -140,7 +140,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     {
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
-            if ((int)$this->getDiscountAmount() < 0) {
+            if ((int) $this->getDiscountAmount() < 0) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please choose a valid discount amount.'));
             }
         }
@@ -440,7 +440,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      */
     public function setIsDeleteable($value)
     {
-        $this->_isDeleteable = (bool)$value;
+        $this->_isDeleteable = (bool) $value;
         return $this;
     }
 
@@ -464,7 +464,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      */
     public function setIsReadonly($value)
     {
-        $this->_isReadonly = (bool)$value;
+        $this->_isReadonly = (bool) $value;
         return $this;
     }
 
@@ -477,7 +477,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     {
         if (!$this->hasWebsiteIds()) {
             $websiteIds = $this->_getResource()->getWebsiteIds($this->getId());
-            $this->setData('website_ids', (array)$websiteIds);
+            $this->setData('website_ids', (array) $websiteIds);
         }
         return $this->_getData('website_ids');
     }

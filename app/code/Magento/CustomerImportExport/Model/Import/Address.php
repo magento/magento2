@@ -602,7 +602,7 @@ class Address extends AbstractCustomer
         if ($rowData[self::COLUMN_ADDRESS_ID]
             && $this->addressStorage->doesExist(
                 $rowData[self::COLUMN_ADDRESS_ID],
-                (string)$customerId
+                (string) $customerId
             )
         ) {
             $newAddress = false;
@@ -855,8 +855,8 @@ class Address extends AbstractCustomer
                             );
                         } elseif ($attributeParams['is_required']
                             && !$this->addressStorage->doesExist(
-                                (string)$addressId,
-                                (string)$customerId
+                                (string) $addressId,
+                                (string) $customerId
                             )
                         ) {
                             $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
@@ -913,8 +913,8 @@ class Address extends AbstractCustomer
                 if (!strlen($addressId)) {
                     $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
                 } elseif (!$this->addressStorage->doesExist(
-                    (string)$addressId,
-                    (string)$customerId
+                    (string) $addressId,
+                    (string) $customerId
                 )) {
                     $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);
                 }
@@ -932,8 +932,8 @@ class Address extends AbstractCustomer
     protected function _checkRowDuplicate($customerId, $addressId)
     {
         if ($this->addressStorage->doesExist(
-            (string)$addressId,
-            (string)$customerId
+            (string) $addressId,
+            (string) $customerId
         )) {
             if (!isset($this->_importedRowPks[$customerId][$addressId])) {
                 $this->_importedRowPks[$customerId][$addressId] = true;

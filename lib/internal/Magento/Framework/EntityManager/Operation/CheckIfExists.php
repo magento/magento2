@@ -71,7 +71,7 @@ class CheckIfExists implements CheckIfExistsInterface
         if (!isset($entityData[$metadata->getIdentifierField()])) {
             return false;
         }
-        return (bool)$connection->fetchOne(
+        return (bool) $connection->fetchOne(
             $connection->select()
                 ->from($metadata->getEntityTable(), [$metadata->getIdentifierField()])
                 ->where($metadata->getIdentifierField() . ' = ?', $entityData[$metadata->getIdentifierField()])

@@ -350,7 +350,7 @@ class Dbp extends \Magento\Framework\Data\Tree
                     $reorderCondition
                 );
 
-                $position = (int)$this->_conn->fetchOne($select);
+                $position = (int) $this->_conn->fetchOne($select);
             }
             $this->_conn->update($this->_table, $reorderData, $reorderCondition);
             $this->_conn->update($this->_table, $data, $condition);

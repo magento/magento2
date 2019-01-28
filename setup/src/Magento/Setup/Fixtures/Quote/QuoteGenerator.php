@@ -606,7 +606,7 @@ class QuoteGenerator
     {
         $tableName = $this->getTableName($tableName, $resourceName);
         $connection = $this->getConnection($resourceName);
-        return (int)$connection->query("SELECT MAX(`{$column}`) FROM `{$tableName}`;")->fetchColumn(0);
+        return (int) $connection->query("SELECT MAX(`{$column}`) FROM `{$tableName}`;")->fetchColumn(0);
     }
 
     /**

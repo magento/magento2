@@ -121,7 +121,7 @@ trait Interceptor
                     $beforeResult = $pluginInstance->$pluginMethod($this, ...array_values($arguments));
 
                     if ($beforeResult !== null) {
-                        $arguments = (array)$beforeResult;
+                        $arguments = (array) $beforeResult;
                     }
                 }
             }

@@ -49,9 +49,9 @@ class Websites implements ResolverInterface
         if (!isset($value['entity_id'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        $this->productWebsitesCollection->addIdFilters((int)$value['entity_id']);
+        $this->productWebsitesCollection->addIdFilters((int) $value['entity_id']);
         $result = function () use ($value) {
-            return $this->productWebsitesCollection->getWebsiteForProductId((int)$value['entity_id']);
+            return $this->productWebsitesCollection->getWebsiteForProductId((int) $value['entity_id']);
         };
 
         return $this->valueFactory->create($result);

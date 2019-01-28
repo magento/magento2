@@ -150,7 +150,7 @@ class Search
         }
 
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
-            $offset = (int)$maxPages;
+            $offset = (int) $maxPages;
         }
         return array_slice($searchResult->getProductsSearchResult(), $offset, $length);
     }

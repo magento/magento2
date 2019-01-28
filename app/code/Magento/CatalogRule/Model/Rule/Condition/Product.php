@@ -37,7 +37,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $result = $this->validateAttribute($model->getData($attrCode));
         $this->_restoreOldAttrValue($model, $oldAttrValue);
 
-        return (bool)$result;
+        return (bool) $result;
     }
 
     /**

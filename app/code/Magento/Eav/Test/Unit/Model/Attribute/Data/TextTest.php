@@ -62,7 +62,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $inputValue = 0;
         $expectedResult = ['"Test" is a required value.'];
         $result = $this->_model->validateValue($inputValue);
-        $this->assertEquals($expectedResult, [(string)$result[0]]);
+        $this->assertEquals($expectedResult, [(string) $result[0]]);
     }
 
     /**

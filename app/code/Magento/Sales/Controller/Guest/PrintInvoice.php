@@ -49,7 +49,7 @@ class PrintInvoice extends \Magento\Sales\Controller\AbstractController\PrintInv
             return $result;
         }
 
-        $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
+        $invoiceId = (int) $this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {
             $invoice = $this->_objectManager->create(
                 \Magento\Sales\Api\InvoiceRepositoryInterface::class

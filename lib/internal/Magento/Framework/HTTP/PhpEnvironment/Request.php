@@ -243,7 +243,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             }
             $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
         }
-        $this->pathInfo = (string)$pathInfo;
+        $this->pathInfo = (string) $pathInfo;
         return $this;
     }
 
@@ -339,10 +339,10 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function getParams()
     {
         $params = $this->params;
-        if ($value = (array)$this->getQuery()) {
+        if ($value = (array) $this->getQuery()) {
             $params += $value;
         }
-        if ($value = (array)$this->getPost()) {
+        if ($value = (array) $this->getPost()) {
             $params += $value;
         }
         return $params;
@@ -434,7 +434,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             // installed MAGETWO-31756
             // Check if a proxy sent a header indicating an initial secure request
             $this->sslOffloadHeader = trim(
-                (string)$this->getAppConfig()->getValue(
+                (string) $this->getAppConfig()->getValue(
                     self::XML_PATH_OFFLOADER_HEADER,
                     \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 )

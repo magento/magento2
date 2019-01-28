@@ -69,7 +69,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
         $attribute = $this->getAttributeByCode($filter->getField());
-        $this->selectBuilder->execute((int)$attribute->getId(), $alias, $select);
+        $this->selectBuilder->execute((int) $attribute->getId(), $alias, $select);
 
         return true;
     }

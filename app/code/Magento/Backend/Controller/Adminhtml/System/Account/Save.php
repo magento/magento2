@@ -45,9 +45,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     public function execute()
     {
         $userId = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser()->getId();
-        $password = (string)$this->getRequest()->getParam('password');
-        $passwordConfirmation = (string)$this->getRequest()->getParam('password_confirmation');
-        $interfaceLocale = (string)$this->getRequest()->getParam('interface_locale', false);
+        $password = (string) $this->getRequest()->getParam('password');
+        $passwordConfirmation = (string) $this->getRequest()->getParam('password_confirmation');
+        $interfaceLocale = (string) $this->getRequest()->getParam('interface_locale', false);
 
         /** @var $user \Magento\User\Model\User */
         $user = $this->_objectManager->create(\Magento\User\Model\User::class)->load($userId);

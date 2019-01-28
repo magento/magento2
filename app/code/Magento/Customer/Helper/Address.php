@@ -192,7 +192,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
                 $store
             );
         }
-        return isset($this->_config[$websiteId][$key]) ? (string)$this->_config[$websiteId][$key] : null;
+        return isset($this->_config[$websiteId][$key]) ? (string) $this->_config[$websiteId][$key] : null;
     }
 
     /**
@@ -257,7 +257,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canShowConfig($key)
     {
-        return (bool)$this->getConfig($key);
+        return (bool) $this->getConfig($key);
     }
 
     /**
@@ -307,7 +307,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $lines = [];
         if (!empty($origStreets) && $toCount > 0) {
-            $countArgs = (int)floor(count($origStreets) / $toCount);
+            $countArgs = (int) floor(count($origStreets) / $toCount);
             $modulo = count($origStreets) % $toCount;
             $offset = 0;
             $neededLinesCount = 0;
@@ -379,7 +379,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getTaxCalculationAddressType($store = null)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
             ScopeInterface::SCOPE_STORE,
             $store

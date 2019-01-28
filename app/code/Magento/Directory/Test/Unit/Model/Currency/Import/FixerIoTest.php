@@ -120,6 +120,6 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
         $messages = $this->model->getMessages();
         self::assertNotEmpty($messages);
         self::assertTrue(is_array($messages));
-        self::assertEquals($message, (string)$messages[0]);
+        self::assertEquals($message, (string) $messages[0]);
     }
 }

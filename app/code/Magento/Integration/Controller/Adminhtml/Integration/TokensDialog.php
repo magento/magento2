@@ -41,7 +41,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
         try {
             $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
             $integration = $this->_integrationService->get($integrationId);
-            $clearExistingToken = (int)$this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
+            $clearExistingToken = (int) $this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
             if ($this->_oauthService->createAccessToken($integration->getConsumerId(), $clearExistingToken)) {
                 $integration->setStatus(IntegrationModel::STATUS_ACTIVE)->save();
             }

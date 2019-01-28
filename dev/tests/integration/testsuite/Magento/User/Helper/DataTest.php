@@ -46,7 +46,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals(
             2,
-            (int)$configModel->getValue(
+            (int) $configModel->getValue(
                 \Magento\User\Helper\Data::XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD
             )
         );

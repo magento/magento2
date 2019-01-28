@@ -15,7 +15,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $customerId = $this->initCurrentCustomer();
-        $itemId = (int)$this->getRequest()->getParam('delete');
+        $itemId = (int) $this->getRequest()->getParam('delete');
         if ($customerId && $itemId) {
             try {
                 $this->_objectManager->create(\Magento\Wishlist\Model\Item::class)->load($itemId)->delete();

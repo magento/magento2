@@ -232,7 +232,7 @@ class ConsoleLogger extends AbstractLogger
             $process['elapsed'] = $this->formatterHelper->formatTime(time() - $process['start']);
         }
         $process['percent'] = floor(
-            ($process['count'] ? (float)$process['done'] / $process['count'] : 0) * 100
+            ($process['count'] ? (float) $process['done'] / $process['count'] : 0) * 100
         );
     }
 

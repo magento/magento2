@@ -206,7 +206,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     public function getQty()
     {
-        return null === $this->_getData(static::QTY) ? null : (float)$this->_getData(static::QTY);
+        return null === $this->_getData(static::QTY) ? null : (float) $this->_getData(static::QTY);
     }
 
     /**
@@ -278,7 +278,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         if ($this->getUseConfigMinQty()) {
             $minQty = $this->stockConfiguration->getMinQty($this->getStoreId());
         } else {
-            $minQty = (float)$this->getData(static::MIN_QTY);
+            $minQty = (float) $this->getData(static::MIN_QTY);
         }
         return $minQty;
     }

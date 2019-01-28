@@ -141,7 +141,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function setSkipRequestLogging($skipRequestLogging)
     {
-        $this->skipRequestLogging = (bool)$skipRequestLogging;
+        $this->skipRequestLogging = (bool) $skipRequestLogging;
         return $this;
     }
 
@@ -323,7 +323,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function getOnlineInterval()
     {
-        $configValue = (int)$this->scopeConfig->getValue(
+        $configValue = (int) $this->scopeConfig->getValue(
             static::XML_PATH_ONLINE_INTERVAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

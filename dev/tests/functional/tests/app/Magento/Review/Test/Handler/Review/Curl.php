@@ -118,6 +118,6 @@ class Curl extends AbstractCurl implements ReviewInterface
         $extractor = new Extractor($url, $regex);
         $match = $extractor->getData();
 
-        return empty($match[1]) ? null : (int)$match[1];
+        return empty($match[1]) ? null : (int) $match[1];
     }
 }

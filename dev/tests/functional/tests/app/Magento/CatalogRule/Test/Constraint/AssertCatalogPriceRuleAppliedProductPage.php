@@ -83,7 +83,7 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
     {
         $errorMessage = [];
         foreach ($fixtureData as $key => $value) {
-            if (isset($formData[$key]) && (float)$value !== (float)$formData[$key]) {
+            if (isset($formData[$key]) && (float) $value !== (float) $formData[$key]) {
                 $errorMessage[] = "Value " . $key . " is not equal."
                     . "\nExpected: " . $fixtureData[$key]
                     . "\nActual: " . $value . "\n";

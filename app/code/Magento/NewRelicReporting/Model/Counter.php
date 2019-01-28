@@ -79,7 +79,7 @@ class Counter
     public function getAllProductsCount()
     {
         $count = $this->productManagement->getCount();
-        return (int)$count;
+        return (int) $count;
     }
 
     /**
@@ -90,7 +90,7 @@ class Counter
     public function getConfigurableCount()
     {
         $count = $this->configurableManagement->getCount();
-        return (int)$count;
+        return (int) $count;
     }
 
     /**
@@ -101,7 +101,7 @@ class Counter
     public function getActiveCatalogSize()
     {
         $count = $this->productManagement->getCount(Status::STATUS_ENABLED);
-        return (int)$count;
+        return (int) $count;
     }
 
     /**
@@ -112,7 +112,7 @@ class Counter
     public function getCategoryCount()
     {
         $count = $this->categoryManagement->getCount();
-        return (int)$count;
+        return (int) $count;
     }
 
     /**
@@ -123,7 +123,7 @@ class Counter
     public function getCustomerCount()
     {
         $count = $this->customerManagement->getCount();
-        return (int)$count;
+        return (int) $count;
     }
 
     /**
@@ -134,7 +134,7 @@ class Counter
     public function getWebsiteCount()
     {
         $count = $this->websiteManagement->getCount();
-        return (int)$count;
+        return (int) $count;
     }
 
     /**
@@ -145,6 +145,6 @@ class Counter
     public function getStoreViewsCount()
     {
         $count = $this->storeManagement->getCount();
-        return (int)$count;
+        return (int) $count;
     }
 }

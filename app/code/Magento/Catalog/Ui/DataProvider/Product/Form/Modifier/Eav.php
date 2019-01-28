@@ -465,7 +465,7 @@ class Eav extends AbstractModifier
      */
     private function resolvePersistentData(array $data)
     {
-        $persistentData = (array)$this->dataPersistor->get('catalog_product');
+        $persistentData = (array) $this->dataPersistor->get('catalog_product');
         $this->dataPersistor->clear('catalog_product');
         $productId = $this->locator->getProduct()->getId();
 
@@ -488,7 +488,7 @@ class Eav extends AbstractModifier
      */
     private function getProductType()
     {
-        return (string)$this->request->getParam('type', $this->locator->getProduct()->getTypeId());
+        return (string) $this->request->getParam('type', $this->locator->getProduct()->getTypeId());
     }
 
     /**
@@ -498,7 +498,7 @@ class Eav extends AbstractModifier
      */
     private function getPreviousSetId()
     {
-        return (int)$this->request->getParam('prev_set_id', 0);
+        return (int) $this->request->getParam('prev_set_id', 0);
     }
 
     /**
@@ -762,7 +762,7 @@ class Eav extends AbstractModifier
     {
         array_walk($options, function (&$value) {
             if (isset($value['value']) && is_scalar($value['value'])) {
-                $value['value'] = (string)$value['value'];
+                $value['value'] = (string) $value['value'];
             }
         });
 

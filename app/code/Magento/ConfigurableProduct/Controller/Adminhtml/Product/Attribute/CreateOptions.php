@@ -65,7 +65,7 @@ class CreateOptions extends Action implements HttpPostActionInterface
      */
     protected function saveAttributeOptions()
     {
-        $options = (array)$this->getRequest()->getParam('options');
+        $options = (array) $this->getRequest()->getParam('options');
         $savedOptions = [];
         foreach ($options as $option) {
             if (isset($option['label']) && isset($option['is_new'])) {

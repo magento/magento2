@@ -103,7 +103,7 @@ class BackendValidator implements ValidatorInterface
             } elseif ($this->auth->isLoggedIn()
                 && $this->backendUrl->useSecretKey()
             ) {
-                $secretKeyValue = (string)$request->getParam(
+                $secretKeyValue = (string) $request->getParam(
                     BackendUrl::SECRET_KEY_PARAM_NAME,
                     null
                 );

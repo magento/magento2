@@ -322,7 +322,7 @@ class Template extends AbstractBlock
      */
     public function getObjectData(\Magento\Framework\DataObject $object, $key)
     {
-        return $object->getDataUsingMethod((string)$key);
+        return $object->getDataUsingMethod((string) $key);
     }
 
     /**

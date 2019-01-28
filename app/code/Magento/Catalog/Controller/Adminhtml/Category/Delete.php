@@ -37,7 +37,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category implements H
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $categoryId = (int)$this->getRequest()->getParam('id');
+        $categoryId = (int) $this->getRequest()->getParam('id');
         $parentId = null;
         if ($categoryId) {
             try {

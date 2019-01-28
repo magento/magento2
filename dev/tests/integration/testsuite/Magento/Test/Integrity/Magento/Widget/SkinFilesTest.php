@@ -37,7 +37,7 @@ class SkinFilesTest extends \PHPUnit\Framework\TestCase
             );
             $config = $instance->setType($row['type'])->getWidgetConfigAsArray();
             if (isset($config['placeholder_image'])) {
-                $result[] = [(string)$config['placeholder_image']];
+                $result[] = [(string) $config['placeholder_image']];
             }
         }
         return $result;

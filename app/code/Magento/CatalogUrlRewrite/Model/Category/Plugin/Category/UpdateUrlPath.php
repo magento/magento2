@@ -79,7 +79,7 @@ class UpdateUrlPath
             && !empty($parentCategoryId)
         ) {
             foreach ($category->getStoreIds() as $storeId) {
-                if (!$this->isGlobalScope((int)$storeId)
+                if (!$this->isGlobalScope((int) $storeId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
                         $storeId,
                         $parentCategoryId,

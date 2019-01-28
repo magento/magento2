@@ -101,7 +101,7 @@ class Config
      */
     public function getNewRelicApiUrl()
     {
-        return (string)$this->scopeConfig->getValue('newrelicreporting/general/api_url');
+        return (string) $this->scopeConfig->getValue('newrelicreporting/general/api_url');
     }
 
     /**
@@ -111,7 +111,7 @@ class Config
      */
     public function getInsightsApiUrl()
     {
-        return (string)$this->scopeConfig->getValue('newrelicreporting/general/insights_api_url');
+        return (string) $this->scopeConfig->getValue('newrelicreporting/general/insights_api_url');
     }
 
     /**
@@ -121,7 +121,7 @@ class Config
      */
     public function getNewRelicAccountId()
     {
-        return (string)$this->scopeConfig->getValue('newrelicreporting/general/account_id');
+        return (string) $this->scopeConfig->getValue('newrelicreporting/general/account_id');
     }
 
     /**
@@ -131,7 +131,7 @@ class Config
      */
     public function getNewRelicAppId()
     {
-        return (int)$this->scopeConfig->getValue('newrelicreporting/general/app_id');
+        return (int) $this->scopeConfig->getValue('newrelicreporting/general/app_id');
     }
 
     /**
@@ -161,7 +161,7 @@ class Config
      */
     public function getNewRelicAppName()
     {
-        return (string)$this->scopeConfig->getValue('newrelicreporting/general/app_name');
+        return (string) $this->scopeConfig->getValue('newrelicreporting/general/app_name');
     }
 
     /**
@@ -171,7 +171,7 @@ class Config
      */
     public function isSeparateApps()
     {
-        return (bool)$this->scopeConfig->getValue('newrelicreporting/general/separate_apps');
+        return (bool) $this->scopeConfig->getValue('newrelicreporting/general/separate_apps');
     }
 
     /**

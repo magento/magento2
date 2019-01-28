@@ -61,7 +61,7 @@ class Page implements ResolverInterface
             throw new GraphQlInputException(__('"Page id should be specified'));
         }
 
-        return (int)$args['id'];
+        return (int) $args['id'];
     }
 
     /**

@@ -74,7 +74,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
                 '',
                 $option->getCode()
             );
-            if ((int)$optionId != $optionId) {
+            if ((int) $optionId != $optionId) {
                 $resultForward->forward('noroute');
                 return $resultForward;
             }

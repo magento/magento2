@@ -126,7 +126,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [$regionId, 0]
         )->where(
             'weeeTax.entity_id = ?',
-            (int)$entityId
+            (int) $entityId
         );
 
         $order = ['weeeTax.state ' . \Magento\Framework\DB\Select::SQL_DESC,

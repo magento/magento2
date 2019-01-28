@@ -51,7 +51,7 @@ class Condition
     public function parseConditions(Element $element)
     {
         $visibilityConditions = [];
-        $configPath = (string)$element->getAttribute('ifconfig');
+        $configPath = (string) $element->getAttribute('ifconfig');
         if (!empty($configPath)) {
             $visibilityConditions['ifconfig'] = [
                 'name' => ConfigCondition::class,
@@ -61,7 +61,7 @@ class Condition
             ];
         }
 
-        $aclResource = (string)$element->getAttribute('aclResource');
+        $aclResource = (string) $element->getAttribute('aclResource');
         if (!empty($aclResource)) {
             $visibilityConditions['acl'] = [
                 'name' => AclCondition::class,

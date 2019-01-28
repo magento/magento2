@@ -86,7 +86,7 @@ class Element extends \SimpleXMLElement
     public function getAttribute($name)
     {
         $attrs = $this->attributes();
-        return isset($attrs[$name]) ? (string)$attrs[$name] : null;
+        return isset($attrs[$name]) ? (string) $attrs[$name] : null;
     }
 
     /**
@@ -133,7 +133,7 @@ class Element extends \SimpleXMLElement
                 $attributeValue = trim($attributeValue, '"');
                 $found = false;
                 foreach ($desc->{$nodeName} as $subdesc) {
-                    if ((string)$subdesc[$attributeName] === $attributeValue) {
+                    if ((string) $subdesc[$attributeName] === $attributeValue) {
                         $found = true;
                         $desc = $subdesc;
                         break;
@@ -200,7 +200,7 @@ class Element extends \SimpleXMLElement
             // add attributes
             foreach ($this->attributes() as $attributeName => $attribute) {
                 if ($attribute) {
-                    $result['@'][$attributeName] = (string)$attribute;
+                    $result['@'][$attributeName] = (string) $attribute;
                 }
             }
         }
@@ -212,10 +212,10 @@ class Element extends \SimpleXMLElement
         } else {
             if (empty($result)) {
                 // return as string, if nothing was found
-                $result = (string)$this;
+                $result = (string) $this;
             } else {
                 // value has zero key element
-                $result[0] = (string)$this;
+                $result[0] = (string) $this;
             }
         }
         return $result;
@@ -245,20 +245,20 @@ class Element extends \SimpleXMLElement
         $attributes = $this->attributes();
         if ($attributes) {
             foreach ($attributes as $key => $value) {
-                $out .= ' ' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
+                $out .= ' ' . $key . '="' . str_replace('"', '\"', (string) $value) . '"';
             }
         }
 
         $attributes = $this->attributes('xsi', true);
         if ($attributes) {
             foreach ($attributes as $key => $value) {
-                $out .= ' xsi:' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
+                $out .= ' xsi:' . $key . '="' . str_replace('"', '\"', (string) $value) . '"';
             }
         }
 
         if ($this->hasChildren()) {
             $out .= '>';
-            $value = trim((string)$this);
+            $value = trim((string) $this);
             if (strlen($value)) {
                 $out .= $this->xmlentities($value);
             }
@@ -268,7 +268,7 @@ class Element extends \SimpleXMLElement
             }
             $out .= $pad . '</' . $this->getName() . '>' . $nl;
         } else {
-            $value = (string)$this;
+            $value = (string) $this;
             if (strlen($value)) {
                 $out .= '>' . $this->xmlentities($value) . '</' . $this->getName() . '>' . $nl;
             } else {
@@ -309,7 +309,7 @@ class Element extends \SimpleXMLElement
         if ($value === null) {
             $value = $this;
         }
-        $value = (string)$value;
+        $value = (string) $value;
 
         $value = str_replace(
             ['&', '"', "'", '<', '>'],

@@ -54,8 +54,8 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         /** @var DimensionFactory $dimensionFactory */
         $dimensionFactory = Bootstrap::getObjectManager()->create(DimensionFactory::class);
         $dimension = [
-            $dimensionFactory->create(CustomerGroupDimensionProvider::DIMENSION_NAME, (string)0),
-            $dimensionFactory->create(WebsiteDimensionProvider::DIMENSION_NAME, (string)1)
+            $dimensionFactory->create(CustomerGroupDimensionProvider::DIMENSION_NAME, (string) 0),
+            $dimensionFactory->create(WebsiteDimensionProvider::DIMENSION_NAME, (string) 1)
         ];
         $connection = $resourceConnection->getConnection();
         $priceTable = $connection->getTableName(

@@ -182,7 +182,7 @@ class Redirect extends Template
         $html = '';
 
         $html .= '<div class="page-title-wrapper">';
-        $html .= '<h1>' . (string)new \Magento\Framework\Phrase('Redirecting...') . '</h1>';
+        $html .= '<h1>' . (string) new \Magento\Framework\Phrase('Redirecting...') . '</h1>';
         $html .= '</div>';
         if ($this->getMessage()) {
             $html .= '<p>' . $this->getMessage() . '</p>';
@@ -190,7 +190,7 @@ class Redirect extends Template
         $html .= $this->getRedirectOutput();
         if (!$this->isHtmlFormRedirect()) {
             $html .= '<p>'
-                . (string)new \Magento\Framework\Phrase(
+                . (string) new \Magento\Framework\Phrase(
                     'Click <a href="%1">here</a> if nothing has happened',
                     [$this->getTargetURL()]
                 )

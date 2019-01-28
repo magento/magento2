@@ -155,7 +155,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
         if ($memUsed > $memSize) {
             return 100;
         }
-        return (int)(100. * ($memUsed / $memSize));
+        return (int) (100. * ($memUsed / $memSize));
     }
 
     /**

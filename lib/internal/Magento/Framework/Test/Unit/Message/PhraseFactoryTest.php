@@ -29,7 +29,7 @@ class PhraseFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate($mainMessage, $subMessages, $separator, $expectedResult)
     {
-        $result = (string)$this->factory->create($mainMessage, $subMessages, $separator);
+        $result = (string) $this->factory->create($mainMessage, $subMessages, $separator);
         $this->assertEquals($expectedResult, $result);
     }
 

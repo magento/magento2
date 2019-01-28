@@ -48,9 +48,9 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             ->from(['p' => $collection->getTable('catalog_product_entity')], ['sku', 'entity_id'])
             ->where('sku IN(?)', ['simple', 'custom-design-simple-product', 'bundle-product']);
         $ids = $collection->getConnection()->fetchPairs($select);
-        $select = (string)$collection->getSelect();
+        $select = (string) $collection->getSelect();
         $this->model->prepareData($collection, array_values($ids));
-        $this->assertEquals($select, (string)$collection->getSelect());
+        $this->assertEquals($select, (string) $collection->getSelect());
         $result = $this->model->addData(['additional_attributes' => $allAdditionalAttributes], $ids['bundle-product']);
         $this->assertArrayHasKey('bundle_price_type', $result);
         $this->assertArrayHasKey('bundle_shipment_type', $result);

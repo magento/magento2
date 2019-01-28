@@ -203,7 +203,7 @@ namespace Magento\Framework\Session {
         public function testCookieSecureDefaultsToIniSettings()
         {
             $model = $this->getModel();
-            $this->assertSame((bool)ini_get('session.cookie_secure'), $model->getCookieSecure());
+            $this->assertSame((bool) ini_get('session.cookie_secure'), $model->getCookieSecure());
         }
 
         public function testSetCookieSecureInOptions()
@@ -253,7 +253,7 @@ namespace Magento\Framework\Session {
         public function testUseCookiesDefaultsToIniSettings()
         {
             $model = $this->getModel();
-            $this->assertSame((bool)ini_get('session.use_cookies'), $model->getUseCookies());
+            $this->assertSame((bool) ini_get('session.use_cookies'), $model->getUseCookies());
         }
 
         public function testSetUseCookiesInOptions()
@@ -266,14 +266,14 @@ namespace Magento\Framework\Session {
         public function testUseOnlyCookiesDefaultsToIniSettings()
         {
             $model = $this->getModel();
-            $this->assertSame((bool)ini_get('session.use_only_cookies'), $model->getUseOnlyCookies());
+            $this->assertSame((bool) ini_get('session.use_only_cookies'), $model->getUseOnlyCookies());
         }
 
         public function testSetUseOnlyCookiesInOptions()
         {
             $model = $this->getModel();
             $model->setOption('use_only_cookies', true);
-            $this->assertTrue((bool)$model->getOption('use_only_cookies'));
+            $this->assertTrue((bool) $model->getOption('use_only_cookies'));
         }
 
         public function testRefererCheckDefaultsToIniSettings()

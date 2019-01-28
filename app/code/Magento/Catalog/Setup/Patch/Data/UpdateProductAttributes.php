@@ -124,7 +124,7 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
         );
 
         //Images tab
-        $groupId = (int)$categorySetup->getAttributeGroupByCode(
+        $groupId = (int) $categorySetup->getAttributeGroupByCode(
             \Magento\Catalog\Model\Product::ENTITY,
             $attributeSetId,
             'image-management',

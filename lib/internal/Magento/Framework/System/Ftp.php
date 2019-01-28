@@ -127,7 +127,7 @@ class Ftp
     public function connect($string, $timeout = 900)
     {
         $params = $this->validateConnectionString($string);
-        $port = isset($params['port']) ? (int)$params['port'] : 21;
+        $port = isset($params['port']) ? (int) $params['port'] : 21;
 
         $this->_conn = ftp_connect($params['host'], $port, $timeout);
 
@@ -188,7 +188,7 @@ class Ftp
         if (empty($data[1])) {
             return false;
         }
-        if ((int)$data[0] != 257) {
+        if ((int) $data[0] != 257) {
             return false;
         }
         $out = trim($data[1], '"');
@@ -280,7 +280,7 @@ class Ftp
     public function pasv($pasv)
     {
         $this->checkConnected();
-        return @ftp_pasv($this->_conn, (bool)$pasv);
+        return @ftp_pasv($this->_conn, (bool) $pasv);
     }
 
     /**
@@ -439,7 +439,7 @@ class Ftp
     public function ls($dir = "/", $recursive = false)
     {
         $dir = $this->correctFilePath($dir);
-        $rawfiles = (array)$this->rawlist($dir, $recursive);
+        $rawfiles = (array) $this->rawlist($dir, $recursive);
         $structure = [];
         $arraypointer = & $structure;
         foreach ($rawfiles as $rawfile) {
@@ -459,7 +459,7 @@ class Ftp
                 $arraypointer[] = [
                     'name' => $info[8],
                     'dir' => $info[0][0] == 'd',
-                    'size' => (int)$info[4],
+                    'size' => (int) $info[4],
                     'chmod' => self::chmodnum($info[0]),
                     'rawdata' => $info,
                     'raw' => $rawfile,

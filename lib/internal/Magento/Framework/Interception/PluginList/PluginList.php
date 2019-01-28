@@ -230,7 +230,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             }
             return $itemA['sortOrder'];
         } elseif (isset($itemB['sortOrder'])) {
-            return (0 - (int)$itemB['sortOrder']);
+            return (0 - (int) $itemB['sortOrder']);
         } else {
             return 0;
         }

@@ -91,7 +91,7 @@ class SaveHandler implements ExtensionInterface
         foreach ($entity->getCategoryIds() as $categoryId) {
             $key = array_search($categoryId, array_column($currentCategoryLinks, 'category_id'));
             if ($key === false) {
-                $result[] = ['category_id' => (int)$categoryId, 'position' => 0];
+                $result[] = ['category_id' => (int) $categoryId, 'position' => 0];
             } else {
                 $result[] = $currentCategoryLinks[$key];
             }

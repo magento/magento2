@@ -81,7 +81,7 @@ class OauthUserContext implements UserContextInterface
             $this->request->getMethod()
         );
         $integration = $this->integrationService->findActiveIntegrationByConsumerId($consumerId);
-        return $this->integrationId = ($integration->getId() ? (int)$integration->getId() : null);
+        return $this->integrationId = ($integration->getId() ? (int) $integration->getId() : null);
     }
 
     /**

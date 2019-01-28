@@ -63,7 +63,7 @@ class Reader implements \Magento\Framework\App\Config\Scope\ReaderInterface
         uasort(
             $array,
             function ($firstItem, $nexItem) {
-                return (int)$firstItem['sortOrder'] <=> (int)$nexItem['sortOrder'];
+                return (int) $firstItem['sortOrder'] <=> (int) $nexItem['sortOrder'];
             }
         );
 

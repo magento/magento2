@@ -64,7 +64,7 @@ class Media extends \Magento\Framework\App\Action\Action implements \Magento\Fra
         /** @var \Magento\Framework\App\ResponseInterface $response */
         $response = $this->getResponse();
 
-        if ($productId = (int)$this->getRequest()->getParam('product_id')) {
+        if ($productId = (int) $this->getRequest()->getParam('product_id')) {
             $product = $this->productModelFactory->create()->load($productId);
             $productMedia = $this->swatchHelper->getProductMediaGallery(
                 $product

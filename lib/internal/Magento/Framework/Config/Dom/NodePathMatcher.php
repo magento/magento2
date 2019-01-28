@@ -21,7 +21,7 @@ class NodePathMatcher
     {
         $pathSubject = $this->simplifyXpath($xpathSubject);
         $pathPattern = '#^' . $pathPattern . '$#';
-        return (bool)preg_match($pathPattern, $pathSubject);
+        return (bool) preg_match($pathPattern, $pathSubject);
     }
 
     /**

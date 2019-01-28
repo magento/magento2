@@ -52,14 +52,14 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
                 $priceBlock->isVisible(),
                 'Price block is not displayed for product ' . $product->getName()
             );
-            $actualPrice['special'] = (float)$priceBlock->getSpecialPrice();
+            $actualPrice['special'] = (float) $priceBlock->getSpecialPrice();
             if ($productPrice[$key]['regular'] !== 'No') {
-                $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
+                $actualPrice['regular'] = (float) $priceBlock->getOldPrice();
                 $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
-                $actualPrice['price_from'] = (float)$priceBlock->getPriceFrom();
-                $actualPrice['price_to'] = (float)$priceBlock->getPriceTo();
-                $actualPrice['old_price_from'] = (float)$priceBlock->getOldPriceFrom();
-                $actualPrice['old_price_to'] = (float)$priceBlock->getOldPriceTo();
+                $actualPrice['price_from'] = (float) $priceBlock->getPriceFrom();
+                $actualPrice['price_to'] = (float) $priceBlock->getPriceTo();
+                $actualPrice['old_price_from'] = (float) $priceBlock->getOldPriceFrom();
+                $actualPrice['old_price_to'] = (float) $priceBlock->getOldPriceTo();
             }
             $diff = $this->verifyData($productPrice[$key], $actualPrice);
             \PHPUnit\Framework\Assert::assertTrue(
@@ -80,7 +80,7 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
     {
         $errorMessage = [];
         foreach ($fixtureData as $key => $value) {
-            if (isset($formData[$key]) && (float)$value !== (float)$formData[$key]) {
+            if (isset($formData[$key]) && (float) $value !== (float) $formData[$key]) {
                 $errorMessage[] = "Value " . $key . " is not equal."
                     . "\nExpected: " . $fixtureData[$key]
                     . "\nActual: " . $value . "\n";

@@ -57,7 +57,7 @@ class CategoryLink
 
         $select = $connection->select();
         $select->from($this->getCategoryLinkMetadata()->getEntityTable(), ['category_id', 'position']);
-        $select->where('product_id = ?', (int)$product->getId());
+        $select->where('product_id = ?', (int) $product->getId());
 
         if (!empty($categoryIds)) {
             $select->where('category_id IN(?)', $categoryIds);
@@ -122,7 +122,7 @@ class CategoryLink
             $key = false;
 
             foreach ($oldCategoryPositions as $oldKey => $oldCategoryPosition) {
-                if ((int)$oldCategoryPosition['category_id'] === (int)$newCategoryPosition['category_id']) {
+                if ((int) $oldCategoryPosition['category_id'] === (int) $newCategoryPosition['category_id']) {
                     $key = $oldKey;
                     break;
                 }
@@ -156,8 +156,8 @@ class CategoryLink
         $data = [];
         foreach ($insertLinks as $categoryLink) {
             $data[] = [
-                'category_id' => (int)$categoryLink['category_id'],
-                'product_id' => (int)$product->getId(),
+                'category_id' => (int) $categoryLink['category_id'],
+                'product_id' => (int) $product->getId(),
                 'position' => $categoryLink['position'],
             ];
         }
@@ -199,7 +199,7 @@ class CategoryLink
 
         $connection = $this->resourceConnection->getConnection();
         $connection->delete($this->getCategoryLinkMetadata()->getEntityTable(), [
-            'product_id = ?' => (int)$product->getId(),
+            'product_id = ?' => (int) $product->getId(),
             'category_id IN(?)' => array_column($deleteLinks, 'category_id')
         ]);
 

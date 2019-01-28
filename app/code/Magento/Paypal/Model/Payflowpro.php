@@ -355,8 +355,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $pathPayflowPro = 'payment/' . Config::METHOD_PAYFLOWPRO . '/active';
         $pathPaymentPro = 'payment/' . Config::METHOD_PAYMENT_PRO . '/active';
 
-        return (bool)(int) $this->_scopeConfig->getValue($pathPayflowPro, ScopeInterface::SCOPE_STORE, $storeId)
-            || (bool)(int) $this->_scopeConfig->getValue($pathPaymentPro, ScopeInterface::SCOPE_STORE, $storeId);
+        return (bool) (int) $this->_scopeConfig->getValue($pathPayflowPro, ScopeInterface::SCOPE_STORE, $storeId)
+            || (bool) (int) $this->_scopeConfig->getValue($pathPaymentPro, ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -705,7 +705,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setUpdateaction($action);
 
         $response = $this->postRequest($request, $this->getConfig());
-        $payment->setAdditionalInformation((array)$response->getData());
+        $payment->setAdditionalInformation((array) $response->getData());
         $this->processErrors($response);
 
         if (!$this->_isTransactionUnderReview($response->getOrigresult())) {

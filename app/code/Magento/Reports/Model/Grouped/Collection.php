@@ -36,7 +36,7 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function setColumnGroupBy($column)
     {
-        $this->_columnGroupBy = (string)$column;
+        $this->_columnGroupBy = (string) $column;
         return $this;
     }
 

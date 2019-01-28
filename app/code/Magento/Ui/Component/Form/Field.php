@@ -82,7 +82,7 @@ class Field extends AbstractComponent
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
             $formElement,
-            array_merge(['context' => $this->getContext()], (array)$this->getData())
+            array_merge(['context' => $this->getContext()], (array) $this->getData())
         );
         $this->wrappedComponent->setData(
             'config',

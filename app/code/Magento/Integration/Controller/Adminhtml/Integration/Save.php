@@ -50,7 +50,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
         /** @var array $integrationData */
         $integrationData = [];
         try {
-            $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
+            $integrationId = (int) $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
             if ($integrationId) {
                 $integrationData = $this->getIntegration($integrationId);
                 if (!$integrationData) {

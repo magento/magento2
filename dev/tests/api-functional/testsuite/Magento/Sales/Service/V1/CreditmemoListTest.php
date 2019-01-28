@@ -64,7 +64,7 @@ class CreditmemoListTest extends WebapiAbstract
         );
         $stateFilter = $filterBuilder
             ->setField('state')
-            ->setValue((string)\Magento\Sales\Model\Order\Creditmemo::STATE_OPEN)
+            ->setValue((string) \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN)
             ->setConditionType('eq')
             ->create();
         $incrementFilter = $filterBuilder

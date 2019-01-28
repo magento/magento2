@@ -53,7 +53,7 @@ class Date extends \Magento\Framework\View\Element\Template
             '",' : '') .
             '
                         buttonText: "' .
-            (string)new \Magento\Framework\Phrase(
+            (string) new \Magento\Framework\Phrase(
                 'Select Date'
             ) .
             '"' . ($maxDate ? ', maxDate: "' . $maxDate . '"' : '') .

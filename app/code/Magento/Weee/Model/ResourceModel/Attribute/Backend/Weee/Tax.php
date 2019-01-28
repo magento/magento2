@@ -55,10 +55,10 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['website_id', 'country', 'state', 'value']
         )->where(
             'entity_id = ?',
-            (int)$product->getId()
+            (int) $product->getId()
         )->where(
             'attribute_id = ?',
-            (int)$attribute->getId()
+            (int) $attribute->getId()
         );
         if ($attribute->isScopeGlobal()) {
             $select->where('website_id = ?', 0);
@@ -83,7 +83,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function deleteProductData($product, $attribute)
     {
-        $where = ['entity_id = ?' => (int)$product->getId(), 'attribute_id = ?' => (int)$attribute->getId()];
+        $where = ['entity_id = ?' => (int) $product->getId(), 'attribute_id = ?' => (int) $attribute->getId()];
 
         $connection = $this->getConnection();
         if (!$attribute->isScopeGlobal()) {
@@ -105,7 +105,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function insertProductData($product, $data)
     {
-        $data['entity_id'] = (int)$product->getId();
+        $data['entity_id'] = (int) $product->getId();
         $this->getConnection()->insert($this->getMainTable(), $data);
         return $this;
     }

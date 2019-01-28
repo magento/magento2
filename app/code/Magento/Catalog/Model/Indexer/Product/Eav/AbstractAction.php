@@ -182,6 +182,6 @@ abstract class AbstractAction
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        return (bool)$eavIndexerStatus;
+        return (bool) $eavIndexerStatus;
     }
 }

@@ -358,7 +358,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function setIsValidate($flag)
     {
-        $this->_isValidate = (bool)$flag;
+        $this->_isValidate = (bool) $flag;
         return $this;
     }
 
@@ -694,7 +694,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             return $this->_wishlist;
         }
 
-        $customerId = (int)$this->getSession()->getCustomerId();
+        $customerId = (int) $this->getSession()->getCustomerId();
         if ($customerId) {
             $this->_wishlist = $this->_objectManager->create(\Magento\Wishlist\Model\Wishlist::class);
             $this->_wishlist->loadByCustomerId($customerId, true);
@@ -723,8 +723,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_cart = $this->quoteFactory->create();
 
-        $customerId = (int)$this->getSession()->getCustomerId();
-        $storeId = (int)$this->getSession()->getStoreId();
+        $customerId = (int) $this->getSession()->getCustomerId();
+        $storeId = (int) $this->getSession()->getStoreId();
         if ($customerId) {
             try {
                 $this->_cart = $this->quoteRepository->getForCustomer($customerId, [$storeId]);
@@ -749,7 +749,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if ($this->_compareList !== null) {
             return $this->_compareList;
         }
-        $customerId = (int)$this->getSession()->getCustomerId();
+        $customerId = (int) $this->getSession()->getCustomerId();
         if ($customerId) {
             $this->_compareList = $this->_objectManager->create(
                 \Magento\Catalog\Model\Product\Compare\ListCompare::class
@@ -965,7 +965,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $this->removeItem($itemId, $from);
             }
         }
-        if (isset($data['empty_customer_cart']) && (int)$data['empty_customer_cart'] == 1) {
+        if (isset($data['empty_customer_cart']) && (int) $data['empty_customer_cart'] == 1) {
             $this->getCustomerCart()->removeAllItems()->collectTotals();
             $this->quoteRepository->save($this->getCustomerCart());
         }
@@ -1081,7 +1081,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function addProducts(array $products)
     {
         foreach ($products as $productId => $config) {
-            $config['qty'] = isset($config['qty']) ? (float)$config['qty'] : 1;
+            $config['qty'] = isset($config['qty']) ? (float) $config['qty'] : 1;
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1111,13 +1111,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             foreach ($items as $itemId => $info) {
                 if (!empty($info['configured'])) {
                     $item = $this->getQuote()->updateItem($itemId, $this->objectFactory->create($info));
-                    $info['qty'] = (float)$item->getQty();
+                    $info['qty'] = (float) $item->getQty();
                 } else {
                     $item = $this->getQuote()->getItemById($itemId);
                     if (!$item) {
                         continue;
                     }
-                    $info['qty'] = (float)$info['qty'];
+                    $info['qty'] = (float) $info['qty'];
                 }
                 $this->quoteItemUpdater->update($item, $info);
                 if ($item && !empty($info['action'])) {
@@ -1426,7 +1426,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
              * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
              * that is why it should be added after _setQuoteAddress call
              */
-            $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
+            $saveInAddressBook = (int) (!empty($address['save_in_address_book']));
             $shippingAddress->setData('save_in_address_book', $saveInAddressBook);
         }
         if ($address instanceof \Magento\Quote\Model\Quote\Address) {
@@ -1493,7 +1493,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
          * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
          * that is why it should be added after _setQuoteAddress call
          */
-        $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
+        $saveInAddressBook = (int) (!empty($address['save_in_address_book']));
         $billingAddress->setData('save_in_address_book', $saveInAddressBook);
 
         $quote = $this->getQuote();
@@ -1601,7 +1601,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function applyCoupon($code)
     {
-        $code = trim((string)$code);
+        $code = trim((string) $code);
         $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
 
         if (empty($code)) {

@@ -26,7 +26,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $collection->setCustomerFilter($customer);
         $this->assertStringMatchesFormat(
             '%AWHERE%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Sparent_id%S = %S-1%S)%SAND%S(%Sparent_id%S = %S3%S)%A',
-            (string)$select
+            (string) $select
         );
     }
 }

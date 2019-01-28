@@ -72,17 +72,17 @@ class FreeShipping implements FreeShippingInterface
 
             $this->calculator->processFreeShipping($item);
             // at least one item matches to the rule and the rule mode is not a strict
-            if ((bool)$item->getAddress()->getFreeShipping()) {
+            if ((bool) $item->getAddress()->getFreeShipping()) {
                 $result = true;
                 break;
             }
 
-            $itemFreeShipping = (bool)$item->getFreeShipping();
+            $itemFreeShipping = (bool) $item->getFreeShipping();
             $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
             $result = $addressFreeShipping;
         }
 
-        $shippingAddress->setFreeShipping((int)$result);
+        $shippingAddress->setFreeShipping((int) $result);
         $this->applyToItems($items, $result);
         return $result;
     }
@@ -115,7 +115,7 @@ class FreeShipping implements FreeShippingInterface
         /** @var AbstractItem $item */
         foreach ($items as $item) {
             $item->getAddress()
-                ->setFreeShipping((int)$freeShipping);
+                ->setFreeShipping((int) $freeShipping);
             $this->applyToChildren($item, $freeShipping);
         }
     }

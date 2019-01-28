@@ -169,7 +169,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     public function getProtectCode()
     {
-        return (string)$this->getShipment()->getProtectCode();
+        return (string) $this->getShipment()->getProtectCode();
     }
 
     /**

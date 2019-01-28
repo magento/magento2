@@ -75,7 +75,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        $object->setTemplateType((int)$object->getTemplateType());
+        $object->setTemplateType((int) $object->getTemplateType());
         return parent::_beforeSave($object);
     }
 

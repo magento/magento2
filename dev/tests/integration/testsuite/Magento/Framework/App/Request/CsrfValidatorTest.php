@@ -151,7 +151,7 @@ class CsrfValidatorTest extends TestCase
              */
             public function validateForCsrf(RequestInterface $request): ?bool
             {
-                return (bool)$request->getParam($this->param);
+                return (bool) $request->getParam($this->param);
             }
         };
     }

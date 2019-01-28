@@ -27,7 +27,7 @@ class Element extends \Magento\Framework\Simplexml\Element
         $flag = $this->{$var};
 
         if ($value === true) {
-            $flag = strtolower((string)$flag);
+            $flag = strtolower((string) $flag);
             if (!empty($flag) && 'false' !== $flag && 'off' !== $flag) {
                 return true;
             } else {
@@ -35,7 +35,7 @@ class Element extends \Magento\Framework\Simplexml\Element
             }
         }
 
-        return !empty($flag) && 0 === strcasecmp($value, (string)$flag);
+        return !empty($flag) && 0 === strcasecmp($value, (string) $flag);
     }
 
     /**
@@ -46,9 +46,9 @@ class Element extends \Magento\Framework\Simplexml\Element
     public function getClassName()
     {
         if ($this->class) {
-            $model = (string)$this->class;
+            $model = (string) $this->class;
         } elseif ($this->model) {
-            $model = (string)$this->model;
+            $model = (string) $this->model;
         } else {
             return false;
         }

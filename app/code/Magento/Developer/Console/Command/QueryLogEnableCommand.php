@@ -107,9 +107,9 @@ class QueryLogEnableCommand extends Command
         $logQueryTime = $input->getOption(self::INPUT_ARG_LOG_QUERY_TIME);
         $logCallStack = $input->getOption(self::INPUT_ARG_LOG_CALL_STACK);
 
-        $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
+        $data[LoggerProxy::PARAM_LOG_ALL] = (int) ($logAllQueries != 'false');
         $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime, 3);
-        $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack != 'false');
+        $data[LoggerProxy::PARAM_CALL_STACK] = (int) ($logCallStack != 'false');
 
         $configGroup[LoggerProxy::CONF_GROUP_NAME] = $data;
 

@@ -63,7 +63,7 @@ class RemoveItem extends \Magento\Framework\App\Action\Action implements HttpPos
         if (!$this->getFormKeyValidator()->validate($this->getRequest())) {
             return $this->resultRedirectFactory->create()->setPath('*/cart/');
         }
-        $itemId = (int)$this->getRequest()->getParam('item_id');
+        $itemId = (int) $this->getRequest()->getParam('item_id');
         try {
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->removeQuoteItem($itemId);

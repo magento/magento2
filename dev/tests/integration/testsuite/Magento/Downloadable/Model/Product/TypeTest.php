@@ -128,7 +128,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         ];
         $links = [];
         foreach ($downloadableData['link'] as $linkData) {
-            if (!$linkData || (isset($linkData['is_delete']) && (bool)$linkData['is_delete'])) {
+            if (!$linkData || (isset($linkData['is_delete']) && (bool) $linkData['is_delete'])) {
                 continue;
             } else {
                 $link = $linkFactory->create(['data' => $linkData]);
@@ -161,7 +161,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         if (isset($downloadableData['sample']) && is_array($downloadableData['sample'])) {
             $samples = [];
             foreach ($downloadableData['sample'] as $sampleData) {
-                if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
+                if (!$sampleData || (isset($sampleData['is_delete']) && (bool) $sampleData['is_delete'])) {
                     continue;
                 } else {
                     $sample = $sampleFactory->create(['data' => $sampleData]);

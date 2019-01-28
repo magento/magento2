@@ -108,7 +108,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
         $xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><GetResponse><value>42</value>></GetResponse>";
         $simpleXmlElement = $this->carrier->parseXml($xmlString);
         $this->assertEquals('GetResponse', $simpleXmlElement->getName());
-        $this->assertEquals(42, (int)$simpleXmlElement->value);
+        $this->assertEquals(42, (int) $simpleXmlElement->value);
         $this->assertInstanceOf('SimpleXMLElement', $simpleXmlElement);
         $customSimpleXmlElement = $this->carrier->parseXml(
             $xmlString,

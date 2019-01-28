@@ -239,7 +239,7 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected function addValidMessage($customerAddress, $validationResult)
     {
         $message = [
-            (string)__('Your VAT ID was successfully validated.'),
+            (string) __('Your VAT ID was successfully validated.'),
         ];
 
         $customer = $customerAddress->getCustomer();
@@ -251,8 +251,8 @@ class AfterAddressSaveObserver implements ObserverInterface
                 $validationResult
             );
             $message[] = $customerVatClass == Vat::VAT_CLASS_DOMESTIC
-                ? (string)__('You will be charged tax.')
-                : (string)__('You will not be charged tax.');
+                ? (string) __('You will be charged tax.')
+                : (string) __('You will not be charged tax.');
         }
 
         $this->messageManager->addSuccess(implode(' ', $message));
@@ -270,14 +270,14 @@ class AfterAddressSaveObserver implements ObserverInterface
     {
         $vatId = $this->escaper->escapeHtml($customerAddress->getVatId());
         $message = [
-            (string)__('The VAT ID entered (%1) is not a valid VAT ID.', $vatId),
+            (string) __('The VAT ID entered (%1) is not a valid VAT ID.', $vatId),
         ];
 
         $customer = $customerAddress->getCustomer();
         if (!$this->scopeConfig->isSetFlag(HelperAddress::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT)
             && !$customer->getDisableAutoGroupChange()
         ) {
-            $message[] = (string)__('You will be charged tax.');
+            $message[] = (string) __('You will be charged tax.');
         }
 
         $this->messageManager->addError(implode(' ', $message));
@@ -294,18 +294,18 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected function addErrorMessage($customerAddress)
     {
         $message = [
-            (string)__('Your Tax ID cannot be validated.'),
+            (string) __('Your Tax ID cannot be validated.'),
         ];
 
         $customer = $customerAddress->getCustomer();
         if (!$this->scopeConfig->isSetFlag(HelperAddress::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT)
             && !$customer->getDisableAutoGroupChange()
         ) {
-            $message[] = (string)__('You will be charged tax.');
+            $message[] = (string) __('You will be charged tax.');
         }
 
         $email = $this->scopeConfig->getValue('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE);
-        $message[] = (string)__('If you believe this is an error, please contact us at %1', $email);
+        $message[] = (string) __('If you believe this is an error, please contact us at %1', $email);
 
         $this->messageManager->addError(implode(' ', $message));
 

@@ -35,7 +35,7 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
-        $select->where('store_id = ?', (int)$object->getStoreId());
+        $select->where('store_id = ?', (int) $object->getStoreId());
         return $select;
     }
 

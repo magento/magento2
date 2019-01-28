@@ -484,7 +484,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSaveAddressWithRestrictedCountries()
     {
         $website = $this->getWebsite('test');
-        $customer = $this->getCustomer('customer.web@example.com', (int)$website->getId());
+        $customer = $this->getCustomer('customer.web@example.com', (int) $website->getId());
         $regionFactory = $this->objectManager->get(RegionInterfaceFactory::class);
         $region = $regionFactory->create()
             ->setRegionCode('CA')

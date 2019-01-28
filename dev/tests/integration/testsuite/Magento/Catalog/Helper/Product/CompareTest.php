@@ -56,8 +56,8 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->setId(10);
         $json = $this->_helper->getAddToWishlistParams($product);
-        $params = (array)json_decode($json);
-        $data = (array)$params['data'];
+        $params = (array) json_decode($json);
+        $data = (array) $params['data'];
         $this->assertEquals('10', $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith(

@@ -103,7 +103,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
         $this->assertEquals('auth', $this->getRequest()->getControllerName());
         $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
-        $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
+        $this->assertTrue((bool) strpos($this->getResponse()->getBody(), $resetPasswordToken));
     }
 
     /**

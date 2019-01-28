@@ -124,7 +124,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testGetUsedProductAttributes()
     {
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
-        $attributeId = (int)$testConfigurable->getId();
+        $attributeId = (int) $testConfigurable->getId();
         $attributes = $this->model->getUsedProductAttributes($this->product);
         $this->assertArrayHasKey($attributeId, $attributes);
         $this->assertEquals($testConfigurable->getData(), $attributes[$attributeId]->getData());
@@ -403,7 +403,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             'You need to choose options for your item.',
-            (string)$this->model->getSpecifyOptionMessage()
+            (string) $this->model->getSpecifyOptionMessage()
         );
     }
 

@@ -112,7 +112,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         /**
          * Check and set correct variable values to prevent SQL-injections
          */
-        $range = (float)$range;
+        $range = (float) $range;
         if ($range == 0) {
             $range = 1;
         }
@@ -381,7 +381,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $priceExpr = $this->_getPriceExpression($select, false);
 
         if ($to !== '') {
-            $to = (float)$to;
+            $to = (float) $to;
             if ($from == $to) {
                 $to += self::MIN_POSSIBLE_PRICE;
             }
@@ -419,11 +419,11 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [
                 $this->dimensionFactory->create(
                     WebsiteDimensionProvider::DIMENSION_NAME,
-                    (string)$this->storeManager->getStore($storeKey)->getWebsiteId()
+                    (string) $this->storeManager->getStore($storeKey)->getWebsiteId()
                 ),
                 $this->dimensionFactory->create(
                     CustomerGroupDimensionProvider::DIMENSION_NAME,
-                    (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
+                    (string) $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
                 )
             ]
         );

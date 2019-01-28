@@ -343,7 +343,7 @@ class Factory
         $options['slow_backend_autoload'] = true;
 
         if (isset($cacheOptions['auto_refresh_fast_cache'])) {
-            $options['auto_refresh_fast_cache'] = (bool)$cacheOptions['auto_refresh_fast_cache'];
+            $options['auto_refresh_fast_cache'] = (bool) $cacheOptions['auto_refresh_fast_cache'];
         } else {
             $options['auto_refresh_fast_cache'] = false;
         }
@@ -361,7 +361,7 @@ class Factory
             $options['slow_backend'] = \Magento\Framework\Cache\Backend\Database::class;
             $options['slow_backend_options'] = $this->_getDbAdapterOptions();
             if (isset($cacheOptions['slow_backend_store_data'])) {
-                $options['slow_backend_options']['store_data'] = (bool)$cacheOptions['slow_backend_store_data'];
+                $options['slow_backend_options']['store_data'] = (bool) $cacheOptions['slow_backend_store_data'];
             } else {
                 $options['slow_backend_options']['store_data'] = false;
             }

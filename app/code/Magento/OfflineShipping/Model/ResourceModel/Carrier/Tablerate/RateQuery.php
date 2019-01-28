@@ -89,9 +89,9 @@ class RateQuery
     public function getBindings()
     {
         $bind = [
-            ':website_id' => (int)$this->request->getWebsiteId(),
+            ':website_id' => (int) $this->request->getWebsiteId(),
             ':country_id' => $this->request->getDestCountryId(),
-            ':region_id' => (int)$this->request->getDestRegionId(),
+            ':region_id' => (int) $this->request->getDestRegionId(),
             ':postcode' => $this->request->getDestPostcode(),
             ':postcode_prefix' => $this->getDestPostcodePrefix()
         ];

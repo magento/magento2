@@ -131,7 +131,7 @@ HTML;
     public function getIsWysiwygEnabled()
     {
         if ($this->_moduleManager->isEnabled('Magento_Cms')) {
-            return (bool)($this->_wysiwygConfig->isEnabled() && $this->getEntityAttribute()->getIsWysiwygEnabled());
+            return (bool) ($this->_wysiwygConfig->isEnabled() && $this->getEntityAttribute()->getIsWysiwygEnabled());
         }
 
         return false;

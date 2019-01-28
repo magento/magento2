@@ -55,7 +55,7 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!$countAdmin) {
             $select->where(sprintf('%s <> %s', $connection->quoteIdentifier('code'), $connection->quote('admin')));
         }
-        return (int)$connection->fetchOne($select);
+        return (int) $connection->fetchOne($select);
     }
 
     /**
@@ -113,7 +113,7 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
 
-        $bindValues = ['group_id' => (int)$groupId];
+        $bindValues = ['group_id' => (int) $groupId];
         $select = $connection->select()->from(
             $this->getMainTable(),
             ['count' => 'COUNT(*)']
@@ -123,8 +123,8 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $count = $connection->fetchOne($select, $bindValues);
 
         if ($count == 1) {
-            $bind = ['default_store_id' => (int)$storeId];
-            $where = ['group_id = ?' => (int)$groupId];
+            $bind = ['default_store_id' => (int) $storeId];
+            $where = ['group_id = ?' => (int) $groupId];
             $connection->update($this->getTable('store_group'), $bind, $where);
         }
 

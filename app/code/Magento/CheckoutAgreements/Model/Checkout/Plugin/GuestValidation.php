@@ -135,6 +135,6 @@ class GuestValidation
         $agreementsList = $isAgreementsEnabled
             ? $this->checkoutAgreementsList->getList($this->activeStoreAgreementsFilter->buildSearchCriteria())
             : [];
-        return (bool)($isAgreementsEnabled && count($agreementsList) > 0);
+        return (bool) ($isAgreementsEnabled && count($agreementsList) > 0);
     }
 }

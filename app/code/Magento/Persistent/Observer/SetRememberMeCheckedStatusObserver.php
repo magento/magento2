@@ -71,11 +71,11 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
         $request = $observer->getEvent()->getRequest();
         if ($request) {
             $rememberMeCheckbox = $request->getPost('persistent_remember_me');
-            $this->_persistentSession->setRememberMeChecked((bool)$rememberMeCheckbox);
+            $this->_persistentSession->setRememberMeChecked((bool) $rememberMeCheckbox);
             if ($request->getFullActionName() == 'checkout_onepage_saveBilling' ||
                 $request->getFullActionName() == 'customer_account_createpost'
             ) {
-                $this->_checkoutSession->setRememberMeChecked((bool)$rememberMeCheckbox);
+                $this->_checkoutSession->setRememberMeChecked((bool) $rememberMeCheckbox);
             }
         }
     }

@@ -69,7 +69,7 @@ class GetCartForUser
             );
         }
 
-        $customerId = (int)$cart->getCustomerId();
+        $customerId = (int) $cart->getCustomerId();
 
         /* Guest cart, allow operations */
         if (!$customerId) {

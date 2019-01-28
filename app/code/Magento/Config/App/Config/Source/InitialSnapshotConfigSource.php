@@ -49,7 +49,7 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        $flagData = (array)($this->flagManager->getFlagData('system_config_snapshot') ?: []);
+        $flagData = (array) ($this->flagManager->getFlagData('system_config_snapshot') ?: []);
 
         $data = $this->dataObjectFactory->create(
             ['data' => $flagData]

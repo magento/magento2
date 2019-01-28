@@ -35,7 +35,7 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     {
         $options = $this->_getOptions();
 
-        $showMissingOptionValues = (bool)$this->getColumn()->getShowMissingOptionValues();
+        $showMissingOptionValues = (bool) $this->getColumn()->getShowMissingOptionValues();
         if (!empty($options) && is_array($options)) {
             //transform option format
             $output = [];

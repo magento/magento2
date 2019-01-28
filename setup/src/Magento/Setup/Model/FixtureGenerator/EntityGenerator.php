@@ -130,7 +130,7 @@ class EntityGenerator
         $this->sequenceRegistry = $sequenceRegistry;
         $this->customTableMap = $customTableMap;
         $this->entityType = $entityType;
-        $this->bunchSize = (int)$bunchSize;
+        $this->bunchSize = (int) $bunchSize;
     }
 
     /**
@@ -161,7 +161,7 @@ class EntityGenerator
 
         $map = [];
         $processed = 0;
-        $entitiesAmount = (int)$entitiesAmount;
+        $entitiesAmount = (int) $entitiesAmount;
         gc_disable();
         for ($entityNumber = 0; $entityNumber < $entitiesAmount; $entityNumber++) {
             $processed++;

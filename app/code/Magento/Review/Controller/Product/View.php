@@ -42,7 +42,7 @@ class View extends ProductController
      */
     public function execute()
     {
-        $review = $this->loadReview((int)$this->getRequest()->getParam('id'));
+        $review = $this->loadReview((int) $this->getRequest()->getParam('id'));
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
         if (!$review) {

@@ -288,7 +288,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $attributeIds = [];
         $attributeTables = [];
-        $storeId = (int)$this->getStoreId();
+        $storeId = (int) $this->getStoreId();
 
         /**
          * Collect attributes with options
@@ -357,7 +357,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     }
                 }
                 if ($where) {
-                    $selects[$frontendInput] = (string)$this->getConnection()->select()->from(
+                    $selects[$frontendInput] = (string) $this->getConnection()->select()->from(
                         $attributeTables[$frontendInput],
                         $this->getEntity()->getLinkField()
                     )->where(
@@ -368,6 +368,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         $sql = $this->getConnection()->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
-        return (string)$sql;
+        return (string) $sql;
     }
 }

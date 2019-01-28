@@ -34,7 +34,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         foreach ($values as $option) {
             $this->assertArrayHasKey('label', $option);
             $this->assertArrayHasKey('value', $option);
-            if (strpos((string)$option['label'], (string)$label) !== false) {
+            if (strpos((string) $option['label'], (string) $label) !== false) {
                 $this->assertEquals($value, $option['value']);
                 $hasLabel = true;
                 break;
@@ -43,6 +43,6 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        return (bool)$hasLabel;
+        return (bool) $hasLabel;
     }
 }

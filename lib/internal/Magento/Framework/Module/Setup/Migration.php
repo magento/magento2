@@ -251,7 +251,7 @@ class Migration
             $query->where($additionalWhere);
         }
 
-        return (int)$connection->fetchOne($query);
+        return (int) $connection->fetchOne($query);
     }
 
     /**

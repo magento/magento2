@@ -38,7 +38,7 @@ class AutoIncrement
     {
         if ($this->incrementValue === null) {
             $increment = $this->resource->getConnection()->fetchRow('SHOW VARIABLES LIKE "auto_increment_increment"');
-            $this->incrementValue = !empty($increment['Value']) ? (int)$increment['Value'] : 1;
+            $this->incrementValue = !empty($increment['Value']) ? (int) $increment['Value'] : 1;
         }
         return $this->incrementValue;
     }

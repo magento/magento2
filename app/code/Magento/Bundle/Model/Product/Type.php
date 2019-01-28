@@ -418,9 +418,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $options = $product->getBundleOptionsData();
                 if ($options) {
                     foreach ($options as $option) {
-                        if (empty($option['delete']) || 1 != (int)$option['delete']) {
+                        if (empty($option['delete']) || 1 != (int) $option['delete']) {
                             $product->setTypeHasOptions(true);
-                            if (1 == (int)$option['required']) {
+                            if (1 == (int) $option['required']) {
                                 $product->setTypeHasRequiredOptions(true);
                                 break;
                             }
@@ -661,7 +661,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
 
             $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
-            $_appendAllSelections = (bool)$product->getSkipCheckRequiredOption() || $skipSaleableCheck;
+            $_appendAllSelections = (bool) $product->getSkipCheckRequiredOption() || $skipSaleableCheck;
 
             $options = $buyRequest->getBundleOption();
             if (is_array($options)) {
@@ -813,8 +813,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $array[$key] = $this->recursiveIntval($value);
-            } elseif (is_numeric($value) && (int)$value != 0) {
-                $array[$key] = (int)$value;
+            } elseif (is_numeric($value) && (int) $value != 0) {
+                $array[$key] = (int) $value;
             } else {
                 unset($array[$key]);
             }
@@ -1221,11 +1221,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getQty($selection, $qtys, $selectionOptionId)
     {
         if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
-            $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+            $qty = (float) $qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
         } else {
-            $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
+            $qty = (float) $selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
         }
-        $qty = (float)$qty;
+        $qty = (float) $qty;
 
         return $qty;
     }
@@ -1242,7 +1242,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $beforeQty = 0;
         $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
         if ($customOption && $customOption->getProduct()->getId() == $selection->getId()) {
-            $beforeQty = (float)$customOption->getValue();
+            $beforeQty = (float) $customOption->getValue();
             return $beforeQty;
         }
 

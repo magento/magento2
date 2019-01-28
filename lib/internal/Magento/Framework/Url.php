@@ -926,7 +926,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         $noSid = null;
         if (isset($routeParams['_nosid'])) {
-            $noSid = (bool)$routeParams['_nosid'];
+            $noSid = (bool) $routeParams['_nosid'];
             unset($routeParams['_nosid']);
         }
         $url = $this->getRouteUrl($routePath, $routeParams);
@@ -1090,7 +1090,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function useSessionIdForUrl($secure = false)
     {
-        $key = 'use_session_id_for_url_' . (int)$secure;
+        $key = 'use_session_id_for_url_' . (int) $secure;
         if ($this->getData($key) === null) {
             $httpHost = $this->_request->getHttpHost();
             $urlHost = parse_url(

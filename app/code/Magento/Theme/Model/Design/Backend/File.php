@@ -186,7 +186,7 @@ class File extends BackendFile
         $urlType = ['_type' => UrlInterface::URL_TYPE_MEDIA];
         if (isset($fieldConfig['base_url'])) {
             $baseUrl = $fieldConfig['base_url'];
-            $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type']];
+            $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string) $baseUrl['type']];
             $baseUrl = $baseUrl['value'] . '/';
         }
         return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl  . $fileName;

@@ -113,9 +113,9 @@ class CartItemRepositoryTest extends WebapiAbstract
                     "extension_attributes" => [
                         "bundle_options" => [
                             [
-                                "option_id" => (int)$bundleOptionId,
+                                "option_id" => (int) $bundleOptionId,
                                 "option_qty" => $itemQty,
-                                "option_selections" => [(int)$optionSelections]
+                                "option_selections" => [(int) $optionSelections]
                             ]
                         ]
                     ]

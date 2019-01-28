@@ -18,7 +18,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
      */
     public function execute()
     {
-        $productId = (int)$this->getRequest()->getParam('product');
+        $productId = (int) $this->getRequest()->getParam('product');
         if ($productId) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {

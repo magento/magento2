@@ -71,7 +71,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     private function getWaitTimeout()
     {
         $result = $this->executeQuery('SELECT @@session.wait_timeout');
-        return (int)$result->fetchColumn();
+        return (int) $result->fetchColumn();
     }
 
     /**

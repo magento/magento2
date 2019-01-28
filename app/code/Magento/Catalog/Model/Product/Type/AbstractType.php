@@ -350,7 +350,7 @@ abstract class AbstractType
             $salable = $product->getData('is_salable');
         }
 
-        return (bool)(int)$salable;
+        return (bool) (int) $salable;
     }
 
     /**
@@ -378,7 +378,7 @@ abstract class AbstractType
         // try to found super product configuration
         $superProductConfig = $buyRequest->getSuperProductConfig();
         if (!empty($superProductConfig['product_id']) && !empty($superProductConfig['product_type'])) {
-            $superProductId = (int)$superProductConfig['product_id'];
+            $superProductId = (int) $superProductConfig['product_id'];
             if ($superProductId) {
                 /** @var \Magento\Catalog\Model\Product $superProduct */
                 $superProduct = $this->_coreRegistry->registry('used_super_product_' . $superProductId);
@@ -935,7 +935,7 @@ abstract class AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return (float)$qty;
+        return (float) $qty;
     }
 
     /**
@@ -967,11 +967,11 @@ abstract class AbstractType
     public function setConfig($config)
     {
         if (isset($config['composite'])) {
-            $this->_isComposite = (bool)$config['composite'];
+            $this->_isComposite = (bool) $config['composite'];
         }
 
         if (isset($config['can_use_qty_decimals'])) {
-            $this->_canUseQtyDecimals = (bool)$config['can_use_qty_decimals'];
+            $this->_canUseQtyDecimals = (bool) $config['can_use_qty_decimals'];
         }
 
         return $this;

@@ -63,7 +63,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
         if ($rule instanceof \Magento\SalesRule\Model\Rule) {
             $ruleId = $rule->getId();
         } else {
-            $ruleId = (int)$rule;
+            $ruleId = (int) $rule;
         }
 
         $select = $connection->select()->from(

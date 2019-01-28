@@ -25,7 +25,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $simpleXmlNode = simplexml_import_dom($requestNode);
             /** @var \DOMElement $requestNode */
             $name = $requestNode->getAttribute('query');
-            $request = $this->mergeAttributes((array)$simpleXmlNode);
+            $request = $this->mergeAttributes((array) $simpleXmlNode);
             $request['dimensions'] = $this->convertNodes($simpleXmlNode->dimensions, 'name');
             $request['queries'] = $this->convertNodes($simpleXmlNode->queries, 'name');
             $request['filters'] = $this->convertNodes($simpleXmlNode->filters, 'name');
@@ -67,7 +67,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if ($node->count() > 0) {
                     $element = $this->convertChildNodes($element, $node);
                 }
-                $type = (string)$node->attributes('xsi', true)['type'];
+                $type = (string) $node->attributes('xsi', true)['type'];
                 if (!empty($type)) {
                     $element['type'] = $type;
                 }

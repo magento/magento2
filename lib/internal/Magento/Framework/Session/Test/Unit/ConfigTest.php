@@ -188,7 +188,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testCookieSecureDefaultsToIniSettings()
     {
         $this->getModel($this->validatorMock);
-        $this->assertSame((bool)ini_get('session.cookie_secure'), $this->config->getCookieSecure());
+        $this->assertSame((bool) ini_get('session.cookie_secure'), $this->config->getCookieSecure());
     }
 
     public function testCookieSecureIsMutable()
@@ -244,7 +244,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testCookieHttpOnlyDefaultsToIniSettings()
     {
         $this->getModel($this->validatorMock);
-        $this->assertSame((bool)ini_get('session.cookie_httponly'), $this->config->getCookieHttpOnly());
+        $this->assertSame((bool) ini_get('session.cookie_httponly'), $this->config->getCookieHttpOnly());
     }
 
     public function testCookieHttpOnlyIsMutable()
@@ -258,7 +258,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testUseCookiesDefaultsToIniSettings()
     {
         $this->getModel($this->validatorMock);
-        $this->assertSame((bool)ini_get('session.use_cookies'), $this->config->getUseCookies());
+        $this->assertSame((bool) ini_get('session.use_cookies'), $this->config->getUseCookies());
     }
 
     public function testUseCookiesIsMutable()
@@ -266,13 +266,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $value = ini_get('session.use_cookies') ? false : true;
         $this->config->setUseCookies($value);
-        $this->assertEquals($value, (bool)$this->config->getUseCookies());
+        $this->assertEquals($value, (bool) $this->config->getUseCookies());
     }
 
     public function testUseOnlyCookiesDefaultsToIniSettings()
     {
         $this->getModel($this->validatorMock);
-        $this->assertSame((bool)ini_get('session.use_only_cookies'), $this->config->getUseOnlyCookies());
+        $this->assertSame((bool) ini_get('session.use_only_cookies'), $this->config->getUseOnlyCookies());
     }
 
     public function testUseOnlyCookiesIsMutable()
@@ -280,7 +280,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $value = ini_get('session.use_only_cookies') ? false : true;
         $this->config->setOption('use_only_cookies', $value);
-        $this->assertEquals($value, (bool)$this->config->getOption('use_only_cookies'));
+        $this->assertEquals($value, (bool) $this->config->getOption('use_only_cookies'));
     }
 
     public function testRefererCheckDefaultsToIniSettings()

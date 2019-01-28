@@ -182,7 +182,7 @@ class StoresFixture extends Fixture
         $this->websitesCount = $this->fixtureModel->getValue('websites', self::DEFAULT_WEBSITE_COUNT);
         $this->storeGroupsCount = $this->fixtureModel->getValue('store_groups', self::DEFAULT_STORE_COUNT);
         $this->storesCount = $this->fixtureModel->getValue('store_views', self::DEFAULT_STORE_VIEW_COUNT);
-        $this->singleRootCategory = (bool)$this->fixtureModel->getValue('assign_entities_to_all_websites', false);
+        $this->singleRootCategory = (bool) $this->fixtureModel->getValue('assign_entities_to_all_websites', false);
 
         if ($this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
             && $this->storeGroupsCount <= self::DEFAULT_STORE_COUNT

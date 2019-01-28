@@ -50,7 +50,7 @@ class StringUtils implements InterpreterInterface
             ? $this->booleanUtils->toBoolean($data['translate'])
             : false;
         if ($needTranslation) {
-            $result = (string)new \Magento\Framework\Phrase($result);
+            $result = (string) new \Magento\Framework\Phrase($result);
         }
 
         return $result;

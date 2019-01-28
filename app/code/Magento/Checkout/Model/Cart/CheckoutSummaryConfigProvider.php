@@ -57,7 +57,7 @@ class CheckoutSummaryConfigProvider implements ConfigProviderInterface
      */
     private function getMaxCartItemsToDisplay()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             'checkout/options/max_items_display_count',
             ScopeInterface::SCOPE_STORE
         );

@@ -109,7 +109,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'lognum' => $user->getLognum() + 1,
         ];
 
-        $condition = ['user_id = ?' => (int)$user->getUserId()];
+        $condition = ['user_id = ?' => (int) $user->getUserId()];
 
         $connection->update($this->getMainTable(), $data, $condition);
 
@@ -192,7 +192,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function _clearUserRoles(ModelUser $user)
     {
-        $conditions = ['user_id = ?' => (int)$user->getId(), 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN];
+        $conditions = ['user_id = ?' => (int) $user->getId(), 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN];
         $this->getConnection()->delete($this->getTable('authorization_role'), $conditions);
     }
 
@@ -305,7 +305,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             "{$table}.user_type = :user_type"
         );
 
-        $binds = ['user_id' => (int)$user->getId(),
+        $binds = ['user_id' => (int) $user->getId(),
                   'user_type' => UserContextInterface::USER_TYPE_ADMIN
         ];
 
@@ -336,8 +336,8 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $dbh = $this->getConnection();
 
         $condition = [
-            'user_id = ?' => (int)$user->getId(),
-            'parent_id = ?' => (int)$user->getRoleId(),
+            'user_id = ?' => (int) $user->getId(),
+            'parent_id = ?' => (int) $user->getRoleId(),
             'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN
         ];
 
@@ -389,7 +389,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $binds = [
             'username' => $user->getUsername(),
             'email' => $user->getEmail(),
-            'user_id' => (int)$user->getId(),
+            'user_id' => (int) $user->getId(),
         ];
 
         $select->from(
@@ -427,7 +427,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->update(
                 $this->getMainTable(),
                 ['extra' => $data],
-                ['user_id = ?' => (int)$object->getId()]
+                ['user_id = ?' => (int) $object->getId()]
             );
         }
 
@@ -444,7 +444,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $select = $connection->select();
         $select->from($this->getMainTable(), 'COUNT(*)');
-        $result = (int)$connection->fetchOne($select);
+        $result = (int) $connection->fetchOne($select);
         return $result;
     }
 
@@ -516,7 +516,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!is_array($userIds)) {
             $userIds = [$userIds];
         }
-        $exceptId = (int)$exceptId;
+        $exceptId = (int) $exceptId;
         return $this->getConnection()->update(
             $this->getMainTable(),
             ['lock_expires' => $this->dateTime->formatDate(time() + $lifetime)],
@@ -560,7 +560,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getOldPasswords($user, $retainLimit = 4)
     {
-        $userId = (int)$user->getId();
+        $userId = (int) $user->getId();
         $table = $this->getTable('admin_passwords');
 
         // purge expired passwords, except those which should be retained

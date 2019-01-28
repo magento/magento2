@@ -89,7 +89,7 @@ class CanViewNotification implements VisibilityConditionInterface
             );
             $this->cacheStorage->save(false, $cacheKey);
         }
-        return (bool)$value;
+        return (bool) $value;
     }
 
     /**

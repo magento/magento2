@@ -136,7 +136,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
      */
     protected function getStoreId()
     {
-        $storeId = (int)$this->getRequest()->getParam('store_id');
+        $storeId = (int) $this->getRequest()->getParam('store_id');
         if ($storeId == null) {
             $storeId = $this->storeManager->getStore()->getId();
         }

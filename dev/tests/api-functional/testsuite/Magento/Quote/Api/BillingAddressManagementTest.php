@@ -37,7 +37,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
 
         $data = [
-            AddressInterface::KEY_ID => (int)$address->getId(),
+            AddressInterface::KEY_ID => (int) $address->getId(),
             AddressInterface::KEY_REGION => $address->getRegion(),
             AddressInterface::KEY_REGION_ID => $address->getRegionId(),
             AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
@@ -163,7 +163,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
 
         $data = [
-            AddressInterface::KEY_ID => (int)$address->getId(),
+            AddressInterface::KEY_ID => (int) $address->getId(),
             AddressInterface::KEY_REGION => $address->getRegion(),
             AddressInterface::KEY_REGION_ID => $address->getRegionId(),
             AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),

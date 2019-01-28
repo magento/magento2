@@ -95,7 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function joinTitle($store = null)
     {
-        $storeId = (int)$this->_storeManager->getStore($store)->getId();
+        $storeId = (int) $this->_storeManager->getStore($store)->getId();
         $this->_select->joinLeft(
             ['title_table' => $this->getTable('tax_calculation_rate_title')],
             $this->getConnection()->quoteInto(

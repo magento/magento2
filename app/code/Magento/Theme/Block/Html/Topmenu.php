@@ -134,7 +134,7 @@ class Topmenu extends Template implements IdentityInterface
             return;
         }
 
-        $result[] = ['total' => $total, 'max' => (int)ceil($total / ceil($total / $limit))];
+        $result[] = ['total' => $total, 'max' => (int) ceil($total / ceil($total / $limit))];
 
         $count = 0;
         $firstCol = true;

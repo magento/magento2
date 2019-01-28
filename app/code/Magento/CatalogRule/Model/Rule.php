@@ -303,7 +303,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     {
         if (!$this->hasCustomerGroupIds()) {
             $customerGroupIds = $this->ruleResourceModel->getCustomerGroupIds($this->getId());
-            $this->setData('customer_group_ids', (array)$customerGroupIds);
+            $this->setData('customer_group_ids', (array) $customerGroupIds);
         }
         return $this->_getData('customer_group_ids');
     }

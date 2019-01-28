@@ -121,7 +121,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
                 );
                 foreach ($layoutXml as $handle) {
                     $this->assertNotContains(
-                        (string)$handle['id'],
+                        (string) $handle['id'],
                         $this->_obsoleteNodes,
                         'This layout handle is obsolete.'
                     );
@@ -167,7 +167,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             if (isset($this->_obsoleteReferences[$handle->getName()])) {
                 foreach ($handle->xpath('reference') as $reference) {
                     $this->assertNotContains(
-                        (string)$reference['name'],
+                        (string) $reference['name'],
                         $this->_obsoleteReferences[$handle->getName()],
                         'The block being referenced is removed.'
                     );
@@ -189,12 +189,12 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $parent = $layoutXml['parent'];
         $owner = $layoutXml['owner'];
 
-        if ((string)$type === 'page') {
+        if ((string) $type === 'page') {
             if ($parent) {
                 $issues[] = 'Attribute "parent" is not valid';
             }
         }
-        if ((string)$type === 'fragment') {
+        if ((string) $type === 'fragment') {
             if ($owner) {
                 $issues[] = 'Attribute "owner" is not valid';
             }

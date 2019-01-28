@@ -51,7 +51,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $storeIds = $this->_storeManager->getGroup($group)->getStoreIds();
             $storeId = array_pop($storeIds);
         } elseif ($store) {
-            $storeId = (int)$store;
+            $storeId = (int) $store;
         } else {
             $storeId = null;
         }

@@ -37,7 +37,7 @@ class CaseCaptchaIsRequiredAfterFailedLoginAttemptsTest extends \Magento\TestFra
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin');
-        $this->assertSessionMessages($this->equalTo([(string)__('Incorrect CAPTCHA.')]), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->equalTo([(string) __('Incorrect CAPTCHA.')]), MessageInterface::TYPE_ERROR);
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\UrlInterface::class
         );

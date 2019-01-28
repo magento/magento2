@@ -458,7 +458,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         // Mock helper methods
         $pushToRobots = 0;
         if (isset($robotsInfo['pushToRobots'])) {
-            $pushToRobots = (int)$robotsInfo['pushToRobots'];
+            $pushToRobots = (int) $robotsInfo['pushToRobots'];
         }
         $this->configReaderMock->expects($this->any())
             ->method('getMaximumLinesNumber')

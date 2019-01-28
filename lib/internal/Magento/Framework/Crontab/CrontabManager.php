@@ -182,7 +182,7 @@ class CrontabManager implements CrontabManagerInterface
     private function getCrontabContent()
     {
         try {
-            $content = (string)$this->shell->execute('crontab -l');
+            $content = (string) $this->shell->execute('crontab -l');
         } catch (LocalizedException $e) {
             return '';
         }

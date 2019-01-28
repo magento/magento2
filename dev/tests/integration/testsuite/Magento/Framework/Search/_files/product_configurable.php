@@ -54,7 +54,7 @@ foreach ($options as $option) {
                 'use_config_manage_stock' => 1,
                 'qty' => 100,
                 'is_qty_decimal' => 0,
-                'is_in_stock' => (int)!$isFirstOption,
+                'is_in_stock' => (int) !$isFirstOption,
             ]
         );
 
@@ -70,7 +70,7 @@ foreach ($options as $option) {
     $stockItem->setUseConfigManageStock(1);
     $stockItem->setQty(1000);
     $stockItem->setIsQtyDecimal(0);
-    $stockItem->setIsInStock((int)!$isFirstOption);
+    $stockItem->setIsInStock((int) !$isFirstOption);
     $stockItem->save();
 
     $attributeValues[] = [

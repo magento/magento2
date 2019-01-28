@@ -26,7 +26,7 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
         $openAnalyticsConfigStep->run();
 
         \PHPUnit\Framework\Assert::assertTrue(
-            (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
+            (bool) $configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
             'Magento Advanced Reporting service is not enabled.'
         );
 

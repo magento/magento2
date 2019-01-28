@@ -62,7 +62,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $this->scheduledStructureMock->expects($this->any())
             ->method('setElementToMove')
             ->with(
-                (string)$currentElement->getAttribute('element'),
+                (string) $currentElement->getAttribute('element'),
                 [$destination, $siblingName, $isAfter, $alias]
             );
         $this->move->interpret($this->contextMock, $currentElement, $parentElement);

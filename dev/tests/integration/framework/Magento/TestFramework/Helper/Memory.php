@@ -119,7 +119,7 @@ class Memory
         if ($unitSymbol) {
             $result *= pow(1024, $pow);
         }
-        return (int)$result;
+        return (int) $result;
     }
 
     /**

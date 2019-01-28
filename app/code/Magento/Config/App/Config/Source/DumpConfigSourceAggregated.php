@@ -102,7 +102,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      */
     public function get($path = '')
     {
-        $path = (string)$path;
+        $path = (string) $path;
         $data = [];
 
         if (isset($this->data[$path])) {

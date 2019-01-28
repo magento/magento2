@@ -251,7 +251,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->method('hasIsTransactionClosed')
             ->willReturn($isPaymentTransactionClosed);
         $newTransaction->expects($isPaymentTransactionClosed ? $this->once() : $this->never())
-            ->method('setIsClosed')->with((int)$isPaymentTransactionClosed);
+            ->method('setIsClosed')->with((int) $isPaymentTransactionClosed);
         $this->paymentMock->expects($isPaymentTransactionClosed ? $this->once() : $this->never())
             ->method('getIsTransactionClosed')
             ->willReturn($isPaymentTransactionClosed);

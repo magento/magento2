@@ -401,7 +401,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      */
     public function setIsDeleteable($value)
     {
-        $this->_isDeleteable = (bool)$value;
+        $this->_isDeleteable = (bool) $value;
         return $this;
     }
 
@@ -423,7 +423,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      */
     public function setIsReadonly($value)
     {
-        $this->_isReadonly = (bool)$value;
+        $this->_isReadonly = (bool) $value;
         return $this;
     }
 }

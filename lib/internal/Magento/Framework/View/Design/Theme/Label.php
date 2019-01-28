@@ -58,6 +58,6 @@ class Label implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->getLabelsCollection((string)new \Magento\Framework\Phrase('-- No Theme --'));
+        return $this->getLabelsCollection((string) new \Magento\Framework\Phrase('-- No Theme --'));
     }
 }

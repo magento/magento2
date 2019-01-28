@@ -82,7 +82,7 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
             $regionCollection = self::$_regionCollections[$countryId];
         }
 
-        $regionId = (int)$element->getForm()->getElement('region_id')->getValue();
+        $regionId = (int) $element->getForm()->getElement('region_id')->getValue();
 
         $htmlAttributes = $element->getHtmlAttributes();
         foreach ($htmlAttributes as $key => $attribute) {
@@ -120,7 +120,7 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
             ) . '>' . "\n";
             foreach ($regionCollection as $region) {
                 $selected = $regionId == $region['value'] ? ' selected="selected"' : '';
-                $regionVal = 0 == $region['value'] ? '' : (int)$region['value'];
+                $regionVal = 0 == $region['value'] ? '' : (int) $region['value'];
                 $html .= '<option value="' . $regionVal . '"' . $selected . '>' . $this->_escaper->escapeHtml(
                     __($region['label'])
                 ) . '</option>';

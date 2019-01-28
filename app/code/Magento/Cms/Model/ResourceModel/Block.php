@@ -155,7 +155,7 @@ class Block extends AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId()) {
-            $stores = [(int)$object->getStoreId(), Store::DEFAULT_STORE_ID];
+            $stores = [(int) $object->getStoreId(), Store::DEFAULT_STORE_ID];
 
             $select->join(
                 ['cbs' => $this->getTable('cms_block_store')],
@@ -186,7 +186,7 @@ class Block extends AbstractDb
         if ($this->_storeManager->isSingleStoreMode()) {
             $stores = [Store::DEFAULT_STORE_ID];
         } else {
-            $stores = (array)$object->getData('store_id');
+            $stores = (array) $object->getData('store_id');
         }
 
         $select = $this->getConnection()->select()
@@ -232,7 +232,7 @@ class Block extends AbstractDb
             )
             ->where('cb.' . $entityMetadata->getIdentifierField() . ' = :block_id');
 
-        return $connection->fetchCol($select, ['block_id' => (int)$id]);
+        return $connection->fetchCol($select, ['block_id' => (int) $id]);
     }
 
     /**

@@ -136,14 +136,14 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected function _convertToByte($memoryValue)
     {
         if (stripos($memoryValue, 'G') !== false) {
-            return (int)$memoryValue * pow(1024, 3);
+            return (int) $memoryValue * pow(1024, 3);
         } elseif (stripos($memoryValue, 'M') !== false) {
-            return (int)$memoryValue * 1024 * 1024;
+            return (int) $memoryValue * 1024 * 1024;
         } elseif (stripos($memoryValue, 'K') !== false) {
-            return (int)$memoryValue * 1024;
+            return (int) $memoryValue * 1024;
         }
 
-        return (int)$memoryValue;
+        return (int) $memoryValue;
     }
 
     /**

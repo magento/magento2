@@ -150,7 +150,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
         $this->assertTrue($this->helper->canShow($product));
 
-        $this->assertTrue($this->helper->canShow((int)$product->getId()));
+        $this->assertTrue($this->helper->canShow((int) $product->getId()));
     }
 
     public function testCanUseCanonicalTagDefault()

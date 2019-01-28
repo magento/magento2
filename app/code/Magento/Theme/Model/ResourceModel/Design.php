@@ -158,7 +158,7 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->where($condition);
         }
 
-        $bind = ['store_id' => (int)$storeId, 'current_id' => (int)$currentId];
+        $bind = ['store_id' => (int) $storeId, 'current_id' => (int) $currentId];
 
         if ($dateTo !== null) {
             $bind['date_to'] = $dateTo;
@@ -190,7 +190,7 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'date_to >= :required_date or date_to IS NULL'
         );
 
-        $bind = ['store_id' => (int)$storeId, 'required_date' => $date];
+        $bind = ['store_id' => (int) $storeId, 'required_date' => $date];
 
         return $this->getConnection()->fetchRow($select, $bind);
     }

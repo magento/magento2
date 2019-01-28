@@ -129,7 +129,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
             ]
         );
 
-        $baseCurrencyCode = $this->_storeManager->getStore((int)$this->getParam('store'))->getBaseCurrencyCode();
+        $baseCurrencyCode = $this->_storeManager->getStore((int) $this->getParam('store'))->getBaseCurrencyCode();
 
         $this->addColumn(
             'total',

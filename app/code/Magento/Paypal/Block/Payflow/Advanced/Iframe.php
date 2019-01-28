@@ -79,6 +79,6 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
         )->getConfigData(
             'sandbox_flag'
         );
-        return (bool)$mode;
+        return (bool) $mode;
     }
 }

@@ -81,7 +81,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $itemId = (int)$this->getRequest()->getParam('item');
+        $itemId = (int) $this->getRequest()->getParam('item');
 
         /* @var $item Item */
         $item = $this->itemFactory->create()

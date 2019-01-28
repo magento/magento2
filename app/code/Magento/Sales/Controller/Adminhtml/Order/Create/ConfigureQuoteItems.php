@@ -18,7 +18,7 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
         // Prepare data
         $configureResult = new \Magento\Framework\DataObject();
         try {
-            $quoteItemId = (int)$this->getRequest()->getParam('id');
+            $quoteItemId = (int) $this->getRequest()->getParam('id');
             if (!$quoteItemId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('The quote item ID needs to be received. Set the ID and try again.')

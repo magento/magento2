@@ -41,7 +41,7 @@ class Options
     {
         $visibilities = $this->getVisibilities($product);
 
-        $result = (bool)$visibilities ? true : null;
+        $result = (bool) $visibilities ? true : null;
         if ($result && $visibility !== null) {
             if ($visibilities) {
                 $maxVisibility = max($visibilities);

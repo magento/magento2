@@ -131,7 +131,7 @@ class FileUploaderDataResolver
             $maxFileSize = self::MAX_FILE_SIZE;
 
             if (isset($config['validation']['max_file_size'])) {
-                $maxFileSize = (int)$config['validation']['max_file_size'];
+                $maxFileSize = (int) $config['validation']['max_file_size'];
             }
 
             $allowedExtensions = [];

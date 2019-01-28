@@ -129,7 +129,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      */
     protected function _initCategory()
     {
-        $categoryId = (int)$this->getRequest()->getParam('id', false);
+        $categoryId = (int) $this->getRequest()->getParam('id', false);
         if (!$categoryId) {
             return false;
         }

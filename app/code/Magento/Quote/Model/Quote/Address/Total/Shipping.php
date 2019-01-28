@@ -68,7 +68,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $address->setItemQty($data['addressQty']);
         $address->setWeight($data['addressWeight']);
         $address->setFreeMethodWeight($data['freeMethodWeight']);
-        $addressFreeShipping = (bool)$address->getFreeShipping();
+        $addressFreeShipping = (bool) $address->getFreeShipping();
         $isFreeShipping = $this->freeShipping->isFreeShipping($quote, $shippingAssignment->getItems());
         $address->setFreeShipping($isFreeShipping);
         if (!$addressFreeShipping && $isFreeShipping) {
@@ -149,7 +149,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $address->setFreeMethodWeight(0);
         $addressWeight = $address->getWeight();
         $freeMethodWeight = $address->getFreeMethodWeight();
-        $addressFreeShipping = (bool)$address->getFreeShipping();
+        $addressFreeShipping = (bool) $address->getFreeShipping();
         $addressQty = 0;
         foreach ($items as $item) {
             /**
@@ -166,8 +166,8 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 continue;
             }
 
-            $itemQty = (float)$item->getQty();
-            $itemWeight = (float)$item->getWeight();
+            $itemQty = (float) $item->getQty();
+            $itemWeight = (float) $item->getWeight();
 
             if ($item->getHasChildren() && $item->isShipSeparately()) {
                 foreach ($item->getChildren() as $child) {
@@ -177,8 +177,8 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $addressQty += $child->getTotalQty();
 
                     if (!$item->getProduct()->getWeightType()) {
-                        $itemWeight = (float)$child->getWeight();
-                        $itemQty = (float)$child->getTotalQty();
+                        $itemWeight = (float) $child->getWeight();
+                        $itemQty = (float) $child->getTotalQty();
                         $addressWeight += ($itemWeight * $itemQty);
                         $rowWeight = $this->getItemRowWeight(
                             $addressFreeShipping,
@@ -250,6 +250,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $rowWeight = 0;
             }
         }
-        return (float)$rowWeight;
+        return (float) $rowWeight;
     }
 }

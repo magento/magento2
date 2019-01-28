@@ -180,7 +180,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $model = $this->getUrlModel();
 
         $model->setUseSession(false);
-        $this->assertFalse((bool)$model->getUseSession());
+        $this->assertFalse((bool) $model->getUseSession());
 
         $model->setUseSession(true);
         $this->assertTrue($model->getUseSession());

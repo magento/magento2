@@ -243,7 +243,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
                     )->setTaxCalculationRateId(
                         $this->getId()
                     )->setStoreId(
-                        (int)$store
+                        (int) $store
                     )->setValue(
                         $title
                     )->save();

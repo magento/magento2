@@ -140,7 +140,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         $emails = empty($emails) ? $emails : explode(',', $emails);
 
         $error = false;
-        $message = (string)$this->getRequest()->getPost('message');
+        $message = (string) $this->getRequest()->getPost('message');
         if (strlen($message) > $textLimit) {
             $error = __('Message length must not exceed %1 symbols', $textLimit);
         } else {

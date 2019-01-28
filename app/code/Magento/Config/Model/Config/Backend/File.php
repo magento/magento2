@@ -203,7 +203,7 @@ class File extends \Magento\Framework\App\Config\Value
                 $uploadDir = $this->getUploadDirPath($uploadDir);
             }
         } else {
-            $uploadDir = (string)$fieldConfig['upload_dir'];
+            $uploadDir = (string) $fieldConfig['upload_dir'];
         }
 
         return $uploadDir;

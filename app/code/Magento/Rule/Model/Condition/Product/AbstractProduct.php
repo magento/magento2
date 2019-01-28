@@ -532,7 +532,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            $productId = (int)$model->getEntityId();
+            $productId = (int) $model->getEntityId();
             return $this->validateAttribute($this->productCategoryList->getCategoryIds($productId));
         } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
             if (!$model->getResource()) {
@@ -581,7 +581,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 $model->setData($attrCode, $oldAttrValue);
             }
 
-            return (bool)$result;
+            return (bool) $result;
         }
     }
 

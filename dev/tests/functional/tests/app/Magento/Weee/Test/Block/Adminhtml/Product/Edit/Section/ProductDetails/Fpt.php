@@ -55,7 +55,7 @@ class Fpt extends SimpleElement
         if ($this->find($this->buttonFormLocator)->isVisible()) {
             $this->find($this->buttonFormLocator)->click();
         }
-        foreach ((array)$value as $name => $data) {
+        foreach ((array) $value as $name => $data) {
             $element = $this->find(
                 $this->fields[$name]['selector'],
                 Locator::SELECTOR_CSS,

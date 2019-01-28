@@ -131,7 +131,7 @@ class Pool implements \Iterator
     public function valid()
     {
         $this->_initialize();
-        return (bool)current($this->_instances);
+        return (bool) current($this->_instances);
     }
 
     /**

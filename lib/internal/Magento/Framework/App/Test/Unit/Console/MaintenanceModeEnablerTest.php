@@ -113,7 +113,7 @@ class MaintenanceModeEnablerTest extends TestCase
             return $isOn;
         });
         $maintenanceMode->method('set')->willReturnCallback(function ($newValue) use (&$isOn) {
-            $isOn = (bool)$newValue;
+            $isOn = (bool) $newValue;
             return true;
         });
 

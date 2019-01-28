@@ -84,13 +84,13 @@ class Eraser
         $select = $this->getSelectForProducts($ids);
         $select->joinLeft(
             ['status_global_attr' => $statusAttribute->getBackendTable()],
-            ' status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            ' status_global_attr.attribute_id = ' . (int) $statusAttribute->getAttributeId()
             . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
             []
         );
         $select->joinLeft(
             ['status_attr' => $statusAttribute->getBackendTable()],
-            ' status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            ' status_attr.attribute_id = ' . (int) $statusAttribute->getAttributeId()
             . ' AND status_attr.store_id = ' . $storeId,
             []
         );
@@ -146,7 +146,7 @@ class Eraser
             }
         } else {
             $this->connection->delete(
-                $this->productIndexerHelper->getFlatTableName((int)$storeId),
+                $this->productIndexerHelper->getFlatTableName((int) $storeId),
                 ['entity_id IN(?)' => $productId]
             );
         }

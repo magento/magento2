@@ -91,7 +91,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
-        $categoryId = (int)$request->getParam($this->getRequestVar());
+        $categoryId = (int) $request->getParam($this->getRequestVar());
         if (!$categoryId) {
             return $this;
         }

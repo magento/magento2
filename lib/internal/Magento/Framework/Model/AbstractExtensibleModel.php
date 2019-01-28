@@ -87,7 +87,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         }
         $customAttributesCodes = $this->getCustomAttributesCodes();
         $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
-            (array)$data[self::CUSTOM_ATTRIBUTES],
+            (array) $data[self::CUSTOM_ATTRIBUTES],
             array_flip($customAttributesCodes)
         );
         foreach ($data[self::CUSTOM_ATTRIBUTES] as $code => $value) {

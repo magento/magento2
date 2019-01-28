@@ -68,7 +68,7 @@ class UseConfigSettings extends Checkbox
             }
             $config['valueFromConfig'] = $keyInConfiguration;
         }
-        $this->setData('config', (array)$config);
+        $this->setData('config', (array) $config);
 
         parent::prepare();
     }

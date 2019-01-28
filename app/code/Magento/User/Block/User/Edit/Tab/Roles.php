@@ -158,7 +158,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
             foreach ($userRoles as $roleId) {
                 $jsonRoles[$roleId] = 0;
             }
-            return $this->_jsonEncoder->encode((object)$jsonRoles);
+            return $this->_jsonEncoder->encode((object) $jsonRoles);
         } else {
             return $userRoles;
         }

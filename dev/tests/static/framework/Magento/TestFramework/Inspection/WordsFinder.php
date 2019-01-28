@@ -164,7 +164,7 @@ class WordsFinder
         $words = [];
         $nodes = $configXml->xpath('//config/words/word');
         foreach ($nodes as $node) {
-            $words[] = (string)$node;
+            $words[] = (string) $node;
         }
         $words = array_filter($words);
 
@@ -199,10 +199,10 @@ class WordsFinder
             if ($component) {
                 $componentType = $component[0]->xpath('@type')[0];
                 $componentName = $component[0]->xpath('@name')[0];
-                $path = $this->componentRegistrar->getPath((string)$componentType, (string)$componentName)
-                    . '/' . (string)$path[0];
+                $path = $this->componentRegistrar->getPath((string) $componentType, (string) $componentName)
+                    . '/' . (string) $path[0];
             } else {
-                $path = $this->_baseDir . '/' . (string)$path[0];
+                $path = $this->_baseDir . '/' . (string) $path[0];
             }
 
             // Words
@@ -210,7 +210,7 @@ class WordsFinder
             $wordNodes = $node->xpath('word');
             if ($wordNodes) {
                 foreach ($wordNodes as $wordNode) {
-                    $words[] = (string)$wordNode;
+                    $words[] = (string) $wordNode;
                 }
             }
             $whitelist[$path] = $words;
@@ -219,7 +219,7 @@ class WordsFinder
             $excludes = [];
             if ($excludeNodes) {
                 foreach ($excludeNodes as $extractNode) {
-                    $excludes[] = (string)$extractNode;
+                    $excludes[] = (string) $extractNode;
                 }
             }
 

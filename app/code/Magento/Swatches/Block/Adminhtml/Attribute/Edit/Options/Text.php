@@ -33,8 +33,8 @@ class Text extends AbstractSwatch
 
         $data = [
             'attributesData' => $values,
-            'isSortable' => (int)(!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
-            'isReadOnly' => (int)$this->getReadOnly()
+            'isSortable' => (int) (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
+            'isReadOnly' => (int) $this->getReadOnly()
         ];
 
         return json_encode($data);

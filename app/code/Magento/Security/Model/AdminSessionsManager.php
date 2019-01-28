@@ -189,7 +189,7 @@ class AdminSessionsManager
      */
     public function getLogoutReasonMessageByStatus($statusCode)
     {
-        switch ((int)$statusCode) {
+        switch ((int) $statusCode) {
             case AdminSessionInfo::LOGGED_IN:
                 $reasonMessage = null;
                 break;
@@ -348,7 +348,7 @@ class AdminSessionsManager
         return (float) max(
             1,
             min(
-                4 * log((float)$this->securityConfig->getAdminSessionLifetime()),
+                4 * log((float) $this->securityConfig->getAdminSessionLifetime()),
                 $this->maxIntervalBetweenConsecutiveProlongs
             )
         );

@@ -134,7 +134,7 @@ class GroupManagementTest extends WebapiAbstract
                 $e->getMessage(),
                 "Exception does not contain expected message."
             );
-            $this->assertContains((string)$nonExistentStoreId, $e->getMessage());
+            $this->assertContains((string) $nonExistentStoreId, $e->getMessage());
         }
     }
 
@@ -223,7 +223,7 @@ class GroupManagementTest extends WebapiAbstract
                 $e->getMessage(),
                 "Exception does not contain expected message."
             );
-            $this->assertContains((string)$groupId, $e->getMessage());
+            $this->assertContains((string) $groupId, $e->getMessage());
         }
     }
 }

@@ -133,7 +133,7 @@ class Integration
                     'resource',
                     $this->aclRetriever->getAllowedResourcesByUser(
                         UserContextInterface::USER_TYPE_INTEGRATION,
-                        (int)$integration->getId()
+                        (int) $integration->getId()
                     )
                 );
             }
@@ -175,7 +175,7 @@ class Integration
     public function afterDelete(IntegrationServiceInterface $subject, array $integrationData)
     {
         //No check needed for integration data since it cannot be empty in the parent invocation - delete
-        $integrationId = (int)$integrationData[IntegrationModel::ID];
+        $integrationId = (int) $integrationData[IntegrationModel::ID];
         $this->integrationAuthorizationService->removePermissions($integrationId);
         return $integrationData;
     }

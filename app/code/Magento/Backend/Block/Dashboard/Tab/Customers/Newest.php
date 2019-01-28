@@ -89,8 +89,8 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
             ]
         );
 
-        $baseCurrencyCode = (string)$this->_storeManager->getStore(
-            (int)$this->getParam('store')
+        $baseCurrencyCode = (string) $this->_storeManager->getStore(
+            (int) $this->getParam('store')
         )->getBaseCurrencyCode();
 
         $this->addColumn(

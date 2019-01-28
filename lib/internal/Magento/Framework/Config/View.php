@@ -207,7 +207,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $scope = $scope ?: $this->_defaultScope;
         $result = [];
 
-        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+        $parents = (array) $this->_fileResolver->getParents($this->_fileName, $scope);
         // Sort parents desc
         krsort($parents);
 

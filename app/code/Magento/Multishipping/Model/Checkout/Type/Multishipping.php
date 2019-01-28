@@ -374,7 +374,7 @@ class Multishipping extends \Magento\Framework\DataObject
                 /**
                  * Require shipping rate recollect
                  */
-                $address->setCollectShippingRates((bool)$this->getCollectRatesFlag());
+                $address->setCollectShippingRates((bool) $this->getCollectRatesFlag());
 
                 if (count($address->getAllItems()) == 0) {
                     $address->isDeleted(true);
@@ -477,7 +477,7 @@ class Multishipping extends \Magento\Framework\DataObject
                 }
 
                 if (isset($itemsInfo[$_item->getId()]['qty'])) {
-                    $qty = (int)$itemsInfo[$_item->getId()]['qty'];
+                    $qty = (int) $itemsInfo[$_item->getId()]['qty'];
                     if ($qty) {
                         $_item->setQty($qty);
                         $quote->getBillingAddress()->addItem($_item);
@@ -506,7 +506,7 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     protected function _addShippingItem($quoteItemId, $data)
     {
-        $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
+        $qty = isset($data['qty']) ? (int) $data['qty'] : 1;
         //$qty       = $qty > 0 ? $qty : 1;
         $addressId = isset($data['address']) ? $data['address'] : false;
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
@@ -522,7 +522,7 @@ class Multishipping extends \Magento\Framework\DataObject
             if ($qty === 0) {
                 return $this;
             }
-            $quoteItem->setMultishippingQty((int)$quoteItem->getMultishippingQty() + $qty);
+            $quoteItem->setMultishippingQty((int) $quoteItem->getMultishippingQty() + $qty);
             $quoteItem->setQty($quoteItem->getMultishippingQty());
             try {
                 $address = $this->addressRepository->getById($addressId);
@@ -538,14 +538,14 @@ class Multishipping extends \Magento\Framework\DataObject
                 $quoteAddress->setCustomerAddressId($addressId);
                 $quoteAddressItem = $quoteAddress->getItemByQuoteItemId($quoteItemId);
                 if ($quoteAddressItem) {
-                    $quoteAddressItem->setQty((int)($quoteAddressItem->getQty() + $qty));
+                    $quoteAddressItem->setQty((int) ($quoteAddressItem->getQty() + $qty));
                 } else {
                     $quoteAddress->addItem($quoteItem, $qty);
                 }
                 /**
                  * Require shipping rate recollect
                  */
-                $quoteAddress->setCollectShippingRates((bool)$this->getCollectRatesFlag());
+                $quoteAddress->setCollectShippingRates((bool) $this->getCollectRatesFlag());
             }
         }
         return $this;
@@ -1013,7 +1013,7 @@ class Multishipping extends \Magento\Framework\DataObject
                     ->setValue($this->getCustomer()->getId())
                     ->setConditionType('eq')
                     ->create();
-                $addresses = (array)($this->addressRepository->getList(
+                $addresses = (array) ($this->addressRepository->getList(
                     $this->searchCriteriaBuilder->addFilters([$filter])->create()
                 )->getItems());
                 if ($addresses) {
@@ -1233,7 +1233,7 @@ class Multishipping extends \Magento\Framework\DataObject
         foreach ($addresses as $address) {
             foreach ($address->getAllItems() as $addressItem) {
                 if ($addressItem->getQuoteItemId() == $item->getQuoteItemId()) {
-                    return (int)$address->getId();
+                    return (int) $address->getId();
                 }
             }
         }

@@ -77,7 +77,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBunchSize()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_BUNCH_SIZE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

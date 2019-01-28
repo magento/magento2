@@ -397,7 +397,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         list($width, $height) = explode('x', strtolower($size), 2);
         foreach (['width', 'height'] as $wh) {
             ${$wh}
-                = (int)${$wh};
+                = (int) ${$wh};
             if (empty(${$wh})) {
                 ${$wh}
                     = null;
@@ -469,7 +469,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function isBaseFilePlaceholder()
     {
-        return (bool)$this->_isBaseFilePlaceholder;
+        return (bool) $this->_isBaseFilePlaceholder;
     }
 
     /**

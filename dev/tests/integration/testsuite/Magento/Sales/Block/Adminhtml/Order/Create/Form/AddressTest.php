@@ -70,7 +70,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testGetAddressCollection()
     {
         $website = $this->getWebsite('base');
-        $customer = $this->getCustomer('customer@example.com', (int)$website->getId());
+        $customer = $this->getCustomer('customer@example.com', (int) $website->getId());
         $addresses = $customer->getAddresses();
         $this->quoteSession->method('getCustomerId')
             ->willReturn($customer->getId());
@@ -88,7 +88,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testGetAddressCollectionJson()
     {
         $website = $this->getWebsite('test');
-        $customer = $this->getCustomer('customer.web@example.com', (int)$website->getId());
+        $customer = $this->getCustomer('customer.web@example.com', (int) $website->getId());
 
         $store = $this->getStore('fixture_second_store');
         $this->quoteSession->method('getStore')

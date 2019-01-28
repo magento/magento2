@@ -43,11 +43,11 @@ class CartItemRepositoryTest extends WebapiAbstract
         foreach ($quote->getAllItems() as $item) {
             $customOptionProcessor->processOptions($item);
             $data = [
-                'item_id' => (int)$item->getItemId(),
+                'item_id' => (int) $item->getItemId(),
                 'sku' => $item->getSku(),
                 'name' => $item->getName(),
-                'price' => (float)$item->getPrice(),
-                'qty' => (float)$item->getQty(),
+                'price' => (float) $item->getPrice(),
+                'qty' => (float) $item->getQty(),
                 'product_type' => $item->getProductType(),
                 'quote_id' => $item->getQuoteId(),
             ];

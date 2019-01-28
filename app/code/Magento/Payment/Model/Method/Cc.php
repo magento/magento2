@@ -198,7 +198,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         if ($configData === null) {
             return true;
         }
-        return (bool)$configData;
+        return (bool) $configData;
     }
 
     /**
@@ -233,8 +233,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = new \DateTime();
-        if (!$expYear || !$expMonth || (int)$date->format('Y') > $expYear
-            || (int)$date->format('Y') == $expYear && (int)$date->format('m') > $expMonth
+        if (!$expYear || !$expMonth || (int) $date->format('Y') > $expYear
+            || (int) $date->format('Y') == $expYear && (int) $date->format('m') > $expMonth
         ) {
             return false;
         }

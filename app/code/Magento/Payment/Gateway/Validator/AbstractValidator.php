@@ -39,7 +39,7 @@ abstract class AbstractValidator implements ValidatorInterface
     {
         return $this->resultInterfaceFactory->create(
             [
-                'isValid' => (bool)$isValid,
+                'isValid' => (bool) $isValid,
                 'failsDescription' => $fails,
                 'errorCodes' => $errorCodes
             ]

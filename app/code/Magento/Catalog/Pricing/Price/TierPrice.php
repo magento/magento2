@@ -80,7 +80,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         GroupManagementInterface $groupManagement,
         CustomerGroupRetrieverInterface $customerGroupRetriever = null
     ) {
-        $quantity = (float)$quantity ? $quantity : 1;
+        $quantity = (float) $quantity ? $quantity : 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;
@@ -114,7 +114,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                     $tierPrice = $prevPrice = $price['website_price'];
                     $prevQty = $price['price_qty'];
                     $priceGroup = $price['cust_group'];
-                    $this->value = (float)$tierPrice;
+                    $this->value = (float) $tierPrice;
                 }
             }
         }
@@ -250,11 +250,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     protected function canApplyTierPrice(array $currentTierPrice, $prevPriceGroup, $prevQty)
     {
-        $custGroupAllId = (int)$this->groupManagement->getAllCustomersGroup()->getId();
+        $custGroupAllId = (int) $this->groupManagement->getAllCustomersGroup()->getId();
         // Tier price can be applied, if:
         // tier price is for current customer group or is for all groups
-        if ((int)$currentTierPrice['cust_group'] !== $this->customerGroup
-            && (int)$currentTierPrice['cust_group'] !== $custGroupAllId
+        if ((int) $currentTierPrice['cust_group'] !== $this->customerGroup
+            && (int) $currentTierPrice['cust_group'] !== $custGroupAllId
         ) {
             return false;
         }

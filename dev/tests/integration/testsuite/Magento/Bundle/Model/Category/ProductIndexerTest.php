@@ -78,11 +78,11 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categoryThird->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
+            $this->assertTrue((bool) $this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
 
         $this->assertTrue(
-            (bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryThird->getParentId())
+            (bool) $this->productResource->canBeShowInCategory($bundleProduct, $categoryThird->getParentId())
         );
     }
 
@@ -122,11 +122,11 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySecond->getId(), $categoryFourth->getId()];
 
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
+            $this->assertTrue((bool) $this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
 
         $this->assertFalse(
-            (bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryThird->getId())
+            (bool) $this->productResource->canBeShowInCategory($bundleProduct, $categoryThird->getId())
         );
     }
 
@@ -153,10 +153,10 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
         $categories = [$categorySecond->getId(), $categoryFourth->getId()];
 
         foreach ($categories as $categoryId) {
-            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
+            $this->assertFalse((bool) $this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
         $this->assertTrue(
-            (bool)$this->productResource->canBeShowInCategory(
+            (bool) $this->productResource->canBeShowInCategory(
                 $bundleProduct,
                 self::DEFAULT_ROOT_CATEGORY
             )
@@ -206,11 +206,11 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
+            $this->assertTrue((bool) $this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
 
         $this->assertFalse(
-            (bool)$this->productResource->canBeShowInCategory($bundleProduct, $categorySecond->getId())
+            (bool) $this->productResource->canBeShowInCategory($bundleProduct, $categorySecond->getId())
         );
     }
 

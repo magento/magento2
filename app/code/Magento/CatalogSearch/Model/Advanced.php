@@ -191,10 +191,10 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 }
 
                 $value['from'] = (isset($value['from']) && is_numeric($value['from']))
-                    ? (float)$value['from'] / $rate
+                    ? (float) $value['from'] / $rate
                     : '';
                 $value['to'] = (isset($value['to']) && is_numeric($value['to']))
-                    ? (float)$value['to'] / $rate
+                    ? (float) $value['to'] / $rate
                     : '';
             }
 

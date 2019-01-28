@@ -78,7 +78,7 @@ class FraudHandler implements HandlerInterface
             [
                 Info::FRAUD_FILTERS => array_merge(
                     $fraudMessages,
-                    (array)$payment->getAdditionalInformation(Info::FRAUD_FILTERS)
+                    (array) $payment->getAdditionalInformation(Info::FRAUD_FILTERS)
                 )
             ],
             $payment
@@ -103,7 +103,7 @@ class FraudHandler implements HandlerInterface
         try {
             $rulesXml = new \SimpleXMLElement($rulesString);
             foreach ($rulesXml->{'rule'} as $rule) {
-                $rules[(string)$rule->{'ruleDescription'}] = (string)$rule->{'triggeredMessage'};
+                $rules[(string) $rule->{'ruleDescription'}] = (string) $rule->{'triggeredMessage'};
             }
         } catch (\Exception $e) {
         } finally {

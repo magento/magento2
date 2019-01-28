@@ -214,7 +214,7 @@ class Adapter implements MethodInterface
      */
     public function canUseInternal()
     {
-        return (bool)$this->getConfiguredValue('can_use_internal');
+        return (bool) $this->getConfiguredValue('can_use_internal');
     }
 
     /**
@@ -222,7 +222,7 @@ class Adapter implements MethodInterface
      */
     public function canUseCheckout()
     {
-        return (bool)$this->getConfiguredValue('can_use_checkout');
+        return (bool) $this->getConfiguredValue('can_use_checkout');
     }
 
     /**
@@ -230,7 +230,7 @@ class Adapter implements MethodInterface
      */
     public function canEdit()
     {
-        return (bool)$this->getConfiguredValue('can_edit');
+        return (bool) $this->getConfiguredValue('can_edit');
     }
 
     /**
@@ -254,7 +254,7 @@ class Adapter implements MethodInterface
      */
     public function isGateway()
     {
-        return (bool)$this->getConfiguredValue('is_gateway');
+        return (bool) $this->getConfiguredValue('is_gateway');
     }
 
     /**
@@ -262,7 +262,7 @@ class Adapter implements MethodInterface
      */
     public function isOffline()
     {
-        return (bool)$this->getConfiguredValue('is_offline');
+        return (bool) $this->getConfiguredValue('is_offline');
     }
 
     /**
@@ -270,7 +270,7 @@ class Adapter implements MethodInterface
      */
     public function isInitializeNeeded()
     {
-        return (bool)(int)$this->getConfiguredValue('can_initialize');
+        return (bool) (int) $this->getConfiguredValue('can_initialize');
     }
 
     /**
@@ -318,7 +318,7 @@ class Adapter implements MethodInterface
      */
     public function isActive($storeId = null)
     {
-        return (bool)$this->getConfiguredValue('active', $storeId);
+        return (bool) $this->getConfiguredValue('active', $storeId);
     }
 
     /**
@@ -359,7 +359,7 @@ class Adapter implements MethodInterface
      */
     private function canPerformCommand($commandCode)
     {
-        return (bool)$this->getConfiguredValue('can_' . $commandCode);
+        return (bool) $this->getConfiguredValue('can_' . $commandCode);
     }
 
     /**
@@ -568,7 +568,7 @@ class Adapter implements MethodInterface
      */
     public function setStore($storeId)
     {
-        $this->storeId = (int)$storeId;
+        $this->storeId = (int) $storeId;
     }
 
     /**

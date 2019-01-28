@@ -524,7 +524,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      */
     public function getDefaultMetaData($result)
     {
-        $result['parent']['default'] = (int)$this->request->getParam('parent');
+        $result['parent']['default'] = (int) $this->request->getParam('parent');
         $result['use_config.available_sort_by']['default'] = true;
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;

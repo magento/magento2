@@ -40,7 +40,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
     {
         try {
             $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
-            $isReauthorize = (bool)$this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
+            $isReauthorize = (bool) $this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
             $integration = $this->_integrationService->get($integrationId);
             if ($isReauthorize) {
                 /** Remove existing token associated with consumer before issuing a new one. */

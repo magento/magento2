@@ -100,7 +100,7 @@ class ProductCategoryCondition implements CustomConditionInterface
             }
 
             // This is the simplest way to check if category is root
-            if ((int)$category->getLevel() === $this->rootCategoryLevel) {
+            if ((int) $category->getLevel() === $this->rootCategoryLevel) {
                 $childCategoryIds[] = $category->getAllChildren(true);
             }
         }

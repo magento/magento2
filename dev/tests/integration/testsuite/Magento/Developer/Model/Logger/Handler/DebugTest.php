@@ -134,7 +134,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $this->outputMock->expects($this->once())
             ->method('writeln')
             ->with('<info>Value was saved in app/etc/env.php and locked.</info>');
-        $this->assertFalse((bool)$this->configSetCommand->run($this->inputMock, $this->outputMock));
+        $this->assertFalse((bool) $this->configSetCommand->run($this->inputMock, $this->outputMock));
     }
 
     public function testDebugInProductionMode()
@@ -144,7 +144,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $this->mode->enableProductionModeMinimal();
         $this->logger->debug($message);
         $this->assertFileNotExists($this->getDebuggerLogPath());
-        $this->assertFalse((bool)$this->appConfig->getValue('dev/debug/debug_logging'));
+        $this->assertFalse((bool) $this->appConfig->getValue('dev/debug/debug_logging'));
 
         $this->enableDebugging();
         $this->logger->debug($message);

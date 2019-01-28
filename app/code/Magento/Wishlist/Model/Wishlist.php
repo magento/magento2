@@ -197,7 +197,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         if ($customerId === null) {
             return $this;
         }
-        $customerId = (int)$customerId;
+        $customerId = (int) $customerId;
         $customerIdFieldName = $this->_getResource()->getCustomerIdFieldName();
         $this->_getResource()->load($this, $customerId, $customerIdFieldName);
         if (!$this->getId() && $create) {
@@ -403,7 +403,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             // Maybe force some store by wishlist internal properties
             $storeId = $product->hasWishlistStoreId() ? $product->getWishlistStoreId() : $product->getStoreId();
         } else {
-            $productId = (int)$product;
+            $productId = (int) $product;
             if (isset($buyRequest) && $buyRequest->getStoreId()) {
                 $storeId = $buyRequest->getStoreId();
             } else {
@@ -511,7 +511,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     {
         $data = [];
         $data[$this->_getResource()->getCustomerIdFieldName()] = $this->getCustomerId();
-        $data['shared'] = (int)$this->getShared();
+        $data['shared'] = (int) $this->getShared();
         $data['sharing_code'] = $this->getSharingCode();
         return $data;
     }
@@ -546,7 +546,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function setSharedStoreIds($storeIds)
     {
-        $this->_storeIds = (array)$storeIds;
+        $this->_storeIds = (array) $storeIds;
         return $this;
     }
 
@@ -642,7 +642,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             $item = $itemId;
             $itemId = $item->getId();
         } else {
-            $item = $this->getItem((int)$itemId);
+            $item = $this->getItem((int) $itemId);
         }
         if (!$item) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t specify a wish list item.'));

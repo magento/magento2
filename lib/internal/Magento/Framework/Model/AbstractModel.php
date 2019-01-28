@@ -345,7 +345,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {
-        if ($key === (array)$key) {
+        if ($key === (array) $key) {
             if ($this->_data !== $key) {
                 $this->_hasDataChanges = true;
             }
@@ -374,7 +374,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
                 $this->_hasDataChanges = true;
                 unset($this->_data[$key]);
             }
-        } elseif ($key === (array)$key) {
+        } elseif ($key === (array) $key) {
             foreach ($key as $element) {
                 $this->unsetData($element);
             }
@@ -390,7 +390,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function setDataChanges($value)
     {
-        $this->_hasDataChanges = (bool)$value;
+        $this->_hasDataChanges = (bool) $value;
         return $this;
     }
 
@@ -683,7 +683,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if ($this->_isObjectNew !== null) {
             return $this->_isObjectNew;
         }
-        return !(bool)$this->getId();
+        return !(bool) $this->getId();
     }
 
     /**

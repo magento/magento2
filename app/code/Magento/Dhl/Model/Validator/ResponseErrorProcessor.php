@@ -27,8 +27,8 @@ class ResponseErrorProcessor
 
         if ($isShippingLabel) {
             foreach ($nodeCondition as $condition) {
-                $code = (string)$condition->ConditionCode;
-                $data = (string)$condition->ConditionData;
+                $code = (string) $condition->ConditionCode;
+                $data = (string) $condition->ConditionData;
                 if (!empty($code) && !empty($data)) {
                     break;
                 }
@@ -36,8 +36,8 @@ class ResponseErrorProcessor
             return __('Error #%1 : %2', trim($code), trim($data));
         }
 
-        $code = (string)$nodeCondition->ConditionCode ?: 0;
-        $data = (string)$nodeCondition->ConditionData ?: '';
+        $code = (string) $nodeCondition->ConditionCode ?: 0;
+        $data = (string) $nodeCondition->ConditionData ?: '';
         return __('Error #%1 : %2', trim($code), trim($data));
     }
 }

@@ -165,7 +165,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function deleteRecordsOlderThen($timestamp)
     {
-        $this->getResource()->deleteRecordsOlderThen((int)$timestamp);
+        $this->getResource()->deleteRecordsOlderThen((int) $timestamp);
 
         return $this;
     }

@@ -157,7 +157,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function getCgiUrl()
     {
-        return (bool)$this->getMethodConfigData('sandbox_flag')
+        return (bool) $this->getMethodConfigData('sandbox_flag')
             ? $this->getMethodConfigData('cgi_url_test_mode')
             : $this->getMethodConfigData('cgi_url');
     }

@@ -43,7 +43,7 @@ class AggregationFactory
                 \Magento\Framework\Search\Response\Bucket::class,
                 [
                     'name' => $rawBucketName,
-                    'values' => $this->prepareValues((array)$rawBucket)
+                    'values' => $this->prepareValues((array) $rawBucket)
                 ]
             );
         }

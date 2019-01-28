@@ -109,7 +109,7 @@ class SearchResultFactory
             $attribute->setAttributeCode($key);
             if (is_bool($value)) {
                 // for proper work of form and grid (for example for Yes/No properties)
-                $value = (string)(int)$value;
+                $value = (string) (int) $value;
             }
             $attribute->setValue($value);
             $attributes[$key] = $attribute;

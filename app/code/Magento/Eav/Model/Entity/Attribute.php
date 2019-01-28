@@ -260,7 +260,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         }
 
         $defaultValue = $this->getDefaultValue();
-        $hasDefaultValue = (string)$defaultValue != '';
+        $hasDefaultValue = (string) $defaultValue != '';
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
             $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);

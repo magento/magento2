@@ -874,7 +874,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             'oauth_signature' => '',
             'oauth_signature_method' => \Magento\Framework\Oauth\OauthInterface::SIGNATURE_SHA1,
             'oauth_nonce' => '',
-            'oauth_timestamp' => (string)time(),
+            'oauth_timestamp' => (string) time(),
             'oauth_token' => $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN),
             'oauth_verifier' => $this->_oauthVerifier,
         ];

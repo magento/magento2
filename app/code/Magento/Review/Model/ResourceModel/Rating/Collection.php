@@ -217,9 +217,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         )->group(
             'rating_option_vote.rating_id'
         );
-        $bind = [':store_id' => (int)$storeId, ':pk_value' => $entityPkValue];
+        $bind = [':store_id' => (int) $storeId, ':pk_value' => $entityPkValue];
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $bind[':rst_store_id'] = (int)$storeId;
+            $bind[':rst_store_id'] = (int) $storeId;
         }
 
         $data = $this->getConnection()->fetchAll($select, $bind);
@@ -245,7 +245,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $ratingCodeCond = $connection->getIfNullSql('title.value', 'main_table.rating_code');
         $this->getSelect()->joinLeft(
             ['title' => $this->getTable('rating_title')],
-            $connection->quoteInto('main_table.rating_id=title.rating_id AND title.store_id = ?', (int)$storeId),
+            $connection->quoteInto('main_table.rating_id=title.rating_id AND title.store_id = ?', (int) $storeId),
             ['rating_code' => $ratingCodeCond]
         );
         return $this;

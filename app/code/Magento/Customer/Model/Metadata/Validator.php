@@ -65,7 +65,7 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
             ) ? $this->_entityData[$attributeCode] : $data[$attributeCode];
             $result = $dataModel->validateValue($value);
             if (true !== $result) {
-                $this->_addErrorMessages($attributeCode, (array)$result);
+                $this->_addErrorMessages($attributeCode, (array) $result);
             }
         }
         return count($this->_messages) == 0;

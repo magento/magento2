@@ -309,12 +309,12 @@ class Select extends \Zend_Db_Select
         if ($count === null) {
             $this->reset(self::LIMIT_COUNT);
         } else {
-            $this->_parts[self::LIMIT_COUNT] = (int)$count;
+            $this->_parts[self::LIMIT_COUNT] = (int) $count;
         }
         if ($offset === null) {
             $this->reset(self::LIMIT_OFFSET);
         } else {
-            $this->_parts[self::LIMIT_OFFSET] = (int)$offset;
+            $this->_parts[self::LIMIT_OFFSET] = (int) $offset;
         }
         return $this;
     }
@@ -393,7 +393,7 @@ class Select extends \Zend_Db_Select
      */
     public function useStraightJoin($flag = true)
     {
-        $this->_parts[self::STRAIGHT_JOIN] = (bool)$flag;
+        $this->_parts[self::STRAIGHT_JOIN] = (bool) $flag;
         return $this;
     }
 

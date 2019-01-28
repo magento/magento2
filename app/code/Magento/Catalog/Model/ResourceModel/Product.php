@@ -253,7 +253,7 @@ class Product extends AbstractResource
 
         $select = $connection->select()->from($this->getEntityTable(), 'entity_id')->where('sku = :sku');
 
-        $bind = [':sku' => (string)$sku];
+        $bind = [':sku' => (string) $sku];
 
         return $connection->fetchOne($select, $bind);
     }
@@ -358,7 +358,7 @@ class Product extends AbstractResource
             null
         )->addFieldToFilter(
             'product_id',
-            (int)$product->getEntityId()
+            (int) $product->getEntityId()
         );
         return $collection;
     }
@@ -373,7 +373,7 @@ class Product extends AbstractResource
     {
         // is_parent=1 ensures that we'll get only category IDs those are direct parents of the product, instead of
         // fetching all parent IDs, including those are higher on the tree
-        $entityId = (int)$object->getEntityId();
+        $entityId = (int) $object->getEntityId();
         if (!isset($this->availableCategoryIdsCache[$entityId])) {
             foreach ($this->_storeManager->getStores() as $store) {
                 $unionTables[] = $this->getAvailableInCategoriesSelect(
@@ -435,10 +435,10 @@ class Product extends AbstractResource
             'product_id'
         )->where(
             'product_id = ?',
-            (int)$product->getEntityId()
+            (int) $product->getEntityId()
         )->where(
             'category_id = ?',
-            (int)$categoryId
+            (int) $categoryId
         );
 
         return $this->getConnection()->fetchOne($select);
@@ -588,7 +588,7 @@ class Product extends AbstractResource
         $connection = $this->getConnection();
         $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)');
-        $result = (int)$connection->fetchOne($select);
+        $result = (int) $connection->fetchOne($select);
         return $result;
     }
 

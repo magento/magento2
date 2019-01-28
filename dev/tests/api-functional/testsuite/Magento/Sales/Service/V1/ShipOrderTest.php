@@ -48,7 +48,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             'orderId' => $existingOrder->getId(),
         ];
 
-        $shipmentId = (int)$this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
+        $shipmentId = (int) $this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
         $this->assertNotEmpty($shipmentId);
 
         try {
@@ -67,8 +67,8 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         }
 
         $this->assertEquals(
-            (int)$shipment->getTotalQty(),
-            (int)$orderedQty,
+            (int) $shipment->getTotalQty(),
+            (int) $orderedQty,
             'Failed asserting that quantity of ordered and shipped items is equal'
         );
         $this->assertEquals(

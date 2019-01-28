@@ -24,16 +24,16 @@ class Xml
             if (isset($value->{$key})) {
                 $i = 0;
                 foreach ($value->{$key} as $v) {
-                    $array[$key][$i++] = (string)$v;
+                    $array[$key][$i++] = (string) $v;
                 }
             } else {
                 // try to transform it into string value, trimming spaces between elements
-                $array[$key] = trim((string)$value);
+                $array[$key] = trim((string) $value);
                 if (empty($array[$key]) && !empty($value)) {
                     $array[$key] = $this->xmlToAssoc($value);
                 } else {
                     // untrim strings values
-                    $array[$key] = (string)$value;
+                    $array[$key] = (string) $value;
                 }
             }
         }

@@ -90,7 +90,7 @@ class UpdateChildProductStep implements TestStepInterface
         $items = explode(',', $this->productUpdate['optionNumber']);
 
         foreach ($items as $itemIndex) {
-            $index = (int)$itemIndex - 1;
+            $index = (int) $itemIndex - 1;
             $optionKey = 'option_key_' . $index;
             $matrixIndex = $this->attributeKey . ':' . $optionKey;
             $sku = $this->product->getConfigurableAttributesData()['matrix'][$matrixIndex]['sku'];

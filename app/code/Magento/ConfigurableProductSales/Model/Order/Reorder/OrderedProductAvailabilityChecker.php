@@ -105,7 +105,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
                     $attributeValue
                 );
         }
-        return (bool)$connection->fetchCol($select);
+        return (bool) $connection->fetchCol($select);
     }
 
     /**

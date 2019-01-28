@@ -173,7 +173,7 @@ class StockItemRepository implements StockItemRepositoryInterface
                 }
                 $stockItem->setStockStatusChangedAuto(0);
                 if ($stockItem->hasStockStatusChangedAutomaticallyFlag()) {
-                    $stockItem->setStockStatusChangedAuto((int)$stockItem->getStockStatusChangedAutomaticallyFlag());
+                    $stockItem->setStockStatusChangedAuto((int) $stockItem->getStockStatusChangedAutomaticallyFlag());
                 }
             } else {
                 $stockItem->setQty(0);

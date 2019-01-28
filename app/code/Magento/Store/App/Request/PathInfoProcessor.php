@@ -46,7 +46,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
         //can store code be used in url
-        if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
+        if ((bool) $this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
             $storeCode = $this->storePathInfoValidator->getValidStoreCode($request, $pathInfo);
             if (!empty($storeCode)) {
                 if (!$request->isDirectAccessFrontendName($storeCode)) {

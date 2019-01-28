@@ -254,7 +254,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
 
-        $opacity = (float)number_format($opacity / 100, 1);
+        $opacity = (float) number_format($opacity / 100, 1);
         $watermark = new \Imagick($imagePath);
 
         if ($this->getWatermarkWidth() &&

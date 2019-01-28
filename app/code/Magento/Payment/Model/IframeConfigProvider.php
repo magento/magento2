@@ -146,7 +146,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      */
     protected function getExpireDateYearLength()
     {
-         return (int)$this->getMethodConfigData('cc_year_length') ?: self::DEFAULT_YEAR_LENGTH;
+         return (int) $this->getMethodConfigData('cc_year_length') ?: self::DEFAULT_YEAR_LENGTH;
     }
 
     /**
@@ -217,7 +217,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      */
     protected function getCgiUrl()
     {
-        return (bool)$this->getMethodConfigData('sandbox_flag')
+        return (bool) $this->getMethodConfigData('sandbox_flag')
             ? $this->getMethodConfigData('cgi_url_test_mode')
             : $this->getMethodConfigData('cgi_url');
     }

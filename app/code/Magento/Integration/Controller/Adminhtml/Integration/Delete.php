@@ -22,7 +22,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration imple
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
+        $integrationId = (int) $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         try {
             if ($integrationId) {
                 $integrationData = $this->_integrationService->get($integrationId);

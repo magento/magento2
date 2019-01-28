@@ -40,7 +40,7 @@ $taxAmount = $block->getTotal()->getValue();
                     <td class="admin__total-mark" style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
                         <?= $block->escapeHtml($rate['title']) ?>
                         <?php if (!is_null($rate['percent'])): ?>
-                            (<?= (float)$rate['percent'] ?>%)
+                            (<?= (float) $rate['percent'] ?>%)
                         <?php endif; ?>
                         <br />
                     </td>

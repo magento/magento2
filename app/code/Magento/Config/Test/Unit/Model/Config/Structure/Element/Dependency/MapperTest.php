@@ -105,7 +105,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             $field = $this->_getField(
                 false,
                 $dependentPath,
-                'Magento_Backend_Model_Config_Structure_Element_Field_' . (string)$isValueSatisfy . $i
+                'Magento_Backend_Model_Config_Structure_Element_Field_' . (string) $isValueSatisfy . $i
             );
             $this->_configStructureMock->expects(
                 $this->at($i)
@@ -120,7 +120,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 $isValueSatisfy,
                 false,
                 $data['id'],
-                'Magento_Backend_Model_Config_Structure_Element_Dependency_Field_' . (string)$isValueSatisfy . $i
+                'Magento_Backend_Model_Config_Structure_Element_Dependency_Field_' . (string) $isValueSatisfy . $i
             );
             $this->_fieldFactoryMock->expects(
                 $this->at($i)
@@ -180,7 +180,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 $this->returnValue($field)
             );
             $dependencyField = $this->_getDependencyField(
-                (bool)$i,
+                (bool) $i,
                 true,
                 $data['id'],
                 'Magento_Backend_Model_Config_Structure_Element_Dependency_Field_visible_' . $i

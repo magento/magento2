@@ -2495,7 +2495,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $cDefault = $options['DEFAULT'];
         }
         if (array_key_exists('NULLABLE', $options)) {
-            $cNullable = (bool)$options['NULLABLE'];
+            $cNullable = (bool) $options['NULLABLE'];
         }
         if (!empty($options['IDENTITY']) || !empty($options['AUTO_INCREMENT'])) {
             $cIdentity = true;
@@ -2985,7 +2985,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $query = sprintf('(%s)', implode(' OR ', $queries));
             }
         } else {
-            $query = $this->_prepareQuotedSqlCondition($conditionKeyMap['eq'], (string)$condition, $fieldName);
+            $query = $this->_prepareQuotedSqlCondition($conditionKeyMap['eq'], (string) $condition, $fieldName);
         }
 
         return $query;
@@ -3059,11 +3059,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         switch ($column['DATA_TYPE']) {
             case 'smallint':
             case 'int':
-                $value = (int)$value;
+                $value = (int) $value;
                 break;
             case 'bigint':
                 if (!is_integer($value)) {
-                    $value = sprintf('%.0f', (float)$value);
+                    $value = sprintf('%.0f', (float) $value);
                 }
                 break;
 
@@ -3077,11 +3077,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     $precision = $column['PRECISION'];
                 }
                 $format = sprintf('%%%d.%dF', $precision - $scale, $scale);
-                $value  = (float)sprintf($format, $value);
+                $value  = (float) sprintf($format, $value);
                 break;
 
             case 'float':
-                $value  = (float)sprintf('%F', $value);
+                $value  = (float) sprintf('%F', $value);
                 break;
 
             case 'date':
@@ -3096,7 +3096,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             case 'mediumtext':
             case 'text':
             case 'longtext':
-                $value  = (string)$value;
+                $value  = (string) $value;
                 if ($column['NULLABLE'] && $value == '') {
                     $value = null;
                 }
@@ -3731,7 +3731,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _prepareInsertData($row, &$bind)
     {
-        $row = (array)$row;
+        $row = (array) $row;
         $line = [];
         foreach ($row as $value) {
             if ($value instanceof \Zend_Db_Expr) {
@@ -3881,13 +3881,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         switch ($last) {
             case 'k':
-                $size = (int)$size * 1024;
+                $size = (int) $size * 1024;
                 break;
             case 'm':
-                $size = (int)$size * 1024 * 1024;
+                $size = (int) $size * 1024 * 1024;
                 break;
             case 'g':
-                $size = (int)$size * 1024 * 1024 * 1024;
+                $size = (int) $size * 1024 * 1024 * 1024;
                 break;
         }
 
@@ -3898,7 +3898,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             return Table::MAX_TEXT_SIZE;
         }
 
-        return (int)$size;
+        return (int) $size;
     }
 
     /**
@@ -3925,7 +3925,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         if (!$trigger->getStatements()) {
             throw new \Zend_Db_Exception(
-                (string)new \Magento\Framework\Phrase(
+                (string) new \Magento\Framework\Phrase(
                     'Trigger %1 has not statements available',
                     [$trigger->getName()]
                 )
@@ -3957,7 +3957,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function dropTrigger($triggerName, $schemaName = null)
     {
         if (empty($triggerName)) {
-            throw new \InvalidArgumentException((string)new \Magento\Framework\Phrase('Trigger name is not defined'));
+            throw new \InvalidArgumentException((string) new \Magento\Framework\Phrase('Trigger name is not defined'));
         }
 
         $triggerName = ($schemaName ? $schemaName . '.' : '') . $triggerName;

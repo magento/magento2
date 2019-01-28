@@ -78,7 +78,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
                 $customer->setStoreId($storeId);
                 $isSubscribedState = $customer->getExtensionAttributes()
                     ->getIsSubscribed();
-                $isSubscribedParam = (bool)$this->getRequest()
+                $isSubscribedParam = (bool) $this->getRequest()
                     ->getParam('is_subscribed', false);
                 if ($isSubscribedParam !== $isSubscribedState) {
                     $this->customerRepository->save($customer);

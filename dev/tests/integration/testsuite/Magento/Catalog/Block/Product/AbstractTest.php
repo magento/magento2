@@ -95,8 +95,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     public function testGetAddToWishlistParams()
     {
         $json = $this->block->getAddToWishlistParams($this->product);
-        $params = (array)json_decode($json);
-        $data = (array)$params['data'];
+        $params = (array) json_decode($json);
+        $data = (array) $params['data'];
         $this->assertEquals($this->product->getId(), $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith(

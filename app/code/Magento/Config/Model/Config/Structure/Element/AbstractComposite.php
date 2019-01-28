@@ -59,7 +59,7 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
     public function hasChildren()
     {
         foreach ($this->getChildren() as $child) {
-            return (bool)$child;
+            return (bool) $child;
         }
         return false;
     }

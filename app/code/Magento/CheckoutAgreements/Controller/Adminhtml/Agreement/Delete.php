@@ -40,7 +40,7 @@ class Delete extends Agreement implements HttpPostActionInterface
      */
     public function execute()
     {
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $agreement = $this->agreementRepository->get($id);
         if (!$agreement->getAgreementId()) {
             $this->messageManager->addError(__('This condition no longer exists.'));

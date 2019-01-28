@@ -60,8 +60,8 @@ class Validator extends \Zend_Validate_InArray
      */
     public function addInputType($type)
     {
-        if (!in_array((string)$type, $this->_haystack, true)) {
-            $this->_haystack[] = (string)$type;
+        if (!in_array((string) $type, $this->_haystack, true)) {
+            $this->_haystack[] = (string) $type;
         }
         return $this;
     }

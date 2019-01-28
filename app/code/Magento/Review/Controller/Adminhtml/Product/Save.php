@@ -60,7 +60,7 @@ class Save extends ProductController implements HttpPostActionInterface
                 }
             }
 
-            $nextId = (int)$this->getRequest()->getParam('next_item');
+            $nextId = (int) $this->getRequest()->getParam('next_item');
             if ($nextId) {
                 $resultRedirect->setPath('review/*/edit', ['id' => $nextId]);
             } elseif ($this->getRequest()->getParam('ret') == 'pending') {

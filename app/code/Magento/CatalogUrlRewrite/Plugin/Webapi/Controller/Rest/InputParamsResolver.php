@@ -52,7 +52,7 @@ class InputParamsResolver
                 if ($attribute['attribute_code'] === 'save_rewrites_history') {
                     foreach ($result as $resultItem) {
                         if ($resultItem instanceof \Magento\Catalog\Model\Product) {
-                            $resultItem->setData('save_rewrites_history', (bool)$attribute['value']);
+                            $resultItem->setData('save_rewrites_history', (bool) $attribute['value']);
                             break 2;
                         }
                     }

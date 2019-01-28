@@ -144,7 +144,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
                 $this->getRequestUri(),
                 $this->getBaseUrl()
             );
-            $this->originalPathInfo = (string)$this->pathInfoProcessor->process($this, $originalPathInfoFromRequest);
+            $this->originalPathInfo = (string) $this->pathInfoProcessor->process($this, $originalPathInfoFromRequest);
             $this->requestString = $this->originalPathInfo
                 . $this->pathInfoService->getQueryString($this->getRequestUri());
         }
@@ -174,7 +174,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      */
     public function setPathInfo($pathInfo = null)
     {
-        $this->pathInfo = (string)$pathInfo;
+        $this->pathInfo = (string) $pathInfo;
         return $this;
     }
 

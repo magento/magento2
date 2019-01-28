@@ -207,7 +207,7 @@ class Storage extends AbstractModel
     public function synchronize($storage)
     {
         if (is_array($storage) && isset($storage['type'])) {
-            $storageDest = (int)$storage['type'];
+            $storageDest = (int) $storage['type'];
             $connection = isset($storage['connection']) ? $storage['connection'] : null;
             $helper = $this->_coreFileStorage;
 
@@ -232,7 +232,7 @@ class Storage extends AbstractModel
                 'source' => $sourceModel->getStorageName(),
                 'destination' => $destinationModel->getStorageName(),
                 'destination_storage_type' => $storageDest,
-                'destination_connection_name' => (string)$destinationModel->getConnectionName(),
+                'destination_connection_name' => (string) $destinationModel->getConnectionName(),
                 'has_errors' => false,
                 'timeout_reached' => false,
             ];

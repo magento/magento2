@@ -56,8 +56,8 @@ class CustomerSetup extends EavSetup
      */
     public function installCustomerForms()
     {
-        $customer = (int)parent::getEntityTypeId('customer');
-        $customerAddress = (int)parent::getEntityTypeId('customer_address');
+        $customer = (int) parent::getEntityTypeId('customer');
+        $customerAddress = (int) parent::getEntityTypeId('customer_address');
 
         $attributeIds = [];
         $select = $this->getSetup()->getConnection()->select()->from(

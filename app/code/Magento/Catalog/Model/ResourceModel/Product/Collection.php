@@ -1110,7 +1110,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['cpa' => $attribute->getBackend()->getTable()],
                 'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
                 ['store_id', 'value']
-            )->where('attribute_id = ?', (int)$attribute->getId());
+            )->where('attribute_id = ?', (int) $attribute->getId());
 
         $data = $this->getConnection()->fetchAll($select);
         $res = [];
@@ -1170,10 +1170,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
         $select->where($this->getPriceExpression($select) . ' IS NOT NULL');
         $row = $this->getConnection()->fetchRow($select, $this->_bindParams, \Zend_Db::FETCH_NUM);
-        $this->_pricesCount = (int)$row[0];
-        $this->_maxPrice = (float)$row[1];
-        $this->_minPrice = (float)$row[2];
-        $this->_priceStandardDeviation = (float)$row[3];
+        $this->_pricesCount = (int) $row[0];
+        $this->_maxPrice = (float) $row[1];
+        $this->_minPrice = (float) $row[2];
+        $this->_priceStandardDeviation = (float) $row[3];
 
         return $this;
     }
@@ -1911,9 +1911,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $filters = $this->_productLimitationFilters;
         if (!$filters->isUsingPriceIndex() ||
             !isset($filters['website_id']) ||
-            (string)$filters['website_id'] === '' ||
+            (string) $filters['website_id'] === '' ||
             !isset($filters['customer_group_id']) ||
-            (string)$filters['customer_group_id'] === ''
+            (string) $filters['customer_group_id'] === ''
         ) {
             return $this;
         }
@@ -1956,11 +1956,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                     [
                         $this->dimensionFactory->create(
                             CustomerGroupDimensionProvider::DIMENSION_NAME,
-                            (string)$filters['customer_group_id']
+                            (string) $filters['customer_group_id']
                         ),
                         $this->dimensionFactory->create(
                             WebsiteDimensionProvider::DIMENSION_NAME,
-                            (string)$filters['website_id']
+                            (string) $filters['website_id']
                         )
                     ]
                 )

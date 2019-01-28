@@ -32,7 +32,7 @@ class BeforeEntitySave implements ObserverInterface
             }
             $entity->validateBeforeSave();
             $entity->beforeSave();
-            $entity->setParentId((int)$entity->getParentId());
+            $entity->setParentId((int) $entity->getParentId());
             $entity->getResource()->beforeSave($entity);
         }
     }

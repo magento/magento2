@@ -109,7 +109,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCategoryChangefreq($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_CATEGORY_CHANGEFREQ,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -126,7 +126,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProductChangefreq($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_CHANGEFREQ,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -143,7 +143,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPageChangefreq($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PAGE_CHANGEFREQ,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -160,7 +160,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCategoryPriority($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_CATEGORY_PRIORITY,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -177,7 +177,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProductPriority($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_PRIORITY,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -194,7 +194,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPagePriority($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PAGE_PRIORITY,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -228,7 +228,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProductImageIncludePolicy($storeId)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_IMAGES_INCLUDE,
             ScopeInterface::SCOPE_STORE,
             $storeId

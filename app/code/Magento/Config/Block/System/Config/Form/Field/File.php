@@ -33,7 +33,7 @@ class File extends \Magento\Framework\Data\Form\Element\File
     protected function _getDeleteCheckbox()
     {
         $html = '';
-        if ((string)$this->getValue()) {
+        if ((string) $this->getValue()) {
             $label = __('Delete File');
             $html .= '<div>' . $this->getValue() . ' ';
             $html .= '<input type="checkbox" name="' .

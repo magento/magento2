@@ -160,7 +160,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     public function setIsComposite($flag)
     {
-        $this->_isComposite = (bool)$flag;
+        $this->_isComposite = (bool) $flag;
         return $this;
     }
 
@@ -816,7 +816,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'type_id=?',
                 $this->getTypeId()
             );
-            $this->hasEntity = (int)$reader->fetchOne($select) > 0;
+            $this->hasEntity = (int) $reader->fetchOne($select) > 0;
         }
 
         return $this->hasEntity;

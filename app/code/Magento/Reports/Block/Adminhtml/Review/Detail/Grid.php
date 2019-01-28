@@ -49,7 +49,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_reviewsFactory->create()->addProductFilter((int)$this->getRequest()->getParam('id'));
+        $collection = $this->_reviewsFactory->create()->addProductFilter((int) $this->getRequest()->getParam('id'));
 
         $this->setCollection($collection);
 

@@ -119,7 +119,7 @@ class DbStorage extends AbstractStorage
 
                 // If request path matches the DB value or it's redirect - we can return result from DB
                 $canReturnResultFromDb = ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath
-                    || in_array((int)$resultFromDb[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true));
+                    || in_array((int) $resultFromDb[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true));
 
                 // Otherwise return 301 redirect to request path from DB results
                 $result = $canReturnResultFromDb ? $resultFromDb : [
@@ -183,7 +183,7 @@ class DbStorage extends AbstractStorage
         $checkOldUrlsSelect = clone $oldUrlsSelect;
         $checkOldUrlsSelect->reset(Select::COLUMNS);
         $checkOldUrlsSelect->columns('count(*)');
-        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+        $hasOldUrls = (bool) $this->connection->fetchOne($checkOldUrlsSelect);
 
         if ($hasOldUrls) {
             $this->connection->query(

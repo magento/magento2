@@ -432,7 +432,7 @@ class Cart extends DataObject implements CartInterface
 
         if (!empty($productIds)) {
             foreach ($productIds as $productId) {
-                $productId = (int)$productId;
+                $productId = (int) $productId;
                 if (!$productId) {
                     continue;
                 }
@@ -474,7 +474,7 @@ class Cart extends DataObject implements CartInterface
             if (!isset($itemInfo['qty'])) {
                 continue;
             }
-            $qty = (float)$itemInfo['qty'];
+            $qty = (float) $itemInfo['qty'];
             if ($qty <= 0) {
                 continue;
             }
@@ -528,7 +528,7 @@ class Cart extends DataObject implements CartInterface
                 continue;
             }
 
-            $qty = isset($itemInfo['qty']) ? (float)$itemInfo['qty'] : false;
+            $qty = isset($itemInfo['qty']) ? (float) $itemInfo['qty'] : false;
             if ($qty > 0) {
                 $item->setQty($qty);
 

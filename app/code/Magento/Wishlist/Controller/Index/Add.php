@@ -89,7 +89,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             $session->unsBeforeWishlistRequest();
         }
 
-        $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
+        $productId = isset($requestParams['product']) ? (int) $requestParams['product'] : null;
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;

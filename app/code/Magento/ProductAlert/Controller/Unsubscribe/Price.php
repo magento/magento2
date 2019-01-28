@@ -39,7 +39,7 @@ class Price extends UnsubscribeController
      */
     public function execute()
     {
-        $productId = (int)$this->getRequest()->getParam('product');
+        $productId = (int) $this->getRequest()->getParam('product');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {

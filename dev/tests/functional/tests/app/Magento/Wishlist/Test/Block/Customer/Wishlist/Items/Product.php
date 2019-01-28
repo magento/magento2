@@ -226,7 +226,7 @@ class Product extends Form
      */
     public function getPriceLabel(): string
     {
-        return (string)$this->_rootElement->find($this->regularPriceLabel)->getText();
+        return (string) $this->_rootElement->find($this->regularPriceLabel)->getText();
     }
 
     /**

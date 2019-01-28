@@ -24,7 +24,7 @@ class OutputBamboo extends \Magento\Framework\Profiler\Driver\Standard\Output\Cs
     public function __construct(array $config = null)
     {
         parent::__construct($config);
-        $this->_metrics = isset($config['metrics']) ? (array)$config['metrics'] : [];
+        $this->_metrics = isset($config['metrics']) ? (array) $config['metrics'] : [];
     }
 
     /**

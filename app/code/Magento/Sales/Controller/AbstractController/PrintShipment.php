@@ -51,12 +51,12 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
+        $shipmentId = (int) $this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
             $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
             $order = $shipment->getOrder();
         } else {
-            $orderId = (int)$this->getRequest()->getParam('order_id');
+            $orderId = (int) $this->getRequest()->getParam('order_id');
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         }
         if ($this->orderAuthorization->canView($order)) {

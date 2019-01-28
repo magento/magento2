@@ -81,7 +81,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
         try {
             $selectedIndexers = $input->getArgument(self::INPUT_KEY_INDEXER);
             if ($selectedIndexers) {
-                $indexersList = (array)$selectedIndexers;
+                $indexersList = (array) $selectedIndexers;
             } else {
                 $indexersList = $this->indexers;
             }
@@ -126,7 +126,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
      */
     private function validate(InputInterface $input): array
     {
-        $inputIndexer = (array)$input->getArgument(self::INPUT_KEY_INDEXER);
+        $inputIndexer = (array) $input->getArgument(self::INPUT_KEY_INDEXER);
         $acceptedValues = array_keys($this->indexers);
         $errors = $this->validateArgument(self::INPUT_KEY_INDEXER, $inputIndexer, $acceptedValues);
 

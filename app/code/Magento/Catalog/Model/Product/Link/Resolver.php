@@ -43,7 +43,7 @@ class Resolver
     public function getLinks()
     {
         if (null === $this->links) {
-            $this->links = (array)$this->request->getParam('links', []);
+            $this->links = (array) $this->request->getParam('links', []);
         }
         return $this->links;
     }

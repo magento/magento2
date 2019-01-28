@@ -392,7 +392,7 @@
                     useAjax: <?= /* @escapeNotVerified */ $block->getUseAjax() ?>,
                     switchTreeUrl: '<?= /* @escapeNotVerified */ $block->getSwitchTreeUrl() ?>',
                     editUrl: '<?= /* @escapeNotVerified */ $block->getEditUrl() ?>',
-                    currentNodeId: <?= /* @escapeNotVerified */ (int)$block->getCategoryId() ?>,
+                    currentNodeId: <?= /* @escapeNotVerified */ (int) $block->getCategoryId() ?>,
                     baseUrl: '<?= /* @escapeNotVerified */ $block->getEditUrl() ?>'
                 };
 
@@ -401,11 +401,11 @@
                         text: <?= /* @escapeNotVerified */ json_encode(htmlentities($block->getRoot()->getName())) ?>,
                         draggable: false,
                         allowDrop: <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-                        id: <?= (int)$block->getRoot()->getId() ?>,
-                        expanded: <?= (int)$block->getIsWasExpanded() ?>,
-                        store_id: <?= (int)$block->getStore()->getId() ?>,
-                        category_id: <?= (int)$block->getCategoryId() ?>,
-                        parent: <?= (int)$block->getRequest()->getParam('parent') ?>
+                        id: <?= (int) $block->getRoot()->getId() ?>,
+                        expanded: <?= (int) $block->getIsWasExpanded() ?>,
+                        store_id: <?= (int) $block->getStore()->getId() ?>,
+                        category_id: <?= (int) $block->getCategoryId() ?>,
+                        parent: <?= (int) $block->getRequest()->getParam('parent') ?>
                     },
                     data: <?= /* @escapeNotVerified */ $block->getTreeJson() ?>
                 };

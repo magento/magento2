@@ -113,7 +113,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      */
     public function getStore()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $storeId = (int) $this->getRequest()->getParam('store');
         return $this->_storeManager->getStore($storeId);
     }
 
@@ -130,7 +130,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         }
         $root = $this->_coreRegistry->registry('root');
         if ($root === null) {
-            $storeId = (int)$this->getRequest()->getParam('store');
+            $storeId = (int) $this->getRequest()->getParam('store');
 
             if ($storeId) {
                 $store = $this->_storeManager->getStore($storeId);

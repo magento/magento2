@@ -155,7 +155,7 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      */
     public function getIsActive()
     {
-        return (bool)$this->getData(PaymentTokenInterface::IS_ACTIVE);
+        return (bool) $this->getData(PaymentTokenInterface::IS_ACTIVE);
     }
 
     /**
@@ -166,7 +166,7 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      */
     public function setIsActive($isActive)
     {
-        $this->setData(PaymentTokenInterface::IS_ACTIVE, (int)$isActive);
+        $this->setData(PaymentTokenInterface::IS_ACTIVE, (int) $isActive);
         return $this;
     }
 

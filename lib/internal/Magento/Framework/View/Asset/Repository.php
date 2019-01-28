@@ -266,7 +266,7 @@ class Repository
      */
     private function getFallbackContext($urlType, $isSecure, $area, $themePath, $locale)
     {
-        $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
+        $secureKey = null === $isSecure ? 'null' : (int) $isSecure;
         $baseDirType = DirectoryList::STATIC_VIEW;
         $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
         if (!isset($this->fallbackContext[$id])) {

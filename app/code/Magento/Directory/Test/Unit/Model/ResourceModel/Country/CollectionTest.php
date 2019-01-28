@@ -99,8 +99,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setForegroundCountries($foregroundCountries);
         $result = $this->_model->toOptionArray($emptyLabel);
-        $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel) && !empty($foregroundCountries)) +
-            (int)(!empty($emptyLabel)), $result);
+        $this->assertCount(count($optionsArray) + (int) (!empty($emptyLabel) && !empty($foregroundCountries)) +
+            (int) (!empty($emptyLabel)), $result);
         foreach ($expectedResults as $index => $expectedResult) {
             $this->assertEquals($expectedResult, $result[$index]['label']);
         }

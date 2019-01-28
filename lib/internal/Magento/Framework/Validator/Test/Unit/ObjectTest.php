@@ -57,7 +57,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
      */
     public function isEntityValid(\Magento\Framework\DataObject $entity)
     {
-        return (bool)$entity->getData('is_valid');
+        return (bool) $entity->getData('is_valid');
     }
 
     public function testAddRule()

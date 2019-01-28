@@ -99,6 +99,6 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
      */
     protected function _getSelectCacheId($select)
     {
-        return $this->_cacheIdPrefix . md5((string)$select);
+        return $this->_cacheIdPrefix . md5((string) $select);
     }
 }

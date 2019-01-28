@@ -58,7 +58,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
      */
     public function execute()
     {
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {

@@ -21,7 +21,7 @@ class DeleteButton extends AbstractCategory implements ButtonProviderInterface
     public function getButtonData()
     {
         $category = $this->getCategory();
-        $categoryId = (int)$category->getId();
+        $categoryId = (int) $category->getId();
 
         if ($categoryId && !in_array($categoryId, $this->getRootIds()) && $category->isDeleteable()) {
             return [

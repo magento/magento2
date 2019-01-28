@@ -61,7 +61,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
         $this->layout = $layout;
         $this->backendHelper = $backendHelper;
 
-        $config['wysiwyg'] = (bool)$attrRepository->get($data['name'])->getIsWysiwygEnabled();
+        $config['wysiwyg'] = (bool) $attrRepository->get($data['name'])->getIsWysiwygEnabled();
         parent::__construct($context, $formFactory, $wysiwygConfig, $components, $data, $config);
     }
 }

@@ -407,7 +407,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addNavigationMaxDepthFilter()
     {
-        $navigationMaxDepth = (int)$this->scopeConfig->getValue(
+        $navigationMaxDepth = (int) $this->scopeConfig->getValue(
             'catalog/navigation/max_depth',
             ScopeInterface::SCOPE_STORE
         );

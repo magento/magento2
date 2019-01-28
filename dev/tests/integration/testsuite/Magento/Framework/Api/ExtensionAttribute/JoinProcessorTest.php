@@ -265,9 +265,9 @@ EXPECTED_SQL;
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
-        $firstProductId = (int)$productRepository->get('simple')->getId();
+        $firstProductId = (int) $productRepository->get('simple')->getId();
         $firstProductQty = 11;
-        $secondProductId = (int)$productRepository->get('custom-design-simple-product')->getId();
+        $secondProductId = (int) $productRepository->get('custom-design-simple-product')->getId();
         $secondProductQty = 22;
         /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
         $stockItemRepository = $objectManager->get(\Magento\CatalogInventory\Api\StockItemRepositoryInterface::class);

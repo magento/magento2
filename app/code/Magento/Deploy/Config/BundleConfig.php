@@ -79,11 +79,11 @@ class BundleConfig
         $unit = strtoupper($unit);
         switch ($unit) {
             case 'KB':
-                return (int)$size;
+                return (int) $size;
             case 'MB':
-                return (int)$size * 1024;
+                return (int) $size * 1024;
             default:
-                return (int)($size / 1024);
+                return (int) ($size / 1024);
         }
     }
 

@@ -89,7 +89,7 @@ class Real extends Column implements
      */
     public function getPrecision()
     {
-        return (int)$this->precision;
+        return (int) $this->precision;
     }
 
     /**
@@ -99,7 +99,7 @@ class Real extends Column implements
      */
     public function getScale()
     {
-        return (int)$this->scale;
+        return (int) $this->scale;
     }
 
     /**
@@ -109,7 +109,7 @@ class Real extends Column implements
      */
     public function isNullable()
     {
-        return (bool)$this->nullable;
+        return (bool) $this->nullable;
     }
 
     /**
@@ -130,7 +130,7 @@ class Real extends Column implements
      */
     public function isUnsigned()
     {
-        return (bool)$this->unsigned;
+        return (bool) $this->unsigned;
     }
 
     /**

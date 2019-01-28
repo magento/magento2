@@ -31,16 +31,16 @@ class BlocksTest extends \PHPUnit\Framework\TestCase
             $elements = $xml->xpath('/layout//*[self::container or self::block]') ?: [];
             /** @var $node \SimpleXMLElement */
             foreach ($elements as $node) {
-                $alias = (string)$node['as'];
+                $alias = (string) $node['as'];
                 if (empty($alias)) {
-                    $alias = (string)$node['name'];
+                    $alias = (string) $node['name'];
                 }
                 if ($node->getName() == 'container') {
                     self::$_containerAliases[$alias]['files'][] = $file;
-                    self::$_containerAliases[$alias]['names'][] = (string)$node['name'];
+                    self::$_containerAliases[$alias]['names'][] = (string) $node['name'];
                 } else {
                     self::$_blockAliases[$alias]['files'][] = $file;
-                    self::$_blockAliases[$alias]['names'][] = (string)$node['name'];
+                    self::$_blockAliases[$alias]['names'][] = (string) $node['name'];
                 }
             }
         }

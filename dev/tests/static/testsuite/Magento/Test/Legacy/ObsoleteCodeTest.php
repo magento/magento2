@@ -791,7 +791,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
      */
     protected function _isClassConstantDefined($content, $constant)
     {
-        return (bool)preg_match('/' . $this->_getClassConstantDefinitionRegExp($constant) . '/S', $content);
+        return (bool) preg_match('/' . $this->_getClassConstantDefinitionRegExp($constant) . '/S', $content);
     }
 
     /**
@@ -827,7 +827,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
     protected function _isClassOrInterface($content, $name)
     {
         $name = preg_quote($name, '/');
-        return (bool)preg_match('/\b(?:class|interface)\s+' . $name . '\b[^{]*\{/iS', $content);
+        return (bool) preg_match('/\b(?:class|interface)\s+' . $name . '\b[^{]*\{/iS', $content);
     }
 
     /**
@@ -840,7 +840,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
     protected function _isDirectDescendant($content, $name)
     {
         $name = preg_quote($name, '/');
-        return (bool)preg_match(
+        return (bool) preg_match(
             '/\s+extends\s+' . $name . '\b|\s+implements\s+[^{]*\b' . $name . '\b[^{^\\\\]*\{/iS',
             $content
         );

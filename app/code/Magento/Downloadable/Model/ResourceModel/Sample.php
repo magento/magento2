@@ -55,7 +55,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $sampleTitleTable = $this->getTable('downloadable_sample_title');
-        $bind = [':sample_id' => $sampleObject->getId(), ':store_id' => (int)$sampleObject->getStoreId()];
+        $bind = [':sample_id' => $sampleObject->getId(), ':store_id' => (int) $sampleObject->getStoreId()];
         $select = $connection->select()->from(
             $sampleTitleTable
         )->where(
@@ -64,7 +64,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($connection->fetchOne($select, $bind)) {
             $where = [
                 'sample_id = ?' => $sampleObject->getId(),
-                'store_id = ?' => (int)$sampleObject->getStoreId(),
+                'store_id = ?' => (int) $sampleObject->getStoreId(),
             ];
             if ($sampleObject->getUseDefaultTitle()) {
                 $connection->delete($sampleTitleTable, $where);
@@ -77,7 +77,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $sampleTitleTable,
                     [
                         'sample_id' => $sampleObject->getId(),
-                        'store_id' => (int)$sampleObject->getStoreId(),
+                        'store_id' => (int) $sampleObject->getStoreId(),
                         'title' => $sampleObject->getTitle()
                     ]
                 );
@@ -138,7 +138,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'cpe.entity_id=:product_id',
             $productId
         );
-        $bind = [':store_id' => (int)$storeId, ':product_id' => $productId];
+        $bind = [':store_id' => (int) $storeId, ':product_id' => $productId];
 
         return $connection->fetchCol($select, $bind);
     }

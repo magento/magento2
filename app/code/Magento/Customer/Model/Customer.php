@@ -929,7 +929,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $ids = $this->_getData('shared_store_ids');
         if ($ids === null) {
             $ids = [];
-            if ((bool)$this->getSharingConfig()->isWebsiteScope()) {
+            if ((bool) $this->getSharingConfig()->isWebsiteScope()) {
                 $ids = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
             } else {
                 foreach ($this->_storeManager->getStores() as $store) {
@@ -952,7 +952,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $ids = $this->_getData('shared_website_ids');
         if ($ids === null) {
             $ids = [];
-            if ((bool)$this->getSharingConfig()->isWebsiteScope()) {
+            if ((bool) $this->getSharingConfig()->isWebsiteScope()) {
                 $ids[] = $this->getWebsiteId();
             } else {
                 foreach ($this->_storeManager->getWebsites() as $website) {
@@ -1148,7 +1148,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function setIsDeleteable($value)
     {
-        $this->_isDeleteable = (bool)$value;
+        $this->_isDeleteable = (bool) $value;
         return $this;
     }
 
@@ -1170,7 +1170,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function setIsReadonly($value)
     {
-        $this->_isReadonly = (bool)$value;
+        $this->_isReadonly = (bool) $value;
         return $this;
     }
 
@@ -1298,7 +1298,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getResetPasswordLinkExpirationPeriod()
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int) $this->_scopeConfig->getValue(
             self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );

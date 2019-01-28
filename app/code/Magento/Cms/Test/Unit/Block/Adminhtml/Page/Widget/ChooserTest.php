@@ -208,7 +208,7 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->cmsPageMock);
         $this->cmsPageMock->expects($this->any())
             ->method('load')
-            ->with((int)$elementValue)
+            ->with((int) $elementValue)
             ->willReturnSelf();
         $this->cmsPageMock->expects($this->any())
             ->method('getId')

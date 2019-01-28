@@ -193,7 +193,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->config->setMethod(Config::METHOD_EXPRESS);
 
         $isInCatalog = $this->getIsInCatalogProduct();
-        $isInContext = (bool)(int) $this->config->getValue('in_context');
+        $isInContext = (bool) (int) $this->config->getValue('in_context');
 
         $isEnabled = ($isInContext && $isInCatalog) || !$isInContext;
         $this->config->setMethod($this->_paymentMethodCode);

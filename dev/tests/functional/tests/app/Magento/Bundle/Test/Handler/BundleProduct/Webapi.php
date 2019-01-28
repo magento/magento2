@@ -62,7 +62,7 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                     'title' => $bundleOption['title'],
                     'type' => $bundleOption['type'],
                     'required' => $bundleOption['required'],
-                    'position' => isset($bundleOption['position']) ? (int)$bundleOption['position'] : $key,
+                    'position' => isset($bundleOption['position']) ? (int) $bundleOption['position'] : $key,
                     'product_links' => $this->prepareLinksInfo($bundleSelections, $key)
                 ];
             }
@@ -132,7 +132,7 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
         foreach ($response['extension_attributes']['bundle_product_options'] as $optionKey => $option) {
             foreach ($option['product_links'] as $assignedKey => $optionValue) {
                 $bundleSelections['bundle_options'][$optionKey]['assigned_products'][$assignedKey] += [
-                    'selection_id' => (int)$optionValue['id'],
+                    'selection_id' => (int) $optionValue['id'],
                     'option_id' => $option['option_id']
                 ];
             }

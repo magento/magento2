@@ -86,10 +86,10 @@ class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
         $observerClasses = [];
         foreach (Files::init()->getConfigFiles($fileNamePattern, [], false) as $configFile) {
             foreach (simplexml_load_file($configFile)->xpath($xpath) as $observer) {
-                $className = (string)$observer->attributes()->instance;
+                $className = (string) $observer->attributes()->instance;
                 // $className may be empty in cases like this <observer name="observer_name" disabled="true" />
                 if ($className) {
-                    $observerClasses[] = trim((string)$observer->attributes()->instance, '\\');
+                    $observerClasses[] = trim((string) $observer->attributes()->instance, '\\');
                 }
             }
         }

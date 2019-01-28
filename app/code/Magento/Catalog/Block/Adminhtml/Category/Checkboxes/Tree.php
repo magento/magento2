@@ -50,7 +50,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         if (empty($ids)) {
             $ids = [];
         } elseif (!is_array($ids)) {
-            $ids = [(int)$ids];
+            $ids = [(int) $ids];
         }
         $this->_selectedIds = $ids;
         return $this;
@@ -105,7 +105,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
                 $item['children'][] = $this->_getNodeJson($child, $level + 1);
             }
         }
-        if (empty($item['children']) && (int)$node->getChildrenCount() > 0) {
+        if (empty($item['children']) && (int) $node->getChildrenCount() > 0) {
             $item['children'] = [];
         }
         $item['expanded'] = in_array($node->getId(), $this->getExpandedPath());

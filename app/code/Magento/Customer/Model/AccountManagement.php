@@ -1105,7 +1105,7 @@ class AccountManagement implements AccountManagementInterface
     public function isCustomerInStore($customerWebsiteId, $storeId)
     {
         $ids = [];
-        if ((bool)$this->configShare->isWebsiteScope()) {
+        if ((bool) $this->configShare->isWebsiteScope()) {
             $ids = $this->storeManager->getWebsite($customerWebsiteId)->getStoreIds();
         } else {
             foreach ($this->storeManager->getStores() as $store) {

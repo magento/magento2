@@ -106,7 +106,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['default_title' => 'title']
         )->joinLeft(
             ['st' => $this->getTable('downloadable_sample_title')],
-            'st.sample_id=main_table.sample_id AND st.store_id = ' . (int)$storeId,
+            'st.sample_id=main_table.sample_id AND st.store_id = ' . (int) $storeId,
             ['store_title' => 'title', 'title' => $ifNullDefaultTitle]
         )->order(
             'main_table.sort_order ASC'

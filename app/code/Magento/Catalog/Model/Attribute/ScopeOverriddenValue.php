@@ -78,11 +78,11 @@ class ScopeOverriddenValue
      */
     public function containsValue($entityType, $entity, $attributeCode, $storeId)
     {
-        if ((int)$storeId === Store::DEFAULT_STORE_ID) {
+        if ((int) $storeId === Store::DEFAULT_STORE_ID) {
             return false;
         }
         if ($this->attributesValues === null) {
-            $this->initAttributeValues($entityType, $entity, (int)$storeId);
+            $this->initAttributeValues($entityType, $entity, (int) $storeId);
         }
 
         return isset($this->attributesValues[$storeId])
@@ -101,7 +101,7 @@ class ScopeOverriddenValue
     public function getDefaultValues($entityType, $entity)
     {
         if ($this->attributesValues === null) {
-            $this->initAttributeValues($entityType, $entity, (int)$entity->getStoreId());
+            $this->initAttributeValues($entityType, $entity, (int) $entity->getStoreId());
         }
 
         return isset($this->attributesValues[Store::DEFAULT_STORE_ID])
@@ -150,7 +150,7 @@ class ScopeOverriddenValue
                 $selects,
                 \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
-            $attributes = $metadata->getEntityConnection()->fetchAll((string)$unionSelect);
+            $attributes = $metadata->getEntityConnection()->fetchAll((string) $unionSelect);
             foreach ($attributes as $attribute) {
                 $this->attributesValues[$attribute['store_id']][$attribute['attribute_code']] = $attribute['value'];
             }

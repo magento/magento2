@@ -60,7 +60,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      */
     protected function _initProduct()
     {
-        $productId = (int)$this->getRequest()->getParam('product');
+        $productId = (int) $this->getRequest()->getParam('product');
         if ($productId) {
             $storeId = $this->_objectManager->get(
                 \Magento\Store\Model\StoreManagerInterface::class

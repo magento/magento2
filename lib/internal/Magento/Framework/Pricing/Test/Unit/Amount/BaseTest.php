@@ -52,7 +52,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $adjustments = [];
 
         $model = $this->createEntity($amount, $adjustments);
-        $result = (string)$model;
+        $result = (string) $model;
         $this->assertEquals($amount, $result);
     }
 

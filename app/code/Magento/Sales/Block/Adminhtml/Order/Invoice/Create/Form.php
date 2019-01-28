@@ -105,6 +105,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      */
     public function getForcedShipmentCreate()
     {
-        return (int)$this->getOrder()->getForcedShipmentWithInvoice();
+        return (int) $this->getOrder()->getForcedShipmentWithInvoice();
     }
 }

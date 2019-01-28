@@ -639,7 +639,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function getLowestPrice($bundleProduct, $price, $bundleQty = 1)
     {
-        $price = (float)$price;
+        $price = (float) $price;
         return min(
             $price,
             $this->_applyTierPrice($bundleProduct, $bundleQty, $price),

@@ -296,7 +296,7 @@ class Pro
             );
             $canRefundMore = $payment->getCreditmemo()->getInvoice()->canRefund();
             $isFullRefund = !$canRefundMore &&
-                0 == (float)$order->getBaseTotalOnlineRefunded() + (float)$order->getBaseTotalOfflineRefunded();
+                0 == (float) $order->getBaseTotalOnlineRefunded() + (float) $order->getBaseTotalOfflineRefunded();
             $api->setRefundType(
                 $isFullRefund
                     ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL

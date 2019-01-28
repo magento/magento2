@@ -183,15 +183,15 @@ class Validator implements ValidatorInterface
             $parts[self::VALIDATOR_REMOTE_ADDR_KEY] = $this->_remoteAddress->getRemoteAddress();
         }
         if (isset($_ENV['HTTP_VIA'])) {
-            $parts[self::VALIDATOR_HTTP_VIA_KEY] = (string)$_ENV['HTTP_VIA'];
+            $parts[self::VALIDATOR_HTTP_VIA_KEY] = (string) $_ENV['HTTP_VIA'];
         }
         if (isset($_ENV['HTTP_X_FORWARDED_FOR'])) {
-            $parts[self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY] = (string)$_ENV['HTTP_X_FORWARDED_FOR'];
+            $parts[self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY] = (string) $_ENV['HTTP_X_FORWARDED_FOR'];
         }
 
         // collect user agent data
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $parts[self::VALIDATOR_HTTP_USER_AGENT_KEY] = (string)$_SERVER['HTTP_USER_AGENT'];
+            $parts[self::VALIDATOR_HTTP_USER_AGENT_KEY] = (string) $_SERVER['HTTP_USER_AGENT'];
         }
 
         return $parts;

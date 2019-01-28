@@ -65,9 +65,9 @@ class Current extends Template
     private function getMca()
     {
         $routeParts = [
-            (string)$this->_request->getModuleName(),
-            (string)$this->_request->getControllerName(),
-            (string)$this->_request->getActionName(),
+            (string) $this->_request->getModuleName(),
+            (string) $this->_request->getControllerName(),
+            (string) $this->_request->getActionName(),
         ];
 
         $parts = [];

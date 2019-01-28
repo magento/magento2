@@ -275,7 +275,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('note', $billingAddress->getCustomerNote());
 
         $shippingAddress = $quote->getShippingAddress();
-        $this->assertTrue((bool)$shippingAddress->getSameAsBilling());
+        $this->assertTrue((bool) $shippingAddress->getSameAsBilling());
         $this->assertNull($shippingAddress->getPrefix());
         $this->assertNull($shippingAddress->getMiddlename());
         $this->assertNull($shippingAddress->getLastname());

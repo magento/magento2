@@ -127,7 +127,7 @@ class Pager extends \Magento\Framework\View\Element\Template
         if (is_object($this->_collection)) {
             return $this->_collection->getCurPage();
         }
-        return (int)$this->getRequest()->getParam($this->getPageVarName(), 1);
+        return (int) $this->getRequest()->getParam($this->getPageVarName(), 1);
     }
 
     /**
@@ -174,7 +174,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         $this->_collection = $collection->setCurPage($this->getCurrentPage());
         // If not int - then not limit
-        if ((int)$this->getLimit()) {
+        if ((int) $this->getLimit()) {
             $this->_collection->setPageSize($this->getLimit());
         }
 
@@ -614,7 +614,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function setFrameLength($frame)
     {
-        $frame = abs((int)$frame);
+        $frame = abs((int) $frame);
         if ($frame == 0) {
             $frame = $this->_frameLength;
         }
@@ -634,7 +634,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function setJump($jump)
     {
-        $jump = abs((int)$jump);
+        $jump = abs((int) $jump);
         if ($this->getJump() != $jump) {
             $this->_setFrameInitialized(false);
             $this->_jump = $jump;
@@ -730,7 +730,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     protected function _setFrameInitialized($flag)
     {
-        $this->_frameInitialized = (bool)$flag;
+        $this->_frameInitialized = (bool) $flag;
         return $this;
     }
 
@@ -778,7 +778,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function setIsOutputRequired($isRequired)
     {
-        $this->_outputRequired = (bool)$isRequired;
+        $this->_outputRequired = (bool) $isRequired;
         return $this;
     }
 

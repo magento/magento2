@@ -63,7 +63,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      */
     public function getExpirableSectionLifetime()
     {
-        return (int)$this->_scopeConfig->getValue('customer/online_customers/section_data_lifetime');
+        return (int) $this->_scopeConfig->getValue('customer/online_customers/section_data_lifetime');
     }
 
     /**

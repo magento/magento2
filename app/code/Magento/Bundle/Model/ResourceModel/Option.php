@@ -101,7 +101,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         /**
          * also saving default fallback value
          */
-        if (0 !== (int)$object->getStoreId()) {
+        if (0 !== (int) $object->getStoreId()) {
             $data->setStoreId(0)->setTitle($object->getDefaultTitle());
             $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
         }

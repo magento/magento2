@@ -124,7 +124,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
         }
 
         $this->setFilterVisibility(
-            array_key_exists('filter_visibility', $data) ? (bool)$data['filter_visibility'] : true
+            array_key_exists('filter_visibility', $data) ? (bool) $data['filter_visibility'] : true
         );
 
         parent::__construct($context, $data);
@@ -135,10 +135,10 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
             isset($data['empty_cell_label']) ? $data['empty_cell_label'] : __('We couldn\'t find any records.')
         );
 
-        $this->setCountSubTotals(isset($data['count_subtotals']) ? (bool)$data['count_subtotals'] : false);
+        $this->setCountSubTotals(isset($data['count_subtotals']) ? (bool) $data['count_subtotals'] : false);
         $this->_subTotals = $subtotals;
 
-        $this->setCountTotals(isset($data['count_totals']) ? (bool)$data['count_totals'] : false);
+        $this->setCountTotals(isset($data['count_totals']) ? (bool) $data['count_totals'] : false);
         $this->_totals = $totals;
     }
 
@@ -321,7 +321,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
                 $this->getMultipleRows($item)
             ) + count(
                 $this->_groupedColumn
-            ) - 1 + (int)$this->shouldRenderSubTotal(
+            ) - 1 + (int) $this->shouldRenderSubTotal(
                 $item
             );
         }

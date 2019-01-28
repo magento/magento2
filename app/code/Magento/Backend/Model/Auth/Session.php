@@ -205,7 +205,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function setIsFirstPageAfterLogin($value)
     {
-        $this->_isFirstAfterLogin = (bool)$value;
+        $this->_isFirstAfterLogin = (bool) $value;
         return $this->setIsFirstVisit($this->_isFirstAfterLogin);
     }
 

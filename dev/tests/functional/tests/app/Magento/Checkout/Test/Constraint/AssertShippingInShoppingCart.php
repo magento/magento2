@@ -33,7 +33,7 @@ class AssertShippingInShoppingCart extends AbstractConstraint
             $checkoutCart->open();
         }
 
-        $fixtureShippingAmount = number_format((float)$cart->getShippingAmount(), 2);
+        $fixtureShippingAmount = number_format((float) $cart->getShippingAmount(), 2);
         $pageShippingAmount = $checkoutCart->getTotalsBlock()->getShippingPrice();
         \PHPUnit\Framework\Assert::assertEquals(
             $fixtureShippingAmount,

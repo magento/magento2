@@ -60,12 +60,12 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $creditmemoId = (int)$this->getRequest()->getParam('creditmemo_id');
+        $creditmemoId = (int) $this->getRequest()->getParam('creditmemo_id');
         if ($creditmemoId) {
             $creditmemo = $this->creditmemoRepository->get($creditmemoId);
             $order = $creditmemo->getOrder();
         } else {
-            $orderId = (int)$this->getRequest()->getParam('order_id');
+            $orderId = (int) $this->getRequest()->getParam('order_id');
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         }
 

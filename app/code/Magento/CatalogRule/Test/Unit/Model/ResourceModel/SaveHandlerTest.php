@@ -58,12 +58,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->at(0))
             ->method('bindRuleToEntity')
-            ->with($entityId, explode(',', (string)$websiteIds), 'website')
+            ->with($entityId, explode(',', (string) $websiteIds), 'website')
             ->willReturnSelf();
 
         $this->resourceMock->expects($this->at(1))
             ->method('bindRuleToEntity')
-            ->with($entityId, explode(',', (string)$customerGroupIds), 'customer_group')
+            ->with($entityId, explode(',', (string) $customerGroupIds), 'customer_group')
             ->willReturnSelf();
 
         $this->assertEquals($entityData, $this->subject->execute($entityType, $entityData));

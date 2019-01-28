@@ -32,7 +32,7 @@ class Shipping
      */
     public function afterIsStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue(
+        return (bool) $result || (bool) $this->_scopeConfig->getValue(
             'carriers/dhl/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -46,7 +46,7 @@ class Shipping
      */
     public function afterIsCityActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue(
+        return (bool) $result || (bool) $this->_scopeConfig->getValue(
             'carriers/dhl/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

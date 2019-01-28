@@ -174,7 +174,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
     public function addOrdersStatistics($isFilter = false)
     {
         $this->_addOrderStatistics = true;
-        $this->_addOrderStatFilter = (bool)$isFilter;
+        $this->_addOrderStatFilter = (bool) $isFilter;
         return $this;
     }
 

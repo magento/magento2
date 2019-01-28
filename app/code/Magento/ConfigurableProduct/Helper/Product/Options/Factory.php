@@ -103,7 +103,7 @@ class Factory
         }
         $attribute->setData(
             array_replace_recursive(
-                (array)$attribute->getData(),
+                (array) $attribute->getData(),
                 $item
             )
         );

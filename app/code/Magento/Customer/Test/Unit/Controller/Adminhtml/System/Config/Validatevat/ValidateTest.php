@@ -68,7 +68,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $isValid = true;
         $requestMessage = 'test';
 
-        $json = '{"valid":' . (int)$isValid . ',"message":"' . $requestMessage . '"}';
+        $json = '{"valid":' . (int) $isValid . ',"message":"' . $requestMessage . '"}';
 
         $gatewayResponse = new \Magento\Framework\DataObject([
             'is_valid' => $isValid,

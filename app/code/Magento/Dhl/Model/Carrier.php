@@ -675,7 +675,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         } else {
             $configWeightUnit = $this->getCode(
                 'dimensions_variables',
-                (string)$this->getConfigData('unit_of_measure')
+                (string) $this->getConfigData('unit_of_measure')
             );
         }
 
@@ -683,7 +683,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configWeightUnit != $countryWeightUnit) {
             $weight = $this->_carrierHelper->convertMeasureWeight(
-                (float)$weight,
+                (float) $weight,
                 $configWeightUnit,
                 $countryWeightUnit
             );
@@ -792,7 +792,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _makePieces(\Magento\Shipping\Model\Simplexml\Element $nodeBkgDetails)
     {
-        $divideOrderWeight = (string)$this->getConfigData('divide_order_weight');
+        $divideOrderWeight = (string) $this->getConfigData('divide_order_weight');
         $nodePieces = $nodeBkgDetails->addChild('Pieces', '', '');
         $items = $this->_getAllItems();
         $numberOfPieces = 0;
@@ -867,7 +867,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if (!$configWeightUnit) {
             $configWeightUnit = $this->getCode(
                 'dimensions_variables',
-                (string)$this->getConfigData('unit_of_measure')
+                (string) $this->getConfigData('unit_of_measure')
             );
         } else {
             $configWeightUnit = $this->getCode('dimensions_variables', $configWeightUnit);
@@ -883,7 +883,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configDimensionUnit != $countryDimensionUnit) {
             $dimension = $this->_carrierHelper->convertMeasureDimension(
-                (float)$dimension,
+                (float) $dimension,
                 $configDimensionUnit,
                 $countryDimensionUnit
             );
@@ -900,11 +900,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _addDimension($nodePiece)
     {
-        $sizeChecker = (string)$this->getConfigData('size');
+        $sizeChecker = (string) $this->getConfigData('size');
 
-        $height = $this->_getDimension((float)$this->getConfigData('height'));
-        $depth = $this->_getDimension((float)$this->getConfigData('depth'));
-        $width = $this->_getDimension((float)$this->getConfigData('width'));
+        $height = $this->_getDimension((float) $this->getConfigData('height'));
+        $depth = $this->_getDimension((float) $this->getConfigData('depth'));
+        $width = $this->_getDimension((float) $this->getConfigData('width'));
 
         if ($sizeChecker && $height && $depth && $width) {
             $nodePiece->addChild('Height', $height);
@@ -942,7 +942,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
                 $bodyXml = $this->_xmlElFactory->create(['data' => $responseBody]);
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
-                if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
+                if (isset($code[0]) && (int) $code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
                     $debugPoint['info'] = sprintf(__("DHL service is not available at %s date"), $date);
                 } else {
                     $this->_debug($debugPoint);
@@ -968,7 +968,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _getQuotesFromServer($request)
     {
         $client = $this->_httpClientFactory->create();
-        $client->setUri((string)$this->getConfigData('gateway_url'));
+        $client->setUri((string) $this->getConfigData('gateway_url'));
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
         $client->setRawData(utf8_encode($request));
 
@@ -993,8 +993,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeRequest = $nodeGetQuote->addChild('Request');
 
         $nodeServiceHeader = $nodeRequest->addChild('ServiceHeader');
-        $nodeServiceHeader->addChild('SiteID', (string)$this->getConfigData('id'));
-        $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
+        $nodeServiceHeader->addChild('SiteID', (string) $this->getConfigData('id'));
+        $nodeServiceHeader->addChild('Password', (string) $this->getConfigData('password'));
 
         $nodeFrom = $nodeGetQuote->addChild('From');
         $nodeFrom->addChild('CountryCode', $rawRequest->getOrigCountryId());
@@ -1007,14 +1007,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'Date',
             (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
         );
-        $nodeBkgDetails->addChild('ReadyTime', 'PT' . (int)(string)$this->getConfigData('ready_time') . 'H00M');
+        $nodeBkgDetails->addChild('ReadyTime', 'PT' . (int) (string) $this->getConfigData('ready_time') . 'H00M');
 
         $nodeBkgDetails->addChild('DimensionUnit', $this->_getDimensionUnit());
         $nodeBkgDetails->addChild('WeightUnit', $this->_getWeightUnit());
 
         $this->_makePieces($nodeBkgDetails);
 
-        $nodeBkgDetails->addChild('PaymentAccountNumber', (string)$this->getConfigData('account'));
+        $nodeBkgDetails->addChild('PaymentAccountNumber', (string) $this->getConfigData('account'));
 
         $nodeTo = $nodeGetQuote->addChild('To');
         $nodeTo->addChild('CountryCode', $rawRequest->getDestCountryId());
@@ -1121,12 +1121,12 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             && isset($shipmentDetails->ShippingCharge)
             && isset($shipmentDetails->GlobalProductCode)
             && isset($shipmentDetails->CurrencyCode)
-            && array_key_exists((string)$shipmentDetails->GlobalProductCode, $this->getAllowedMethods())
+            && array_key_exists((string) $shipmentDetails->GlobalProductCode, $this->getAllowedMethods())
         ) {
             // DHL product code, e.g. '3', 'A', 'Q', etc.
-            $dhlProduct = (string)$shipmentDetails->GlobalProductCode;
-            $totalEstimate = (float)(string)$shipmentDetails->ShippingCharge;
-            $currencyCode = (string)$shipmentDetails->CurrencyCode;
+            $dhlProduct = (string) $shipmentDetails->GlobalProductCode;
+            $totalEstimate = (float) (string) $shipmentDetails->ShippingCharge;
+            $currencyCode = (string) $shipmentDetails->CurrencyCode;
             $baseCurrencyCode = $this->_storeManager->getWebsite($this->_request->getWebsiteId())
                 ->getBaseCurrencyCode();
             $dhlProductDescription = $this->getDhlProductTitle($dhlProduct);
@@ -1174,7 +1174,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         } else {
             $dhlProductDescription = false;
             if (isset($shipmentDetails->GlobalProductCode)) {
-                $dhlProductDescription = $this->getDhlProductTitle((string)$shipmentDetails->GlobalProductCode);
+                $dhlProductDescription = $this->getDhlProductTitle((string) $shipmentDetails->GlobalProductCode);
             }
             $dhlProductDescription = $dhlProductDescription ? $dhlProductDescription : __("DHL");
             $this->_errors[] = __("Zero shipping charge for '%1'", $dhlProductDescription);
@@ -1415,8 +1415,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $nodeRequest = $xml->addChild('Request', '', '');
         $nodeServiceHeader = $nodeRequest->addChild('ServiceHeader');
-        $nodeServiceHeader->addChild('SiteID', (string)$this->getConfigData('id'));
-        $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
+        $nodeServiceHeader->addChild('SiteID', (string) $this->getConfigData('id'));
+        $nodeServiceHeader->addChild('Password', (string) $this->getConfigData('password'));
 
         if (!$originRegion) {
             $xml->addChild('RequestedPickupTime', 'N', '');
@@ -1429,7 +1429,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         /** Billing */
         $nodeBilling = $xml->addChild('Billing', '', '');
-        $nodeBilling->addChild('ShipperAccountNumber', (string)$this->getConfigData('account'));
+        $nodeBilling->addChild('ShipperAccountNumber', (string) $this->getConfigData('account'));
         /**
          * Method of Payment:
          * S (Shipper)
@@ -1441,9 +1441,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         /**
          * Shipment bill to account – required if Shipping PaymentType is other than 'S'
          */
-        $nodeBilling->addChild('BillingAccountNumber', (string)$this->getConfigData('account'));
+        $nodeBilling->addChild('BillingAccountNumber', (string) $this->getConfigData('account'));
         $nodeBilling->addChild('DutyPaymentType', 'S');
-        $nodeBilling->addChild('DutyAccountNumber', (string)$this->getConfigData('account'));
+        $nodeBilling->addChild('DutyAccountNumber', (string) $this->getConfigData('account'));
 
         /** Receiver */
         $nodeConsignee = $xml->addChild('Consignee', '', '');
@@ -1514,10 +1514,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         /** Shipper */
         $nodeShipper = $xml->addChild('Shipper', '', '');
-        $nodeShipper->addChild('ShipperID', (string)$this->getConfigData('account'));
+        $nodeShipper->addChild('ShipperID', (string) $this->getConfigData('account'));
         $nodeShipper->addChild('CompanyName', $rawRequest->getShipperContactCompanyName());
         if ($originRegion !== 'AP') {
-            $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
+            $nodeShipper->addChild('RegisteredAccount', (string) $this->getConfigData('account'));
         }
 
         $address = $rawRequest->getShipperAddressStreet1() . ' ' . $rawRequest->getShipperAddressStreet2();
@@ -1557,7 +1557,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri((string) $this->getConfigData('gateway_url'));
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1716,8 +1716,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $requestNode = $xml->addChild('Request', '', '');
         $serviceHeaderNode = $requestNode->addChild('ServiceHeader', '', '');
-        $serviceHeaderNode->addChild('SiteID', (string)$this->getConfigData('id'));
-        $serviceHeaderNode->addChild('Password', (string)$this->getConfigData('password'));
+        $serviceHeaderNode->addChild('SiteID', (string) $this->getConfigData('id'));
+        $serviceHeaderNode->addChild('Password', (string) $this->getConfigData('password'));
 
         $xml->addChild('LanguageCode', 'EN', '');
         foreach ($trackings as $tracking) {
@@ -1751,7 +1751,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri((string) $this->getConfigData('gateway_url'));
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1794,13 +1794,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 if (isset($xml->Response->Status->Condition)) {
                     $nodeCondition = $xml->Response->Status->Condition;
                 }
-                $code = isset($nodeCondition->ConditionCode) ? (string)$nodeCondition->ConditionCode : 0;
-                $data = isset($nodeCondition->ConditionData) ? (string)$nodeCondition->ConditionData : '';
+                $code = isset($nodeCondition->ConditionCode) ? (string) $nodeCondition->ConditionCode : 0;
+                $data = isset($nodeCondition->ConditionData) ? (string) $nodeCondition->ConditionData : '';
                 $this->_errors[$code] = __('Error #%1 : %2', $code, $data);
             } elseif (is_object($xml) && is_object($xml->AWBInfo)) {
                 foreach ($xml->AWBInfo as $awbinfo) {
                     $awbinfoData = [];
-                    $trackNum = isset($awbinfo->AWBNumber) ? (string)$awbinfo->AWBNumber : '';
+                    $trackNum = isset($awbinfo->AWBNumber) ? (string) $awbinfo->AWBNumber : '';
                     if (!is_object($awbinfo) || !$awbinfo->ShipmentInfo) {
                         $this->_errors[$trackNum] = __('Unable to retrieve tracking');
                         continue;
@@ -1808,21 +1808,21 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     $shipmentInfo = $awbinfo->ShipmentInfo;
 
                     if ($shipmentInfo->ShipmentDesc) {
-                        $awbinfoData['service'] = (string)$shipmentInfo->ShipmentDesc;
+                        $awbinfoData['service'] = (string) $shipmentInfo->ShipmentDesc;
                     }
 
-                    $awbinfoData['weight'] = (string)$shipmentInfo->Weight . ' ' . (string)$shipmentInfo->WeightUnit;
+                    $awbinfoData['weight'] = (string) $shipmentInfo->Weight . ' ' . (string) $shipmentInfo->WeightUnit;
 
                     $packageProgress = [];
                     if (isset($shipmentInfo->ShipmentEvent)) {
                         foreach ($shipmentInfo->ShipmentEvent as $shipmentEvent) {
                             $shipmentEventArray = [];
-                            $shipmentEventArray['activity'] = (string)$shipmentEvent->ServiceEvent->EventCode
-                                . ' ' . (string)$shipmentEvent->ServiceEvent->Description;
-                            $shipmentEventArray['deliverydate'] = (string)$shipmentEvent->Date;
-                            $shipmentEventArray['deliverytime'] = (string)$shipmentEvent->Time;
-                            $shipmentEventArray['deliverylocation'] = (string)$shipmentEvent->ServiceArea
-                                ->Description . ' [' . (string)$shipmentEvent->ServiceArea->ServiceAreaCode . ']';
+                            $shipmentEventArray['activity'] = (string) $shipmentEvent->ServiceEvent->EventCode
+                                . ' ' . (string) $shipmentEvent->ServiceEvent->Description;
+                            $shipmentEventArray['deliverydate'] = (string) $shipmentEvent->Date;
+                            $shipmentEventArray['deliverytime'] = (string) $shipmentEvent->Time;
+                            $shipmentEventArray['deliverylocation'] = (string) $shipmentEvent->ServiceArea
+                                ->Description . ' [' . (string) $shipmentEvent->ServiceArea->ServiceAreaCode . ']';
                             $packageProgress[] = $shipmentEventArray;
                         }
                         $awbinfoData['progressdetail'] = $packageProgress;
@@ -1919,9 +1919,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $this->_isDomestic = false;
 
-        $origCountry = (string)$this->getCountryParams($origCountryCode)->getData('name');
-        $destCountry = (string)$this->getCountryParams($destCountryCode)->getData('name');
-        $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
+        $origCountry = (string) $this->getCountryParams($origCountryCode)->getData('name');
+        $destCountry = (string) $this->getCountryParams($destCountryCode)->getData('name');
+        $isDomestic = (string) $this->getCountryParams($destCountryCode)->getData('domestic');
 
         if (($origCountry == $destCountry && $isDomestic)
             || ($this->_carrierHelper->isCountryInEU($origCountryCode)
@@ -1948,8 +1948,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             if (!isset($xml->AirwayBillNumber) || !isset($xml->LabelImage->OutputImage)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unable to retrieve shipping label'));
             }
-            $result->setTrackingNumber((string)$xml->AirwayBillNumber);
-            $labelContent = (string)$xml->LabelImage->OutputImage;
+            $result->setTrackingNumber((string) $xml->AirwayBillNumber);
+            $labelContent = (string) $xml->LabelImage->OutputImage;
             $result->setShippingLabelContent(base64_decode($labelContent));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));

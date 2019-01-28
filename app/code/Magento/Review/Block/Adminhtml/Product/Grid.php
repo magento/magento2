@@ -94,7 +94,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 
         $this->addColumn('name', ['header' => __('Name'), 'index' => 'name']);
 
-        if ((int)$this->getRequest()->getParam('store', 0)) {
+        if ((int) $this->getRequest()->getParam('store', 0)) {
             $this->addColumn('custom_name', ['header' => __('Product Store Name'), 'index' => 'custom_name']);
         }
 

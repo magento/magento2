@@ -104,7 +104,7 @@ class Cc extends \Magento\Payment\Block\Form
             if ($configData === null) {
                 return true;
             }
-            return (bool)$configData;
+            return (bool) $configData;
         }
         return true;
     }

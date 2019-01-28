@@ -87,7 +87,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      */
     protected function _isCompressionNeeded($data)
     {
-        return strlen($data) > (int)$this->_decoratorOptions['compression_threshold'];
+        return strlen($data) > (int) $this->_decoratorOptions['compression_threshold'];
     }
 
     /**

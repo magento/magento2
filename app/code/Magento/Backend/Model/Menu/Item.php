@@ -228,7 +228,7 @@ class Item
      */
     public function hasChildren()
     {
-        return (null !== $this->_submenu) && (bool)$this->_submenu->count();
+        return (null !== $this->_submenu) && (bool) $this->_submenu->count();
     }
 
     /**
@@ -251,8 +251,8 @@ class Item
      */
     public function getUrl()
     {
-        if ((bool)$this->_action) {
-            return $this->_urlModel->getUrl((string)$this->_action, ['_cache_secret_key' => true]);
+        if ((bool) $this->_action) {
+            return $this->_urlModel->getUrl((string) $this->_action, ['_cache_secret_key' => true]);
         }
         return '#';
     }
@@ -335,7 +335,7 @@ class Item
      */
     public function hasTooltip()
     {
-        return (bool)$this->_tooltip;
+        return (bool) $this->_tooltip;
     }
 
     /**
@@ -438,7 +438,7 @@ class Item
     protected function _isConfigDependenciesAvailable()
     {
         if ($this->_dependsOnConfig) {
-            return $this->_scopeConfig->isSetFlag((string)$this->_dependsOnConfig, ScopeInterface::SCOPE_STORE);
+            return $this->_scopeConfig->isSetFlag((string) $this->_dependsOnConfig, ScopeInterface::SCOPE_STORE);
         }
         return true;
     }
@@ -451,7 +451,7 @@ class Item
     public function isAllowed()
     {
         try {
-            return $this->_acl->isAllowed((string)$this->_resource);
+            return $this->_acl->isAllowed((string) $this->_resource);
         } catch (\Exception $e) {
             return false;
         }

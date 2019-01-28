@@ -332,7 +332,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      */
     public function setSaveStoresFlag($value)
     {
-        $this->_saveStoresFlag = (bool)$value;
+        $this->_saveStoresFlag = (bool) $value;
         return $this;
     }
 

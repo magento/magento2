@@ -98,7 +98,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAcceptedSaveCookiesWebsiteIds()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        $acceptedSaveCookiesWebsites[(int)$this->_website->getId()] = 1;
+        $acceptedSaveCookiesWebsites[(int) $this->_website->getId()] = 1;
         return json_encode($acceptedSaveCookiesWebsites);
     }
 
@@ -124,7 +124,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCookieRestrictionLifetime()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_currentStore

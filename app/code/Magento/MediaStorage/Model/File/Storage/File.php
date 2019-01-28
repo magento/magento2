@@ -142,8 +142,8 @@ class File
             return false;
         }
 
-        $offset = (int)$offset >= 0 ? (int)$offset : 0;
-        $count = (int)$count >= 1 ? (int)$count : 1;
+        $offset = (int) $offset >= 0 ? (int) $offset : 0;
+        $count = (int) $count >= 1 ? (int) $count : 1;
 
         if (empty($this->_data)) {
             $this->_data = $this->getStorageData();

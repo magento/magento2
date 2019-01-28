@@ -467,7 +467,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasCustomPrice()) {
-                $price = (float)$this->getCustomPrice();
+                $price = (float) $this->getCustomPrice();
                 if ($price) {
                     $rate = $this->priceCurrency->convert($price, $this->getStore()) / $price;
                     $price = $price / $rate;
@@ -489,7 +489,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasOriginalCustomPrice()) {
-                $price = (float)$this->getOriginalCustomPrice();
+                $price = (float) $this->getOriginalCustomPrice();
                 if ($price) {
                     $rate = $this->priceCurrency->convert($price, $this->getStore()) / $price;
                     $price = $price / $rate;
@@ -632,7 +632,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         }
 
         if (null !== $calculate &&
-            (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
+            (int) $calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
         ) {
             return true;
         }
@@ -656,7 +656,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         }
 
         if (null !== $shipmentType &&
-            (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
+            (int) $shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
         ) {
             return true;
         }

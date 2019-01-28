@@ -28,13 +28,13 @@ class TextBlobDefinition implements DefinitionConverterInterface
 
         switch ($last) {
             case 'k':
-                $size = (int)$size * 1024;
+                $size = (int) $size * 1024;
                 break;
             case 'm':
-                $size = (int)$size * 1024 * 1024;
+                $size = (int) $size * 1024 * 1024;
                 break;
             case 'g':
-                $size = (int)$size * 1024 * 1024 * 1024;
+                $size = (int) $size * 1024 * 1024 * 1024;
                 break;
         }
 
@@ -45,7 +45,7 @@ class TextBlobDefinition implements DefinitionConverterInterface
             return Table::MAX_TEXT_SIZE;
         }
 
-        return (int)$size;
+        return (int) $size;
     }
 
     /**

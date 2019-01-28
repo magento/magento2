@@ -25,7 +25,7 @@ class Filter extends \Magento\Email\Model\Template\Filter
      */
     public function setUseSessionInUrl($flag)
     {
-        $this->_useSessionInUrl = (bool)$flag;
+        $this->_useSessionInUrl = (bool) $flag;
         return $this;
     }
 

@@ -124,8 +124,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      */
     private function isRequestFromCheckoutPage(\Magento\Framework\App\RequestInterface $request): bool
     {
-        $requestUri = (string)$request->getRequestUri();
-        $refererUri = (string)$request->getServer('HTTP_REFERER');
+        $requestUri = (string) $request->getRequestUri();
+        $refererUri = (string) $request->getServer('HTTP_REFERER');
 
         /** @var bool $isCheckoutPage */
         $isCheckoutPage = (

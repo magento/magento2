@@ -305,7 +305,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->configMock->expects(
-            $this->exactly((int)$isActive)
+            $this->exactly((int) $isActive)
         )->method(
             'isDevAllowed'
         )->will(

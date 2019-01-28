@@ -135,7 +135,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
-        $orderId = (int)$orderModel->getId();
+        $orderId = (int) $orderModel->getId();
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);
@@ -190,7 +190,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
-        $orderId = (int)$orderModel->getId();
+        $orderId = (int) $orderModel->getId();
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);

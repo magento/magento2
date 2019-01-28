@@ -24,7 +24,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSelect()
     {
-        $select = (string)$this->_collection->getSelect();
+        $select = (string) $this->_collection->getSelect();
         $search = '/SUM\(table_rating.percent\)\/COUNT\(table_rating.rating_id\) AS `avg_rating`'
             . '[\s\S]+SUM\(table_rating.percent_approved\)\/COUNT\(table_rating.rating_id\) AS `avg_rating_approved`'
             . '[\s\S]+LEFT JOIN `.*rating_option_vote_aggregated` AS `table_rating`/';

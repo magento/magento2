@@ -202,7 +202,7 @@ class Suggestions implements SuggestedQueriesInterface
      */
     private function getSearchSuggestionsCount()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::CONFIG_SUGGESTION_COUNT,
             ScopeInterface::SCOPE_STORE
         );

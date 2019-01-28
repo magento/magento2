@@ -121,7 +121,7 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
+        $this->connection->delete($changelogTableName, ['version_id < ?' => (int) $versionId]);
 
         return true;
     }
@@ -148,10 +148,10 @@ class Changelog implements ChangelogInterface
             [$this->getColumnName()]
         )->where(
             'version_id > ?',
-            (int)$fromVersionId
+            (int) $fromVersionId
         )->where(
             'version_id <= ?',
-            (int)$toVersionId
+            (int) $toVersionId
         );
 
         return $this->connection->fetchCol($select);
@@ -171,7 +171,7 @@ class Changelog implements ChangelogInterface
         }
         $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
         if (isset($row['Auto_increment'])) {
-            return (int)$row['Auto_increment'] - 1;
+            return (int) $row['Auto_increment'] - 1;
         } else {
             throw new \Exception("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
         }

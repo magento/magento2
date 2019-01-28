@@ -102,7 +102,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 ['default_title' => 'title']
             )->joinLeft(
                 ['st' => $this->getTable('downloadable_link_title')],
-                'st.link_id=main_table.link_id AND st.store_id = ' . (int)$storeId,
+                'st.link_id=main_table.link_id AND st.store_id = ' . (int) $storeId,
                 [
                     'store_title' => 'title',
                     'title' => $ifNullDefaultTitle
@@ -127,7 +127,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['default_price' => 'price']
         )->joinLeft(
             ['stp' => $this->getTable('downloadable_link_price')],
-            'stp.link_id=main_table.link_id AND stp.website_id = ' . (int)$websiteId,
+            'stp.link_id=main_table.link_id AND stp.website_id = ' . (int) $websiteId,
             ['website_price' => 'price', 'price' => $ifNullDefaultPrice]
         );
 

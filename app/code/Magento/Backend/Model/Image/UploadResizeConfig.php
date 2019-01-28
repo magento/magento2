@@ -47,7 +47,7 @@ class UploadResizeConfig implements UploadResizeConfigInterface
      */
     public function getMaxWidth(): int
     {
-        return (int)$this->config->getValue(self::XML_PATH_MAX_WIDTH_IMAGE);
+        return (int) $this->config->getValue(self::XML_PATH_MAX_WIDTH_IMAGE);
     }
 
     /**
@@ -57,7 +57,7 @@ class UploadResizeConfig implements UploadResizeConfigInterface
      */
     public function getMaxHeight(): int
     {
-        return (int)$this->config->getValue(self::XML_PATH_MAX_HEIGHT_IMAGE);
+        return (int) $this->config->getValue(self::XML_PATH_MAX_HEIGHT_IMAGE);
     }
 
     /**
@@ -67,6 +67,6 @@ class UploadResizeConfig implements UploadResizeConfigInterface
      */
     public function isResizeEnabled(): bool
     {
-        return (bool)$this->config->getValue(self::XML_PATH_ENABLE_RESIZE);
+        return (bool) $this->config->getValue(self::XML_PATH_ENABLE_RESIZE);
     }
 }

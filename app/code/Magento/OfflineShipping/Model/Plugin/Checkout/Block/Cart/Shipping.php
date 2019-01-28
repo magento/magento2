@@ -34,7 +34,7 @@ class Shipping
      */
     public function afterIsStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue(
+        return (bool) $result || (bool) $this->_scopeConfig->getValue(
             'carriers/tablerate/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

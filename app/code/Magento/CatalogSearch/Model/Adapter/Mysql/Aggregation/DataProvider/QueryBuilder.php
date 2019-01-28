@@ -132,11 +132,11 @@ class QueryBuilder
             [
                 $this->dimensionFactory->create(
                     WebsiteDimensionProvider::DIMENSION_NAME,
-                    (string)$websiteId
+                    (string) $websiteId
                 ),
                 $this->dimensionFactory->create(
                     CustomerGroupDimensionProvider::DIMENSION_NAME,
-                    (string)$customerGroupId
+                    (string) $customerGroupId
                 ),
             ]
         );

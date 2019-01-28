@@ -486,7 +486,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $config->setSection($section)->setGroups($data)->save();
 
         if ($restore && !isset($this->_origConfigValues[$path])) {
-            $this->_origConfigValues[$path] = (string)$objectManager->get(
+            $this->_origConfigValues[$path] = (string) $objectManager->get(
                 \Magento\Framework\App\Config\ScopeConfigInterface::class
             )->getNode(
                 $path,

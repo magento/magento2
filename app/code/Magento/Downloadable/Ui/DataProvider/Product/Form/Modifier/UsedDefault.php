@@ -105,7 +105,7 @@ class UsedDefault extends AbstractModifier
      */
     protected function priceUsedDefault()
     {
-        $scope = (int)$this->scopeConfig->getValue(
+        $scope = (int) $this->scopeConfig->getValue(
             \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

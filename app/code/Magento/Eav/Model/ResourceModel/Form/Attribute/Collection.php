@@ -257,7 +257,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $store = $this->getStore();
             $joinWebsiteExpression = $connection->quoteInto(
                 'sa.attribute_id = main_table.attribute_id AND sa.website_id = ?',
-                (int)$store->getWebsiteId()
+                (int) $store->getWebsiteId()
             );
             $select->joinLeft(['sa' => $this->_getEavWebsiteTable()], $joinWebsiteExpression, $saColumns);
         }
@@ -266,7 +266,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $storeLabelExpr = $connection->getCheckSql('al.value IS NULL', 'ea.frontend_label', 'al.value');
         $joinExpression = $connection->quoteInto(
             'al.attribute_id = main_table.attribute_id AND al.store_id = ?',
-            (int)$store->getId()
+            (int) $store->getId()
         );
         $select->joinLeft(
             ['al' => $this->getTable('eav_attribute_label')],
@@ -275,7 +275,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         );
 
         // add entity type filter
-        $select->where('ea.entity_type_id = ?', (int)$entityType->getId());
+        $select->where('ea.entity_type_id = ?', (int) $entityType->getId());
 
         return parent::_beforeLoad();
     }

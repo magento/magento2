@@ -112,7 +112,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
         }
 
         $bind = ['visitor_id' => null];
-        $where = ['customer_id = ?' => (int)$object->getCustomerId()];
+        $where = ['customer_id = ?' => (int) $object->getCustomerId()];
         $this->getConnection()->update($this->getMainTable(), $bind, $where);
 
         return $this;
@@ -200,7 +200,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
         ];
         $data = [];
         foreach ($productIds as $productId) {
-            $productId = (int)$productId;
+            $productId = (int) $productId;
             if ($productId) {
                 $row['product_id'] = $productId;
                 $data[] = $row;

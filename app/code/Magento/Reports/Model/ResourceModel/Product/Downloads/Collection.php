@@ -47,7 +47,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ['l.link_id']
         )->joinLeft(
             ['l_store' => $this->getTable('downloadable_link_title')],
-            $connection->quoteInto('l.link_id = l_store.link_id AND l_store.store_id = ?', (int)$this->getStoreId()),
+            $connection->quoteInto('l.link_id = l_store.link_id AND l_store.store_id = ?', (int) $this->getStoreId()),
             ['link_title' => $linkExpr]
         )->where(
             implode(

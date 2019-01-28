@@ -19,7 +19,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
     {
         /** @var \Magento\User\Model\User */
         $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
-        $userId = (int)$this->getRequest()->getPost('user_id');
+        $userId = (int) $this->getRequest()->getPost('user_id');
 
         if ($userId) {
             if ($currentUser->getId() == $userId) {
@@ -28,7 +28,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                 return;
             }
             try {
-                $currentUserPassword = (string)$this->getRequest()->getPost(UserEdit::CURRENT_USER_PASSWORD_FIELD);
+                $currentUserPassword = (string) $this->getRequest()->getPost(UserEdit::CURRENT_USER_PASSWORD_FIELD);
                 if (empty($currentUserPassword)) {
                     throw new AuthenticationException(
                         __('The password entered for the current user is invalid. Verify the password and try again.')

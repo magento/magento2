@@ -25,8 +25,8 @@ class Xml extends AbstractAdapter
                 continue;
             }
             $attributes = $element->attributes();
-            if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true') {
-                $this->_addPhrase((string)$element);
+            if ((string) $attributes['translate'] === 'true' || (string) $attributes['translatable'] === 'true') {
+                $this->_addPhrase((string) $element);
             } else {
                 $this->parseTranslatableNodes($attributes, $element);
             }
@@ -65,13 +65,13 @@ class Xml extends AbstractAdapter
     {
         $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
         foreach (explode($nodesDelimiter, $attributes['translate']) as $value) {
-            $phrase = trim((string)$element->{$value});
+            $phrase = trim((string) $element->{$value});
             if ($phrase) {
                 $this->_addPhrase($phrase);
             }
             $elementAttributes = $element->attributes();
             if (isset($elementAttributes[$value])) {
-                $phrase = (string)$elementAttributes[$value];
+                $phrase = (string) $elementAttributes[$value];
                 if ($phrase) {
                     $this->_addPhrase($phrase);
                 }

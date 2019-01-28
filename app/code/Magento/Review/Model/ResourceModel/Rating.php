@@ -103,7 +103,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         $table = $this->getMainTable();
-        $storeId = (int)$this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
+        $storeId = (int) $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
         $select = parent::_getLoadSelect($field, $value, $object);
         $codeExpr = $connection->getIfNullSql('title.value', "{$table}.rating_code");
 
@@ -131,7 +131,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $connection = $this->getConnection();
-        $bind = [':rating_id' => (int)$object->getId()];
+        $bind = [':rating_id' => (int) $object->getId()];
         // load rating titles
         $select = $connection->select()->from(
             $this->getTable('rating_title'),
@@ -146,7 +146,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         // load rating available in stores
-        $object->setStores($this->getStores((int)$object->getId()));
+        $object->setStores($this->getStores((int) $object->getId()));
 
         return $this;
     }
@@ -198,7 +198,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function processRatingCodes(\Magento\Framework\Model\AbstractModel $object)
     {
         $connection = $this->getConnection();
-        $ratingId = (int)$object->getId();
+        $ratingId = (int) $object->getId();
         $table = $this->getTable('rating_title');
         $select = $connection->select()->from($table, ['store_id', 'value'])
             ->where('rating_id = :rating_id');
@@ -208,7 +208,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $insert = [];
         foreach (array_diff_assoc($new, $old) as $storeId => $title) {
-            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title];
+            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int) $storeId, 'value' => $title];
         }
         $this->insertRatingData($table, $insert);
         return $this;
@@ -223,7 +223,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function processRatingStores(\Magento\Framework\Model\AbstractModel $object)
     {
         $connection = $this->getConnection();
-        $ratingId = (int)$object->getId();
+        $ratingId = (int) $object->getId();
         $table = $this->getTable('rating_store');
         $select = $connection->select()->from($table, ['store_id'])
             ->where('rating_id = :rating_id');
@@ -233,7 +233,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $insert = [];
         foreach (array_diff($new, $old) as $storeId) {
-            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId];
+            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int) $storeId];
         }
         $this->insertRatingData($table, $insert);
         return $this;
@@ -519,7 +519,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $ratingIds = $connection->fetchCol($select, [':entity_id' => $entityId]);
 
         if ($ratingIds) {
-            $where = ['entity_pk_value = ?' => (int)$productId, 'rating_id IN(?)' => $ratingIds];
+            $where = ['entity_pk_value = ?' => (int) $productId, 'rating_id IN(?)' => $ratingIds];
             $connection->delete($this->getTable('rating_option_vote_aggregated'), $where);
         }
 

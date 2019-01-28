@@ -96,7 +96,7 @@ class Log implements DebuggerInterface
      */
     private function buildExceptionInfo(Exception $exception)
     {
-        $infoContent = (string)$exception;
+        $infoContent = (string) $exception;
         $info = $this->buildInfoSection('Exception', $infoContent);
         return $info;
     }

@@ -73,7 +73,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             'value NOT LIKE ?',
             '0'
         );
-        $showPrefix = (bool)$this->customerAddress->getConfig('prefix_show')
+        $showPrefix = (bool) $this->customerAddress->getConfig('prefix_show')
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
@@ -86,7 +86,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             'value NOT LIKE ?',
             '0'
         );
-        $showMiddlename = (bool)$this->customerAddress->getConfig('middlename_show')
+        $showMiddlename = (bool) $this->customerAddress->getConfig('middlename_show')
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
@@ -99,7 +99,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             'value NOT LIKE ?',
             '0'
         );
-        $showSuffix = (bool)$this->customerAddress->getConfig('suffix_show')
+        $showSuffix = (bool) $this->customerAddress->getConfig('suffix_show')
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
@@ -112,7 +112,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             'value NOT LIKE ?',
             '0'
         );
-        $showDob = (bool)$this->customerAddress->getConfig('dob_show')
+        $showDob = (bool) $this->customerAddress->getConfig('dob_show')
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
@@ -125,7 +125,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             'value NOT LIKE ?',
             '0'
         );
-        $showTaxVat = (bool)$this->customerAddress->getConfig('taxvat_show')
+        $showTaxVat = (bool) $this->customerAddress->getConfig('taxvat_show')
             || $connection->fetchOne($select) > 0;
 
         $customerEntityTypeId = $eavSetup->getEntityTypeId('customer');
@@ -810,7 +810,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
                 $connection->beginTransaction();
 
                 foreach ($data as $value) {
-                    $bind = ['path' => 'checkout/options/onepage_checkout_enabled', 'value' => !(bool)$value['value']];
+                    $bind = ['path' => 'checkout/options/onepage_checkout_enabled', 'value' => !(bool) $value['value']];
                     $where = 'config_id = ' . $value['config_id'];
                     $connection->update($table, $bind, $where);
                 }

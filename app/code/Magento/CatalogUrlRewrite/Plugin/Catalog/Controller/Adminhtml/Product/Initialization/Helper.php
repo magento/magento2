@@ -36,7 +36,7 @@ class Helper
          * Create Permanent Redirect for old URL key
          */
         if ($result->getId() && isset($productData['url_key_create_redirect'])) {
-            $result->setData('save_rewrites_history', (bool)$productData['url_key_create_redirect']);
+            $result->setData('save_rewrites_history', (bool) $productData['url_key_create_redirect']);
         }
         return $result;
     }

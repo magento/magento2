@@ -99,7 +99,7 @@ class Transfer implements TransferInterface
      */
     public function getMethod()
     {
-        return (string)$this->method;
+        return (string) $this->method;
     }
 
     /**
@@ -129,7 +129,7 @@ class Transfer implements TransferInterface
      */
     public function getUri()
     {
-        return (string)$this->uri;
+        return (string) $this->uri;
     }
 
     /**

@@ -22,7 +22,7 @@ class StartTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
             ->will($this->returnValue($buttonParam));
         $this->checkout->expects($this->once())
             ->method('setIsBml')
-            ->with((bool)$buttonParam);
+            ->with((bool) $buttonParam);
 
         $this->request->expects($this->at(2))
             ->method('getParam')
@@ -33,7 +33,7 @@ class StartTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
             ->will($this->returnValue(1));
         $this->checkout->expects($this->once())
             ->method('start')
-            ->with($this->anything(), $this->anything(), (bool)$buttonParam);
+            ->with($this->anything(), $this->anything(), (bool) $buttonParam);
         $this->model->execute();
     }
 

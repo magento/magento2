@@ -74,7 +74,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     {
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
 
-        $rootIdExpr = $this->connection->quote((string)$rootId);
+        $rootIdExpr = $this->connection->quote((string) $rootId);
         $rootCatIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}");
         $catIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 
@@ -108,7 +108,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     {
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
 
-        $rootIdExpr = $this->connection->quote((string)$rootId);
+        $rootIdExpr = $this->connection->quote((string) $rootId);
         $rootCatIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}");
         $catIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 

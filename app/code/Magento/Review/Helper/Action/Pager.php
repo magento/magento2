@@ -84,7 +84,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _loadItems()
     {
         if ($this->_items === null) {
-            $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
+            $this->_items = (array) $this->_backendSession->getData($this->_getStorageKey());
         }
     }
 

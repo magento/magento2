@@ -433,7 +433,7 @@ class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _aggregateRatings($ratingIds, $entityPkValue)
     {
         if ($ratingIds && !is_array($ratingIds)) {
-            $ratingIds = [(int)$ratingIds];
+            $ratingIds = [(int) $ratingIds];
         }
         if ($ratingIds && $entityPkValue) {
             foreach ($ratingIds as $ratingId) {

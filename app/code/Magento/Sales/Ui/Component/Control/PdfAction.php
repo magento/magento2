@@ -25,7 +25,7 @@ class PdfAction extends Action
             $config['pdfAction'],
             ['order_id' => $context->getRequestParam('order_id')]
         );
-        $this->setData('config', (array)$config);
+        $this->setData('config', (array) $config);
         parent::prepare();
     }
 }

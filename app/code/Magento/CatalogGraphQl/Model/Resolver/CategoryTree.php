@@ -58,7 +58,7 @@ class CategoryTree implements ResolverInterface
             throw new GraphQlInputException(__('"id for category should be specified'));
         }
 
-        return (int)$args['id'];
+        return (int) $args['id'];
     }
 
     /**

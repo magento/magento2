@@ -84,7 +84,7 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
         /** @var \Magento\Indexer\Model\Indexer $indexer */
         $indexer = $this->getObjectManager()->get(\Magento\Indexer\Model\Indexer::class);
         try {
-            $selectedIndexer = (string)$input->getArgument(self::INPUT_KEY_INDEXER);
+            $selectedIndexer = (string) $input->getArgument(self::INPUT_KEY_INDEXER);
             if (!$selectedIndexer) {
                 $this->showAvailableModes($output);
             } else {
@@ -167,12 +167,12 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
     private function validate(InputInterface $input): array
     {
         $errors = [];
-        $inputIndexer = (string)$input->getArgument(self::INPUT_KEY_INDEXER);
+        $inputIndexer = (string) $input->getArgument(self::INPUT_KEY_INDEXER);
         if ($inputIndexer) {
             $acceptedValues = array_keys($this->dimensionProviders);
             $errors = $this->validateArgument(self::INPUT_KEY_INDEXER, $inputIndexer, $acceptedValues);
             if (!$errors) {
-                $inputIndexerDimensionMode = (string)$input->getArgument(self::INPUT_KEY_MODE);
+                $inputIndexerDimensionMode = (string) $input->getArgument(self::INPUT_KEY_MODE);
                 /** @var ModeSwitcherInterface $modeSwitcher */
                 $modeSwitcher = $this->dimensionProviders[$inputIndexer];
                 $acceptedValues = array_keys($modeSwitcher->getDimensionModes()->getDimensions());

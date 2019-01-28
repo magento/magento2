@@ -92,7 +92,7 @@ class Data extends AbstractHelper
     {
         $params['_type'] = \Magento\Framework\UrlInterface::URL_TYPE_LINK;
         if (isset($params['is_secure'])) {
-            $params['_secure'] = (bool)$params['is_secure'];
+            $params['_secure'] = (bool) $params['is_secure'];
         } elseif ($this->storeManager->getStore()->isCurrentlySecure()) {
             $params['_secure'] = true;
         }

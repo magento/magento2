@@ -89,7 +89,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setIsStoreFilterWithAdmin($value)
     {
-        $this->_isStoreFilterWithAdmin = (bool)$value;
+        $this->_isStoreFilterWithAdmin = (bool) $value;
         return $this;
     }
 }

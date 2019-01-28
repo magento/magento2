@@ -53,11 +53,11 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
     {
         $transport = parent::_prepareSpecificInformation($transport);
         $payment = $this->getInfo();
-        $storedFields = explode(',', (string)$this->config->getValue('paymentInfoKeys'));
+        $storedFields = explode(',', (string) $this->config->getValue('paymentInfoKeys'));
         if ($this->getIsSecureMode()) {
             $storedFields = array_diff(
                 $storedFields,
-                explode(',', (string)$this->config->getValue('privateInfoKeys'))
+                explode(',', (string) $this->config->getValue('privateInfoKeys'))
             );
         }
 
@@ -88,8 +88,8 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
         $value
     ) {
         $transport->setData(
-            (string)$this->getLabel($field),
-            (string)$this->getValueView(
+            (string) $this->getLabel($field),
+            (string) $this->getValueView(
                 $field,
                 $value
             )

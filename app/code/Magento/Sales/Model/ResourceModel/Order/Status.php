@@ -145,8 +145,8 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [
                 'status' => $status,
                 'state' => $state,
-                'is_default' => (int)$isDefault,
-                'visible_on_front' => (int)$visibleOnFront
+                'is_default' => (int) $isDefault,
+                'visible_on_front' => (int) $visibleOnFront
             ]
         );
         return $this;
@@ -218,7 +218,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function checkIsStatusUsed($status)
     {
-        return (bool)$this->getConnection()->fetchOne(
+        return (bool) $this->getConnection()->fetchOne(
             $this->getConnection()->select()
                 ->from(['sfo' => $this->getTable('sales_order')], [])
                 ->where('status = ?', $status)
@@ -236,7 +236,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function checkIsStateDefault($state, $status)
     {
-        return (bool)$this->getConnection()->fetchOne(
+        return (bool) $this->getConnection()->fetchOne(
             $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
@@ -255,7 +255,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function getStatusByState($state)
     {
-        return (string)$this->getConnection()->fetchOne(
+        return (string) $this->getConnection()->fetchOne(
             $select = $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable, []])
                 ->where('state = ?', $state)

@@ -94,7 +94,7 @@ class Iterator implements \Iterator, \ArrayAccess
      */
     public function valid()
     {
-        return (bool)current($this->data);
+        return (bool) current($this->data);
     }
 
     /**

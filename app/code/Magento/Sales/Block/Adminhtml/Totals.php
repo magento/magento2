@@ -64,7 +64,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         /**
          * Add shipping
          */
-        if (!$this->getSource()->getIsVirtual() && ((float)$this->getSource()->getShippingAmount() ||
+        if (!$this->getSource()->getIsVirtual() && ((float) $this->getSource()->getShippingAmount() ||
             $this->getSource()->getShippingDescription())
         ) {
             $this->_totals['shipping'] = new \Magento\Framework\DataObject(
@@ -80,7 +80,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         /**
          * Add discount
          */
-        if ((float)$this->getSource()->getDiscountAmount() != 0) {
+        if ((float) $this->getSource()->getDiscountAmount() != 0) {
             if ($this->getSource()->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $this->getSource()->getDiscountDescription());
             } else {

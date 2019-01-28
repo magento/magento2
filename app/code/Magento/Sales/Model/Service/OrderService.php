@@ -172,7 +172,7 @@ class OrderService implements OrderManagementInterface
     {
         $order = $this->orderRepository->get($id);
         $order->hold();
-        return (bool)$this->orderRepository->save($order);
+        return (bool) $this->orderRepository->save($order);
     }
 
     /**
@@ -185,7 +185,7 @@ class OrderService implements OrderManagementInterface
     {
         $object = $this->orderRepository->get($id);
         $object->unhold();
-        return (bool)$this->orderRepository->save($object);
+        return (bool) $this->orderRepository->save($object);
     }
 
     /**
@@ -203,7 +203,7 @@ class OrderService implements OrderManagementInterface
             //commit
         } catch (\Exception $e) {
             if ($e instanceof CommandException) {
-                $this->paymentFailures->handle((int)$order->getQuoteId(), __($e->getMessage()));
+                $this->paymentFailures->handle((int) $order->getQuoteId(), __($e->getMessage()));
             }
             throw $e;
             //rollback;

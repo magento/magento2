@@ -104,21 +104,21 @@ abstract class Create extends \Magento\Backend\App\Action
          * Identify customer
          */
         if ($customerId = $this->getRequest()->getParam('customer_id')) {
-            $this->_getSession()->setCustomerId((int)$customerId);
+            $this->_getSession()->setCustomerId((int) $customerId);
         }
 
         /**
          * Identify store
          */
         if ($storeId = $this->getRequest()->getParam('store_id')) {
-            $this->_getSession()->setStoreId((int)$storeId);
+            $this->_getSession()->setStoreId((int) $storeId);
         }
 
         /**
          * Identify currency
          */
         if ($currencyId = $this->getRequest()->getParam('currency_id')) {
-            $this->_getSession()->setCurrencyId((string)$currencyId);
+            $this->_getSession()->setCurrencyId((string) $currencyId);
             $this->_getOrderCreateModel()->setRecollect(true);
         }
         return $this;
@@ -181,7 +181,7 @@ abstract class Create extends \Magento\Backend\App\Action
             ) {
                 $this->_getOrderCreateModel()->setShippingAsBilling(1);
             } else {
-                $this->_getOrderCreateModel()->setShippingAsBilling((int)$syncFlag);
+                $this->_getOrderCreateModel()->setShippingAsBilling((int) $syncFlag);
             }
         }
 
@@ -215,7 +215,7 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Adding product to quote from shopping cart, wishlist etc.
          */
-        if ($productId = (int)$this->getRequest()->getPost('add_product')) {
+        if ($productId = (int) $this->getRequest()->getPost('add_product')) {
             $this->_getOrderCreateModel()->addProduct($productId, $this->getRequest()->getPostValue());
         }
 
@@ -241,8 +241,8 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Remove quote item
          */
-        $removeItemId = (int)$this->getRequest()->getPost('remove_item');
-        $removeFrom = (string)$this->getRequest()->getPost('from');
+        $removeItemId = (int) $this->getRequest()->getPost('remove_item');
+        $removeFrom = (string) $this->getRequest()->getPost('from');
         if ($removeItemId && $removeFrom) {
             $this->_getOrderCreateModel()->removeItem($removeItemId, $removeFrom);
             $this->_getOrderCreateModel()->recollectCart();
@@ -251,9 +251,9 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Move quote item
          */
-        $moveItemId = (int)$this->getRequest()->getPost('move_item');
-        $moveTo = (string)$this->getRequest()->getPost('to');
-        $moveQty = (int)$this->getRequest()->getPost('qty');
+        $moveItemId = (int) $this->getRequest()->getPost('move_item');
+        $moveTo = (string) $this->getRequest()->getPost('to');
+        $moveQty = (int) $this->getRequest()->getPost('qty');
         if ($moveItemId && $moveTo) {
             $this->_getOrderCreateModel()->moveQuoteItem($moveItemId, $moveTo, $moveQty);
         }

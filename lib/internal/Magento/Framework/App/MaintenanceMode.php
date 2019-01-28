@@ -91,7 +91,7 @@ class MaintenanceMode
      */
     public function setAddresses($addresses)
     {
-        $addresses = (string)$addresses;
+        $addresses = (string) $addresses;
         if (empty($addresses)) {
             if ($this->flagDir->isExist(self::IP_FILENAME)) {
                 return $this->flagDir->delete(self::IP_FILENAME);

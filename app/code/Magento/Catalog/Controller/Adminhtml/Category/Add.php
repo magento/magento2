@@ -43,7 +43,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category implements Http
      */
     public function execute()
     {
-        $parentId = (int)$this->getRequest()->getParam('parent');
+        $parentId = (int) $this->getRequest()->getParam('parent');
 
         $category = $this->_initCategory(true);
         if (!$category || !$parentId || $category->getId()) {

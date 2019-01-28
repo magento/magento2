@@ -49,6 +49,6 @@ class Curl extends AbstractCurl implements TaxClassInterface
         if ($data['success'] !== true) {
             throw new \Exception("Tax class creation by curl handler was not successful! Response: $response");
         }
-        return isset($data['class_id']) ? (int)$data['class_id'] : null;
+        return isset($data['class_id']) ? (int) $data['class_id'] : null;
     }
 }

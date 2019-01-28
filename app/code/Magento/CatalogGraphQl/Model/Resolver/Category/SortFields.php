@@ -55,7 +55,7 @@ class SortFields implements ResolverInterface
         array_walk(
             $sortFieldsOptions,
             function (&$option) {
-                $option['label'] = (string)$option['label'];
+                $option['label'] = (string) $option['label'];
             }
         );
         $data = [

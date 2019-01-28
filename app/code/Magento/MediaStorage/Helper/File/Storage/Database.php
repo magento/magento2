@@ -84,7 +84,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function checkDbUsage()
     {
         if (null === $this->_useDb) {
-            $currentStorage = (int)$this->scopeConfig->getValue(
+            $currentStorage = (int) $this->scopeConfig->getValue(
                 \Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA,
                 'default'
             );

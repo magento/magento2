@@ -90,7 +90,7 @@ class Uploader extends \Magento\Framework\File\Uploader
         if ($flag === null) {
             return $this->_skipDbProcessing;
         }
-        $this->_skipDbProcessing = (bool)$flag;
+        $this->_skipDbProcessing = (bool) $flag;
         return $this;
     }
 

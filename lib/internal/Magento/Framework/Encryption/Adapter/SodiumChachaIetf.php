@@ -38,7 +38,7 @@ class SodiumChachaIetf implements EncryptionAdapterInterface
     {
         $nonce = random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
         $cipherText = sodium_crypto_aead_chacha20poly1305_ietf_encrypt(
-            (string)$data,
+            (string) $data,
             $nonce,
             $nonce,
             $this->key

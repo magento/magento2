@@ -179,11 +179,11 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
 
         // showing websites that only associated to products
         if ($product->getId()) {
-            $entityStores = (array)$product->getStoreIds();
+            $entityStores = (array) $product->getStoreIds();
 
             //if category is chosen, reset stores which are not related with this category
             if ($category->getId()) {
-                $categoryStores = (array)$category->getStoreIds();
+                $categoryStores = (array) $category->getStoreIds();
                 $entityStores = array_intersect($entityStores, $categoryStores);
             }
             if (!$entityStores) {
@@ -195,7 +195,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
             }
             $this->_requireStoresFilter = true;
         } elseif ($category->getId()) {
-            $entityStores = (array)$category->getStoreIds();
+            $entityStores = (array) $category->getStoreIds();
             $message = __(
                 'Please assign a website to the selected category.'
             );

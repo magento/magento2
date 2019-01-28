@@ -163,7 +163,7 @@ class AuthObserver implements ObserverInterface
         if (!($lockThreshold && $maxFailures)) {
             return;
         }
-        $failuresNum = (int)$user->getFailuresNum() + 1;
+        $failuresNum = (int) $user->getFailuresNum() + 1;
         /** @noinspection PhpAssignmentInConditionInspection */
         if ($firstFailureDate = $user->getFirstFailure()) {
             $firstFailureDate = new \DateTime($firstFailureDate);

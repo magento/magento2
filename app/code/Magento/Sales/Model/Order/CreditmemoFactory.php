@@ -199,8 +199,8 @@ class CreditmemoFactory
     protected function initData($creditmemo, $data)
     {
         if (isset($data['shipping_amount'])) {
-            $creditmemo->setBaseShippingAmount((float)$data['shipping_amount']);
-            $creditmemo->setBaseShippingInclTax((float)$data['shipping_amount']);
+            $creditmemo->setBaseShippingAmount((float) $data['shipping_amount']);
+            $creditmemo->setBaseShippingInclTax((float) $data['shipping_amount']);
         }
         if (isset($data['adjustment_positive'])) {
             $creditmemo->setAdjustmentPositive($data['adjustment_positive']);
@@ -308,7 +308,7 @@ class CreditmemoFactory
             } elseif (!count($qtyList)) {
                 $qty = $orderItem->getQtyToRefund();
             } else {
-                return (float)$qty;
+                return (float) $qty;
             }
 
             if (isset($refundLimits[$orderItem->getId()])) {
@@ -316,7 +316,7 @@ class CreditmemoFactory
             }
         }
 
-        return (float)$qty;
+        return (float) $qty;
     }
 
     /**
@@ -338,6 +338,6 @@ class CreditmemoFactory
             $amount = min($amount, $invoice->getBaseShippingAmount());
         }
 
-        return (float)$amount;
+        return (float) $amount;
     }
 }

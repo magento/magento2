@@ -75,7 +75,7 @@ class TypeSelectorsSniff implements Sniff
             return;
         }
 
-        $isBracketOnSameLane = (bool)($tokens[$bracketPtr]['line'] === $tokens[$stackPtr]['line']);
+        $isBracketOnSameLane = (bool) ($tokens[$bracketPtr]['line'] === $tokens[$stackPtr]['line']);
 
         if (!$isBracketOnSameLane) {
             return;

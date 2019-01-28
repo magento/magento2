@@ -143,10 +143,10 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
-                $itemPublicationDate = strtotime((string)$item->pubDate);
+                $itemPublicationDate = strtotime((string) $item->pubDate);
                 if ($installDate <= $itemPublicationDate) {
                     $feedData[] = [
-                        'severity' => (int)$item->severity,
+                        'severity' => (int) $item->severity,
                         'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
                         'title' => $this->escapeString($item->title),
                         'description' => $this->escapeString($item->description),
@@ -252,6 +252,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     private function escapeString(\SimpleXMLElement $data)
     {
-        return htmlspecialchars((string)$data);
+        return htmlspecialchars((string) $data);
     }
 }

@@ -118,7 +118,7 @@ class Grid extends \Magento\Framework\View\Element\Template
         $addresses = $this->getAddressCollection();
         $primaryAddressIds = [$this->getDefaultBilling(), $this->getDefaultShipping()];
         foreach ($addresses as $address) {
-            if (!in_array((int)$address->getId(), $primaryAddressIds, true)) {
+            if (!in_array((int) $address->getId(), $primaryAddressIds, true)) {
                 $additional[] = $address->getDataModel();
             }
         }
@@ -184,7 +184,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     {
         $customer = $this->getCustomer();
 
-        return (int)$customer->getDefaultBilling();
+        return (int) $customer->getDefaultBilling();
     }
 
     /**
@@ -199,7 +199,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     {
         $customer = $this->getCustomer();
 
-        return (int)$customer->getDefaultShipping();
+        return (int) $customer->getDefaultShipping();
     }
 
     /**

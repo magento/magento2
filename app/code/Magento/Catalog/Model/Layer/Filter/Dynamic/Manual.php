@@ -95,7 +95,7 @@ class Manual implements AlgorithmInterface
      */
     public function getMaxIntervalsNumber()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_RANGE_MAX_INTERVALS,
             ScopeInterface::SCOPE_STORE
         );

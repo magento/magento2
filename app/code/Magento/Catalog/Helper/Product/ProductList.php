@@ -132,7 +132,7 @@ class ProductList
             return $this->_defaultAvailableLimit;
         }
         $perPageConfigKey = 'catalog/frontend/' . $mode . '_per_page_values';
-        $perPageValues = (string)$this->scopeConfig->getValue(
+        $perPageValues = (string) $this->scopeConfig->getValue(
             $perPageConfigKey,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

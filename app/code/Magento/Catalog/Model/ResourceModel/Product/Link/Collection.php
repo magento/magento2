@@ -144,7 +144,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 '.link_id = main_table.link_id AND ' .
                 $aliasInCondition .
                 '.product_link_attribute_id = ' .
-                (int)$attribute['id'],
+                (int) $attribute['id'],
                 [$attribute['code'] => 'value']
             );
         }

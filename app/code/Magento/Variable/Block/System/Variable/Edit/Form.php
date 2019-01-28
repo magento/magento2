@@ -57,8 +57,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $useDefault = false;
         if ($this->getVariable()->getId() && $this->getVariable()->getStoreId()) {
-            $useDefault = !(bool)$this->getVariable()->getStoreHtmlValue();
-            $this->getVariable()->setUseDefaultValue((int)$useDefault);
+            $useDefault = !(bool) $this->getVariable()->getStoreHtmlValue();
+            $this->getVariable()->setUseDefaultValue((int) $useDefault);
             $fieldset->addField(
                 'use_default_value',
                 'select',

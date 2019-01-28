@@ -164,7 +164,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(self::SESSION_ID, $session[self::COLUMN_SESSION_ID]);
         $this->assertTrue(
-            ctype_digit((string)$session[self::COLUMN_SESSION_EXPIRES]),
+            ctype_digit((string) $session[self::COLUMN_SESSION_EXPIRES]),
             'Value of session expire field must have integer type'
         );
         $this->assertEquals($data, base64_decode($session[self::COLUMN_SESSION_DATA]));

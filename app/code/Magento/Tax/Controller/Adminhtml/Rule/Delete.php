@@ -18,7 +18,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule implements HttpPostA
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $ruleId = (int)$this->getRequest()->getParam('rule');
+        $ruleId = (int) $this->getRequest()->getParam('rule');
         try {
             $this->ruleService->deleteById($ruleId);
             $this->messageManager->addSuccess(__('The tax rule has been deleted.'));

@@ -325,7 +325,7 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
         $result = [];
         if ($elements) {
             foreach ($elements as $node) {
-                $result[] = (string)$node;
+                $result[] = (string) $node;
             }
         }
         return $result;

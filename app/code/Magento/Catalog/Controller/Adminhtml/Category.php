@@ -85,9 +85,9 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     private function resolveCategoryId() : int
     {
-        $categoryId = (int)$this->getRequest()->getParam('id', false);
+        $categoryId = (int) $this->getRequest()->getParam('id', false);
 
-        return $categoryId ?: (int)$this->getRequest()->getParam('entity_id', false);
+        return $categoryId ?: (int) $this->getRequest()->getParam('entity_id', false);
     }
 
     /**
@@ -100,9 +100,9 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     private function resolveStoreId() : int
     {
-        $storeId = (int)$this->getRequest()->getParam('store', false);
+        $storeId = (int) $this->getRequest()->getParam('store', false);
 
-        return $storeId ?: (int)$this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
+        return $storeId ?: (int) $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
     }
 
     /**

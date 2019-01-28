@@ -145,7 +145,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                     [
                         'name' => $newAttributeCode,
                         'dataType' => $attributeData[AttributeMetadata::BACKEND_TYPE],
-                        'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
+                        'visible' => (bool) $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );
                 if ($attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]) {
@@ -168,7 +168,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 'config',
                 array_merge(
                     $component->getData('config'),
-                    ['visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
+                    ['visible' => (bool) $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
                 )
             );
         }

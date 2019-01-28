@@ -152,7 +152,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 }
             }
 
-            $scope = (int)$this->_config->getValue(
+            $scope = (int) $this->_config->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
@@ -240,19 +240,19 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $titleTableName = $this->getTable('catalog_product_option_title');
         foreach ([\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()] as $storeId) {
-            $existInCurrentStore = $this->getColFromOptionTable($titleTableName, (int)$object->getId(), (int)$storeId);
-            $existInDefaultStore = (int)$storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID ?
+            $existInCurrentStore = $this->getColFromOptionTable($titleTableName, (int) $object->getId(), (int) $storeId);
+            $existInDefaultStore = (int) $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID ?
                 $existInCurrentStore :
                 $this->getColFromOptionTable(
                     $titleTableName,
-                    (int)$object->getId(),
+                    (int) $object->getId(),
                     \Magento\Store\Model\Store::DEFAULT_STORE_ID
                 );
 
             if ($object->getTitle()) {
-                $isDeleteStoreTitle = (bool)$object->getData('is_delete_store_title');
+                $isDeleteStoreTitle = (bool) $object->getData('is_delete_store_title');
                 if ($existInCurrentStore) {
-                    if ($isDeleteStoreTitle && (int)$storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                    if ($isDeleteStoreTitle && (int) $storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                         $connection->delete($titleTableName, ['option_title_id = ?' => $existInCurrentStore]);
                     } elseif ($object->getStoreId() == $storeId) {
                         $data = $this->_prepareDataForTable(
@@ -479,7 +479,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ' AND ',
             [
                 'option_title_store.option_id=product_option.option_id',
-                $connection->quoteInto('option_title_store.store_id = ?', (int)$storeId)
+                $connection->quoteInto('option_title_store.store_id = ?', (int) $storeId)
             ]
         );
 
@@ -526,7 +526,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ' AND ',
             [
                 'option_title_store.option_type_id = option_type.option_type_id',
-                $connection->quoteInto('option_title_store.store_id = ?', (int)$storeId)
+                $connection->quoteInto('option_title_store.store_id = ?', (int) $storeId)
             ]
         );
 

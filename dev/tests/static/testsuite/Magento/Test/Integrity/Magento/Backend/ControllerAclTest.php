@@ -154,7 +154,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
             $config = simplexml_load_file($file[0]);
             $nodes = $config->xpath('.//resource/@id') ?: [];
             foreach ($nodes as $node) {
-                $xmlResources[(string)$node] = $node;
+                $xmlResources[(string) $node] = $node;
             }
         }, $aclFiles);
         $this->aclResources = $xmlResources;

@@ -213,7 +213,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $config = simplexml_load_file($file);
             $nodes = @($config->xpath("/config/*/design/theme/full_name") ?: []);
             foreach ($nodes as $node) {
-                $defaultThemes[] = (string)$node;
+                $defaultThemes[] = (string) $node;
             }
         }
         self::$_defaultThemes = sprintf('#app/design.*/(%s)/.*#', implode('|', array_unique($defaultThemes)));
@@ -252,7 +252,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getCleanedFileContents($fileType, $file)
     {
-        $contents = (string)file_get_contents($file);
+        $contents = (string) file_get_contents($file);
         switch ($fileType) {
             case 'php':
                 //Removing php comments
@@ -606,8 +606,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $config = simplexml_load_file($configFile);
         $nodes  = $config->xpath("/config/router/*");
         foreach ($nodes as $node) {
-            $id = (string)$node['id'];
-            if ($id != 'adminhtml' && '' == (string)$node['frontName']) {
+            $id = (string) $node['id'];
+            if ($id != 'adminhtml' && '' == (string) $node['frontName']) {
                 // Exclude overridden routers
                 continue;
             }
@@ -635,10 +635,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 $xml = simplexml_load_file($file);
-                foreach ((array)$xml->xpath('//container | //block') as $element) {
+                foreach ((array) $xml->xpath('//container | //block') as $element) {
                     /** @var \SimpleXMLElement $element */
                     $attributes = $element->attributes();
-                    $block = (string)$attributes->name;
+                    $block = (string) $attributes->name;
                     if (!empty($block)) {
                         self::$_mapLayoutBlocks[$area][$block] = @(self::$_mapLayoutBlocks[$area][$block] ?: []);
                         self::$_mapLayoutBlocks[$area][$block][$module] = $module;
@@ -664,7 +664,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             ) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 $xml = simplexml_load_file($file);
-                foreach ((array)$xml->xpath('/layout/child::*') as $element) {
+                foreach ((array) $xml->xpath('/layout/child::*') as $element) {
                     /** @var \SimpleXMLElement $element */
                     $handle = $element->getName();
                     self::$_mapLayoutHandles[$area][$handle] = @(self::$_mapLayoutHandles[$area][$handle] ?: []);
@@ -744,10 +744,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 }
             }
 
-            $require = array_keys((array)$json->get('require'));
+            $require = array_keys((array) $json->get('require'));
             self::addDependencies($moduleName, $require, self::TYPE_HARD, $packageModuleMap);
 
-            $suggest = array_keys((array)$json->get('suggest'));
+            $suggest = array_keys((array) $json->get('suggest'));
             self::addDependencies($moduleName, $suggest, self::TYPE_SOFT, $packageModuleMap);
         }
     }
@@ -818,7 +818,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 throw new \Exception("Invalid Json: $file");
             }
             $moduleXml = simplexml_load_file(dirname($file) . '/etc/module.xml');
-            $moduleName = str_replace('_', '\\', (string)$moduleXml->module->attributes()->name);
+            $moduleName = str_replace('_', '\\', (string) $moduleXml->module->attributes()->name);
             $packageName = $composerJson->name;
             $packageModuleMapping[$packageName] = $moduleName;
         }

@@ -193,7 +193,7 @@ abstract class AbstractEntity
         );
         $this->_pageSize = isset(
             $data['page_size']
-        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
+        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int) $this->_scopeConfig->getValue(
             static::XML_PATH_PAGE_SIZE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) : 0);
@@ -243,7 +243,7 @@ abstract class AbstractEntity
      */
     public function addRowError($errorCode, $errorRowNum)
     {
-        $errorCode = (string)$errorCode;
+        $errorCode = (string) $errorCode;
         $this->_errors[$errorCode][] = $errorRowNum + 1;
         // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
@@ -405,7 +405,7 @@ abstract class AbstractEntity
                 'Please correct the value for "%1" column.',
                 $errorCode
             );
-            $message = (string)$message;
+            $message = (string) $message;
             $messages[$message] = $errorRows;
         }
 

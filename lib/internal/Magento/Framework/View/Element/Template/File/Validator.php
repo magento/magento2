@@ -133,7 +133,7 @@ class Validator
     protected function isPathInDirectories($path, $directories)
     {
         if (!is_array($directories)) {
-            $directories = (array)$directories;
+            $directories = (array) $directories;
         }
         $realPath = $this->fileDriver->getRealPath($path);
         foreach ($directories as $directory) {

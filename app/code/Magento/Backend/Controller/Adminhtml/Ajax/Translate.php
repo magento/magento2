@@ -47,7 +47,7 @@ class Translate extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $translate = (array)$this->getRequest()->getPost('translate');
+        $translate = (array) $this->getRequest()->getPost('translate');
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

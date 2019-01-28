@@ -195,7 +195,7 @@ class Interval implements IntervalInterface
     {
         $returnPrices = [];
         foreach ($hits as $hit) {
-            $returnPrices[] = (float)$hit['fields'][$fieldName][0];
+            $returnPrices[] = (float) $hit['fields'][$fieldName][0];
         }
 
         return $returnPrices;

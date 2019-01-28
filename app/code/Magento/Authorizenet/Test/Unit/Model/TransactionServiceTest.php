@@ -77,9 +77,9 @@ class TransactionServiceTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->transactionService->getTransactionDetails($this->authorizenetMock, $transactionId);
 
-        static::assertEquals($responseCode, (string)$result->transaction->responseCode);
-        static::assertEquals($responseCode, (string)$result->transaction->responseReasonCode);
-        static::assertEquals($responseStatus, (string)$result->transaction->transactionStatus);
+        static::assertEquals($responseCode, (string) $result->transaction->responseCode);
+        static::assertEquals($responseCode, (string) $result->transaction->responseReasonCode);
+        static::assertEquals($responseStatus, (string) $result->transaction->transactionStatus);
     }
 
     /**

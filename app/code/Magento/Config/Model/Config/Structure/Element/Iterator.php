@@ -119,7 +119,7 @@ class Iterator implements \Iterator
      */
     public function valid()
     {
-        return (bool)current($this->_elements);
+        return (bool) current($this->_elements);
     }
 
     /**

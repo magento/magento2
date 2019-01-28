@@ -60,10 +60,10 @@ abstract class Quote extends \Magento\Backend\App\Action
             \Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE,
             $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         );
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
 
         if (!$id && $this->getRequest()->getParam('rule_id')) {
-            $id = (int)$this->getRequest()->getParam('rule_id');
+            $id = (int) $this->getRequest()->getParam('rule_id');
         }
 
         if ($id) {

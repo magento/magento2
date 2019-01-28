@@ -67,6 +67,6 @@ class ConfigurablePriceResolver implements PriceResolverInterface
             $price = isset($price) ? min($price, $productPrice) : $productPrice;
         }
 
-        return (float)$price;
+        return (float) $price;
     }
 }

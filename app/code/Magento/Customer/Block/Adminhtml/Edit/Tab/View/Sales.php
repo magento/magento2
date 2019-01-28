@@ -103,7 +103,7 @@ class Sales extends \Magento\Backend\Block\Template
         );
 
         $this->_collection = $this->_collectionFactory->create()->setCustomerIdFilter(
-            (int)$this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+            (int) $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
         )->setOrderStateFilter(
             Order::STATE_CANCELED,
             true

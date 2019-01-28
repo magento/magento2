@@ -186,7 +186,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $data = new \Magento\Framework\DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
-        $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
+        $data[self::REGION_ID_ATTRIBUTE_CODE] = (int) self::REGION_ID_ATTRIBUTE_VALUE;
         $customerFormData = [self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE];
         $this->_customerSession->expects(
             $this->once()
@@ -198,7 +198,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $formData = $this->_block->getFormData();
         $this->assertEquals($data, $formData);
         $this->assertTrue(isset($formData[self::REGION_ID_ATTRIBUTE_CODE]));
-        $this->assertSame((int)self::REGION_ID_ATTRIBUTE_VALUE, $formData[self::REGION_ID_ATTRIBUTE_CODE]);
+        $this->assertSame((int) self::REGION_ID_ATTRIBUTE_VALUE, $formData[self::REGION_ID_ATTRIBUTE_CODE]);
     }
 
     /**
@@ -323,7 +323,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $data = new \Magento\Framework\DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
-        $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
+        $data[self::REGION_ID_ATTRIBUTE_CODE] = (int) self::REGION_ID_ATTRIBUTE_VALUE;
         $customerFormData = [self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE];
         $this->_customerSession->expects(
             $this->once()

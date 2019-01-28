@@ -68,7 +68,7 @@ class Generator extends AbstractSource
         $this->_pattern = $rowPattern;
         $this->_count = $count;
         $this->_patternRowsCount = $this->_pattern->getRowsCount();
-        $this->_limit = (int)$count * $this->_patternRowsCount;
+        $this->_limit = (int) $count * $this->_patternRowsCount;
         parent::__construct($this->_pattern->getHeaders());
     }
 

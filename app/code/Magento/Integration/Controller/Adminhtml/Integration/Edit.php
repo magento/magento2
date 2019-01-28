@@ -21,7 +21,7 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration impleme
     public function execute()
     {
         /** Try to recover integration data from session if it was added during previous request which failed. */
-        $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
+        $integrationId = (int) $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         if ($integrationId) {
             try {
                 $integrationData = $this->_integrationService->get($integrationId)->getData();

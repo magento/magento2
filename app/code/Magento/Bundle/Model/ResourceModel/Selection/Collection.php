@@ -190,7 +190,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         );
         $this->getSelect()->joinLeft(
             ['price' => $this->getTable('catalog_product_bundle_selection_price')],
-            'selection.selection_id = price.selection_id AND price.website_id = ' . (int)$websiteId .
+            'selection.selection_id = price.selection_id AND price.website_id = ' . (int) $websiteId .
             ' AND selection.parent_product_id = price.parent_product_id',
             [
                 'selection_price_type' => $priceType,
@@ -331,7 +331,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $websiteId = $this->_storeManager->getStore()->getWebsiteId();
                 $this->getSelect()->joinLeft(
                     ['price' => $this->getTable('catalog_product_bundle_selection_price')],
-                    'selection.selection_id = price.selection_id AND price.website_id = ' . (int)$websiteId,
+                    'selection.selection_id = price.selection_id AND price.website_id = ' . (int) $websiteId,
                     []
                 );
             }

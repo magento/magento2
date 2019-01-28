@@ -175,7 +175,7 @@ class BatchIterator implements BatchIteratorInterface
         );
         $row = $this->connection->fetchRow($wrapperSelect);
         $this->minValue = $row['max'];
-        return (int)$row['cnt'];
+        return (int) $row['cnt'];
     }
 
     /**

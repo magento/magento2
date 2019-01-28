@@ -50,24 +50,24 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
      */
     public function execute()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $storeId = (int) $this->getRequest()->getParam('store');
         $store = $this->getStoreManager()->getStore($storeId);
         $this->getStoreManager()->setCurrentStore($store->getCode());
 
-        $categoryId = (int)$this->getRequest()->getParam('id');
+        $categoryId = (int) $this->getRequest()->getParam('id');
 
         if (!$categoryId) {
             if ($storeId) {
-                $categoryId = (int)$this->getStoreManager()->getStore($storeId)->getRootCategoryId();
+                $categoryId = (int) $this->getStoreManager()->getStore($storeId)->getRootCategoryId();
             } else {
                 $defaultStoreView = $this->getStoreManager()->getDefaultStoreView();
                 if ($defaultStoreView) {
-                    $categoryId = (int)$defaultStoreView->getRootCategoryId();
+                    $categoryId = (int) $defaultStoreView->getRootCategoryId();
                 } else {
                     $stores = $this->getStoreManager()->getStores();
                     if (count($stores)) {
                         $store = reset($stores);
-                        $categoryId = (int)$store->getRootCategoryId();
+                        $categoryId = (int) $store->getRootCategoryId();
                     }
                 }
             }

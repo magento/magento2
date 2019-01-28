@@ -79,7 +79,7 @@ class Gateway implements GatewayInterface
         $client = $this->httpClientFactory->create();
 
         $client->setUri(
-            (bool)$config->getValue('sandbox_flag')
+            (bool) $config->getValue('sandbox_flag')
             ? $config->getValue('transaction_url_test_mode')
             : $config->getValue('transaction_url')
         );
@@ -118,8 +118,8 @@ class Gateway implements GatewayInterface
                     'request' => $request->getData(),
                     'result' => $result->getData()
                 ],
-                (array)$config->getValue('getDebugReplacePrivateDataKeys'),
-                (bool)$config->getValue('debug')
+                (array) $config->getValue('getDebugReplacePrivateDataKeys'),
+                (bool) $config->getValue('debug')
             );
         }
 

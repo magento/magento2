@@ -47,7 +47,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category impl
         } else {
             $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->setIsTreeWasExpanded(false);
         }
-        $categoryId = (int)$this->getRequest()->getPost('id');
+        $categoryId = (int) $this->getRequest()->getPost('id');
         if ($categoryId) {
             $this->getRequest()->setParam('id', $categoryId);
 

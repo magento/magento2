@@ -73,7 +73,7 @@ class AbstractHelperTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->_model->getCILike($field, $value, $options);
         $this->assertInstanceOf('Zend_Db_Expr', $result);
-        $this->assertEquals($field . ' LIKE ' . $value, (string)$result);
+        $this->assertEquals($field . ' LIKE ' . $value, (string) $result);
     }
 
     /**

@@ -123,7 +123,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect->setPath('*/*/');
         }
 
-        $itemId = (int)$this->getRequest()->getParam('item');
+        $itemId = (int) $this->getRequest()->getParam('item');
         /* @var $item \Magento\Wishlist\Model\Item */
         $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {

@@ -80,9 +80,9 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         $bind = [
-            ':product_id' => (int)$parentId,
-            ':link_type_id' => (int)$typeId,
-            ':linked_product_id' => (int)$linkedProductId
+            ':product_id' => (int) $parentId,
+            ':link_type_id' => (int) $typeId,
+            ':linked_product_id' => (int) $linkedProductId
         ];
         $select = $connection->select()->from(
             $this->getMainTable(),
@@ -140,7 +140,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $connection = $this->getConnection();
 
-        $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
+        $bind = [':product_id' => (int) $parentId, ':link_type_id' => (int) $typeId];
         $select = $connection->select()->from(
             $this->getMainTable(),
             ['linked_product_id', 'link_id']
@@ -200,9 +200,9 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _prepareAttributeValue($type, $value)
     {
         if ($type == 'int') {
-            $value = (int)$value;
+            $value = (int) $value;
         } elseif ($type == 'decimal') {
-            $value = (float)sprintf('%F', $value);
+            $value = (float) sprintf('%F', $value);
         }
         return $value;
     }
@@ -251,7 +251,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $childrenIds = [];
-        $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
+        $bind = [':product_id' => (int) $parentId, ':link_type_id' => (int) $typeId];
         $select = $connection->select()->from(
             ['l' => $this->getMainTable()],
             ['linked_product_id']

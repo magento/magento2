@@ -76,7 +76,7 @@ class Navigation
         return array_values(array_filter(
             $this->navStates,
             function ($value) {
-                return isset($value['nav']) && (bool)$value['nav'];
+                return isset($value['nav']) && (bool) $value['nav'];
             }
         ));
     }
@@ -93,7 +93,7 @@ class Navigation
         $result = array_values(array_filter(
             $this->navStates,
             function ($value) {
-                return isset($value['main']) && (bool)$value['main'];
+                return isset($value['main']) && (bool) $value['main'];
             }
         ));
         return $result;

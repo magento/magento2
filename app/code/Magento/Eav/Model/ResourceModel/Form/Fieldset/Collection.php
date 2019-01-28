@@ -140,7 +140,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $labelExpr = $select->getConnection()->getIfNullSql('store_label.label', 'default_label.label');
             $joinCondition = $this->getConnection()->quoteInto(
                 'main_table.fieldset_id = store_label.fieldset_id AND store_label.store_id = ?',
-                (int)$this->getStoreId()
+                (int) $this->getStoreId()
             );
             $select->joinLeft(
                 ['store_label' => $this->getTable('eav_form_fieldset_label')],

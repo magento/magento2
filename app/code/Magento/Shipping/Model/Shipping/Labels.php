@@ -110,7 +110,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
             $shipmentStoreId
         );
         $storeInfo = new DataObject(
-            (array)$this->_scopeConfig->getValue(
+            (array) $this->_scopeConfig->getValue(
                 'general/store_information',
                 ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId

@@ -83,7 +83,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
                     $object->setEntityTypeId($this->getTypeId());
                 }
 
-                $object->setParentId((int)$object->getParentId());
+                $object->setParentId((int) $object->getParentId());
 
                 $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
 

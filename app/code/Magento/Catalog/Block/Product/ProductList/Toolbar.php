@@ -225,7 +225,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         $this->_collection->setCurPage($this->getCurrentPage());
 
         // we need to set pagination only if passed value integer and more that 0
-        $limit = (int)$this->getLimit();
+        $limit = (int) $this->getLimit();
         if ($limit) {
             $this->_collection->setPageSize($limit);
         }

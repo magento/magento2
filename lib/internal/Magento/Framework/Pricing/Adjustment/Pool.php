@@ -98,7 +98,7 @@ class Pool
     protected function createAdjustment($adjustmentCode)
     {
         $adjustmentData = $this->adjustments[$adjustmentCode];
-        $sortOrder = isset($adjustmentData['sortOrder']) ? (int)$adjustmentData['sortOrder'] : self::DEFAULT_SORT_ORDER;
+        $sortOrder = isset($adjustmentData['sortOrder']) ? (int) $adjustmentData['sortOrder'] : self::DEFAULT_SORT_ORDER;
         return $this->adjustmentFactory->create(
             $adjustmentData['className'],
             [

@@ -54,7 +54,7 @@ class CouponTest extends GraphQlAbstract
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlQuery($query);
 
@@ -75,7 +75,7 @@ class CouponTest extends GraphQlAbstract
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlQuery($query);
 
@@ -96,7 +96,7 @@ class CouponTest extends GraphQlAbstract
         $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load($this->quote, 'test_order_1', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessageRegExp('/Cart doesn\'t contain products/');
@@ -117,7 +117,7 @@ class CouponTest extends GraphQlAbstract
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $this->quote->setCustomerId(1);
         $this->quoteResource->save($this->quote);
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
@@ -140,7 +140,7 @@ class CouponTest extends GraphQlAbstract
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -169,7 +169,7 @@ class CouponTest extends GraphQlAbstract
             'test_order_with_simple_product_without_address',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int) $this->quote->getId());
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',

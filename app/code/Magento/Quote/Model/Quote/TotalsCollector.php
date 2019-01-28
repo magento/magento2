@@ -151,18 +151,18 @@ class TotalsCollector
             $total->setBaseShippingAmount($addressTotal->getBaseShippingAmount());
             $total->setShippingDescription($addressTotal->getShippingDescription());
 
-            $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
-            $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
+            $total->setSubtotal((float) $total->getSubtotal() + $addressTotal->getSubtotal());
+            $total->setBaseSubtotal((float) $total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
 
             $total->setSubtotalWithDiscount(
-                (float)$total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
+                (float) $total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
             );
             $total->setBaseSubtotalWithDiscount(
-                (float)$total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
+                (float) $total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
             );
 
-            $total->setGrandTotal((float)$total->getGrandTotal() + $addressTotal->getGrandTotal());
-            $total->setBaseGrandTotal((float)$total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
+            $total->setGrandTotal((float) $total->getGrandTotal() + $addressTotal->getGrandTotal());
+            $total->setBaseGrandTotal((float) $total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
         }
 
         $this->quoteValidator->validateQuoteAmount($quote, $quote->getGrandTotal());
@@ -232,7 +232,7 @@ class TotalsCollector
                 $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $item->getQty());
             }
             $quote->setItemsCount($quote->getItemsCount() + 1);
-            $quote->setItemsQty((float)$quote->getItemsQty() + $item->getQty());
+            $quote->setItemsQty((float) $quote->getItemsQty() + $item->getQty());
         }
         return $this;
     }

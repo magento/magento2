@@ -75,7 +75,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
             if ('false' === $forceNewSectionTimestamp) {
                 $forceNewSectionTimestamp = false;
             }
-            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$forceNewSectionTimestamp);
+            $response = $this->sectionPool->getSectionsData($sectionNames, (bool) $forceNewSectionTimestamp);
         } catch (\Exception $e) {
             $resultJson->setStatusHeader(
                 \Zend\Http\Response::STATUS_CODE_400,

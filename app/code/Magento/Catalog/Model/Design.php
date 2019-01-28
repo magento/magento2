@@ -138,7 +138,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
             )->setPageLayout(
                 $object->getPageLayout()
             )->setLayoutUpdates(
-                (array)$object->getCustomLayoutUpdate()
+                (array) $object->getCustomLayoutUpdate()
             );
         }
         return $settings;

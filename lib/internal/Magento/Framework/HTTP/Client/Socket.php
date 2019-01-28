@@ -92,7 +92,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      */
     public function setTimeout($value)
     {
-        $this->_timeout = (int)$value;
+        $this->_timeout = (int) $value;
     }
 
     /**
@@ -104,7 +104,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     public function __construct($host = null, $port = 80)
     {
         if ($host) {
-            $this->connect($host, (int)$port);
+            $this->connect($host, (int) $port);
         }
     }
 
@@ -118,7 +118,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     public function connect($host, $port = 80)
     {
         $this->_host = $host;
-        $this->_port = (int)$port;
+        $this->_port = (int) $port;
     }
 
     /**
@@ -249,7 +249,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
             $this->setCredentials($parts['user'], $parts['pass']);
         }
         if (!empty($parts['port'])) {
-            $this->_port = (int)$parts['port'];
+            $this->_port = (int) $parts['port'];
         }
 
         if (!empty($parts['host'])) {
@@ -425,7 +425,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         if (count($line) != 3) {
             return $this->doError("Invalid response line returned from server: " . $responseLine);
         }
-        $this->_responseStatus = (int)$line[1];
+        $this->_responseStatus = (int) $line[1];
         $this->processResponseHeaders();
 
         $this->processRedirect();

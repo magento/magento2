@@ -40,13 +40,13 @@ class OrderRenderer implements RendererInterface
             $order = [];
             foreach ($select->getPart(Select::ORDER) as $term) {
                 if (is_array($term)) {
-                    if (is_numeric($term[0]) && (string)(int)$term[0] == $term[0]) {
-                        $order[] = (int)trim($term[0]) . ' ' . $term[1];
+                    if (is_numeric($term[0]) && (string) (int) $term[0] == $term[0]) {
+                        $order[] = (int) trim($term[0]) . ' ' . $term[1];
                     } else {
                         $order[] = $this->quote->quoteIdentifier($term[0]) . ' ' . $term[1];
                     }
-                } elseif (is_numeric($term) && (string)(int)$term == $term) {
-                    $order[] = (int)trim($term);
+                } elseif (is_numeric($term) && (string) (int) $term == $term) {
+                    $order[] = (int) trim($term);
                 } else {
                     $order[] = $this->quote->quoteIdentifier($term);
                 }

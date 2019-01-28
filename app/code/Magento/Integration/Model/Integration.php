@@ -131,6 +131,6 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      */
     public function getStatus()
     {
-        return (int)$this->getData(self::STATUS);
+        return (int) $this->getData(self::STATUS);
     }
 }

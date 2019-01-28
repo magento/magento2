@@ -79,7 +79,7 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
 
         foreach ($tierPrices as $tierPrice) {
             $text = $productViewBlock->getTierPrices($index++);
-            $noError = (bool)preg_match('#^[^\d]+(\d+)[^\d]+(\d+(?:(?:,\d+)*)+(?:.\d+)*).*#i', $text, $match);
+            $noError = (bool) preg_match('#^[^\d]+(\d+)[^\d]+(\d+(?:(?:,\d+)*)+(?:.\d+)*).*#i', $text, $match);
             if (!$noError) {
                 break;
             }

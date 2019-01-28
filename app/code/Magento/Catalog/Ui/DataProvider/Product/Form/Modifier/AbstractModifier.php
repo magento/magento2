@@ -54,7 +54,7 @@ abstract class AbstractModifier implements ModifierInterface
      */
     protected function getNextGroupSortOrder(array $meta, $groupCodes, $defaultSortOrder, $iteration = 1)
     {
-        $groupCodes = (array)$groupCodes;
+        $groupCodes = (array) $groupCodes;
 
         foreach ($groupCodes as $groupCode) {
             if (isset($meta[$groupCode]['arguments']['data']['config']['sortOrder'])) {
@@ -77,7 +77,7 @@ abstract class AbstractModifier implements ModifierInterface
      */
     protected function getNextAttributeSortOrder(array $meta, $attributeCodes, $defaultSortOrder, $iteration = 1)
     {
-        $attributeCodes = (array)$attributeCodes;
+        $attributeCodes = (array) $attributeCodes;
 
         foreach ($meta as $groupMeta) {
             $defaultSortOrder = $this->_getNextAttributeSortOrder(
@@ -209,7 +209,7 @@ abstract class AbstractModifier implements ModifierInterface
      */
     protected function formatPrice($value)
     {
-        return $value !== null ? number_format((float)$value, PriceCurrencyInterface::DEFAULT_PRECISION, '.', '') : '';
+        return $value !== null ? number_format((float) $value, PriceCurrencyInterface::DEFAULT_PRECISION, '.', '') : '';
     }
 
     /**
@@ -221,6 +221,6 @@ abstract class AbstractModifier implements ModifierInterface
      */
     protected function formatWeight($value)
     {
-        return (float)$value;
+        return (float) $value;
     }
 }

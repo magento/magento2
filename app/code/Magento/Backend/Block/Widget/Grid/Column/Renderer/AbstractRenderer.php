@@ -160,7 +160,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             if (null === $customWidth || preg_match('/^[0-9]+%?$/', $customWidth)) {
                 $width = $customWidth;
             } elseif (preg_match('/^([0-9]+)px$/', $customWidth, $matches)) {
-                $width = (int)$matches[1];
+                $width = (int) $matches[1];
             }
         }
 

@@ -77,13 +77,13 @@ abstract class Cart extends \Magento\Backend\App\Action
      */
     protected function _initData()
     {
-        $this->_customerId = (int)$this->getRequest()->getParam('customer_id');
+        $this->_customerId = (int) $this->getRequest()->getParam('customer_id');
         if (!$this->_customerId) {
             throw new \Magento\Framework\Exception\LocalizedException(__("The customer ID isn't defined."));
         }
 
-        $quoteItemId = (int)$this->getRequest()->getParam('id');
-        $websiteId = (int)$this->getRequest()->getParam('website_id');
+        $quoteItemId = (int) $this->getRequest()->getParam('id');
+        $websiteId = (int) $this->getRequest()->getParam('website_id');
 
         try {
             $this->_quote = $this->quoteRepository->getForCustomer($this->_customerId);

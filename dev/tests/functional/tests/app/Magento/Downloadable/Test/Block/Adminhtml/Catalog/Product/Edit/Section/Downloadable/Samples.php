@@ -66,7 +66,7 @@ class Samples extends Form
             $element->find($this->addNewSampleRow)->click();
 
             if (isset($sample['sort_order'])) {
-                $currentSortOrder = (int)$sample['sort_order'] - 1;
+                $currentSortOrder = (int) $sample['sort_order'] - 1;
                 unset($sample['sort_order']);
             } else {
                 $currentSortOrder = 0;

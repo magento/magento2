@@ -64,11 +64,11 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
         }
 
         if (isset($data['_forced_secure'])) {
-            $this->setSecure((bool)$data['_forced_secure']);
+            $this->setSecure((bool) $data['_forced_secure']);
             $this->setSecureIsForced(true);
             unset($data['_forced_secure']);
         } elseif (isset($data['_secure'])) {
-            $this->setSecure((bool)$data['_secure']);
+            $this->setSecure((bool) $data['_secure']);
             unset($data['_secure']);
         }
 

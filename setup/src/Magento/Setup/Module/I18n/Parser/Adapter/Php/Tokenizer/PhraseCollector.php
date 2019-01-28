@@ -182,7 +182,7 @@ class PhraseCollector
      */
     public function setIncludeObjects($includeObjects = true)
     {
-        $this->includeObjects = (bool)$includeObjects;
+        $this->includeObjects = (bool) $includeObjects;
         return $this;
     }
 }

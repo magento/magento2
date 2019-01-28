@@ -103,7 +103,7 @@ class DownloadProductsReportEntityTest extends Injectable
             ['order' => $order, 'cart' => $cart]
         );
         $invoice->run();
-        $this->openDownloadableLink($order, (int)$downloads);
+        $this->openDownloadableLink($order, (int) $downloads);
     }
 
     /**

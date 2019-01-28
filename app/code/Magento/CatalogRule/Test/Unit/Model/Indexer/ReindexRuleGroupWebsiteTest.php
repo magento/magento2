@@ -61,7 +61,7 @@ class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $timeStamp = (int)gmdate('U');
+        $timeStamp = (int) gmdate('U');
         $insertString = 'insert_string';
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
         $this->resourceMock->expects($this->at(0))->method('getConnection')->willReturn($connectionMock);

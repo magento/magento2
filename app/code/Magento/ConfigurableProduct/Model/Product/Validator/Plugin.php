@@ -86,7 +86,7 @@ class Plugin
         RequestInterface $request,
         DataObject $response
     ) {
-        $variationProducts = (array)$request->getPost('variations-matrix');
+        $variationProducts = (array) $request->getPost('variations-matrix');
         if ($variationProducts) {
             $validationResult = $this->_validateProductVariations($product, $variationProducts, $request);
             if (!empty($validationResult)) {

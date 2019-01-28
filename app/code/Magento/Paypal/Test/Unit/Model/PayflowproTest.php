@@ -267,7 +267,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $amount = 23.03;
         $this->payflowpro->capture($paymentMock, $amount);
         static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
-        static::assertFalse((bool)$paymentMock->getIsTransactionPending());
+        static::assertFalse((bool) $paymentMock->getIsTransactionPending());
     }
 
     /**
@@ -358,7 +358,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $this->payflowpro->capture($paymentMock, $amount);
 
         $this->assertEquals($response['pnref'], $paymentMock->getTransactionId());
-        $this->assertFalse((bool)$paymentMock->getIsTransactionPending());
+        $this->assertFalse((bool) $paymentMock->getIsTransactionPending());
     }
 
     /**
@@ -377,7 +377,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $amount = 43.20;
         $this->payflowpro->authorize($paymentMock, $amount);
         static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
-        static::assertFalse((bool)$paymentMock->getIsTransactionPending());
+        static::assertFalse((bool) $paymentMock->getIsTransactionPending());
     }
 
     /**

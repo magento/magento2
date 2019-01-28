@@ -304,7 +304,7 @@ class System implements ConfigTypeInterface
     private function getDataByPathParts($data, $pathParts)
     {
         foreach ($pathParts as $key) {
-            if ((array)$data === $data && isset($data[$key])) {
+            if ((array) $data === $data && isset($data[$key])) {
                 $data = $data[$key];
             } elseif ($data instanceof \Magento\Framework\DataObject) {
                 $data = $data->getDataByKey($key);

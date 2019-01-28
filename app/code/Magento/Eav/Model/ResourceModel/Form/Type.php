@@ -93,7 +93,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     if (empty($entityId)) {
                         continue;
                     }
-                    $data[] = ['entity_type_id' => (int)$entityId, 'type_id' => $object->getId()];
+                    $data[] = ['entity_type_id' => (int) $entityId, 'type_id' => $object->getId()];
                 }
                 if ($data) {
                     $connection->insertMultiple($this->getTable('eav_form_type_entity'), $data);

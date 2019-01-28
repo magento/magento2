@@ -520,7 +520,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $result = $this->_isPartialLoad;
         if ($flag !== null) {
-            $this->_isPartialLoad = (bool)$flag;
+            $this->_isPartialLoad = (bool) $flag;
         }
         return $result;
     }
@@ -1172,7 +1172,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                     $object->setEntityTypeId($this->getTypeId());
                 }
 
-                $object->setParentId((int)$object->getParentId());
+                $object->setParentId((int) $object->getParentId());
 
                 $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
 
@@ -1239,7 +1239,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             if (!isset($delete[$tableName])) {
                 $delete[$tableName] = [];
             }
-            $delete[$tableName] = array_merge((array)$delete[$tableName], $valuesData);
+            $delete[$tableName] = array_merge((array) $delete[$tableName], $valuesData);
         }
     }
 

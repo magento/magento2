@@ -99,7 +99,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     public function getStores()
     {
-        return $this->hasData('stores') ? $this->getData('stores') : (array)$this->getData('store_id');
+        return $this->hasData('stores') ? $this->getData('stores') : (array) $this->getData('store_id');
     }
 
     /**
@@ -324,7 +324,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     public function isActive()
     {
-        return (bool)$this->getData(self::IS_ACTIVE);
+        return (bool) $this->getData(self::IS_ACTIVE);
     }
 
     /**

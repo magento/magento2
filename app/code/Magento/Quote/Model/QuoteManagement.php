@@ -253,7 +253,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
         }
-        return (int)$quote->getId();
+        return (int) $quote->getId();
     }
 
     /**
@@ -557,8 +557,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
         $customer = $this->customerRepository->getById($quote->getCustomerId());
-        $hasDefaultBilling = (bool)$customer->getDefaultBilling();
-        $hasDefaultShipping = (bool)$customer->getDefaultShipping();
+        $hasDefaultBilling = (bool) $customer->getDefaultBilling();
+        $hasDefaultShipping = (bool) $customer->getDefaultShipping();
 
         if ($shipping && !$shipping->getSameAsBilling()
             && (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())

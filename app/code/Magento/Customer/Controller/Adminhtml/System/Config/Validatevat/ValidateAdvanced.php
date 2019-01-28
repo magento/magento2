@@ -39,7 +39,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
         $storeId = $this->getRequest()->getParam('store_id');
         // Sanitize value if needed
         if ($storeId !== null) {
-            $storeId = (int)$storeId;
+            $storeId = (int) $storeId;
         }
 
         $groupId = $this->_objectManager->get(\Magento\Customer\Model\Vat::class)

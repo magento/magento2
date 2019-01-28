@@ -87,7 +87,7 @@ class CartFixed extends AbstractDiscount
             $cartRules[$rule->getId()] = $rule->getDiscountAmount();
         }
 
-        $availableDiscountAmount = (float)$cartRules[$rule->getId()];
+        $availableDiscountAmount = (float) $cartRules[$rule->getId()];
         $discountType = self::$discountType . $rule->getId();
 
         if ($availableDiscountAmount > 0) {

@@ -50,7 +50,7 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $attributeSetId = $eavSetup->getDefaultAttributeSetId(Product::ENTITY);
-        $groupId = (int)$eavSetup->getAttributeGroupByCode(
+        $groupId = (int) $eavSetup->getAttributeGroupByCode(
             Product::ENTITY,
             $attributeSetId,
             'image-management',

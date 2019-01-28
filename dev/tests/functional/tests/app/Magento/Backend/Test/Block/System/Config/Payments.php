@@ -105,7 +105,7 @@ class Payments extends Block
      */
     public function isFieldEnabled($fieldId)
     {
-        return (bool)$this->_rootElement->find($fieldId)->getValue();
+        return (bool) $this->_rootElement->find($fieldId)->getValue();
     }
 
     /**

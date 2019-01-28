@@ -164,7 +164,7 @@ class AttributeMetadataResolver
         string $requestFieldName,
         bool $allowToShowHiddenAttributes
     ) {
-        $userDefined = (bool)$customerAttribute->getIsUserDefined();
+        $userDefined = (bool) $customerAttribute->getIsUserDefined();
         if (!$userDefined) {
             return $customerAttribute->getIsVisible();
         }

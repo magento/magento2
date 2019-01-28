@@ -186,7 +186,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 $invoice->getOrder()
             );
             $shipment = false;
-            if (!empty($data['do_shipment']) || (int)$invoice->getOrder()->getForcedShipmentWithInvoice()) {
+            if (!empty($data['do_shipment']) || (int) $invoice->getOrder()->getForcedShipmentWithInvoice()) {
                 $shipment = $this->_prepareShipment($invoice);
                 if ($shipment) {
                     $transactionSave->addObject($shipment);

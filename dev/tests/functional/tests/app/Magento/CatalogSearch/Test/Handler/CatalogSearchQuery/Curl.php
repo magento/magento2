@@ -87,6 +87,6 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
             throw new \Exception('Search term not found in grid!');
         }
 
-        return (int)$matches[1];
+        return (int) $matches[1];
     }
 }

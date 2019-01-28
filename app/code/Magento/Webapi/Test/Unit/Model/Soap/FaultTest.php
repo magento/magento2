@@ -190,7 +190,7 @@ XML;
             'ObjectDetails' => [
                 'Fault reason',
                 'Sender',
-                (object)['key' => 'value'],
+                (object) ['key' => 'value'],
                 $expectedXmls['expectedResultObjectDetails'],
                 'SOAP fault message with object data details is invalid.',
             ],

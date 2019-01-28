@@ -414,12 +414,12 @@ class Table
             $default = $options['default'];
         }
         if (array_key_exists('nullable', $options)) {
-            $nullable = (bool)$options['nullable'];
+            $nullable = (bool) $options['nullable'];
         }
         if (!empty($options['primary'])) {
             $primary = true;
             if (isset($options['primary_position'])) {
-                $primaryPosition = (int)$options['primary_position'];
+                $primaryPosition = (int) $options['primary_position'];
             } else {
                 $primaryPosition = 0;
                 foreach ($this->_columns as $v) {
@@ -531,10 +531,10 @@ class Table
 
                 $columnName = $columnData['name'];
                 if (!empty($columnData['size'])) {
-                    $columnSize = (int)$columnData['size'];
+                    $columnSize = (int) $columnData['size'];
                 }
                 if (!empty($columnData['position'])) {
-                    $columnPos = (int)$columnData['position'];
+                    $columnPos = (int) $columnData['position'];
                 }
             } else {
                 continue;

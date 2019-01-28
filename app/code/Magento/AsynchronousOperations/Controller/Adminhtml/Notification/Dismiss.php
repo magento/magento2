@@ -48,8 +48,8 @@ class Dismiss extends Action
     public function execute()
     {
         $bulkUuids = [];
-        foreach ((array)$this->getRequest()->getParam('uuid', []) as $bulkUuid) {
-            $bulkUuids[] = (string)$bulkUuid;
+        foreach ((array) $this->getRequest()->getParam('uuid', []) as $bulkUuid) {
+            $bulkUuids[] = (string) $bulkUuid;
         }
 
         $isAcknowledged = $this->notificationManagement->acknowledgeBulks($bulkUuids);

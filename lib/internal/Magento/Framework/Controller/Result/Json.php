@@ -70,7 +70,7 @@ class Json extends AbstractResult
      */
     public function setJsonData($jsonData)
     {
-        $this->json = (string)$jsonData;
+        $this->json = (string) $jsonData;
         return $this;
     }
 

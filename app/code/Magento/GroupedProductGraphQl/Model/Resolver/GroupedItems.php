@@ -56,7 +56,7 @@ class GroupedItems implements ResolverInterface
             }
 
             $data[] = [
-                'position' => (int)$link->getPosition(),
+                'position' => (int) $link->getPosition(),
                 'qty' => $link->getExtensionAttributes()->getQty(),
                 'sku' => $link->getLinkedProductSku()
             ];

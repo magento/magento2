@@ -18,7 +18,7 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
         $response = new \Magento\Framework\DataObject();
         $response->setError(0);
         $errors = null;
-        $userId = (int)$this->getRequest()->getParam('user_id');
+        $userId = (int) $this->getRequest()->getParam('user_id');
         $data = $this->getRequest()->getPostValue();
         try {
             /** @var $model \Magento\User\Model\User */

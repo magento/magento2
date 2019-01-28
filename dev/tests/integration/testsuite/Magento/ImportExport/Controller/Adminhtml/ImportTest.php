@@ -17,7 +17,7 @@ class ImportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/admin/import/index');
         $body = $this->getResponse()->getBody();
         $this->assertContains(
-            (string)\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            (string) \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\ImportExport\Helper\Data::class
             )->getMaxUploadSizeMessage(),
             $body

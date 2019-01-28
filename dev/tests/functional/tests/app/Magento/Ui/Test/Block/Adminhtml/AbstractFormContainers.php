@@ -76,7 +76,7 @@ abstract class AbstractFormContainers extends Form
             isset($this->containers[$containerName]['wrapper']) ? $this->containers[$containerName]['wrapper'] : ''
         );
         $container->setMapping(
-            isset($this->containers[$containerName]['fields']) ? (array)$this->containers[$containerName]['fields'] : []
+            isset($this->containers[$containerName]['fields']) ? (array) $this->containers[$containerName]['fields'] : []
         );
 
         return $container;

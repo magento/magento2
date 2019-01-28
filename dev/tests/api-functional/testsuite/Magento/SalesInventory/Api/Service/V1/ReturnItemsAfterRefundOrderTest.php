@@ -58,7 +58,7 @@ class ReturnItemsAfterRefundOrderTest extends \Magento\TestFramework\TestCase\We
                 'arguments' => [
                     'extension_attributes' => [
                         'return_to_stock_items' => [
-                            (int)$orderItem->getItemId()
+                            (int) $orderItem->getItemId()
                         ],
                     ],
                 ],

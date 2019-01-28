@@ -91,7 +91,7 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
             }
 
             $bind = ['password' => $newHash];
-            $where = ['user_id = ?' => (int)$customer['user_id']];
+            $where = ['user_id = ?' => (int) $customer['user_id']];
             $connection->update($customerEntityTable, $bind, $where);
         }
     }

@@ -1161,13 +1161,13 @@ class Installer
             return;
         }
 
-        $adminUserModuleIsInstalled = (bool)$this->deploymentConfig->get('modules/Magento_User');
+        $adminUserModuleIsInstalled = (bool) $this->deploymentConfig->get('modules/Magento_User');
         //Admin user data is not system data, so we need to install it only if schema for admin user was installed
         if ($adminUserModuleIsInstalled) {
             $this->assertDbConfigExists();
             $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
             $setup = $this->setupFactory->create($this->context->getResources());
-            $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
+            $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array) $data);
             $adminAccount->save();
         }
     }

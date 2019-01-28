@@ -249,7 +249,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if (is_string($xml)) {
             $xml = simplexml_load_string($xml);
         }
-        $this->loadArray((array)$xml);
+        $this->loadArray((array) $xml);
         return $this;
     }
 
@@ -369,7 +369,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     {
         $opt = [];
         if ($this->hasValueOption()) {
-            foreach ((array)$this->getValueOption() as $key => $value) {
+            foreach ((array) $this->getValueOption() as $key => $value) {
                 $opt[] = ['value' => $key, 'label' => $value];
             }
         }
@@ -821,7 +821,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             case '!{}':
                 if (is_scalar($validatedValue) && is_array($value)) {
                     foreach ($value as $item) {
-                        if (stripos($validatedValue, (string)$item) !== false) {
+                        if (stripos($validatedValue, (string) $item) !== false) {
                             $result = true;
                             break;
                         }
@@ -844,9 +844,9 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             case '()':
             case '!()':
                 if (is_array($validatedValue)) {
-                    $result = count(array_intersect($validatedValue, (array)$value)) > 0;
+                    $result = count(array_intersect($validatedValue, (array) $value)) > 0;
                 } else {
-                    $value = (array)$value;
+                    $value = (array) $value;
                     foreach ($value as $item) {
                         if ($this->_compareValues($validatedValue, $item)) {
                             $result = true;
@@ -882,7 +882,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if ($strict) {
             $validatePattern = '^' . $validatePattern . '$';
         }
-        return (bool)preg_match('~' . $validatePattern . '~iu', $value);
+        return (bool) preg_match('~' . $validatePattern . '~iu', $value);
     }
 
     /**

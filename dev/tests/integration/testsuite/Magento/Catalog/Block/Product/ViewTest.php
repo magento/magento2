@@ -72,7 +72,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetJsonConfig()
     {
-        $config = (array)json_decode($this->_block->getJsonConfig());
+        $config = (array) json_decode($this->_block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals($this->_product->getId(), $config['productId']);

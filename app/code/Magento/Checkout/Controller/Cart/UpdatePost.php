@@ -103,7 +103,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetAct
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
-        $updateAction = (string)$this->getRequest()->getParam('update_cart_action');
+        $updateAction = (string) $this->getRequest()->getParam('update_cart_action');
 
         switch ($updateAction) {
             case 'empty_cart':

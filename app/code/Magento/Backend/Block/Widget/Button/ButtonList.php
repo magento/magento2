@@ -129,6 +129,6 @@ class ButtonList
      */
     public function sortButtons(Item $itemA, Item $itemB)
     {
-        return (int)$itemA->getSortOrder() <=> (int)$itemB->getSortOrder();
+        return (int) $itemA->getSortOrder() <=> (int) $itemB->getSortOrder();
     }
 }

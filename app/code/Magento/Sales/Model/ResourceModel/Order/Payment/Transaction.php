@@ -55,7 +55,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                     ['payment_id', 'order_id']
                 )->where(
                     "{$this->getIdFieldName()} = ?",
-                    (int)$id
+                    (int) $id
                 )
             );
             if (!$verificationRow) {
@@ -67,8 +67,8 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             $where = [
                 $connection->quoteIdentifier($this->getIdFieldName()) . '!=?' => $id,
                 new \Zend_Db_Expr('parent_id IS NULL'),
-                'payment_id = ?' => (int)$paymentId,
-                'order_id = ?' => (int)$orderId,
+                'payment_id = ?' => (int) $paymentId,
+                'order_id = ?' => (int) $orderId,
                 'parent_txn_id = ?' => $txnId,
             ];
             $connection->update($this->getMainTable(), ['parent_id' => $id], $where);
@@ -146,7 +146,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                     __('We don\'t have enough information to save the parent transaction ID.')
                 );
             }
-            $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
+            $parentId = (int) $this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
             if ($parentId) {
                 $transaction->setData('parent_id', $parentId);
             }
@@ -154,7 +154,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
         // make sure unique key won't cause trouble
         if ($transaction->isFailsafe()) {
-            $autoincrementId = (int)$this->_lookupByTxnId($orderId, $paymentId, $txnId, $idFieldName);
+            $autoincrementId = (int) $this->_lookupByTxnId($orderId, $paymentId, $txnId, $idFieldName);
             if ($autoincrementId) {
                 $transaction->setData($idFieldName, $autoincrementId)->isObjectNew(false);
             }

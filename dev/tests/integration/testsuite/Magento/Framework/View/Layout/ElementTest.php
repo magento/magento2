@@ -28,8 +28,8 @@ class ElementTest extends \PHPUnit\Framework\TestCase
 
         $this->model->prepare();
 
-        $this->assertEquals('root', (string)$blockNode->attributes()->parent);
-        $this->assertEquals(\Magento\Backend\Block\Page::class, (string)$blockNode->attributes()->class);
-        $this->assertEquals('nodeForTesting', (string)$actionNode->attributes()->block);
+        $this->assertEquals('root', (string) $blockNode->attributes()->parent);
+        $this->assertEquals(\Magento\Backend\Block\Page::class, (string) $blockNode->attributes()->class);
+        $this->assertEquals('nodeForTesting', (string) $actionNode->attributes()->block);
     }
 }

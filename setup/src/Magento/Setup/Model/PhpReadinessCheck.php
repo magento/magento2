@@ -193,7 +193,7 @@ class PhpReadinessCheck
 
         $currentMemoryLimit = ini_get('memory_limit');
 
-        $currentMemoryInteger = (int)$currentMemoryLimit;
+        $currentMemoryInteger = (int) $currentMemoryLimit;
 
         if ($currentMemoryInteger > 0
             && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
@@ -246,7 +246,7 @@ class PhpReadinessCheck
 
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
-            $currentXDebugNestingLevel = (int)ini_get('xdebug.max_nesting_level');
+            $currentXDebugNestingLevel = (int) ini_get('xdebug.max_nesting_level');
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
             if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
@@ -288,7 +288,7 @@ class PhpReadinessCheck
 
         $data = [];
         $error = false;
-        $iniSetting = (int)ini_get('always_populate_raw_post_data');
+        $iniSetting = (int) ini_get('always_populate_raw_post_data');
 
         $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
         $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
@@ -304,7 +304,7 @@ class PhpReadinessCheck
 	        Please open your php.ini file and set always_populate_raw_post_data to -1.
  	        If you need more help please call your hosting provider.',
             PHP_VERSION,
-            (int)ini_get('always_populate_raw_post_data')
+            (int) ini_get('always_populate_raw_post_data')
         );
 
         $data['always_populate_raw_post_data'] = [

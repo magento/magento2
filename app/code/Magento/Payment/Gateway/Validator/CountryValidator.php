@@ -45,7 +45,7 @@ class CountryValidator extends AbstractValidator
         $isValid = true;
         $storeId = $validationSubject['storeId'];
 
-        if ((int)$this->config->getValue('allowspecific', $storeId) === 1) {
+        if ((int) $this->config->getValue('allowspecific', $storeId) === 1) {
             $availableCountries = explode(
                 ',',
                 $this->config->getValue('specificcountry', $storeId)

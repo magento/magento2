@@ -36,7 +36,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
 
         if ($data) {
             $data['design'] = $this->_filterPostData($data['design']);
-            $id = (int)$this->getRequest()->getParam('id');
+            $id = (int) $this->getRequest()->getParam('id');
 
             $design = $this->_objectManager->create(\Magento\Framework\App\DesignInterface::class);
             if ($id) {

@@ -574,9 +574,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData(self::STORE_ID)) {
-            return (int)$this->_getData(self::STORE_ID);
+            return (int) $this->_getData(self::STORE_ID);
         }
-        return (int)$this->_storeManager->getStore()->getId();
+        return (int) $this->_storeManager->getStore()->getId();
     }
 
     /**

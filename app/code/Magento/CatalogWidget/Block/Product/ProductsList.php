@@ -335,7 +335,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         if (!$this->hasData('show_pager')) {
             $this->setData('show_pager', self::DEFAULT_SHOW_PAGER);
         }
-        return (bool)$this->getData('show_pager');
+        return (bool) $this->getData('show_pager');
     }
 
     /**

@@ -189,7 +189,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      */
     public function setCustomerId($id)
     {
-        $this->_customerId = (int)$id;
+        $this->_customerId = (int) $id;
         return $this;
     }
 

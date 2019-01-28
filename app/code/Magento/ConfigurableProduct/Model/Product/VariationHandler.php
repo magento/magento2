@@ -200,7 +200,7 @@ class VariationHandler
         }
 
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
-        $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
+        $postData['stock_data'] = array_diff_key((array) $parentProduct->getStockData(), array_flip($keysFilter));
         if (!isset($postData['stock_data']['is_in_stock'])) {
             $stockStatus = $parentProduct->getQuantityAndStockStatus();
             $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];

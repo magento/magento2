@@ -624,7 +624,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatus($status);
 
         $storeId = $customerData->getStoreId();
-        if ((int)$customerData->getStoreId() === 0) {
+        if ((int) $customerData->getStoreId() === 0) {
             $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
         }
 

@@ -269,7 +269,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      */
     protected function isErrorExists()
     {
-        return (bool)$this->getMessageManager()->getMessages(true)->getCountByType(MessageInterface::TYPE_ERROR);
+        return (bool) $this->getMessageManager()->getMessages(true)->getCountByType(MessageInterface::TYPE_ERROR);
     }
 
     /**

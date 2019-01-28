@@ -43,7 +43,7 @@ class CustomerGroupDimensionProvider implements DimensionProviderInterface
     public function getIterator(): \Traversable
     {
         foreach ($this->getCustomerGroups() as $customerGroup) {
-            yield $this->dimensionFactory->create(self::DIMENSION_NAME, (string)$customerGroup);
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, (string) $customerGroup);
         }
     }
 

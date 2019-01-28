@@ -88,7 +88,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
             . ' ' . implode(' ', $whiteList);
         exec($command, $output, $exitCode);
 
-        return !(bool)$exitCode;
+        return !(bool) $exitCode;
     }
 
     /**

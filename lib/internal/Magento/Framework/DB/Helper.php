@@ -117,7 +117,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         $havings = [];
         $columns = $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
         foreach ($columns as $columnEntry) {
-            $correlationName = (string)$columnEntry[1];
+            $correlationName = (string) $columnEntry[1];
             $column          = $columnEntry[2];
             foreach ($selectHavings as $having) {
                 /**
@@ -157,12 +157,12 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     protected function _assembleLimit($query, $limitCount, $limitOffset, $columnList = [])
     {
         if ($limitCount !== null) {
-            $limitCount = (int)$limitCount;
+            $limitCount = (int) $limitCount;
             if ($limitCount <= 0) {
                 //throw new \Exception("LIMIT argument count={$limitCount} is not valid");
             }
 
-            $limitOffset = (int)$limitOffset;
+            $limitOffset = (int) $limitOffset;
             if ($limitOffset < 0) {
                 //throw new \Exception("LIMIT argument offset={$limitOffset} is not valid");
             }

@@ -136,7 +136,7 @@ class AttributeRepository
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
-            $option = ['label' => (string)$option->getLabel(), 'value' => $option->getValue()];
+            $option = ['label' => (string) $option->getLabel(), 'value' => $option->getValue()];
         }
         return $options;
     }

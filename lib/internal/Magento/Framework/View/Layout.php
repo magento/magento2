@@ -1094,7 +1094,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     public function isCacheable()
     {
         $this->build();
-        $cacheableXml = !(bool)count($this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
+        $cacheableXml = !(bool) count($this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
         return $this->cacheable && $cacheableXml;
     }
 
@@ -1116,7 +1116,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     public function setIsPrivate($isPrivate = true)
     {
-        $this->isPrivate = (bool)$isPrivate;
+        $this->isPrivate = (bool) $isPrivate;
         return $this;
     }
 

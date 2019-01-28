@@ -25,7 +25,7 @@ class Delete extends \Magento\Checkout\Controller\Cart implements HttpPostAction
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         if ($id) {
             try {
                 $this->cart->removeItem($id);

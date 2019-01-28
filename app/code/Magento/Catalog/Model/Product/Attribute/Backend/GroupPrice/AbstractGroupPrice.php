@@ -173,7 +173,7 @@ abstract class AbstractGroupPrice extends Price
     {
         $attribute = $this->getAttribute();
         $priceRows = $object->getData($attribute->getName());
-        $priceRows = array_filter((array)$priceRows);
+        $priceRows = array_filter((array) $priceRows);
 
         if (empty($priceRows)) {
             return true;
@@ -420,7 +420,7 @@ abstract class AbstractGroupPrice extends Price
     public function getAffectedFields($object)
     {
         $data = [];
-        $prices = (array)$object->getData($this->getAttribute()->getName());
+        $prices = (array) $object->getData($this->getAttribute()->getName());
         $tableName = $this->_getResource()->getMainTable();
         foreach ($prices as $value) {
             $data[$tableName][] = [

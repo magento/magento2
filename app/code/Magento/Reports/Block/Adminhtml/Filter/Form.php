@@ -48,7 +48,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function setFieldVisibility($fieldId, $visibility)
     {
-        $this->_fieldVisibility[$fieldId] = (bool)$visibility;
+        $this->_fieldVisibility[$fieldId] = (bool) $visibility;
     }
 
     /**

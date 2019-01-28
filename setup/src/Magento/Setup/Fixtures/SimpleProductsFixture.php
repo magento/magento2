@@ -187,7 +187,7 @@ class SimpleProductsFixture extends Fixture
         $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSets) {
             mt_srand($index);
             $attributeSetCount = count(array_keys($defaultAttributeSets));
-            if ($attributeSetCount > (($index - 1) % (int)$this->fixtureModel->getValue('categories', 30))) {
+            if ($attributeSetCount > (($index - 1) % (int) $this->fixtureModel->getValue('categories', 30))) {
                 return array_keys($defaultAttributeSets)[mt_rand(0, count(array_keys($defaultAttributeSets)) - 1)];
             } else {
                 $customSetsAmount = count($additionalAttributeSets);
@@ -267,7 +267,7 @@ class SimpleProductsFixture extends Fixture
     private function getDefaultAttributeSetId()
     {
         if (null === $this->defaultAttributeSetId) {
-            $this->defaultAttributeSetId = (int)$this->productFactory->create()->getDefaultAttributeSetId();
+            $this->defaultAttributeSetId = (int) $this->productFactory->create()->getDefaultAttributeSetId();
         }
 
         return $this->defaultAttributeSetId;

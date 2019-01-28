@@ -44,7 +44,7 @@ class CreateHandler implements ExtensionInterface
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
         foreach ($samples as $sample) {
             $sample->setId(null);
-            $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
+            $this->sampleRepository->save($entity->getSku(), $sample, !(bool) $entity->getStoreId());
         }
 
         return $entity;

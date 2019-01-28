@@ -79,7 +79,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getDefaultLength()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -131,7 +131,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getDefaultDashInterval()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (int) $this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

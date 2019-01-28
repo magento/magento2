@@ -22,7 +22,7 @@ class FilesCollector
         $files = [];
         foreach ($paths as $path) {
             foreach ($this->_getIterator($path, $fileMask) as $file) {
-                $files[] = (string)$file;
+                $files[] = (string) $file;
             }
         }
         sort($files);

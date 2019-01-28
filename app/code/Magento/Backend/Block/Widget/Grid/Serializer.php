@@ -69,9 +69,9 @@ class Serializer extends \Magento\Framework\View\Element\Template
     public function getColumnInputNames($asJSON = false)
     {
         if ($asJSON) {
-            return $this->_jsonEncoder->encode((array)$this->getInputNames());
+            return $this->_jsonEncoder->encode((array) $this->getInputNames());
         }
-        return (array)$this->getInputNames();
+        return (array) $this->getInputNames();
     }
 
     /**

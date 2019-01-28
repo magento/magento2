@@ -105,10 +105,10 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
             )->joinInner(
                 [
                     't' => $this->priceTableResolver->resolve('catalog_product_index_price', [
-                        $this->dimensionFactory->create(WebsiteDimensionProvider::DIMENSION_NAME, (string)$websiteId),
+                        $this->dimensionFactory->create(WebsiteDimensionProvider::DIMENSION_NAME, (string) $websiteId),
                         $this->dimensionFactory->create(
                             CustomerGroupDimensionProvider::DIMENSION_NAME,
-                            (string)$customerGroupId
+                            (string) $customerGroupId
                         ),
                     ])
                 ],

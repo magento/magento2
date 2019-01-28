@@ -92,7 +92,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         $agreementsList = $this->checkoutAgreementsList->getList(
             $this->activeStoreAgreementsFilter->buildSearchCriteria()
         );
-        $agreementConfiguration['isEnabled'] = (bool)($isAgreementsEnabled && count($agreementsList) > 0);
+        $agreementConfiguration['isEnabled'] = (bool) ($isAgreementsEnabled && count($agreementsList) > 0);
 
         foreach ($agreementsList as $agreement) {
             $agreementConfiguration['agreements'][] = [

@@ -406,8 +406,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         /**
          * check if schedule generation is needed
          */
-        $lastRun = (int)$this->_cache->load(self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId);
-        $rawSchedulePeriod = (int)$this->getCronGroupConfigurationValue(
+        $lastRun = (int) $this->_cache->load(self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId);
+        $rawSchedulePeriod = (int) $this->getCronGroupConfigurationValue(
             $groupId,
             self::XML_PATH_SCHEDULE_GENERATE_EVERY
         );
@@ -475,8 +475,8 @@ class ProcessCronQueueObserver implements ObserverInterface
     private function cleanupJobs($groupId, $currentTime)
     {
         // check if history cleanup is needed
-        $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
-        $historyCleanUp = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_CLEANUP_EVERY);
+        $lastCleanup = (int) $this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
+        $historyCleanUp = (int) $this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_CLEANUP_EVERY);
         if ($lastCleanup > $this->dateTime->gmtTimestamp() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
             return $this;
         }
@@ -490,8 +490,8 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         $this->cleanupDisabledJobs($groupId);
 
-        $historySuccess = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_SUCCESS);
-        $historyFailure = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_FAILURE);
+        $historySuccess = (int) $this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_SUCCESS);
+        $historyFailure = (int) $this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_FAILURE);
         $historyLifetimes = [
             Schedule::STATUS_SUCCESS => $historySuccess * self::SECONDS_IN_MINUTE,
             Schedule::STATUS_MISSED => $historyFailure * self::SECONDS_IN_MINUTE,
@@ -597,7 +597,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     protected function getScheduleTimeInterval($groupId)
     {
-        $scheduleAheadFor = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_SCHEDULE_AHEAD_FOR);
+        $scheduleAheadFor = (int) $this->getCronGroupConfigurationValue($groupId, self::XML_PATH_SCHEDULE_AHEAD_FOR);
         $scheduleAheadFor = $scheduleAheadFor * self::SECONDS_IN_MINUTE;
 
         return $scheduleAheadFor;

@@ -263,7 +263,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function setStore($storeId)
     {
-        $this->setData('store', (int)$storeId);
+        $this->setData('store', (int) $storeId);
     }
 
     /**
@@ -866,7 +866,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function isActive($storeId = null)
     {
-        return (bool)(int)$this->getConfigData('active', $storeId);
+        return (bool) (int) $this->getConfigData('active', $storeId);
     }
 
     /**
@@ -925,7 +925,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function getDebugFlag()
     {
-        return (bool)(int)$this->getConfigData('debug');
+        return (bool) (int) $this->getConfigData('debug');
     }
 
     /**

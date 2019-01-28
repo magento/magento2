@@ -98,9 +98,9 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             $statusTable = $status->getBackend()->getTable();
             $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');
             $statusConditions = [
-                's.store_id IN(0,' . (int)$store->getId() . ')',
-                's.attribute_id = ' . (int)$status->getId(),
-                'e.entity_id = ' . (int)$id,
+                's.store_id IN(0,' . (int) $store->getId() . ')',
+                's.attribute_id = ' . (int) $status->getId(),
+                'e.entity_id = ' . (int) $id,
             ];
             $select = $this->_connection->select();
             $select->from(['e' => $catalogProductEntityTable], ['s.value'])

@@ -27,7 +27,7 @@ if ($block->getIsInCatalogProduct()) {
         <?= /* @noEscape */ $shortcutHtmlId ?>"
      data-mage-init='{
      "paypalCheckout": {
-                "isCatalogProduct": "<?= /* @noEscape */ !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false ?>",
+                "isCatalogProduct": "<?= /* @noEscape */ !empty($isInCatalogProduct) ? (bool) $isInCatalogProduct : false ?>",
                 "shortcutContainerClass": "<?= /* @noEscape */ "." . $shortcutHtmlId ?>"
             }
      }'

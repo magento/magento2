@@ -182,7 +182,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      */
     protected function _getJs($quantityFieldId, $inStockFieldId)
     {
-        $isNewProduct = (int)$this->coreRegistry->registry('product')->isObjectNew();
+        $isNewProduct = (int) $this->coreRegistry->registry('product')->isObjectNew();
         return "
             <script type='text/javascript'>
                 require(['jquery', 'prototype', 'domReady!'], function($) {

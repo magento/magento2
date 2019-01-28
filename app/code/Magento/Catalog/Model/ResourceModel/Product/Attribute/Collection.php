@@ -64,7 +64,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      */
     protected function _initSelect()
     {
-        $entityTypeId = (int)$this->_eavEntityFactory->create()->setType(
+        $entityTypeId = (int) $this->_eavEntityFactory->create()->setType(
             \Magento\Catalog\Model\Product::ENTITY
         )->getTypeId();
         $columns = $this->getConnection()->describeTable($this->getResource()->getMainTable());

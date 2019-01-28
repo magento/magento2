@@ -214,7 +214,7 @@ QUERY;
         if ($this->fixtureTaxRates === null) {
             $this->fixtureTaxRates = [];
             if ($this->getFixtureTaxRules()) {
-                $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
+                $taxRateIds = (array) $this->getFixtureTaxRules()[0]->getRates();
                 foreach ($taxRateIds as $taxRateId) {
                     /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
                     $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);

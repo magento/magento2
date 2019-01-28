@@ -107,7 +107,7 @@ class Messages extends \Magento\Backend\Block\Template
      */
     public function hasMessages()
     {
-        return (bool)count($this->_messages->getItems());
+        return (bool) count($this->_messages->getItems());
     }
 
     /**

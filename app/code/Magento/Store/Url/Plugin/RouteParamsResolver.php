@@ -65,7 +65,7 @@ class RouteParamsResolver
             $subject->setScope($data['_scope']);
             unset($data['_scope']);
         }
-        if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
+        if (isset($data['_scope_to_url']) && (bool) $data['_scope_to_url'] === true) {
             /** @var StoreInterface $currentScope */
             $currentScope = $subject->getScope();
             $storeCode = $currentScope && $currentScope instanceof StoreInterface ?

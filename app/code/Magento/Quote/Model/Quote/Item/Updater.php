@@ -77,7 +77,7 @@ class Updater
         $itemQty = $info['qty'];
         if ($item->getProduct()->getStockItem()) {
             if (!$item->getProduct()->getStockItem()->getIsQtyDecimal()) {
-                $itemQty = (int)$info['qty'];
+                $itemQty = (int) $info['qty'];
             } else {
                 $item->setIsQtyDecimal(1);
             }

@@ -21,13 +21,13 @@ echo $var;
 <?= '$var' ?>
 <?= "value" ?>
 <?= 'value' ?>
-<?= (int)$var ?>
-<?= (bool)$var ?>
+<?= (int) $var ?>
+<?= (bool) $var ?>
 <?= count($var) ?>
 <?= $object->methodHtml() ?>
 <?php pecho($var);?>
 <?= $object->methodHtml() .
-    (bool)$var .
+    (bool) $var .
     $block->escapeUrl("some value");
 ?>
 <?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>

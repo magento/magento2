@@ -61,7 +61,7 @@ class Date extends AbstractElement
      */
     protected function _toTimestamp($value)
     {
-        $value = (int)$value;
+        $value = (int) $value;
         if ($value > 3155760000) {
             $value = 0;
         }

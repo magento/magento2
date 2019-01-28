@@ -96,7 +96,7 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
             /**
              * Number of operations that has been processed (i.e. operations with any status but 'open')
              */
-            $allProcessedOperationsQty = (int)$this->operationCollectionFactory->create()
+            $allProcessedOperationsQty = (int) $this->operationCollectionFactory->create()
                 ->addFieldToFilter('bulk_uuid', $bulkUuid)
                 ->getSize();
 
@@ -142,7 +142,7 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
         /**
          * Number of operations that has been processed (i.e. operations with any status but 'open')
          */
-        $allProcessedOperationsQty = (int)$this->operationCollectionFactory->create()
+        $allProcessedOperationsQty = (int) $this->operationCollectionFactory->create()
             ->addFieldToFilter('bulk_uuid', $bulkUuid)
             ->getSize();
 
@@ -191,7 +191,7 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
 
-        return (int)$connection->fetchOne(
+        return (int) $connection->fetchOne(
             $connection->select()
                 ->from($metadata->getEntityTable(), 'operation_count')
                 ->where('uuid = ?', $bulkUuid)

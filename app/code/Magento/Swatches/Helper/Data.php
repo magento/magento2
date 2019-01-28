@@ -140,7 +140,7 @@ class Data
     public function assembleAdditionalDataEavAttribute(Attribute $attribute)
     {
         $initialAdditionalData = [];
-        $additionalData = (string)$attribute->getData('additional_data');
+        $additionalData = (string) $attribute->getData('additional_data');
         if (!empty($additionalData)) {
             $additionalData = $this->serializer->unserialize($additionalData);
             if (is_array($additionalData)) {

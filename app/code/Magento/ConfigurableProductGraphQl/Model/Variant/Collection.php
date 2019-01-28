@@ -149,7 +149,7 @@ class Collection
             /** @var Product $childProduct */
             foreach ($childCollection->getItems() as $childProduct) {
                 $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
-                $parentId = (int)$childProduct->getParentId();
+                $parentId = (int) $childProduct->getParentId();
                 if (!isset($this->childrenMap[$parentId])) {
                     $this->childrenMap[$parentId] = [];
                 }

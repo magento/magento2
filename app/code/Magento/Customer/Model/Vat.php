@@ -86,7 +86,7 @@ class Vat
      */
     public function getMerchantCountryCode($store = null)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             StoreInformation::XML_PATH_STORE_INFO_COUNTRY_CODE,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -101,7 +101,7 @@ class Vat
      */
     public function getMerchantVatNumber($store = null)
     {
-        return (string)$this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             StoreInformation::XML_PATH_STORE_INFO_VAT_NUMBER,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -139,7 +139,7 @@ class Vat
         ];
 
         if (isset($vatClassToGroupXmlPathMap[$vatClass])) {
-            $groupId = (int)$this->scopeConfig->getValue(
+            $groupId = (int) $this->scopeConfig->getValue(
                 $vatClassToGroupXmlPathMap[$vatClass],
                 ScopeInterface::SCOPE_STORE,
                 $store
@@ -196,9 +196,9 @@ class Vat
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
-            $gatewayResponse->setIsValid((bool)$result->valid);
-            $gatewayResponse->setRequestDate((string)$result->requestDate);
-            $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
+            $gatewayResponse->setIsValid((bool) $result->valid);
+            $gatewayResponse->setRequestDate((string) $result->requestDate);
+            $gatewayResponse->setRequestIdentifier((string) $result->requestIdentifier);
             $gatewayResponse->setRequestSuccess(true);
 
             if ($gatewayResponse->getIsValid()) {

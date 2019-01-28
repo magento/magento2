@@ -33,7 +33,7 @@ class Iterator extends \Magento\Framework\DataObject
             foreach ($callbacks as $callback) {
                 $result = call_user_func($callback, $args);
                 if (!empty($result)) {
-                    $args = array_merge($args, (array)$result);
+                    $args = array_merge($args, (array) $result);
                 }
             }
             $args['idx']++;

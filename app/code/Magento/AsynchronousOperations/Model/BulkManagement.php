@@ -115,7 +115,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
             $bulkSummary->setUserType($userType);
-            $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
+            $bulkSummary->setOperationCount((int) $bulkSummary->getOperationCount() + count($operations));
 
             $this->entityManager->save($bulkSummary);
 

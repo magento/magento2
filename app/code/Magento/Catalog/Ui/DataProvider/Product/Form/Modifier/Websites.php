@@ -193,10 +193,10 @@ class Websites extends AbstractModifier
                             'dataScope' => 'website_ids.' . $website['id'],
                             'label' => $label,
                             'valueMap' => [
-                                'true' => (string)$website['id'],
+                                'true' => (string) $website['id'],
                                 'false' => '0',
                             ],
-                            'value' => $isChecked ? (string)$website['id'] : '0',
+                            'value' => $isChecked ? (string) $website['id'] : '0',
                             'disabled' => $this->locator->getProduct()->isLockedAttribute('website_ids'),
                         ],
                     ],

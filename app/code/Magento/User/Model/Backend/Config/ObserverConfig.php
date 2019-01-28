@@ -39,7 +39,7 @@ class ObserverConfig
             return false;
         }
 
-        return (int)$latestPassword['last_updated'] + $this->getAdminPasswordLifetime() < time();
+        return (int) $latestPassword['last_updated'] + $this->getAdminPasswordLifetime() < time();
     }
 
     /**
@@ -48,7 +48,7 @@ class ObserverConfig
      */
     public function getAdminLockThreshold()
     {
-        return 60 * (int)$this->backendConfig->getValue('admin/security/lockout_threshold');
+        return 60 * (int) $this->backendConfig->getValue('admin/security/lockout_threshold');
     }
 
     /**
@@ -58,7 +58,7 @@ class ObserverConfig
      */
     public function isPasswordChangeForced()
     {
-        return (bool)(int)$this->backendConfig->getValue('admin/security/password_is_forced');
+        return (bool) (int) $this->backendConfig->getValue('admin/security/password_is_forced');
     }
 
     /**
@@ -68,7 +68,7 @@ class ObserverConfig
      */
     public function getAdminPasswordLifetime()
     {
-        return 86400 * (int)$this->backendConfig->getValue('admin/security/password_lifetime');
+        return 86400 * (int) $this->backendConfig->getValue('admin/security/password_lifetime');
     }
 
     /**
@@ -78,6 +78,6 @@ class ObserverConfig
      */
     public function getMaxFailures()
     {
-        return (int)$this->backendConfig->getValue('admin/security/lockout_failures');
+        return (int) $this->backendConfig->getValue('admin/security/lockout_failures');
     }
 }

@@ -255,10 +255,10 @@ class TierPriceStorageTest extends WebapiAbstract
 
         foreach ($tierPrices as $tierPrice) {
             $priceIsCorrect = $price['price_type'] === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
-                ? (float)$tierPrice->getExtensionAttributes()->getPercentageValue() === (float)$price['price']
-                : (float)$tierPrice->getValue() === (float)$price['price'];
+                ? (float) $tierPrice->getExtensionAttributes()->getPercentageValue() === (float) $price['price']
+                : (float) $tierPrice->getValue() === (float) $price['price'];
             if ($priceIsCorrect
-                && (int)$tierPrice->getQty() === (int)$price['quantity']
+                && (int) $tierPrice->getQty() === (int) $price['quantity']
                 && $tierPrice->getExtensionAttributes()->getWebsiteId() == $price['website_id']
             ) {
                 $isCorrect = true;

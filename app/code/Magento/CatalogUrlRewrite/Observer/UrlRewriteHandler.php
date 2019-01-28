@@ -127,8 +127,8 @@ class UrlRewriteHandler
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $this->isSkippedProduct[$category->getEntityId()] = [];
-        $saveRewriteHistory = (bool)$category->getData('save_rewrites_history');
-        $storeId = (int)$category->getStoreId();
+        $saveRewriteHistory = (bool) $category->getData('save_rewrites_history');
+        $storeId = (int) $category->getStoreId();
 
         if ($category->getChangedProductIds()) {
             $this->generateChangedProductUrls($mergeDataProvider, $category, $storeId, $saveRewriteHistory);
@@ -167,12 +167,12 @@ class UrlRewriteHandler
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $this->isSkippedProduct[$category->getEntityId()] = [];
-        $saveRewriteHistory = (bool)$category->getData('save_rewrites_history');
+        $saveRewriteHistory = (bool) $category->getData('save_rewrites_history');
         $storeIds = $this->getCategoryStoreIds($category);
 
         if ($category->getChangedProductIds()) {
             foreach ($storeIds as $storeId) {
-                $this->generateChangedProductUrls($mergeDataProvider, $category, (int)$storeId, $saveRewriteHistory);
+                $this->generateChangedProductUrls($mergeDataProvider, $category, (int) $storeId, $saveRewriteHistory);
             }
         }
 

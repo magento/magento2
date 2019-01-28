@@ -223,7 +223,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getIsPriceWebsiteScope()
     {
-        $scope = (int)$this->_scopeConfig->getValue(
+        $scope = (int) $this->_scopeConfig->getValue(
             \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

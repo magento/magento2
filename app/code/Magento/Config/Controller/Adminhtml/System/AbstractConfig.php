@@ -118,7 +118,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
         $sanitizedConfigState = $configState;
         foreach ($configState as $sectionId => $value) {
             if (array_key_exists($sectionId, $sectionList)) {
-                $sanitizedConfigState[$sectionId] = (bool)$sanitizedConfigState[$sectionId] ? '1' : '0';
+                $sanitizedConfigState[$sectionId] = (bool) $sanitizedConfigState[$sectionId] ? '1' : '0';
             } else {
                 unset($sanitizedConfigState[$sectionId]);
             }

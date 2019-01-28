@@ -819,7 +819,7 @@ XMLRequest;
             $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()");
-            $success = (int)$arr[0];
+            $success = (int) $arr[0];
             if ($success === 1) {
                 $arr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment");
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
@@ -832,7 +832,7 @@ XMLRequest;
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
-                    $code = (string)$shipElement->Service->Code;
+                    $code = (string) $shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
                         //The location of tax information is in a different place
                         // depending on whether we are using negotiated rates or not
@@ -849,7 +849,7 @@ XMLRequest;
                                     ->MonetaryValue;
 
                                 $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->NegotiatedRates
+                                    (string) $shipElement->NegotiatedRates
                                         ->NetSummaryCharges
                                         ->TotalChargesWithTaxes
                                         ->CurrencyCode
@@ -857,7 +857,7 @@ XMLRequest;
                             } else {
                                 $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
+                                    (string) $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
                                 );
                             }
                         } else {
@@ -868,12 +868,12 @@ XMLRequest;
                             if ($includeTaxesActive) {
                                 $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
+                                    (string) $shipElement->TotalChargesWithTaxes->CurrencyCode
                                 );
                             } else {
                                 $cost = $shipElement->TotalCharges->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
-                                    (string)$shipElement->TotalCharges->CurrencyCode
+                                    (string) $shipElement->TotalCharges->CurrencyCode
                                 );
                             }
                         }
@@ -882,7 +882,7 @@ XMLRequest;
                         $successConversion = true;
                         if ($responseCurrencyCode) {
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
-                                $cost = (float)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
+                                $cost = (float) $cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                             } else {
                                 $errorTitle = __(
                                     'We can\'t convert a rate from "%1-%2".',
@@ -899,13 +899,13 @@ XMLRequest;
 
                         if ($successConversion) {
                             $costArr[$code] = $cost;
-                            $priceArr[$code] = $this->getMethodPrice((float)$cost, $code);
+                            $priceArr[$code] = $this->getMethodPrice((float) $cost, $code);
                         }
                     }
                 }
             } else {
                 $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/Error/ErrorDescription/text()");
-                $errorTitle = (string)$arr[0][0];
+                $errorTitle = (string) $arr[0][0];
                 $error = $this->_rateErrorFactory->create();
                 $error->setCarrier('ups');
                 $error->setCarrierTitle($this->getConfigData('title'));
@@ -1079,20 +1079,20 @@ XMLAuth;
             $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//TrackResponse/Response/ResponseStatusCode/text()");
-            $success = (int)$arr[0][0];
+            $success = (int) $arr[0][0];
 
             if ($success === 1) {
                 $arr = $xml->getXpath("//TrackResponse/Shipment/Service/Description/text()");
-                $resultArr['service'] = (string)$arr[0];
+                $resultArr['service'] = (string) $arr[0];
 
                 $arr = $xml->getXpath("//TrackResponse/Shipment/PickupDate/text()");
-                $resultArr['shippeddate'] = (string)$arr[0];
+                $resultArr['shippeddate'] = (string) $arr[0];
 
                 $arr = $xml->getXpath("//TrackResponse/Shipment/Package/PackageWeight/Weight/text()");
-                $weight = (string)$arr[0];
+                $weight = (string) $arr[0];
 
                 $arr = $xml->getXpath("//TrackResponse/Shipment/Package/PackageWeight/UnitOfMeasurement/Code/text()");
-                $unit = (string)$arr[0];
+                $unit = (string) $arr[0];
 
                 $resultArr['weight'] = "{$weight} {$unit}";
 
@@ -1102,42 +1102,42 @@ XMLAuth;
                     foreach ($activityTags as $activityTag) {
                         $addressArr = [];
                         if (isset($activityTag->ActivityLocation->Address->City)) {
-                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->City;
+                            $addressArr[] = (string) $activityTag->ActivityLocation->Address->City;
                         }
                         if (isset($activityTag->ActivityLocation->Address->StateProvinceCode)) {
-                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->StateProvinceCode;
+                            $addressArr[] = (string) $activityTag->ActivityLocation->Address->StateProvinceCode;
                         }
                         if (isset($activityTag->ActivityLocation->Address->CountryCode)) {
-                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->CountryCode;
+                            $addressArr[] = (string) $activityTag->ActivityLocation->Address->CountryCode;
                         }
                         $dateArr = [];
-                        $date = (string)$activityTag->Date;
+                        $date = (string) $activityTag->Date;
                         //YYYYMMDD
                         $dateArr[] = substr($date, 0, 4);
                         $dateArr[] = substr($date, 4, 2);
                         $dateArr[] = substr($date, -2, 2);
 
                         $timeArr = [];
-                        $time = (string)$activityTag->Time;
+                        $time = (string) $activityTag->Time;
                         //HHMMSS
                         $timeArr[] = substr($time, 0, 2);
                         $timeArr[] = substr($time, 2, 2);
                         $timeArr[] = substr($time, -2, 2);
 
                         if ($index === 1) {
-                            $resultArr['status'] = (string)$activityTag->Status->StatusType->Description;
+                            $resultArr['status'] = (string) $activityTag->Status->StatusType->Description;
                             $resultArr['deliverydate'] = implode('-', $dateArr);
                             //YYYY-MM-DD
                             $resultArr['deliverytime'] = implode(':', $timeArr);
                             //HH:MM:SS
-                            $resultArr['deliverylocation'] = (string)$activityTag->ActivityLocation->Description;
-                            $resultArr['signedby'] = (string)$activityTag->ActivityLocation->SignedForByName;
+                            $resultArr['deliverylocation'] = (string) $activityTag->ActivityLocation->Description;
+                            $resultArr['signedby'] = (string) $activityTag->ActivityLocation->SignedForByName;
                             if ($addressArr) {
                                 $resultArr['deliveryto'] = implode(', ', $addressArr);
                             }
                         } else {
                             $tempArr = [];
-                            $tempArr['activity'] = (string)$activityTag->Status->StatusType->Description;
+                            $tempArr['activity'] = (string) $activityTag->Status->StatusType->Description;
                             $tempArr['deliverydate'] = implode('-', $dateArr);
                             //YYYY-MM-DD
                             $tempArr['deliverytime'] = implode(':', $timeArr);
@@ -1153,7 +1153,7 @@ XMLAuth;
                 }
             } else {
                 $arr = $xml->getXpath("//TrackResponse/Response/Error/ErrorDescription/text()");
-                $errorTitle = (string)$arr[0][0];
+                $errorTitle = (string) $arr[0][0];
             }
         }
 
@@ -1473,10 +1473,10 @@ XMLAuth;
 
         $result = new \Magento\Framework\DataObject();
         if (isset($response->Error)) {
-            $result->setErrors((string)$response->Error->ErrorDescription);
+            $result->setErrors((string) $response->Error->ErrorDescription);
         } else {
-            $shippingLabelContent = (string)$response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
-            $trackingNumber = (string)$response->ShipmentResults->PackageResults->TrackingNumber;
+            $shippingLabelContent = (string) $response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
+            $trackingNumber = (string) $response->ShipmentResults->PackageResults->TrackingNumber;
 
             $result->setShippingLabelContent(base64_decode($shippingLabelContent));
             $result->setTrackingNumber($trackingNumber);
@@ -1542,7 +1542,7 @@ XMLAuth;
         if (isset($response->Response->Error)
             && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
         ) {
-            $result->setErrors((string)$response->Response->Error->ErrorDescription);
+            $result->setErrors((string) $response->Response->Error->ErrorDescription);
         }
 
         $this->_debug($debugData);
