@@ -1222,7 +1222,7 @@
                             </field>
                             <group id="checkout_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
                                 <label>Checkout Page</label>
-                                <field id="checkout_page_button_customize" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                                <field id="checkout_page_button_customize" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
                                     <label>Customize Button</label>
                                     <config_path>paypal/style/checkout_page_button_customize</config_path>
                                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -1232,6 +1232,7 @@
                                     <label>Label</label>
                                     <comment><![CDATA[The installment feature is available only in these locales: en_MX, es_MX, en_BR, pt_BR.]]></comment>
                                     <config_path>paypal/style/checkout_page_button_label</config_path>
+                                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\ButtonStylesLabel</frontend_model>
                                     <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getLabel</source_model>
                                     <depends>
                                         <field id="checkout_page_button_customize">1</field>
@@ -1301,7 +1302,6 @@
                             <group id="product_page_button" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
                                 <label>Product Pages</label>
                                 <field id="product_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
-                                    <comment/>
                                     <config_path>paypal/style/product_page_button_customize</config_path>
                                 </field>
                                 <field id="product_page_button_label" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_label">
@@ -1354,7 +1354,6 @@
                             <group id="cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="110">
                                 <label>Cart Page</label>
                                 <field id="cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
-                                    <comment/>
                                     <config_path>paypal/style/cart_page_button_customize</config_path>
                                 </field>
                                 <field id="cart_page_button_label" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_label">
@@ -1407,7 +1406,6 @@
                             <group id="mini_cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="120">
                                 <label>Mini Cart</label>
                                 <field id="mini_cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
-                                    <comment/>
                                     <config_path>paypal/style/mini_cart_page_button_customize</config_path>
                                 </field>
                                 <field id="mini_cart_page_button_label" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_label">
