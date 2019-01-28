@@ -1597,7 +1597,7 @@ class Files
             $result = array_merge($result, $files);
         }
         if (!empty($incorrectPatterns)) {
-            throw new \Exception("The following patterns didn't return any result:\n" . join("\n", $incorrectPatterns));
+            throw new \Exception("The following patterns didn't return any result:\n" . implode("\n", $incorrectPatterns));
         }
         return $result;
     }

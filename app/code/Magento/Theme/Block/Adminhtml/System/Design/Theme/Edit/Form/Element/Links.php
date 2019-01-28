@@ -49,7 +49,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
             $this->getHtmlId(),
             $this->serialize($this->getHtmlAttributes()),
             PHP_EOL,
-            join('', $links),
+            implode('', $links),
             PHP_EOL,
             $this->getAfterElementHtml()
         );
@@ -75,7 +75,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
 
         $html = sprintf(
             '<a %s>%s</a>%s',
-            join(' ', $attributes),
+            implode(' ', $attributes),
             $this->_escape($option['label']),
             isset($option['delimiter']) ? $option['delimiter'] : ''
         );

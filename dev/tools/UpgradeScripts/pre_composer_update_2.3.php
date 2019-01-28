@@ -272,7 +272,7 @@ try {
         output('Repository authentication failures occurred!', WARN);
         output(' * Failed authentication could result in incorrect package versions', WARN);
         output(' * To resolve, add credentials for the repositories to auth.json', WARN);
-        output(' * URL(s) failing authentication: ' . join(', ', array_keys($authFailed)), WARN);
+        output(' * URL(s) failing authentication: ' . implode(', ', array_keys($authFailed)), WARN);
     }
 } catch (Exception $e) {
     if ($e->getPrevious()) {
@@ -335,7 +335,7 @@ function runComposer($command)
     $command = "$composerExec $command --no-interaction";
     output(" Running command:\\n  $command");
     exec("$command 2>&1", $lines, $exitCode);
-    $output = '    ' . join('\n    ', $lines);
+    $output = '    ' . implode('\n    ', $lines);
 
     // Reload composer object from the updated composer.json
     $composerData = json_decode(file_get_contents($composerFile), true);

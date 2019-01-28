@@ -431,7 +431,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $cond[] = $connection->quoteInto('e.path LIKE ?', "{$path}%");
         }
         if ($cond) {
-            $this->getSelect()->where(join(' OR ', $cond));
+            $this->getSelect()->where(implode(' OR ', $cond));
         }
         return $this;
     }

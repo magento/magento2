@@ -235,7 +235,7 @@ class Amount extends Template implements AmountRenderInterface
     {
         $cssClasses = $this->hasData('css_classes') ? explode(' ', $this->getData('css_classes')) : [];
         $cssClasses = array_merge($cssClasses, array_keys($adjustmentRenders));
-        $this->setData('adjustment_css_classes', join(' ', $cssClasses));
+        $this->setData('adjustment_css_classes', implode(' ', $cssClasses));
         return $this;
     }
 }

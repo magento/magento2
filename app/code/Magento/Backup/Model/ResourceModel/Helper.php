@@ -92,7 +92,7 @@ class Helper extends \Magento\Framework\DB\Helper
         return sprintf(
             "ALTER TABLE %s\n  %s;\n",
             $this->getConnection()->quoteIdentifier($tableName),
-            join(",\n  ", $foreignKeys)
+            implode(",\n  ", $foreignKeys)
         );
     }
 

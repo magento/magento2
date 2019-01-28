@@ -3062,7 +3062,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $value = (int)$value;
                 break;
             case 'bigint':
-                if (!is_integer($value)) {
+                if (!is_int($value)) {
                     $value = sprintf('%.0f', (float)$value);
                 }
                 break;
@@ -3488,7 +3488,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $query = sprintf('%s INTO %s', $query, $this->quoteIdentifier($table));
         if ($fields) {
             $columns = array_map([$this, 'quoteIdentifier'], $fields);
-            $query = sprintf('%s (%s)', $query, join(', ', $columns));
+            $query = sprintf('%s (%s)', $query, implode(', ', $columns));
         }
 
         $query = sprintf('%s %s', $query, $select->assemble());
@@ -3522,7 +3522,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $update[] = sprintf('%1$s = VALUES(%1$s)', $this->quoteIdentifier($field));
         }
 
-        return count($update) ? ' ON DUPLICATE KEY UPDATE ' . join(', ', $update) : '';
+        return count($update) ? ' ON DUPLICATE KEY UPDATE ' . implode(', ', $update) : '';
     }
 
     /**

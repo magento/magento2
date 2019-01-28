@@ -83,7 +83,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $select->join(
             [$tableAlias => $this->getMainTable()],
-            join(' AND ', $conditions),
+            implode(' AND ', $conditions),
             ['value', 'count' => new \Zend_Db_Expr("COUNT({$tableAlias}.entity_id)")]
         )->group(
             "{$tableAlias}.value"

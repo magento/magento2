@@ -105,7 +105,7 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
         $lastFourDigits = substr(key($creditCardNumber), -4, 4);
 
         $availableCreditCards = $storedPaymentsBlock->getCreditCards();
-        if (key_exists($lastFourDigits, $availableCreditCards)) {
+        if (array_key_exists($lastFourDigits, $availableCreditCards)) {
             $storedPaymentsBlock->deleteCreditCard($availableCreditCards[$lastFourDigits]);
         }
         $this->assertStoredPaymentDeletedMessage->processAssert($this->storedPaymentMethodsPage);

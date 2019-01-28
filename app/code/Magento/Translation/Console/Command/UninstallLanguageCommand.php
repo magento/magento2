@@ -121,7 +121,7 @@ class UninstallLanguageCommand extends Command
             if (!$this->validate($package)) {
                 $output->writeln("<info>Package $package is not a Magento language and will be skipped.</info>");
             } else {
-                if (sizeof($dependencies[$package]) > 0) {
+                if (count($dependencies[$package]) > 0) {
                     $output->writeln("<info>Package $package has dependencies and will be skipped.</info>");
                 } else {
                     $packagesToRemove[] = $package;

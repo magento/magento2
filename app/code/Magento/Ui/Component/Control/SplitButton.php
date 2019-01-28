@@ -50,7 +50,7 @@ class SplitButton extends Button
             $classes[] = $this->getClass();
         }
 
-        return $this->attributesToHtml(['title' => $title, 'class' => join(' ', $classes)]);
+        return $this->attributesToHtml(['title' => $title, 'class' => implode(' ', $classes)]);
     }
 
     /**
@@ -78,7 +78,7 @@ class SplitButton extends Button
         $attributes = [
             'id' => $this->getId() . '-button',
             'title' => $title,
-            'class' => join(' ', $classes),
+            'class' => implode(' ', $classes),
             'disabled' => $disabled,
             'style' => $this->getStyle(),
         ];
@@ -120,7 +120,7 @@ class SplitButton extends Button
             $classes[] = $disabled;
         }
 
-        $attributes = ['title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled];
+        $attributes = ['title' => $title, 'class' => implode(' ', $classes), 'disabled' => $disabled];
         $this->getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 
         $html = $this->attributesToHtml($attributes);
@@ -173,7 +173,7 @@ class SplitButton extends Button
         $attributes = [
             'id' => isset($option['id']) ? $this->getId() . '-' . $option['id'] : '',
             'title' => $title,
-            'class' => join(' ', $classes),
+            'class' => implode(' ', $classes),
             'onclick' => isset($option['onclick']) ? $option['onclick'] : '',
             'style' => isset($option['style']) ? $option['style'] : '',
             'disabled' => $disabled,

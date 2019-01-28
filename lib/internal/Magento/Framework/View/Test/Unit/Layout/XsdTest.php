@@ -55,6 +55,6 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $xmlString = file_get_contents(__DIR__ . '/_files/arguments.xml');
         $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
 
-        $this->assertEmpty($actualResult, join("\n", $actualResult));
+        $this->assertEmpty($actualResult, implode("\n", $actualResult));
     }
 }

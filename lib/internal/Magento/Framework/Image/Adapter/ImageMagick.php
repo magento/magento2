@@ -40,7 +40,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     {
         if ($color) {
             if (is_array($color)) {
-                $color = "rgb(" . join(',', $color) . ")";
+                $color = "rgb(" . implode(',', $color) . ")";
             }
 
             $pixel = new \ImagickPixel();

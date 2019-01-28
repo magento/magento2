@@ -67,7 +67,7 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
         $this->configWriterMock
             ->expects($this->once())
             ->method('save')
-            ->with(CollectionTime::CRON_SCHEDULE_PATH, join(' ', ['04', '05', '*', '*', '*']));
+            ->with(CollectionTime::CRON_SCHEDULE_PATH, implode(' ', ['04', '05', '*', '*', '*']));
 
         $this->assertInstanceOf(
             Value::class,
@@ -97,7 +97,7 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
         $this->configWriterMock
             ->expects($this->once())
             ->method('save')
-            ->with(CollectionTime::CRON_SCHEDULE_PATH, join(' ', ['04', '05', '*', '*', '*']))
+            ->with(CollectionTime::CRON_SCHEDULE_PATH, implode(' ', ['04', '05', '*', '*', '*']))
             ->willThrowException($exception);
         $this->loggerMock
             ->expects($this->once())

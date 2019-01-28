@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if (sizeof($block->getTotals()) > 0): ?>
+<?php if (count($block->getTotals()) > 0): ?>
 <div class="dashboard-totals" id="dashboard_diagram_totals">
     <ul class="dashboard-totals-list">
         <?php foreach ($block->getTotals() as $_total): ?>

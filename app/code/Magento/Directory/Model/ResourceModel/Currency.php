@@ -138,7 +138,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveRates($rates)
     {
-        if (is_array($rates) && sizeof($rates) > 0) {
+        if (is_array($rates) && count($rates) > 0) {
             $connection = $this->getConnection();
             $data = [];
             foreach ($rates as $currencyCode => $rate) {

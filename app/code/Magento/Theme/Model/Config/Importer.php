@@ -96,7 +96,7 @@ class Importer implements ImporterInterface
              */
             foreach ($collection->getItems() as $theme) {
                 $themeFullPath = $theme->getFullPath();
-                if (!key_exists($themeFullPath, $data) && !in_array($themeFullPath, $themesInFs)) {
+                if (!array_key_exists($themeFullPath, $data) && !in_array($themeFullPath, $themesInFs)) {
                     $this->themeResourceModel->delete($theme);
                 }
             }

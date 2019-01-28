@@ -140,7 +140,7 @@ class Stock
             'cataloginventory_stock_item',
             'is_in_stock',
             'product_id=entity_id',
-            '(' . join(') OR (', $cond) . ')'
+            '(' . implode(') OR (', $cond) . ')'
         );
     }
 

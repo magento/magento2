@@ -104,7 +104,7 @@ class ModuleStatus
                 [$module['name']],
                 $enabledModules
             );
-            if (sizeof($errorMessages[$module['name']]) === 0) {
+            if (count($errorMessages[$module['name']]) === 0) {
                 $canBeDisabled[] = $module['name'];
             }
         }

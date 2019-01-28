@@ -85,7 +85,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame(1, count($optionsList));
         $this->assertSame('index', $optionsList[0]->getName());
     }
 
@@ -443,9 +443,9 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             "The following requested index types are not supported: '"
-            . join("', '", $inputIndexers)
+            . implode("', '", $inputIndexers)
             . "'." . PHP_EOL . 'Supported types: '
-            . join(", ", array_map(
+            . implode(", ", array_map(
                 function ($item) {
                     /** @var IndexerInterface $item */
                     $item->getId();

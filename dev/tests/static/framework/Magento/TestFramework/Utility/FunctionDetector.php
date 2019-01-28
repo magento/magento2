@@ -108,6 +108,6 @@ class FunctionDetector
         if (empty($functions)) {
             return '';
         }
-        return '/(?<!function |->|::)\b(' . join('|', $functions) . ')\s*\(/i';
+        return '/(?<!function |->|::)\b(' . implode('|', $functions) . ')\s*\(/i';
     }
 }

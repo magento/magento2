@@ -133,7 +133,7 @@ class ProcessManager
     private function startChildProcess(callable $userFunction)
     {
         $status = call_user_func($userFunction);
-        $status = is_integer($status) ? $status : 0;
+        $status = is_int($status) ? $status : 0;
         exit($status);
     }
 

@@ -54,7 +54,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
             $classes[] = $this->getButtonClass();
         }
 
-        $attributes = ['id' => $this->getId(), 'title' => $title, 'class' => join(' ', $classes)];
+        $attributes = ['id' => $this->getId(), 'title' => $title, 'class' => implode(' ', $classes)];
 
         $html = $this->_getAttributesString($attributes);
 
@@ -86,7 +86,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
         $attributes = [
             'id' => $this->getId() . '-button',
             'title' => $title,
-            'class' => join(' ', $classes),
+            'class' => implode(' ', $classes),
             'disabled' => $disabled,
             'style' => $this->getStyle(),
         ];
@@ -124,7 +124,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
             $classes[] = $disabled;
         }
 
-        $attributes = ['title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled];
+        $attributes = ['title' => $title, 'class' => implode(' ', $classes), 'disabled' => $disabled];
         $this->_getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 
         $html = $this->_getAttributesString($attributes);
@@ -205,7 +205,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
         $attributes = [
             'id' => isset($option['id']) ? $this->getId() . '-' . $option['id'] : '',
             'title' => $title,
-            'class' => join(' ', $classes),
+            'class' => implode(' ', $classes),
             'onclick' => isset($option['onclick']) ? $option['onclick'] : '',
             'style' => isset($option['style']) ? $option['style'] : '',
             'disabled' => $disabled,
@@ -233,6 +233,6 @@ class SplitButton extends \Magento\Backend\Block\Widget
             }
             $html[] = $attributeKey . '="' . $this->escapeHtmlAttr($attributeValue, false) . '"';
         }
-        return join(' ', $html);
+        return implode(' ', $html);
     }
 }

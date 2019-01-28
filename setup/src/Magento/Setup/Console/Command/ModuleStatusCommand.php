@@ -115,7 +115,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
             return Cli::RETURN_FAILURE;
         }
 
-        $output->writeln(join("\n", $enabledModuleNames));
+        $output->writeln(implode("\n", $enabledModuleNames));
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
@@ -130,7 +130,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
             return Cli::RETURN_FAILURE;
         }
 
-        $output->writeln(join("\n", $disabledModuleNames));
+        $output->writeln(implode("\n", $disabledModuleNames));
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 

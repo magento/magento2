@@ -627,7 +627,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
         $methodArr = explode('/', $partMethod);
-        switch (sizeof($methodArr)) {
+        switch (count($methodArr)) {
             case 1:
                 $part = 'attribute';
                 $method = $methodArr[0];

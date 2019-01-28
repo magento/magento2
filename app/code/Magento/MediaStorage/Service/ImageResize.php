@@ -177,7 +177,7 @@ class ImageResize
         $themesInUse = [];
         $registeredThemes = $this->themeCollection->loadRegisteredThemes();
         $storesByThemes = $this->themeCustomizationConfig->getStoresByThemes();
-        $keyType = is_integer(key($storesByThemes)) ? 'getId' : 'getCode';
+        $keyType = is_int(key($storesByThemes)) ? 'getId' : 'getCode';
         foreach ($registeredThemes as $registeredTheme) {
             if (array_key_exists($registeredTheme->$keyType(), $storesByThemes)) {
                 $themesInUse[] = $registeredTheme;

@@ -9,7 +9,7 @@
 ?>
 <?php
 /** @var $block \Magento\Reports\Block\Adminhtml\Grid */
-$numColumns = sizeof($block->getColumns());
+$numColumns = count($block->getColumns());
 ?>
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>

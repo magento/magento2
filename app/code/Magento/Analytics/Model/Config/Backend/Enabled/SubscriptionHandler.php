@@ -113,7 +113,7 @@ class SubscriptionHandler
      */
     private function setCronSchedule()
     {
-        $this->configWriter->save(self::CRON_STRING_PATH, join(' ', self::CRON_EXPR_ARRAY));
+        $this->configWriter->save(self::CRON_STRING_PATH, implode(' ', self::CRON_EXPR_ARRAY));
         return true;
     }
 

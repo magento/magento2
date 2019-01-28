@@ -123,7 +123,7 @@ class Link extends AbstractRenderer
             $html[] = sprintf('%s="%s"', $key, $this->escapeHtmlAttr($value, false));
         }
 
-        return join(' ', $html);
+        return implode(' ', $html);
     }
 
     /**

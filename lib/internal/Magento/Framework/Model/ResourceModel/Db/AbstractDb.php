@@ -278,7 +278,7 @@ abstract class AbstractDb extends AbstractResource
     public function getTable($tableName)
     {
         if (is_array($tableName)) {
-            $cacheName = join('@', $tableName);
+            $cacheName = implode('@', $tableName);
             list($tableName, $entitySuffix) = $tableName;
         } else {
             $cacheName = $tableName;

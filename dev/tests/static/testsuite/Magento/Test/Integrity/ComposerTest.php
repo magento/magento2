@@ -390,7 +390,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 . "Consider adding them to 'require-dev' section (if needed for child components only),"
                 . " to 'replace' section (if they are present in the project),"
                 . " to 'require' section (if needed for the skeleton).\n"
-                . join("\n", $errors)
+                . implode("\n", $errors)
             );
         }
     }
@@ -496,12 +496,12 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
             $this->assertEmpty(
                 $nonDeclaredDependencies,
                 'Following dependencies are not declared in the root composer.json: '
-                . join(', ', $nonDeclaredDependencies)
+                . implode(', ', $nonDeclaredDependencies)
             );
             $this->assertEmpty(
                 $nonexistentDependencies,
                 'Following dependencies declared in the root composer.json do not exist: '
-                . join(', ', $nonexistentDependencies)
+                . implode(', ', $nonexistentDependencies)
             );
         }
     }

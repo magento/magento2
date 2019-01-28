@@ -53,7 +53,7 @@ class InitializeMsrpAttributes implements DataPatchInterface, PatchVersionInterf
             \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,
         ];
-        $productTypes = join(',', $productTypes);
+        $productTypes = implode(',', $productTypes);
         $eavSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'msrp',

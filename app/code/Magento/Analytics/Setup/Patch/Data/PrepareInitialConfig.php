@@ -51,7 +51,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
                     'scope' => 'default',
                     'scope_id' => 0,
                     'path' => SubscriptionHandler::CRON_STRING_PATH,
-                    'value' => join(' ', SubscriptionHandler::CRON_EXPR_ARRAY)
+                    'value' => implode(' ', SubscriptionHandler::CRON_EXPR_ARRAY)
                 ]
             ]
         );

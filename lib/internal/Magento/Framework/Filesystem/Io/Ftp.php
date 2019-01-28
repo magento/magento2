@@ -251,7 +251,7 @@ class Ftp extends AbstractIo
         } else {
             if (is_string($src)) {
                 $stream = tmpfile();
-                fputs($stream, $src);
+                fwrite($stream, $src);
                 fseek($stream, 0);
             } elseif (is_resource($src)) {
                 $stream = $src;

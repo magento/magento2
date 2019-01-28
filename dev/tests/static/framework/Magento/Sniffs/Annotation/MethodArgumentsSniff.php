@@ -371,7 +371,7 @@ class MethodArgumentsSniff implements Sniff
         $parametersCount = count($paramPointers);
         if ($argumentsCount <= $parametersCount && $argumentsCount > 0) {
             $duplicateParameters = [];
-            for ($i = 0; $i < sizeof($paramDefinitions); $i++) {
+            for ($i = 0; $i < count($paramDefinitions); $i++) {
                 if (isset($paramDefinitions[$i]['paramName'])) {
                     $parameterContent = $paramDefinitions[$i]['paramName'];
                     for ($j = $i + 1; $j < count($paramDefinitions); $j++) {

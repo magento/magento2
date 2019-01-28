@@ -261,11 +261,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'attribute_set_id'
         )->join(
             ['website' => $this->getTable('catalog_product_website')],
-            join(' AND ', $websiteConds),
+            implode(' AND ', $websiteConds),
             []
         )->join(
             ['compare' => $this->getTable('catalog_compare_item')],
-            join(' AND ', $compareConds),
+            implode(' AND ', $compareConds),
             []
         );
         return $this->getConnection()->fetchCol($select);

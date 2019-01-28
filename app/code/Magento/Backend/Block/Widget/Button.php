@@ -89,7 +89,7 @@ class Button extends \Magento\Backend\Block\Widget
             'name' => $this->getElementName(),
             'title' => $title,
             'type' => $this->getType(),
-            'class' => join(' ', $classes),
+            'class' => implode(' ', $classes),
             'onclick' => $this->getOnClick(),
             'style' => $this->getStyle(),
             'value' => $this->getValue(),

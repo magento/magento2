@@ -161,7 +161,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getCount()
     {
-        return sizeof($this->_items);
+        return count($this->_items);
     }
 
     /**
@@ -224,7 +224,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
-            return join(',', $selected);
+            return implode(',', $selected);
         }
         return '';
     }
@@ -298,7 +298,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
         $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
-            return join(",", $gridIds);
+            return implode(",", $gridIds);
         }
         return '';
     }

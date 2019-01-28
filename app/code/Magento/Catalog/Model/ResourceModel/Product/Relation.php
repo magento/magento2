@@ -98,7 +98,7 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function removeRelations($parentId, $childIds)
     {
         if (!empty($childIds)) {
-            $where = join(
+            $where = implode(
                 ' AND ',
                 [
                     $this->getConnection()->quoteInto('parent_id = ?', $parentId),

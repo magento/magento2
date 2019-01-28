@@ -464,7 +464,7 @@ class File extends AbstractIo
         $this->_cwd();
 
         if (file_exists($filename)) {
-            if (!is_writeable($filename)) {
+            if (!is_writable($filename)) {
                 printf('The file %s is not writable', $filename);
                 return false;
             }
@@ -513,7 +513,7 @@ class File extends AbstractIo
     public function isWriteable($path)
     {
         $this->_cwd();
-        $result = is_writeable($path);
+        $result = is_writable($path);
         $this->_iwd();
         return $result;
     }

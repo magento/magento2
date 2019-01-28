@@ -37,7 +37,7 @@ class XmlFilesTest extends \PHPUnit\Framework\TestCase
             $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
-        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . implode("\n", $errors));
     }
 
     /**
@@ -89,7 +89,7 @@ class XmlFilesTest extends \PHPUnit\Framework\TestCase
         $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $this->validationStateMock);
         $errors = [];
         $result = $domConfig->validate('urn:magento:framework:Config/etc/theme.xsd', $errors);
-        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . implode("\n", $errors));
     }
 
     /**

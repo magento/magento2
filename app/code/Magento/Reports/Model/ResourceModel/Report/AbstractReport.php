@@ -421,7 +421,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
                 \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_SECOND
             );
 
-            $query .= ++$i == $periodsCount ? $then : "CASE WHEN " . join(" OR ", $subParts) . " THEN {$then} ELSE ";
+            $query .= ++$i == $periodsCount ? $then : "CASE WHEN " . implode(" OR ", $subParts) . " THEN {$then} ELSE ";
         }
 
         return $query . str_repeat('END ', count($periods) - 1);

@@ -111,7 +111,7 @@ class ResponseHandler
     {
         $responseBody = $response->getBody();
 
-        if (key_exists($response->getStatus(), self::$failureResponses)) {
+        if (array_key_exists($response->getStatus(), self::$failureResponses)) {
             return sprintf(self::$failureResponses[$response->getStatus()], $responseBody);
         }
 

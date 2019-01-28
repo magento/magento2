@@ -138,6 +138,6 @@ class Button extends AbstractRenderer
      */
     protected function _getAttributesStr($attributes)
     {
-        return join(' ', $attributes);
+        return implode(' ', $attributes);
     }
 }

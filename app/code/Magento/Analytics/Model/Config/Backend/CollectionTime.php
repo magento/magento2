@@ -79,7 +79,7 @@ class CollectionTime extends Value
             '*',                    # Day of the Week
         ];
 
-        $cronExprString = join(' ', $cronExprArray);
+        $cronExprString = implode(' ', $cronExprArray);
 
         try {
             $this->configWriter->save(self::CRON_SCHEDULE_PATH, $cronExprString);

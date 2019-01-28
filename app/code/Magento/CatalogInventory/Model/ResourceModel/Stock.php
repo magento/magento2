@@ -344,13 +344,13 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
 
         $where = [];
         foreach ($conditions as $k => $part) {
-            $where[$k] = join(' ' . \Magento\Framework\DB\Select::SQL_AND . ' ', $part);
+            $where[$k] = implode(' ' . \Magento\Framework\DB\Select::SQL_AND . ' ', $part);
         }
 
         $where = $connection->prepareSqlCondition(
             'invtr.low_stock_date',
             ['notnull' => true]
-        ) . ' ' . \Magento\Framework\DB\Select::SQL_AND . ' ((' . join(
+        ) . ' ' . \Magento\Framework\DB\Select::SQL_AND . ' ((' . implode(
             ') ' . \Magento\Framework\DB\Select::SQL_OR . ' (',
             $where
         ) . '))';

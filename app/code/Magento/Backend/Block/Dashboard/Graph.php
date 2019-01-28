@@ -331,7 +331,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $thisdataarray = $serie;
             if ($this->_encoding == "s") {
                 // SIMPLE ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                for ($j = 0; $j < count($thisdataarray); $j++) {
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         $ylocation = round(
@@ -344,7 +344,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 }
             } else {
                 // EXTENDED ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                for ($j = 0; $j < count($thisdataarray); $j++) {
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         if ($yrange) {
@@ -381,7 +381,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $valueBuffer = [];
 
-        if (sizeof($this->_axisLabels) > 0) {
+        if (count($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
             $indexid = 0;
             foreach ($this->_axisLabels as $idx => $labels) {

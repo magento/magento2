@@ -176,7 +176,7 @@ class ItemCarrier
             }
             $messages[] = __(
                 'We couldn\'t add the following product(s) to the shopping cart: %1.',
-                join(', ', $products)
+                implode(', ', $products)
             );
         }
 
@@ -203,7 +203,7 @@ class ItemCarrier
             }
 
             $this->messageManager->addSuccess(
-                __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), join(', ', $products))
+                __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), implode(', ', $products))
             );
 
             // save cart and collect totals

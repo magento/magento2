@@ -287,7 +287,7 @@ class Filesystem extends AbstractBackup
         if (!is_dir($backupsDir)) {
             $backupsDirParentDirectory = basename($backupsDir);
 
-            if (!is_writeable($backupsDirParentDirectory)) {
+            if (!is_writable($backupsDirParentDirectory)) {
                 throw new NotEnoughPermissions(
                     new Phrase('Cant create backups directory')
                 );

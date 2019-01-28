@@ -158,7 +158,7 @@ class Excel
         }
         $xmlData[] = '</Row>';
 
-        return join('', $xmlData);
+        return implode('', $xmlData);
     }
 
     /**

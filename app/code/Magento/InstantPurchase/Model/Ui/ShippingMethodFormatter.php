@@ -25,7 +25,7 @@ class ShippingMethodFormatter
             $shippingMethod->getMethodTitle(),
         ];
         $data = array_filter($data);
-        $formatted = join(' - ', $data);
+        $formatted = implode(' - ', $data);
         return $formatted;
     }
 }

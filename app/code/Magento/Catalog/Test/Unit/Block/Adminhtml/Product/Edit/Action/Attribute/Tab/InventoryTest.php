@@ -111,7 +111,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->with('store')
             ->will($this->returnValue('125'));
 
-        $this->assertTrue(is_integer($this->inventory->getStoreId()));
+        $this->assertTrue(is_int($this->inventory->getStoreId()));
     }
 
     /**

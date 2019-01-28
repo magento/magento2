@@ -167,7 +167,7 @@ class Encryptor implements EncryptorInterface
         if ($salt === true) {
             $salt = self::DEFAULT_SALT_LENGTH;
         }
-        if (is_integer($salt)) {
+        if (is_int($salt)) {
             $salt = $this->random->getRandomString($salt);
         }
 

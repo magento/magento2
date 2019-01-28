@@ -83,7 +83,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractM
      */
     private function isRestricted(string $itemId): bool
     {
-        if (!key_exists($itemId, $this->restrictions)) {
+        if (!array_key_exists($itemId, $this->restrictions)) {
             return false;
         }
 

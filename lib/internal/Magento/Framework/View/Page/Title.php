@@ -68,7 +68,7 @@ class Title
      */
     public function get()
     {
-        return join(self::TITLE_GLUE, $this->build());
+        return implode(self::TITLE_GLUE, $this->build());
     }
 
     /**

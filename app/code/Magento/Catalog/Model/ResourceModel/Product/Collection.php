@@ -423,7 +423,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->_eventManager->dispatch('catalog_prepare_price_select', $eventArgs);
 
-        $additional = join('', $response->getAdditionalCalculations());
+        $additional = implode('', $response->getAdditionalCalculations());
         $this->_priceExpression = $table . '.min_price';
         $this->_additionalPriceExpression = $additional;
         $this->_catalogPreparePriceSelect = clone $select;
@@ -1560,7 +1560,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 foreach ($attribute as $condition) {
                     $sqlArr[] = $this->_getAttributeConditionSql($condition['attribute'], $condition, $joinType);
                 }
-                $conditionSql = '(' . join(') OR (', $sqlArr) . ')';
+                $conditionSql = '(' . implode(') OR (', $sqlArr) . ')';
                 $this->getSelect()->where($conditionSql);
                 return $this;
             }
@@ -1838,13 +1838,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             if (!$joinWebsite) {
                 unset($fromPart['product_website']);
             } else {
-                $fromPart['product_website']['joinCondition'] = join(' AND ', $conditions);
+                $fromPart['product_website']['joinCondition'] = implode(' AND ', $conditions);
             }
             $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         } elseif ($joinWebsite) {
             $this->getSelect()->join(
                 ['product_website' => $this->getTable('catalog_product_website')],
-                join(' AND ', $conditions),
+                implode(' AND ', $conditions),
                 []
             );
         }
@@ -1923,7 +1923,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $connection = $this->getConnection();
         $select = $this->getSelect();
-        $joinCond = join(
+        $joinCond = implode(
             ' AND ',
             [
                 'price_index.entity_id = e.entity_id',
@@ -2040,7 +2040,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $conditions[] = $this->getConnection()->quoteInto('cat_index.is_parent=?', $filters['category_is_anchor']);
         }
 
-        $joinCond = join(' AND ', $conditions);
+        $joinCond = implode(' AND ', $conditions);
         $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
         if (isset($fromPart['cat_index'])) {
             $fromPart['cat_index']['joinCondition'] = $joinCond;
@@ -2079,7 +2079,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $filters['category_id']
             ),
         ];
-        $joinCond = join(' AND ', $conditions);
+        $joinCond = implode(' AND ', $conditions);
 
         $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
         if (isset($fromPart['cat_pro'])) {

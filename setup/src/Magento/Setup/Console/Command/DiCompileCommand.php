@@ -239,15 +239,15 @@ class DiCompileCommand extends Command
             $vendorPathsRegExps = [];
             foreach ($vendorPaths as $vendorDir => $vendorModules) {
                 $vendorPathsRegExps[] = $vendorDir
-                    . '/(?:' . join('|', $vendorModules) . ')';
+                    . '/(?:' . implode('|', $vendorModules) . ')';
             }
             $basePathsRegExps[] = preg_quote($basePath, '#')
-                . '/(?:' . join('|', $vendorPathsRegExps) . ')';
+                . '/(?:' . implode('|', $vendorPathsRegExps) . ')';
         }
 
         $excludedModulePaths = [
-            '#^(?:' . join('|', $basePathsRegExps) . ')/Test#',
-            '#^(?:' . join('|', $basePathsRegExps) . ')/tests#',
+            '#^(?:' . implode('|', $basePathsRegExps) . ')/Test#',
+            '#^(?:' . implode('|', $basePathsRegExps) . ')/tests#',
         ];
         return $excludedModulePaths;
     }
@@ -265,8 +265,8 @@ class DiCompileCommand extends Command
         }, $libraryPaths);
 
         $excludedLibraryPaths = [
-            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
-            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests#',
+            '#^(?:' . implode('|', $libraryPaths) . ')/([\\w]+/)?Test#',
+            '#^(?:' . implode('|', $libraryPaths) . ')/([\\w]+/)?tests#',
         ];
         return $excludedLibraryPaths;
     }

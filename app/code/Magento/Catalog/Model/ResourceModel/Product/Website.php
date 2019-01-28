@@ -60,7 +60,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $connection->quoteInto('website_id IN(?)', $websiteIds),
             $connection->quoteInto('product_id IN(?)', $productIds),
         ];
-        $whereCond = join(' AND ', $whereCond);
+        $whereCond = implode(' AND ', $whereCond);
 
         $connection->beginTransaction();
         try {

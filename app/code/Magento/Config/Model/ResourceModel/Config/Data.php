@@ -37,7 +37,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (is_array($object->getValue())) {
-            $object->setValue(join(',', $object->getValue()));
+            $object->setValue(implode(',', $object->getValue()));
         }
         return parent::_beforeSave($object);
     }

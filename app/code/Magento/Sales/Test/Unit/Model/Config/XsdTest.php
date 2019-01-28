@@ -31,7 +31,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         libxml_use_internal_errors(true);
         $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $this->_xsdFile);
         libxml_use_internal_errors(false);
-        $this->assertEmpty($result, 'Validation failed with errors: ' . join(', ', $result));
+        $this->assertEmpty($result, 'Validation failed with errors: ' . implode(', ', $result));
     }
 
     /**

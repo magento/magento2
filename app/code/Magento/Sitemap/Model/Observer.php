@@ -136,7 +136,7 @@ class Observer
                     'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             )->setTemplateVars(
-                ['warnings' => join("\n", $errors)]
+                ['warnings' => implode("\n", $errors)]
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,

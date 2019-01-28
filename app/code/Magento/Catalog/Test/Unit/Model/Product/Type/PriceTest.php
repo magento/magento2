@@ -198,9 +198,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $tpArray = $this->product->getData($this::KEY_TIER_PRICE);
         $this->assertNotNull($tpArray);
         $this->assertTrue(is_array($tpArray));
-        $this->assertEquals(sizeof($tps), sizeof($tpArray));
+        $this->assertEquals(count($tps), count($tpArray));
 
-        for ($i = 0; $i < sizeof($tps); $i++) {
+        for ($i = 0; $i < count($tps); $i++) {
             $tpData = $tpArray[$i];
             $this->assertEquals($expectedWebsiteId, $tpData['website_id'], 'Website Id does not match');
             $this->assertEquals($tps[$i]->getValue(), $tpData['price'], 'Price/Value does not match');
@@ -226,12 +226,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $tpRests = $this->model->getTierPrices($this->product);
         $this->assertNotNull($tpRests);
         $this->assertTrue(is_array($tpRests));
-        $this->assertEquals(sizeof($tps), sizeof($tpRests));
+        $this->assertEquals(count($tps), count($tpRests));
         foreach ($tpRests as $tpRest) {
             $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());
         }
 
-        for ($i = 0; $i < sizeof($tps); $i++) {
+        for ($i = 0; $i < count($tps); $i++) {
             $this->assertEquals(
                 $tps[$i]->getValue(),
                 $tpRests[$i]->getValue(),

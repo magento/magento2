@@ -84,7 +84,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
         }
 
         $command = $this->getCommand() . ' --log-pmd ' . escapeshellarg($this->reportFile)
-            . ' --names-exclude ' . join(',', $blacklistedFileNames) . ' --min-lines 13 ' . join(' ', $blacklistedDirs)
+            . ' --names-exclude ' . implode(',', $blacklistedFileNames) . ' --min-lines 13 ' . implode(' ', $blacklistedDirs)
             . ' ' . implode(' ', $whiteList);
         exec($command, $output, $exitCode);
 

@@ -104,7 +104,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'value LIKE :template_id'
         )->where(
-            join(' OR ', $orWhere)
+            implode(' OR ', $orWhere)
         );
 
         return $this->getConnection()->fetchAll($select, $bind);

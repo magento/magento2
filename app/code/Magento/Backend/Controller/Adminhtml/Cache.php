@@ -74,7 +74,7 @@ abstract class Cache extends Action
         $allTypes = array_keys($this->_cacheTypeList->getTypes());
         $invalidTypes = array_diff($types, $allTypes);
         if (count($invalidTypes) > 0) {
-            throw new LocalizedException(__('These cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
+            throw new LocalizedException(__('These cache type(s) don\'t exist: %1', implode(', ', $invalidTypes)));
         }
     }
 }

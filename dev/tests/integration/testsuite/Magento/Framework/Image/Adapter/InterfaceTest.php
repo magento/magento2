@@ -217,7 +217,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $adapter->open($image);
         try {
             call_user_func_array([$adapter, 'save'], $tempPath);
-            $tempPath = join('', $tempPath);
+            $tempPath = implode('', $tempPath);
             $this->assertFileExists($tempPath);
             unlink($tempPath);
         } catch (\Exception $e) {
@@ -300,7 +300,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $colorAfter = $adapter->getColorAt($newPixel['x'], $newPixel['y']);
 
         $result = $this->_compareColors($colorBefore, $colorAfter);
-        $this->assertTrue($result, join(',', $colorBefore) . ' not equals ' . join(',', $colorAfter));
+        $this->assertTrue($result, implode(',', $colorBefore) . ' not equals ' . implode(',', $colorAfter));
     }
 
     /**
@@ -382,8 +382,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $result = $this->_compareColors($comparePoint1Color, $comparePoint2Color);
         $message = sprintf(
             '%s should be different to %s due to alpha transparency',
-            join(',', $comparePoint1Color),
-            join(',', $comparePoint2Color)
+            implode(',', $comparePoint1Color),
+            implode(',', $comparePoint2Color)
         );
         $this->assertFalse($result, $message);
     }
@@ -474,7 +474,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $colorAfter = $adapter->getColorAt($pixel['x'], $pixel['y']);
 
         $result = $this->_compareColors($colorBefore, $colorAfter);
-        $message = join(',', $colorBefore) . ' not equals ' . join(',', $colorAfter);
+        $message = implode(',', $colorBefore) . ' not equals ' . implode(',', $colorAfter);
         $this->assertFalse($result, $message);
     }
 

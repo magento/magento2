@@ -313,7 +313,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
             $entityIds[] = $item->getEntityId();
         }
 
-        if (sizeof($entityIds) == 0) {
+        if (count($entityIds) == 0) {
             return $this;
         }
 

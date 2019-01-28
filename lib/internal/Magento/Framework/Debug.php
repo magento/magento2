@@ -101,10 +101,10 @@ class Debug
                     $className,
                     isset($data['type']) ? $data['type'] : '->',
                     $data['function'],
-                    join(', ', $args)
+                    implode(', ', $args)
                 );
             } elseif (isset($data['function'])) {
-                $methodName = sprintf('%s(%s)', $data['function'], join(', ', $args));
+                $methodName = sprintf('%s(%s)', $data['function'], implode(', ', $args));
             }
 
             if (isset($data['file'])) {
@@ -166,9 +166,9 @@ class Debug
                 foreach ($args as $k => $v) {
                     $arr[] = self::_formatCalledArgument($k) . ' => ' . $v;
                 }
-                $out .= 'array(' . join(', ', $arr) . ')';
+                $out .= 'array(' . implode(', ', $arr) . ')';
             } else {
-                $out .= 'array(' . join(', ', $args) . ')';
+                $out .= 'array(' . implode(', ', $args) . ')';
             }
         } elseif ($arg === null) {
             $out .= 'NULL';

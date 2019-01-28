@@ -273,7 +273,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     public function getMessage($string = true)
     {
         if ($string) {
-            return join("\n", $this->_messages);
+            return implode("\n", $this->_messages);
         }
         return $this->_messages;
     }

@@ -21,7 +21,7 @@ class NameBuilder
     public function buildClassName($parts)
     {
         $separator = '\\';
-        $string = join($separator, $parts);
+        $string = implode($separator, $parts);
         $string = str_replace('_', $separator, $string);
         $className = str_replace(' ', $separator, ucwords(str_replace($separator, ' ', $string)));
         return $className;
