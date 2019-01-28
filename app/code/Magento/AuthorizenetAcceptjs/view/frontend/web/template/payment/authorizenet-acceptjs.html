@@ -11,7 +11,7 @@
                class="radio"
                attr="id: getCode()" ko-value="getCode()" ko-checked="isChecked" click="selectPaymentMethod" visible="isRadioButtonVisible()"/>
         <label attr="for: getCode()" class="label">
-            <span text="getTitle()"></span>
+            <span translate="getTitle()"></span>
         </label>
     </div>
     <div class="payment-method-content">
@@ -19,7 +19,7 @@
         <div class="payment-method-billing-address">
             <each args="$parent.getRegion(getBillingAddressFormName())" render="" />
         </div>
-        <form class="form" id="co-payment-form" data-bind="" method="post" afterRender="initFormElement">
+        <form class="form" id="co-payment-form" method="post" afterRender="initFormElement">
             <render args="ccForm" />
             <input type="submit" id="authorizenet_acceptjs_submit"  style="display:none" />
         </form>
@@ -30,10 +30,7 @@
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
-                        data-bind="
-                            click: beforePlaceOrder,
-                            attr: {title: $t('Place Order')}
-                        "
+                        data-bind="click: beforePlaceOrder, attr: {title: $t('Place Order')}"
                         >
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
