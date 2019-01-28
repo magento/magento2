@@ -84,7 +84,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'showInWebsite' => '1',
                 'showInStore' => '1',
                 'label' => null,
-                'backend_model' => 'Magento\\Backend\\Model\\Config\\Backend\\Image',
+                'backend_model' => \Magento\Config\Model\Config\Backend\Image::class,
                 'upload_dir' => [
                     'config' => 'system/filesystem/media',
                     'scope_info' => '1',

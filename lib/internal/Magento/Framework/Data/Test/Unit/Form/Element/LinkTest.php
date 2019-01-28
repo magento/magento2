@@ -25,7 +25,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $factoryMock = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
         $collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
             [],
             [],
             '',
