@@ -12,7 +12,10 @@ define([
     'use strict';
 
     return function (shippingAddress) {
+    	var address = null;
+    	address = quote.billingAddress();
         quote.shippingAddress(shippingAddress);
-        quote.billingAddress(quote.billingAddress());
+        quote.billingAddress(address);
+
     };
 });
