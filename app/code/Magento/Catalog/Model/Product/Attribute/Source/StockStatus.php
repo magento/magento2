@@ -66,5 +66,4 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
 
         return isset($options[$optionId]) ? $options[$optionId] : null;
     }
-
 }
