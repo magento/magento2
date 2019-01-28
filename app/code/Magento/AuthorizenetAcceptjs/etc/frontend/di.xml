@@ -13,4 +13,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="authorizenet_acceptjs_config_provider" xsi:type="object">Magento\AuthorizenetAcceptjs\Model\Ui\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="authorizenet_acceptjs" xsi:type="const">Magento\AuthorizenetAcceptjs\Gateway\Config::METHOD</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

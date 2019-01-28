@@ -13,8 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Property should have a semicolon at the end of line
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#end-of-the-property-line
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#end-of-the-property-line
  */
 class SemicolonSpacingSniff implements Sniff
 {
@@ -44,7 +43,7 @@ class SemicolonSpacingSniff implements Sniff
     private $styleCodesToSkip = [T_ASPERAND, T_COLON, T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -52,7 +51,7 @@ class SemicolonSpacingSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -72,6 +71,8 @@ class SemicolonSpacingSniff implements Sniff
     }
 
     /**
+     * Semicolon validation.
+     *
      * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
@@ -90,6 +91,8 @@ class SemicolonSpacingSniff implements Sniff
     }
 
     /**
+     * Spaces validation.
+     *
      * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
