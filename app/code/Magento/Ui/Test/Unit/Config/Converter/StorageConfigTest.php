@@ -30,7 +30,7 @@ class StorageConfigTest extends \PHPUnit\Framework\TestCase
     public function testConvert()
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files/test.xml');
         $domXpath = new \DOMXPath($dom);
         $storageConfig = $domXpath->query('//listing/settings/storageConfig')->item(0);
         $path = $domXpath->query('//listing/settings/storageConfig/path')->item(0);

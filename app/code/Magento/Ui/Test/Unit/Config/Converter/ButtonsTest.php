@@ -30,7 +30,7 @@ class ButtonsTest extends \PHPUnit\Framework\TestCase
     public function testConvert()
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
         $domXpath = new \DOMXPath($dom);
         $buttons = $domXpath->query('//listing/settings/buttons')->item(0);
         $url = $domXpath->query('//listing/settings/buttons/button[@name="button_2"]/url')->item(0);
@@ -100,7 +100,7 @@ class ButtonsTest extends \PHPUnit\Framework\TestCase
     public function testConvertEmptyButtons()
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $buttons = $domXpath->query('//form/settings/buttons')->item(0);
         $expectedResult = [

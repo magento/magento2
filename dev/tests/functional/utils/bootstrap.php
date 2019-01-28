@@ -5,7 +5,7 @@
  */
 umask(0);
 
-$mtfRoot = dirname(dirname(__FILE__));
+$mtfRoot = dirname(__DIR__);
 $mtfRoot = str_replace('\\', '/', $mtfRoot);
 define('MTF_BP', $mtfRoot);
 define('MTF_TESTS_PATH', MTF_BP . '/tests/app/');

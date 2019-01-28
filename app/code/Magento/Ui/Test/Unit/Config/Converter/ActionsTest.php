@@ -36,7 +36,7 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
     public function testConvert(array $expectedResult, $xpath)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.xml');
         $domXpath = new \DOMXPath($dom);
         $actions = $domXpath->query($xpath)->item(0);
         $urlResult = [

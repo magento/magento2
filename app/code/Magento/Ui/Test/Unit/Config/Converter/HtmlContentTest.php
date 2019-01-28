@@ -52,7 +52,7 @@ class HtmlContentTest extends \PHPUnit\Framework\TestCase
         ];
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $node = $domXpath->query('//form/htmlContent/block')->item(0);
 

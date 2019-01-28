@@ -24,7 +24,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/test.csv';
+        $this->_testFile = str_replace('\\', '/', realpath(__DIR__)) . '/_files/test.csv';
 
         $this->_phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
         $this->_phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);

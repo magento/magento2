@@ -39,7 +39,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/exports')->item(0);
         $this->assertEquals($expectedResult, $this->converter->convert($classes));
@@ -64,7 +64,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/imports')->item(0);
         $this->assertEquals($expectedResult, $this->converter->convert($classes));
@@ -89,7 +89,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/listens')->item(0);
         $this->assertEquals($expectedResult, $this->converter->convert($classes));
@@ -114,7 +114,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
         $classes = $domXpath->query('//form/fieldset/settings/links')->item(0);
         $this->assertEquals($expectedResult, $this->converter->convert($classes));

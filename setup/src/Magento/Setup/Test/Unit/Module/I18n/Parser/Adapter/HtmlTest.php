@@ -27,7 +27,7 @@ class HtmlTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/email.html';
+        $this->_testFile = str_replace('\\', '/', realpath(__DIR__)) . '/_files/email.html';
         $this->_stringsCount = count(file($this->_testFile));
 
         $this->_adapter = (new ObjectManager($this))->getObject(\Magento\Setup\Module\I18n\Parser\Adapter\Html::class);

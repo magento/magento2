@@ -16,7 +16,7 @@
 // Explicitly define Allure CLI executable if it's not available in your PATH.
 define('ALLURE_CLI', 'allure');
 
-$mtfRoot = dirname(dirname(__FILE__));
+$mtfRoot = dirname(__DIR__);
 $mtfRoot = str_replace('\\', '/', $mtfRoot);
 define('MTF_BP', $mtfRoot);
 

@@ -54,7 +54,7 @@ class SchemaXml
         $this->objectManager = $objectManager;
         $this->fieldsProvider = $this->objectManager->create(\Magento\Mtf\Util\Generate\Fixture\FieldsProvider::class);
         $this->dom = new \DOMDocument('1.0');
-        $this->dom->load(dirname(__FILE__) . '/template.xml');
+        $this->dom->load(__DIR__ . '/template.xml');
         $this->dom->preserveWhiteSpace = false;
         $this->dom->formatOutput = true;
     }
