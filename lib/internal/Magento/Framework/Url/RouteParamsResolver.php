@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Url;
 
-use Magento\Framework\Url\RouteParamsResolverInterface;
 
 /**
  * Route params resolver.

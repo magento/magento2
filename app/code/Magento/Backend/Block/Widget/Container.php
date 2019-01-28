@@ -8,7 +8,6 @@
 
 namespace Magento\Backend\Block\Widget;
 
-use Magento\Framework\View\Element\Template;
 
 /**
  * @api

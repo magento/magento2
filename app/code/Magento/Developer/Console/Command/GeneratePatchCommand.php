@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
-use Magento\Developer\Model\Di\Information;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -16,7 +15,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Helper\Table;
 
 /**
  * Allows to generate setup patches

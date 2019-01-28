@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Symfony\Component\Yaml\Yaml;
 
 /** This is project's console commands configuration for Robo task runner.
  *

@@ -5,7 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Module\Dir;
 
 class MenuConfigFilesTest extends \PHPUnit\Framework\TestCase
 {

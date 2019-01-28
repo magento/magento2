@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Setup\Model\Navigation;
 use Magento\Setup\Controller\StartUpdater;
 
 /**

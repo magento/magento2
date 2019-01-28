@@ -7,7 +7,6 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Reports\Test\Page\Adminhtml\SalesReport;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use DateTime;
 
 /**

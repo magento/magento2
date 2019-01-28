@@ -5,7 +5,6 @@
  */
 namespace Magento\MysqlMq\Model;
 
-use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
  * Test for MySQL publisher class.

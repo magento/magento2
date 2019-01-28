@@ -9,7 +9,6 @@ namespace Magento\GiftMessage\Setup\Patch\Data;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

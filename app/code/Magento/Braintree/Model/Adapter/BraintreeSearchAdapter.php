@@ -8,7 +8,6 @@ namespace Magento\Braintree\Model\Adapter;
 use Braintree\MultipleValueNode;
 use Braintree\RangeNode;
 use Braintree\TextNode;
-use Braintree\Transaction;
 use Braintree\TransactionSearch;
 
 /**

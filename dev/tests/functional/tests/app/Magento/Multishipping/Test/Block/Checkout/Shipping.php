@@ -6,7 +6,6 @@
 
 namespace Magento\Multishipping\Test\Block\Checkout;
 
-use Magento\Multishipping\Test\Fixture\GuestPaypalDirect;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 

@@ -9,7 +9,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\OrderFactory;
-use Magento\Authorizenet\Model\Directpost;
 use Magento\Authorizenet\Model\Authorizenet;
 
 /**

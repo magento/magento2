@@ -5,7 +5,6 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\Model\Config\Reader;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;

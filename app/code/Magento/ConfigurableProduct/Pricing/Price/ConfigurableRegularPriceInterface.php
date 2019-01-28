@@ -6,7 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 
 /**

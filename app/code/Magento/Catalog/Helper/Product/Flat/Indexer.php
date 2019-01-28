@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Catalog Product Flat Indexer Helper

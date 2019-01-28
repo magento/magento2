@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Helper;
 
-use Magento\Framework\ObjectManager\Helper\Composite;
 
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 

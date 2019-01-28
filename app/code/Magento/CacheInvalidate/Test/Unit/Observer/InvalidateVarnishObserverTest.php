@@ -5,7 +5,6 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class InvalidateVarnishObserverTest extends \PHPUnit\Framework\TestCase
 {

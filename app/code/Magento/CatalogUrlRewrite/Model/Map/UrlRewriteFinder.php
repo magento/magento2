@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\Catalog\Model\Product;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;

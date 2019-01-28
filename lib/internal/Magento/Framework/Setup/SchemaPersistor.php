@@ -6,7 +6,6 @@
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Shell;
 
 /**
  * Persist listened schema to db_schema.xml file.

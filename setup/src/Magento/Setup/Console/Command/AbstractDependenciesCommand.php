@@ -8,7 +8,6 @@ namespace Magento\Setup\Console\Command;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Setup\Model\ObjectManagerProvider;

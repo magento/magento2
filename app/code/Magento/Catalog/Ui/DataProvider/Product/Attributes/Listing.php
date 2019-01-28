@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Attributes;
 
-use Magento\Catalog\Model\AttributeHandler;
 use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 

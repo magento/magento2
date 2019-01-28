@@ -10,7 +10,6 @@ namespace Magento\Braintree\Plugin;
 use Magento\Braintree\Model\Paypal\OrderCancellationService;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider as PayPalConfigProvider;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\PaymentInterface;

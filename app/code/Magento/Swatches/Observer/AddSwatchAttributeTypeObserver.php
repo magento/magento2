@@ -5,7 +5,6 @@
  */
 namespace Magento\Swatches\Observer;
 
-use Magento\Config\Model\Config\Source;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;

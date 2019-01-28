@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model;
 
-use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**

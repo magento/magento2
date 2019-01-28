@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

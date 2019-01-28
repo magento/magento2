@@ -6,7 +6,6 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Block\Transparent\Iframe;
 
 /**

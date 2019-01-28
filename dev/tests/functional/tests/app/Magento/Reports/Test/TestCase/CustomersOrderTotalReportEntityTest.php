@@ -8,7 +8,6 @@ namespace Magento\Reports\Test\TestCase;
 
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Reports\Test\Page\Adminhtml\CustomerTotalsReport;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 

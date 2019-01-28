@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\EnvelopeInterface;
 
 class Envelope implements EnvelopeInterface
 {

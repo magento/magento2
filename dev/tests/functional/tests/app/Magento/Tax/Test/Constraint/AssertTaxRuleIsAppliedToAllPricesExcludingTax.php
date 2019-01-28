@@ -6,7 +6,6 @@
 
 namespace Magento\Tax\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

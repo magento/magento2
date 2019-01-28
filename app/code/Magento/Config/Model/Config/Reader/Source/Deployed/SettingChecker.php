@@ -5,7 +5,6 @@
  */
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\Model\Config\Reader;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;

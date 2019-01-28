@@ -8,7 +8,6 @@ namespace Magento\Framework\Config;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Dir;
-use Magento\Framework\Oauth\Exception;
 
 /**
  * Application config file resolver.

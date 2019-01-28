@@ -7,7 +7,6 @@
 namespace Magento\Cms\Setup\Patch\Data;
 
 use Magento\Cms\Setup\ContentConverter;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;

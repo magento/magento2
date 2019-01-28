@@ -9,7 +9,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\App\ObjectManager;
 
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {

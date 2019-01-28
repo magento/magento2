@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;

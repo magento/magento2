@@ -9,10 +9,8 @@ namespace Magento\Tax\Setup\Patch\Data;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\Tax\Setup\TaxSetupFactory;
 
 class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
 {

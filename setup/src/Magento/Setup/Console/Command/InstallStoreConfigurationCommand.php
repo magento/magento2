@@ -15,7 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\Locale as LocaleValidator;
 use Magento\Framework\Validator\Timezone as TimezoneValidator;
 use Magento\Framework\Validator\Currency as CurrencyValidator;

@@ -6,7 +6,6 @@
 namespace Magento\CheckoutAgreements\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\ObjectManager;
 use Magento\Multishipping\Test\Page\MultishippingCheckoutOverview;
 use Magento\Mtf\TestStep\TestStepFactory;
 

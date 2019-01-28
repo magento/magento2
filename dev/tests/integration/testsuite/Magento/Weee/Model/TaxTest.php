@@ -6,7 +6,6 @@
 
 namespace Magento\Weee\Model;
 
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

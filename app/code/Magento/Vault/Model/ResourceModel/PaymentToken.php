@@ -5,7 +5,6 @@
  */
 namespace Magento\Vault\Model\ResourceModel;
 
-use Magento\Vault\Setup\InstallSchema;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**

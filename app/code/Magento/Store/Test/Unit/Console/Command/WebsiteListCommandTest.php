@@ -7,7 +7,6 @@ namespace Magento\Store\Test\Unit\Console\Command;
 
 use Magento\Store\Console\Command\WebsiteListCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Console\Helper\HelperSet;
 use Magento\Store\Model\Website;
 use Magento\Framework\Console\Cli;
 use Magento\Store\Api\WebsiteRepositoryInterface;

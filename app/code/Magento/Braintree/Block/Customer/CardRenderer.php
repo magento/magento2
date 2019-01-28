@@ -6,7 +6,6 @@
 namespace Magento\Braintree\Block\Customer;
 
 use Magento\Braintree\Model\Ui\ConfigProvider;
-use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Block\AbstractCardRenderer;
 

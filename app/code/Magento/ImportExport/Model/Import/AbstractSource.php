@@ -5,7 +5,6 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
-use Magento\ImportExport\Model\Import\AbstractEntity;
 
 /**
  * Data source with columns for Magento_ImportExport

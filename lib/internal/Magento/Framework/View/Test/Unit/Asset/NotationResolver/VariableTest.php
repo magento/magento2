@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\NotationResolver\Variable;
 use Magento\Framework\View\Asset\Repository;

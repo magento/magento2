@@ -5,7 +5,6 @@
  */
 namespace Magento\MysqlMq\Model;
 
-use Magento\MysqlMq\Model\QueueManagement;
 
 /**
  * Test for Queue Management class.

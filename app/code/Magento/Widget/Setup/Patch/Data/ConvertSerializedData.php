@@ -10,7 +10,6 @@ use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Widget\Setup\LayoutUpdateConverter;

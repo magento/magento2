@@ -15,7 +15,6 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
-use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

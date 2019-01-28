@@ -8,11 +8,9 @@ namespace Magento\Rule\Model\Condition\Sql;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**

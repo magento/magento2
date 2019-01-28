@@ -8,7 +8,6 @@ namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**

@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Test\Handler\SalesRule;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 use Magento\Mtf\Handler\Webapi as AbstractWebapi;
 use Magento\SalesRule\Test\Fixture\SalesRule;

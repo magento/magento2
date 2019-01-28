@@ -7,7 +7,6 @@
 namespace Magento\Store\Test\Unit\App\Config\Type;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\App\Config\Type\Scopes;
 

@@ -16,7 +16,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Model\Order\ProductOption;
 use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**

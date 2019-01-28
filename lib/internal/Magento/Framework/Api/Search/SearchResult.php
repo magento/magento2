@@ -7,8 +7,6 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\SearchResultInterface;
 
 class SearchResult extends AbstractSimpleObject implements SearchResultInterface
 {

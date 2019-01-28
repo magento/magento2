@@ -5,7 +5,6 @@
  */
 namespace Magento\Swatches\Test\Constraint;
 
-use Magento\Catalog\Test\Constraint\AssertProductPage;
 use Magento\Catalog\Test\TestStep\OpenProductOnFrontendStep;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;

@@ -12,7 +12,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Model\PaymentTokenManagement;
-use Magento\Vault\Setup\InstallSchema;
 
 class PaymentTokenTest extends \PHPUnit\Framework\TestCase
 {

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CatalogInventory;
 
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;

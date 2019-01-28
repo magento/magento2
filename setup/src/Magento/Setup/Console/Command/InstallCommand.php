@@ -10,7 +10,6 @@ namespace Magento\Setup\Console\Command;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Magento\Framework\Setup\Declaration\Schema\Request;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;

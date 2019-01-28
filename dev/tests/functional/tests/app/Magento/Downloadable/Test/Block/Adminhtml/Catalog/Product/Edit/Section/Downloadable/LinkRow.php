@@ -8,7 +8,6 @@ namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\ElementInterface;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Form item links.

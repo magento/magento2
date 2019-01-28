@@ -11,7 +11,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Review\Block\Product\ReviewRenderer;
 use Magento\Store\Model\ScopeInterface;
 
 /**

@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Operations;
 
-use Magento\Framework\Setup\Declaration\Schema\Db\AdapterMediator;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;

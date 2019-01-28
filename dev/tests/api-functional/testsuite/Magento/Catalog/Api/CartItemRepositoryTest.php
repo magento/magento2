@@ -7,7 +7,6 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class CartItemRepositoryTest extends WebapiAbstract
 {

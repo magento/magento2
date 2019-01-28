@@ -8,7 +8,6 @@ namespace Magento\Catalog\Helper\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\View\Result\LayoutFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;

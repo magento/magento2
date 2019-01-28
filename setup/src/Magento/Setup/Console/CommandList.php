@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Console;
 
-use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
 use Zend\ServiceManager\ServiceManager;
 
 /**

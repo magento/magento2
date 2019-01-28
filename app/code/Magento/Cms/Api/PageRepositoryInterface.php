@@ -5,7 +5,6 @@
  */
 namespace Magento\Cms\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
  * CMS page CRUD interface.

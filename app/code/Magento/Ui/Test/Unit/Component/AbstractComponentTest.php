@@ -8,7 +8,6 @@ namespace Magento\Ui\Test\Unit\Component;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 
 class AbstractComponentTest extends \PHPUnit\Framework\TestCase
 {

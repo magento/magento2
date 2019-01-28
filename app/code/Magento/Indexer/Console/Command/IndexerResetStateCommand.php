@@ -6,10 +6,8 @@
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Indexer\ConfigInterface;
 
 /**
  * Command for invalidating indexers.

@@ -6,7 +6,6 @@
 
 namespace Magento\Payment\Test\Unit\Block;
 
-use Magento\Framework\DataObject;
 
 class FormTest extends \PHPUnit\Framework\TestCase
 {

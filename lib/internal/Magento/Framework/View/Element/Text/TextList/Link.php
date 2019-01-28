@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Element\Text\TextList;
 
-use Magento\Framework\View\Element\Text;
 
 /**
  * Class Link

@@ -6,7 +6,6 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;

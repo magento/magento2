@@ -7,10 +7,7 @@ namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definiti
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Boolean;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Comment;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Identity;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Integer;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Real;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Unsigned;

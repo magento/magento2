@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
-use Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 
 /**
  * Composite reader for consumer config.

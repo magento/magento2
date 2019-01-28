@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Topology\Config;
 
-use Magento\Framework\Phrase;
 
 /**
  * Composite reader for topology config.

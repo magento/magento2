@@ -10,7 +10,6 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\MutableScopeConfig;
 use Magento\Framework\App\ReinitableConfig;
-use Magento\Framework\App\Config as AppConfig;
 use Magento\Backend\App\Config as BackendConfig;
 
 /**

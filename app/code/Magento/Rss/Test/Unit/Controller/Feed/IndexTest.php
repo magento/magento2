@@ -6,7 +6,6 @@
 namespace Magento\Rss\Test\Unit\Controller\Feed;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Zend\Feed\Writer\Exception\InvalidArgumentException;
 
 /**
  * Class IndexTest

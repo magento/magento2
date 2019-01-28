@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Api\ExtensionAttribute;
 
-use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter as Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Reflection\TypeProcessor;

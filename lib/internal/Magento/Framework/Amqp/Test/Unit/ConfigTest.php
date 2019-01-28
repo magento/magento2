@@ -6,7 +6,6 @@
 namespace Magento\Framework\Amqp\Test\Unit;
 
 use Magento\Framework\Amqp\Config;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase

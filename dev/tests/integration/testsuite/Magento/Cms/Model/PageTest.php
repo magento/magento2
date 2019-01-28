@@ -7,7 +7,6 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * @magentoAppArea adminhtml

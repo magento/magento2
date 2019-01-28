@@ -6,7 +6,6 @@
  */
 namespace Magento\GroupedProduct\Api;
 
-use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\TestCase\WebapiAbstract;

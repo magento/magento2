@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Design\ThemeInterface;
 

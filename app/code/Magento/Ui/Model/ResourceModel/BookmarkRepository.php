@@ -8,7 +8,6 @@ namespace Magento\Ui\Model\ResourceModel;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Ui\Api\Data\BookmarkInterface;

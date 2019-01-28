@@ -7,7 +7,6 @@
  */
 namespace Magento\Config\Model\Config;
 
-use Magento\Framework\Module\Dir;
 
 /**
  * @api

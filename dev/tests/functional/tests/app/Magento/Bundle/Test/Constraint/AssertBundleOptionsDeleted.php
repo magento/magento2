@@ -10,7 +10,6 @@ use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Assert bundle product form.

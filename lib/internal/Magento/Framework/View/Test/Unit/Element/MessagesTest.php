@@ -13,7 +13,6 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Framework\View\Element\Messages;
 
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 
 class MessagesTest extends \PHPUnit\Framework\TestCase

@@ -6,7 +6,6 @@
 namespace Magento\Newsletter\Test\Unit\Model\Queue;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Mail\MessageInterface;
 
 class TransportBuilderTest extends \PHPUnit\Framework\TestCase
 {

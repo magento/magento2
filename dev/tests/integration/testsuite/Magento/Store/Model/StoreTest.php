@@ -8,7 +8,6 @@ namespace Magento\Store\Model;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;

@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Layout;
 
 use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
-use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

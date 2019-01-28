@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Test\Unit\Controller;
 
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor;
-use Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor;
 
 /**
  * Test Rest controller.

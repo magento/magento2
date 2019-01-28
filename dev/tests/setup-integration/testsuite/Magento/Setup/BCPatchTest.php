@@ -7,7 +7,6 @@
 namespace Magento\Setup;
 
 use Magento\Framework\Module\DbVersionInfo;
-use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\ModuleResource;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TableData;

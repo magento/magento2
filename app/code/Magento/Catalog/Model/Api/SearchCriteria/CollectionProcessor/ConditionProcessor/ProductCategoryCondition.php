@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\Condition
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\NoSuchEntityException as CategoryDoesNotExistException;
 
 /**

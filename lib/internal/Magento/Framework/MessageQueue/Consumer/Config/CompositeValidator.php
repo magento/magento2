@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
-use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
-use Magento\Framework\Phrase;
 
 /**
  * Composite validator for consumer config.

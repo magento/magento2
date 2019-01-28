@@ -6,9 +6,7 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Module\Setup;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class AdminAccountFactory

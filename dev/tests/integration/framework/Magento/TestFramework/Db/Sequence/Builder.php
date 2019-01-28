@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework\Db\Sequence;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Magento\Framework\App\ResourceConnection as AppResource;

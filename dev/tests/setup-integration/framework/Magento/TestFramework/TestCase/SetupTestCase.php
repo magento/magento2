@@ -5,8 +5,6 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\DesignInterface;
-use Magento\Framework\View\DesignExceptions;
 
 /**
  * Instance of Setup test case. Used in order to tweak dataProviders functionality.

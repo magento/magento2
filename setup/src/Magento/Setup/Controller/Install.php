@@ -8,7 +8,6 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
-use Magento\SampleData;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\Installer\ProgressFactory;
 use Magento\Setup\Model\InstallerFactory;

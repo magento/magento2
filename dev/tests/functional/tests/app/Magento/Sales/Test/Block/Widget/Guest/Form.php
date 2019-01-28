@@ -8,10 +8,8 @@ namespace Magento\Sales\Test\Block\Widget\Guest;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Orders and Returns form search block.

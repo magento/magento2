@@ -9,7 +9,6 @@ namespace Magento\Framework\Stdlib\DateTime\Timezone;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class LocalizedDateToUtcConverter

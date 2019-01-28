@@ -6,11 +6,8 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Model\ResourceModel\Block;
-use Magento\Cms\Model\BlockFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

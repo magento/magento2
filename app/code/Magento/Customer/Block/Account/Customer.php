@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @api

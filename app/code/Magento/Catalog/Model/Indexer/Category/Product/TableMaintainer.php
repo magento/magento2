@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 
 /**

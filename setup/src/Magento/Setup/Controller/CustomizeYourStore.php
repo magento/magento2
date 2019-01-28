@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\ObjectManagerProvider;

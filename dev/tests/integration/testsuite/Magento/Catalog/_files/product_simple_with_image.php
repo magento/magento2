@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();

@@ -5,7 +5,6 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;

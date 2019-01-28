@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Catalog\Api\Data\CustomOptionExtensionInterface;
 
 class CustomOptionTest extends \PHPUnit\Framework\TestCase
 {

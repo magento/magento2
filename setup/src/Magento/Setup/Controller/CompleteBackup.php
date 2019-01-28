@@ -5,9 +5,7 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class CompleteBackup extends AbstractActionController

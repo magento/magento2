@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;

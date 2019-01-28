@@ -6,7 +6,6 @@
 namespace Magento\TestFramework\Utility;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
-use Magento\TestFramework\UtilityBarFactory;
 use Magento\TestFramework\Utility\PartialNamespace\BarFactory as PartialNamespaceBarFactory;
 use Magento\Framework\UrlFactory;
 use Magento\Catalog\Model\Product\OptionFactory;

@@ -6,7 +6,6 @@
 
 namespace Magento\Quote\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Setup\ConvertSerializedDataToJsonFactory;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;

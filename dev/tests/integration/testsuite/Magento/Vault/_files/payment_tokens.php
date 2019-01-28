@@ -6,7 +6,6 @@
 
 include "customer.php";
 
-use Magento\Customer\Model\Customer;
 use Magento\Vault\Model\PaymentToken;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

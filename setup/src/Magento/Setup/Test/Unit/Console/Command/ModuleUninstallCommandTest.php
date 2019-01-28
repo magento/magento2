@@ -7,7 +7,6 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Setup\Console\Command\ModuleUninstallCommand;
-use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Symfony\Component\Console\Tester\CommandTester;
 

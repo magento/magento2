@@ -17,7 +17,6 @@ use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Configurable product resource model.

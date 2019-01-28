@@ -9,7 +9,6 @@ use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogSearch\Model\Advanced;
 use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
 use Magento\Framework\UrlFactory;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 

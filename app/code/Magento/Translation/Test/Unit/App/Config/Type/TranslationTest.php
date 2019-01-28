@@ -5,12 +5,8 @@
  */
 namespace Magento\Translation\Test\Unit\App\Config\Type;
 
-use Magento\Authorizenet\Helper\Backend\Data;
-use Magento\Framework\App\Cache\Type\Translate;
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\Cache\FrontendInterface;
 use Magento\Translation\App\Config\Type\Translation;
-use Magento\Framework\DataObject;
 
 /**
  * @covers \Magento\Translation\App\Config\Type\Translation

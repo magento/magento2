@@ -7,7 +7,6 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInterface
 {

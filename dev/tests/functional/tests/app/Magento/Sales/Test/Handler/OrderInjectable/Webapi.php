@@ -11,7 +11,6 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Handler\Webapi as AbstractWebapi;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 

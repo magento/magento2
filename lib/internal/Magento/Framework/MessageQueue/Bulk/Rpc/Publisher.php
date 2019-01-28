@@ -8,7 +8,6 @@ namespace Magento\Framework\MessageQueue\Bulk\Rpc;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\Bulk\ExchangeRepository;
-use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;

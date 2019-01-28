@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Merged;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Repository as AssetRepository;

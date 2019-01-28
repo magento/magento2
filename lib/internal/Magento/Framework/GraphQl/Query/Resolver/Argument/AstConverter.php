@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver\Argument;
 
-use GraphQL\Language\AST\ListValueNode;
-use GraphQL\Language\AST\NodeList;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ClauseFactory;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Connective;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ConnectiveFactory;

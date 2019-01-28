@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
 /**
  * Provides collections of custom condition processors (CustomConditionInterface)

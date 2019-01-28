@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use PHPUnit\Framework\TestResult;
 
 /**
  * Class GenerateCustomerTokenTest

@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Composer\InfoCommand;
 use Magento\Setup\Model\SystemPackage;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;

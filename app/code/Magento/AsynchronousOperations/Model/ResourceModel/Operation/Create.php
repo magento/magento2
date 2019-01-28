@@ -8,7 +8,6 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Phrase;
 
 /**
  * Create operation for list of bulk operations.

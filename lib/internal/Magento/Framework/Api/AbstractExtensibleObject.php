@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Base Class for extensible data Objects

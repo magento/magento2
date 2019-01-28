@@ -9,7 +9,6 @@ namespace Magento\CatalogRule\Test\Constraint;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Assert that Catalog Price Rule is applied in Shopping Cart.

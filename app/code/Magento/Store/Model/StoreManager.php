@@ -6,7 +6,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 

@@ -14,7 +14,6 @@ use Magento\Tax\Api\Data\TaxDetailsInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Model\Calculation\AbstractCalculator;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
-use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxDetails\AppliedTax;
 use Magento\Tax\Model\TaxDetails\AppliedTaxRate;
 use Magento\Tax\Model\TaxDetails\TaxDetails;

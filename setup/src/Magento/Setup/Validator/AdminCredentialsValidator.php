@@ -7,7 +7,6 @@ namespace Magento\Setup\Validator;
 
 use Magento\Framework\Config\ConfigOptionsListConstants as ConfigOption;
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\Installer;
 
 /**
  * Admin user credentials validator

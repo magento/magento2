@@ -7,19 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Cache;
-use Magento\Framework\Config\FileResolverInterface;
-use Magento\Framework\GraphQl\Config\Config;
-use Magento\Framework\GraphQl\Config\ConfigElementInterface;
-use Magento\Framework\GraphQl\Config\Data\Argument;
 use Magento\Framework\GraphQl\Config\Data\Enum;
 use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\Framework\GraphQl\Config\Element\EnumValue;
 use Magento\Framework\GraphQl\Config\Element\InterfaceType;
-use Magento\Framework\GraphQl\Config\Element\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
 
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase

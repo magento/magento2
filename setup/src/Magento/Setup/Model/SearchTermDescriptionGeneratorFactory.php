@@ -10,8 +10,6 @@ use Magento\Setup\Fixtures\FixtureConfig;
 use Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory;
 use Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory;
 use Magento\Setup\Model\Description\DescriptionGeneratorFactory;
-use Magento\Setup\Model\DictionaryFactory;
-use Magento\Setup\Model\SearchTermManagerFactory;
 
 /**
  * Search term description generator factory

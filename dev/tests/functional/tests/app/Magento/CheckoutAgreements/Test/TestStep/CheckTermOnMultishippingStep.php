@@ -7,7 +7,6 @@ namespace Magento\CheckoutAgreements\Test\TestStep;
 
 use Magento\Multishipping\Test\Page\MultishippingCheckoutOverview;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 
 /**
  * Process Terms and Conditions checkbox on multiple addresses checkout page.

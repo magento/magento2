@@ -12,7 +12,6 @@ use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\DownloadablePanel
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Ui\Component\Form;
 
 /**
  * Class DownloadablePanelTest

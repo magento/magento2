@@ -7,7 +7,6 @@ namespace Magento\Ui\Config;
 
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Ui\Config\Converter;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**

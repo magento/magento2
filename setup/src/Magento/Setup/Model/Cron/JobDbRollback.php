@@ -5,10 +5,8 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

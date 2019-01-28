@@ -7,7 +7,6 @@
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
 use Magento\Framework\Data\AbstractCriteria;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper;
 
 /**
  * Class StockItemCriteria

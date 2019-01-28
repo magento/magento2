@@ -5,7 +5,6 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Cart\Item\Renderer;
 
-use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped as Renderer;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase

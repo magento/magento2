@@ -7,11 +7,7 @@
 namespace Magento\Setup;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
-use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use Magento\TestFramework\Deploy\CliCommand;
-use Magento\TestFramework\Deploy\DescribeTable;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;

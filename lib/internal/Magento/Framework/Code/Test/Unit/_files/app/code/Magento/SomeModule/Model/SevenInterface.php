@@ -11,7 +11,6 @@
 
 namespace Magento\SomeModule\Model;
 
-use Magento\SomeModule\Model\Two\Test as TestTwo;
 use Magento\SomeModule\Model\Three\Test as TestThree;
 
 /**

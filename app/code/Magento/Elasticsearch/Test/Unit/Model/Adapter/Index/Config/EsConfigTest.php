@@ -7,7 +7,6 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index\Config;
 
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Config\Data;
 
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigTest

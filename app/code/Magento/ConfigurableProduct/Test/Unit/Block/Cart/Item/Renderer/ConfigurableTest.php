@@ -5,7 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Cart\Item\Renderer;
 
-use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Renderer;
 
 class ConfigurableTest extends \PHPUnit\Framework\TestCase

@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog Product Eav Attributes abstract indexer resource model

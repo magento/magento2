@@ -6,7 +6,6 @@
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Helper\Data;
-use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

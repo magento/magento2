@@ -10,7 +10,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
-use Magento\Framework\MessageQueue\QueueRepository;
 use Psr\Log\LoggerInterface;
 
 /**
