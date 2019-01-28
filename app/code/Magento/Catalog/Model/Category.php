@@ -39,10 +39,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Category extends \Magento\Catalog\Model\AbstractModel implements
-    \Magento\Framework\DataObject\IdentityInterface,
-    \Magento\Catalog\Api\Data\CategoryInterface,
-    \Magento\Catalog\Api\Data\CategoryTreeInterface
+class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface, \Magento\Catalog\Api\Data\CategoryInterface, \Magento\Catalog\Api\Data\CategoryTreeInterface
 {
     /**
      * Entity code.

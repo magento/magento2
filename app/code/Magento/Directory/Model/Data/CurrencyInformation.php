@@ -12,8 +12,7 @@ namespace Magento\Directory\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Directory\Api\Data\CurrencyInformationInterface
+class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Directory\Api\Data\CurrencyInformationInterface
 {
     const KEY_BASE_CURRENCY_CODE = 'base_currency_code';
     const KEY_BASE_CURRENCY_SYMBOL = 'base_currency_symbol';

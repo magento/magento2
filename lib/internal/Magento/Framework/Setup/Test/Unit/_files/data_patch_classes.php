@@ -32,9 +32,7 @@ class OtherDataPatch implements \Magento\Framework\Setup\Patch\DataPatchInterfac
     }
 }
 
-class SomeDataPatch implements
-    \Magento\Framework\Setup\Patch\DataPatchInterface,
-    \Magento\Framework\Setup\Patch\PatchVersionInterface
+class SomeDataPatch implements \Magento\Framework\Setup\Patch\DataPatchInterface, \Magento\Framework\Setup\Patch\PatchVersionInterface
 {
     /**
      * {@inheritdoc}
@@ -71,9 +69,7 @@ class SomeDataPatch implements
     }
 }
 
-class NonTransactionableDataPatch implements
-    \Magento\Framework\Setup\Patch\DataPatchInterface,
-    \Magento\Framework\Setup\Patch\NonTransactionableInterface
+class NonTransactionableDataPatch implements \Magento\Framework\Setup\Patch\DataPatchInterface, \Magento\Framework\Setup\Patch\NonTransactionableInterface
 {
 
     /**
@@ -100,9 +96,7 @@ class NonTransactionableDataPatch implements
     }
 }
 
-class RevertableDataPatch implements
-    \Magento\Framework\Setup\Patch\DataPatchInterface,
-    \Magento\Framework\Setup\Patch\PatchRevertableInterface
+class RevertableDataPatch implements \Magento\Framework\Setup\Patch\DataPatchInterface, \Magento\Framework\Setup\Patch\PatchRevertableInterface
 {
     /**
      * {@inheritdoc}

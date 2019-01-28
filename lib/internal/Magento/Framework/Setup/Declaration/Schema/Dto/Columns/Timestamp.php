@@ -14,10 +14,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * Declared in SQL, like Timestamp.
  * Has 2 additional params: default and on_update.
  */
-class Timestamp extends Column implements
-    ElementDiffAwareInterface,
-    ColumnDefaultAwareInterface,
-    ColumnNullableAwareInterface
+class Timestamp extends Column implements ElementDiffAwareInterface, ColumnDefaultAwareInterface, ColumnNullableAwareInterface
 {
     /**
      * @var string

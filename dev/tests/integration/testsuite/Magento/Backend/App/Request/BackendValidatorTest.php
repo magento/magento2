@@ -111,7 +111,7 @@ class BackendValidatorTest extends TestCase
         $l = self::AWARE_LOCATION_VALUE;
         $p = self::AWARE_VALIDATION_PARAM;
 
-        return new class($l, $p) extends AbstractAction{
+        return new class($l, $p) extends AbstractAction {
 
             /**
              * @var string
@@ -173,7 +173,7 @@ class BackendValidatorTest extends TestCase
             ->get(ResponseInterface::class);
         $m = self::CSRF_AWARE_MESSAGE;
 
-        return new class ($r, $m) implements CsrfAwareActionInterface {
+        return new class($r, $m) implements CsrfAwareActionInterface {
 
             /**
              * @var ResponseInterface

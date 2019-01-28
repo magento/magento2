@@ -13,10 +13,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class RefBicPatch implements
-    DataPatchInterface,
-    PatchRevertableInterface,
-    PatchVersionInterface
+class RefBicPatch implements DataPatchInterface, PatchRevertableInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

@@ -39,10 +39,7 @@ use Magento\Framework\Pricing\SaleableInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Product extends \Magento\Catalog\Model\AbstractModel implements
-    IdentityInterface,
-    SaleableInterface,
-    ProductInterface
+class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityInterface, SaleableInterface, ProductInterface
 {
     /**
      * @var ProductLinkRepositoryInterface

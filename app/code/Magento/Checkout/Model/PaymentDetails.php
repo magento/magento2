@@ -8,8 +8,7 @@ namespace Magento\Checkout\Model;
 /**
  * @codeCoverageIgnoreStart
  */
-class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Checkout\Api\Data\PaymentDetailsInterface
+class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Checkout\Api\Data\PaymentDetailsInterface
 {
     /**
      * {@inheritdoc}

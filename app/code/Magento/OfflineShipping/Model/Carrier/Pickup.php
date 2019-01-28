@@ -13,8 +13,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * @api
  * @since 100.0.2
  */
-class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
-    \Magento\Shipping\Model\Carrier\CarrierInterface
+class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string

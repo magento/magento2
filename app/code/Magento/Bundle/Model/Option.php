@@ -14,8 +14,7 @@ namespace Magento\Bundle\Model;
  * @method Option setParentId(int $value)
  * @since 100.0.2
  */
-class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Bundle\Api\Data\OptionInterface
+class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Bundle\Api\Data\OptionInterface
 {
     /**#@+
      * Constants

@@ -11,8 +11,7 @@ namespace Magento\Directory\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Directory\Api\Data\RegionInformationInterface
+class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Directory\Api\Data\RegionInformationInterface
 {
     const KEY_REGION_ID   = 'region_id';
     const KEY_REGION_CODE = 'region_code';

@@ -16,8 +16,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * @api
  * @since 100.0.2
  */
-class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var string[]

@@ -15,8 +15,7 @@ namespace Magento\Eav\Model\Entity\Increment;
  * @api
  * @since 100.0.2
  */
-abstract class AbstractIncrement extends \Magento\Framework\DataObject implements
-    \Magento\Eav\Model\Entity\Increment\IncrementInterface
+abstract class AbstractIncrement extends \Magento\Framework\DataObject implements \Magento\Eav\Model\Entity\Increment\IncrementInterface
 {
     /**
      * Get pad length

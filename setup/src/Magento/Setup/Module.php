@@ -14,9 +14,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
-class Module implements
-    BootstrapListenerInterface,
-    ConfigProviderInterface
+class Module implements BootstrapListenerInterface, ConfigProviderInterface
 {
     /**
      * {@inheritdoc}

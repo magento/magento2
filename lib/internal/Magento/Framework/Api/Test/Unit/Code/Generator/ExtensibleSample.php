@@ -11,8 +11,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Class ExtensibleSample
  */
-class ExtensibleSample extends AbstractExtensibleModel implements
-    \Magento\Framework\Api\Test\Unit\Code\Generator\ExtensibleSampleInterface
+class ExtensibleSample extends AbstractExtensibleModel implements \Magento\Framework\Api\Test\Unit\Code\Generator\ExtensibleSampleInterface
 {
     /**
      * {@inheritdoc}

@@ -15,10 +15,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
  * Class InstallData
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class ZFirstPatch implements
-    DataPatchInterface,
-    PatchVersionInterface,
-    PatchRevertableInterface
+class ZFirstPatch implements DataPatchInterface, PatchVersionInterface, PatchRevertableInterface
 {
     /**
      * @var ResourceConnection

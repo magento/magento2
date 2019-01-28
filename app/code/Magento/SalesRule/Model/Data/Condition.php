@@ -14,8 +14,7 @@ use Magento\SalesRule\Api\Data\ConditionInterface;
  *
  * @codeCoverageIgnore
  */
-class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\ConditionInterface
+class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\SalesRule\Api\Data\ConditionInterface
 {
     const KEY_CONDITION_TYPE = 'condition_type';
     const KEY_CONDITIONS = 'conditions';

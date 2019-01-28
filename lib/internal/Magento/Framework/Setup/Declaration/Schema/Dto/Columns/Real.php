@@ -15,11 +15,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * where S - is scale, P - is precision.
  * https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
  */
-class Real extends Column implements
-    ElementDiffAwareInterface,
-    ColumnUnsignedAwareInterface,
-    ColumnNullableAwareInterface,
-    ColumnDefaultAwareInterface
+class Real extends Column implements ElementDiffAwareInterface, ColumnUnsignedAwareInterface, ColumnNullableAwareInterface, ColumnDefaultAwareInterface
 {
     /**
      * @var int

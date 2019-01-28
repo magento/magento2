@@ -12,9 +12,7 @@ use Magento\Integration\Model\Oauth\Token\RequestLog\Config as RequestLogConfig;
 /**
  * Resource model for failed authentication attempts to retrieve admin/customer token.
  */
-class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
-    ReaderInterface,
-    WriterInterface
+class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ReaderInterface, WriterInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime

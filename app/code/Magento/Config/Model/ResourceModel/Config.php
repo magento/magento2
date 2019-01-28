@@ -14,8 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * @api
  * @since 100.0.2
  */
-class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
-    \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \Magento\Framework\App\Config\ConfigResource\ConfigInterface
 {
     /**
      * Define main table

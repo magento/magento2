@@ -10,8 +10,7 @@ namespace Magento\Bundle\Model;
  * Class Link
  * @codeCoverageIgnore
  */
-class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Bundle\Api\Data\LinkInterface
+class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Bundle\Api\Data\LinkInterface
 {
     /**#@+
      * Constants

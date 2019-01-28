@@ -20,9 +20,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
-abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    AttributeInterface,
-    \Magento\Eav\Api\Data\AttributeInterface
+abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements AttributeInterface, \Magento\Eav\Api\Data\AttributeInterface
 {
     const TYPE_STATIC = 'static';
 

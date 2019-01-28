@@ -13,8 +13,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Gallery extends \Magento\Backend\Block\Template implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Gallery extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var AbstractElement|null

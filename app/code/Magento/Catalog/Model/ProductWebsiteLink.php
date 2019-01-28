@@ -6,8 +6,7 @@
 
 namespace Magento\Catalog\Model;
 
-class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\Catalog\Api\Data\ProductWebsiteLinkInterface
+class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\Catalog\Api\Data\ProductWebsiteLinkInterface
 {
     /**#@+
      * Field names

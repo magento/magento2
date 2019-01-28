@@ -8,8 +8,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 /**
  * Customer address region field renderer
  */
-class Region extends \Magento\Backend\Block\AbstractBlock implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Region extends \Magento\Backend\Block\AbstractBlock implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Directory\Helper\Data

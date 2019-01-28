@@ -10,8 +10,7 @@ namespace Magento\Catalog\Model\Category;
  *
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  */
-class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
-    \Magento\Catalog\Api\Data\CategoryAttributeInterface
+class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements \Magento\Catalog\Api\Data\CategoryAttributeInterface
 {
     const SCOPE_STORE = 0;
 

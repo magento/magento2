@@ -8,8 +8,7 @@ namespace Magento\Framework\Code\Generator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
-class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
-    \Magento\Framework\Code\Generator\CodeGeneratorInterface
+class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
     /**
      * Possible doc block options

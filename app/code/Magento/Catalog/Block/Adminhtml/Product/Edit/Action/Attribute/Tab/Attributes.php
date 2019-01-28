@@ -23,8 +23,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory

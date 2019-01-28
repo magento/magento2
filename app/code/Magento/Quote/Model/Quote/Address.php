@@ -97,8 +97,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
-    \Magento\Quote\Api\Data\AddressInterface
+class Address extends \Magento\Customer\Model\Address\AbstractAddress implements \Magento\Quote\Api\Data\AddressInterface
 {
     const RATES_FETCH = 1;
 

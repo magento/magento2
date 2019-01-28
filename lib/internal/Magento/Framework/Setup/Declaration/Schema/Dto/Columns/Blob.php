@@ -14,9 +14,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * We can have few binary types: blob, mediumblob, longblob.
  * Declared in SQL, like blob.
  */
-class Blob extends Column implements
-    ElementDiffAwareInterface,
-    ColumnNullableAwareInterface
+class Blob extends Column implements ElementDiffAwareInterface, ColumnNullableAwareInterface
 {
     /**
      * @var bool

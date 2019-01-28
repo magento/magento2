@@ -12,8 +12,7 @@ use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 /**
  * @inheritdoc
  */
-class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    PriceInfoInterface
+class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements PriceInfoInterface
 {
     /**
      * @return string

@@ -11,8 +11,7 @@ namespace Magento\TestModuleExtensionAttributes\Model\Data;
  * Class Customer
  *
  */
-class FakeCustomer extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerInterface
+class FakeCustomer extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerInterface
 {
     /**
      * Get email address

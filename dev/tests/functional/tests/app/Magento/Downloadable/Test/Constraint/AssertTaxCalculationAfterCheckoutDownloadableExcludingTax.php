@@ -11,8 +11,7 @@ use Magento\Customer\Test\Fixture\Customer;
 /**
  * Checks that prices excl tax on order review and customer order pages are equal to specified in dataset.
  */
-class AssertTaxCalculationAfterCheckoutDownloadableExcludingTax extends
- AbstractAssertTaxCalculationAfterCheckoutDownloadable
+class AssertTaxCalculationAfterCheckoutDownloadableExcludingTax extends AbstractAssertTaxCalculationAfterCheckoutDownloadable
 {
     /**
      * Constraint severeness

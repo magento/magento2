@@ -14,10 +14,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
  * Class ReferenceIncrementalSomeIntegerPatch
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class ReferenceIncrementalSomeIntegerPatch implements
-    DataPatchInterface,
-    PatchRevertableInterface,
-    PatchVersionInterface
+class ReferenceIncrementalSomeIntegerPatch implements DataPatchInterface, PatchRevertableInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

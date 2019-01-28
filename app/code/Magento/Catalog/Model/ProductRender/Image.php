@@ -11,8 +11,7 @@ use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
 /**
  * Product image renderer model.
  */
-class Image extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    ImageInterface
+class Image extends \Magento\Framework\Model\AbstractExtensibleModel implements ImageInterface
 {
     /**
      * Set url to image.

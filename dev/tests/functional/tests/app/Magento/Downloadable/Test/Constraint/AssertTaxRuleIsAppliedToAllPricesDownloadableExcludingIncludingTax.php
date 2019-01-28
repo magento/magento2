@@ -11,8 +11,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 /**
  * Checks that prices excl tax on category, product and cart pages are equal to specified in dataset.
  */
-class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax extends
- AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable
+class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax extends AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable
 {
     /**
      * Constraint severeness.

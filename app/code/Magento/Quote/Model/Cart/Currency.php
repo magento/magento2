@@ -8,8 +8,7 @@ namespace Magento\Quote\Model\Cart;
 /**
  * @codeCoverageIgnore
  */
-class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Quote\Api\Data\CurrencyInterface
+class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Quote\Api\Data\CurrencyInterface
 {
     /**
      * {@inheritdoc}

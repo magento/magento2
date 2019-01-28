@@ -15,8 +15,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
  * @api
  * @since 100.0.2
  */
-class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry

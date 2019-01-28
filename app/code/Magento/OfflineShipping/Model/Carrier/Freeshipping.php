@@ -19,8 +19,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * @api
  * @since 100.0.2
  */
-class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
-    \Magento\Shipping\Model\Carrier\CarrierInterface
+class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string

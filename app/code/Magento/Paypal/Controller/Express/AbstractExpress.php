@@ -14,10 +14,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
  * Abstract Express Checkout Controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractExpress extends AppAction implements
-    RedirectLoginInterface,
-    HttpGetActionInterface,
-    HttpPostActionInterface
+abstract class AbstractExpress extends AppAction implements RedirectLoginInterface, HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Paypal\Model\Express\Checkout

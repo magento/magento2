@@ -10,9 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Theme file service abstract class
  */
-abstract class AbstractFile implements
-    \Magento\Framework\View\Design\Theme\Customization\FileInterface,
-    \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface
+abstract class AbstractFile implements \Magento\Framework\View\Design\Theme\Customization\FileInterface, \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface
 {
     /**
      * Customization path

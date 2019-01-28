@@ -10,8 +10,7 @@ namespace Magento\SalesRule\Model\Coupon;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+class Massgenerator extends \Magento\Framework\Model\AbstractModel implements \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
 {
     /**
      * Maximum probability of guessing the coupon on the first attempt

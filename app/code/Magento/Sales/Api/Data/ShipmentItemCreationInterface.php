@@ -14,9 +14,7 @@ namespace Magento\Sales\Api\Data;
  * @api
  * @since 100.1.2
  */
-interface ShipmentItemCreationInterface extends
-    LineItemInterface,
-    \Magento\Framework\Api\ExtensibleDataInterface
+interface ShipmentItemCreationInterface extends LineItemInterface, \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.

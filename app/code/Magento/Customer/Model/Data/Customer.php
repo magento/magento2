@@ -12,8 +12,7 @@ use \Magento\Framework\Api\AttributeValueFactory;
  * Class Customer
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Customer\Api\Data\CustomerInterface
+class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Customer\Api\Data\CustomerInterface
 {
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface

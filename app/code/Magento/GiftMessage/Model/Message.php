@@ -14,8 +14,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Message extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\GiftMessage\Api\Data\MessageInterface
+class Message extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\GiftMessage\Api\Data\MessageInterface
 {
     /**
      * @var \Magento\GiftMessage\Model\TypeFactory

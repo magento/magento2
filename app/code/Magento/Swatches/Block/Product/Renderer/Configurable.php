@@ -29,8 +29,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
-    \Magento\Framework\DataObject\IdentityInterface
+class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Path to template file with Swatch renderer.

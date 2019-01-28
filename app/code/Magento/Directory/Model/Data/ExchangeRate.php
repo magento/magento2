@@ -12,8 +12,7 @@ namespace Magento\Directory\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Directory\Api\Data\ExchangeRateInterface
+class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Directory\Api\Data\ExchangeRateInterface
 {
     const KEY_CURRENCY_TO = 'currency_to';
     const KEY_RATE = 'rate';

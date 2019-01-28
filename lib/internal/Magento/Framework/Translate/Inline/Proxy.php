@@ -8,8 +8,7 @@ namespace Magento\Framework\Translate\Inline;
 /**
  * Proxy class for \Magento\Framework\Translate\Inline
  */
-class Proxy extends \Magento\Framework\Translate\Inline implements
-    \Magento\Framework\ObjectManager\NoninterceptableInterface
+class Proxy extends \Magento\Framework\Translate\Inline implements \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance

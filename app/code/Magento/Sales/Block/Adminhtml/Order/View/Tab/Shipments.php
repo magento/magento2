@@ -11,8 +11,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @api
  * @since 100.0.2
  */
-class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Shipments extends \Magento\Framework\View\Element\Text\ListText implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry

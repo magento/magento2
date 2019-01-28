@@ -11,9 +11,7 @@ use \Magento\Framework\ObjectManager\NoninterceptableInterface;
 /**
  * System cache proxy model
  */
-class Proxy implements
-    CacheInterface,
-    NoninterceptableInterface
+class Proxy implements CacheInterface, NoninterceptableInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

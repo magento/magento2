@@ -14,12 +14,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * Declared in SQL, like INT(11) or BIGINT(20).
  * Where digit is padding, how many zeros should be added before first non-zero digit.
  */
-class Integer extends Column implements
-    ElementDiffAwareInterface,
-    ColumnUnsignedAwareInterface,
-    ColumnNullableAwareInterface,
-    ColumnIdentityAwareInterface,
-    ColumnDefaultAwareInterface
+class Integer extends Column implements ElementDiffAwareInterface, ColumnUnsignedAwareInterface, ColumnNullableAwareInterface, ColumnIdentityAwareInterface, ColumnDefaultAwareInterface
 {
     /**
      * @var bool

@@ -8,9 +8,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto;
 /**
  * Column structural element.
  */
-class Column extends GenericElement implements
-    ElementInterface,
-    TableElementInterface
+class Column extends GenericElement implements ElementInterface, TableElementInterface
 {
     /**
      * Element type.

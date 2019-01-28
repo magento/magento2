@@ -11,9 +11,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 /**
  * Customer attribute metadata class.
  */
-class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\Customer\Api\Data\AttributeMetadataInterface,
-    \Magento\Eav\Api\Data\AttributeDefaultValueInterface
+class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\Customer\Api\Data\AttributeMetadataInterface, \Magento\Eav\Api\Data\AttributeDefaultValueInterface
 {
     /**
      * {@inheritdoc}

@@ -36,11 +36,7 @@ use Zend\Uri\UriFactory;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
-class Store extends AbstractExtensibleModel implements
-    AppScopeInterface,
-    UrlScopeInterface,
-    IdentityInterface,
-    StoreInterface
+class Store extends AbstractExtensibleModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface, StoreInterface
 {
     /**
      * Store Id key name

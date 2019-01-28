@@ -32,9 +32,7 @@ class OtherSchemaPatch implements \Magento\Framework\Setup\Patch\SchemaPatchInte
     }
 }
 
-class SomeSchemaPatch implements
-    \Magento\Framework\Setup\Patch\SchemaPatchInterface,
-    \Magento\Framework\Setup\Patch\PatchVersionInterface
+class SomeSchemaPatch implements \Magento\Framework\Setup\Patch\SchemaPatchInterface, \Magento\Framework\Setup\Patch\PatchVersionInterface
 {
     /**
      * {@inheritdoc}

@@ -16,8 +16,7 @@ namespace Magento\Quote\Model\Quote\Item;
  * @method \Magento\Quote\Model\Quote\Item\Option setCode(string $value)
  * @method \Magento\Quote\Model\Quote\Item\Option setValue(string $value)
  */
-class Option extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+class Option extends \Magento\Framework\Model\AbstractModel implements \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item

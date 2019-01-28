@@ -25,8 +25,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Eav\Api\Data\AttributeSetInterface
+class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Eav\Api\Data\AttributeSetInterface
 {
     /**#@+
      * Constants

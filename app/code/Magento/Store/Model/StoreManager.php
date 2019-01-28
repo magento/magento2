@@ -15,9 +15,7 @@ use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreManager implements
-    \Magento\Store\Model\StoreManagerInterface,
-    \Magento\Store\Api\StoreWebsiteRelationInterface
+class StoreManager implements \Magento\Store\Model\StoreManagerInterface, \Magento\Store\Api\StoreWebsiteRelationInterface
 {
     /**
      * Application run code

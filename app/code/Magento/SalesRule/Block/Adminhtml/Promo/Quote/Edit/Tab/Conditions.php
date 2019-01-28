@@ -7,8 +7,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 
-class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Ui\Component\Layout\Tabs\TabInterface
+class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * Core registry

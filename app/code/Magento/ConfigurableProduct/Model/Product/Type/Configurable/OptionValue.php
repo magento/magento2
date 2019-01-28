@@ -11,8 +11,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
  * Class OptionValue
  *
  */
-class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\ConfigurableProduct\Api\Data\OptionValueInterface
+class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\ConfigurableProduct\Api\Data\OptionValueInterface
 {
     /**#@+
      * Constants for field names

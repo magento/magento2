@@ -15,8 +15,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto;
  *  - constraint
  *  - index
  */
-abstract class GenericElement implements
-    ElementInterface
+abstract class GenericElement implements ElementInterface
 {
     /**
      * High level type.

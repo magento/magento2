@@ -9,8 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
 
-class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    MsrpPriceInfoInterface
+class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements MsrpPriceInfoInterface
 {
     /**
      * @inheritdoc

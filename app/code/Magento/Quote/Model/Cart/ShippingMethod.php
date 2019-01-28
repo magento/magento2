@@ -12,8 +12,7 @@ use Magento\Quote\Api\Data\ShippingMethodInterface;
  *
  * @codeCoverageIgnore
  */
-class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    ShippingMethodInterface
+class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject implements ShippingMethodInterface
 {
     /**
      * Returns the shipping carrier code.

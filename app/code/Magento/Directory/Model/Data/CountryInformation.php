@@ -11,8 +11,7 @@ namespace Magento\Directory\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Directory\Api\Data\CountryInformationInterface
+class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Directory\Api\Data\CountryInformationInterface
 {
     const KEY_COUNTRY_ID = 'country_id';
     const KEY_COUNTRY_TWO_LETTER_ABBREVIATION = 'country_abbreviation2';

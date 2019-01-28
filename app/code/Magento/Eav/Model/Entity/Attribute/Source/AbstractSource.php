@@ -13,9 +13,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
-abstract class AbstractSource implements
-    \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface,
-    \Magento\Framework\Option\ArrayInterface
+abstract class AbstractSource implements \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface, \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Reference to the attribute instance

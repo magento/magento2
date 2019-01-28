@@ -13,9 +13,7 @@ namespace Magento\Sales\Api\Data;
  * @api
  * @since 100.0.2
  */
-interface ShipmentItemInterface extends
-    \Magento\Sales\Api\Data\LineItemInterface,
-    \Magento\Framework\Api\ExtensibleDataInterface
+interface ShipmentItemInterface extends \Magento\Sales\Api\Data\LineItemInterface, \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case

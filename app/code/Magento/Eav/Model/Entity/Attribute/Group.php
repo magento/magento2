@@ -19,8 +19,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
  * @since 100.0.2
  */
-class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Eav\Api\Data\AttributeGroupInterface
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Eav\Api\Data\AttributeGroupInterface
 {
     /**
      * @var \Magento\Framework\Filter\Translit

@@ -5,8 +5,7 @@
  */
 namespace Magento\TestModuleDefaultHydrator\Model\Data;
 
-class ExtensionAttribute extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface
+class ExtensionAttribute extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface
 {
     /**
      * Get id

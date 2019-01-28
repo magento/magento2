@@ -12,8 +12,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 /**
  * Tax class model
  */
-class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\TaxClassInterface
+class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Tax\Api\Data\TaxClassInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

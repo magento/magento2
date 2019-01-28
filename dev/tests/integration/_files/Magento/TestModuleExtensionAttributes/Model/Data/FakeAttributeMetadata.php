@@ -10,8 +10,7 @@ namespace Magento\TestModuleExtensionAttributes\Model\Data;
 /**
  * Customer attribute metadata class.
  */
-class FakeAttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\TestModuleExtensionAttributes\Api\Data\FakeAttributeMetadataInterface
+class FakeAttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\TestModuleExtensionAttributes\Api\Data\FakeAttributeMetadataInterface
 {
     /**
      * {@inheritdoc}

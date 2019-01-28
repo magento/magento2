@@ -17,8 +17,7 @@ use \Magento\Framework\Api\AttributeValueFactory;
  * @api
  * @since 100.0.2
  */
-class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Customer\Api\Data\AddressInterface
+class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Customer\Api\Data\AddressInterface
 {
     /**
      * @var \Magento\Customer\Api\AddressMetadataInterface

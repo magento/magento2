@@ -15,8 +15,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
-class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\ConfigurableProduct\Api\Data\OptionInterface
+class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\ConfigurableProduct\Api\Data\OptionInterface
 {
     /**
      * Constants for field names

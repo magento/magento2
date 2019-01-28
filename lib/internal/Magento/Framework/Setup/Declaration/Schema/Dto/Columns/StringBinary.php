@@ -14,10 +14,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * Declared in SQL, like VARCHAR(L), BINARY(L)
  * where L - length.
  */
-class StringBinary extends Column implements
-    ElementDiffAwareInterface,
-    ColumnNullableAwareInterface,
-    ColumnDefaultAwareInterface
+class StringBinary extends Column implements ElementDiffAwareInterface, ColumnNullableAwareInterface, ColumnDefaultAwareInterface
 {
     /**
      * @var bool

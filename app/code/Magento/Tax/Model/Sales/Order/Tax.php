@@ -18,8 +18,7 @@ namespace Magento\Tax\Model\Sales\Order;
  * @method \Magento\Tax\Model\Sales\Order\Tax setBaseRealAmount(float $value)
  * @codeCoverageIgnore
  */
-class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
+class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

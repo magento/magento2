@@ -11,10 +11,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 /**
  * Vault payment method integration with instant purchase facade.
  */
-class Integration implements
-    AvailabilityCheckerInterface,
-    PaymentTokenFormatterInterface,
-    PaymentAdditionalInformationProviderInterface
+class Integration implements AvailabilityCheckerInterface, PaymentTokenFormatterInterface, PaymentAdditionalInformationProviderInterface
 {
     /**
      * @var VaultPaymentInterface

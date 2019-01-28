@@ -10,8 +10,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Provides product options configuration
  */
-class Config extends \Magento\Framework\Config\Data implements
-    \Magento\Catalog\Model\ProductOptions\ConfigInterface
+class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\Model\ProductOptions\ConfigInterface
 {
     /**
      * Constructor

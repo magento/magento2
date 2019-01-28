@@ -10,8 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config;
 use Magento\Translation\App\Config\Type\Translation;
 
-class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
-    \Magento\Framework\Translate\ResourceInterface
+class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \Magento\Framework\Translate\ResourceInterface
 {
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface

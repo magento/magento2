@@ -20,10 +20,7 @@ use Magento\Indexer\Model\ProcessManager;
  * @api
  * @since 100.0.2
  */
-class Fulltext implements
-    \Magento\Framework\Indexer\ActionInterface,
-    \Magento\Framework\Mview\ActionInterface,
-    \Magento\Framework\Indexer\DimensionalIndexerInterface
+class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface, \Magento\Framework\Indexer\DimensionalIndexerInterface
 {
     /**
      * Indexer ID in configuration

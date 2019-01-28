@@ -16,10 +16,7 @@ namespace Magento\Store\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Framework\DataObject\IdentityInterface,
-    \Magento\Store\Api\Data\GroupInterface,
-    \Magento\Framework\App\ScopeInterface
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Framework\DataObject\IdentityInterface, \Magento\Store\Api\Data\GroupInterface, \Magento\Framework\App\ScopeInterface
 {
     const ENTITY = 'store_group';
 

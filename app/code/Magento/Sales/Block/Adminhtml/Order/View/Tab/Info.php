@@ -12,8 +12,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Retrieve order model instance

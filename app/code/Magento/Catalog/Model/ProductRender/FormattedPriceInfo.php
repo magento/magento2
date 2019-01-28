@@ -11,8 +11,7 @@ use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 /**
  * @inheritdoc
  */
-class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    FormattedPriceInfoInterface
+class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements FormattedPriceInfoInterface
 {
     /**
      * @inheritdoc

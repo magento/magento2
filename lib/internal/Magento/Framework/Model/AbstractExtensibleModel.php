@@ -16,8 +16,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Implementations may choose to process custom attributes as their persistence requires them to.
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractExtensibleModel extends AbstractModel implements
-    \Magento\Framework\Api\CustomAttributesDataInterface
+abstract class AbstractExtensibleModel extends AbstractModel implements \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
      * @var ExtensionAttributesFactory

@@ -10,8 +10,7 @@ namespace Magento\SalesRule\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
+class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
 {
     const FAILED_ITEMS = 'failed_items';
     const MISSING_ITEMS = 'missing_items';

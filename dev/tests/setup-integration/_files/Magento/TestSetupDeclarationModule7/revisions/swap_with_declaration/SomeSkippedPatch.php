@@ -13,9 +13,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
  * Class SomePatch
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class SomeSkippedPatch implements
-    DataPatchInterface,
-    PatchVersionInterface
+class SomeSkippedPatch implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

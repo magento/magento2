@@ -13,8 +13,7 @@ use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface;
  * @api
  * @since 100.2.0
  */
-class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    WeeeAdjustmentAttributeInterface
+class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements WeeeAdjustmentAttributeInterface
 {
     /**
      * @inheritdoc

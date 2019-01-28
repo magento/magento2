@@ -9,10 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto;
  * Index structural element.
  * Used to speedup read operations from SQL database.
  */
-class Index extends GenericElement implements
-    ElementInterface,
-    TableElementInterface,
-    ElementDiffAwareInterface
+class Index extends GenericElement implements ElementInterface, TableElementInterface, ElementDiffAwareInterface
 {
     /**
      * Element type.

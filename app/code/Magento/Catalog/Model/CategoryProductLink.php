@@ -9,8 +9,7 @@ namespace Magento\Catalog\Model;
 /**
  * @codeCoverageIgnore
  */
-class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Catalog\Api\Data\CategoryProductLinkInterface
+class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Catalog\Api\Data\CategoryProductLinkInterface
 {
     /**#@+
      * Constant for confirmation status

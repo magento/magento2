@@ -9,8 +9,7 @@ namespace Magento\Catalog\Model\ProductLink;
 /**
  * @codeCoverageIgnore
  */
-class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Catalog\Api\Data\ProductLinkInterface
+class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Catalog\Api\Data\ProductLinkInterface
 {
     /**#@+
      * Constants

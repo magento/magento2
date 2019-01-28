@@ -15,8 +15,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @api
  * @since 100.0.2
  */
-class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Fieldset extends \Magento\Backend\Block\AbstractBlock implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session

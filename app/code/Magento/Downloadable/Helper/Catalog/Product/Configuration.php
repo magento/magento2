@@ -11,8 +11,7 @@ namespace Magento\Downloadable\Helper\Catalog\Product;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
-    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
      * Catalog product configuration

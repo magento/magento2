@@ -11,8 +11,7 @@ namespace Magento\SalesRule\Model;
  * @api
  * @since 100.0.2
  */
-class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\SalesRule\Api\Data\CouponInterface
+class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\SalesRule\Api\Data\CouponInterface
 {
     const KEY_COUPON_ID = 'coupon_id';
     const KEY_RULE_ID = 'rule_id';

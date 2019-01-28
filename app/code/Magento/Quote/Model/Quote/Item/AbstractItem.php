@@ -47,8 +47,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
+abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
     /**
      * @var Item|null

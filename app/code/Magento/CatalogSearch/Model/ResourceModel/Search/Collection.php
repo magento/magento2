@@ -13,8 +13,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Search;
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements
-    \Magento\Search\Model\SearchCollectionInterface
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
 {
     /**
      * Attribute collection

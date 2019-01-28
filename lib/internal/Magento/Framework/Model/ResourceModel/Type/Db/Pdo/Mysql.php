@@ -13,8 +13,7 @@ use Magento\Framework\DB\SelectFactory;
 
 // @codingStandardsIgnoreStart
 
-class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
-    ConnectionAdapterInterface
+class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 // @codingStandardsIgnoreEnd
 {
     /**

@@ -15,8 +15,7 @@ use Magento\Framework\Exception\StateException;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class Checkout extends \Magento\Checkout\Controller\Action implements
-    \Magento\Checkout\Controller\Express\RedirectLoginInterface
+abstract class Checkout extends \Magento\Checkout\Controller\Action implements \Magento\Checkout\Controller\Express\RedirectLoginInterface
 {
     /**
      * Constructor

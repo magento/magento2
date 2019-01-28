@@ -13,8 +13,7 @@ use Magento\Store\Model\Store;
  * Paypal Billing Agreement method
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement implements
-    \Magento\Paypal\Model\Billing\Agreement\MethodInterface
+class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement implements \Magento\Paypal\Model\Billing\Agreement\MethodInterface
 {
     /**
      * Method code

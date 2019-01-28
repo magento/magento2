@@ -18,8 +18,7 @@ use Magento\Tax\Test\Constraint\AbstractAssertTaxRuleIsAppliedToAllPrices;
 /**
  * Checks that prices excl tax on category, product and cart pages are equal to specified in dataset.
  */
-abstract class AbstractAssertTaxRuleIsAppliedToAllPricesOnGroupedProductPage extends
- AbstractAssertTaxRuleIsAppliedToAllPrices
+abstract class AbstractAssertTaxRuleIsAppliedToAllPricesOnGroupedProductPage extends AbstractAssertTaxRuleIsAppliedToAllPrices
 {
     /**
      * Get grouped product view prices.

@@ -13,9 +13,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * Text column.
  * Declared in SQL, like: TEXT, TINYTEXT, MEDIUMTEXT, LONGTEXT.
  */
-class Text extends Column implements
-    ElementDiffAwareInterface,
-    ColumnNullableAwareInterface
+class Text extends Column implements ElementDiffAwareInterface, ColumnNullableAwareInterface
 {
     /**
      * @var bool

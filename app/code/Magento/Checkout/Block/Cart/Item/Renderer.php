@@ -25,8 +25,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Renderer extends \Magento\Framework\View\Element\Template implements
-    \Magento\Framework\DataObject\IdentityInterface
+class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session

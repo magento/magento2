@@ -13,10 +13,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class LlNextChainPatch implements
-    DataPatchInterface,
-    PatchRevertableInterface,
-    PatchVersionInterface
+class LlNextChainPatch implements DataPatchInterface, PatchRevertableInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

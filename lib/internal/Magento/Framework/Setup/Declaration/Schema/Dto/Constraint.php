@@ -9,9 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto;
  * Constraint structural element.
  * Used for creating additional rules on db tables.
  */
-class Constraint extends GenericElement implements
-    ElementInterface,
-    TableElementInterface
+class Constraint extends GenericElement implements ElementInterface, TableElementInterface
 {
     /**
      * In case if we will need to change this object: add, modify or drop, we will need

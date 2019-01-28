@@ -13,10 +13,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
  * Boolean column.
  * Declared in SQL, like TINYINT(1) or BOOL or BOOLEAN. Alias for integer or binary type.
  */
-class Boolean extends Column implements
-    ElementDiffAwareInterface,
-    ColumnNullableAwareInterface,
-    ColumnDefaultAwareInterface
+class Boolean extends Column implements ElementDiffAwareInterface, ColumnNullableAwareInterface, ColumnDefaultAwareInterface
 {
     /**
      * @var bool

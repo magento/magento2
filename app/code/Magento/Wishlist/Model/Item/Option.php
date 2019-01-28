@@ -16,8 +16,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  * @api
  * @since 100.0.2
  */
-class Option extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+class Option extends \Magento\Framework\Model\AbstractModel implements \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
     /**
      * @var Item

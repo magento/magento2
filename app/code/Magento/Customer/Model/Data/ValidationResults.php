@@ -10,8 +10,7 @@ namespace Magento\Customer\Model\Data;
 /**
  * Validation results data model.
  */
-class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\Customer\Api\Data\ValidationResultsInterface
+class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\Customer\Api\Data\ValidationResultsInterface
 {
     /**
      * {@inheritdoc}

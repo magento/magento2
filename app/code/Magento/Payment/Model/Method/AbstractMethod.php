@@ -27,9 +27,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
  * @see https://devdocs.magento.com/guides/v2.1/payments-integrations/payment-gateway/payment-gateway-intro.html
  * @since 100.0.2
  */
-abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    MethodInterface,
-    PaymentMethodInterface
+abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements MethodInterface, PaymentMethodInterface
 {
     const STATUS_UNKNOWN = 'UNKNOWN';
 

@@ -10,8 +10,7 @@ namespace Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset;
  * @api
  * @since 100.0.2
  */
-class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Form element which re-rendering

@@ -12,8 +12,7 @@ namespace Magento\SalesRule\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface
+class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface
 {
     const KEY_RULE_ID = 'rule_id';
     const KEY_FORMAT = 'format';

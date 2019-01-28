@@ -8,8 +8,7 @@ namespace Magento\Sales\Model\Order\Tax;
 /**
  * Sales Order Tax Item model
  */
-class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
+class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

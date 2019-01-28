@@ -12,8 +12,7 @@ namespace Magento\SalesRule\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\RuleLabelInterface
+class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\SalesRule\Api\Data\RuleLabelInterface
 {
     const KEY_STORE_ID = 'store_id';
     const KEY_STORE_LABEL = 'store_label';

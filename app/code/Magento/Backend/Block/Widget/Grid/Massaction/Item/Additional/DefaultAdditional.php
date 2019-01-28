@@ -10,8 +10,7 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
+class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
 {
     /**
      * {@inheritdoc}

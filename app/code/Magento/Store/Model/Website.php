@@ -23,10 +23,7 @@ namespace Magento\Store\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Framework\DataObject\IdentityInterface,
-    \Magento\Framework\App\ScopeInterface,
-    \Magento\Store\Api\Data\WebsiteInterface
+class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Framework\DataObject\IdentityInterface, \Magento\Framework\App\ScopeInterface, \Magento\Store\Api\Data\WebsiteInterface
 {
     const ENTITY = 'store_website';
 

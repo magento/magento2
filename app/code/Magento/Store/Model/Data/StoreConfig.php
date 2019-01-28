@@ -10,8 +10,7 @@ namespace Magento\Store\Model\Data;
  *
  * @codeCoverageIgnore
  */
-class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Store\Api\Data\StoreConfigInterface
+class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Store\Api\Data\StoreConfigInterface
 {
     const KEY_ID = 'id';
     const KEY_CODE = 'code';

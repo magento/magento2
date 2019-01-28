@@ -15,8 +15,7 @@ namespace Magento\Config\Block\System\Config\Form\Field;
  * @api
  * @since 100.0.2
  */
-class Heading extends \Magento\Backend\Block\AbstractBlock implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Heading extends \Magento\Backend\Block\AbstractBlock implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Render element html

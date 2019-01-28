@@ -9,8 +9,7 @@ namespace Magento\Catalog\Model;
 /**
  * @codeCoverageIgnore
  */
-class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Catalog\Api\Data\CategoryLinkInterface
+class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject implements \Magento\Catalog\Api\Data\CategoryLinkInterface
 {
     /**#@+
      * Constants

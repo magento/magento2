@@ -12,8 +12,7 @@ namespace Magento\GoogleOptimizer\Block\Code;
  * @api
  * @since 100.0.2
  */
-class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements
-    \Magento\Framework\DataObject\IdentityInterface
+class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Product name in registry

@@ -13,8 +13,7 @@ use Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface;
  *
  * @method \Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectExtensionInterface getExtensionAttributes()
  */
-class CustomAttributeNestedDataObject extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    CustomAttributeNestedDataObjectInterface
+class CustomAttributeNestedDataObject extends \Magento\Framework\Model\AbstractExtensibleModel implements CustomAttributeNestedDataObjectInterface
 {
     /**
      * @return string
