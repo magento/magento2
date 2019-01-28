@@ -10,8 +10,9 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder;
+use PHPUnit\Framework\TestCase;
 
-class RequestTypeBuilderTest extends \PHPUnit\Framework\TestCase
+class RequestTypeBuilderTest extends TestCase
 {
     /**
      * @var AuthenticationDataBuilder

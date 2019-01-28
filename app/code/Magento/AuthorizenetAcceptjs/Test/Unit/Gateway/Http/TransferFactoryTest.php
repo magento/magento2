@@ -12,8 +12,10 @@ use Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\FilterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TransferFactoryTest extends \PHPUnit\Framework\TestCase
+class TransferFactoryTest extends TestCase
 {
     /**
      * @var TransferFactory
@@ -26,12 +28,12 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
     private $transferMock;
 
     /**
-     * @var TransferBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransferBuilder|MockObject
      */
     private $transferBuilder;
 
     /**
-     * @var FilterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilterInterface|MockObject
      */
     private $filterMock;
 
@@ -51,18 +53,19 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $request = ['data1', 'data2'];
 
+        // Assert the filter was created
         $this->filterMock->expects($this->once())
             ->method('filter')
             ->with($request)
             ->willReturn($request);
 
+        // Assert the body of the transfer was set
         $this->transferBuilder->expects($this->once())
             ->method('setBody')
             ->with($request)
             ->willReturnSelf();
 
-        $this->transferBuilder->expects($this->once())
-            ->method('build')
+        $this->transferBuilder->method('build')
             ->willReturn($this->transferMock);
 
         $this->assertEquals($this->transferMock, $this->transferFactory->create($request));

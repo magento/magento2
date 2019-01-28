@@ -18,9 +18,10 @@ use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\Data\TransactionSearchResultInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
+class CaptureStrategyCommandTest extends TestCase
 {
     /**
      * @var CaptureStrategyCommand
@@ -106,9 +107,6 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers \Magento\AuthorizenetAcceptjs\Gateway\Command\CaptureStrategyCommand::execute
-     */
     public function testExecuteWillAuthorizeWhenNotAuthorizedAndNotCaptured()
     {
         $subject = ['payment' => $this->paymentDOMock];

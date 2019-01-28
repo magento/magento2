@@ -10,8 +10,6 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Payment\Helper\Formatter;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
 /**
@@ -19,8 +17,6 @@ use Magento\Sales\Model\Order\Payment;
  */
 class RefundDataBuilder implements BuilderInterface
 {
-    use Formatter;
-
     /**
      * @var SubjectReader
      */
@@ -39,39 +35,23 @@ class RefundDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        // @TODO test coverage for this class when complete
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
-        $order = $paymentDO->getOrder();
         $data = [];
 
         if ($payment instanceof Payment) {
-            $data = [
-                'transactionRequest' => [
-                    'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
-                ]
-            ];
-
-            if ($order instanceof Order) {
-                $data['transactionRequest']['shipping'] = [
-                    'amount' => $order->getBaseShippingAmount()
-                ];
-            }
-
             $dataDescriptor = $payment->decrypt($payment->getAdditionalInformation('opaqueDataDescriptor'));
             $dataValue = $payment->decrypt($payment->getAdditionalInformation('opaqueDataValue'));
 
-            $data['transactionRequest']['payment'] = [
-                'creditCard' => [
-                    'cardNumber' => '4111111111111111',
-                    'expirationDate' => '2019-12',
-                    'cardCode' => '123'
+            $data = [
+                'transactionRequest' => [
+                    'payment' => [
+                        'opaqueData' => [
+                            'dataDescriptor' => $dataDescriptor,
+                            'dataValue' => $dataValue
+                        ]
+                    ]
                 ]
-                // @TODO integrate the real payment values from accept.js
-                /*'opaqueData' => [
-                    'dataDescriptor' => $dataDescriptor,
-                    'dataValue' => $dataValue
-                ]*/
             ];
         }
 

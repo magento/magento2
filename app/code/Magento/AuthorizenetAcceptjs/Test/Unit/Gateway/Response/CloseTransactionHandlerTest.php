@@ -12,8 +12,10 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CloseTransactionHandlerTest extends \PHPUnit\Framework\TestCase
+class CloseTransactionHandlerTest extends TestCase
 {
     /**
      * @var CloseTransactionHandler
@@ -21,12 +23,12 @@ class CloseTransactionHandlerTest extends \PHPUnit\Framework\TestCase
     private $handler;
 
     /**
-     * @var InfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InfoInterface|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDOMock;
 

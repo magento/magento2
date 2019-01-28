@@ -13,8 +13,10 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreConfigBuilderTest extends \PHPUnit\Framework\TestCase
+class StoreConfigBuilderTest extends TestCase
 {
     /**
      * @var StoreConfigBuilder
@@ -22,30 +24,27 @@ class StoreConfigBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var InfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InfoInterface|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderAdapterInterface|MockObject
      */
     private $orderMock;
 
     protected function setUp()
     {
-        $this->paymentDOMock = $this->getMockBuilder(PaymentDataObjectInterface::class)
-            ->getMock();
-        $this->paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->getMock();
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentMock = $this->createMock(InfoInterface::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
-            ->getMock();
+        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
         $this->paymentDOMock->method('getOrder')
             ->willReturn($this->orderMock);
 
@@ -54,8 +53,7 @@ class StoreConfigBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuild()
     {
-        $this->orderMock->expects($this->once())
-            ->method('getStoreID')
+        $this->orderMock->method('getStoreID')
             ->willReturn(123);
 
         $expected = [

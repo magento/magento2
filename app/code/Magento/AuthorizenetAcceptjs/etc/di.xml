@@ -14,7 +14,7 @@
     <virtualType name="AuthorizenetAcceptjsFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
             <argument name="code" xsi:type="string">authorizenet_acceptjs</argument>
-            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\AuthorizenetAcceptjs\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">AuthorizenetAcceptjsInfoBlock</argument>
             <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>
             <argument name="validatorPool" xsi:type="object">AuthorizenetAcceptjsValidatorPool</argument>
@@ -36,7 +36,7 @@
     </virtualType>
 
     <!-- Validators -->
-    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorChain">
+    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
         <arguments>
             <argument name="chainBreakingValidators" xsi:type="array">
                 <item name="general" xsi:type="boolean">true</item>
@@ -50,7 +50,7 @@
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
         <arguments>
-            <argument name="config" xsi:type="object">AuthorizenetAcceptjsConfig</argument>
+            <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
@@ -141,9 +141,12 @@
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
                 <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\TransactionTypeDataBuilder</item>
+                <item name="amount" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AmountDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PaymentDataBuilder</item>
+                <item name="shipping" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\ShippingDataBuilder</item>
                 <item name="solution" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder</item>
                 <item name="order" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder</item>
+                <item name="po" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PoDataBuilder</item>
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
                 <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
@@ -158,9 +161,12 @@
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
                 <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionTypeDataBuilder</item>
+                <item name="amount" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AmountDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundDataBuilder</item>
+                <item name="shipping" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\ShippingDataBuilder</item>
                 <item name="solution" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder</item>
                 <item name="order" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder</item>
+                <item name="po" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PoDataBuilder</item>
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
                 <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>

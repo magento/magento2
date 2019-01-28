@@ -10,7 +10,6 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Adds the basic payment information to the request
@@ -36,21 +35,14 @@ class OrderDataBuilder implements BuilderInterface
     public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-        $payment = $paymentDO->getPayment();
         $order = $paymentDO->getOrder();
 
-        $data = [
+        return [
             'transactionRequest' => [
                 'order' => [
                     'invoiceNumber' => $order->getOrderIncrementId()
                 ]
             ]
         ];
-
-        if ($payment instanceof Payment) {
-            $data['transactionRequest']['poNumber'] = $payment->getPoNumber();
-        }
-
-        return $data;
     }
 }
