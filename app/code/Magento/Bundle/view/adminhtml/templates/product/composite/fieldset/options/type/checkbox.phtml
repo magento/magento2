@@ -14,49 +14,49 @@
 
 <div class="field admin__field options<?php if ($_option->getRequired()) echo ' required _required' ?>">
     <label class="label admin__field-label">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
 
     <div class="control admin__field-control">
         <div class="nested <?php if ($_option->getDecoratedIsLast()):?> last<?php endif;?>">
 
             <?php if (count($_selections) == 1 && $_option->getRequired()): ?>
-                <?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
+                <?php echo /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
                 <input type="hidden"
-                       name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
-                       value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
-                       price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
+                       name="bundle_option[<?php echo /* @escapeNotVerified */ $_option->getId() ?>]"
+                       value="<?php echo /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
+                       price="<?php echo /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
             <?php else:?>
 
                 <?php foreach ($_selections as $_selection): ?>
                     <div class="field choice admin__field admin__field-option">
                         <input
-                            class="change-container-classname admin__control-checkbox checkbox bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?> <?php if ($_option->getRequired()) echo 'validate-one-required-by-name' ?>"
-                            id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
+                            class="change-container-classname admin__control-checkbox checkbox bundle-option-<?php echo /* @escapeNotVerified */ $_option->getId() ?> <?php if ($_option->getRequired()) echo 'validate-one-required-by-name' ?>"
+                            id="bundle-option-<?php echo /* @escapeNotVerified */ $_option->getId() ?>-<?php echo /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
                             type="checkbox"
-                            name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>][<?= /* @escapeNotVerified */ $_selection->getId() ?>]"
+                            name="bundle_option[<?php echo /* @escapeNotVerified */ $_option->getId() ?>][<?php echo /* @escapeNotVerified */ $_selection->getId() ?>]"
                             <?php if ($block->isSelected($_selection)):?>
-                                <?= ' checked="checked"' ?>
+                                <?php echo ' checked="checked"' ?>
                             <?php endif;?>
                             <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck):?>
-                                <?= ' disabled="disabled"' ?>
+                                <?php echo ' disabled="disabled"' ?>
                             <?php endif;?>
-                            value="<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
+                            value="<?php echo /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
                             onclick="ProductConfigure.bundleControl.changeSelection(this)"
-                            price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selection) ?>" />
+                            price="<?php echo /* @escapeNotVerified */ $block->getSelectionPrice($_selection) ?>" />
 
                         <label class="admin__field-label"
-                               for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>">
-                            <span><?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
+                               for="bundle-option-<?php echo /* @escapeNotVerified */ $_option->getId() ?>-<?php echo /* @escapeNotVerified */ $_selection->getSelectionId() ?>">
+                            <span><?php echo /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
                         </label>
 
                         <?php if ($_option->getRequired()): ?>
-                            <?= /* @escapeNotVerified */ $block->setValidationContainer('bundle-option-' . $_option->getId() . '-' . $_selection->getSelectionId(), 'bundle-option-' . $_option->getId() . '-container') ?>
+                            <?php echo /* @escapeNotVerified */ $block->setValidationContainer('bundle-option-' . $_option->getId() . '-' . $_selection->getSelectionId(), 'bundle-option-' . $_option->getId() . '-container') ?>
                         <?php endif;?>
                     </div>
                 <?php endforeach; ?>
 
-                <div id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-container"></div>
+                <div id="bundle-option-<?php echo /* @escapeNotVerified */ $_option->getId() ?>-container"></div>
             <?php endif; ?>
         </div>
     </div>

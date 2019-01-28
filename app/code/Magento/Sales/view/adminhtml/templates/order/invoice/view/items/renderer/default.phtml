@@ -12,17 +12,17 @@
 <?php $_item->setStoreId($_item->getInvoice()->getStoreId()) ?>
 <?php $block->setPriceDataObject($_item) ?>
 <tr>
-    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-price">
-        <?= $block->getColumnHtml($_item, 'price') ?>
+        <?php echo $block->getColumnHtml($_item, 'price') ?>
     </td>
-    <td class="col-qty"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
+    <td class="col-qty"><?php echo /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
     <td class="col-subtotal">
-        <?= $block->getColumnHtml($_item, 'subtotal') ?>
+        <?php echo $block->getColumnHtml($_item, 'subtotal') ?>
     </td>
-    <td class="col-tax"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-discount"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-tax"><?php echo /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discount"><?php echo /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
-        <?= $block->getColumnHtml($_item, 'total') ?>
+        <?php echo $block->getColumnHtml($_item, 'total') ?>
     </td>
 </tr>

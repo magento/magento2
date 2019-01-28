@@ -15,15 +15,15 @@
     <table class="shipment-track">
         <thead>
         <tr>
-            <th><?= /* @escapeNotVerified */  __('Shipped By') ?></th>
-            <th><?= /* @escapeNotVerified */  __('Tracking Number') ?></th>
+            <th><?php echo /* @escapeNotVerified */  __('Shipped By') ?></th>
+            <th><?php echo /* @escapeNotVerified */  __('Tracking Number') ?></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($trackCollection as $_item): ?>
             <tr>
-                <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
-                <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
+                <td><?php echo $block->escapeHtml($_item->getTitle()) ?>:</td>
+                <td><?php echo $block->escapeHtml($_item->getNumber()) ?></td>
             </tr>
         <?php endforeach ?>
         </tbody>

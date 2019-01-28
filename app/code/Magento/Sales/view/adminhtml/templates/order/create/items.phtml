@@ -9,9 +9,9 @@
 ?>
 
 <div class="admin__page-section-title">
-    <strong class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></strong>
+    <strong class="title"><?php echo /* @escapeNotVerified */ $block->getHeaderText() ?></strong>
     <div class="actions">
-        <?= $block->getButtonsHtml() ?>
+        <?php echo $block->getButtonsHtml() ?>
     </div>
 </div>
-<?= $block->getChildHtml() ?>
+<?php echo $block->getChildHtml() ?>

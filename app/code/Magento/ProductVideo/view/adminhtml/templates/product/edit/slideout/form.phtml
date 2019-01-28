@@ -5,23 +5,23 @@
  */
 /* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
 ?>
-<div id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none"
-    data-modal-info='<?= /* @escapeNotVerified */ $block->getWidgetOptions() ?>'
+<div id="<?php echo /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none"
+    data-modal-info='<?php echo /* @escapeNotVerified */ $block->getWidgetOptions() ?>'
 >
-    <?= /* @escapeNotVerified */ $block->getFormHtml() ?>
+    <?php echo /* @escapeNotVerified */ $block->getFormHtml() ?>
     <div id="video-player-preview-location" class="video-player-sidebar">
         <div class="video-player-container"></div>
         <div class="video-information title">
-            <label><?= /* @escapeNotVerified */ __('Title:') ?> </label><span></span>
+            <label><?php echo /* @escapeNotVerified */ __('Title:') ?> </label><span></span>
         </div>
         <div class="video-information uploaded">
-            <label><?= /* @escapeNotVerified */ __('Uploaded:') ?> </label><span></span>
+            <label><?php echo /* @escapeNotVerified */ __('Uploaded:') ?> </label><span></span>
         </div>
         <div class="video-information uploader">
-            <label><?= /* @escapeNotVerified */ __('Uploader:') ?> </label><span></span>
+            <label><?php echo /* @escapeNotVerified */ __('Uploader:') ?> </label><span></span>
         </div>
         <div class="video-information duration">
-            <label><?= /* @escapeNotVerified */ __('Duration:') ?> </label><span></span>
+            <label><?php echo /* @escapeNotVerified */ __('Duration:') ?> </label><span></span>
         </div>
     </div>
 </div>

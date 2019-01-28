@@ -8,5 +8,5 @@
 
 ?>
 <?php if ($block->getOrderHasDownloadable()): ?>
-    <?= /* @escapeNotVerified */ __('Go to <a href="%1">My Downloadable Products</a>', $block->getDownloadableProductsUrl()) ?>
+    <?php echo /* @escapeNotVerified */ __('Go to <a href="%1">My Downloadable Products</a>', $block->getDownloadableProductsUrl()) ?>
 <?php endif; ?>

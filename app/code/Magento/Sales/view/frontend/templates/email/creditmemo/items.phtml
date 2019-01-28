@@ -14,25 +14,25 @@
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= /* @escapeNotVerified */  __('Items') ?>
+                    <?php echo /* @escapeNotVerified */  __('Items') ?>
                 </th>
                 <th class="item-qty">
-                    <?= /* @escapeNotVerified */  __('Qty') ?>
+                    <?php echo /* @escapeNotVerified */  __('Qty') ?>
                 </th>
                 <th class="item-subtotal">
-                    <?= /* @escapeNotVerified */  __('Subtotal') ?>
+                    <?php echo /* @escapeNotVerified */  __('Subtotal') ?>
                 </th>
             </tr>
         </thead>
         <?php foreach ($_creditmemo->getAllItems() as $_item): ?>
             <?php if (!$_item->getOrderItem()->getParentItem())  : ?>
                 <tbody>
-                    <?= $block->getItemHtml($_item) ?>
+                    <?php echo $block->getItemHtml($_item) ?>
                 </tbody>
             <?php endif; ?>
         <?php endforeach; ?>
         <tfoot class="order-totals">
-            <?= $block->getChildHtml('creditmemo_totals') ?>
+            <?php echo $block->getChildHtml('creditmemo_totals') ?>
         </tfoot>
     </table>
 <?php endif; ?>

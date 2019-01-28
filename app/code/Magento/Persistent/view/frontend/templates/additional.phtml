@@ -6,11 +6,11 @@
 ?>
 <?php if ($block->getCustomerId()) :?>
     <span>
-        <a <?= /* @escapeNotVerified */ $block->getLinkAttributes()?>><?= $block->escapeHtml(__('Not you?'));?></a>
+        <a <?php echo /* @escapeNotVerified */ $block->getLinkAttributes()?>><?php echo $block->escapeHtml(__('Not you?'));?></a>
     </span>
 <?php endif;?>
 <script type="application/javascript">
-    window.persistent = <?= /* @noEscape */ $block->getConfig(); ?>;
+    window.persistent = <?php echo /* @noEscape */ $block->getConfig(); ?>;
 </script>
 <script type="text/x-magento-init">
     {

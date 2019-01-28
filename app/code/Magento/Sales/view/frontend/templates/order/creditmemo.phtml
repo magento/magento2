@@ -5,11 +5,11 @@
  */
 ?>
 <div class="order-details-items creditmemo">
-    <?= $block->getChildHtml('creditmemo_items') ?>
+    <?php echo $block->getChildHtml('creditmemo_items') ?>
     <div class="actions-toolbar">
         <div class="secondary">
-            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back">
-                <span><?= /* @escapeNotVerified */ $block->getBackTitle() ?></span>
+            <a href="<?php echo /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back">
+                <span><?php echo /* @escapeNotVerified */ $block->getBackTitle() ?></span>
             </a>
         </div>
     </div>

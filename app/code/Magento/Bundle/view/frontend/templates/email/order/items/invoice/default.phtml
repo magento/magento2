@@ -36,7 +36,7 @@
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="bundle-option-label">
                 <td colspan="3">
-                    <strong><em><?= /* @escapeNotVerified */  $attributes['option_label'] ?></em></strong>
+                    <strong><em><?php echo /* @escapeNotVerified */  $attributes['option_label'] ?></em></strong>
                 </td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
@@ -45,25 +45,25 @@
     <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
-                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="product-name"><?php echo $block->escapeHtml($_item->getName()) ?></p>
+                <p class="sku"><?php echo /* @escapeNotVerified */  __('SKU') ?>: <?php echo $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
     <?php else: ?>
         <tr class="bundle-item bundle-option-value">
             <td class="item-info">
-                <p><?= $block->getValueHtml($_item) ?></p>
+                <p><?php echo $block->getValueHtml($_item) ?></p>
             </td>
     <?php endif; ?>
             <td class="item-qty">
                 <?php if ($block->canShowPriceInfo($_item)): ?>
-                    <?= /* @escapeNotVerified */  $_item->getQty() * 1 ?>
+                    <?php echo /* @escapeNotVerified */  $_item->getQty() * 1 ?>
                 <?php else: ?>
                     &nbsp;
                 <?php endif; ?>
             </td>
             <td class="item-price">
                 <?php if ($block->canShowPriceInfo($_item)): ?>
-                    <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+                    <?php echo /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
                 <?php else: ?>
                     &nbsp;
                 <?php endif; ?>
@@ -78,12 +78,12 @@
             <?php if ($block->getItemOptions()): ?>
                 <dl>
                     <?php foreach ($block->getItemOptions() as $option): ?>
-                        <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
-                                    <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
+                        <dt><strong><em><?php echo /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+                                    <dd><?php echo /* @escapeNotVerified */  $option['value'] ?></dd>
                     <?php endforeach; ?>
                 </dl>
             <?php endif; ?>
-            <?= $block->escapeHtml($_item->getDescription()) ?>
+            <?php echo $block->escapeHtml($_item->getDescription()) ?>
         </td>
     </tr>
 <?php endif; ?>

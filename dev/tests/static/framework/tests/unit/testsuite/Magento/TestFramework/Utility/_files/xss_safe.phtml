@@ -7,32 +7,32 @@
 // @codingStandardsIgnoreFile
 ?>
 
-<?= /* @escapeNotVerified */ $block->getSomeData() ?>
-<?= /* @noEscape */ $block->getSomeData() ?>
-<input name="form_key" type="hidden" value="<?= $block->escapeUrl($var) ?>" />
-<input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr('value') ?>" />
-<input name="form_key" type="hidden" value="<?= $block->escapeJs('value') ?>" />
-<?= $block->escapeCss('value') ?>
+<?php echo /* @escapeNotVerified */ $block->getSomeData() ?>
+<?php echo /* @noEscape */ $block->getSomeData() ?>
+<input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
+<input name="form_key" type="hidden" value="<?php echo $block->escapeHtmlAttr('value') ?>" />
+<input name="form_key" type="hidden" value="<?php echo $block->escapeJs('value') ?>" />
+<?php echo $block->escapeCss('value') ?>
 echo $var;
-<?= $block->getHtmlId("some value") ?>
-<?= $block->getIdHtml("some value") ?>
-<?= $block->getIdHtml("some value") ?>
-<?= "\$var1" ?>
-<?= '$var' ?>
-<?= "value" ?>
-<?= 'value' ?>
-<?= (int)$var ?>
-<?= (bool)$var ?>
-<?= count($var) ?>
-<?= $object->methodHtml() ?>
+<?php echo $block->getHtmlId("some value") ?>
+<?php echo $block->getIdHtml("some value") ?>
+<?php echo $block->getIdHtml("some value") ?>
+<?php echo "\$var1" ?>
+<?php echo '$var' ?>
+<?php echo "value" ?>
+<?php echo 'value' ?>
+<?php echo (int)$var ?>
+<?php echo (bool)$var ?>
+<?php echo count($var) ?>
+<?php echo $object->methodHtml() ?>
 <?php pecho($var);?>
-<?= $object->methodHtml() .
+<?php echo $object->methodHtml() .
     (bool)$var .
     $block->escapeUrl("some value");
 ?>
-<?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
-<?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
-<?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
+<?php echo /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
+<?php echo $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
+<?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
 <?php
 /**
  * echo $someVar;
@@ -45,4 +45,4 @@ echo $var;
     <col <?= $_column->getProperty() ?> />
 <?php endforeach; */ ?>
 
-<?= $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])) ?>
+<?php echo $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])) ?>

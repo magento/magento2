@@ -18,8 +18,8 @@
         {
             "*": {
                 "mage/translate-init": {
-                    "dictionaryFile": "text!<?= $block->escapeJs($fileName); ?>",
-                    "version": "<?= $block->escapeJs($version) ?>"
+                    "dictionaryFile": "text!<?php echo $block->escapeJs($fileName); ?>",
+                    "version": "<?php echo $block->escapeJs($version) ?>"
                 }
             }
         }

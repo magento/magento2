@@ -7,17 +7,17 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<dl id="dl-<?= /* @escapeNotVerified */ $id ?>" class="accordion">
+<dl id="dl-<?php echo /* @escapeNotVerified */ $id ?>" class="accordion">
 <?php foreach ($sections as $sectionId => $section): ?>
-    <dt id="dt-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>">
-        <strong><?= /* @escapeNotVerified */ $section['title'] ?></strong>
+    <dt id="dt-<?php echo /* @escapeNotVerified */ $id ?>-<?php echo /* @escapeNotVerified */ $sectionId ?>">
+        <strong><?php echo /* @escapeNotVerified */ $section['title'] ?></strong>
     </dt>
-    <dd id="dd-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $section['id'] ?>" class="section-menu <?= !empty($section['active']) ? 'open' : '' ?>">
+    <dd id="dd-<?php echo /* @escapeNotVerified */ $id ?>-<?php echo /* @escapeNotVerified */ $section['id'] ?>" class="section-menu <?php echo !empty($section['active']) ? 'open' : '' ?>">
         <ul>
         <?php foreach ($section['children'] as $menuId => $menuItem): ?>
-            <li id="li-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>-<?= /* @escapeNotVerified */ $menuId ?>">
-                <a href="#" title="<?= /* @escapeNotVerified */ $menuItem['title'] ?>">
-                    <span><?= /* @escapeNotVerified */ $menuItem['label'] ?></span>
+            <li id="li-<?php echo /* @escapeNotVerified */ $id ?>-<?php echo /* @escapeNotVerified */ $sectionId ?>-<?php echo /* @escapeNotVerified */ $menuId ?>">
+                <a href="#" title="<?php echo /* @escapeNotVerified */ $menuItem['title'] ?>">
+                    <span><?php echo /* @escapeNotVerified */ $menuItem['label'] ?></span>
                 </a>
             </li>
         <?php endforeach ?>

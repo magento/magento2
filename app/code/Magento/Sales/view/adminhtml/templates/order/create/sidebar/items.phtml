@@ -8,16 +8,16 @@
 
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?= /* @escapeNotVerified */ $block->getDataId() ?>">
+<div class="create-order-sidebar-block" id="sidebar_data_<?php echo /* @escapeNotVerified */ $block->getDataId() ?>">
     <div class="head sidebar-title-block">
         <a href="#" class="action-refresh"
-           title="<?= $block->escapeHtml(__('Refresh')) ?>"
-           onclick="order.loadArea('sidebar_<?= /* @escapeNotVerified */ $block->getDataId() ?>', 'sidebar_data_<?= /* @escapeNotVerified */ $block->getDataId() ?>');return false;">
-            <span><?= /* @escapeNotVerified */ __('Refresh') ?></span>
+           title="<?php echo $block->escapeHtml(__('Refresh')) ?>"
+           onclick="order.loadArea('sidebar_<?php echo /* @escapeNotVerified */ $block->getDataId() ?>', 'sidebar_data_<?php echo /* @escapeNotVerified */ $block->getDataId() ?>');return false;">
+            <span><?php echo /* @escapeNotVerified */ __('Refresh') ?></span>
         </a>
         <h5 class="create-order-sidebar-label">
-            <?= /* @escapeNotVerified */ $block->getHeaderText() ?>
-            <span class="normal">(<?= /* @escapeNotVerified */ $block->getItemCount() ?>)</span>
+            <?php echo /* @escapeNotVerified */ $block->getHeaderText() ?>
+            <span class="normal">(<?php echo /* @escapeNotVerified */ $block->getItemCount() ?>)</span>
         </h5>
     </div>
     <div class="content">
@@ -26,29 +26,29 @@
         <table class="admin__table-primary">
             <thead>
                 <tr>
-                    <th class="col-item"><?= /* @escapeNotVerified */ __('Item') ?></th>
+                    <th class="col-item"><?php echo /* @escapeNotVerified */ __('Item') ?></th>
 
                     <?php if ($block->canDisplayItemQty()): ?>
-                        <th class="col-qty"><?= /* @escapeNotVerified */ __('Qty') ?></th>
+                        <th class="col-qty"><?php echo /* @escapeNotVerified */ __('Qty') ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canDisplayPrice()): ?>
-                        <th class="col-price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                        <th class="col-price"><?php echo /* @escapeNotVerified */ __('Price') ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canRemoveItems()): ?>
                         <th class="col-remove">
-                            <span title="<?= $block->escapeHtml(__('Remove')) ?>"
+                            <span title="<?php echo $block->escapeHtml(__('Remove')) ?>"
                                   class="icon icon-remove">
-                                <span><?= /* @escapeNotVerified */ __('Remove') ?></span>
+                                <span><?php echo /* @escapeNotVerified */ __('Remove') ?></span>
                             </span>
                         </th>
                     <?php endif; ?>
 
                     <th class="col-add">
-                        <span title="<?= $block->escapeHtml(__('Add To Order')) ?>"
+                        <span title="<?php echo $block->escapeHtml(__('Add To Order')) ?>"
                               class="icon icon-add">
-                            <span><?= /* @escapeNotVerified */ __('Add To Order') ?></span>
+                            <span><?php echo /* @escapeNotVerified */ __('Add To Order') ?></span>
                         </span>
                     </th>
                 </tr>
@@ -57,31 +57,31 @@
             <tbody>
                 <?php foreach ($block->getItems() as $_item): ?>
                     <tr>
-                        <td class="col-item"><?= $block->escapeHtml($_item->getName()) ?></td>
+                        <td class="col-item"><?php echo $block->escapeHtml($_item->getName()) ?></td>
 
                         <?php if ($block->canDisplayItemQty()): ?>
                             <td class="col-qty">
-                                <?= /* @escapeNotVerified */ $block->getItemQty($_item) ?>
+                                <?php echo /* @escapeNotVerified */ $block->getItemQty($_item) ?>
                             </td>
                         <?php endif; ?>
 
                         <?php if ($block->canDisplayPrice()): ?>
                             <td class="col-price">
-                                <?= /* @noEscape */ $block->getItemPrice($block->getProduct($_item)) ?>
+                                <?php echo /* @noEscape */ $block->getItemPrice($block->getProduct($_item)) ?>
                             </td>
                         <?php endif; ?>
 
                         <?php if ($block->canRemoveItems()): ?>
                             <td class="col-remove">
                                 <div class="admin__field-option">
-                                    <input id="sidebar-remove-<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?= /* @escapeNotVerified */ $block->getItemId($_item) ?>"
+                                    <input id="sidebar-remove-<?php echo /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?php echo /* @escapeNotVerified */ $block->getItemId($_item) ?>"
                                            type="checkbox"
                                            class="admin__control-checkbox"
-                                           name="sidebar[remove][<?= /* @escapeNotVerified */ $block->getItemId($_item) ?>]"
-                                           value="<?= /* @escapeNotVerified */ $block->getDataId() ?>"
-                                           title="<?= $block->escapeHtml(__('Remove')) ?>" />
+                                           name="sidebar[remove][<?php echo /* @escapeNotVerified */ $block->getItemId($_item) ?>]"
+                                           value="<?php echo /* @escapeNotVerified */ $block->getDataId() ?>"
+                                           title="<?php echo $block->escapeHtml(__('Remove')) ?>" />
                                     <label class="admin__field-label"
-                                           for="sidebar-remove-<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?= /* @escapeNotVerified */ $block->getItemId($_item) ?>">
+                                           for="sidebar-remove-<?php echo /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?php echo /* @escapeNotVerified */ $block->getItemId($_item) ?>">
                                     </label>
                                 </div>
                             </td>
@@ -92,26 +92,26 @@
                                 <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist'): ?>
                                     <a href="#"
                                        class="icon icon-configure"
-                                       title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>"
-                                       onclick="order.sidebarConfigureProduct('<?= 'sidebar_wishlist' ?>', <?= /* @escapeNotVerified */ $block->getProductId($_item) ?>, <?= /* @escapeNotVerified */ $block->getItemId($_item) ?>); return false;">
-                                        <span><?= /* @escapeNotVerified */ __('Configure and Add to Order') ?></span>
+                                       title="<?php echo $block->escapeHtml(__('Configure and Add to Order')) ?>"
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo /* @escapeNotVerified */ $block->getProductId($_item) ?>, <?php echo /* @escapeNotVerified */ $block->getItemId($_item) ?>); return false;">
+                                        <span><?php echo /* @escapeNotVerified */ __('Configure and Add to Order') ?></span>
                                     </a>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
                                     <a href="#"
                                        class="icon icon-configure"
-                                       title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>"
-                                       onclick="order.sidebarConfigureProduct('<?= 'sidebar' ?>', <?= /* @escapeNotVerified */ $block->getProductId($_item) ?>); return false;">
-                                        <span><?= /* @escapeNotVerified */ __('Configure and Add to Order') ?></span>
+                                       title="<?php echo $block->escapeHtml(__('Configure and Add to Order')) ?>"
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo /* @escapeNotVerified */ $block->getProductId($_item) ?>); return false;">
+                                        <span><?php echo /* @escapeNotVerified */ __('Configure and Add to Order') ?></span>
                                     </a>
                                 <?php else: ?>
-                                    <input id="sidebar-<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?= /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>"
+                                    <input id="sidebar-<?php echo /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?php echo /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>"
                                            type="checkbox"
                                            class="admin__control-checkbox"
-                                           name="sidebar[<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>][<?= /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>]"
-                                           value="<?= /* @escapeNotVerified */ $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
-                                           title="<?= $block->escapeHtml(__('Add To Order')) ?>"/>
+                                           name="sidebar[<?php echo /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>][<?php echo /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>]"
+                                           value="<?php echo /* @escapeNotVerified */ $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
+                                           title="<?php echo $block->escapeHtml(__('Add To Order')) ?>"/>
                                     <label class="admin__field-label"
-                                           for="sidebar-<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?= /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>">
+                                           for="sidebar-<?php echo /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?php echo /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>">
                                     </label>
                                 <?php endif; ?>
                             </div>
@@ -121,11 +121,11 @@
             </tbody>
         </table>
         <?php else: ?>
-            <span class="no-items"><?= /* @escapeNotVerified */ __('No items') ?></span>
+            <span class="no-items"><?php echo /* @escapeNotVerified */ __('No items') ?></span>
         <?php endif ?>
         </div>
         <?php if ($block->getItemCount() && $block->canRemoveItems()): ?>
-            <?= $block->getChildHtml('empty_customer_cart_button') ?>
+            <?php echo $block->getChildHtml('empty_customer_cart_button') ?>
         <?php endif; ?>
     </div>
 </div>

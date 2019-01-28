@@ -12,30 +12,30 @@
 <?php $_order = $block->getItem()->getOrder(); ?>
 <tr>
     <td class="item-info has-extra">
-        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <p class="product-name"><?php echo $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?php echo /* @escapeNotVerified */  __('SKU') ?>: <?php echo $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
         <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
-            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
+            <dt><strong><em><?php echo /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+            <dd><?php echo /* @escapeNotVerified */  $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
         <dl>
-            <dt><strong><em><?= /* @escapeNotVerified */  $block->getLinksTitle() ?></em></strong></dt>
+            <dt><strong><em><?php echo /* @escapeNotVerified */  $block->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
                 <dd>
-                    <?= $block->escapeHtml($link->getLinkTitle()) ?>
+                    <?php echo $block->escapeHtml($link->getLinkTitle()) ?>
                 </dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?= $block->escapeHtml($_item->getDescription()) ?>
+        <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
+    <td class="item-qty"><?php echo /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
     <td class="item-price">
-        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+        <?php echo /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
     </td>
 </tr>

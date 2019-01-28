@@ -11,26 +11,26 @@
 <?php $_order = $block->getItem()->getOrder(); ?>
 <tr>
     <td class="item-info<?php if ($block->getItemOptions()): ?> has-extra<?php endif; ?>">
-        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <p class="product-name"><?php echo $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?php echo /* @escapeNotVerified */  __('SKU') ?>: <?php echo $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
             <dl>
                 <?php foreach ($block->getItemOptions() as $option): ?>
-                    <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+                    <dt><strong><em><?php echo /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
                     <dd>
-                        <?= /* @escapeNotVerified */  nl2br($option['value']) ?>
+                        <?php echo /* @escapeNotVerified */  nl2br($option['value']) ?>
                     </dd>
                 <?php endforeach; ?>
             </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
-            <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
+            <?php echo $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
         <?php endif; ?>
-        <?= $block->escapeHtml($_item->getDescription()) ?>
+        <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
+    <td class="item-qty"><?php echo /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
     <td class="item-price">
-        <?= /* @escapeNotVerified */  $block->getItemPrice($_item->getOrderItem()) ?>
+        <?php echo /* @escapeNotVerified */  $block->getItemPrice($_item->getOrderItem()) ?>
     </td>
 </tr>

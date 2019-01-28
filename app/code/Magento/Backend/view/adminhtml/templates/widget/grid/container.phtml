@@ -8,6 +8,6 @@
 
 ?>
 <?php if ($block->getButtonsHtml()): ?>
-<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getButtonsHtml() ?></div>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getButtonsHtml() ?></div>
 <?php endif; ?>
-<?= $block->getGridHtml() ?>
+<?php echo $block->getGridHtml() ?>

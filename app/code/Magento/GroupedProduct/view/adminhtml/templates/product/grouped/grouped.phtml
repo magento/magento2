@@ -12,13 +12,13 @@
 $_gridPopupBlock = $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildBlock('grid');
 $_gridPopupBlock->setRowClickCallback('function(){}');
 ?>
-<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?= /* @escapeNotVerified */ $_gridPopupBlock->getId() ?>]"}}'>
+<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?php echo /* @escapeNotVerified */ $_gridPopupBlock->getId() ?>]"}}'>
     <div class="no-products-message">
-        <?= /* @escapeNotVerified */ __('There are no grouped products.') ?>
+        <?php echo /* @escapeNotVerified */ __('There are no grouped products.') ?>
     </div>
-    <?= $block->getChildHtml('list') ?>
+    <?php echo $block->getChildHtml('list') ?>
     <div data-role="add-product-dialog" class="no-display">
-        <?= $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid') ?>
+        <?php echo $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid') ?>
     </div>
     <button type="button" data-role="add-product">Add Products to Group</button>
 </div>

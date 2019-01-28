@@ -8,14 +8,14 @@
 
 ?>
 
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
-    <?= $block->getBlockHtml('formkey') ?>
+<form action="<?php echo /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
+    <?php echo $block->getBlockHtml('formkey') ?>
 </form>
 <script type="text/x-magento-init">
     {
         "#attributes-edit-form": {
             "Magento_Catalog/catalog/product/edit/attribute": {
-                "validationUrl": "<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>"
+                "validationUrl": "<?php echo /* @escapeNotVerified */ $block->getValidationUrl() ?>"
             }
         }
     }

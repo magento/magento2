@@ -39,8 +39,8 @@ if ($_attributeType && $_attributeType == 'text') {
 ?>
 
 <?php if ($_attributeValue): ?>
-<div class="product attribute <?= /* @escapeNotVerified */ $_className ?>">
-    <?php if ($renderLabel): ?><strong class="type"><?= /* @escapeNotVerified */ $_attributeLabel ?></strong><?php endif; ?>
-    <div class="value" <?= /* @escapeNotVerified */ $_attributeAddAttribute ?>><?= /* @escapeNotVerified */ $_attributeValue ?></div>
+<div class="product attribute <?php echo /* @escapeNotVerified */ $_className ?>">
+    <?php if ($renderLabel): ?><strong class="type"><?php echo /* @escapeNotVerified */ $_attributeLabel ?></strong><?php endif; ?>
+    <div class="value" <?php echo /* @escapeNotVerified */ $_attributeAddAttribute ?>><?php echo /* @escapeNotVerified */ $_attributeValue ?></div>
 </div>
 <?php endif; ?>

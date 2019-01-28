@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?= $this->doctype() ?>
+<?php echo $this->doctype() ?>
 <!--[if !IE]><!-->
 <html lang="en" ng-app="magentoSetup">
 <!--<![endif]-->
@@ -12,10 +12,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{$state.current.title}}</title>
-    <?= $this->headLink()
+    <?php echo $this->headLink()
         ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
-    <?= $this->headScript()
+    <?php echo $this->headScript()
         ->appendFile($this->basePath() . '/pub/angular/angular.min.js')
         ->appendFile($this->basePath() . '/pub/angular-ng-storage/angular-ng-storage.min.js')
         ->appendFile($this->basePath() . '/pub/angular-ng-dialog/angular-ng-dialog.min.js')
@@ -52,24 +52,24 @@
     <link
         rel="icon"
         type="image/x-icon"
-        href="<?= $this->basePath() ?>/pub/images/favicon/favicon.ico"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon.ico"
         sizes="16x16">
     <link
         rel="icon"
         type="image/png"
-        href="<?= $this->basePath() ?>/pub/images/favicon/favicon-96x96.png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-96x96.png"
         sizes="96x96">
     <link
         rel="icon"
         type="image/png"
-        href="<?= $this->basePath() ?>/pub/images/favicon/favicon-32x32.png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-32x32.png"
         sizes="32x32">
     <link
         rel="icon"
         type="image/png"
-        href="<?= $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
         sizes="16x16">
-    <?= $this->inlineScript() ?>
+    <?php echo $this->inlineScript() ?>
     <style>
         a.white-space-pre-line {
             white-space: pre-line;
@@ -77,6 +77,6 @@
     </style>
 </head>
 <body>
-<?= $this->content ?>
+<?php echo $this->content ?>
 </body>
 </html>

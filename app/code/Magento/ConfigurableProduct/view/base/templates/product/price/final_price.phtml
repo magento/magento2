@@ -46,12 +46,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 
 <?php if ($block->showMinimalPrice()): ?>
     <?php if ($block->getUseLinkForAsLowAs()):?>
-        <a href="<?= /* @escapeNotVerified */ $block->getSaleableItem()->getProductUrl() ?>" class="minimal-price-link">
-            <?= /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
+        <a href="<?php echo /* @escapeNotVerified */ $block->getSaleableItem()->getProductUrl() ?>" class="minimal-price-link">
+            <?php echo /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
         </a>
     <?php else:?>
         <span class="minimal-price-link">
-            <?= /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
+            <?php echo /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
         </span>
     <?php endif?>
 <?php endif; ?>

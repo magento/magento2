@@ -22,18 +22,18 @@
                     $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="data item title"
-                     aria-labelledby="tab-label-<?= /* @escapeNotVerified */ $alias ?>-title"
-                     data-role="collapsible" id="tab-label-<?= /* @escapeNotVerified */ $alias ?>">
+                     aria-labelledby="tab-label-<?php echo /* @escapeNotVerified */ $alias ?>-title"
+                     data-role="collapsible" id="tab-label-<?php echo /* @escapeNotVerified */ $alias ?>">
                     <a class="data switch"
                        tabindex="-1"
                        data-toggle="switch"
-                       href="#<?= /* @escapeNotVerified */ $alias ?>"
-                       id="tab-label-<?= /* @escapeNotVerified */ $alias ?>-title">
-                        <?= /* @escapeNotVerified */ $label ?>
+                       href="#<?php echo /* @escapeNotVerified */ $alias ?>"
+                       id="tab-label-<?php echo /* @escapeNotVerified */ $alias ?>-title">
+                        <?php echo /* @escapeNotVerified */ $label ?>
                     </a>
                 </div>
-                <div class="data item content" id="<?= /* @escapeNotVerified */ $alias ?>" data-role="content">
-                    <?= /* @escapeNotVerified */ $html ?>
+                <div class="data item content" id="<?php echo /* @escapeNotVerified */ $alias ?>" data-role="content">
+                    <?php echo /* @escapeNotVerified */ $html ?>
                 </div>
             <?php endforeach;?>
         </div>

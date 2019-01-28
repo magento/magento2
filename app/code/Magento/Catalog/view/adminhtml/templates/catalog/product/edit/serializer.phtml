@@ -9,4 +9,4 @@
 ?>
 
 <?php $_id = 'id_' . md5(microtime()) ?>
-<input type="hidden" name="<?= /* @escapeNotVerified */ $block->getInputElementName() ?>"  value="" id="<?= /* @escapeNotVerified */ $_id ?>" />
+<input type="hidden" name="<?php echo /* @escapeNotVerified */ $block->getInputElementName() ?>"  value="" id="<?php echo /* @escapeNotVerified */ $_id ?>" />

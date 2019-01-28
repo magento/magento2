@@ -16,7 +16,7 @@
 <?php foreach ($methods as $method): ?>
     <?php $methodHtml = $block->getMethodHtml($method); ?>
     <?php if (trim($methodHtml) !== ''): ?>
-    <li class="item"><?= /* @escapeNotVerified */ $methodHtml ?></li>
+    <li class="item"><?php echo /* @escapeNotVerified */ $methodHtml ?></li>
     <?php endif; ?>
 <?php endforeach; ?>
 </ul>

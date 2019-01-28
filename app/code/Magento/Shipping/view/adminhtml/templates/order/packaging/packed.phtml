@@ -14,7 +14,7 @@
     <?php $params = new \Magento\Framework\DataObject($package->getParams()) ?>
     <section class="admin__page-section">
         <div class="admin__page-section-title">
-            <span class="title"><?= /* @escapeNotVerified */ __('Package') . ' ' . $packageId ?></span>
+            <span class="title"><?php echo /* @escapeNotVerified */ __('Package') . ' ' . $packageId ?></span>
         </div>
         <div class="admin__page-section-content">
             <div class="row row-gutter">
@@ -22,22 +22,22 @@
                     <table class="admin__table-secondary">
                         <tbody>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Type') ?></th>
-                                <td><?= /* @escapeNotVerified */ $block->getContainerTypeByCode($params->getContainer()) ?></td>
+                                <th><?php echo /* @escapeNotVerified */ __('Type') ?></th>
+                                <td><?php echo /* @escapeNotVerified */ $block->getContainerTypeByCode($params->getContainer()) ?></td>
                             </tr>
                             <tr>
                             <?php if ($block->displayCustomsValue()): ?>
-                                <th><?= /* @escapeNotVerified */ __('Customs Value') ?></th>
-                                <td><?= /* @escapeNotVerified */ $block->displayCustomsPrice($params->getCustomsValue()) ?></td>
+                                <th><?php echo /* @escapeNotVerified */ __('Customs Value') ?></th>
+                                <td><?php echo /* @escapeNotVerified */ $block->displayCustomsPrice($params->getCustomsValue()) ?></td>
                             <?php else: ?>
-                                <th><?= /* @escapeNotVerified */ __('Total Weight') ?></th>
-                                <td><?= /* @escapeNotVerified */ $params->getWeight() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
+                                <th><?php echo /* @escapeNotVerified */ __('Total Weight') ?></th>
+                                <td><?php echo /* @escapeNotVerified */ $params->getWeight() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
                             <?php endif; ?>
                             </tr>
                         <?php if ($params->getSize()): ?>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Size') ?></th>
-                                <td><?= /* @escapeNotVerified */ ucfirst(strtolower($params->getSize())) ?></td>
+                                <th><?php echo /* @escapeNotVerified */ __('Size') ?></th>
+                                <td><?php echo /* @escapeNotVerified */ ucfirst(strtolower($params->getSize())) ?></td>
                             </tr>
                         <?php endif; ?>
                         </tbody>
@@ -47,30 +47,30 @@
                     <table class="admin__table-secondary">
                         <tbody>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Length') ?></th>
+                                <th><?php echo /* @escapeNotVerified */ __('Length') ?></th>
                                 <td>
                                 <?php if ($params->getLength() != null): ?>
-                                    <?= /* @escapeNotVerified */ $params->getLength() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                    <?php echo /* @escapeNotVerified */ $params->getLength() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
                                 <?php else: ?>
                                     --
                                 <?php endif; ?>
                                 </td>
                             </tr>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Width') ?></th>
+                                <th><?php echo /* @escapeNotVerified */ __('Width') ?></th>
                                 <td>
                                 <?php if ($params->getWidth() != null): ?>
-                                    <?= /* @escapeNotVerified */ $params->getWidth() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                    <?php echo /* @escapeNotVerified */ $params->getWidth() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
                                 <?php else: ?>
                                     --
                                 <?php endif; ?>
                                 </td>
                             </tr>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Height') ?></th>
+                                <th><?php echo /* @escapeNotVerified */ __('Height') ?></th>
                                 <td>
                                 <?php if ($params->getHeight() != null): ?>
-                                    <?= /* @escapeNotVerified */ $params->getHeight() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                    <?php echo /* @escapeNotVerified */ $params->getHeight() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
                                 <?php else: ?>
                                     --
                                 <?php endif; ?>
@@ -84,24 +84,24 @@
                         <tbody>
                         <?php if ($params->getDeliveryConfirmation() != null): ?>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Signature Confirmation') ?></th>
-                                <td><?= /* @escapeNotVerified */ $block->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation()) ?></td>
+                                <th><?php echo /* @escapeNotVerified */ __('Signature Confirmation') ?></th>
+                                <td><?php echo /* @escapeNotVerified */ $block->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation()) ?></td>
                             </tr>
                         <?php endif; ?>
                         <?php if ($params->getContentType() != null): ?>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Contents') ?></th>
+                                <th><?php echo /* @escapeNotVerified */ __('Contents') ?></th>
                                 <?php if ($params->getContentType() == 'OTHER'): ?>
-                                    <td><?= $block->escapeHtml($params->getContentTypeOther()) ?></td>
+                                    <td><?php echo $block->escapeHtml($params->getContentTypeOther()) ?></td>
                                 <?php else: ?>
-                                    <td><?= /* @escapeNotVerified */ $block->getContentTypeByCode($params->getContentType()) ?></td>
+                                    <td><?php echo /* @escapeNotVerified */ $block->getContentTypeByCode($params->getContentType()) ?></td>
                                 <?php endif; ?>
                             </tr>
                         <?php endif; ?>
                         <?php if ($params->getGirth()): ?>
                             <tr>
-                                <th><?= /* @escapeNotVerified */ __('Girth') ?></th>
-                                <td><?= /* @escapeNotVerified */ $params->getGirth() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getGirthDimensionUnits()) ?></td>
+                                <th><?php echo /* @escapeNotVerified */ __('Girth') ?></th>
+                                <td><?php echo /* @escapeNotVerified */ $params->getGirth() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getGirthDimensionUnits()) ?></td>
                             </tr>
                         <?php endif; ?>
                         </tbody>
@@ -110,19 +110,19 @@
             </div>
         </div>
         <div class="admin__page-section-item-title">
-            <span class="title"><?= /* @escapeNotVerified */ __('Items in the Package') ?></span>
+            <span class="title"><?php echo /* @escapeNotVerified */ __('Items in the Package') ?></span>
         </div>
         <div class="admin__table-wrapper">
             <table class="data-table admin__table-primary">
                 <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
-                    <th class="col-weight"><span><?= /* @escapeNotVerified */ __('Weight') ?></span></th>
+                    <th class="col-product"><span><?php echo /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <th class="col-weight"><span><?php echo /* @escapeNotVerified */ __('Weight') ?></span></th>
                     <?php if ($block->displayCustomsValue()): ?>
-                        <th class="col-custom"><span><?= /* @escapeNotVerified */ __('Customs Value') ?></span></th>
+                        <th class="col-custom"><span><?php echo /* @escapeNotVerified */ __('Customs Value') ?></span></th>
                     <?php endif; ?>
-                    <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty Ordered') ?></span></th>
-                    <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                    <th class="col-qty"><span><?php echo /* @escapeNotVerified */ __('Qty Ordered') ?></span></th>
+                    <th class="col-qty"><span><?php echo /* @escapeNotVerified */ __('Qty') ?></span></th>
                 </tr>
                 </thead>
                 <tbody id="">
@@ -130,19 +130,19 @@
                     <?php $item = new \Magento\Framework\DataObject($item) ?>
                     <tr title="#" id="">
                         <td class="col-product">
-                            <?= /* @escapeNotVerified */ $item->getName() ?>
+                            <?php echo /* @escapeNotVerified */ $item->getName() ?>
                         </td>
                         <td class="col-weight">
-                            <?= /* @escapeNotVerified */ $item->getWeight() ?>
+                            <?php echo /* @escapeNotVerified */ $item->getWeight() ?>
                         </td>
                         <?php if ($block->displayCustomsValue()): ?>
-                            <td class="col-custom"><?= /* @escapeNotVerified */ $block->displayCustomsPrice($item->getCustomsValue()) ?></td>
+                            <td class="col-custom"><?php echo /* @escapeNotVerified */ $block->displayCustomsPrice($item->getCustomsValue()) ?></td>
                         <?php endif; ?>
                         <td class="col-qty">
-                            <?= /* @escapeNotVerified */ $block->getQtyOrderedItem($item->getOrderItemId()) ?>
+                            <?php echo /* @escapeNotVerified */ $block->getQtyOrderedItem($item->getOrderItemId()) ?>
                         </td>
                         <td class="col-qty">
-                            <?= /* @escapeNotVerified */ $item->getQty()*1 ?>
+                            <?php echo /* @escapeNotVerified */ $item->getQty()*1 ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -163,8 +163,8 @@
         "#packed_window": {
             "Magento_Shipping/js/packages":{
                 "type":"slide",
-                "title":"<?= /* @escapeNotVerified */  __('Packages') ?>",
-                "url": "<?= /* @escapeNotVerified */ $block->getPrintButton() ?>"
+                "title":"<?php echo /* @escapeNotVerified */  __('Packages') ?>",
+                "url": "<?php echo /* @escapeNotVerified */ $block->getPrintButton() ?>"
             }
         }
     }

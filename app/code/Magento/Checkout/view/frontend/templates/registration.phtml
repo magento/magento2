@@ -17,8 +17,8 @@
                         "registration": {
                             "component": "Magento_Checkout/js/view/registration",
                             "config": {
-                                "registrationUrl": "<?= /* @escapeNotVerified */ $block->getCreateAccountUrl() ?>",
-                                "email": "<?= /* @escapeNotVerified */ $block->getEmailAddress() ?>"
+                                "registrationUrl": "<?php echo /* @escapeNotVerified */ $block->getCreateAccountUrl() ?>",
+                                "email": "<?php echo /* @escapeNotVerified */ $block->getEmailAddress() ?>"
                             },
                             "children": {
                                 "errors": {

@@ -84,13 +84,13 @@ require(["prototype"], function(){
                 'carriers_ups_mode_xml','carriers_ups_include_taxes'];
             this.onlyUpsElements = ['carriers_ups_gateway_url'];
 
-            this.storedOriginShipment = '<?= /* @noEscape */ $storedOriginShipment ?>';
-            this.storedFreeShipment = '<?= /* @noEscape */ $storedFreeShipment ?>';
-            this.storedUpsType = '<?= /* @noEscape */ $storedUpsType ?>';
+            this.storedOriginShipment = '<?php echo /* @noEscape */ $storedOriginShipment ?>';
+            this.storedFreeShipment = '<?php echo /* @noEscape */ $storedFreeShipment ?>';
+            this.storedUpsType = '<?php echo /* @noEscape */ $storedUpsType ?>';
             <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data'); ?>
-            this.storedAllowedMethods = <?= /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
-            this.originShipmentObj = <?= /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
-            this.originShipmentObj['default'] = <?= /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
+            this.storedAllowedMethods = <?php echo /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
+            this.originShipmentObj = <?php echo /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
+            this.originShipmentObj['default'] = <?php echo /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
 
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
@@ -108,7 +108,7 @@ require(["prototype"], function(){
             while (freeMethod.length > 0) {
                 freeMethod.remove(0);
             }
-            freeMethod.insert(new Element('option', {value:''}).update('<?= $block->escapeHtml(__('None')) ?>'));
+            freeMethod.insert(new Element('option', {value:''}).update('<?php echo $block->escapeHtml(__('None')) ?>'));
 
             var code, option;
             for (code in originShipment) {

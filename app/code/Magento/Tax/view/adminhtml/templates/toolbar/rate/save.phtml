@@ -8,7 +8,7 @@
 
 ?>
 <?php if ($form): ?>
-<?= $form->toHtml() ?>
+<?php echo $form->toHtml() ?>
 
 <script>
 require([
@@ -16,7 +16,7 @@ require([
     "mage/mage"
 ], function($){
 
-    $('#<?= /* @escapeNotVerified */ $form->getForm()->getId() ?>').mage('form').mage('validation');
+    $('#<?php echo /* @escapeNotVerified */ $form->getForm()->getId() ?>').mage('form').mage('validation');
 
     $(document).ready(function () {
         'use strict';

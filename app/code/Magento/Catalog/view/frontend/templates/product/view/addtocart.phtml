@@ -15,27 +15,27 @@
     <div class="fieldset">
         <?php if ($block->shouldRenderQuantity()): ?>
         <div class="field qty">
-            <label class="label" for="qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></label>
+            <label class="label" for="qty"><span><?php echo /* @escapeNotVerified */ __('Qty') ?></span></label>
             <div class="control">
                 <input type="number"
                        name="qty"
                        id="qty"
-                       value="<?= /* @escapeNotVerified */ $block->getProductDefaultQty() * 1 ?>"
-                       title="<?= /* @escapeNotVerified */ __('Qty') ?>"
+                       value="<?php echo /* @escapeNotVerified */ $block->getProductDefaultQty() * 1 ?>"
+                       title="<?php echo /* @escapeNotVerified */ __('Qty') ?>"
                        class="input-text qty"
-                       data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
                        />
             </div>
         </div>
         <?php endif; ?>
         <div class="actions">
             <button type="submit"
-                    title="<?= /* @escapeNotVerified */ $buttonTitle ?>"
+                    title="<?php echo /* @escapeNotVerified */ $buttonTitle ?>"
                     class="action primary tocart"
                     id="product-addtocart-button">
-                <span><?= /* @escapeNotVerified */ $buttonTitle ?></span>
+                <span><?php echo /* @escapeNotVerified */ $buttonTitle ?></span>
             </button>
-            <?= $block->getChildHtml('', true) ?>
+            <?php echo $block->getChildHtml('', true) ?>
         </div>
     </div>
 </div>

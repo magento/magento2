@@ -19,11 +19,11 @@
             "autoOpen": true,
             "buttons": false,
             "modalClass": "modal-system-messages",
-            "title": "<?= /* @escapeNotVerified */ $block->getHeaderText() ?>"
+            "title": "<?php echo /* @escapeNotVerified */ $block->getHeaderText() ?>"
         }
     }'>
     <li class="message message-warning warning">
-        <?= /* @escapeNotVerified */ $block->getNoticeMessageText() ?><br/>
-        <a href="<?= /* @escapeNotVerified */ $block->getNoticeMessageUrl() ?>"><?= /* @escapeNotVerified */ $block->getReadDetailsText() ?></a>
+        <?php echo /* @escapeNotVerified */ $block->getNoticeMessageText() ?><br/>
+        <a href="<?php echo /* @escapeNotVerified */ $block->getNoticeMessageUrl() ?>"><?php echo /* @escapeNotVerified */ $block->getReadDetailsText() ?></a>
     </li>
 </ul>

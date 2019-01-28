@@ -17,21 +17,21 @@ $_height = $block->getImagesHeight();
     <div
         data-row="file"
         class="filecnt"
-        id="<?= $block->escapeHtmlAttr($block->getFileId($file)) ?>"
-        data-size="<?= $block->escapeHtmlAttr($file->getSize()) ?>"
-        data-mime-type="<?= $block->escapeHtmlAttr($file->getMimeType()) ?>"
+        id="<?php echo $block->escapeHtmlAttr($block->getFileId($file)) ?>"
+        data-size="<?php echo $block->escapeHtmlAttr($file->getSize()) ?>"
+        data-mime-type="<?php echo $block->escapeHtmlAttr($file->getMimeType()) ?>"
     >
-        <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;width:<?= $block->escapeHtmlAttr($_width) ?>px;">
+        <p class="nm" style="height:<?php echo $block->escapeHtmlAttr($_height) ?>px;width:<?php echo $block->escapeHtmlAttr($_width) ?>px;">
         <?php if ($block->getFileThumbUrl($file)):?>
-            <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
+            <img src="<?php echo $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?php echo $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)): ?>
-            <small><?= $block->escapeHtml($block->getFileWidth($file)) ?>x<?= $block->escapeHtml($block->getFileHeight($file)) ?> <?= $block->escapeHtml(__('px.')) ?></small><br/>
+            <small><?php echo $block->escapeHtml($block->getFileWidth($file)) ?>x<?php echo $block->escapeHtml($block->getFileHeight($file)) ?> <?php echo $block->escapeHtml(__('px.')) ?></small><br/>
         <?php endif; ?>
-        <small><?= $block->escapeHtml($block->getFileShortName($file)) ?></small>
+        <small><?php echo $block->escapeHtml($block->getFileShortName($file)) ?></small>
     </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="empty"><?= $block->escapeHtml(__('No files found')) ?></div>
+    <div class="empty"><?php echo $block->escapeHtml(__('No files found')) ?></div>
 <?php endif; ?>

@@ -7,10 +7,10 @@
 ?>
 
 <div class="reports-content">
-    <?= $block->getChildHtml('grid.filter.form') ?>
+    <?php echo $block->getChildHtml('grid.filter.form') ?>
 </div>
 
-<?= $block->getGridHtml() ?>
+<?php echo $block->getGridHtml() ?>
 
 <script>
 require([
@@ -32,7 +32,7 @@ require([
         }
 
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?= /* @escapeNotVerified */ $block->getFilterUrl() ?>filter/'+
+            setLocation('<?php echo /* @escapeNotVerified */ $block->getFilterUrl() ?>filter/'+
                 Base64.encode(Form.serializeElements(elements))+'/'
             );
         }

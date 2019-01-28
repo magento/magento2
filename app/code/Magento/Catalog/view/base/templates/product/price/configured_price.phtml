@@ -18,7 +18,7 @@ $configuredRegularPrice = $block->getPriceType(
 <?php if ($configuredPrice->getAmount()->getValue() < $configuredRegularPrice->getAmount()->getValue()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
-            <?= /* @noEscape */ $block->renderAmount(
+            <?php echo /* @noEscape */ $block->renderAmount(
                 $configuredPrice->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Special Price')),
@@ -30,7 +30,7 @@ $configuredRegularPrice = $block->getPriceType(
             ); ?>
         </span>
         <span class="old-price">
-            <?= /* @noEscape */ $block->renderAmount(
+            <?php echo /* @noEscape */ $block->renderAmount(
                 $configuredRegularPrice->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
@@ -49,7 +49,7 @@ $configuredRegularPrice = $block->getPriceType(
         : '';
     ?>
     <p class="price-as-configured">
-        <?= /* @noEscape */ $block->renderAmount(
+        <?php echo /* @noEscape */ $block->renderAmount(
             $configuredPrice->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),

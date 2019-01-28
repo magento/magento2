@@ -11,20 +11,20 @@
 <?php if ($websites = $block->getWebsites()): ?>
 
 <div class="store-switcher store-view">
-    <span class="store-switcher-label"><?= /* @escapeNotVerified */ __('Store View:') ?></span>
+    <span class="store-switcher-label"><?php echo /* @escapeNotVerified */ __('Store View:') ?></span>
     <div class="actions dropdown closable">
         <input type="hidden" name="store_switcher" id="store_switcher"
-               data-role="store-view-id" data-param="<?= /* @escapeNotVerified */ $block->getStoreVarName() ?>"
-               value="<?= $block->escapeHtml($block->getStoreId()) ?>"
-               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+               data-role="store-view-id" data-param="<?php echo /* @escapeNotVerified */ $block->getStoreVarName() ?>"
+               value="<?php echo $block->escapeHtml($block->getStoreId()) ?>"
+               onchange="switchScope(this);"<?php echo /* @escapeNotVerified */ $block->getUiId() ?> />
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"
-               data-role="store-group-id" data-param="<?= /* @escapeNotVerified */ $block->getStoreGroupVarName() ?>"
-               value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
-               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+               data-role="store-group-id" data-param="<?php echo /* @escapeNotVerified */ $block->getStoreGroupVarName() ?>"
+               value="<?php echo $block->escapeHtml($block->getStoreGroupId()) ?>"
+               onchange="switchScope(this);"<?php echo /* @escapeNotVerified */ $block->getUiId() ?> />
         <input type="hidden" name="website_switcher" id="website_switcher"
-               data-role="website-id" data-param="<?= /* @escapeNotVerified */ $block->getWebsiteVarName() ?>"
-               value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
-               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+               data-role="website-id" data-param="<?php echo /* @escapeNotVerified */ $block->getWebsiteVarName() ?>"
+               value="<?php echo $block->escapeHtml($block->getWebsiteId()) ?>"
+               onchange="switchScope(this);"<?php echo /* @escapeNotVerified */ $block->getUiId() ?> />
         <button
             type="button"
             class="admin__action-dropdown"
@@ -32,7 +32,7 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             id="store-change-button">
-            <?= /* @escapeNotVerified */ $block->getCurrentSelectionName() ?>
+            <?php echo /* @escapeNotVerified */ $block->getCurrentSelectionName() ?>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()): ?>
@@ -44,12 +44,12 @@
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) {
                         ?>
                         <a data-role="store-view-id" data-value="" href="#">
-                            <?= /* @escapeNotVerified */ $block->getDefaultSelectionName() ?>
+                            <?php echo /* @escapeNotVerified */ $block->getDefaultSelectionName() ?>
                         </a>
                     <?php
                     } else {
                         ?>
-                        <span><?= /* @escapeNotVerified */ $block->getDefaultSelectionName() ?></span>
+                        <span><?php echo /* @escapeNotVerified */ $block->getDefaultSelectionName() ?></span>
                     <?php
                     } ?>
                 </li>
@@ -68,13 +68,13 @@
                             } ?>">
                                 <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)) {
                                     ?>
-                                    <a data-role="website-id" data-value="<?= $block->escapeHtml($website->getId()) ?>" href="#">
-                                        <?= $block->escapeHtml($website->getName()) ?>
+                                    <a data-role="website-id" data-value="<?php echo $block->escapeHtml($website->getId()) ?>" href="#">
+                                        <?php echo $block->escapeHtml($website->getName()) ?>
                                     </a>
                                 <?php
                                 } else {
                                     ?>
-                                    <span><?= $block->escapeHtml($website->getName()) ?></span>
+                                    <span><?php echo $block->escapeHtml($website->getName()) ?></span>
                                 <?php
                                 } ?>
                             </li>
@@ -88,13 +88,13 @@
                             } ?>">
                                 <?php if ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group)) {
                                     ?>
-                                    <a data-role="store-group-id" data-value="<?= $block->escapeHtml($group->getId()) ?>" href="#">
-                                        <?= $block->escapeHtml($group->getName()) ?>
+                                    <a data-role="store-group-id" data-value="<?php echo $block->escapeHtml($group->getId()) ?>" href="#">
+                                        <?php echo $block->escapeHtml($group->getName()) ?>
                                     </a>
                                 <?php
                                 } else {
                                     ?>
-                                    <span><?= $block->escapeHtml($group->getName()) ?></span>
+                                    <span><?php echo $block->escapeHtml($group->getName()) ?></span>
                                 <?php
                                 } ?>
                             </li>
@@ -106,13 +106,13 @@
                         } ?>">
                             <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)) {
                                 ?>
-                                <a data-role="store-view-id" data-value="<?= $block->escapeHtml($store->getId()) ?>" href="#">
-                                    <?= $block->escapeHtml($store->getName()) ?>
+                                <a data-role="store-view-id" data-value="<?php echo $block->escapeHtml($store->getId()) ?>" href="#">
+                                    <?php echo $block->escapeHtml($store->getName()) ?>
                                 </a>
                             <?php
                             } else {
                                 ?>
-                                <span><?= $block->escapeHtml($store->getName()) ?></span>
+                                <span><?php echo $block->escapeHtml($store->getName()) ?></span>
                             <?php
                             } ?>
                         </li>
@@ -121,12 +121,12 @@
             <?php endforeach; ?>
             <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
                 <li class="dropdown-toolbar">
-                    <a href="<?= /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?= /* @escapeNotVerified */ __('Stores Configuration') ?></a>
+                    <a href="<?php echo /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?php echo /* @escapeNotVerified */ __('Stores Configuration') ?></a>
                 </li>
             <?php endif; ?>
         </ul>
     </div>
-    <?= $block->getHintHtml() ?>
+    <?php echo $block->getHintHtml() ?>
 </div>
 
 <script>
@@ -168,7 +168,7 @@ require([
             var switcherParams = {
                 scopeId: scopeId,
                 scopeParams: scopeParams,
-                useConfirm: <?= (int)$block->getUseConfirm() ?>
+                useConfirm: <?php echo (int)$block->getUseConfirm() ?>
             };
             scopeSwitcherHandler(switcherParams);
         } else {
@@ -176,13 +176,13 @@ require([
             <?php if ($block->getUseConfirm()): ?>
 
             confirm({
-                content:  "<?= /* @escapeNotVerified */ __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
+                content:  "<?php echo /* @escapeNotVerified */ __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
                 actions: {
                     confirm: function() {
                         reload();
                     },
                     cancel: function() {
-                        obj.value = '<?= $block->escapeHtml($block->getStoreId()) ?>';
+                        obj.value = '<?php echo $block->escapeHtml($block->getStoreId()) ?>';
                     }
                 }
             });
@@ -194,7 +194,7 @@ require([
 
         function reload() {
             <?php if (!$block->isUsingIframe()): ?>
-            var url = '<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + scopeParams;
+            var url = '<?php echo /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + scopeParams;
             setLocation(url);
             <?php else: ?>
             jQuery('#preview_selected_store').val(scopeId);

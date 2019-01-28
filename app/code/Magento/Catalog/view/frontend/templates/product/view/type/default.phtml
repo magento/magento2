@@ -12,12 +12,12 @@
 
 <?php if ($block->displayProductStockStatus()): ?>
     <?php if ($_product->isAvailable()): ?>
-        <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-            <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+        <div class="stock available" title="<?php echo /* @escapeNotVerified */ __('Availability') ?>">
+            <span><?php echo /* @escapeNotVerified */ __('In stock') ?></span>
         </div>
     <?php else: ?>
-        <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-            <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+        <div class="stock unavailable" title="<?php echo /* @escapeNotVerified */ __('Availability') ?>">
+            <span><?php echo /* @escapeNotVerified */ __('Out of stock') ?></span>
         </div>
     <?php endif; ?>
 <?php endif; ?>

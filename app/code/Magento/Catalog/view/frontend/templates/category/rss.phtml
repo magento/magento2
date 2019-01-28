@@ -8,5 +8,5 @@
 
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink() && $block->isTopCategory()): ?>
-    <a href="<?= /* @escapeNotVerified */ $block->getLink() ?>" class="action link rss"><span><?= /* @escapeNotVerified */ $block->getLabel() ?></span></a>
+    <a href="<?php echo /* @escapeNotVerified */ $block->getLink() ?>" class="action link rss"><span><?php echo /* @escapeNotVerified */ $block->getLabel() ?></span></a>
 <?php endif; ?>

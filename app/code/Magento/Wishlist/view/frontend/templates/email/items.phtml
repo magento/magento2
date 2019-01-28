@@ -19,25 +19,25 @@
             <?php $_product = $item->getProduct(); ?>
             <td class="col product">
                 <p>
-                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <?= /* @noEscape */ $block->getImage($_product, 'product_small_image')->toHtml() ?>
+                    <a href="<?php echo $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                        <?php echo /* @noEscape */ $block->getImage($_product, 'product_small_image')->toHtml() ?>
                     </a>
                 </p>
 
                 <p>
-                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
+                    <a href="<?php echo $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                        <strong><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                     </a>
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
                     <p>
-                        <strong><?= $block->escapeHtml(__('Comment')) ?>:</strong>
-                        <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
+                        <strong><?php echo $block->escapeHtml(__('Comment')) ?>:</strong>
+                        <br/><?php echo /* @noEscape */  $block->getEscapedDescription($item) ?>
                     </p>
                 <?php endif; ?>
                 <p>
-                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <?= $block->escapeHtml(__('View Product')) ?>
+                    <a href="<?php echo $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                        <?php echo $block->escapeHtml(__('View Product')) ?>
                     </a>
                 </p>
             </td>

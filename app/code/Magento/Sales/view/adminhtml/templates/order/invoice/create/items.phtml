@@ -11,28 +11,28 @@
 <section class="admin__page-section">
     <div class="admin__page-section-title">
         <?php $_itemsGridLabel = $block->getForcedShipmentCreate() ? 'Items to Invoice and Ship' : 'Items to Invoice'; ?>
-        <span class="title"><?= /* @escapeNotVerified */ __('%1', $_itemsGridLabel) ?></span>
+        <span class="title"><?php echo /* @escapeNotVerified */ __('%1', $_itemsGridLabel) ?></span>
     </div>
     <div class="admin__page-section-content grid">
         <div class="admin__table-wrapper">
             <table class="data-table admin__table-primary order-invoice-tables">
                 <thead>
                     <tr class="headings">
-                        <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
-                        <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
-                        <th class="col-ordered-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
-                        <th class="col-qty-invoice"><span><?= /* @escapeNotVerified */ __('Qty to Invoice') ?></span></th>
-                        <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
-                        <th class="col-tax"><span><?= /* @escapeNotVerified */ __('Tax Amount') ?></span></th>
-                        <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount Amount') ?></span></th>
-                        <th class="col-total last"><span><?= /* @escapeNotVerified */ __('Row Total') ?></span></th>
+                        <th class="col-product"><span><?php echo /* @escapeNotVerified */ __('Product') ?></span></th>
+                        <th class="col-price"><span><?php echo /* @escapeNotVerified */ __('Price') ?></span></th>
+                        <th class="col-ordered-qty"><span><?php echo /* @escapeNotVerified */ __('Qty') ?></span></th>
+                        <th class="col-qty-invoice"><span><?php echo /* @escapeNotVerified */ __('Qty to Invoice') ?></span></th>
+                        <th class="col-subtotal"><span><?php echo /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                        <th class="col-tax"><span><?php echo /* @escapeNotVerified */ __('Tax Amount') ?></span></th>
+                        <th class="col-discount"><span><?php echo /* @escapeNotVerified */ __('Discount Amount') ?></span></th>
+                        <th class="col-total last"><span><?php echo /* @escapeNotVerified */ __('Row Total') ?></span></th>
                     </tr>
                 </thead>
                 <?php if ($block->canEditQty()): ?>
                 <tfoot>
                     <tr>
                         <td colspan="3">&nbsp;</td>
-                        <td><?= $block->getUpdateButtonHtml() ?></td>
+                        <td><?php echo $block->getUpdateButtonHtml() ?></td>
                         <td colspan="4">&nbsp;</td>
                     </tr>
                 </tfoot>
@@ -44,9 +44,9 @@
                 } else {
                     $_i++;
                 } ?>
-                    <tbody class="<?= /* @escapeNotVerified */ $_i%2 ? 'even' : 'odd' ?>">
-                        <?= $block->getItemHtml($_item) ?>
-                        <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    <tbody class="<?php echo /* @escapeNotVerified */ $_i%2 ? 'even' : 'odd' ?>">
+                        <?php echo $block->getItemHtml($_item) ?>
+                        <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                     </tbody>
                 <?php endforeach; ?>
             </table>
@@ -58,27 +58,27 @@
 
 <?php if (!empty($orderTotalBar)): ?>
 <section class="admin__page-section">
-    <?= /* @escapeNotVerified */ $orderTotalBar ?>
+    <?php echo /* @escapeNotVerified */ $orderTotalBar ?>
 </section>
 <?php endif; ?>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
+        <span class="title"><?php echo /* @escapeNotVerified */ __('Order Total') ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= /* @escapeNotVerified */ __('Invoice History') ?></span>
+                <span class="title"><?php echo /* @escapeNotVerified */ __('Invoice History') ?></span>
             </div>
             <div id="history_form" class="admin__page-section-item-content order-history-form">
                 <div class="admin__field">
                     <label for="invoice_comment_text" class="admin__field-label">
-                        <span><?= /* @escapeNotVerified */ __('Invoice Comments') ?></span>
+                        <span><?php echo /* @escapeNotVerified */ __('Invoice Comments') ?></span>
                     </label>
                     <div class="admin__field-control">
                         <textarea id="invoice_comment_text" name="invoice[comment_text]" class="admin__control-textarea"
-                                  rows="3" cols="5"><?= /* @escapeNotVerified */ $block->getInvoice()->getCommentText() ?></textarea>
+                                  rows="3" cols="5"><?php echo /* @escapeNotVerified */ $block->getInvoice()->getCommentText() ?></textarea>
                     </div>
                 </div>
             </div>
@@ -86,10 +86,10 @@
 
         <div id="invoice_totals" class="admin__page-section-item order-totals">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= /* @escapeNotVerified */ __('Invoice Totals') ?></span>
+                <span class="title"><?php echo /* @escapeNotVerified */ __('Invoice Totals') ?></span>
             </div>
             <div class="admin__page-section-item-content order-totals-actions">
-                <?= $block->getChildHtml('invoice_totals') ?>
+                <?php echo $block->getChildHtml('invoice_totals') ?>
                 <?php if ($block->isCaptureAllowed()): ?>
                 <?php if ($block->canCapture()):?>
                     <div class="admin__field">
@@ -99,34 +99,34 @@
                         <input type="checkbox" name="invoice[do_capture]" id="invoice_do_capture" value="1" checked/>
                         */
                         ?>
-                      <label for="invoice_do_capture" class="admin__field-label"><?= /* @escapeNotVerified */ __('Amount') ?></label>
+                      <label for="invoice_do_capture" class="admin__field-label"><?php echo /* @escapeNotVerified */ __('Amount') ?></label>
                       <select class="admin__control-select" name="invoice[capture_case]">
-                          <option value="online"><?= /* @escapeNotVerified */ __('Capture Online') ?></option>
-                          <option value="offline"><?= /* @escapeNotVerified */ __('Capture Offline') ?></option>
-                          <option value="not_capture"><?= /* @escapeNotVerified */ __('Not Capture') ?></option>
+                          <option value="online"><?php echo /* @escapeNotVerified */ __('Capture Online') ?></option>
+                          <option value="offline"><?php echo /* @escapeNotVerified */ __('Capture Offline') ?></option>
+                          <option value="not_capture"><?php echo /* @escapeNotVerified */ __('Not Capture') ?></option>
                       </select>
                     </div>
                 <?php elseif ($block->isGatewayUsed()):?>
                     <input type="hidden" name="invoice[capture_case]" value="offline"/>
-                    <div><?= /* @escapeNotVerified */ __('The invoice will be created offline without the payment gateway.') ?></div>
+                    <div><?php echo /* @escapeNotVerified */ __('The invoice will be created offline without the payment gateway.') ?></div>
                 <?php endif?>
                 <?php endif; ?>
                 <div class="admin__field admin__field-option field-append">
                     <input id="notify_customer" name="invoice[comment_customer_notify]" value="1" type="checkbox"
                            class="admin__control-checkbox" />
-                    <label class="admin__field-label" for="notify_customer"><?= /* @escapeNotVerified */ __('Append Comments') ?></label>
+                    <label class="admin__field-label" for="notify_customer"><?php echo /* @escapeNotVerified */ __('Append Comments') ?></label>
                 </div>
                 <?php if ($block->canSendInvoiceEmail()): ?>
                 <div class="admin__field admin__field-option field-email">
                     <input id="send_email" name="invoice[send_email]" value="1" type="checkbox"
                            class="admin__control-checkbox" />
-                    <label class="admin__field-label" for="send_email"><?= /* @escapeNotVerified */ __('Email Copy of Invoice') ?></label>
+                    <label class="admin__field-label" for="send_email"><?php echo /* @escapeNotVerified */ __('Email Copy of Invoice') ?></label>
                 </div>
                 <?php endif; ?>
-                <?= $block->getChildHtml('submit_before') ?>
+                <?php echo $block->getChildHtml('submit_before') ?>
                 <div class="actions">
-                    <?= $block->getChildHtml('submit_button') ?>
-                    <?= $block->getChildHtml('submit_after') ?>
+                    <?php echo $block->getChildHtml('submit_button') ?>
+                    <?php echo $block->getChildHtml('submit_after') ?>
                 </div>
             </div>
         </div>
@@ -139,7 +139,7 @@ require(['jquery', 'prototype'], function(jQuery){
 //<![CDATA[
 var submitButtons = $$('.submit-button');
 var updateButtons = $$('.update-button');
-var enableSubmitButtons = <?= (int) !$block->getDisableSubmitButton() ?>;
+var enableSubmitButtons = <?php echo (int) !$block->getDisableSubmitButton() ?>;
 var fields = $$('.qty-input');
 
 updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});

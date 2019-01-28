@@ -22,25 +22,25 @@ if ($block->getIsInCatalogProduct()) {
     $isInCatalogProduct = $block->getIsInCatalogProduct();
 }
 ?>
-<div data-label="<?= $block->escapeHtml(__('or')) ?>"
-     class="paypal checkout <?= /* @noEscape */ $labelPosition ?> paypal-logo
-        <?= /* @noEscape */ $shortcutHtmlId ?>"
+<div data-label="<?php echo $block->escapeHtml(__('or')) ?>"
+     class="paypal checkout <?php echo /* @noEscape */ $labelPosition ?> paypal-logo
+        <?php echo /* @noEscape */ $shortcutHtmlId ?>"
      data-mage-init='{
      "paypalCheckout": {
-                "isCatalogProduct": "<?= /* @noEscape */ !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false ?>",
-                "shortcutContainerClass": "<?= /* @noEscape */ "." . $shortcutHtmlId ?>"
+                "isCatalogProduct": "<?php echo /* @noEscape */ !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false ?>",
+                "shortcutContainerClass": "<?php echo /* @noEscape */ "." . $shortcutHtmlId ?>"
             }
      }'
     >
     <input type="image" data-action="checkout-form-submit"
-           data-checkout-url="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"
-           src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
-           alt="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"
-           title="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"/>
+           data-checkout-url="<?php echo $block->escapeUrl($block->getCheckoutUrl()) ?>"
+           src="<?php echo $block->escapeUrl($block->getImageUrl()) ?>"
+           alt="<?php echo $block->escapeHtml(__('Checkout with PayPal')) ?>"
+           title="<?php echo $block->escapeHtml(__('Checkout with PayPal')) ?>"/>
     <?php if ($block->getAdditionalLinkImage()): ?>
         <?php $linkImage = $block->getAdditionalLinkImage(); ?>
-        <a href="<?= $block->escapeUrl($linkImage['href']) ?>">
-            <img src="<?= $block->escapeHtml($linkImage['src']) ?>" />
+        <a href="<?php echo $block->escapeUrl($linkImage['href']) ?>">
+            <img src="<?php echo $block->escapeHtml($linkImage['src']) ?>" />
         </a>
     <?php endif; ?>
 </div>

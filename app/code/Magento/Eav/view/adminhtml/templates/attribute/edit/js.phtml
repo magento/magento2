@@ -12,8 +12,8 @@
     {
         "*": {
             "eavInputTypes": {
-                "inputTypes": <?= /* @escapeNotVerified */ json_encode($block->getComaptibleInputTypes())?>,
-                "hints": <?= /* @escapeNotVerified */ json_encode($block->getInputTypeHints())?>
+                "inputTypes": <?php echo /* @escapeNotVerified */ json_encode($block->getComaptibleInputTypes())?>,
+                "hints": <?php echo /* @escapeNotVerified */ json_encode($block->getInputTypeHints())?>
             }
         }
     }

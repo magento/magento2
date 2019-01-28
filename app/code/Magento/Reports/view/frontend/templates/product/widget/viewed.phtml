@@ -15,12 +15,12 @@ $type = $block->getType() . '-' . $mode;
 $class = 'widget viewed' . ' ' . $mode;
 $title = __('Recently Viewed');
 ?>
-<div class="block <?= /* @escapeNotVerified */ $class ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?= /* @escapeNotVerified */ $block->getCount() ?>" style="display: none;">
+<div class="block <?php echo /* @escapeNotVerified */ $class ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?php echo /* @escapeNotVerified */ $block->getCount() ?>" style="display: none;">
     <div class="title">
-        <strong><?= /* @escapeNotVerified */ $title ?></strong>
+        <strong><?php echo /* @escapeNotVerified */ $title ?></strong>
     </div>
     <div class="content">
-        <ol class="products list items <?= /* @escapeNotVerified */ $type ?>">
+        <ol class="products list items <?php echo /* @escapeNotVerified */ $type ?>">
         </ol>
     </div>
 </div>

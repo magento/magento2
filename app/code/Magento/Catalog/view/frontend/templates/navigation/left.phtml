@@ -20,20 +20,20 @@
 <?php if ($_count): ?>
     <div class="block filter">
         <div class="title">
-            <strong><?= /* @escapeNotVerified */ __('Shop By') ?></strong>
+            <strong><?php echo /* @escapeNotVerified */ __('Shop By') ?></strong>
         </div>
         <div class="content">
-            <strong class="subtitle"><?= /* @escapeNotVerified */ __('Shopping Options') ?></strong>
+            <strong class="subtitle"><?php echo /* @escapeNotVerified */ __('Shopping Options') ?></strong>
             <dl class="options" id="narrow-by-list2">
-                <dt><?= /* @escapeNotVerified */ __('Category') ?></dt>
+                <dt><?php echo /* @escapeNotVerified */ __('Category') ?></dt>
                 <dd>
                     <ol class="items">
                         <?php /** @var \Magento\Catalog\Model\Category $_category */ ?>
                         <?php foreach ($_categories as $_category): ?>
                             <?php if ($_category->getIsActive()): ?>
                                 <li class="item">
-                                    <a href="<?= /* @escapeNotVerified */ $block->getCategoryUrl($_category) ?>"<?php if ($block->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?= $block->escapeHtml($_category->getName()) ?></a>
-                                    <span class="count"><?= /* @escapeNotVerified */ $_category->getProductCount() ?></span>
+                                    <a href="<?php echo /* @escapeNotVerified */ $block->getCategoryUrl($_category) ?>"<?php if ($block->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?php echo $block->escapeHtml($_category->getName()) ?></a>
+                                    <span class="count"><?php echo /* @escapeNotVerified */ $_category->getProductCount() ?></span>
                                 </li>
                             <?php endif; ?>
                         <?php endforeach ?>

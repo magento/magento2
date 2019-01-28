@@ -9,7 +9,7 @@
 ?>
 <?php /* @var $block \Magento\Backend\Block\Template */ ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?= /* @escapeNotVerified */ __('Current Configuration Scope:') ?></label>
+    <label class="label" for="store_switcher"><?php echo /* @escapeNotVerified */ __('Current Configuration Scope:') ?></label>
     <div class="control">
         <select id="store_switcher" class="system-config-store-switcher" onchange="location.href=this.options[this.selectedIndex].getAttribute('url')">
         <?php foreach ($block->getStoreSelectOptions() as $_value => $_option): ?>
@@ -17,20 +17,20 @@
             <?php if ($_option['is_close']): ?>
                 </optgroup>
             <?php else: ?>
-                <optgroup label="<?= $block->escapeHtml($_option['label']) ?>" style="<?= /* @escapeNotVerified */ $_option['style'] ?>">
+                <optgroup label="<?php echo $block->escapeHtml($_option['label']) ?>" style="<?php echo /* @escapeNotVerified */ $_option['style'] ?>">
             <?php endif; ?>
             <?php continue ?>
         <?php endif; ?>
-          <option value="<?= $block->escapeHtml($_value) ?>" url="<?= /* @escapeNotVerified */ $_option['url'] ?>" <?= $_option['selected'] ? 'selected="selected"' : '' ?> style="<?= /* @escapeNotVerified */ $_option['style'] ?>">
-              <?= $block->escapeHtml($_option['label']) ?>
+          <option value="<?php echo $block->escapeHtml($_value) ?>" url="<?php echo /* @escapeNotVerified */ $_option['url'] ?>" <?php echo $_option['selected'] ? 'selected="selected"' : '' ?> style="<?php echo /* @escapeNotVerified */ $_option['style'] ?>">
+              <?php echo $block->escapeHtml($_option['label']) ?>
           </option>
         <?php endforeach ?>
         </select>
     </div>
-    <?= $block->getHintHtml() ?>
+    <?php echo $block->getHintHtml() ?>
     <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
         <div class="actions">
-            <a href="<?= /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?= /* @escapeNotVerified */ __('Stores') ?></a>
+            <a href="<?php echo /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?php echo /* @escapeNotVerified */ __('Stores') ?></a>
         </div>
     <?php endif; ?>
 </div>

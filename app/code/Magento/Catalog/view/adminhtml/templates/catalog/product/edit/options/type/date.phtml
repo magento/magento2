@@ -14,10 +14,10 @@
             <thead>
             <tr class="headings">
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th><?= /* @escapeNotVerified */ __('Price') ?></th>
-                <th><?= /* @escapeNotVerified */ __('Price Type') ?></th>
+                <th><?php echo /* @escapeNotVerified */ __('Price') ?></th>
+                <th><?php echo /* @escapeNotVerified */ __('Price Type') ?></th>
                 <?php endif; ?>
-                <th><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th><?php echo /* @escapeNotVerified */ __('SKU') ?></th>
             </tr>
             </thead>
             <tr>
@@ -32,7 +32,7 @@
                         <?php endif; ?>>
                 </td>
                 <td class="opt-price-type">
-                    <?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %>
+                    <?php echo $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %>
                 </td>
                 <?php else : ?>
                 <input id="product_option_<%- data.option_id %>_price" name="product[options][<%- data.option_id %>][price]" type="hidden">

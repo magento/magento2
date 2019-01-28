@@ -8,12 +8,12 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
-<div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
-    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+<div data-bind="scope: '<?php echo /* @noEscape */  $block->getComponentName() ?>'">
+    <h2 class="steps-wizard-title"><?php echo $block->escapeHtml(
             __('Step 2: Attribute Values')
         ); ?></h2>
     <div class="steps-wizard-info">
-        <span><?= $block->escapeHtml(
+        <span><?php echo $block->escapeHtml(
                 __('Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.')
             );?></span>
     </div>
@@ -24,12 +24,12 @@
                 <div class="attribute-entity-title-block">
                     <span class="draggable-handle"
                           data-role="draggable"
-                          title="<?= $block->escapeHtml(__('Sort Variations')) ?>">
+                          title="<?php echo $block->escapeHtml(__('Sort Variations')) ?>">
                     </span>
                     <div class="attribute-entity-title" data-bind="text: label"></div>
                     <div class="attribute-options-block">
                         (<span class="attribute-length" data-bind="text: $data.options().length"></span>
-                        <?= $block->escapeHtml(
+                        <?php echo $block->escapeHtml(
                             __('Options')
                         ); ?>)
                     </div>
@@ -39,24 +39,24 @@
                     <button type="button"
                             class="action-select-all action-tertiary"
                             data-bind="click: $parent.selectAllAttributes"
-                            title="<?= $block->escapeHtml(__('Select All')) ?>">
-                        <span><?= $block->escapeHtml(
+                            title="<?php echo $block->escapeHtml(__('Select All')) ?>">
+                        <span><?php echo $block->escapeHtml(
                                 __('Select All')
                             ); ?></span>
                     </button>
                     <button type="button"
                             class="action-deselect-all action-tertiary"
                             data-bind="click: $parent.deSelectAllAttributes"
-                            title="<?= $block->escapeHtml(__('Deselect All')) ?>">
-                        <span><?= $block->escapeHtml(
+                            title="<?php echo $block->escapeHtml(__('Deselect All')) ?>">
+                        <span><?php echo $block->escapeHtml(
                                 __('Deselect All')
                             ); ?></span>
                     </button>
                     <button type="button"
                             class="action-remove-all action-tertiary"
                             data-bind="click: $parent.removeAttribute.bind($parent)"
-                            title="<?= $block->escapeHtml(__('Remove Attribute')) ?>">
-                        <span><?= $block->escapeHtml(
+                            title="<?php echo $block->escapeHtml(__('Remove Attribute')) ?>">
+                        <span><?php echo $block->escapeHtml(
                                 __('Remove Attribute')
                             ); ?></span>
                     </button>
@@ -83,19 +83,19 @@
                             </div>
                             <button type="button"
                                     class="action-save"
-                                    title="<?= $block->escapeHtml(__('Save Option')) ?>"
+                                    title="<?php echo $block->escapeHtml(__('Save Option')) ?>"
                                     data-action="save"
                                     data-bind="click: $parents[1].saveOption.bind($parent)">
-                                <span><?= $block->escapeHtml(
+                                <span><?php echo $block->escapeHtml(
                                         __('Save Option')
                                     ); ?></span>
                             </button>
                             <button type="button"
                                     class="action-remove"
-                                    title="<?= $block->escapeHtml(__('Remove Option')) ?>"
+                                    title="<?php echo $block->escapeHtml(__('Remove Option')) ?>"
                                     data-action="remove"
                                     data-bind="click: $parents[1].removeOption.bind($parent)">
-                                <span><?= $block->escapeHtml(
+                                <span><?php echo $block->escapeHtml(
                                         __('Remove Option')
                                     ); ?></span>
                             </button>
@@ -107,7 +107,7 @@
                     type="button"
                     data-action="addOption"
                     data-bind="click: $parent.createOption, visible: canCreateOption">
-                <span><?= $block->escapeHtml(
+                <span><?php echo $block->escapeHtml(
                         __('Create New Value')
                     ); ?></span>
             </button>
@@ -119,11 +119,11 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @noEscape */  $block->getComponentName() ?>": {
+                    "<?php echo /* @noEscape */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
-                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>",
-                        "optionsUrl": "<?= /* @noEscape */  $block->getUrl('catalog/product_attribute/getAttributes') ?>",
-                        "createOptionsUrl": "<?= /* @noEscape */  $block->getUrl('catalog/product_attribute/createOptions') ?>"
+                        "appendTo": "<?php echo /* @noEscape */  $block->getParentComponentName() ?>",
+                        "optionsUrl": "<?php echo /* @noEscape */  $block->getUrl('catalog/product_attribute/getAttributes') ?>",
+                        "createOptionsUrl": "<?php echo /* @noEscape */  $block->getUrl('catalog/product_attribute/createOptions') ?>"
                     }
                 }
             }

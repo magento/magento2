@@ -10,4 +10,4 @@
 $_item = $block->getItem();
 ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
-<?= /* @escapeNotVerified */ $_order->formatPrice($block->getTotalAmount($_item)) ?>
+<?php echo /* @escapeNotVerified */ $_order->formatPrice($block->getTotalAmount($_item)) ?>

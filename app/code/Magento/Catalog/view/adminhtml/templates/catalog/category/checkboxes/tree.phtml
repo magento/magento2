@@ -11,26 +11,26 @@
 ?>
 
 <?php $divId = $block->escapeHtml('tree-div_' . time()) ?>
-<div id="<?= /* @noEscape */ $divId ?>" class="tree"></div>
+<div id="<?php echo /* @noEscape */ $divId ?>" class="tree"></div>
 <script id="ie-deferred-loader" defer="defer" src="//:"></script>
 
 <script type="text/x-magento-init">
     {
         "*": {
             "categoryCheckboxTree": {
-                "dataUrl":       "<?= $block->escapeUrl($block->getLoadTreeUrl()) ?>",
-                "divId":         "<?= /* @noEscape */ $divId ?>",
-                "rootVisible":   <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
-                "useAjax":       <?= $block->escapeHtml($block->getUseAjax()) ?>,
-                "currentNodeId": <?= (int)$block->getCategoryId() ?>,
-                "jsFormObject":  "<?= /* @noEscape */ $block->getJsFormObject() ?>",
-                "name":          "<?= $block->escapeHtml($block->getRoot()->getName()) ?>",
-                "checked":       "<?= $block->escapeHtml($block->getRoot()->getChecked()) ?>",
-                "allowdDrop":    <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
-                "rootId":        <?= (int)$block->getRoot()->getId() ?>,
-                "expanded":      <?= (int)$block->getIsWasExpanded() ?>,
-                "categoryId":    <?= (int)$block->getCategoryId() ?>,
-                "treeJson":      <?= /* @noEscape */ $block->getTreeJson() ?>
+                "dataUrl":       "<?php echo $block->escapeUrl($block->getLoadTreeUrl()) ?>",
+                "divId":         "<?php echo /* @noEscape */ $divId ?>",
+                "rootVisible":   <?php echo /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "useAjax":       <?php echo $block->escapeHtml($block->getUseAjax()) ?>,
+                "currentNodeId": <?php echo (int)$block->getCategoryId() ?>,
+                "jsFormObject":  "<?php echo /* @noEscape */ $block->getJsFormObject() ?>",
+                "name":          "<?php echo $block->escapeHtml($block->getRoot()->getName()) ?>",
+                "checked":       "<?php echo $block->escapeHtml($block->getRoot()->getChecked()) ?>",
+                "allowdDrop":    <?php echo /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "rootId":        <?php echo (int)$block->getRoot()->getId() ?>,
+                "expanded":      <?php echo (int)$block->getIsWasExpanded() ?>,
+                "categoryId":    <?php echo (int)$block->getCategoryId() ?>,
+                "treeJson":      <?php echo /* @noEscape */ $block->getTreeJson() ?>
             }
         }
     }

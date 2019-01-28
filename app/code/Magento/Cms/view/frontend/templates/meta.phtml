@@ -8,8 +8,8 @@
 
 ?>
 <?php if ($pageData->getPageMetaKeywords()): ?>
-    <meta name="keywords" content="<?= /* @noEscape */ $pageData->getPageMetaKeywords() ?>"/>
+    <meta name="keywords" content="<?php echo /* @noEscape */ $pageData->getPageMetaKeywords() ?>"/>
 <?php endif; ?>
 <?php if ($pageData->getPageMetaDescription()): ?>
-    <meta name="description" content="<?= /* @noEscape */ $pageData->getPageMetaDescription() ?>"/>
+    <meta name="description" content="<?php echo /* @noEscape */ $pageData->getPageMetaDescription() ?>"/>
 <?php endif; ?>

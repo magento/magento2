@@ -12,8 +12,8 @@
  * @var $block \Magento\Ui\Component\Control\Button
  */
 ?>
-<?= $block->getBeforeHtml() ?>
-<button <?= /* @escapeNotVerified */ $block->getAttributesHtml(), $block->getUiId() ?>>
-    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
+<?php echo $block->getBeforeHtml() ?>
+<button <?php echo /* @escapeNotVerified */ $block->getAttributesHtml(), $block->getUiId() ?>>
+    <span><?php echo /* @escapeNotVerified */ $block->getLabel() ?></span>
 </button>
-<?= $block->getAfterHtml() ?>
+<?php echo $block->getAfterHtml() ?>

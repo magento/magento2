@@ -12,7 +12,7 @@ $idSuffix = $block->getIdSuffix() ?: '';
 <?php if ($block->hasSpecialPrice()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
-            <?= /* @noEscape */ $block->renderAmount(
+            <?php echo /* @noEscape */ $block->renderAmount(
                 $block->getConfiguredPrice()->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Special Price')),
@@ -24,7 +24,7 @@ $idSuffix = $block->getIdSuffix() ?: '';
             ); ?>
         </span>
         <span class="old-price">
-            <?= /* @noEscape */ $block->renderAmount(
+            <?php echo /* @noEscape */ $block->renderAmount(
                 $block->getConfiguredRegularPrice()->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
@@ -43,7 +43,7 @@ $idSuffix = $block->getIdSuffix() ?: '';
         : '';
     ?>
     <p class="price-as-configured">
-        <?= /* @noEscape */ $block->renderAmount(
+        <?php echo /* @noEscape */ $block->renderAmount(
             $block->getConfiguredPrice()->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),

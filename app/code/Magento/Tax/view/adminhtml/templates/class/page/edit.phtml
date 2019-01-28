@@ -5,15 +5,15 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?= $block->getBackButtonHtml() ?>
-    <?= $block->getResetButtonHtml() ?>
-    <?= $block->getDeleteButtonHtml() ?>
-    <?= $block->getSaveButtonHtml() ?>
+    <?php echo $block->getBackButtonHtml() ?>
+    <?php echo $block->getResetButtonHtml() ?>
+    <?php echo $block->getDeleteButtonHtml() ?>
+    <?php echo $block->getSaveButtonHtml() ?>
 </div>
-<?= $block->getRenameFormHtml() ?>
+<?php echo $block->getRenameFormHtml() ?>
 <script type="text/x-magento-init">
     {
-        "#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>": {
+        "#<?php echo /* @escapeNotVerified */ $block->getRenameFormId() ?>": {
             "Magento_Tax/js/page/validate": {}
         }
     }

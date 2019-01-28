@@ -20,10 +20,10 @@ $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
 <?php if (!$_productCollection->count()): ?>
-<p class="message note"><?= /* @escapeNotVerified */ __('We can\'t find products matching the selection.') ?></p>
+<p class="message note"><?php echo /* @escapeNotVerified */ __('We can\'t find products matching the selection.') ?></p>
 <?php else: ?>
-<?= $block->getToolbarHtml() ?>
-<?= $block->getAdditionalHtml() ?>
+<?php echo $block->getToolbarHtml() ?>
+<?php echo $block->getAdditionalHtml() ?>
 <?php
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
@@ -37,14 +37,14 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
     }
 ?>
-<div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?>">
+<div class="products wrapper <?php echo /* @escapeNotVerified */ $viewMode ?>">
     <ol class="products list items">
         <?php foreach ($_productCollection as $_product): ?>
             <li class="item product">
                 <div class="product">
                     <?php // Product Image ?>
-                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product photo">
-                        <?= $block->getImage($_product, $image)->toHtml() ?>
+                    <a href="<?php echo /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product photo">
+                        <?php echo $block->getImage($_product, $image)->toHtml() ?>
                     </a>
                     <div class="product details">
                     <?php
@@ -95,6 +95,6 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         <?php endforeach; ?>
     </ol>
 </div>
-<?= $block->getToolbarHtml() ?>
+<?php echo $block->getToolbarHtml() ?>
 <?php endif; ?>
-<?= /* @escapeNotVerified */ $time_taken = microtime(true) - $start ?>
+<?php echo /* @escapeNotVerified */ $time_taken = microtime(true) - $start ?>

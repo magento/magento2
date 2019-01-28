@@ -10,12 +10,12 @@
 
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
 <?php if ($block->displayPriceIncludingTax()): ?>
-    <?= /* @escapeNotVerified */ $block->getDisplayAmount() ?>
+    <?php echo /* @escapeNotVerified */ $block->getDisplayAmount() ?>
 <?php elseif ($block->displayPriceExcludingTax()): ?>
-    <?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?>
+    <?php echo /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?>
 <?php elseif ($block->displayBothPrices()): ?>
-    <?= /* @escapeNotVerified */ $block->getDisplayAmount() ?>
+    <?php echo /* @escapeNotVerified */ $block->getDisplayAmount() ?>
     <?php if ($block->getDisplayAmountExclTax() !== $block->getDisplayAmount()): ?>
-        (+<?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?> Excl. Tax)
+        (+<?php echo /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?> Excl. Tax)
     <?php endif; ?>
 <?php endif; ?>

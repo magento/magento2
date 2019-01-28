@@ -10,9 +10,9 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?= $block->escapeHtml(__('Email Preview')) ?></title>
+    <title><?php echo $block->escapeHtml(__('Email Preview')) ?></title>
 </head>
 <body>
-    <?= $block->getChildHtml('content') ?>
+    <?php echo $block->getChildHtml('content') ?>
 </body>
 </html>

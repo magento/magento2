@@ -13,13 +13,13 @@
  */
 ?>
 
-<form action="<?= /* @escapeNotVerified */ $block->getImportFormAction() ?>" method="post" class="import-service">
-    <?= $block->getBlockHtml('formkey') ?>
+<form action="<?php echo /* @escapeNotVerified */ $block->getImportFormAction() ?>" method="post" class="import-service">
+    <?php echo $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset admin__fieldset-import-service">
-        <?= $block->getServicesHtml() ?>
-        <?= $block->getImportButtonHtml() ?>
+        <?php echo $block->getServicesHtml() ?>
+        <?php echo $block->getImportButtonHtml() ?>
     </fieldset>
 </form>
-<?= $block->getResetButtonHtml() ?>
-<?= $block->getSaveButtonHtml() ?>
-<?= $block->getRatesMatrixHtml() ?>
+<?php echo $block->getResetButtonHtml() ?>
+<?php echo $block->getSaveButtonHtml() ?>
+<?php echo $block->getRatesMatrixHtml() ?>

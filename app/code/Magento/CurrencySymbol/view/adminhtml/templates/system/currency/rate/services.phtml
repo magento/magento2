@@ -13,8 +13,8 @@
  */
 ?>
 <div class="admin__field">
-    <label class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Import Service') ?></span></label>
+    <label class="admin__field-label"><span><?php echo /* @escapeNotVerified */ __('Import Service') ?></span></label>
     <div class="admin__field-control">
-        <?= $block->getChildHtml('import_services') ?>
+        <?php echo $block->getChildHtml('import_services') ?>
     </div>
 </div>

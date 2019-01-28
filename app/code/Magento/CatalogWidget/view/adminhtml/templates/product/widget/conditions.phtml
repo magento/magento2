@@ -16,12 +16,12 @@ $fieldClass .= $element->getRequired() ? ' required' : '';
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
 ?>
-<div<?= /* @noEscape */ $fieldAttributes ?>>
-    <?= $element->getLabelHtml() ?>
+<div<?php echo /* @noEscape */ $fieldAttributes ?>>
+    <?php echo $element->getLabelHtml() ?>
     <div class="control admin__field-control">
         <div class="rule-tree">
             <div class="rule-tree-wrapper">
-                <?= $block->getInputHtml() ?>
+                <?php echo $block->getInputHtml() ?>
             </div>
         </div>
     </div>
@@ -33,6 +33,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?= $block->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?= $block->escapeJs($block->getHtmlId()) ?>', '<?= $block->escapeUrl($block->getNewChildUrl()) ?>');
+        window.<?php echo $block->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?php echo $block->escapeJs($block->getHtmlId()) ?>', '<?php echo $block->escapeUrl($block->getNewChildUrl()) ?>');
     });
 </script>

@@ -47,7 +47,7 @@
 </script>
 <div class="grid-container no-display">
     <table class="admin__control-table" data-role="grouped-product-grid"
-        data-products="<?= $block->escapeHtml(
+        data-products="<?php echo $block->escapeHtml(
             $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAssociatedProducts())
         ); ?>">
         <thead>
@@ -56,16 +56,16 @@
                     <span></span>
                 </th>
                 <th data-column="name" class="no-link col-name">
-                    <span><?= /* @escapeNotVerified */ __('Name') ?></span>
+                    <span><?php echo /* @escapeNotVerified */ __('Name') ?></span>
                 </th>
                 <th data-column="sku" class="no-link col-sku">
-                    <span><?= /* @escapeNotVerified */ __('SKU') ?></span>
+                    <span><?php echo /* @escapeNotVerified */ __('SKU') ?></span>
                 </th>
                 <th data-column="price" class="no-link col-price">
-                    <span><?= /* @escapeNotVerified */ __('Price') ?></span>
+                    <span><?php echo /* @escapeNotVerified */ __('Price') ?></span>
                     </th>
                 <th data-column="qty" class="no-link col-qty">
-                    <span><?= /* @escapeNotVerified */ __('Default Qty') ?></span>
+                    <span><?php echo /* @escapeNotVerified */ __('Default Qty') ?></span>
                 </th>
                 <th data-column="actions" class="last no-link col-actions">
                     <span></span>
