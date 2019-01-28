@@ -84,7 +84,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $parentRoleId = 2;
-        list($role,) = $this->initRoles($roleId, $parentRoleId);
+        list($role, ) = $this->initRoles($roleId, $parentRoleId);
 
         $this->model->addParent($role, 26);
     }

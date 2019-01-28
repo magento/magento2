@@ -73,7 +73,7 @@ if (isset($opts['help'])) {
 
 try {
     if (version_compare(PHP_VERSION, '7.1', '<') || version_compare(PHP_VERSION, '7.3', '>=')) {
-        preg_match('/^\d+\.\d+\.\d+/',PHP_VERSION, $matches);
+        preg_match('/^\d+\.\d+\.\d+/', PHP_VERSION, $matches);
         $phpVersion = $matches[0];
         throw new Exception("Invalid PHP version '$phpVersion'. Magento 2.3 requires PHP 7.1 or 7.2");
     }
@@ -208,7 +208,7 @@ try {
     // Add the repository to composer.json if needed without overwriting any existing ones
     $repoUrls = array_map(function ($r) { return $r['url']; }, $composerData['repositories']);
     if (!in_array($repo, $repoUrls)) {
-        $repoLabels = array_map('strtolower',array_keys($composerData['repositories']));
+        $repoLabels = array_map('strtolower', array_keys($composerData['repositories']));
         $newLabel = 'magento';
         if (in_array($newLabel, $repoLabels)) {
             $count = count($repoLabels);

@@ -170,7 +170,7 @@ class Source
      */
     public function getSourceContentType(LocalInterface $asset)
     {
-        list(,,$type) = $this->preProcess($asset);
+        list(, , $type) = $this->preProcess($asset);
         return $type;
     }
 
