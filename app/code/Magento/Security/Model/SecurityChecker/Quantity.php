@@ -48,7 +48,7 @@ class Quantity implements SecurityCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {

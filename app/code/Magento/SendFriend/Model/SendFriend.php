@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  * @method \Magento\SendFriend\Model\SendFriend setTime(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -162,6 +163,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Send email.
+     *
      * @return $this
      * @throws CoreException
      */
