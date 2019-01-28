@@ -50,7 +50,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Directory\Helper\Data

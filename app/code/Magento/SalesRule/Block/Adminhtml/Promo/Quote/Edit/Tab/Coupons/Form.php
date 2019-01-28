@@ -17,7 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\SalesRule\Helper\Coupon
      */
-    protected $_salesRuleCoupon = null;
+    protected $_salesRuleCoupon;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

@@ -10,7 +10,7 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

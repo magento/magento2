@@ -17,7 +17,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Set collection factory

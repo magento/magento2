@@ -26,7 +26,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     /**
      * @var \Magento\Sales\Model\Order\Shipment|null
      */
-    protected $_shipment = null;
+    protected $_shipment;
 
     /**
      * @var string

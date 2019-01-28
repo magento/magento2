@@ -25,7 +25,7 @@ class ParamsBuilder
     /**
      * @var int|null
      */
-    private $defaultAngle = null;
+    private $defaultAngle;
 
     /**
      * @var bool

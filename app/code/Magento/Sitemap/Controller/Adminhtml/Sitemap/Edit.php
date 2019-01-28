@@ -13,7 +13,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context

@@ -31,7 +31,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * @var Creditmemo|null
      */
-    protected $_creditmemo = null;
+    protected $_creditmemo;
 
     /**
      * @return Creditmemo|null

@@ -17,7 +17,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\View\FileSystem
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

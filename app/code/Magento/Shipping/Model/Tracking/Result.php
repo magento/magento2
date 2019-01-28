@@ -18,7 +18,7 @@ class Result
     /**
      * @var null|array
      */
-    protected $_error = null;
+    protected $_error;
 
     /**
      * Reset tracking

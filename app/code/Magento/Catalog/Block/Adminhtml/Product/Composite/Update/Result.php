@@ -18,14 +18,14 @@ class Result extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Framework\View\Helper\Js
      */
-    protected $_jsHelper = null;
+    protected $_jsHelper;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface

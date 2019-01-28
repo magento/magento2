@@ -18,14 +18,14 @@ class Tree extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Cms wysiwyg images
      *
      * @var \Magento\Cms\Helper\Wysiwyg\Images
      */
-    protected $_cmsWysiwygImages = null;
+    protected $_cmsWysiwygImages;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json

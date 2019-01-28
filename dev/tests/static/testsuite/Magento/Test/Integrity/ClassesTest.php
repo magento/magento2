@@ -36,7 +36,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array|null
      */
-    private $referenceBlackList = null;
+    private $referenceBlackList;
 
     /**
      * Set Up

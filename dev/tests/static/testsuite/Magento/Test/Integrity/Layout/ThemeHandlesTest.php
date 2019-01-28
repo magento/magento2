@@ -12,7 +12,7 @@ class ThemeHandlesTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array|null
      */
-    protected $_baseFrontendHandles = null;
+    protected $_baseFrontendHandles;
 
     public function testIsDesignHandleDeclaredInCode()
     {

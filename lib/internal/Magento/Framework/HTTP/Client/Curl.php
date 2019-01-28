@@ -35,7 +35,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Stream resource
      * @var object
      */
-    protected $_sock = null;
+    protected $_sock;
 
     /**
      * Request headers

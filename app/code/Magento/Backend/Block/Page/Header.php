@@ -25,7 +25,7 @@ class Header extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_backendData = null;
+    protected $_backendData;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session

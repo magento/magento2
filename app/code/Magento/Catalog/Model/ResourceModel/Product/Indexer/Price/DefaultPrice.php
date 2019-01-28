@@ -48,12 +48,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var bool|null
      */
-    private $hasEntity = null;
+    private $hasEntity;
 
     /**
      * @var IndexTableStructureFactory

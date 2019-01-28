@@ -14,7 +14,7 @@ class CategoryConfigReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var CategoryConfigReader
      */
-    private $model = null;
+    private $model;
 
     protected function setUp()
     {

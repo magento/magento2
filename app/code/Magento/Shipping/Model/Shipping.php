@@ -20,14 +20,14 @@ class Shipping implements RateCollectorInterface
      *
      * @var array
      */
-    protected $_orig = null;
+    protected $_orig;
 
     /**
      * Cached result
      *
      * @var \Magento\Shipping\Model\Rate\Result
      */
-    protected $_result = null;
+    protected $_result;
 
     /**
      * Part of carrier xml config path

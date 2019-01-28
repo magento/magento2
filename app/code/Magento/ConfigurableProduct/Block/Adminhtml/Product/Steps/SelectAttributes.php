@@ -18,7 +18,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

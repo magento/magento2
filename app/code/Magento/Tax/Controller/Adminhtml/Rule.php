@@ -28,7 +28,7 @@ abstract class Rule extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Tax\Api\TaxRuleRepositoryInterface

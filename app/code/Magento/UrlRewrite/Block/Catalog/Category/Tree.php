@@ -34,7 +34,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory

@@ -29,14 +29,14 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      *
      * @var string
      */
-    protected $resource = null;
+    protected $resource;
 
     /**
      * The uri at which to access the controller
      *
      * @var string
      */
-    protected $uri = null;
+    protected $uri;
 
     /**
      * @var string|null

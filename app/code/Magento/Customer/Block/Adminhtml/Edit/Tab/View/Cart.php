@@ -23,7 +23,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Data\CollectionFactory
@@ -38,7 +38,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var \Magento\Quote\Model\Quote
      */
-    protected $quote = null;
+    protected $quote;
 
     /**
      * @var \Magento\Quote\Model\QuoteFactory

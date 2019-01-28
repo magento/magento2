@@ -178,7 +178,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @var array|null
      */
-    protected $_queryHook = null;
+    protected $_queryHook;
 
     /**
      * @var String

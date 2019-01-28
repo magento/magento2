@@ -19,7 +19,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterf
      *
      * @var \Magento\GoogleAnalytics\Helper\Data
      */
-    protected $_googleAnalyticsData = null;
+    protected $_googleAnalyticsData;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface

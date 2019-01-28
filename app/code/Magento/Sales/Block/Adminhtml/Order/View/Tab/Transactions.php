@@ -24,7 +24,7 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Context $context

@@ -18,7 +18,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Framework\Registry|null
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory

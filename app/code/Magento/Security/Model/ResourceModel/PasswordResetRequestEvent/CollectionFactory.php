@@ -22,7 +22,7 @@ class CollectionFactory
      * @var \Magento\Framework\ObjectManagerInterface
      * @since 100.1.0
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * Instance name to create
@@ -30,7 +30,7 @@ class CollectionFactory
      * @var string
      * @since 100.1.0
      */
-    protected $instanceName = null;
+    protected $instanceName;
 
     /**
      * @var ConfigInterface

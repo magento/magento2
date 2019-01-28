@@ -19,7 +19,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Authorizenet\Helper\DataFactory

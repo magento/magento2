@@ -66,7 +66,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * @var int|float|string|null
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * Core store config

@@ -40,7 +40,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     /**
      * @var int|null
      */
-    protected $maxMessages = null;
+    protected $maxMessages;
 
     /**
      * @var PublisherConsumerController

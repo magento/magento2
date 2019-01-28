@@ -15,7 +15,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Context $context

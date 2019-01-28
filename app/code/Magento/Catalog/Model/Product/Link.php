@@ -34,7 +34,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     /**
      * @var mixed
      */
-    protected $_attributes = null;
+    protected $_attributes;
 
     /**
      * Product collection factory

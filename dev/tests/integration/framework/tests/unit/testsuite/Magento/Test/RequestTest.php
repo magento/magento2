@@ -12,7 +12,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\TestFramework\Request
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

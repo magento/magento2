@@ -53,7 +53,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $_connection = null;
+    protected $_connection;
 
     /**
      * Constructor

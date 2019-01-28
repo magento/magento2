@@ -15,12 +15,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var array
      */
-    protected $_sessionData = null;
+    protected $_sessionData;
 
     /**
      * @var array
      */
-    protected $_allStores = null;
+    protected $_allStores;
 
     /**
      * @var bool
@@ -37,7 +37,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @var \Magento\Store\Model\System\Store

@@ -20,14 +20,14 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    private $schema = null;
+    private $schema;
 
     /**
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
      */
-    private $perFileSchema = null;
+    private $perFileSchema;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader

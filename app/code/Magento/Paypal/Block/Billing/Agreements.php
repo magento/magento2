@@ -25,7 +25,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
      */
-    protected $_billingAgreements = null;
+    protected $_billingAgreements;
 
     /**
      * @var \Magento\Customer\Model\Session

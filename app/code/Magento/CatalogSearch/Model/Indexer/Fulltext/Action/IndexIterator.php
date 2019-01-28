@@ -78,7 +78,7 @@ class IndexIterator implements \Iterator
     /**
      * @var null
      */
-    private $current = null;
+    private $current;
 
     /**
      * @var bool
@@ -88,7 +88,7 @@ class IndexIterator implements \Iterator
     /**
      * @var null
      */
-    private $key = null;
+    private $key;
 
     /**
      * @var array

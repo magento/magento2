@@ -15,7 +15,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Config\Model\Config\Backend\Admin\Robots
      */
-    protected $model = null;
+    protected $model;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read

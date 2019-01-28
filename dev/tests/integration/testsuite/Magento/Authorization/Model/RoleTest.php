@@ -13,7 +13,7 @@ class RoleTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Authorization\Model\Role
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

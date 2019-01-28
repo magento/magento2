@@ -28,7 +28,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     /**
      * @var null|bool
      */
-    protected $fireEventInitCurrentStoreAfter = null;
+    protected $fireEventInitCurrentStoreAfter;
 
     /**
      * @param \Magento\Store\Model\StoreManager $decoratedStoreManager

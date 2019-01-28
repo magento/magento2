@@ -79,7 +79,7 @@ class Config
      *
      * @var bool|null
      */
-    protected $_isCacheEnabled = null;
+    protected $_isCacheEnabled;
 
     /**
      * @var \Magento\Framework\App\CacheInterface

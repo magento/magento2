@@ -33,20 +33,20 @@ class Transaction extends AbstractModel implements TransactionInterface
      *
      * @var \Magento\Sales\Model\Order\Payment
      */
-    protected $_order = null;
+    protected $_order;
 
     /**
      * Parent transaction instance
      * @var \Magento\Sales\Model\Order\Payment\Transaction
      */
-    protected $_parentTransaction = null;
+    protected $_parentTransaction;
 
     /**
      * Child transactions, assoc array of transaction_id => instance
      *
      * @var array
      */
-    protected $_children = null;
+    protected $_children;
 
     /**
      * Child transactions, assoc array of txn_id => instance
@@ -55,7 +55,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      *
      * @var array
      */
-    protected $_identifiedChildren = null;
+    protected $_identifiedChildren;
 
     /**
      * Whether to perform automatic actions on transactions, such as auto-closing and putting as a parent
@@ -76,7 +76,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      *
      * @var bool
      */
-    protected $_hasChild = null;
+    protected $_hasChild;
 
     /**
      * Event object prefix
@@ -99,7 +99,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      *
      * @var int
      */
-    protected $_orderWebsiteId = null;
+    protected $_orderWebsiteId;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory

@@ -19,7 +19,7 @@ class Order extends \Magento\Framework\DataObject
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface

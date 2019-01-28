@@ -36,7 +36,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager = null;
+    protected $eventManager;
 
     /**
      * Total items number

@@ -19,7 +19,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
      *
      * @var \Magento\Backup\Helper\Data
      */
-    protected $_backupData = null;
+    protected $_backupData;
 
     /**
      * @param \Magento\Backup\Helper\Data $backupData

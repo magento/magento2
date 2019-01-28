@@ -30,7 +30,7 @@ abstract class Statistics extends \Magento\Backend\App\Action implements HttpGet
      *
      * @var null|AuthSession
      */
-    protected $_adminSession = null;
+    protected $_adminSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date

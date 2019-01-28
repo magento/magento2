@@ -77,7 +77,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @var int|array|null
      */
-    protected $_productsFilter = null;
+    protected $_productsFilter;
 
     /**
      * Store current date at "Y-m-d H:i:s" format

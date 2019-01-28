@@ -26,7 +26,7 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Message factory

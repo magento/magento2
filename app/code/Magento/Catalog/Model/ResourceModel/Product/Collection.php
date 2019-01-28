@@ -97,7 +97,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @var array
      */
-    protected $_allIdsCache = null;
+    protected $_allIdsCache;
 
     /**
      * Is add tax percents to product collection flag
@@ -116,7 +116,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @var \Magento\Framework\DB\Select
      */
-    protected $_productCountSelect = null;
+    protected $_productCountSelect;
 
     /**
      * @var bool
@@ -170,28 +170,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @var int
      */
-    protected $_pricesCount = null;
+    protected $_pricesCount;
 
     /**
      * Cloned Select after dispatching 'catalog_prepare_price_select' event
      *
      * @var \Magento\Framework\DB\Select
      */
-    protected $_catalogPreparePriceSelect = null;
+    protected $_catalogPreparePriceSelect;
 
     /**
      * Catalog product flat
      *
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
      */
-    protected $_catalogProductFlatState = null;
+    protected $_catalogProductFlatState;
 
     /**
      * Catalog data
      *
      * @var \Magento\Framework\Module\Manager
      */
-    protected $moduleManager = null;
+    protected $moduleManager;
 
     /**
      * Core store config

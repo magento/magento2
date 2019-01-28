@@ -29,7 +29,7 @@ class ExchangeFactory implements ExchangeFactoryInterface
      * @var \Magento\Framework\ObjectManagerInterface
      * @since 100.2.0
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * Initialize dependencies.

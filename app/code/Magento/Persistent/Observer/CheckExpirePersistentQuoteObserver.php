@@ -29,14 +29,14 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $_persistentSession = null;
+    protected $_persistentSession;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager
@@ -48,7 +48,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * Request

@@ -26,14 +26,14 @@ class Uploader extends \Magento\Framework\File\Uploader
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
      */
-    protected $_coreFileStorage = null;
+    protected $_coreFileStorage;
 
     /**
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDb = null;
+    protected $_coreFileStorageDb;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension

@@ -16,7 +16,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\Address

@@ -13,7 +13,7 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax
      */
-    protected $_block = null;
+    protected $_block;
 
     protected function setUp()
     {

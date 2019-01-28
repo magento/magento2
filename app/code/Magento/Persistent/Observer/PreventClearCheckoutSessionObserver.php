@@ -22,14 +22,14 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $_persistentSession = null;
+    protected $_persistentSession;
 
     /**
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * @param \Magento\Persistent\Helper\Session $persistentSession

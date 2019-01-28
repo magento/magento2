@@ -35,7 +35,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @var array
      */
-    protected $_entityAttributeValues = null;
+    protected $_entityAttributeValues;
 
     /**
      * Attribute data key that indicates whether it should be used for rules

@@ -42,14 +42,14 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * @var array|null
      */
-    protected $_allAttributes = null;
+    protected $_allAttributes;
 
     /**
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxData = null;
+    protected $_taxData;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory

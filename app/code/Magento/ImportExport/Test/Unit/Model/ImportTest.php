@@ -30,7 +30,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      *
      * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_importExportData = null;
+    protected $_importExportData;
 
     /**
      * @var \Magento\ImportExport\Model\Import\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject

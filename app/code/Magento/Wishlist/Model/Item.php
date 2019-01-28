@@ -83,7 +83,7 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @var bool|null
      */
-    protected $_flagOptionsSaved = null;
+    protected $_flagOptionsSaved;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

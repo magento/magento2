@@ -38,7 +38,7 @@ abstract class Catalog extends Action
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Date filter instance

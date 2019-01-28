@@ -20,14 +20,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Sales\Helper\Reorder
      */
-    protected $_salesReorder = null;
+    protected $_salesReorder;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory

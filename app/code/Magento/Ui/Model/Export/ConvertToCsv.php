@@ -29,7 +29,7 @@ class ConvertToCsv
     /**
      * @var int|null
      */
-    protected $pageSize = null;
+    protected $pageSize;
 
     /**
      * @var Filter

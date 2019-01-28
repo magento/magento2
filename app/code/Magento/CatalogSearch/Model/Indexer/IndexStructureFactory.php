@@ -23,7 +23,7 @@ class IndexStructureFactory
      * @var ObjectManagerInterface
      * @since 100.1.0
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * Instance name to create
@@ -31,7 +31,7 @@ class IndexStructureFactory
      * @var string
      * @since 100.1.0
      */
-    protected $structures = null;
+    protected $structures;
     /**
      * @var EngineResolverInterface
      */

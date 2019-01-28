@@ -17,7 +17,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @var \Magento\Catalog\Helper\Product\Configuration|null
      */
-    protected $_productConfig = null;
+    protected $_productConfig;
 
     /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool

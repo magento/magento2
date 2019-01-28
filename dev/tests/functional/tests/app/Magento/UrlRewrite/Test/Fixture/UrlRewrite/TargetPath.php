@@ -20,7 +20,7 @@ class TargetPath extends DataSource
      *
      * @var FixtureInterface
      */
-    protected $entity = null;
+    protected $entity;
 
     /**
      * @constructor

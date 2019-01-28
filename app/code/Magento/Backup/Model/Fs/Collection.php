@@ -31,14 +31,14 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      *
      * @var \Magento\Backup\Helper\Data
      */
-    protected $_backupData = null;
+    protected $_backupData;
 
     /**
      * Backup model
      *
      * @var \Magento\Backup\Model\Backup
      */
-    protected $_backup = null;
+    protected $_backup;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory

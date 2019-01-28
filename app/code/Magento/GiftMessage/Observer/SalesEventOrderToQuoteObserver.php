@@ -19,7 +19,7 @@ class SalesEventOrderToQuoteObserver implements ObserverInterface
      *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
-    protected $_giftMessageMessage = null;
+    protected $_giftMessageMessage;
 
     /**
      * @var \Magento\GiftMessage\Model\MessageFactory

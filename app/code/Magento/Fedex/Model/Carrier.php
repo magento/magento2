@@ -73,14 +73,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var RateRequest|null
      */
-    protected $_request = null;
+    protected $_request;
 
     /**
      * Rate result data
      *
      * @var Result|null
      */
-    protected $_result = null;
+    protected $_result;
 
     /**
      * Path to wsdl file of rate service
@@ -94,14 +94,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var string
      */
-    protected $_shipServiceWsdl = null;
+    protected $_shipServiceWsdl;
 
     /**
      * Path to wsdl file of track service
      *
      * @var string
      */
-    protected $_trackServiceWsdl = null;
+    protected $_trackServiceWsdl;
 
     /**
      * Container types that could be customized for FedEx carrier

@@ -18,7 +18,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      *
      * @var Collection
      */
-    protected $_websiteCollection = null;
+    protected $_websiteCollection;
 
     /**
      * Core registry

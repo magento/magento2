@@ -107,7 +107,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @var array
      */
-    protected $_uniqueFields = null;
+    protected $_uniqueFields;
 
     /**
      * Serializable fields declaration

@@ -36,7 +36,7 @@ class Query implements QueryInterface
      *
      * @var \Zend_Db_Statement_Pdo
      */
-    protected $fetchStmt = null;
+    protected $fetchStmt;
 
     /**
      * @var Logger

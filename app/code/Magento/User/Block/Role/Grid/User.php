@@ -20,7 +20,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Factory for user role model

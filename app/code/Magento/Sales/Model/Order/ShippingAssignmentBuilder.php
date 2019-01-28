@@ -33,7 +33,7 @@ class ShippingAssignmentBuilder
     /**
      * @var int|null
      */
-    private $orderId = null;
+    private $orderId;
 
     /**
      * ShippingAssignment constructor.

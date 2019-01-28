@@ -18,7 +18,7 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

@@ -42,7 +42,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @var \Magento\Catalog\Helper\Product\Compare
      */
-    protected $_catalogProductCompare = null;
+    protected $_catalogProductCompare;
 
     /**
      * Catalog product compare item

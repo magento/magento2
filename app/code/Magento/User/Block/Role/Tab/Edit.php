@@ -60,7 +60,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * @var \Magento\Framework\Registry
      * @since 100.1.0
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

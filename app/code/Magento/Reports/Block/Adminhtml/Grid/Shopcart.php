@@ -17,7 +17,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var array
      */
-    protected $_currentCurrencyCode = null;
+    protected $_currentCurrencyCode;
 
     /**
      * Ids of current stores

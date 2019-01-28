@@ -25,14 +25,14 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var Template
      */
-    protected $_templateProcessor = null;
+    protected $_templateProcessor;
 
     /**
      * Catalog data
      *
      * @var Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Eav config

@@ -20,7 +20,7 @@ class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Payment\Helper\Data

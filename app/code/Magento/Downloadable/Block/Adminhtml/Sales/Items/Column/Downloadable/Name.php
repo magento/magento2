@@ -21,7 +21,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     /**
      * @var Purchased|null
      */
-    protected $_purchased = null;
+    protected $_purchased;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory

@@ -22,7 +22,7 @@ class Parameter
      *
      * @var mixed
      */
-    protected $_value = null;
+    protected $_value;
 
     /**
      * Value is a BLOB.
@@ -38,25 +38,25 @@ class Parameter
      * Data type to set to DB driver during parameter bind
      * @var mixed
      */
-    protected $_dataType = null;
+    protected $_dataType;
 
     /**
      * Length to set to DB driver during parameter bind
      * @var mixed
      */
-    protected $_length = null;
+    protected $_length;
 
     /**
      * Specific driver options to set to DB driver during parameter bind
      * @var mixed
      */
-    protected $_driverOptions = null;
+    protected $_driverOptions;
 
     /**
      * Additional information to be used by DB adapter internally
      * @var \Magento\Framework\DataObject
      */
-    protected $_additional = null;
+    protected $_additional;
 
     /**
      * Inits instance

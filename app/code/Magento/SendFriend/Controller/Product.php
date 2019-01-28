@@ -21,7 +21,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator

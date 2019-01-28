@@ -14,27 +14,27 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Eav\Model\Form
      */
-    protected $_model = null;
+    protected $_model;
 
     /**
      * @var array
      */
-    protected $_attributes = null;
+    protected $_attributes;
 
     /**
      * @var array
      */
-    protected $_systemAttribute = null;
+    protected $_systemAttribute;
 
     /**
      * @var array
      */
-    protected $_userAttribute = null;
+    protected $_userAttribute;
 
     /**
      * @var \Magento\Framework\DataObject
      */
-    protected $_entity = null;
+    protected $_entity;
 
     /**
      * Initialize form

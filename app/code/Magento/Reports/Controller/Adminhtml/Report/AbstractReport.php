@@ -77,7 +77,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      *
      * @var null|\Magento\Backend\Model\Auth\Session
      */
-    protected $_adminSession = null;
+    protected $_adminSession;
 
     /**
      * Retrieve admin session model

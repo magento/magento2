@@ -17,7 +17,7 @@ class Excel
      *
      * @var \Iterator|null
      */
-    protected $_iterator = null;
+    protected $_iterator;
 
     /**
      * Method Callback Array

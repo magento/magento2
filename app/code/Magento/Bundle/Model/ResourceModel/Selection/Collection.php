@@ -29,12 +29,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var DataObject
      */
-    private $itemPrototype = null;
+    private $itemPrototype;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
-    private $catalogRuleProcessor = null;
+    private $catalogRuleProcessor;
 
     /**
      * Is website scope prices joined to collection

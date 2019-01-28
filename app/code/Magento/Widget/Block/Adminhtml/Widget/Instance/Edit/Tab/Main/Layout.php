@@ -22,7 +22,7 @@ class Layout extends Template implements RendererInterface
     /**
      * @var AbstractElement|null
      */
-    protected $_element = null;
+    protected $_element;
 
     /**
      * @var string

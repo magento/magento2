@@ -23,7 +23,7 @@ class CartTab extends TabWrapper
      *
      * @var Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var bool

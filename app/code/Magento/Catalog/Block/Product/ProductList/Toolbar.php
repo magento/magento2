@@ -26,14 +26,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
-    protected $_collection = null;
+    protected $_collection;
 
     /**
      * List of available order fields
      *
      * @var array
      */
-    protected $_availableOrder = null;
+    protected $_availableOrder;
 
     /**
      * List of available view types
@@ -61,7 +61,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_orderField = null;
+    protected $_orderField;
 
     /**
      * Default direction
@@ -75,7 +75,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_viewMode = null;
+    protected $_viewMode;
 
     /**
      * @var bool $_paramsMemorizeAllowed

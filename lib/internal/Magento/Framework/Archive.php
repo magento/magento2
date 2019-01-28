@@ -31,7 +31,7 @@ class Archive
      *
      * @var \Magento\Framework\Archive\Tar|\Magento\Framework\Archive\Gz|\Magento\Framework\Archive\Bz
      */
-    protected $_archiver = null;
+    protected $_archiver;
 
     /**
      * Accessible formats for compress.

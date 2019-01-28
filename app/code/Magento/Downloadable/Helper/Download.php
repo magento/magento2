@@ -43,14 +43,14 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var string
      */
-    protected $_resourceFile = null;
+    protected $_resourceFile;
 
     /**
      * Resource open handle
      *
      * @var \Magento\Framework\Filesystem\File\ReadInterface
      */
-    protected $_handle = null;
+    protected $_handle;
 
     /**
      * Remote server headers

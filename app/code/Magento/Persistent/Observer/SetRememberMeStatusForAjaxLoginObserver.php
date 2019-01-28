@@ -26,7 +26,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json

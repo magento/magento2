@@ -49,7 +49,7 @@ class Storage extends AbstractModel
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
      */
-    protected $_coreFileStorage = null;
+    protected $_coreFileStorage;
 
     /**
      * Core store config

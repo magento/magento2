@@ -14,7 +14,7 @@ class Theme extends Value
      *
      * @var \Magento\Framework\View\DesignInterface
      */
-    protected $_design = null;
+    protected $_design;
 
     /**
      * Path to config node with list of caches

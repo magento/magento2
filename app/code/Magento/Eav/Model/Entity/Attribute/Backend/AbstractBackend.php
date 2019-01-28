@@ -58,7 +58,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @var mixed
      */
-    protected $_defaultValue = null;
+    protected $_defaultValue;
 
     /**
      * Set attribute instance

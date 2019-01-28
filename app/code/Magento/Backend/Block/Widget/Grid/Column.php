@@ -43,7 +43,7 @@ class Column extends Widget
      *
      * @var string|null
      */
-    protected $_cssClass = null;
+    protected $_cssClass;
 
     /**
      * Renderer types

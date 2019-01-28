@@ -20,7 +20,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

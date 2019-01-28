@@ -39,7 +39,7 @@ class ComponentRegistrarFixture
      *
      * @var array
      */
-    private $origComponents = null;
+    private $origComponents;
 
     /**
      * Constructor

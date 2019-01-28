@@ -16,28 +16,28 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Proxied instance name
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $_instanceName;
 
     /**
      * Proxied instance
      *
      * @var \Magento\Framework\View\Layout
      */
-    protected $_subject = null;
+    protected $_subject;
 
     /**
      * Instance shareability flag
      *
      * @var bool
      */
-    protected $_isShared = null;
+    protected $_isShared;
 
     /**
      * Proxy constructor

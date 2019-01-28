@@ -58,7 +58,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Catalog\Helper\Data|null
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory

@@ -28,7 +28,7 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @var string
      */
-    protected $_activeTab = null;
+    protected $_activeTab;
 
     /**
      * Destination HTML element id

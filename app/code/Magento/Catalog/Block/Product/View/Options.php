@@ -37,7 +37,7 @@ class Options extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_registry = null;
+    protected $_registry;
 
     /**
      * Catalog product

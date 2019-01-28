@@ -27,7 +27,7 @@ class FrontendDecorator implements CurlInterface
      *
      * @var string
      */
-    protected $formKey = null;
+    protected $formKey;
 
     /**
      * Response data.

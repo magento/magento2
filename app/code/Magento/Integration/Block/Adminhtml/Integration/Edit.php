@@ -21,7 +21,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_registry = null;
+    protected $_registry;
 
     /**
      * @var \Magento\Integration\Helper\Data

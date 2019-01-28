@@ -56,7 +56,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @var \Magento\Directory\Helper\Data
      */
-    protected $_directoryData = null;
+    protected $_directoryData;
 
     /**
      * @var \Magento\Shipping\Model\Simplexml\ElementFactory
@@ -113,7 +113,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @var \Magento\Framework\DataObject|null
      */
-    protected $_rawRequest = null;
+    protected $_rawRequest;
 
     /**
      * The security scanner XML document

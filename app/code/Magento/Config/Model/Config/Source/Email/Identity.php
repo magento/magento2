@@ -16,7 +16,7 @@ class Identity implements \Magento\Framework\Option\ArrayInterface
      *
      * @var array
      */
-    protected $_options = null;
+    protected $_options;
 
     /**
      * Configuration structure

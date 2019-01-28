@@ -30,7 +30,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**#@-*/
 
     /**#@-*/
-    protected $defaultSelection = null;
+    protected $defaultSelection;
 
     /**
      * Initialize resource model

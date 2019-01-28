@@ -18,7 +18,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

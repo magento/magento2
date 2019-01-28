@@ -23,14 +23,14 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var int
      */
-    protected $_storageId = null;
+    protected $_storageId;
 
     /**
      * Array of items
      *
      * @var array
      */
-    protected $_items = null;
+    protected $_items;
 
     /**
      * Backend session model

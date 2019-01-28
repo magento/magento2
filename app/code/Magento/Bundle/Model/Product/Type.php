@@ -92,14 +92,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $_catalogProduct = null;
+    protected $_catalogProduct;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

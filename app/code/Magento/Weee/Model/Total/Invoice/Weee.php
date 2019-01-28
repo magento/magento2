@@ -16,7 +16,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
      *
      * @var WeeeHelper
      */
-    protected $_weeeData = null;
+    protected $_weeeData;
 
     /**
      * Instance of serializer.

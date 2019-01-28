@@ -33,7 +33,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      *
      * @var string
      */
-    protected $excludeAdjustment = null;
+    protected $excludeAdjustment;
 
     /**
      * @var CustomOptionPriceCalculator

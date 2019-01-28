@@ -25,7 +25,7 @@ class Form extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Review\Helper\Data
      */
-    protected $_reviewData = null;
+    protected $_reviewData;
 
     /**
      * Catalog product model

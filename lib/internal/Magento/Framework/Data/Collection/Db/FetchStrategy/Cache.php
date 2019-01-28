@@ -37,7 +37,7 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
     /**
      * @var int|bool|null
      */
-    protected $_cacheLifetime = null;
+    protected $_cacheLifetime;
 
     /**
      * @var SerializerInterface

@@ -96,7 +96,7 @@ class Uploader
      * @var string
      * @access protected
      */
-    protected $_dispretionPath = null;
+    protected $_dispretionPath;
 
     /**
      * @var bool
@@ -106,7 +106,7 @@ class Uploader
     /**
      * @var null|string[]
      */
-    protected $_allowedExtensions = null;
+    protected $_allowedExtensions;
 
     /**
      * Validate callbacks storage

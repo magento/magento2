@@ -14,7 +14,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     /**
      * @var null
      */
-    protected $_priceDisplayType = null;
+    protected $_priceDisplayType;
 
     /**
      * @var string
@@ -26,14 +26,14 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils

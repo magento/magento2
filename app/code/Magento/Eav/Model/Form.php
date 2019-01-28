@@ -85,7 +85,7 @@ abstract class Form
      *
      * @var array
      */
-    protected $_allowedAttributes = null;
+    protected $_allowedAttributes;
 
     /**
      * Is AJAX request flag
@@ -104,7 +104,7 @@ abstract class Form
     /**
      * @var \Magento\Framework\Validator
      */
-    protected $_validator = null;
+    protected $_validator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

@@ -32,7 +32,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      *
      * @var QueryFactory
      */
-    protected $queryFactory = null;
+    protected $queryFactory;
 
     /**
      * Core store config

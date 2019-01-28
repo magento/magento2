@@ -22,7 +22,7 @@ class Sharing extends \Magento\Framework\View\Element\Template
      *
      * @var array|null
      */
-    protected $_enteredData = null;
+    protected $_enteredData;
 
     /**
      * Wishlist configuration

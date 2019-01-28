@@ -72,7 +72,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * @var array
      */
-    protected $values = null;
+    protected $values;
 
     /**
      * Catalog product option value

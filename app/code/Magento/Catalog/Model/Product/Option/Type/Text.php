@@ -23,7 +23,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $_escaper;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession

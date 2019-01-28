@@ -10,7 +10,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Widget\Model\Widget
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

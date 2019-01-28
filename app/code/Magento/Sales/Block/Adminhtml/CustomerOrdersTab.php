@@ -22,7 +22,7 @@ class CustomerOrdersTab extends TabWrapper
      *
      * @var Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var bool

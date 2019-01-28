@@ -102,7 +102,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Eav\Model\Config

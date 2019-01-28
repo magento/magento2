@@ -37,7 +37,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     /**
      * @var string[]
      */
-    protected $customAttributesCodes = null;
+    protected $customAttributesCodes;
 
     /**
      * @var bool

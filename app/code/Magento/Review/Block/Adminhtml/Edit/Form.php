@@ -16,7 +16,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Review\Helper\Data
      */
-    protected $_reviewData = null;
+    protected $_reviewData;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface

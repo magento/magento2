@@ -10,7 +10,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_helper = null;
+    protected $_helper;
 
     protected function setUp()
     {

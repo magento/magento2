@@ -21,7 +21,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Entity model name which must be used to retrieve entity specific data.
      * @var null|\Magento\Catalog\Model\ResourceModel\AbstractResource
      */
-    protected $_entityResource = null;
+    protected $_entityResource;
 
     /**
      * Prepared href attribute

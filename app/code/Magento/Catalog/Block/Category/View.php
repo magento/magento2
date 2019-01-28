@@ -18,7 +18,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog layer

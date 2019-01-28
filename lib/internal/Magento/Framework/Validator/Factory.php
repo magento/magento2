@@ -23,7 +23,7 @@ class Factory
      *
      * @var array|null
      */
-    protected $_configFiles = null;
+    protected $_configFiles;
 
     /**
      * @var bool

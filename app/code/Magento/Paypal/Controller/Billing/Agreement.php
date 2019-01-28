@@ -17,7 +17,7 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context

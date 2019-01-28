@@ -48,7 +48,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * @var \Magento\Sales\Model\Order\Item|null
      */
-    protected $_orderItem = null;
+    protected $_orderItem;
 
     /**
      * @var \Magento\Sales\Model\Order\ItemFactory

@@ -17,7 +17,7 @@ class Load extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Framework\View\Helper\Js
      */
-    protected $_jsHelper = null;
+    protected $_jsHelper;
 
     /**
      * Json encoder

@@ -16,7 +16,7 @@ class TotalFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Quote address factory constructor

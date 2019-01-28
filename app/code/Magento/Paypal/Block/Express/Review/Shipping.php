@@ -19,7 +19,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Quote\Model\Quote\Address
      */
-    protected $address = null;
+    protected $address;
 
     /**
      * @var \Magento\Quote\Model\Quote\AddressFactory

@@ -29,7 +29,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     /**
      * @var SearchResultFactory
      */
-    protected $searchResultFactory = null;
+    protected $searchResultFactory;
 
     /**
      * @var \Magento\Sales\Api\Data\ShipmentInterface[]

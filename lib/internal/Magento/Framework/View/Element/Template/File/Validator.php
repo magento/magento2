@@ -45,7 +45,7 @@ class Validator
      *
      * @var bool
      */
-    protected $directory = null;
+    protected $directory;
 
     /**
      * Themes directory

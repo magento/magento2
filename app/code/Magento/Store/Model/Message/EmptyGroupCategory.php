@@ -34,7 +34,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      *
      * @var GroupInterface[]
      */
-    private $items = null;
+    private $items;
 
     /**
      * @param GroupCollection $collection Store group collection

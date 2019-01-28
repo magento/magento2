@@ -18,14 +18,14 @@ class History extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
      */
-    protected $_salesData = null;
+    protected $_salesData;
 
     /**
      * @var \Magento\Sales\Helper\Admin

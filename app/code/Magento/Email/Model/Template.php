@@ -89,7 +89,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     /**
      * @var \Exception|null
      */
-    protected $_sendingException = null;
+    protected $_sendingException;
 
     /**
      * Email filter factory

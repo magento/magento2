@@ -19,7 +19,7 @@ class Edit extends \Magento\Directory\Block\Data
     /**
      * @var \Magento\Customer\Api\Data\AddressInterface|null
      */
-    protected $_address = null;
+    protected $_address;
 
     /**
      * @var \Magento\Customer\Model\Session

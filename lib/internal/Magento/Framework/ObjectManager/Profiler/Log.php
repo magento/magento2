@@ -20,7 +20,7 @@ class Log
     /**
      * @var Item
      */
-    protected $currentItem = null;
+    protected $currentItem;
 
     /**
      * @var array

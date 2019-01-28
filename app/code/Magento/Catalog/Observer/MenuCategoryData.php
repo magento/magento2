@@ -19,7 +19,7 @@ class MenuCategoryData
      *
      * @var \Magento\Catalog\Model\Layer
      */
-    private $catalogLayer = null;
+    private $catalogLayer;
 
     /**
      * Catalog layer resolver

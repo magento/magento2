@@ -17,7 +17,7 @@ class Format implements \Magento\Framework\Option\ArrayInterface
      *
      * @var \Magento\SalesRule\Helper\Coupon
      */
-    protected $_salesRuleCoupon = null;
+    protected $_salesRuleCoupon;
 
     /**
      * @param \Magento\SalesRule\Helper\Coupon $salesRuleCoupon

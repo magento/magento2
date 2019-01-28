@@ -18,14 +18,14 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @var string
      */
-    protected $_columnGroupBy = null;
+    protected $_columnGroupBy;
 
     /**
      * Collection resource
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
-    protected $_resourceCollection = null;
+    protected $_resourceCollection;
 
     /**
      * Set column to group by

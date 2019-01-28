@@ -34,7 +34,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Stream resource
      * @var object
      */
-    private $_sock = null;
+    private $_sock;
 
     /**
      * Request headers

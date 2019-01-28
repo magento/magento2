@@ -48,7 +48,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Sitemap\Helper\Data
      */
-    protected $_sitemapData = null;
+    protected $_sitemapData;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product

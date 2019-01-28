@@ -17,14 +17,14 @@ class JoinDataInterfaceFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $_instanceName;
 
     /**
      * Factory constructor

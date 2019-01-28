@@ -28,14 +28,14 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $_catalogProduct = null;
+    protected $_catalogProduct;
 
     /**
      * Catalog design

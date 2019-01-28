@@ -71,7 +71,7 @@ class Item extends AbstractModel implements OrderItemInterface
      *
      * @var \Magento\Sales\Model\Order
      */
-    protected $_order = null;
+    protected $_order;
 
     /**
      * @var array

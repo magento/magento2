@@ -18,7 +18,7 @@ class Link extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $registry = null;
+    protected $registry;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface

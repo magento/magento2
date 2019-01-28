@@ -19,7 +19,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * @var string
      */
-    protected $_formattedOptionValue = null;
+    protected $_formattedOptionValue;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface

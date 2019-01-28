@@ -25,7 +25,7 @@ abstract class Template extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Registry
      * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context

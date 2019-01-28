@@ -264,7 +264,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var array
      */
-    protected $_mediaGalleryAttributeId = null;
+    protected $_mediaGalleryAttributeId;
 
     /**
      * Validation failure message template definitions
@@ -481,7 +481,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
@@ -503,7 +503,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\ImportExport\Model\Import\Config
@@ -665,14 +665,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var null
      */
-    protected $_replaceFlag = null;
+    protected $_replaceFlag;
 
     /**
      * Flag for replace operation.
      *
      * @var null
      */
-    protected $cachedImages = null;
+    protected $cachedImages;
 
     /**
      * @var array

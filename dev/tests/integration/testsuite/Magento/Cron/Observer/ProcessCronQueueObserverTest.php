@@ -12,7 +12,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Cron\Observer\ProcessCronQueueObserver
      */
-    private $_model = null;
+    private $_model;
 
     protected function setUp()
     {

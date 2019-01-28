@@ -16,7 +16,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      *
      * @var \Magento\Quote\Model\QuoteValidator
      */
-    protected $quoteValidator = null;
+    protected $quoteValidator;
 
     /**
      * @param \Magento\Quote\Model\QuoteValidator $quoteValidator

@@ -89,12 +89,12 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Backend\Model\Widget\Grid\SubTotals
      */
-    protected $_subTotals = null;
+    protected $_subTotals;
 
     /**
      * @var \Magento\Backend\Model\Widget\Grid\Totals
      */
-    protected $_totals = null;
+    protected $_totals;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

@@ -10,7 +10,7 @@ class Parser
     /**
      * @var \DOMDocument|null
      */
-    protected $_dom = null;
+    protected $_dom;
 
     /**
      * @var \DOMDocument

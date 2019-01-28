@@ -26,7 +26,7 @@ class Config
     /**
      * @var bool|null
      */
-    protected $isCacheEnabled = null;
+    protected $isCacheEnabled;
 
     /**
      * @var SerializerInterface

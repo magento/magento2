@@ -71,7 +71,7 @@ class StoreManager implements
      *
      * @var string
      */
-    protected $currentStoreId = null;
+    protected $currentStoreId;
 
     /**
      * Flag that shows that system has only one store view

@@ -31,14 +31,14 @@ class Layer extends \Magento\Framework\DataObject
      *
      * @var string
      */
-    protected $_stateKey = null;
+    protected $_stateKey;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $registry = null;
+    protected $registry;
 
     /**
      * Store manager

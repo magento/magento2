@@ -17,7 +17,7 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      *
      * @var \Magento\Sales\Model\Order
      */
-    protected $_salesOrder = null;
+    protected $_salesOrder;
 
     /**
      * Order field for setOrderFilter

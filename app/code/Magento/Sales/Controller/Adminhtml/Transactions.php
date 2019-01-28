@@ -30,7 +30,7 @@ abstract class Transactions extends \Magento\Backend\App\Action
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var PageFactory

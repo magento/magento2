@@ -27,7 +27,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $_persistentSession = null;
+    protected $_persistentSession;
 
     /**
      * @var \Magento\Customer\Model\Session

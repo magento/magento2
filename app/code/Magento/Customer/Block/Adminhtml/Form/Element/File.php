@@ -22,7 +22,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface

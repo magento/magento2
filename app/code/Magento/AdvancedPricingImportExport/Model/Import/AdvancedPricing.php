@@ -137,7 +137,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * @var array
      */
-    protected $_oldSkus = null;
+    protected $_oldSkus;
 
     /**
      * Permanent entity columns.

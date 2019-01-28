@@ -29,7 +29,7 @@ class Button extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Wishlist\Helper\Data
      */
-    protected $_wishlistData = null;
+    protected $_wishlistData;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

@@ -44,7 +44,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @var null|int
      */
-    protected $_customerId = null;
+    protected $_customerId;
 
     /**
      * @var \Magento\Framework\App\Http\Context

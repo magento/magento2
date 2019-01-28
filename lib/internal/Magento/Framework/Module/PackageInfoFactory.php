@@ -15,7 +15,7 @@ class PackageInfoFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * Factory constructor

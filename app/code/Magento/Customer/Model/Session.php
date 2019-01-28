@@ -45,7 +45,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @var bool|null
      */
-    protected $_isCustomerIdChecked = null;
+    protected $_isCustomerIdChecked;
 
     /**
      * Customer URL
@@ -59,7 +59,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @var \Magento\Framework\Url\Helper\Data|null
      */
-    protected $_coreUrl = null;
+    protected $_coreUrl;
 
     /**
      * @var Share

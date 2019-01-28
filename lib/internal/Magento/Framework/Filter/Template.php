@@ -56,7 +56,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @var callable|null
      */
-    protected $templateProcessor = null;
+    protected $templateProcessor;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils

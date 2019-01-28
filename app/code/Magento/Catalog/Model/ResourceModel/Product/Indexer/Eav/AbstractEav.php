@@ -21,7 +21,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context

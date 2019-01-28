@@ -110,14 +110,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * @var \Magento\Email\Model\TemplateFactory
      */
-    protected $templateFactory = null;
+    protected $templateFactory;
 
     /**
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
      */
-    protected $design = null;
+    protected $design;
 
     /**
      * @var \Magento\Store\Model\App\Emulation

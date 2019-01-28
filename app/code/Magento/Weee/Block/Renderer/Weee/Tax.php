@@ -17,17 +17,17 @@ class Tax extends \Magento\Backend\Block\Widget implements
     /**
      * @var AbstractElement|null
      */
-    protected $_element = null;
+    protected $_element;
 
     /**
      * @var array|null
      */
-    protected $_countries = null;
+    protected $_countries;
 
     /**
      * @var array|null
      */
-    protected $_websites = null;
+    protected $_websites;
 
     /**
      * @var string

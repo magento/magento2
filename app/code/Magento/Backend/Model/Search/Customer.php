@@ -29,7 +29,7 @@ class Customer extends \Magento\Framework\DataObject
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface

@@ -29,7 +29,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Sales\Helper\Admin

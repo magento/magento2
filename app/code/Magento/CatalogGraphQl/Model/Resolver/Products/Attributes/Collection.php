@@ -25,7 +25,7 @@ class Collection
     /**
      * @var AttributeCollection
      */
-    private $collection = null;
+    private $collection;
 
     /**
      * @param AttributeCollectionFactory $collectionFactory

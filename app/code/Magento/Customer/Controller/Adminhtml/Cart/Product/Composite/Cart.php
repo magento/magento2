@@ -35,14 +35,14 @@ abstract class Cart extends \Magento\Backend\App\Action
      *
      * @var \Magento\Quote\Model\Quote
      */
-    protected $_quote = null;
+    protected $_quote;
 
     /**
      * Quote item we're working with
      *
      * @var \Magento\Quote\Model\Quote\Item
      */
-    protected $_quoteItem = null;
+    protected $_quoteItem;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface

@@ -20,7 +20,7 @@ class Query extends DataSource
      *
      * @var InjectableFixture
      */
-    protected $entity = null;
+    protected $entity;
 
     /**
      * @constructor

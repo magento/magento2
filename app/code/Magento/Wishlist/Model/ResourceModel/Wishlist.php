@@ -22,7 +22,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var null|int
      */
-    protected $_itemsCount = null;
+    protected $_itemsCount;
 
     /**
      * Store customer ID field name

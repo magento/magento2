@@ -12,7 +12,7 @@ class IpnFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * @var array

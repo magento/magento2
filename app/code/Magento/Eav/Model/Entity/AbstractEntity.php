@@ -151,7 +151,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @var int
      */
-    protected $_sortingSetId = null;
+    protected $_sortingSetId;
 
     /**
      * Entity attribute values per backend table to delete

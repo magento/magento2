@@ -15,14 +15,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @var \Magento\Review\Helper\Action\Pager
      */
-    protected $_reviewActionPager = null;
+    protected $_reviewActionPager;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Review model factory

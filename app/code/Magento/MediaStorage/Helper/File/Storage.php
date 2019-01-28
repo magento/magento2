@@ -19,7 +19,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var int
      */
-    protected $_currentStorage = null;
+    protected $_currentStorage;
 
     /**
      * List of internal storages
@@ -33,7 +33,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDb = null;
+    protected $_coreFileStorageDb;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage

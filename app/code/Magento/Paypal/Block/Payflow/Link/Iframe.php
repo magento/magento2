@@ -18,7 +18,7 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

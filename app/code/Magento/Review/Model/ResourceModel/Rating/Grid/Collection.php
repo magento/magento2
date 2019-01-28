@@ -17,7 +17,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory

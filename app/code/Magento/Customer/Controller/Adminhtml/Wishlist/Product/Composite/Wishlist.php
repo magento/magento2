@@ -24,14 +24,14 @@ abstract class Wishlist extends \Magento\Backend\App\Action
      *
      * @var \Magento\Wishlist\Model\Wishlist
      */
-    protected $_wishlist = null;
+    protected $_wishlist;
 
     /**
      * Wishlist item we're working with.
      *
      * @var \Magento\Wishlist\Model\Wishlist
      */
-    protected $_wishlistItem = null;
+    protected $_wishlistItem;
 
     /**
      * Loads wishlist and wishlist item.

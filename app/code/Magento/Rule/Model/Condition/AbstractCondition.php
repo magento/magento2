@@ -26,19 +26,19 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
      * Defines which operators will be available for this condition
      * @var string
      */
-    protected $_inputType = null;
+    protected $_inputType;
 
     /**
      * Default values for possible operator options
      * @var array
      */
-    protected $_defaultOperatorOptions = null;
+    protected $_defaultOperatorOptions;
 
     /**
      * Default combinations of operator options, depending on input type
      * @var array
      */
-    protected $_defaultOperatorInputByType = null;
+    protected $_defaultOperatorInputByType;
 
     /**
      * List of input types for values which should be array

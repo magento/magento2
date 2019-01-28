@@ -33,7 +33,7 @@ class DbVersionInfo
     /**
      * @var array
      */
-    private $dbVersionErrorsCache = null;
+    private $dbVersionErrorsCache;
 
     /**
      * @param ModuleListInterface $moduleList

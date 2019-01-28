@@ -15,14 +15,14 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    private $instanceName = null;
+    private $instanceName;
 
     /**
      * Initialize dependencies.

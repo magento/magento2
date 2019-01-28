@@ -19,7 +19,7 @@ class Gallery extends \Magento\Backend\Block\Template implements
     /**
      * @var AbstractElement|null
      */
-    protected $_element = null;
+    protected $_element;
 
     /**
      * @var string

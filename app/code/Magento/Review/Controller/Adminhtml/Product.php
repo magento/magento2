@@ -28,7 +28,7 @@ abstract class Product extends Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * Review model factory

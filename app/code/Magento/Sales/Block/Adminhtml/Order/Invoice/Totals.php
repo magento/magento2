@@ -21,7 +21,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      *
      * @var Invoice|null
      */
-    protected $_invoice = null;
+    protected $_invoice;
 
     /**
      * Get invoice

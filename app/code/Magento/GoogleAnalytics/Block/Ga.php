@@ -21,7 +21,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\GoogleAnalytics\Helper\Data
      */
-    protected $_googleAnalyticsData = null;
+    protected $_googleAnalyticsData;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory

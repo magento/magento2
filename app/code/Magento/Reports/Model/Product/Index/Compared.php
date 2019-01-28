@@ -34,7 +34,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      *
      * @var \Magento\Catalog\Helper\Product\Compare
      */
-    protected $_productCompare = null;
+    protected $_productCompare;
 
     /**
      * @param \Magento\Framework\Model\Context $context

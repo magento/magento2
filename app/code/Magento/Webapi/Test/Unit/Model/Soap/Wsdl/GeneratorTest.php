@@ -19,7 +19,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customAttributeTypeLocator = null;
+    protected $customAttributeTypeLocator;
 
     /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit_Framework_MockObject_MockObject */
     protected $serviceMetadata;

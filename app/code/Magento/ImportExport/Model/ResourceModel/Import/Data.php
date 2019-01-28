@@ -16,7 +16,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * @var \Iterator
      */
-    protected $_iterator = null;
+    protected $_iterator;
 
     /**
      * Helper to encode/decode json

@@ -20,7 +20,7 @@ class ScopeId extends DataSource
      *
      * @var Store
      */
-    protected $store = null;
+    protected $store;
 
     /**
      * @constructor

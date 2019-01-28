@@ -22,7 +22,7 @@ abstract class Status extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context

@@ -19,7 +19,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
      */
-    protected $productConfig = null;
+    protected $productConfig;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context

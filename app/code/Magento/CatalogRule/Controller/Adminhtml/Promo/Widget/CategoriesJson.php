@@ -20,7 +20,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param Context $context

@@ -35,14 +35,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var null|string|array
      */
-    protected $_state = null;
+    protected $_state;
 
     /**
      * Order state condition
      *
      * @var string
      */
-    protected $_orderStateCondition = null;
+    protected $_orderStateCondition;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory

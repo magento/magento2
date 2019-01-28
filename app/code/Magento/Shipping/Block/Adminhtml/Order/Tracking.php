@@ -18,7 +18,7 @@ class Tracking extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Shipping\Model\Config

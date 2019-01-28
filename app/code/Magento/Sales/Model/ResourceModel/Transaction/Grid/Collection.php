@@ -16,7 +16,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transa
      *
      * @var \Magento\Framework\Registry
      */
-    protected $registryManager = null;
+    protected $registryManager;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory

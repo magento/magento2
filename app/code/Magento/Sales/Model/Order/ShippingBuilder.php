@@ -21,7 +21,7 @@ class ShippingBuilder
     /**
      * @var int|null
      */
-    private $orderId = null;
+    private $orderId;
 
     /**
      * @var Order

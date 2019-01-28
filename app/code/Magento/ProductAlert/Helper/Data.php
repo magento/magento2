@@ -22,14 +22,14 @@ class Data extends \Magento\Framework\Url\Helper\Data
      *
      * @var null|\Magento\Catalog\Model\Product
      */
-    protected $_product = null;
+    protected $_product;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface

@@ -43,7 +43,7 @@ class Option extends Widget
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface

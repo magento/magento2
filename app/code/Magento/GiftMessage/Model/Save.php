@@ -22,7 +22,7 @@ class Save extends \Magento\Framework\DataObject
      *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
-    protected $_giftMessageMessage = null;
+    protected $_giftMessageMessage;
 
     /**
      * @var \Magento\Backend\Model\Session\Quote

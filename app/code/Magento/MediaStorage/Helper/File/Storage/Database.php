@@ -21,20 +21,20 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Database storage model
      * @var null|\Magento\MediaStorage\Model\File\Storage\Database
      */
-    protected $_databaseModel = null;
+    protected $_databaseModel;
 
     /**
      * Storage resource model
      * @var null|\Magento\MediaStorage\Model\ResourceModel\File\Storage\Database
      */
-    protected $_resourceModel = null;
+    protected $_resourceModel;
 
     /**
      * Db usage flag
      *
      * @var bool
      */
-    protected $_useDb = null;
+    protected $_useDb;
 
     /**
      * Media dir

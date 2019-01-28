@@ -100,7 +100,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -112,7 +112,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Sales\Model\Config

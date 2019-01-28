@@ -22,7 +22,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var CustomerRepositoryInterface

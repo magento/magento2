@@ -25,7 +25,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Sales\Helper\Admin

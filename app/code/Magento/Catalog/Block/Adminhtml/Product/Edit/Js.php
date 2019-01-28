@@ -17,7 +17,7 @@ class Js extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var TaxCalculationInterface

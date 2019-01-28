@@ -19,7 +19,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
      *
      * @var null|\Magento\Backend\Block\Widget\Button
      */
-    protected $_validateButton = null;
+    protected $_validateButton;
 
     /**
      * @var string

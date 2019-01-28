@@ -27,7 +27,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog session

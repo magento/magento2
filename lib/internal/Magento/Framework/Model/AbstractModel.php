@@ -111,14 +111,14 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @var bool
      */
-    protected $_isObjectNew = null;
+    protected $_isObjectNew;
 
     /**
      * Validator for checking the model state before saving it
      *
      * @var \Zend_Validate_Interface|bool|null
      */
-    protected $_validatorBeforeSave = null;
+    protected $_validatorBeforeSave;
 
     /**
      * Application Event Dispatcher

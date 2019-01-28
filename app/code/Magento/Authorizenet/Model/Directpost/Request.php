@@ -16,7 +16,7 @@ class Request extends AuthorizenetRequest
     /**
      * @var string
      */
-    protected $_transKey = null;
+    protected $_transKey;
 
     /**
      * Return merchant transaction key.

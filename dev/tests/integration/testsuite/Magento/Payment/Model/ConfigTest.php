@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Config
      */
-    private $model = null;
+    private $model;
 
     protected function setUp()
     {

@@ -59,7 +59,7 @@ class BundleSelectionPrice extends AbstractPrice
      *
      * @var string
      */
-    protected $excludeAdjustment = null;
+    protected $excludeAdjustment;
 
     /**
      * @param Product $saleableItem

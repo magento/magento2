@@ -19,7 +19,7 @@ class Table extends \Magento\Backend\Block\Template
      *
      * @var Collection|null
      */
-    protected $_websiteCollection = null;
+    protected $_websiteCollection;
 
     /**
      * Constructor

@@ -25,7 +25,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Store manager

@@ -16,7 +16,7 @@ class Index extends Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $registry = null;
+    protected $registry;
 
     /**
      * @var WishlistProvider

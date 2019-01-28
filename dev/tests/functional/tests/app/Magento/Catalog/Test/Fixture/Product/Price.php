@@ -23,7 +23,7 @@ class Price extends DataSource
      *
      * @var string
      */
-    protected $priceData = null;
+    protected $priceData;
 
     /**
      * @constructor

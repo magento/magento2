@@ -22,7 +22,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      *
      * @var string|null
      */
-    protected $_collectorsCacheKey = null;
+    protected $_collectorsCacheKey;
 
     /**
      * Configuration group where to collect registered totals

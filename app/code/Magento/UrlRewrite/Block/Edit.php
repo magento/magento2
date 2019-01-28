@@ -34,7 +34,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewriteFactory

@@ -21,7 +21,7 @@ abstract class Design extends Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date

@@ -71,7 +71,7 @@ class CreateConfigurableProductEntityTest extends Injectable
      *
      * @var string
      */
-    protected $configData = null;
+    protected $configData;
 
     /**
      * Injection data.

@@ -118,7 +118,7 @@ class Config
     /**
      * @var bool|null
      */
-    protected $_priceIncludesTax = null;
+    protected $_priceIncludesTax;
 
     /**
      * Flag which notify what we need use shipping prices exclude tax for calculations
@@ -130,7 +130,7 @@ class Config
     /**
      * @var $_shippingPriceIncludeTax bool
      */
-    protected $_shippingPriceIncludeTax = null;
+    protected $_shippingPriceIncludeTax;
 
     /**
      * Core store config

@@ -26,7 +26,7 @@ class Result
      *
      * @var null|bool
      */
-    protected $_error = null;
+    protected $_error;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

@@ -20,7 +20,7 @@ class LandingPage extends DataSource
      *
      * @var CmsBlock
      */
-    protected $cmsBlock = null;
+    protected $cmsBlock;
 
     /**
      * @constructor

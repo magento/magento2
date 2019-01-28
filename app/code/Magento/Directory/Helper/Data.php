@@ -91,7 +91,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var array
      */
-    protected $_optZipCountries = null;
+    protected $_optZipCountries;
 
     /**
      * @var Config

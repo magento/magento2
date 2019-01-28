@@ -21,14 +21,14 @@ class Send extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\SendFriend\Helper\Data
      */
-    protected $_sendfriendData = null;
+    protected $_sendfriendData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Customer\Model\Session

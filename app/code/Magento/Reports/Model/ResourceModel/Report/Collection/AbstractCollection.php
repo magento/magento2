@@ -18,21 +18,21 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @var string
      */
-    protected $_from = null;
+    protected $_from;
 
     /**
      * To date
      *
      * @var string
      */
-    protected $_to = null;
+    protected $_to;
 
     /**
      * Period
      *
      * @var string
      */
-    protected $_period = null;
+    protected $_period;
 
     /**
      * Store ids

@@ -39,7 +39,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      *
      * @var string
      */
-    protected $_errorMessage = null;
+    protected $_errorMessage;
 
     /**
      * Convert XML document into array.

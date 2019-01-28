@@ -25,7 +25,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     /**
      * @var \Magento\Customer\Api\Data\AddressInterface
      */
-    protected $defaultShippingAddress = null;
+    protected $defaultShippingAddress;
 
     /**
      * @var \Magento\Directory\Model\TopDestinationCountries

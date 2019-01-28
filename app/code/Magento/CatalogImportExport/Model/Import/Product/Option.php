@@ -265,7 +265,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Core store config

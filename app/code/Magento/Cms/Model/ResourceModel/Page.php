@@ -30,7 +30,7 @@ class Page extends AbstractDb
      *
      * @var null|Store
      */
-    protected $_store = null;
+    protected $_store;
 
     /**
      * Store manager

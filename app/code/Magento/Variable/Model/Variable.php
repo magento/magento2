@@ -30,7 +30,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $_escaper;
 
     /**
      * @param \Magento\Framework\Model\Context $context

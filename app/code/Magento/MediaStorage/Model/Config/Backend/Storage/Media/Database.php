@@ -12,7 +12,7 @@ class Database extends \Magento\Framework\App\Config\Value
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
      */
-    protected $_coreFileStorage = null;
+    protected $_coreFileStorage;
 
     /**
      * @param \Magento\Framework\Model\Context $context

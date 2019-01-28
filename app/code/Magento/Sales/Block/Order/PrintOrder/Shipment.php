@@ -34,7 +34,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var \Magento\Payment\Helper\Data

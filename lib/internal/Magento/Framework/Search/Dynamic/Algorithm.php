@@ -46,21 +46,21 @@ class Algorithm
      *
      * @var null|float
      */
-    protected $_upperLimit = null;
+    protected $_upperLimit;
 
     /**
      * Lower values limit
      *
      * @var null|float
      */
-    protected $_lowerLimit = null;
+    protected $_lowerLimit;
 
     /**
      * Number of segmentation intervals
      *
      * @var null|int
      */
-    protected $_intervalsNumber = null;
+    protected $_intervalsNumber;
 
     /**
      * Upper limits of skipped quantiles

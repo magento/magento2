@@ -71,7 +71,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @var string
      */
-    protected $_reportCollection = null;
+    protected $_reportCollection;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface

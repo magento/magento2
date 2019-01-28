@@ -81,14 +81,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var \Magento\Quote\Model\Quote\Address\RateRequest|null
      */
-    protected $_request = null;
+    protected $_request;
 
     /**
      * Rate result data
      *
      * @var Result|null
      */
-    protected $_result = null;
+    protected $_result;
 
     /**
      * Default cgi gateway url

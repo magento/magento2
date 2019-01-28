@@ -41,7 +41,7 @@ class WebsiteIds extends DataSource
      *
      * @var array
      */
-    private $fixtureData = null;
+    private $fixtureData;
 
     /**
      * @constructor

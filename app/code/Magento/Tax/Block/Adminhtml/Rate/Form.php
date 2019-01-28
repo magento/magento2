@@ -26,7 +26,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var null
      */
-    protected $_titles = null;
+    protected $_titles;
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Tax\Helper\Data|null
      */
-    protected $_taxData = null;
+    protected $_taxData;
 
     /**
      * @var \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory

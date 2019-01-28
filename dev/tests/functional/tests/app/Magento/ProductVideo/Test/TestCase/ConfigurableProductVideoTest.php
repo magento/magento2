@@ -68,7 +68,7 @@ class ConfigurableProductVideoTest extends Injectable
      *
      * @var string
      */
-    private $configData = null;
+    private $configData;
 
     /**
      * @param CatalogProductIndex $productIndex

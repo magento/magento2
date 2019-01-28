@@ -12,12 +12,12 @@ class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * @var string
      */
-    protected $instanceName = null;
+    protected $instanceName;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

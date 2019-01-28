@@ -58,7 +58,7 @@ class Repository
     /**
      * @var null|array
      */
-    private $defaults = null;
+    private $defaults;
 
     /**
      * @var FileFactory

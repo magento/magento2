@@ -33,7 +33,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Catalog\Model\Layer

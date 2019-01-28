@@ -10,7 +10,7 @@ abstract class AbstractEntity
     /**
      * @var string
      */
-    protected $_name = null;
+    protected $_name;
 
     /**
      * Configuration object

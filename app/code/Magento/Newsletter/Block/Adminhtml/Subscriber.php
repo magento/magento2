@@ -24,7 +24,7 @@ class Subscriber extends \Magento\Backend\Block\Template
      *
      * @var Collection
      */
-    protected $_queueCollection = null;
+    protected $_queueCollection;
 
     /**
      * @var string

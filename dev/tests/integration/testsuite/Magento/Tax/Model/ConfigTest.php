@@ -10,7 +10,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Tax\Model\Config
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

@@ -22,7 +22,7 @@ class Factory
      *
      * @var ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Factory constructor

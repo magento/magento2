@@ -63,7 +63,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Framework\Simplexml\Element
      */
-    protected $_widgetConfigXml = null;
+    protected $_widgetConfigXml;
 
     /**
      * Prefix of model events names

@@ -20,7 +20,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDb = null;
+    protected $_coreFileStorageDb;
 
     /**
      * Date model

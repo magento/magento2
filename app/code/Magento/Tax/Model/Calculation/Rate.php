@@ -35,12 +35,12 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**#@-*/
 
     /**#@-*/
-    protected $_titles = null;
+    protected $_titles;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\Title
      */
-    protected $_titleModel = null;
+    protected $_titleModel;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory

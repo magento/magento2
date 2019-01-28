@@ -14,14 +14,14 @@ class Option extends \Magento\Backend\Block\Widget
      *
      * @var AbstractElement|null
      */
-    protected $_element = null;
+    protected $_element;
 
     /**
      * List of bundle product options
      *
      * @var array|null
      */
-    protected $_options = null;
+    protected $_options;
 
     /**
      * @var string
@@ -33,7 +33,7 @@ class Option extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Bundle\Model\Source\Option\Type

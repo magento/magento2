@@ -37,7 +37,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      *
      * @var bool
      */
-    protected $isShared = null;
+    protected $isShared;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

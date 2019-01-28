@@ -44,7 +44,7 @@ abstract class Index extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -55,13 +55,13 @@ abstract class Index extends \Magento\Backend\App\Action
      * @var \Magento\Customer\Model\CustomerFactory
      * @deprecated 100.2.0
      */
-    protected $_customerFactory = null;
+    protected $_customerFactory;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
      * @deprecated 100.2.0
      */
-    protected $_addressFactory = null;
+    protected $_addressFactory;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory

@@ -43,21 +43,21 @@ class Tabs extends WigetTabs
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog data
      *
      * @var Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Adminhtml catalog
      *
      * @var Catalog
      */
-    protected $_helperCatalog = null;
+    protected $_helperCatalog;
 
     /**
      * @var CollectionFactory

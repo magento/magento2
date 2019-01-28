@@ -18,7 +18,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
     /**
      * @var Result
      */
-    private $truncateResult = null;
+    private $truncateResult;
 
     /**
      * Truncate string

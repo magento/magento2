@@ -29,14 +29,14 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $_persistentSession = null;
+    protected $_persistentSession;
 
     /**
      * @param \Magento\Persistent\Helper\Session $persistentSession

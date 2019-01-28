@@ -32,7 +32,7 @@ class Builder
     /**
      * @var QueryContainer
      */
-    private $query = null;
+    private $query;
 
     /**
      * @param  DataProviderInterface[] $dataProviderContainer

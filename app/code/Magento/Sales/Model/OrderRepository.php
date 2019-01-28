@@ -37,7 +37,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * @var SearchResultFactory
      */
-    protected $searchResultFactory = null;
+    protected $searchResultFactory;
 
     /**
      * @var OrderExtensionFactory

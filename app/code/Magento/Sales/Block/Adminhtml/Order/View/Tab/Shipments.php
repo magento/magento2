@@ -19,7 +19,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Collection factory

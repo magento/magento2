@@ -22,7 +22,7 @@ class Element extends \SimpleXMLElement
      *       to emulate complicated attributes
      * @var \Magento\Framework\Simplexml\Element
      */
-    protected $_parent = null;
+    protected $_parent;
 
     /**
      * For future use

@@ -22,14 +22,14 @@ class IndexerHandlerFactory
      *
      * @var ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $handlers = null;
+    protected $handlers;
 
     /**
      * @var EngineResolverInterface

@@ -25,7 +25,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      *
      * @var \Magento\Downloadable\Helper\Catalog\Product\Configuration
      */
-    protected $_downloadableProductConfiguration = null;
+    protected $_downloadableProductConfiguration;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

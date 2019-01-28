@@ -28,7 +28,7 @@ class Resolver
     /**
      * @var \Magento\Catalog\Model\Layer
      */
-    protected $layer = null;
+    protected $layer;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

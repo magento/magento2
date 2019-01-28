@@ -11,12 +11,12 @@ class UrlFactory
     /**
      * @var ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * @var string
      */
-    protected $_instanceName = null;
+    protected $_instanceName;
 
     /**
      * @param ObjectManagerInterface $objectManager

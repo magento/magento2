@@ -25,7 +25,7 @@ abstract class AbstractXml
      * Dom configuration model
      * @var \Magento\Framework\Config\Dom
      */
-    protected $_domConfig = null;
+    protected $_domConfig;
 
     /**
      * @var \Magento\Framework\Config\DomFactory

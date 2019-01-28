@@ -17,7 +17,7 @@ class Item extends \Magento\Backend\Block\Widget
     /**
      * @var Extended
      */
-    protected $_massaction = null;
+    protected $_massaction;
 
     /**
      * Set parent massaction block

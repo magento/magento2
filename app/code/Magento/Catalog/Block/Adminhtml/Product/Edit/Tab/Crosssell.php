@@ -25,7 +25,7 @@ class Crosssell extends Extended
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkFactory

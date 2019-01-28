@@ -62,7 +62,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
      */
-    protected $_productConfig = null;
+    protected $_productConfig;
 
     /**
      * @var \Magento\Framework\Url\Helper\Data

@@ -124,7 +124,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @var \Magento\ImportExport\Helper\Data
      */
-    protected $_importExportData = null;
+    protected $_importExportData;
 
     /**
      * @var \Magento\ImportExport\Model\Import\ConfigInterface

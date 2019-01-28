@@ -167,7 +167,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @var array|null
      */
-    protected $_configCache = null;
+    protected $_configCache;
 
     /**
      * Base nodes of store configuration cache
@@ -210,21 +210,21 @@ class Store extends AbstractExtensibleModel implements
      * @var boolean|null
      * @deprecated unused protected property
      */
-    protected $_isAdminSecure = null;
+    protected $_isAdminSecure;
 
     /**
      * Flag that shows that frontend URLs are secure
      *
      * @var boolean|null
      */
-    protected $_isFrontSecure = null;
+    protected $_isFrontSecure;
 
     /**
      * Store frontend name
      *
      * @var string|null
      */
-    protected $_frontendName = null;
+    protected $_frontendName;
 
     /**
      * Readonly flag
@@ -260,7 +260,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDatabase = null;
+    protected $_coreFileStorageDatabase;
 
     /**
      * Filesystem instance

@@ -28,7 +28,7 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
-    protected $_purchasedSeparatelyAttribute = null;
+    protected $_purchasedSeparatelyAttribute;
 
     /**
      * @var string
@@ -40,14 +40,14 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Downloadable\Helper\File
      */
-    protected $_downloadableFile = null;
+    protected $_downloadableFile;
 
     /**
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDb = null;
+    protected $_coreFileStorageDb;
 
     /**
      * Core registry

@@ -30,7 +30,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * @var Order|null
      */
-    protected $_invoice = null;
+    protected $_invoice;
 
     /**
      * @return Order

@@ -22,7 +22,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Context $context

@@ -20,14 +20,14 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var Attribute
      */
-    protected $_attribute = null;
+    protected $_attribute;
 
     /**
      * Eav data
      *
      * @var \Magento\Eav\Helper\Data
      */
-    protected $_eavData = null;
+    protected $_eavData;
 
     /**
      * @var \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker

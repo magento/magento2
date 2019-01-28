@@ -19,7 +19,7 @@ class Order extends \Magento\Framework\DataObject
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory

@@ -20,7 +20,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     /**
      * @var Quote|null
      */
-    protected $_quote = null;
+    protected $_quote;
 
     /**
      * @var array

@@ -32,7 +32,7 @@ abstract class Index extends Action implements HttpGetActionInterface
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Backup\Factory

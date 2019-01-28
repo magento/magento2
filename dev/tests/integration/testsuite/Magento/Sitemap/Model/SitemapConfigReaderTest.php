@@ -14,7 +14,7 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var SitemapConfigReader
      */
-    private $model = null;
+    private $model;
 
     protected function setUp()
     {

@@ -15,7 +15,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * @var mixed
      */
-    protected $_product = null;
+    protected $_product;
 
     /**
      * @var string
@@ -27,7 +27,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

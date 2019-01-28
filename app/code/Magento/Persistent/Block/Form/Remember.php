@@ -19,7 +19,7 @@ class Remember extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * @var \Magento\Framework\Math\Random

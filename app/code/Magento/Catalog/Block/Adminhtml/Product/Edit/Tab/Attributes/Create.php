@@ -20,7 +20,7 @@ class Create extends Button
      *
      * @var \Magento\Framework\DataObject
      */
-    protected $_config = null;
+    protected $_config;
 
     /**
      * Retrieve config of new attribute creation

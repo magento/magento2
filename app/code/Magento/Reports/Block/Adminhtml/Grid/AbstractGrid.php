@@ -19,7 +19,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var null
      */
-    protected $_currentCurrencyCode = null;
+    protected $_currentCurrencyCode;
 
     /**
      * @var array
@@ -29,14 +29,14 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var null
      */
-    protected $_aggregatedColumns = null;
+    protected $_aggregatedColumns;
 
     /**
      * Reports data
      *
      * @var \Magento\Reports\Helper\Data
      */
-    protected $_reportsData = null;
+    protected $_reportsData;
 
     /**
      * Reports grouped collection factory

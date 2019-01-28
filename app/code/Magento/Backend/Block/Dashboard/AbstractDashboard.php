@@ -18,7 +18,7 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     /**
      * @var \Magento\Backend\Helper\Dashboard\AbstractDashboard
      */
-    protected $_dataHelper = null;
+    protected $_dataHelper;
 
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory

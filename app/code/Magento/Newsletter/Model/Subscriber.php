@@ -81,7 +81,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Newsletter\Helper\Data
      */
-    protected $_newsletterData = null;
+    protected $_newsletterData;
 
     /**
      * Core store config

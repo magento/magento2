@@ -25,7 +25,7 @@ class ConsumerFactory
      *
      * @var ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * @var ConsumerConfig

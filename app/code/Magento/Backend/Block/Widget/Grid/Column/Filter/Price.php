@@ -17,17 +17,17 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * @var array
      */
-    protected $_currencyList = null;
+    protected $_currencyList;
 
     /**
      * @var \Magento\Directory\Model\Currency
      */
-    protected $_currencyModel = null;
+    protected $_currencyModel;
 
     /**
      * @var \Magento\Directory\Model\Currency\DefaultLocator
      */
-    protected $_currencyLocator = null;
+    protected $_currencyLocator;
 
     /**
      * @param \Magento\Backend\Block\Context $context

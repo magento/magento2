@@ -31,7 +31,7 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      *
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $_escaper;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory

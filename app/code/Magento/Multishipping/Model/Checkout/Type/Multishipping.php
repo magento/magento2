@@ -39,7 +39,7 @@ class Multishipping extends \Magento\Framework\DataObject
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * Core store config

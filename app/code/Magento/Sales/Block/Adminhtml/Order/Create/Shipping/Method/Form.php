@@ -28,7 +28,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxData = null;
+    protected $_taxData;
 
     /**
      * @var PriceCurrencyInterface

@@ -43,7 +43,7 @@ class Onepage
     /**
      * @var \Magento\Quote\Model\Quote
      */
-    protected $_quote = null;
+    protected $_quote;
 
     /**
      * @var \Magento\Checkout\Helper\Data
@@ -67,7 +67,7 @@ class Onepage
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

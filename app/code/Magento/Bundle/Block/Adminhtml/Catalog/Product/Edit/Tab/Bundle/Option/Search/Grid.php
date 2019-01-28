@@ -17,7 +17,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Bundle\Helper\Data
      */
-    protected $_bundleData = null;
+    protected $_bundleData;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory

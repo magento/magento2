@@ -51,7 +51,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Whether can void
      * @var string
      */
-    protected $_canVoidLookup = null;
+    protected $_canVoidLookup;
 
     /**
      * @var string
@@ -113,7 +113,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * @var CreditmemoManager
      */
-    private $creditmemoManager = null;
+    private $creditmemoManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context

@@ -10,7 +10,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Config\Model\Config\Backend\Image\Adapter
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

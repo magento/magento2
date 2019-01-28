@@ -10,12 +10,12 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Cache\Backend\MongoDb|null
      */
-    protected $_model = null;
+    protected $_model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_collection = null;
+    protected $_collection;
 
     protected function setUp()
     {

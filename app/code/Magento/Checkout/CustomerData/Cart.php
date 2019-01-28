@@ -31,7 +31,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     /**
      * @var \Magento\Quote\Model\Quote|null
      */
-    protected $quote = null;
+    protected $quote;
 
     /**
      * @var \Magento\Checkout\Helper\Data

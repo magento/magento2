@@ -25,14 +25,14 @@ class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $_persistentSession = null;
+    protected $_persistentSession;
 
     /**
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager

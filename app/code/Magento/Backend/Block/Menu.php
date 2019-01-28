@@ -42,7 +42,7 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Backend\Model\Menu\Item|false|null
      */
-    protected $_activeItemModel = null;
+    protected $_activeItemModel;
 
     /**
      * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory

@@ -36,7 +36,7 @@ class PatchHistory
     /**
      * @var array
      */
-    private $patchesRegistry = null;
+    private $patchesRegistry;
 
     /**
      * @var ResourceConnection

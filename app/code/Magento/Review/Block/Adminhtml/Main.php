@@ -16,7 +16,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface

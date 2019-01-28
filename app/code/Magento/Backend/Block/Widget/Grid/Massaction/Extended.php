@@ -38,7 +38,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_backendData = null;
+    protected $_backendData;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface

@@ -60,14 +60,14 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDb = null;
+    protected $_coreFileStorageDb;
 
     /**
      * Cms wysiwyg images
      *
      * @var \Magento\Cms\Helper\Wysiwyg\Images
      */
-    protected $_cmsWysiwygImages = null;
+    protected $_cmsWysiwygImages;
 
     /**
      * @var array

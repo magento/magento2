@@ -10,12 +10,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\View\LayoutInterface
      */
-    protected $_layout = null;
+    protected $_layout;
 
     /**
      * @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      */
-    protected $_block = null;
+    protected $_block;
 
     protected function setUp()
     {

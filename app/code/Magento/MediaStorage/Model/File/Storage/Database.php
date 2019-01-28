@@ -25,7 +25,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database
      */
-    protected $_directoryModel = null;
+    protected $_directoryModel;
 
     /**
      * Collect errors during sync process
@@ -50,7 +50,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @var string
      * @since 100.1.0
      */
-    protected $mediaBaseDirectory = null;
+    protected $mediaBaseDirectory;
 
     /**
      * @param \Magento\Framework\Model\Context $context

@@ -25,12 +25,12 @@ class Downloadable extends Widget implements TabInterface
      *
      * @var \Magento\Catalog\Model\Product
      */
-    protected $_product = null;
+    protected $_product;
 
     /**
      * @var \Magento\Framework\DataObject|null
      */
-    protected $_config = null;
+    protected $_config;
 
     /**
      * @var string
@@ -49,7 +49,7 @@ class Downloadable extends Widget implements TabInterface
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param Context $context

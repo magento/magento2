@@ -32,7 +32,7 @@ class Config
     /**
      * @var \DOMXPath
      */
-    protected $_configDomXPath = null;
+    protected $_configDomXPath;
 
     /**
      * Layout model

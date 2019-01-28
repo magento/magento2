@@ -44,21 +44,21 @@ class Item
      *
      * @var string
      */
-    protected $_sortIndex = null;
+    protected $_sortIndex;
 
     /**
      * Menu item action
      *
      * @var string
      */
-    protected $_action = null;
+    protected $_action;
 
     /**
      * Parent menu item id
      *
      * @var string
      */
-    protected $_parentId = null;
+    protected $_parentId;
 
     /**
      * Acl resource of menu item

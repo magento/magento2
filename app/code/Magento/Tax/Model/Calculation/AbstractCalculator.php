@@ -93,7 +93,7 @@ abstract class AbstractCalculator
      *
      * @var \Magento\Framework\DataObject
      */
-    private $addressRateRequest = null;
+    private $addressRateRequest;
 
     /**
      * Rounding deltas for prices

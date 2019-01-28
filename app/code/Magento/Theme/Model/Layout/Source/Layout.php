@@ -25,13 +25,13 @@ class Layout implements \Magento\Framework\Option\ArrayInterface
      *
      * @var array
      */
-    protected $_options = null;
+    protected $_options;
 
     /**
      * Default option
      * @var string
      */
-    protected $_defaultValue = null;
+    protected $_defaultValue;
 
     /**
      * Retrieve page layout options

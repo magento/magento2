@@ -32,14 +32,14 @@ class Samples extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Downloadable\Helper\File
      */
-    protected $_downloadableFile = null;
+    protected $_downloadableFile;
 
     /**
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDb = null;
+    protected $_coreFileStorageDb;
 
     /**
      * Core registry

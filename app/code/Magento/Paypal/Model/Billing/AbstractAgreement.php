@@ -15,7 +15,7 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Payment\Model\MethodInterface
      */
-    protected $_paymentMethodInstance = null;
+    protected $_paymentMethodInstance;
 
     /**
      * Billing Agreement Errors
@@ -57,7 +57,7 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @param \Magento\Framework\Model\Context $context

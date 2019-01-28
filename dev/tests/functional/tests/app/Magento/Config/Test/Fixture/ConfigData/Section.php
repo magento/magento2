@@ -52,14 +52,14 @@ class Section extends DataSource
      *
      * @var array|null
      */
-    private $fixtureData = null;
+    private $fixtureData;
 
     /**
      * Scope data.
      *
      * @var array|null
      */
-    private $scopeData = null;
+    private $scopeData;
 
     /**
      * Level of scope for set.
@@ -67,7 +67,7 @@ class Section extends DataSource
      *
      * @var string
      */
-    private $setLevel = null;
+    private $setLevel;
 
     /**
      * @constructor

@@ -16,7 +16,7 @@ abstract class AbstractIntegrity extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_enabledModules = null;
+    protected $_enabledModules;
 
     /**
      * Returns array of enabled modules

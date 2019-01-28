@@ -70,14 +70,14 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\SendFriend\Helper\Data
      */
-    protected $_sendfriendData = null;
+    protected $_sendfriendData;
 
     /**
      * Catalog image
      *
      * @var \Magento\Catalog\Helper\Image
      */
-    protected $_catalogImage = null;
+    protected $_catalogImage;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder

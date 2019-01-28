@@ -14,7 +14,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Cache\Backend\MongoDb|null
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

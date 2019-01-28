@@ -137,7 +137,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var array
      */
-    protected $_superAttrValuesCombs = null;
+    protected $_superAttrValuesCombs;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface

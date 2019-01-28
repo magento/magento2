@@ -20,7 +20,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     /**
      * @var \Magento\Framework\Translate\AdapterInterface|null
      */
-    protected $_translator = null;
+    protected $_translator;
 
     /**
      * Array of validation failure messages

@@ -34,7 +34,7 @@ abstract class Onepage extends Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface

@@ -30,14 +30,14 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog product
      *
      * @var Product
      */
-    protected $_catalogProduct = null;
+    protected $_catalogProduct;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

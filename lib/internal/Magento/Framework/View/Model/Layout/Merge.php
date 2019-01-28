@@ -87,7 +87,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @var array|null
      */
-    protected $subst = null;
+    protected $subst;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface

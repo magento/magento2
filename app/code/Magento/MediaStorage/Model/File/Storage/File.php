@@ -25,26 +25,26 @@ class File
      *
      * @var string
      */
-    protected $_mediaBaseDirectory = null;
+    protected $_mediaBaseDirectory;
 
     /**
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_storageHelper = null;
+    protected $_storageHelper;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Media
      */
-    protected $_mediaHelper = null;
+    protected $_mediaHelper;
 
     /**
      * Data at storage
      *
      * @var array
      */
-    protected $_data = null;
+    protected $_data;
 
     /**
      * Collect errors during sync process

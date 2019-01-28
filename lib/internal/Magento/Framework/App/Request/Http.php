@@ -83,7 +83,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     /**
      * @var bool|null
      */
-    protected $isSafeMethod = null;
+    protected $isSafeMethod;
 
     /**
      * @var array

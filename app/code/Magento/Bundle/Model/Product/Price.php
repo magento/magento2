@@ -39,7 +39,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Serializer interface instance.

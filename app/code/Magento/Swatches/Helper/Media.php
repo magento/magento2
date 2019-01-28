@@ -38,7 +38,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $fileStorageDb = null;
+    protected $fileStorageDb;
 
     /**
      * Store manager

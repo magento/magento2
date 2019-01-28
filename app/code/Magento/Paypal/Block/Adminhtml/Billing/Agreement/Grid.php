@@ -15,7 +15,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var \Magento\Paypal\Helper\Data
      */
-    protected $_helper = null;
+    protected $_helper;
 
     /**
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory

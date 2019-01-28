@@ -26,7 +26,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

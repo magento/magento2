@@ -15,7 +15,7 @@ class Minsaleqty extends \Magento\Framework\App\Config\Value
      *
      * @var \Magento\CatalogInventory\Helper\Minsaleqty
      */
-    protected $_catalogInventoryMinsaleqty = null;
+    protected $_catalogInventoryMinsaleqty;
 
     /**
      * @param \Magento\Framework\Model\Context $context

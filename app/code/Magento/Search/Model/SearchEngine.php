@@ -17,7 +17,7 @@ class SearchEngine implements SearchEngineInterface
     /**
      * @var AdapterInterface
      */
-    private $adapter = null;
+    private $adapter;
 
     /**
      * Adapter factory

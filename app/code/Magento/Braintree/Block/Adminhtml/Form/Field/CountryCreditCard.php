@@ -16,12 +16,12 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * @var Countries
      */
-    protected $countryRenderer = null;
+    protected $countryRenderer;
 
     /**
      * @var CcTypes
      */
-    protected $ccTypesRenderer = null;
+    protected $ccTypesRenderer;
 
     /**
      * Returns renderer for country element

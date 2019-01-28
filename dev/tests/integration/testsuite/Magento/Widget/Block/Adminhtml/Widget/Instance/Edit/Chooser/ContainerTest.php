@@ -13,7 +13,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container
      */
-    protected $block = null;
+    protected $block;
 
     protected function setUp()
     {

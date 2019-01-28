@@ -39,7 +39,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      *
      * @var null|bool
      */
-    protected $_isAvailable = null;
+    protected $_isAvailable;
 
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory

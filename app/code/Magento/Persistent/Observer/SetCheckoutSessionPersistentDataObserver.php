@@ -20,7 +20,7 @@ class SetCheckoutSessionPersistentDataObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    private $persistentSession = null;
+    private $persistentSession;
 
     /**
      * Customer session
@@ -34,14 +34,14 @@ class SetCheckoutSessionPersistentDataObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    private $persistentData = null;
+    private $persistentData;
 
     /**
      * Customer Repository
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    private $customerRepository = null;
+    private $customerRepository;
 
     /**
      * @param \Magento\Persistent\Helper\Session $persistentSession

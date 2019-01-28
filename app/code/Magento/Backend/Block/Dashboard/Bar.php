@@ -20,7 +20,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * @var \Magento\Directory\Model\Currency|null
      */
-    protected $_currentCurrencyCode = null;
+    protected $_currentCurrencyCode;
 
     /**
      * @return array

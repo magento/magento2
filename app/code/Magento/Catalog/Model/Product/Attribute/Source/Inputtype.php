@@ -16,14 +16,14 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager

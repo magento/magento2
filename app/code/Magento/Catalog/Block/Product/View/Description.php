@@ -22,14 +22,14 @@ class Description extends \Magento\Framework\View\Element\Template
     /**
      * @var Product
      */
-    protected $_product = null;
+    protected $_product;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

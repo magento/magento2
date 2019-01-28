@@ -10,7 +10,7 @@ class InvalidTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Indexer\Model\Indexer
      */
-    private $indexerMock = null;
+    private $indexerMock;
 
     /**
      * @var \Magento\Indexer\Model\Message\Invalid

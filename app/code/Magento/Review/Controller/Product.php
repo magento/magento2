@@ -22,7 +22,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * Customer session model

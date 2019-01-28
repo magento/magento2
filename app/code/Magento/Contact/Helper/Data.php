@@ -42,7 +42,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var array
      */
-    private $postData = null;
+    private $postData;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context

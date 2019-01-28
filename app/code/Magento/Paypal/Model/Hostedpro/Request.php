@@ -55,7 +55,7 @@ class Request extends DataObject
      *
      * @var \Magento\Customer\Helper\Address
      */
-    protected $customerAddress = null;
+    protected $customerAddress;
 
     /**
      * Tax data

@@ -18,14 +18,14 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    private $instanceName = null;
+    private $instanceName;
 
     /**
      * @var ConfigPool

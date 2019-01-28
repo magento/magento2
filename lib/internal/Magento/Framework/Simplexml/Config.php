@@ -17,7 +17,7 @@ class Config
      *
      * @var Element
      */
-    protected $_xml = null;
+    protected $_xml;
 
     /**
      * Class name of simplexml elements for this configuration

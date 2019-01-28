@@ -125,7 +125,7 @@ abstract class AbstractEntity
      *
      * @var string|null
      */
-    protected $_fileName = null;
+    protected $_fileName;
 
     /**
      * Address attributes collection
@@ -160,7 +160,7 @@ abstract class AbstractEntity
      *
      * @var array
      */
-    protected $_attributeCodes = null;
+    protected $_attributeCodes;
 
     /**
      * Permanent entity columns

@@ -29,14 +29,14 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      *
      * @var \Magento\Backup\Model\ResourceModel\Db
      */
-    protected $_resourceDb = null;
+    protected $_resourceDb;
 
     /**
      * Core resource model
      *
      * @var \Magento\Framework\App\ResourceConnection
      */
-    protected $_resource = null;
+    protected $_resource;
 
     /**
      * @var Helper

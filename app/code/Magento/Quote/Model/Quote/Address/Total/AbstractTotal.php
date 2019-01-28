@@ -25,7 +25,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     /**
      * @var string
      */
-    protected $_address = null;
+    protected $_address;
 
     /**
      * Various abstract abilities
@@ -46,7 +46,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @var string
      */
-    protected $_itemRowTotalKey = null;
+    protected $_itemRowTotalKey;
 
     /**
      * Set total code code name

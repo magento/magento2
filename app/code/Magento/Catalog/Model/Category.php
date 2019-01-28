@@ -149,7 +149,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
      */
-    protected $_treeModel = null;
+    protected $_treeModel;
 
     /**
      * Core data

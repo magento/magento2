@@ -29,7 +29,7 @@ abstract class AbstractSource implements
      *
      * @var array
      */
-    protected $_options = null;
+    protected $_options;
 
     /**
      * Set attribute instance

@@ -29,7 +29,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\ImportExport\Helper\Data
      */
-    protected $_importExportData = null;
+    protected $_importExportData;
 
     /**
      * Local filters types base on attribute code

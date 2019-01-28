@@ -19,7 +19,7 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      *
      * @var ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * Instance name to create

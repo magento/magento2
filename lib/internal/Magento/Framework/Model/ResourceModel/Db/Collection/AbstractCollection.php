@@ -43,7 +43,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @var array|null
      */
-    protected $_fieldsToSelect = null;
+    protected $_fieldsToSelect;
 
     /**
      * Expression fields to select in query.
@@ -57,7 +57,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @var array|null
      */
-    protected $_initialFieldsToSelect = null;
+    protected $_initialFieldsToSelect;
 
     /**
      * Fields to select changed flag
@@ -78,7 +78,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @var string
      */
-    protected $_mainTable = null;
+    protected $_mainTable;
 
     /**
      * Reset items data changed flag
@@ -106,7 +106,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory

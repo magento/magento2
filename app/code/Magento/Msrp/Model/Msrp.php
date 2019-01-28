@@ -13,7 +13,7 @@ class Msrp
     /**
      * @var array
      */
-    protected $mapApplyToProductType = null;
+    protected $mapApplyToProductType;
 
     /**
      * @var AttributeFactory

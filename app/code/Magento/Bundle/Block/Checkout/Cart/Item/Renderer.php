@@ -22,7 +22,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      *
      * @var Configuration
      */
-    protected $_bundleProductConfiguration = null;
+    protected $_bundleProductConfiguration;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

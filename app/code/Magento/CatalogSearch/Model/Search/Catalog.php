@@ -17,7 +17,7 @@ class Catalog extends \Magento\Framework\DataObject
      *
      * @var \Magento\Search\Model\QueryFactory
      */
-    protected $queryFactory = null;
+    protected $queryFactory;
 
     /**
      * Magento string lib
@@ -31,7 +31,7 @@ class Catalog extends \Magento\Framework\DataObject
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminhtmlData;
 
     /**
      * @param \Magento\Backend\Helper\Data $adminhtmlData

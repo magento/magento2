@@ -17,7 +17,7 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
      *
      * @var string
      */
-    protected $_orderStatus = null;
+    protected $_orderStatus;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory

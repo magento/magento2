@@ -37,7 +37,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @var \Magento\Framework\Filesystem\File\WriteInterface
      */
-    protected $_stream = null;
+    protected $_stream;
 
     /**
      * @var \Magento\Framework\Filesystem

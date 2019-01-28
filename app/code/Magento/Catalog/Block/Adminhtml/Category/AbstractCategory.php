@@ -18,7 +18,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Tree

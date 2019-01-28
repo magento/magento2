@@ -58,7 +58,7 @@ class UpdateCustomVariableEntityTest extends Injectable
      *
      * @var Store
      */
-    protected $store = null;
+    protected $store;
 
     /**
      * Configuration setting.

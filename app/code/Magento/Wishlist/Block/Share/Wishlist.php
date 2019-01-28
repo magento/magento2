@@ -22,7 +22,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @var \Magento\Customer\Api\Data\CustomerInterface
      */
-    protected $_customer = null;
+    protected $_customer;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface

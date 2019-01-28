@@ -29,7 +29,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     /**
      * @var SearchResultFactory
      */
-    protected $searchResultFactory = null;
+    protected $searchResultFactory;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderAddressInterface[]

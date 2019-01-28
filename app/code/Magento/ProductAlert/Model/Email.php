@@ -102,7 +102,7 @@ class Email extends AbstractModel
      *
      * @var Data
      */
-    protected $_productAlertData = null;
+    protected $_productAlertData;
 
     /**
      * Core store config
@@ -139,7 +139,7 @@ class Email extends AbstractModel
     /**
      * @var int
      */
-    private $storeId = null;
+    private $storeId;
 
     /**
      * @param Context $context

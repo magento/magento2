@@ -77,7 +77,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @var \Magento\Directory\Helper\Data
      */
-    protected $_directoryData = null;
+    protected $_directoryData;
 
     /**
      * @var \Magento\Eav\Model\Config

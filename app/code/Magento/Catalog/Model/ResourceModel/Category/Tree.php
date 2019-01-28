@@ -58,14 +58,14 @@ class Tree extends Dbp
      *
      * @var array
      */
-    protected $_inactiveCategoryIds = null;
+    protected $_inactiveCategoryIds;
 
     /**
      * Store id
      *
      * @var integer
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection

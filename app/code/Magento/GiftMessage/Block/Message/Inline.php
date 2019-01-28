@@ -18,17 +18,17 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * @var mixed
      */
-    protected $_entity = null;
+    protected $_entity;
 
     /**
      * @var string|null
      */
-    protected $_type = null;
+    protected $_type;
 
     /**
      * @var Message|null
      */
-    protected $_giftMessage = null;
+    protected $_giftMessage;
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
-    protected $_giftMessageMessage = null;
+    protected $_giftMessageMessage;
 
     /**
      * @var \Magento\Customer\Model\Session

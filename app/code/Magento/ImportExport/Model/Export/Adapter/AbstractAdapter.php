@@ -28,7 +28,7 @@ abstract class AbstractAdapter
      *
      * @var array
      */
-    protected $_headerCols = null;
+    protected $_headerCols;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write

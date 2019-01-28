@@ -26,7 +26,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @var array
      */
-    protected $_totals = null;
+    protected $_totals;
 
     /**
      * @var \Magento\Sales\Model\Config

@@ -15,14 +15,14 @@ class QueueConfigItemFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    private $instanceName = null;
+    private $instanceName;
 
     /**
      * Factory constructor

@@ -19,7 +19,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      *
      * @var \Magento\Reports\Model\Flag
      */
-    protected $_flag = null;
+    protected $_flag;
 
     /**
      * Logger instance

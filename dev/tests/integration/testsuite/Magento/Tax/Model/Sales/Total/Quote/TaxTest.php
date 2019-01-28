@@ -24,7 +24,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @var SetupUtil
      */
-    protected $setupUtil = null;
+    protected $setupUtil;
 
     /**
      * @var TotalsCollector

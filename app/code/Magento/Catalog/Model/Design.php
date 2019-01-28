@@ -26,7 +26,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Framework\View\DesignInterface
      */
-    protected $_design = null;
+    protected $_design;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface

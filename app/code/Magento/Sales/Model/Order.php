@@ -147,12 +147,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @var Currency
      */
-    protected $_orderCurrency = null;
+    protected $_orderCurrency;
 
     /**
      * @var Currency|null
      */
-    protected $_baseCurrency = null;
+    protected $_baseCurrency;
 
     /**
      * Array of action flags for canUnhold, canEdit, etc.

@@ -57,21 +57,21 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @var array
      */
-    protected $_data = null;
+    protected $_data;
 
     /**
      * Fields map for correlation names & real selected fields
      *
      * @var array
      */
-    protected $_map = null;
+    protected $_map;
 
     /**
      * Database's statement for fetch item one by one
      *
      * @var \Zend_Db_Statement_Pdo
      */
-    protected $_fetchStmt = null;
+    protected $_fetchStmt;
 
     /**
      * Whether orders are rendered

@@ -21,7 +21,7 @@ class Payment extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

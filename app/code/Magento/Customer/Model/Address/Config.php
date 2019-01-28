@@ -33,7 +33,7 @@ class Config extends ConfigData
      *
      * @var \Magento\Store\Model\Store
      */
-    protected $_store = null;
+    protected $_store;
 
     /**
      * Default types per store, used for invalid code

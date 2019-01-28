@@ -21,7 +21,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $schema = null;
+    protected $schema;
 
     /**
      * SchemaLocator constructor.

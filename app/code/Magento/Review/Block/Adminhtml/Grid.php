@@ -25,21 +25,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Review\Helper\Action\Pager
      */
-    protected $_reviewActionPager = null;
+    protected $_reviewActionPager;
 
     /**
      * Review data
      *
      * @var \Magento\Review\Helper\Data
      */
-    protected $_reviewData = null;
+    protected $_reviewData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Review collection model factory

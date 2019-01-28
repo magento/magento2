@@ -21,7 +21,7 @@ class WishlistTab extends TabWrapper implements TabInterface
      *
      * @var Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var bool

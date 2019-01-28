@@ -28,7 +28,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      *
      * @var Express
      */
-    protected $_ecInstance = null;
+    protected $_ecInstance;
 
     /**
      * @var InfoFactory

@@ -28,7 +28,7 @@ class Advanced extends Generic
      *
      * @var Data
      */
-    protected $_eavData = null;
+    protected $_eavData;
 
     /**
      * @var Yesno

@@ -34,7 +34,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Constructor

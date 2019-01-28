@@ -20,7 +20,7 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory

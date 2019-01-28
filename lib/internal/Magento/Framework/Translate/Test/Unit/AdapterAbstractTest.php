@@ -10,7 +10,7 @@ class AdapterAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Translate\AbstractAdapter
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

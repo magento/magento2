@@ -101,7 +101,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\Catalog\Model\Product\Type\AbstractType
      */
-    protected $_typeInstance = null;
+    protected $_typeInstance;
 
     /**
      * Product link instance
@@ -122,7 +122,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var Product\Url
      */
-    protected $_urlModel = null;
+    protected $_urlModel;
 
     /**
      * @var ResourceModel\Product
@@ -156,7 +156,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @var array
      */
-    protected $_links = null;
+    protected $_links;
 
     /**
      * Flag for available duplicate function
@@ -177,7 +177,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $_catalogProduct = null;
+    protected $_catalogProduct;
 
     /**
      * @var \Magento\Framework\Module\Manager

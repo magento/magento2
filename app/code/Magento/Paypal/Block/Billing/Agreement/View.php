@@ -25,21 +25,21 @@ class View extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Paypal\Model\Billing\Agreement
      */
-    protected $_billingAgreementInstance = null;
+    protected $_billingAgreementInstance;
 
     /**
      * Related orders collection
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
-    protected $_relatedOrders = null;
+    protected $_relatedOrders;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory

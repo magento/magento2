@@ -10,7 +10,7 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport
      */
-    protected $_block = null;
+    protected $_block;
 
     protected function setUp()
     {

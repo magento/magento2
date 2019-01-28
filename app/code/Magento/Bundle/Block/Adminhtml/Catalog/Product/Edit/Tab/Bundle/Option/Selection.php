@@ -22,14 +22,14 @@ class Selection extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Bundle\Model\Source\Option\Selection\Price\Type

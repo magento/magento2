@@ -47,7 +47,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @var \Magento\Catalog\Helper\Product\Compare
      */
-    protected $_catalogProductCompare = null;
+    protected $_catalogProductCompare;
 
     /**
      * Customer session

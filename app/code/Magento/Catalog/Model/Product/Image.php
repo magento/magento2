@@ -47,7 +47,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @var int
      * @deprecated use config setting with path self::XML_PATH_JPEG_QUALITY
      */
-    protected $_quality = null;
+    protected $_quality;
 
     /**
      * @var bool
@@ -152,7 +152,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDatabase = null;
+    protected $_coreFileStorageDatabase;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

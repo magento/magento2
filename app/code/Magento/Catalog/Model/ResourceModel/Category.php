@@ -46,21 +46,21 @@ class Category extends AbstractResource
      *
      * @var int
      */
-    protected $_isActiveAttributeId = null;
+    protected $_isActiveAttributeId;
 
     /**
      * Store id
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * Category collection factory

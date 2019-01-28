@@ -20,7 +20,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @var Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * @param Context $context

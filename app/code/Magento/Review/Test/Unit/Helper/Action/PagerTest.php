@@ -8,7 +8,7 @@ namespace Magento\Review\Test\Unit\Helper\Action;
 class PagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Review\Helper\Action\Pager */
-    protected $_helper = null;
+    protected $_helper;
 
     /**
      * Prepare helper object

@@ -53,7 +53,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * @var Item|null
      */
-    protected $_parentItem = null;
+    protected $_parentItem;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\AbstractItem[]

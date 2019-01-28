@@ -16,12 +16,12 @@ class Item
     /**
      * @var Item|null
      */
-    protected $parent = null;
+    protected $parent;
 
     /**
      * @var string
      */
-    protected $hash = null;
+    protected $hash;
 
     /**
      * @var array

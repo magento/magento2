@@ -18,14 +18,14 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_backendData = null;
+    protected $_backendData;
 
     /**
      * Catalog data
      *
      * @var \Magento\Framework\Module\Manager
      */
-    protected $_moduleManager = null;
+    protected $_moduleManager;
 
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config

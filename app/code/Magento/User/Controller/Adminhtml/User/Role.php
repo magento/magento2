@@ -21,7 +21,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Factory for user role model

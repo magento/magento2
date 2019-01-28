@@ -15,7 +15,7 @@ class Exceptions extends ArraySerialized
      *
      * @var \Magento\Framework\View\DesignInterface
      */
-    protected $_design = null;
+    protected $_design;
 
     /**
      * Initialize dependencies

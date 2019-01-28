@@ -32,7 +32,7 @@ class PublisherConsumerController
     /**
      * @var int|null
      */
-    private $maxMessages = null;
+    private $maxMessages;
 
     /**
      * @var OsInfo

@@ -16,7 +16,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema = null;
+    protected $_schema;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader

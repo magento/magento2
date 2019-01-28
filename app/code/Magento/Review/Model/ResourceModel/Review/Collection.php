@@ -18,35 +18,35 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var string
      */
-    protected $_reviewTable = null;
+    protected $_reviewTable;
 
     /**
      * Review detail table
      *
      * @var string
      */
-    protected $_reviewDetailTable = null;
+    protected $_reviewDetailTable;
 
     /**
      * Review status table
      *
      * @var string
      */
-    protected $_reviewStatusTable = null;
+    protected $_reviewStatusTable;
 
     /**
      * Review entity table
      *
      * @var string
      */
-    protected $_reviewEntityTable = null;
+    protected $_reviewEntityTable;
 
     /**
      * Review store table
      *
      * @var string
      */
-    protected $_reviewStoreTable = null;
+    protected $_reviewStoreTable;
 
     /**
      * Add store data flag
@@ -59,7 +59,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var \Magento\Review\Helper\Data
      */
-    protected $_reviewData = null;
+    protected $_reviewData;
 
     /**
      * Rating option model

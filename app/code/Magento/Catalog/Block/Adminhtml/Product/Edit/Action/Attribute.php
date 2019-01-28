@@ -25,7 +25,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      *
      * @var ActionAttribute
      */
-    protected $_helperActionAttribute = null;
+    protected $_helperActionAttribute;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

@@ -31,7 +31,7 @@ abstract class AbstractCommand
      *
      * @var \Magento\Backend\Model\Menu\Builder\AbstractCommand
      */
-    protected $_next = null;
+    protected $_next;
 
     /**
      * @param array $data

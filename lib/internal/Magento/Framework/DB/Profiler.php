@@ -28,7 +28,7 @@ class Profiler extends \Zend_Db_Profiler
      *
      * @var string|null
      */
-    private $_lastQueryId = null;
+    private $_lastQueryId;
 
     /**
      * Setter for host IP

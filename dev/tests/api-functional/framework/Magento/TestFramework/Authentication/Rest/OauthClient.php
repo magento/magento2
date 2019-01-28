@@ -30,7 +30,7 @@ class OauthClient extends AbstractService
     const DEFAULT_TIMEOUT = 120;
 
     /** @var string|null */
-    protected $_oauthVerifier = null;
+    protected $_oauthVerifier;
 
     public function __construct(
         Credentials $credentials,

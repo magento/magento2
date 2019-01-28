@@ -31,7 +31,7 @@ class Repository implements TransactionRepositoryInterface
      *
      * @var SearchResultFactory
      */
-    private $searchResultFactory = null;
+    private $searchResultFactory;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder

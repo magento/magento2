@@ -18,7 +18,7 @@ class Font implements \Magento\Framework\Option\ArrayInterface
      *
      * @var \Magento\Captcha\Helper\Data
      */
-    protected $_captchaData = null;
+    protected $_captchaData;
 
     /**
      * @param \Magento\Captcha\Helper\Data $captchaData

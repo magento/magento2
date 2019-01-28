@@ -35,14 +35,14 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      *
      * @var \Magento\CatalogRule\Helper\Data
      */
-    protected $_catalogRuleData = null;
+    protected $_catalogRuleData;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Eav\Model\Config

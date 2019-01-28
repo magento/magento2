@@ -16,7 +16,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $escaper = null;
+    protected $escaper;
 
     /**
      * @var \Magento\Framework\ZendEscaper

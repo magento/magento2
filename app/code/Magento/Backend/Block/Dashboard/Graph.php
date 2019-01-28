@@ -97,7 +97,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @var \Magento\Backend\Helper\Dashboard\Data
      */
-    protected $_dashboardData = null;
+    protected $_dashboardData;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

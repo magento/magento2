@@ -29,7 +29,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Newsletter\Model\Subscriber
      */
-    protected $_subscriber = null;
+    protected $_subscriber;
 
     /**
      * Subscriber factory

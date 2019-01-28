@@ -33,7 +33,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface

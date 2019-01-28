@@ -14,7 +14,7 @@ class Config
      *
      * @var array
      */
-    protected $_pageTypes = null;
+    protected $_pageTypes;
 
     /**
      * Data storage

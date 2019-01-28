@@ -44,7 +44,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @var null|int
      */
-    protected $_customerId = null;
+    protected $_customerId;
 
     /**
      * Catalog session

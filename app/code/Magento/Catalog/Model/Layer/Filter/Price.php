@@ -25,7 +25,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog layer filter price algorithm

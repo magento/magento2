@@ -29,7 +29,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
     /**
      * @var SearchResultFactory
      */
-    protected $searchResultFactory = null;
+    protected $searchResultFactory;
 
     /**
      * \Magento\Sales\Api\Data\CreditmemoInterface[]

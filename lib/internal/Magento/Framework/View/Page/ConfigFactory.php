@@ -16,14 +16,14 @@ class ConfigFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $instanceName = null;
+    protected $instanceName;
 
     /**
      * Factory constructor

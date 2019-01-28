@@ -20,7 +20,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @var int
      */
-    protected $_orderId = null;
+    protected $_orderId;
 
     /**
      * Columns of order info that should be selected
@@ -48,21 +48,21 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @var int
      */
-    protected $_paymentId = null;
+    protected $_paymentId;
 
     /**
      * Parent ID filter
      *
      * @var int
      */
-    protected $_parentId = null;
+    protected $_parentId;
 
     /**
      * Filter by transaction type
      *
      * @var string[]
      */
-    protected $_txnTypes = null;
+    protected $_txnTypes;
 
     /**
      * Order field for setOrderFilter

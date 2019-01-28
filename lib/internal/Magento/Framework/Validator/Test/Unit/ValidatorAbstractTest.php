@@ -14,7 +14,7 @@ class ValidatorAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @var null|\Magento\Framework\Translate\AdapterInterface
      */
-    protected $_defaultTranslator = null;
+    protected $_defaultTranslator;
 
     protected function setUp()
     {

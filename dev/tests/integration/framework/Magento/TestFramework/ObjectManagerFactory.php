@@ -38,7 +38,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
     /**
      * @var array
      */
-    protected $_primaryConfigData = null;
+    protected $_primaryConfigData;
 
     /**
      * Restore locator instance

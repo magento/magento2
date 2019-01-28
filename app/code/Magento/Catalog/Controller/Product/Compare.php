@@ -23,7 +23,7 @@ abstract class Compare extends \Magento\Framework\App\Action\Action implements H
      *
      * @var null|int
      */
-    protected $_customerId = null;
+    protected $_customerId;
 
     /**
      * Catalog session

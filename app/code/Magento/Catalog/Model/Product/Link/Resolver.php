@@ -21,7 +21,7 @@ class Resolver
      * @var null|array
      * @since 101.0.0
      */
-    protected $links = null;
+    protected $links;
 
     /**
      * Resolver constructor.

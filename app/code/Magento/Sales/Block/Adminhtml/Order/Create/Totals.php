@@ -35,7 +35,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @var \Magento\Sales\Helper\Data
      */
-    protected $_salesData = null;
+    protected $_salesData;
 
     /**
      * Sales config

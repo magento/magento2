@@ -20,7 +20,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDatabase = null;
+    protected $_coreFileStorageDatabase;
 
     /**
      * Filesystem object.

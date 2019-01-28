@@ -12,7 +12,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Theme\Model\Design\Backend\Exceptions
      */
-    private $exceptions = null;
+    private $exceptions;
 
     /** @var Json */
     private $serializer;

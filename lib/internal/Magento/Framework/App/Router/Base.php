@@ -106,7 +106,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     /**
      * @var string
      */
-    protected $pathPrefix = null;
+    protected $pathPrefix;
 
     /**
      * @var \Magento\Framework\App\Router\ActionList

@@ -17,7 +17,7 @@ class Validator extends \Zend_Validate_InArray
      *
      * @var \Magento\Eav\Helper\Data
      */
-    protected $_eavData = null;
+    protected $_eavData;
 
     /**
      * @param \Magento\Eav\Helper\Data $eavData

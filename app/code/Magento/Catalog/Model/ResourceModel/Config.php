@@ -24,7 +24,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * Eav config

@@ -26,12 +26,12 @@ class Cart
     /**
      * @var \Magento\Quote\Model\Quote|null
      */
-    protected $quote = null;
+    protected $quote;
 
     /**
      * @var array|null
      */
-    protected $totals = null;
+    protected $totals;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession

@@ -20,7 +20,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\View\LayoutInterface
      */
-    protected $_layout = null;
+    protected $_layout;
 
     protected static $_mocks = [];
 

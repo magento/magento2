@@ -30,7 +30,7 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var \Magento\Payment\Helper\Data

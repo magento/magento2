@@ -29,7 +29,7 @@ class MaxHeapTableSizeProcessor
      *
      * @var int
      */
-    protected $currentMaxHeapTableSize = null;
+    protected $currentMaxHeapTableSize;
 
     /**
      * @param ResourceConnection $resource

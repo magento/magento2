@@ -42,12 +42,12 @@ class PatchRegistry implements \IteratorAggregate
     /**
      * @var \Iterator
      */
-    private $iterator = null;
+    private $iterator;
 
     /**
      * @var \Iterator
      */
-    private $reverseIterator = null;
+    private $reverseIterator;
 
     /**
      * @var array

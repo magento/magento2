@@ -19,7 +19,7 @@ class DocumentFactory
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $_instanceName;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

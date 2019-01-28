@@ -17,7 +17,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      *
      * @var \Magento\Downloadable\Model\Link\Purchased
      */
-    protected $_purchasedLinks = null;
+    protected $_purchasedLinks;
 
     /**
      * Core store config

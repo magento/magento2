@@ -15,7 +15,7 @@ abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db
      *
      * @var string
      */
-    protected $_connectionName = null;
+    protected $_connectionName;
 
     /**
      * Sets name of connection the resource will use

@@ -24,7 +24,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

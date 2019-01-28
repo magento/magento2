@@ -19,7 +19,7 @@ class Sftp extends AbstractIo
     /**
      * @var \phpseclib\Net\SFTP
      */
-    protected $_connection = null;
+    protected $_connection;
 
     /**
      * Open a SFTP connection to a remote site.

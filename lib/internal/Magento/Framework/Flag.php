@@ -22,7 +22,7 @@ class Flag extends Model\AbstractModel
      *
      * @var string
      */
-    protected $_flagCode = null;
+    protected $_flagCode;
 
     /**
      * Serializer for encode/decode string/data.

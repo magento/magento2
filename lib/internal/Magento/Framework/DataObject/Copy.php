@@ -21,7 +21,7 @@ class Copy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager = null;
+    protected $eventManager;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesFactory

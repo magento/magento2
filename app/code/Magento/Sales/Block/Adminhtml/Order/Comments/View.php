@@ -19,7 +19,7 @@ class View extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Sales\Helper\Data
      */
-    protected $_salesData = null;
+    protected $_salesData;
 
     /**
      * @var \Magento\Sales\Helper\Admin

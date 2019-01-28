@@ -17,7 +17,7 @@ class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var string
      */
-    protected $_attributeTabBlock = null;
+    protected $_attributeTabBlock;
 
     /**
      * Attribute Tab block name for category edit

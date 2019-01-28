@@ -30,12 +30,12 @@ class Item extends AbstractModel implements ShipmentItemInterface
     /**
      * @var \Magento\Sales\Model\Order\Shipment|null
      */
-    protected $_shipment = null;
+    protected $_shipment;
 
     /**
      * @var \Magento\Sales\Model\Order\Item|null
      */
-    protected $_orderItem = null;
+    protected $_orderItem;
 
     /**
      * @var \Magento\Sales\Model\Order\ItemFactory

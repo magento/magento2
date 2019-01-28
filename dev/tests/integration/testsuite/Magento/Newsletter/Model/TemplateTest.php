@@ -13,7 +13,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Newsletter\Model\Template
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

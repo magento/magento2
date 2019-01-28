@@ -78,7 +78,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @var string
      */
-    protected $_dataTable = null;
+    protected $_dataTable;
 
     /**
      * @var \Magento\Eav\Model\Config

@@ -19,7 +19,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager = null;
+    protected $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

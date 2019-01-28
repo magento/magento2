@@ -25,7 +25,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * Customer session

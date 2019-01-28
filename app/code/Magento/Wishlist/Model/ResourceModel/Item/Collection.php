@@ -79,14 +79,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var \Magento\Sales\Helper\Admin
      */
-    protected $_adminhtmlSales = null;
+    protected $_adminhtmlSales;
 
     /**
      * Catalog inventory data
      *
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      */
-    protected $stockConfiguration = null;
+    protected $stockConfiguration;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

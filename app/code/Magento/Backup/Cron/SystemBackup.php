@@ -31,14 +31,14 @@ class SystemBackup
      *
      * @var \Magento\Backup\Helper\Data
      */
-    protected $_backupData = null;
+    protected $_backupData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Psr\Log\LoggerInterface

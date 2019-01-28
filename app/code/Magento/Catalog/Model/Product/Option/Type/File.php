@@ -30,7 +30,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * @var string|null
      */
-    protected $_formattedOptionValue = null;
+    protected $_formattedOptionValue;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
@@ -49,7 +49,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_coreFileStorageDatabase = null;
+    protected $_coreFileStorageDatabase;
 
     /**
      * @var \Magento\Framework\Escaper

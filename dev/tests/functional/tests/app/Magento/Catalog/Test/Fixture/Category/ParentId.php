@@ -20,7 +20,7 @@ class ParentId extends DataSource
      *
      * @var Category
      */
-    protected $parentCategory = null;
+    protected $parentCategory;
 
     /**
      * @constructor

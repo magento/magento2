@@ -103,7 +103,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @var string|null
      */
-    protected $_fragment = null;
+    protected $_fragment;
 
     /**
      * Set pager data

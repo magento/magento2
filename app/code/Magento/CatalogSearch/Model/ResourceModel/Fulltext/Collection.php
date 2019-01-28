@@ -41,7 +41,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var \Magento\Search\Model\QueryFactory
      * @deprecated 100.1.0
      */
-    protected $queryFactory = null;
+    protected $queryFactory;
 
     /**
      * @var \Magento\Framework\Search\Request\Builder
@@ -63,7 +63,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var string|null
      */
-    private $relevanceOrderDirection = null;
+    private $relevanceOrderDirection;
 
     /**
      * @var string

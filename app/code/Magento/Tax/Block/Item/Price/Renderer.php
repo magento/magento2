@@ -36,14 +36,14 @@ class Renderer extends \Magento\Framework\View\Element\Template
     /**
      * @var string|int|null
      */
-    protected $storeId = null;
+    protected $storeId;
 
     /**
      * Set the display area, e.g., cart, sales, etc.
      *
      * @var string
      */
-    protected $zone = null;
+    protected $zone;
 
     /**
      * @var PriceCurrencyInterface

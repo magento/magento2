@@ -93,7 +93,7 @@ class Application
      *
      * @var null
      */
-    protected $_appArea = null;
+    protected $_appArea;
 
     /**
      * Primary DI Config.

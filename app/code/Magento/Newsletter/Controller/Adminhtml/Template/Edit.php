@@ -15,7 +15,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context

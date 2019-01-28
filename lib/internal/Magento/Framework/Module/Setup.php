@@ -18,7 +18,7 @@ class Setup implements SetupInterface
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private $connection = null;
+    private $connection;
 
     /**
      * Tables cache array

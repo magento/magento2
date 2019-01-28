@@ -28,7 +28,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      *
      * @var bool
      */
-    protected $_isDisplayed = null;
+    protected $_isDisplayed;
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage\Flag $fileStorage

@@ -18,7 +18,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @var string|null
      */
-    protected $_blockGroup = null;
+    protected $_blockGroup;
 
     /**
      * Controller name

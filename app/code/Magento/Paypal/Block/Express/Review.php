@@ -38,7 +38,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @var Rate
      */
-    protected $_currentShippingRate = null;
+    protected $_currentShippingRate;
 
     /**
      * Paypal controller path

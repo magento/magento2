@@ -24,7 +24,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @var \Magento\Sales\Helper\Reorder
      */
-    protected $_salesReorder = null;
+    protected $_salesReorder;
 
     /**
      * @param \Magento\Backend\Block\Context $context

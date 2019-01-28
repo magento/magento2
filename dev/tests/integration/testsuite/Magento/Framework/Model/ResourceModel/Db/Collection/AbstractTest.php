@@ -10,7 +10,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
-    protected $_model = null;
+    protected $_model;
 
     protected function setUp()
     {

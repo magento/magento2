@@ -24,7 +24,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @var \Magento\Downloadable\Helper\File
      */
-    protected $_downloadableFile = null;
+    protected $_downloadableFile;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\SampleFactory

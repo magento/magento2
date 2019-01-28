@@ -18,7 +18,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory

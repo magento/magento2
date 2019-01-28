@@ -22,7 +22,7 @@ class Captcha extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Captcha\Helper\Data
      */
-    protected $_captchaData = null;
+    protected $_captchaData;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

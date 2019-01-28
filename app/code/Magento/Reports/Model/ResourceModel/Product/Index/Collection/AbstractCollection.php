@@ -23,7 +23,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      *
      * @var null|int
      */
-    protected $_customerId = null;
+    protected $_customerId;
 
     /**
      * @var \Magento\Customer\Model\Visitor

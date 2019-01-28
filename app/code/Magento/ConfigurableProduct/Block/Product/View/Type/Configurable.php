@@ -27,7 +27,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $catalogProduct = null;
+    protected $catalogProduct;
 
     /**
      * Current customer
