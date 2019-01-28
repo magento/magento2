@@ -15,7 +15,7 @@ class Js extends AbstractAdapter
      */
     protected function _parse()
     {
-        $fileHandle = @fopen($this->_file, 'r');
+        $fileHandle = @fopen($this->_file, 'rb');
         $lineNumber = 0;
         while (!feof($fileHandle)) {
             $lineNumber++;

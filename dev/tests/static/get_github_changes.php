@@ -82,7 +82,7 @@ function saveChangedFileContent(GitRepo $repo)
  */
 function generateChangedFilesList($outputFile, $changedFiles)
 {
-    $changedFilesList = fopen($outputFile, 'w');
+    $changedFilesList = fopen($outputFile, 'wb');
     foreach ($changedFiles as $file) {
         fwrite($changedFilesList, $file . PHP_EOL);
     }
@@ -100,7 +100,7 @@ function generateChangedFilesList($outputFile, $changedFiles)
 function generateBranchesList($outputFile, $branches, $branchName)
 {
     $branchOutputFile = str_replace('changed_files', 'branches', $outputFile);
-    $branchesList = fopen($branchOutputFile, 'w');
+    $branchesList = fopen($branchOutputFile, 'wb');
     fwrite($branchesList, $branchName . PHP_EOL);
     foreach ($branches as $branch) {
         fwrite($branchesList, substr(strrchr($branch, '/'), 1) . PHP_EOL);

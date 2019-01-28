@@ -16,8 +16,8 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
     {
         $this->multipleStreamOutput = new MultipleStreamOutput(
             [
-                fopen(__DIR__ . '/_files/a.txt', 'a+'),
-                fopen(__DIR__ . '/_files/b.txt', 'a+')
+                fopen(__DIR__ . '/_files/a.txt', 'a+b'),
+                fopen(__DIR__ . '/_files/b.txt', 'a+b')
             ]
         );
     }

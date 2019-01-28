@@ -28,7 +28,7 @@ class Csv implements WriterInterface
      */
     public function __construct($outputFilename)
     {
-        if (false === ($fileHandler = @fopen($outputFilename, 'w'))) {
+        if (false === ($fileHandler = @fopen($outputFilename, 'wb'))) {
             throw new \InvalidArgumentException(
                 sprintf('Cannot open file for write dictionary: "%s"', $outputFilename)
             );

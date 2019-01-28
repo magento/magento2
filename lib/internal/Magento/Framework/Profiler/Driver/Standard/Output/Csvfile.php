@@ -67,7 +67,7 @@ class Csvfile extends AbstractOutput
      */
     public function display(Stat $stat)
     {
-        $fileHandle = fopen($this->_filePath, 'w');
+        $fileHandle = fopen($this->_filePath, 'wb');
         if (!$fileHandle) {
             throw new \RuntimeException(sprintf('Can not open a file "%s".', $this->_filePath));
         }

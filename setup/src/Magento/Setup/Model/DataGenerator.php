@@ -51,7 +51,7 @@ class DataGenerator
      */
     protected function readData()
     {
-        $f = fopen($this->dictionaryFile, 'r');
+        $f = fopen($this->dictionaryFile, 'rb');
         while (!feof($f) && is_array($line = fgetcsv($f))) {
             $this->dictionaryData[] = $line[0];
         }

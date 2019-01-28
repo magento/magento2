@@ -95,7 +95,7 @@ class Csv
             throw new \Exception('File "' . $file . '" does not exist');
         }
 
-        $fh = fopen($file, 'r');
+        $fh = fopen($file, 'rb');
         while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure)) {
             $data[] = $rowData;
         }

@@ -51,7 +51,7 @@ class CsvTemplate implements TemplateInterface
             throw new \Exception('File "' . $filename . '" does not exist.');
         }
 
-        $fh = fopen('php://temp', 'rw');
+        $fh = fopen('php://temp', 'rwb');
         $fh = $this->addEntitiesData($fh);
         rewind($fh);
         $this->csv = stream_get_contents($fh);

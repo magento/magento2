@@ -55,7 +55,7 @@ class Http
 
         $this->response->sendHeaders();
 
-        $handle = fopen($filepath, 'r');
+        $handle = fopen($filepath, 'rb');
         if ($handle) {
             while (($buffer = fgets($handle, 4096)) !== false) {
                 echo $buffer;

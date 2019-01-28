@@ -64,8 +64,8 @@ class JobFactory
     public function create($name, array $params = [])
     {
         $cronStatus = $this->serviceLocator->get(\Magento\Setup\Model\Cron\Status::class);
-        $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+');
-        $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
+        $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+b');
+        $logStream = fopen($cronStatus->getLogFilePath(), 'a+b');
         $streamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
         $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
         /** @var ObjectManagerInterface $objectManager */

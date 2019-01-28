@@ -90,7 +90,7 @@ class Ftp extends AbstractRollback
         $validationFilename = '~validation-' . microtime(true) . '.tmp';
         $validationFilePath = $this->_snapshot->getBackupsDir() . '/' . $validationFilename;
 
-        $fh = @fopen($validationFilePath, 'w');
+        $fh = @fopen($validationFilePath, 'wb');
         @fclose($fh);
 
         if (!is_file($validationFilePath)) {

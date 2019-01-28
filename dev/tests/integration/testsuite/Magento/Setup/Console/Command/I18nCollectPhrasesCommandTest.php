@@ -54,7 +54,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $handle = fopen($outputPath, 'r');
+        $handle = fopen($outputPath, 'rb');
         $output = fread($handle, filesize($outputPath));
         $expected = file_get_contents(
             BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/expectedPhrases.csv'

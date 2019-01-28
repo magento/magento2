@@ -81,7 +81,7 @@ abstract class AbstractFile implements FileInterface
      */
     protected function _openFile($file)
     {
-        if (false === ($this->_fileHandler = @fopen($file, 'r'))) {
+        if (false === ($this->_fileHandler = @fopen($file, 'rb'))) {
             throw new \InvalidArgumentException(sprintf('Cannot open dictionary file: "%s".', $file));
         }
     }
