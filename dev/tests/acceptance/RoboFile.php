@@ -21,7 +21,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return void
      */
-    function buildProject()
+    public function buildProject()
     {
         passthru($this->getBaseCmd("build:project"));
     }
@@ -33,7 +33,7 @@ class RoboFile extends \Robo\Tasks
      * @param array $opts
      * @return \Robo\Result
      */
-    function generateTests(array $tests, $opts = [
+    public function generateTests(array $tests, $opts = [
         'config' => null,
         'force' => false,
         'nodes' => null,
@@ -66,7 +66,7 @@ class RoboFile extends \Robo\Tasks
      * @throws Exception
      * @return \Robo\Result
      */
-    function generateSuite(array $args)
+    public function generateSuite(array $args)
     {
         if (empty($args)) {
             throw new Exception("Please provide suite name(s) after generate:suite command");
@@ -81,7 +81,7 @@ class RoboFile extends \Robo\Tasks
      * @param array $args
      * @return \Robo\Result
      */
-    function group(array $args)
+    public function group(array $args)
     {
         $args = array_merge($args, ['-k']);
         $baseCmd = $this->getBaseCmd("run:group");
@@ -93,7 +93,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return \Robo\Result
      */
-    function allure1Generate()
+    public function allure1Generate()
     {
         return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' -o tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
@@ -103,7 +103,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return \Robo\Result
      */
-    function allure2Generate()
+    public function allure2Generate()
     {
         return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' --output tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .' --clean');
     }
@@ -113,7 +113,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return \Robo\Result
      */
-    function allure1Open()
+    public function allure1Open()
     {
         return $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
@@ -123,7 +123,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return \Robo\Result
      */
-    function allure2Open()
+    public function allure2Open()
     {
         return $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
@@ -133,7 +133,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return \Robo\Result
      */
-    function allure1Report()
+    public function allure1Report()
     {
         $result1 = $this->allure1Generate();
 
@@ -149,7 +149,7 @@ class RoboFile extends \Robo\Tasks
      *
      * @return \Robo\Result
      */
-    function allure2Report()
+    public function allure2Report()
     {
         $result1 = $this->allure2Generate();
 
