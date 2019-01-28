@@ -57,6 +57,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $shippingAddress = $quote->getShippingAddress();
 
         $data = $this->getData($quote, $shippingAddress);
+        $data = $this->formatTotalsData($data);
 
         $requestData = ['cartId' => $cartId];
 
@@ -190,6 +191,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $shippingAddress = $quote->getShippingAddress();
 
         $data = $this->getData($quote, $shippingAddress);
+        $data = $this->formatTotalsData($data);
 
         $actual = $this->_webApiCall($serviceInfo);
         unset($actual['items'][0]['options']);
