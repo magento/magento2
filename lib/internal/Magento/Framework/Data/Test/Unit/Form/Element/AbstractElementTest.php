@@ -42,6 +42,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Data\Form\Element\CollectionFactory', [], [], '', false
         );
         $this->_escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $this->_escaperMock->method('escapeHtml')->willReturnArgument(0);
 
         $this->_model = $this->getMockForAbstractClass('Magento\Framework\Data\Form\Element\AbstractElement', [
             $this->_factoryMock,

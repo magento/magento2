@@ -30,7 +30,7 @@ class RegionTest extends \PHPUnit_Framework_TestCase
         $escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
         $elementMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\AbstractElement',
-            ['getForm', 'getHtmlAttributes'],
+            ['getForm', 'getHtmlAttributes', 'getHtmlId', 'getName'],
             [],
             '',
             false

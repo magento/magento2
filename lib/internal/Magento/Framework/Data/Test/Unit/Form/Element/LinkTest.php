@@ -32,6 +32,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
+        $escaperMock->method('escapeHtml')->willReturnArgument(0);
         $this->_link = new \Magento\Framework\Data\Form\Element\Link(
             $factoryMock,
             $collectionFactoryMock,

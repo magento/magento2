@@ -8,6 +8,11 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\Select;
 class AllowspecificTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
+    /**
      * @var \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific
      */
     protected $_object;
@@ -20,7 +25,14 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_object = $testHelper->getObject('Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific');
+        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
+        $this->_object = $testHelper->getObject(
+            'Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific',
+            ['escaper' => $this->escaperMock]
+        );
         $this->_object->setData('html_id', 'spec_element');
         $this->_formMock = $this->getMock(
             'Magento\Framework\Data\Form',

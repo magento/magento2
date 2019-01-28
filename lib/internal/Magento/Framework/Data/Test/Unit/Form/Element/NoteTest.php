@@ -32,6 +32,7 @@ class NoteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
+        $escaperMock->method('escapeHtml')->willReturnArgument(0);
         $this->_model = new \Magento\Framework\Data\Form\Element\Note(
             $factoryMock,
             $collectionFactoryMock,
