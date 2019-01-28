@@ -54,6 +54,8 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             return $result;
         }
 
+        $phrase = rtrim($phrase, "-");
+
         $synonymGroups = $this->getSynonymGroupsByPhrase($phrase);
 
         // Replace multiple spaces in a row with the only one space
