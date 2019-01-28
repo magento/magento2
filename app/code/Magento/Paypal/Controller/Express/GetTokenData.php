@@ -59,33 +59,33 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
     private $logger;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
+     * @var CustomerRepository
      */
     private $customerRepository;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     private $cartRepository;
 
     /**
-     * @var \Magento\Quote\Api\GuestCartRepositoryInterface
+     * @var GuestCartRepositoryInterface
      */
     private $guestCartRepository;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
-     * @param \Magento\Framework\Session\Generic $paypalSession
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository
-     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @param \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     * @param OrderFactory $orderFactory
+     * @param CheckoutFactory $checkoutFactory
+     * @param PayPalSession $paypalSession
+     * @param UrlHelper $urlHelper
+     * @param CustomerUrl $customerUrl
+     * @param LoggerInterface $logger
+     * @param CustomerRepository $customerRepository
+     * @param CartRepositoryInterface $cartRepository
+     * @param GuestCartRepositoryInterface $guestCartRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -122,7 +122,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
     /**
      * Get token data
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute(): ResultInterface
     {

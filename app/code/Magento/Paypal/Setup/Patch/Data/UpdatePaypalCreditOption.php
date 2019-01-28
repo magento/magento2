@@ -39,13 +39,8 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
         $this->moduleDataSetup->getConnection()->startSetup();
         $connection = $this->moduleDataSetup->getConnection();
         $select = $connection->select()
-            ->from(
-                $this->moduleDataSetup->getTable('core_config_data'),
-                ['scope', 'scope_id', 'value']
-            )->where(
-                'path = ?',
-                'payment/paypal_express_bml/active'
-            );
+            ->from($this->moduleDataSetup->getTable('core_config_data'), ['scope', 'scope_id', 'value'])
+            ->where('path = ?', 'payment/paypal_express_bml/active');
         foreach ($connection->fetchAll($select) as $pair) {
             if (!$pair['value']) {
                 $this->moduleDataSetup->getConnection()
@@ -60,8 +55,7 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
                     );
             }
         }
-        $this->moduleDataSetup->getConnection()
-            ->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

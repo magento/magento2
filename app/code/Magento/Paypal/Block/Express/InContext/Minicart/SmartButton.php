@@ -25,7 +25,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class SmartButton extends Template implements ShortcutInterface
 {
-    const ALIAS_ELEMENT_INDEX = 'alias';
+    private const ALIAS_ELEMENT_INDEX = 'alias';
 
     /**
      * @var Config
@@ -101,7 +101,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return bool
      */
-    private function isInContext() : bool
+    private function isInContext(): bool
     {
         return (bool)(int) $this->config->getValue('in_context');
     }
@@ -111,7 +111,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return bool
      */
-    private function isVisibleOnCart() : bool
+    private function isVisibleOnCart(): bool
     {
         return (bool)(int) $this->config->getValue('visible_on_cart');
     }
@@ -121,7 +121,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return bool
      */
-    private function shouldRender() : bool
+    private function shouldRender(): bool
     {
         return $this->payment->isAvailable($this->session->getQuote())
             && $this->isInContext()
@@ -197,7 +197,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return string
      */
-    public function getContainerId()
+    public function getContainerId(): string
     {
         return $this->getData('button_id');
     }
@@ -207,7 +207,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return string
      */
-    private function getQuoteId()
+    private function getQuoteId(): string
     {
         $quoteId = (int)$this->session->getQuoteId();
         if (!$this->session->getQuote()->getCustomerId()) {

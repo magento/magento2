@@ -21,7 +21,7 @@ use Magento\Framework\UrlInterface;
  */
 class SmartButton extends Template implements ShortcutInterface
 {
-    const ALIAS_ELEMENT_INDEX = 'alias';
+    private const ALIAS_ELEMENT_INDEX = 'alias';
 
     /**
      * @var Config
@@ -73,7 +73,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return bool
      */
-    protected function shouldRender() : bool
+    protected function shouldRender(): bool
     {
         $isInCatalog = $this->getIsInCatalogProduct();
         $isInContext = (bool)(int) $this->config->getValue('in_context');

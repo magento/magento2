@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect;
 
@@ -10,21 +11,22 @@ use Magento\Paypal\Model\Config\StructurePlugin;
 use Magento\Backend\Block\Template\Context;
 use Magento\Paypal\Model\Config;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Config\Block\System\Config\Form\Field;
 
 /**
  * Class DisabledFundingOptions
  */
-class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Field
+class DisabledFundingOptions extends Field
 {
     /**
-     * @var \Magento\Paypal\Model\Config
+     * @var Config
      */
     private $config;
 
     /**
      * DisabledFundingOptions constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Paypal\Model\Config $config
+     * @param Context $context
+     * @param Config $config
      * @param array $data
      */
     public function __construct(
@@ -39,7 +41,7 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
     /**
      * Render country field considering request parameter
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
     public function render(AbstractElement $element)
@@ -57,7 +59,7 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
      * @param array $options
      * @return array
      */
-    private function filterValuesForPaypalCredit($options)
+    private function filterValuesForPaypalCredit($options): array
     {
         return array_filter($options, function ($opt) {
             return ($opt['value'] !== 'CREDIT');

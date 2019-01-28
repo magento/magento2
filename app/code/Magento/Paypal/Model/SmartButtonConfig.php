@@ -68,7 +68,7 @@ class SmartButtonConfig
      *
      * @return array
      */
-    private function getDisallowedFunding() : array
+    private function getDisallowedFunding(): array
     {
         $disallowedFunding = $this->config->getValue('disable_funding_options');
         return $disallowedFunding ? explode(',', $disallowedFunding) : [];
@@ -79,7 +79,7 @@ class SmartButtonConfig
      *
      * @return array
      */
-    private function getAllowedFunding() : array
+    private function getAllowedFunding(): array
     {
         return [];
     }
@@ -90,7 +90,7 @@ class SmartButtonConfig
      * @param string $page
      * @return array
      */
-    private function getButtonStyles(string $page) : array
+    private function getButtonStyles(string $page): array
     {
         $styles = $this->defaultStyles[$page];
         if ((boolean)$this->config->getValue("{$page}_page_button_customize")) {
@@ -112,7 +112,7 @@ class SmartButtonConfig
      * @param string $page
      * @return array
      */
-    private function updateStyles(array $styles, string $page) : array
+    private function updateStyles(array $styles, string $page): array
     {
         $locale = $this->localeResolver->getLocale();
 
@@ -133,7 +133,7 @@ class SmartButtonConfig
         if ($styles['label'] === 'installment') {
             if (array_key_exists($locale, $installmentPeriodLocale)) {
                 $styles['installmentperiod'] = (int)$this->config->getValue(
-                    "{$page}_page_button_{$installmentPeriodLocale[$locale]}_installment_period"
+                    $page .'_page_button_' . $installmentPeriodLocale[$locale] . '_installment_period'
                 );
             } else {
                 $styles['label'] = 'paypal';

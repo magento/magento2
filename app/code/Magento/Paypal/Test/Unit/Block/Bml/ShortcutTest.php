@@ -33,14 +33,12 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
         $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $configFactoryMock =
-            $this->getMockBuilder(\Magento\Paypal\Model\ConfigFactory::class)
+        $configFactoryMock = $this->getMockBuilder(\Magento\Paypal\Model\ConfigFactory::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
 
-        $configMock =
-            $this->getMockBuilder(\Magento\Paypal\Model\Config::class)
+        $configMock = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['setMethod'])
                 ->getMock();

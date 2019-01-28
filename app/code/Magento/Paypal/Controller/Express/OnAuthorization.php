@@ -9,6 +9,7 @@ namespace Magento\Paypal\Controller\Express;
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Paypal\Model\Config as PayPalConfig;
 use Magento\Paypal\Model\Express\Checkout as PayPalCheckout;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
@@ -20,7 +21,6 @@ use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
 use Magento\Framework\Session\Generic as PayPalSession;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
@@ -47,35 +47,34 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     protected $_checkoutType = PayPalCheckout::class;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * Url Builder
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Quote\Api\GuestCartRepositoryInterface
+     * @var GuestCartRepositoryInterface
      */
     private $guestCartRepository;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
-     * @param \Magento\Framework\Session\Generic $paypalSession
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
-     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     * @param OrderFactory $orderFactory
+     * @param CheckoutFactory $checkoutFactory
+     * @param PayPalSession $paypalSession
+     * @param UrlHelper $urlHelper
+     * @param CustomerUrl $customerUrl
+     * @param CartRepositoryInterface $cartRepository
+     * @param UrlInterface $urlBuilder
+     * @param GuestCartRepositoryInterface $guestCartRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -87,7 +86,6 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
         PayPalSession $paypalSession,
         UrlHelper $urlHelper,
         CustomerUrl $customerUrl,
-        AgreementsValidatorInterface $agreementValidator,
         CartRepositoryInterface $cartRepository,
         UrlInterface $urlBuilder,
         GuestCartRepositoryInterface $guestCartRepository
@@ -110,9 +108,9 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     /**
      * Place order or redirect on Paypal review page
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $quoteId = $this->getRequest()->getParam('quoteId');

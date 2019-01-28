@@ -1649,7 +1649,7 @@ class Config extends AbstractConfig
             case 'disable_funding_options':
                 return "paypal/style/{$fieldName}";
             default:
-                return $this->_mapButtonStyles($fieldName);
+                return $this->mapButtonStyles($fieldName);
         }
     }
 
@@ -1706,7 +1706,7 @@ class Config extends AbstractConfig
      * @return null|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function _mapButtonStyles(string $fieldName)
+    private function mapButtonStyles(string $fieldName)
     {
         $page = substr($fieldName, 0, (int)strpos($fieldName, '_page_button_'));
 
