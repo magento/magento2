@@ -9,9 +9,9 @@
 <form action="<?= $block->escapeUrl($block->getContinueUrl()); ?>" method="post">
     <div class="multicheckout success">
         <p><?= $block->escapeHtml(__('For successfully order items, you\'ll receive a confirmation email including '.
-                'order numbers, tracking information and more details.')) ?></p>
+                'order numbers, tracking information and more details.')); ?></p>
         <?php if ($orderIds = $block->getOrderIds()) : ?>
-            <h3><?= $block->escapeHtml(__('Successfully ordered'))?></h3>
+            <h3><?= $block->escapeHtml(__('Successfully ordered'));?></h3>
             <div class="orders-succeed">
             <ul class="orders-list">
             <?php foreach ($orderIds as $orderId => $incrementId) : ?>
@@ -39,7 +39,7 @@
             </ul>
             </div>
         <?php endif; ?>
-        <?= $block->getChildHtml() ?>
+        <?= $block->getChildHtml(); ?>
         <div class="actions-toolbar" id="review-buttons-container">
             <div class="primary">
                 <button type="submit"

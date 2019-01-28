@@ -9,5 +9,5 @@
 /** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
 $_item = $block->getItem();
 ?>
-<?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
-<?= /* @escapeNotVerified */ $_order->formatPrice($block->getTotalAmount($_item)) ?>
+<?php $_order = $block->getItem()->getOrderItem()->getOrder(); ?>
+<?= /* @escapeNotVerified */ $_order->formatPrice($block->getTotalAmount($_item)); ?>

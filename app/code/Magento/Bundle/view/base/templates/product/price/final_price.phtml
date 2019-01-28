@@ -38,7 +38,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
                     'skip_adjustments'  => true
                 ]); ?>
             </span>
-        <?php endif ?>
+        <?php endif; ?>
     </p>
 <?php else: ?>
     <?php if ($block->showRangePrice()): ?>
@@ -58,7 +58,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
                         'skip_adjustments'  => true
                     ]); ?>
                 </span>
-            <?php endif ?>
+            <?php endif; ?>
         </p>
         <p class="price-to">
             <?php /* @escapeNotVerified */ echo $block->renderAmount($maximalPrice, [
@@ -76,7 +76,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
                         'skip_adjustments'  => true
                     ]); ?>
                 </span>
-            <?php endif ?>
+            <?php endif; ?>
         </p>
     <?php else: ?>
         <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalPrice, [
@@ -92,6 +92,6 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
                     'skip_adjustments'  => true
                 ]); ?>
             </span>
-        <?php endif ?>
-    <?php endif ?>
-<?php endif ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>

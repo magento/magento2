@@ -52,12 +52,12 @@ $orderIds = $block->getOrderIds();
         <div class="message message-error error">
             <div>
                 <?= $block->escapeHtml(__('To purchase these items: Return to the')); ?>
-                <a href="<?= $block->escapeUrl($block->getUrl('*/*/overview')) ?>">
+                <a href="<?= $block->escapeUrl($block->getUrl('*/*/overview')); ?>">
                     <?= $block->escapeHtml(__('Review page in Checkout')); ?></a>,
-                <?= $block->escapeHtml(__('resolve any errors, and place a new order.'))?>
+                <?= $block->escapeHtml(__('resolve any errors, and place a new order.'));?>
             </div>
         </div>
-        <?php $failedAddresses = $block->getFailedAddresses() ?>
+        <?php $failedAddresses = $block->getFailedAddresses(); ?>
         <?php if (!empty($failedAddresses)) : ?>
             <ol class="orders-list">
                 <?php foreach ($failedAddresses as $address) : ?>

@@ -7,19 +7,19 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_source  = $block->getSource() ?>
-<?php $_order   = $block->getOrder() ?>
-<?php $block->setPriceDataObject($_source) ?>
+<?php $_source  = $block->getSource(); ?>
+<?php $_order   = $block->getOrder(); ?>
+<?php $block->setPriceDataObject($_source); ?>
 
 <?php if ((float) $_source->getDiscountAmount()): ?>
     <tr>
         <td class="label">
             <?php if ($_order->getCouponCode()): ?>
-                <?= /* @escapeNotVerified */ __('Discount (%1)', $_order->getCouponCode()) ?>
+                <?= /* @escapeNotVerified */ __('Discount (%1)', $_order->getCouponCode()); ?>
             <?php else: ?>
-                <?= /* @escapeNotVerified */ __('Discount') ?>
+                <?= /* @escapeNotVerified */ __('Discount'); ?>
             <?php endif; ?>
         </td>
-        <td><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
+        <td><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount'); ?></td>
     </tr>
 <?php endif; ?>

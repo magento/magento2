@@ -5,11 +5,11 @@
  */
 // @codingStandardsIgnoreFile
 ?>
-<button class="scalable" type="button" id="<?= $block->getHtmlId() ?>" data-mage-init='{"testConnection":{
-    "url": "<?= /* @escapeNotVerified */ $block->getAjaxUrl() ?>",
-    "elementId": "<?= $block->getHtmlId() ?>",
-    "successText": "<?= /* @escapeNotVerified */ __('Successful! Test again?') ?>",
-    "failedText": "<?= /* @escapeNotVerified */ __('Connection failed! Test again?') ?>",
-    "fieldMapping": "<?= /* @escapeNotVerified */ $block->getFieldMapping() ?>"}, "validation": {}}'>
-    <span><span><span id="<?= $block->getHtmlId() ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
+<button class="scalable" type="button" id="<?= $block->getHtmlId(); ?>" data-mage-init='{"testConnection":{
+    "url": "<?= /* @escapeNotVerified */ $block->getAjaxUrl(); ?>",
+    "elementId": "<?= $block->getHtmlId(); ?>",
+    "successText": "<?= /* @escapeNotVerified */ __('Successful! Test again?'); ?>",
+    "failedText": "<?= /* @escapeNotVerified */ __('Connection failed! Test again?'); ?>",
+    "fieldMapping": "<?= /* @escapeNotVerified */ $block->getFieldMapping(); ?>"}, "validation": {}}'>
+    <span><span><span id="<?= $block->getHtmlId(); ?>_result"><?= $block->escapeHtml($block->getButtonLabel()); ?></span></span></span>
 </button>

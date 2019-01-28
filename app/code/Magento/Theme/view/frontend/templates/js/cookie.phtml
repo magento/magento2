@@ -17,10 +17,10 @@
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?= /* @escapeNotVerified */ $block->getPath() ?>",
-                "domain": "<?= /* @escapeNotVerified */ $block->getDomain() ?>",
+                "path": "<?= /* @escapeNotVerified */ $block->getPath(); ?>",
+                "domain": "<?= /* @escapeNotVerified */ $block->getDomain(); ?>",
                 "secure": false,
-                "lifetime": "<?= /* @escapeNotVerified */ $block->getLifetime() ?>"
+                "lifetime": "<?= /* @escapeNotVerified */ $block->getLifetime(); ?>"
             }
         }
     }

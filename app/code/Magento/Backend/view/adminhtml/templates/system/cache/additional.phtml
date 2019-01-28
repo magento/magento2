@@ -27,7 +27,7 @@ $permissions = $block->getData('permissions');
                 <button onclick="setLocation('<?= $block->escapeJs($block->getCleanMediaUrl()); ?>')" type="button">
                     <?= $block->escapeHtml(__('Flush JavaScript/CSS Cache')); ?>
                 </button>
-                <span><?= $block->escapeHtml(__('Themes JavaScript and CSS files combined to one file')) ?></span>
+                <span><?= $block->escapeHtml(__('Themes JavaScript and CSS files combined to one file')); ?></span>
             </p>
         <?php endif; ?>
         <?php if (!$block->isInProductionMode() && $permissions->hasAccessToFlushStaticFiles()): ?>
@@ -38,6 +38,6 @@ $permissions = $block->getData('permissions');
                 <span><?= $block->escapeHtml(__('Preprocessed view files and static files')); ?></span>
             </p>
         <?php endif; ?>
-        <?= $block->getChildHtml() ?>
+        <?= $block->getChildHtml(); ?>
     </div>
 <?php endif; ?>

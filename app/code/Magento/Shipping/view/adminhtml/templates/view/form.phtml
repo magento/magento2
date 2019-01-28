@@ -21,7 +21,7 @@ $order = $block->getShipment()->getOrder();
                 <span class="title"><?= $block->escapeHtml(__('Payment Information')); ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <div><?= $block->getChildHtml('order_payment') ?></div>
+                <div><?= $block->getChildHtml('order_payment'); ?></div>
                 <div class="order-payment-currency">
                     <?= $block->escapeHtml(__('The order was placed using %1.', $order->getOrderCurrencyCode())); ?>
                 </div>
@@ -64,13 +64,13 @@ $order = $block->getShipment()->getOrder();
                 <p>
                     <?php if ($block->canCreateShippingLabel()): ?>
                         <?= /* @noEscape */ $block->getCreateLabelButton(); ?>
-                    <?php endif ?>
+                    <?php endif; ?>
                     <?php if ($block->getShipment()->getShippingLabel()): ?>
                         <?= /* @noEscape */ $block->getPrintLabelButton(); ?>
-                    <?php endif ?>
+                    <?php endif; ?>
                     <?php if ($block->getShipment()->getPackages()): ?>
                         <?= /* @noEscape */ $block->getShowPackagesButton(); ?>
-                    <?php endif ?>
+                    <?php endif; ?>
                 </p>
                 <?= $block->getChildHtml('shipment_tracking'); ?>
 
@@ -103,7 +103,7 @@ $order = $block->getShipment()->getOrder();
         </div>
     </div>
 </section>
-<div><?= $block->getChildHtml('extra_shipment_info') ?></div>
+<div><?= $block->getChildHtml('extra_shipment_info'); ?></div>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">

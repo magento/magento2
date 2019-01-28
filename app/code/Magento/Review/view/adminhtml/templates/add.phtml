@@ -5,14 +5,14 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?= $block->getBackButtonHtml() ?>
-    <?= $block->getResetButtonHtml() ?>
+    <?= $block->getBackButtonHtml(); ?>
+    <?= $block->getResetButtonHtml(); ?>
     <span class="hidden" id="formButtons">
-        <?= $block->getSaveButtonHtml() ?>
+        <?= $block->getSaveButtonHtml(); ?>
     </span>
 </div>
 <div class="hidden" id="formContainer">
-    <?= $block->getFormHtml() ?>
+    <?= $block->getFormHtml(); ?>
 </div>
 <script>
 require([

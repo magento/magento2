@@ -22,20 +22,20 @@ require([
 
     $.extend(true, $, {
         calendarConfig: {
-            dayNames: <?= /* @escapeNotVerified */ $days['wide'] ?>,
-            dayNamesMin: <?= /* @escapeNotVerified */ $days['abbreviated'] ?>,
-            monthNames: <?= /* @escapeNotVerified */ $months['wide'] ?>,
-            monthNamesShort: <?= /* @escapeNotVerified */ $months['abbreviated'] ?>,
-            infoTitle: "<?= /* @escapeNotVerified */ __('About the calendar') ?>",
-            firstDay: <?= /* @escapeNotVerified */ $firstDay ?>,
-            closeText: "<?= /* @escapeNotVerified */ __('Close') ?>",
-            currentText: "<?= /* @escapeNotVerified */ __('Go Today') ?>",
-            prevText: "<?= /* @escapeNotVerified */ __('Previous') ?>",
-            nextText: "<?= /* @escapeNotVerified */ __('Next') ?>",
-            weekHeader: "<?= /* @escapeNotVerified */ __('WK') ?>",
-            timeText: "<?= /* @escapeNotVerified */ __('Time') ?>",
-            hourText: "<?= /* @escapeNotVerified */ __('Hour') ?>",
-            minuteText: "<?= /* @escapeNotVerified */ __('Minute') ?>",
+            dayNames: <?= /* @escapeNotVerified */ $days['wide']; ?>,
+            dayNamesMin: <?= /* @escapeNotVerified */ $days['abbreviated']; ?>,
+            monthNames: <?= /* @escapeNotVerified */ $months['wide']; ?>,
+            monthNamesShort: <?= /* @escapeNotVerified */ $months['abbreviated']; ?>,
+            infoTitle: "<?= /* @escapeNotVerified */ __('About the calendar'); ?>",
+            firstDay: <?= /* @escapeNotVerified */ $firstDay; ?>,
+            closeText: "<?= /* @escapeNotVerified */ __('Close'); ?>",
+            currentText: "<?= /* @escapeNotVerified */ __('Go Today'); ?>",
+            prevText: "<?= /* @escapeNotVerified */ __('Previous'); ?>",
+            nextText: "<?= /* @escapeNotVerified */ __('Next'); ?>",
+            weekHeader: "<?= /* @escapeNotVerified */ __('WK'); ?>",
+            timeText: "<?= /* @escapeNotVerified */ __('Time'); ?>",
+            hourText: "<?= /* @escapeNotVerified */ __('Hour'); ?>",
+            minuteText: "<?= /* @escapeNotVerified */ __('Minute'); ?>",
             dateFormat: $.datepicker.RFC_2822,
             showOn: "button",
             showAnim: "",
@@ -50,13 +50,13 @@ require([
             showTime: false,
             showHour: false,
             showMinute: false,
-            serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp() ?>,
-            serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds() ?>,
-            yearRange: '<?= /* @escapeNotVerified */ $block->getYearRange() ?>'
+            serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp(); ?>,
+            serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds(); ?>,
+            yearRange: '<?= /* @escapeNotVerified */ $block->getYearRange(); ?>'
         }
     });
 
-enUS = <?= /* @escapeNotVerified */ $enUS ?>; // en_US locale reference
+enUS = <?= /* @escapeNotVerified */ $enUS; ?>; // en_US locale reference
 
 });
 </script>

@@ -25,7 +25,7 @@
         <div class="block-title"><strong><?= $block->escapeHtml(__('Billing Information')); ?></strong></div>
         <div class="block-content">
             <div class="box box-billing-address">
-                <?php $address = $block->getBillingAddress() ?>
+                <?php $address = $block->getBillingAddress(); ?>
                 <strong class="box-title">
                     <span><?= $block->escapeHtml(__('Billing Address')); ?></span>
                     <a href="<?= $block->escapeUrl($block->getEditBillingAddressUrl($address)); ?>"
@@ -33,7 +33,7 @@
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?= /* @noEscape */ $address->format('html') ?>
+                        <?= /* @noEscape */ $address->format('html'); ?>
                     </address>
                 </div>
             </div>
@@ -46,11 +46,11 @@
                 <div class="box-content">
                     <input type="hidden"
                            name="payment[cc_number]"
-                           value="<?= $block->escapeHtml($block->getPayment()->getCcNumber()) ?>" />
+                           value="<?= $block->escapeHtml($block->getPayment()->getCcNumber()); ?>" />
                     <input type="hidden"
                            name="payment[cc_cid]"
-                           value="<?= $block->escapeHtml($block->getPayment()->getCcCid()) ?>" />
-                    <?= /* @noEscape */ $block->getPaymentHtml() ?>
+                           value="<?= $block->escapeHtml($block->getPayment()->getCcCid()); ?>" />
+                    <?= /* @noEscape */ $block->getPaymentHtml(); ?>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
                     <strong><?= $block->escapeHtml(__('Address')); ?> <?= $block->escapeHtml($index + 1); ?>
                         <span>
                             <?= $block->escapeHtml(__('of')); ?>
-                            <?= $block->escapeHtml($block->getShippingAddressCount())?>
+                            <?= $block->escapeHtml($block->getShippingAddressCount());?>
                         </span>
                     </strong>
                 </div>
@@ -81,7 +81,7 @@
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?= /* @noEscape */ $address->format('html') ?>
+                            <?= /* @noEscape */ $address->format('html'); ?>
                         </address>
                     </div>
                 </div>
@@ -93,8 +93,8 @@
                     </strong>
                     <?php if ($_rate = $block->getShippingAddressRate($address)) : ?>
                         <div class="box-content">
-                            <?= $block->escapeHtml($_rate->getCarrierTitle()) ?>
-                            (<?= $block->escapeHtml($_rate->getMethodTitle()) ?>)
+                            <?= $block->escapeHtml($_rate->getCarrierTitle()); ?>
+                            (<?= $block->escapeHtml($_rate->getMethodTitle()); ?>)
                             <?php
                             $exclTax = $block->getShippingPriceExclTax($address);
                             $inclTax = $block->getShippingPriceInclTax($address);
@@ -104,14 +104,14 @@
                             <?php if ($displayBothPrices) : ?>
                                 <span class="price-including-tax"
                                       data-label="<?= $block->escapeHtml(__('Incl. Tax')); ?>">
-                                    <?= /* @noEscape */ $inclTax ?>
+                                    <?= /* @noEscape */ $inclTax; ?>
                                 </span>
                                 <span class="price-excluding-tax"
                                       data-label="<?= $block->escapeHtml(__('Excl. Tax')); ?>">
                                     <?= /* @noEscape */ $exclTax; ?>
                                 </span>
                             <?php else : ?>
-                                <?= /* @noEscape */ $inclTax ?>
+                                <?= /* @noEscape */ $inclTax; ?>
                             <?php  endif; ?>
                         </div>
                     <?php endif; ?>
@@ -137,7 +137,7 @@
                                 </thead>
                                 <tbody>
                                 <?php foreach ($block->getShippingAddressItems($address) as $item) : ?>
-                                    <?= /* @noEscape */ $block->getRowItemHtml($item) ?>
+                                    <?= /* @noEscape */ $block->getRowItemHtml($item); ?>
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
@@ -182,7 +182,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($block->getVirtualItems() as $_item) : ?>
-                            <?= /* @noEscape */ $block->getRowItemHtml($_item) ?>
+                            <?= /* @noEscape */ $block->getRowItemHtml($_item); ?>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
@@ -194,10 +194,10 @@
     </div>
     <?php endif; ?>
 
-    <?= /* @noEscape */ $block->getChildHtml('items_after') ?>
+    <?= /* @noEscape */ $block->getChildHtml('items_after'); ?>
 
     <div id="checkout-review-submit" class="checkout-review">
-        <?= /* @noEscape */ $block->getChildHtml('agreements') ?>
+        <?= /* @noEscape */ $block->getChildHtml('agreements'); ?>
         <div class="grand totals">
             <strong class="mark"><?= $block->escapeHtml(__('Grand Total:')); ?></strong>
             <strong class="amount">

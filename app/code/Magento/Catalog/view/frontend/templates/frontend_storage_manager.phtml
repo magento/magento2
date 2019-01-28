@@ -12,9 +12,9 @@
                     "components": {
                         "storage-manager": {
                             "component": "Magento_Catalog/js/storage-manager",
-                            "appendTo": "<?= /* @escapeNotVerified */ $block->getParentComponentName() ?>",
+                            "appendTo": "<?= /* @escapeNotVerified */ $block->getParentComponentName(); ?>",
                             "storagesConfiguration" :
-                                         <?= /* @escapeNotVerified */ $block->getConfigurationJson() ?>
+                                         <?= /* @escapeNotVerified */ $block->getConfigurationJson(); ?>
                         }
                     }
                 }

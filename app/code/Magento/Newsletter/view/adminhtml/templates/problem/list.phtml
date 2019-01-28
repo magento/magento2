@@ -7,14 +7,14 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?= $block->getChildHtml('grid') ?>
+<?= $block->getChildHtml('grid'); ?>
 
 <?php if ($block->getShowButtons()): ?>
 <div class="form-buttons">
-    <?= $block->getUnsubscribeButtonHtml() ?>
-    <?= $block->getDeleteButtonHtml() ?>
+    <?= $block->getUnsubscribeButtonHtml(); ?>
+    <?= $block->getDeleteButtonHtml(); ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 <script>
 require(["prototype", "mage/adminhtml/events"], function(){
 

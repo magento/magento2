@@ -21,11 +21,11 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         "Magento_Ui/js/modal/modal"
     ], function(jQuery){
 
-        window.packaging = new Packaging(<?= /* @escapeNotVerified */ $block->getConfigDataJson() ?>);
+        window.packaging = new Packaging(<?= /* @escapeNotVerified */ $block->getConfigDataJson(); ?>);
         packaging.changeContainerType($$('select[name=package_container]')[0]);
         packaging.checkSizeAndGirthParameter(
             $$('select[name=package_container]')[0],
-            <?= /* @escapeNotVerified */ $girthEnabled ?>
+            <?= /* @escapeNotVerified */ $girthEnabled; ?>
         );
         packaging.setConfirmPackagingCallback(function(){
             packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
@@ -52,23 +52,23 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         });
         jQuery('#packaging_window').modal({
             type: 'slide',
-            title: '<?= /* @escapeNotVerified */ __('Create Packages') ?>',
+            title: '<?= /* @escapeNotVerified */ __('Create Packages'); ?>',
             buttons: [{
-                text: '<?= /* @escapeNotVerified */ __('Cancel') ?>',
+                text: '<?= /* @escapeNotVerified */ __('Cancel'); ?>',
                 'class': 'action-secondary',
                 click: function () {
                     packaging.cancelPackaging();
                     this.closeModal();
                     }
                 }, {
-                text: '<?= /* @escapeNotVerified */ __('Save') ?>',
+                text: '<?= /* @escapeNotVerified */ __('Save'); ?>',
                 'attr': {'disabled':'disabled', 'data-action':'save-packages'},
                 'class': 'action-primary _disabled',
                 click: function () {
                     packaging.confirmPackaging();
                     }
                 }, {
-                    text: '<?= /* @escapeNotVerified */ __('Add Package') ?>',
+                    text: '<?= /* @escapeNotVerified */ __('Add Package'); ?>',
                     'attr': {'data-action':'add-packages'},
                     'class': 'action-secondary',
                     click: function () {
@@ -80,4 +80,4 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         jQuery(document).data('packagingInited', true);
     });
 </script>
-<?php include ($block->getTemplateFile('Magento_Shipping::order/packaging/popup_content.phtml')) ?>
+<?php include ($block->getTemplateFile('Magento_Shipping::order/packaging/popup_content.phtml')); ?>

@@ -7,8 +7,8 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_product = $block->getProduct() ?>
+<?php $_product = $block->getProduct(); ?>
 <?php if ($block->canEmailToFriend()): ?>
-    <a href="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
-       class="action mailto friend"><span><?= /* @escapeNotVerified */ __('Email') ?></span></a>
+    <a href="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product); ?>"
+       class="action mailto friend"><span><?= /* @escapeNotVerified */ __('Email'); ?></span></a>
 <?php endif; ?>

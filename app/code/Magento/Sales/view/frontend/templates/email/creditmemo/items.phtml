@@ -7,32 +7,32 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_creditmemo = $block->getCreditmemo() ?>
-<?php $_order      = $block->getOrder() ?>
+<?php $_creditmemo = $block->getCreditmemo(); ?>
+<?php $_order      = $block->getOrder(); ?>
 <?php if ($_creditmemo && $_order): ?>
     <table class="email-items">
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= /* @escapeNotVerified */  __('Items') ?>
+                    <?= /* @escapeNotVerified */  __('Items'); ?>
                 </th>
                 <th class="item-qty">
-                    <?= /* @escapeNotVerified */  __('Qty') ?>
+                    <?= /* @escapeNotVerified */  __('Qty'); ?>
                 </th>
                 <th class="item-subtotal">
-                    <?= /* @escapeNotVerified */  __('Subtotal') ?>
+                    <?= /* @escapeNotVerified */  __('Subtotal'); ?>
                 </th>
             </tr>
         </thead>
         <?php foreach ($_creditmemo->getAllItems() as $_item): ?>
             <?php if (!$_item->getOrderItem()->getParentItem())  : ?>
                 <tbody>
-                    <?= $block->getItemHtml($_item) ?>
+                    <?= $block->getItemHtml($_item); ?>
                 </tbody>
             <?php endif; ?>
         <?php endforeach; ?>
         <tfoot class="order-totals">
-            <?= $block->getChildHtml('creditmemo_totals') ?>
+            <?= $block->getChildHtml('creditmemo_totals'); ?>
         </tfoot>
     </table>
 <?php endif; ?>

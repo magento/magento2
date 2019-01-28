@@ -12,15 +12,15 @@
  * @var $block \Magento\Downloadable\Block\Catalog\Product\View\Type
  */
 ?>
-<?php $_product = $block->getProduct() ?>
+<?php $_product = $block->getProduct(); ?>
 
 <?php if ($_product->getIsSalable()): ?>
-    <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-        <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+    <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability'); ?>">
+        <span><?= /* @escapeNotVerified */ __('In stock'); ?></span>
     </div>
 <?php else: ?>
-    <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-        <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+    <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability'); ?>">
+        <span><?= /* @escapeNotVerified */ __('Out of stock'); ?></span>
     </div>
 <?php endif; ?>
-<?= $block->getChildHtml() ?>
+<?= $block->getChildHtml(); ?>

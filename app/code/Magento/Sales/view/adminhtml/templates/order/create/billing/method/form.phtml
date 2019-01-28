@@ -41,11 +41,11 @@
         <?php endif;?>
 
             <label class="admin__field-label" for="p_method_<?= $block->escapeHtml($_code); ?>">
-                <?= $block->escapeHtml($_method->getTitle()) ?>
+                <?= $block->escapeHtml($_method->getTitle()); ?>
             </label>
         </dt>
         <dd class="admin__payment-method-wrapper">
-            <?= /* @noEscape */ $block->getChildHtml('payment.method.' . $_code) ?>
+            <?= /* @noEscape */ $block->getChildHtml('payment.method.' . $_code); ?>
         </dd>
     <?php endforeach; ?>
     </dl>

@@ -7,10 +7,10 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_element = $block->getElement() ?>
+<?php $_element = $block->getElement(); ?>
 
 <?php if (!$_element->getNoDisplay()): ?>
 <div class="cms-manage-content-actions">
-    <?= trim($_element->getElementHtml()) ?>
+    <?= trim($_element->getElementHtml()); ?>
 </div>
 <?php endif; ?>

@@ -10,25 +10,25 @@
 
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?= $block->getBackButtonHtml() ?>
-    <?= $block->getPreviewButtonHtml() ?>
+    <?= $block->getBackButtonHtml(); ?>
+    <?= $block->getPreviewButtonHtml(); ?>
     <?php if (!$block->getIsPreview()): ?>
-        <?= $block->getResetButtonHtml() ?>
-        <?= $block->getSaveButtonHtml() ?>
-    <?php endif ?>
+        <?= $block->getResetButtonHtml(); ?>
+        <?= $block->getSaveButtonHtml(); ?>
+    <?php endif; ?>
     <?php if ($block->getCanResume()): ?>
-        <?= $block->getResumeButtonHtml() ?>
-    <?php endif ?>
+        <?= $block->getResumeButtonHtml(); ?>
+    <?php endif; ?>
 </div>
 
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
-    <?= $block->getBlockHtml('formkey') ?>
-    <?= $block->getChildHtml('form') ?>
+<form action="<?= $block->escapeUrl($block->getSaveUrl()); ?>" method="post" id="queue_edit_form">
+    <?= $block->getBlockHtml('formkey'); ?>
+    <?= $block->getChildHtml('form'); ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
-    <?= $block->getBlockHtml('formkey') ?>
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()); ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
+    <?= $block->getBlockHtml('formkey'); ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2; ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />

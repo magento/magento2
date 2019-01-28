@@ -22,10 +22,10 @@
         background-color: #DFF7FF!important;
     }
 </style>
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?= $block->getBlockHtml('formkey') ?>
+<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl(); ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+    <?= $block->getBlockHtml('formkey'); ?>
     <div class="accordion">
-        <?= $block->getChildHtml('form') ?>
+        <?= $block->getChildHtml('form'); ?>
     </div>
 </form>
 <script>

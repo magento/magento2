@@ -64,7 +64,7 @@
                         <span><?= $block->escapeHtml(__('Payment Method')); ?></span>
                     </legend><br>
                     <div class="box-content">
-                        <?= $block->getChildHtml('payment_methods_before') ?>
+                        <?= $block->getChildHtml('payment_methods_before'); ?>
                         <?php /* Payment methods forms list */ ?>
                         <dl class="checkout-payment-method" id="payment-methods">
                             <?php
@@ -86,7 +86,7 @@
                                            id="p_method_<?= $block->escapeHtml($code); ?>"
                                            value="<?= $block->escapeHtml($code); ?>"
                                            name="payment[method]"
-                                           title="<?= $block->escapeHtml($_method->getTitle()) ?>"
+                                           title="<?= $block->escapeHtml($_method->getTitle()); ?>"
                                         <?php if ($checked) : ?>
                                            checked="checked"
                                         <?php endif; ?>
@@ -100,7 +100,7 @@
                                            class="radio solo method" />
                                 <?php endif; ?>
                                     <label for="p_method_<?= $block->escapeHtml($code); ?>">
-                                        <?= $block->escapeHtml($_method->getTitle()) ?>
+                                        <?= $block->escapeHtml($_method->getTitle()); ?>
                                     </label>
                             </dt>
                                 <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
@@ -111,8 +111,8 @@
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </dl>
-                        <?= $block->getChildHtml('payment_methods_after') ?>
-                        <?= $block->getChildHtml('checkout_billing_items') ?>
+                        <?= $block->getChildHtml('payment_methods_after'); ?>
+                        <?= $block->getChildHtml('checkout_billing_items'); ?>
                     </div>
                 </fieldset>
             </div>
@@ -138,7 +138,7 @@
         var addtocartForm = jQuery('#multishipping-billing-form');
 
         addtocartForm.mage('payment', {
-            checkoutPrice: <?= (float)$block->getQuoteBaseGrandTotal() ?>
+            checkoutPrice: <?= (float)$block->getQuoteBaseGrandTotal(); ?>
         });
 
         addtocartForm.mage('validation', {

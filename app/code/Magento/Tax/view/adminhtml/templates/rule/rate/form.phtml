@@ -10,8 +10,8 @@
     <div class="grid-loader"></div>
 </div>
 
-<div class="form-inline" id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none">
-    <?= $block->getFormHtml() ?>
-    <?= $block->getChildHtml('form_after') ?>
+<div class="form-inline" id="<?= /* @escapeNotVerified */ $block->getNameInLayout(); ?>" style="display:none">
+    <?= $block->getFormHtml(); ?>
+    <?= $block->getChildHtml('form_after'); ?>
 </div>
 

@@ -14,7 +14,7 @@
         <div class="box box-billing-address">
             <div class="box-content">
                 <address>
-                    <?= $block->getAddressAsHtml($address) ?>
+                    <?= $block->getAddressAsHtml($address); ?>
                     <?php if ($block->isAddressDefaultBilling($address)): ?>
                         <br /><strong><?= $block->escapeHtml(__('Default Billing')); ?></strong>
                     <?php endif; ?>

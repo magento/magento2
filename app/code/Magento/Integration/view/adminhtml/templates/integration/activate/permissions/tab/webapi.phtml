@@ -13,14 +13,14 @@
 ?>
 <fieldset class="admin__fieldset form-inline entry-edit">
     <?php if ($block->isTreeEmpty()): ?>
-        <p class="empty"><?= /* @escapeNotVerified */ __('No permissions requested') ?></p>
+        <p class="empty"><?= /* @escapeNotVerified */ __('No permissions requested'); ?></p>
     <?php else: ?>
         <div class="field" data-role="tree-resources-container">
             <div class="control">
                 <div id="resource-tree" class="tree x-tree" data-role="resource-tree"></div>
             </div>
         </div>
-    <?php endif ?>
+    <?php endif; ?>
 </fieldset>
 <?php if (!$block->isTreeEmpty()): ?>
     <script>
@@ -35,9 +35,9 @@
             });
 
             $('[data-role="resource-tree"]').rolesTree({
-                'treeInitData': <?= /* @escapeNotVerified */ $block->getResourcesTreeJson() ?>,
-                'treeInitSelectedData': <?= /* @escapeNotVerified */ $block->getSelectedResourcesJson() ?>
+                'treeInitData': <?= /* @escapeNotVerified */ $block->getResourcesTreeJson(); ?>,
+                'treeInitSelectedData': <?= /* @escapeNotVerified */ $block->getSelectedResourcesJson(); ?>
             });
         });
     </script>
-<?php endif ?>
+<?php endif; ?>

@@ -12,8 +12,8 @@
  * @var $block \Magento\Backend\Block\Widget\Button
  */
 ?>
-<?= $block->getBeforeHtml() ?>
-<button <?= /* @escapeNotVerified */ $block->getAttributesHtml(), $block->getUiId() ?>>
-    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
+<?= $block->getBeforeHtml(); ?>
+<button <?= /* @escapeNotVerified */ $block->getAttributesHtml(), $block->getUiId(); ?>>
+    <span><?= /* @escapeNotVerified */ $block->getLabel(); ?></span>
 </button>
-<?= $block->getAfterHtml() ?>
+<?= $block->getAfterHtml(); ?>

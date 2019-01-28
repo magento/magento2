@@ -7,13 +7,13 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <span class="product-image-container"
-      style="width:<?= /* @escapeNotVerified */ $block->getWidth() ?>px;">
+      style="width:<?= /* @escapeNotVerified */ $block->getWidth(); ?>px;">
     <span class="product-image-wrapper"
-          style="padding-bottom: <?= /* @escapeNotVerified */ ($block->getRatio() * 100) ?>%;">
-        <img class="<?= /* @escapeNotVerified */ $block->getClass() ?>"
-            <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
-            src="<?= /* @escapeNotVerified */ $block->getImageUrl() ?>"
-            max-width="<?= /* @escapeNotVerified */ $block->getWidth() ?>"
-            max-height="<?= /* @escapeNotVerified */ $block->getHeight() ?>"
-            alt="<?= /* @escapeNotVerified */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
+          style="padding-bottom: <?= /* @escapeNotVerified */ ($block->getRatio() * 100); ?>%;">
+        <img class="<?= /* @escapeNotVerified */ $block->getClass(); ?>"
+            <?= /* @escapeNotVerified */ $block->getCustomAttributes(); ?>
+            src="<?= /* @escapeNotVerified */ $block->getImageUrl(); ?>"
+            max-width="<?= /* @escapeNotVerified */ $block->getWidth(); ?>"
+            max-height="<?= /* @escapeNotVerified */ $block->getHeight(); ?>"
+            alt="<?= /* @escapeNotVerified */ $block->stripTags($block->getLabel(), null, true); ?>"/></span>
 </span>

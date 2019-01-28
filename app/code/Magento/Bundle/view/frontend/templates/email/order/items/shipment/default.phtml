@@ -9,50 +9,50 @@
 ?>
 <?php /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */ ?>
 
-<?php $parentItem = $block->getItem() ?>
+<?php $parentItem = $block->getItem(); ?>
 
-<?php $items = array_merge([$parentItem->getOrderItem()], $parentItem->getOrderItem()->getChildrenItems()) ?>
-<?php $shipItems = $block->getChildren($parentItem) ?>
+<?php $items = array_merge([$parentItem->getOrderItem()], $parentItem->getOrderItem()->getChildrenItems()); ?>
+<?php $shipItems = $block->getChildren($parentItem); ?>
 
 <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
-    <?php $_showlastRow = true ?>
+    <?php $_showlastRow = true; ?>
 <?php else: ?>
-    <?php $_showlastRow = false ?>
+    <?php $_showlastRow = false; ?>
 <?php endif; ?>
 
-<?php $_prevOptionId = '' ?>
+<?php $_prevOptionId = ''; ?>
 
 <?php foreach ($items as $_item): ?>
 
     <?php if ($_item->getParentItem()): ?>
-        <?php $attributes = $block->getSelectionAttributes($_item) ?>
+        <?php $attributes = $block->getSelectionAttributes($_item); ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="bundle-option-label">
                 <td colspan="2">
-                    <strong><em><?= /* @escapeNotVerified */  $attributes['option_label'] ?></em></strong>
+                    <strong><em><?= /* @escapeNotVerified */  $attributes['option_label']; ?></em></strong>
                 </td>
             </tr>
-            <?php $_prevOptionId = $attributes['option_id'] ?>
+            <?php $_prevOptionId = $attributes['option_id']; ?>
         <?php endif; ?>
     <?php endif; ?>
     <?php if (!$_item->getParentItem()): ?>
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
-                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="product-name"><?= $block->escapeHtml($_item->getName()); ?></p>
+                <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)); ?></p>
             </td>
     <?php else: ?>
         <tr class="bundle-item bundle-option-value">
             <td class="item-info">
-                <p><?= $block->getValueHtml($_item) ?></p>
+                <p><?= $block->getValueHtml($_item); ?></p>
             </td>
     <?php endif; ?>
             <td class="item-qty">
                 <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())): ?>
                     <?php if (isset($shipItems[$_item->getId()])): ?>
-                        <?= /* @escapeNotVerified */  $shipItems[$_item->getId()]->getQty() * 1 ?>
+                        <?= /* @escapeNotVerified */  $shipItems[$_item->getId()]->getQty() * 1; ?>
                     <?php elseif ($_item->getIsVirtual()): ?>
-                        <?= /* @escapeNotVerified */  __('N/A') ?>
+                        <?= /* @escapeNotVerified */  __('N/A'); ?>
                     <?php else: ?>
                         0
                     <?php endif; ?>
@@ -70,12 +70,12 @@
             <?php if ($block->getItemOptions()): ?>
             <dl>
                 <?php foreach ($block->getItemOptions() as $option): ?>
-                <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
-                            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
+                <dt><strong><em><?= /* @escapeNotVerified */  $option['label']; ?></em></strong></dt>
+                            <dd><?= /* @escapeNotVerified */  $option['value']; ?></dd>
                 <?php endforeach; ?>
             </dl>
             <?php endif; ?>
-            <?= $block->escapeHtml($_item->getDescription()) ?>
+            <?= $block->escapeHtml($_item->getDescription()); ?>
         </td>
     </tr>
 <?php endif; ?>
