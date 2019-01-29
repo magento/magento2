@@ -62,6 +62,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testIsOutputEnabledReturnsFalseForDisabledModule()
     {
+        $this->_moduleList->expects($this->once())->method('has')->with('Disabled_Module')->willReturn(false);
         $this->_outputConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
         $this->assertFalse($this->_model->isOutputEnabled('Disabled_Module'));
     }
