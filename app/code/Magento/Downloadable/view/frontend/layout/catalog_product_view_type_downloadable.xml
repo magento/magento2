@@ -7,6 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <attribute name="class" value="page-product-downloadable"/>
         <referenceContainer name="product.info.main">
             <block class="Magento\Downloadable\Block\Catalog\Product\Samples" name="product.info.downloadable.samples" as="samples" template="Magento_Downloadable::catalog/product/samples.phtml" after="product.price.tier" />
         </referenceContainer>
@@ -25,8 +26,21 @@
                 </block>
             </block>
         </referenceBlock>
+        <referenceContainer name="product.info.options.wrapper.bottom">
+            <block class="Magento\Catalog\Pricing\Render" name="product.price.final.copy" before="-">
+                <arguments>
+                    <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                    <argument name="price_type_code" xsi:type="string">final_price</argument>
+                    <argument name="display_msrp_help_message" xsi:type="string">1</argument>
+                    <argument name="zone" xsi:type="string">item_view</argument>
+                    <argument name="id_suffix" xsi:type="string">copy-</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="downloadable_page_head_components" template="Magento_Downloadable::js/components.phtml"/>
-        </referenceBlock>        
+        </referenceBlock>
+        <move element="product.info" destination="content" after="product.info.media" />
+        <move element="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
     </body>
 </page>
