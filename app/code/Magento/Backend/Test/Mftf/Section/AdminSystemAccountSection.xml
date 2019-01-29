@@ -8,9 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="LocaleOptionsSection">
-        <element name="sectionHeader" type="text" selector="#general_locale-head"/>
-        <element name="timezone" type="select" selector="#general_locale_timezone"/>
-        <element name="useDefault" type="checkbox" selector="#general_locale_timezone_inherit"/>
+    <section name="AdminSystemAccountSection">
+        <element name="interfaceLocale" type="text" selector="#interface_locale"/>
+        <element name="currentPassword" type="text" selector="#current_password"/>
     </section>
 </sections>
