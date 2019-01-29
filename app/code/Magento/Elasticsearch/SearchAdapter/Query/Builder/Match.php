@@ -113,7 +113,7 @@ class Match implements QueryInterface
 
         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
         $count = 0;
-        $value = preg_replace('#^\\\\"(.*)\\\\"$#m', '$1', $queryValue['value'], -1, $count);
+        $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
         $condition = ($count) ? 'match_phrase' : 'match';
 
         $attributesTypes = $this->fieldMapper->getAllAttributesTypes();
