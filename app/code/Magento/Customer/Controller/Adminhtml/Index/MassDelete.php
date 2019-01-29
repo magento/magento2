@@ -47,8 +47,7 @@ class MassDelete extends AbstractMassAction implements HttpPostActionInterface
     }
 
     /**
-     * @param AbstractCollection $collection
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @inheritdoc
      */
     protected function massAction(AbstractCollection $collection)
     {
