@@ -25,9 +25,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete" />
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal" />
-        <waitForPageLoad stepKey="waitForStoreListPageLoad" />
-        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload" time="30" />
-        <see userInput="You saved the store view." stepKey="seeSavedMessage" />
+        <waitForElementNotVisible selector="{{AdminNewStoreViewActionsSection.loadingMask}}" stepKey="waitForElementVisible"/>
     </actionGroup>
     <!--Save the Store view-->
     <actionGroup name="AdminCreateStoreViewActionSaveGroup">
