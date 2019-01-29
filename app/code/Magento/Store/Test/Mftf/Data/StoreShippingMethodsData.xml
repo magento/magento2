@@ -32,7 +32,7 @@
         <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
     </entity>
     <entity name="Price" type="free_shipping_subtotal">
-        <data key="value">89</data>
+        <data key="value">90</data>
     </entity>
 
     <entity name="DefaultMinimumOrderAmount" type="minimum_order_amount">
