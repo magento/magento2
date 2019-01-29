@@ -16,6 +16,7 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Prepare base select for Product Price index limited by specified dimensions: website and customer group
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BaseFinalPrice
@@ -66,10 +67,11 @@ class BaseFinalPrice
     private $metadataPool;
 
     /**
-     * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -89,6 +91,8 @@ class BaseFinalPrice
     }
 
     /**
+     * Build query for base final price.
+     *
      * @param Dimension[] $dimensions
      * @param string $productType
      * @param array $entityIds
@@ -285,7 +289,7 @@ class BaseFinalPrice
     /**
      * Get tier price expression for table
      *
-     * @param $tableAlias
+     * @param string $tableAlias
      * @param \Zend_Db_Expr $priceExpression
      * @return \Zend_Db_Expr
      */
@@ -305,7 +309,7 @@ class BaseFinalPrice
     /**
      * Get connection
      *
-     * return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface
