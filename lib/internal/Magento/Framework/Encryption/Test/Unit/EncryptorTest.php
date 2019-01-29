@@ -238,7 +238,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testUseSpecifiedHashingAlgoDataProvider()
+    public function useSpecifiedHashingAlgoDataProvider()
     {
         return [
             ['password', 'salt', Encryptor::HASH_VERSION_MD5,
@@ -253,7 +253,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider testUseSpecifiedHashingAlgoDataProvider
+     * @dataProvider useSpecifiedHashingAlgoDataProvider
      *
      * @param $password
      * @param $salt

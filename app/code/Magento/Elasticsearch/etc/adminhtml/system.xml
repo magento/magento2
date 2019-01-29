@@ -92,15 +92,15 @@
                 <field id="elasticsearch5_username" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Elasticsearch HTTP Username</label>
                     <depends>
-                        <field id="elasticsearch_enable_auth">1</field>
                         <field id="engine">elasticsearch5</field>
+                        <field id="elasticsearch5_enable_auth">1</field>
                     </depends>
                 </field>
                 <field id="elasticsearch5_password" translate="label" type="text" sortOrder="66" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Elasticsearch HTTP Password</label>
                     <depends>
-                        <field id="elasticsearch_enable_auth">1</field>
                         <field id="engine">elasticsearch5</field>
+                        <field id="elasticsearch5_enable_auth">1</field>
                     </depends>
                 </field>
                 <field id="elasticsearch5_server_timeout" translate="label" type="text" sortOrder="67" showInDefault="1" showInWebsite="0" showInStore="0">

@@ -46,6 +46,8 @@ class Rss extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get link url.
+     *
      * @return string
      */
     public function getLink()
@@ -54,6 +56,8 @@ class Rss extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get translatable label for url.
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getLabel()
@@ -91,7 +95,10 @@ class Rss extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * Get type, secure and query params for link.
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function getLinkParams()
     {

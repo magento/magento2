@@ -96,15 +96,17 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             /* @var $status \Magento\Eav\Model\Entity\Attribute */
             $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
             $statusTable = $status->getBackend()->getTable();
+            $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');
             $statusConditions = [
-                'store_id IN(0,' . (int)$store->getId() . ')',
-                'attribute_id = ' . (int)$status->getId(),
-                $linkField . ' = ' . (int)$id,
+                's.store_id IN(0,' . (int)$store->getId() . ')',
+                's.attribute_id = ' . (int)$status->getId(),
+                'e.entity_id = ' . (int)$id,
             ];
             $select = $this->_connection->select();
-            $select->from($statusTable, ['value'])
+            $select->from(['e' => $catalogProductEntityTable], ['s.value'])
                 ->where(implode(' AND ', $statusConditions))
-                ->order('store_id DESC')
+                ->joinLeft(['s' => $statusTable], "e.{$linkField} = s.{$linkField}", [])
+                ->order('s.store_id DESC')
                 ->limit(1);
             $result = $this->_connection->query($select);
             $status = $result->fetchColumn(0);
