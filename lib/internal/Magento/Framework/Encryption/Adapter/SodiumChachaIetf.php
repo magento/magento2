@@ -33,6 +33,7 @@ class SodiumChachaIetf implements EncryptionAdapterInterface
      *
      * @param string $data
      * @return string string
+     * @throws \SodiumException
      */
     public function encrypt(string $data): string
     {
@@ -65,6 +66,6 @@ class SodiumChachaIetf implements EncryptionAdapterInterface
             $this->key
         );
 
-        return $plainText;
+        return $plainText !== false ? $plainText : '';
     }
 }
