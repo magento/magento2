@@ -70,7 +70,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter ?: ObjectManager::getInstance()->get(
             ActiveStoreAgreementsFilter::class
         );
-         $this->templateProcessor = $templateProcessor ?: ObjectManager::getInstance()->get(Filter::class);
+         $this->templateProcessor = $templateProcessor ?: ObjectManager::getInstance()->get(\Magento\Widget\Model\Template\Filter::class);
     }
 
     /**
