@@ -61,7 +61,7 @@
                                     <?php else: ?>
                                         class="admin__control-select"
                                     <?php endif; ?>>
-                                <?php foreach ($block->getContainers() as $key => $value): ?>
+                                <?php foreach ($containers as $key => $value): ?>
                                     <option value="<?= /* @escapeNotVerified */ $key ?>" >
                                         <?= /* @escapeNotVerified */ $value ?>
                                     </option>
