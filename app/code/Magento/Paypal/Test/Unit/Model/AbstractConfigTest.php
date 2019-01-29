@@ -293,7 +293,6 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
         $this->config->isMethodActive('method');
     }
 
-
     /**
      * Check bill me later active setting uses disable funding options
      *

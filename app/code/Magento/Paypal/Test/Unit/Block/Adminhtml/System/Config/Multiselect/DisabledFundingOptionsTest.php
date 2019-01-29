@@ -11,7 +11,7 @@ use \Magento\Framework\Data\Form\Element\AbstractElement;
 use \Magento\Framework\App\RequestInterface;
 use \Magento\Framework\View\Helper\Js;
 use \Magento\Paypal\Model\Config;
-use \Magento\Paypal\Block\Adminhtml\System\Config\Multiselect\DisabledFundingOptions;
+use \Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect\DisabledFundingOptions;
 use \Magento\Paypal\Model\Config\StructurePlugin;
 use \PHPUnit\Framework\TestCase;
 
