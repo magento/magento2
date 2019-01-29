@@ -44,6 +44,8 @@ class Storage
      */
     public function afterReplace(StorageInterface $object, array $result, array $urls)
     {
+        return $result;
+
         $toSave = [];
         foreach ($this->filterUrls($result) as $record) {
             $metadata = $record->getMetadata();
@@ -53,7 +55,7 @@ class Storage
                 'product_id' => $record->getEntityId(),
             ];
         }
-        if ($toSave) {
+        if (count($toSave) > 0) {
             $this->productResource->saveMultiple($toSave);
         }
         return $result;
@@ -67,7 +69,7 @@ class Storage
      */
     public function beforeDeleteByData(StorageInterface $object, array $data)
     {
-        $this->productResource->removeMultipleByProductCategory($data);
+        //$this->productResource->removeMultipleByProductCategory($data);
     }
 
     /**

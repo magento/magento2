@@ -185,10 +185,10 @@ class ProductScopeRewriteGenerator
             )
         );
         $mergeDataProvider->merge(
-            $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            $url = $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
         );
         $mergeDataProvider->merge(
-            $this->currentUrlRewritesRegenerator->generateAnchor(
+            $url = $this->currentUrlRewritesRegenerator->generateAnchor(
                 $storeId,
                 $product,
                 $productCategories,
