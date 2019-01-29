@@ -71,7 +71,9 @@
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
         <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct" />
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="waitForProductToSave"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
@@ -258,7 +260,7 @@
             <argument name="website" type="string"/>
         </arguments>
         <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
-        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{AdminProductContentSection.sectionHeader}}._show" visible="false" stepKey="expandSection"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
     </actionGroup>
