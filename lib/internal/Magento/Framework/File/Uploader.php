@@ -207,6 +207,10 @@ class Uploader
         $this->_result = false;
         $destinationFile = $destinationFolder;
         $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
+        $basePath = str_replace('/tmp/','/',$destinationFolder);
+        if (file_exists($basePath.'/'.$this->_file['name'])) {
+            $fileName = pathinfo($this->_file['name'], PATHINFO_FILENAME)."_1.".pathinfo($this->_file['name'], PATHINFO_EXTENSION);
+        }
         $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
