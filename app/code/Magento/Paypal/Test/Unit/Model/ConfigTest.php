@@ -246,7 +246,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         // _mapGenericStyleFieldset
         $this->scopeConfig->method('getValue')
-            ->with("paypal/style/{$name}")
+            ->with('paypal/style/' . $name)
             ->willReturn($expectedValue);
 
         $this->assertEquals($expectedResult, $this->model->getValue($name));
@@ -255,7 +255,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function payPalStylesDataProvider()
+    public function payPalStylesDataProvider(): array
     {
         return [
             ['checkout_page_button_customize', 'value', 'value'],
