@@ -272,6 +272,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function tryScheduleDataProvider(): array
     {
         $date = '2011-12-13 14:15:16';
+        $timestamp = (new \DateTime($date, new \DateTimeZone('UTC')))->getTimestamp();
+        $day = 'Monday';
         return [
             [$date, [], false],
             [$date, null, false],
@@ -279,12 +281,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             [$date, [], false],
             [$date, null, false],
             [$date, false, false],
-            [strtotime($date), ['*', '*', '*', '*', '*'], true],
-            [strtotime($date), ['15', '*', '*', '*', '*'], true],
-            [strtotime($date), ['*', '14', '*', '*', '*'], true],
-            [strtotime($date), ['*', '*', '13', '*', '*'], true],
-            [strtotime($date), ['*', '*', '*', '12', '*'], true],
-            [strtotime('Monday'), ['*', '*', '*', '*', '1'], true],
+            [$timestamp, ['*', '*', '*', '*', '*'], true],
+            [$timestamp, ['15', '*', '*', '*', '*'], true],
+            [$timestamp, ['*', '14', '*', '*', '*'], true],
+            [$timestamp, ['*', '*', '13', '*', '*'], true],
+            [$timestamp, ['*', '*', '*', '12', '*'], true],
+            [(new \DateTime($day, new \DateTimeZone('UTC')))->getTimestamp(), ['*', '*', '*', '*', '1'], true],
         ];
     }
 
