@@ -15,7 +15,7 @@ define([
                 var value = '',
                     params = [1,3];
 
-                expect(rules['range-words'].handler(value, params)).toBe(false);
+                expect(rules['range-words'].handler(value, params)).toBe(true);
             });
 
             it('Check on redundant words', function () {
@@ -37,6 +37,37 @@ define([
                     params = [1,3];
 
                 expect(rules['range-words'].handler(value, params)).toBe(true);
+            });
+        });
+        describe('"validate-number" method', function () {
+            it('Check on empty value', function () {
+                var value = '';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on integer', function () {
+                var value = '125';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on float', function () {
+                var value = '1000.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on formatted float', function () {
+                var value = '1,000,000.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on not a number', function () {
+                var value = 'string';
+
+                expect(rules['validate-number'].handler(value)).toBe(false);
             });
         });
     });

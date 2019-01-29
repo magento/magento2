@@ -16,6 +16,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
+ * Resource model for category entity
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends AbstractResource
@@ -198,7 +200,7 @@ class Category extends AbstractResource
      * delete child categories
      *
      * @param \Magento\Framework\DataObject $object
-     * @return $this
+     * @return void
      */
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -249,7 +251,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data before saving
-     * prepare path and increment children count for parent categories
+     *
+     * Prepare path and increment children count for parent categories
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -298,7 +301,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data after save category object
-     * save related products ids and update path value
+     *
+     * Save related products ids and update path value
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -482,15 +486,27 @@ class Category extends AbstractResource
             $this->getCategoryProductTable(),
             ['product_id', 'position']
         )->where(
-            'category_id = :category_id'
+            "{$this->getTable('catalog_category_product')}.category_id = ?",
+            $category->getId()
         );
+        $websiteId = $category->getStore()->getWebsiteId();
+        if ($websiteId) {
+            $select->join(
+                ['product_website' => $this->getTable('catalog_product_website')],
+                "product_website.product_id = {$this->getTable('catalog_category_product')}.product_id",
+                []
+            )->where(
+                'product_website.website_id = ?',
+                $websiteId
+            );
+        }
         $bind = ['category_id' => (int)$category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
 
     /**
-     * Get chlden categories count
+     * Get children categories count
      *
      * @param int $categoryId
      * @return int
@@ -664,7 +680,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return intval($counts);
+        return (int) $counts;
     }
 
     /**
@@ -862,6 +878,7 @@ class Category extends AbstractResource
 
     /**
      * Check category is forbidden to delete.
+     *
      * If category is root and assigned to store group return false
      *
      * @param integer $categoryId
@@ -918,7 +935,7 @@ class Category extends AbstractResource
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
-        $levelFiled = $connection->quoteIdentifier('level');
+        $levelField = $connection->quoteIdentifier('level');
         $pathField = $connection->quoteIdentifier('path');
 
         /**
@@ -958,7 +975,7 @@ class Category extends AbstractResource
                         $newPath . '/'
                     ) . ')'
                 ),
-                'level' => new \Zend_Db_Expr($levelFiled . ' + ' . $levelDisposition)
+                'level' => new \Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
@@ -982,6 +999,7 @@ class Category extends AbstractResource
 
     /**
      * Process positions of old parent category children and new parent category children.
+     *
      * Get position for moved category
      *
      * @param \Magento\Catalog\Model\Category $category
@@ -1062,7 +1080,7 @@ class Category extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -1088,6 +1106,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns EntityManager object
+     *
      * @return EntityManager
      */
     private function getEntityManager()
@@ -1100,6 +1120,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns AggregateCount object
+     *
      * @return Category\AggregateCount
      */
     private function getAggregateCount()

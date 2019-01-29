@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultVideoVirtualProductTest" extends="AdminAddDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add default product video for a Virtual Product"/>
+            <description value="Admin should be able to add default product video for a Virtual Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-109"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <!-- Replacing steps in base AdminAddDefaultVideoSimpleProductTest -->
+
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+    </test>
+</tests>

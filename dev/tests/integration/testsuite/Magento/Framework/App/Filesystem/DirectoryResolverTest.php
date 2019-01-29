@@ -52,7 +52,7 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
     {
         $directory = $this->filesystem
             ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
-        $path = $directory->getAbsolutePath($path);
+        $path = $directory->getAbsolutePath() .'/' .$path;
         $this->assertEquals($expectation, $this->directoryResolver->validatePath($path, $directoryConfig));
     }
 

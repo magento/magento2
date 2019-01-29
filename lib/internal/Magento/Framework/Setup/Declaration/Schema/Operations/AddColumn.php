@@ -110,7 +110,7 @@ class AddColumn implements OperationInterface
             Index::TYPE,
             [
                 'name' => self::TEMPORARY_KEY,
-                'column' => $column->getName(),
+                'column' => [$column->getName()],
                 'columns' => [$column],
                 'table' => $column->getTable()
             ]
@@ -119,7 +119,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOperationName()
     {
@@ -127,7 +127,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isOperationDestructive()
     {
@@ -187,7 +187,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation(ElementHistory $elementHistory)
     {

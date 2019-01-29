@@ -103,6 +103,12 @@ define([
                 }
             });
 
+            quote.shippingAddress.subscribe(function () {
+                if (self.isActive()) {
+                    self.reInitPayPal();
+                }
+            });
+
             // for each component initialization need update property
             this.isReviewRequired(false);
             this.initClientConfig();
@@ -204,7 +210,9 @@ define([
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
 
-            if (quote.billingAddress() === null && typeof data.details.billingAddress !== 'undefined') {
+            if ((this.isRequiredBillingAddress() || quote.billingAddress() === null) &&
+                typeof data.details.billingAddress !== 'undefined'
+            ) {
                 this.setBillingAddress(data.details, data.details.billingAddress);
             }
 
@@ -228,6 +236,7 @@ define([
 
             this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
+            this.clientConfig.paypal.shippingAddressOverride = this.getShippingAddress();
 
             Braintree.setConfig(this.clientConfig);
             Braintree.setup();
@@ -247,6 +256,14 @@ define([
          */
         isAllowOverrideShippingAddress: function () {
             return window.checkoutConfig.payment[this.getCode()].isAllowShippingAddressOverride;
+        },
+
+        /**
+         * Is billing address required from PayPal side
+         * @returns {Boolean}
+         */
+        isRequiredBillingAddress: function () {
+            return window.checkoutConfig.payment[this.getCode()].isRequiredBillingAddress;
         },
 
         /**
@@ -403,14 +420,16 @@ define([
          * Triggers when customer click "Continue to PayPal" button
          */
         payWithPayPal: function () {
-            if (additionalValidators.validate()) {
-                try {
-                    Braintree.checkout.paypal.initAuthFlow();
-                } catch (e) {
-                    this.messageContainer.addErrorMessage({
-                        message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
-                    });
-                }
+            if (!additionalValidators.validate()) {
+                return;
+            }
+
+            try {
+                Braintree.checkout.paypal.initAuthFlow();
+            } catch (e) {
+                this.messageContainer.addErrorMessage({
+                    message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
+                });
             }
         },
 

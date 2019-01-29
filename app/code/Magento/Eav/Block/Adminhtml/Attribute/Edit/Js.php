@@ -18,7 +18,7 @@ class Js extends \Magento\Backend\Block\Template
      * @var string
      */
   
-    protected $_template = 'attribute/edit/js.phtml';
+    protected $_template = 'Magento_Eav::attribute/edit/js.phtml';
 
     /**
      * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype

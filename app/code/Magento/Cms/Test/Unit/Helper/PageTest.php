@@ -118,6 +118,9 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     private $httpRequestMock;
 
+    /**
+     * Test Setup
+     */
     protected function setUp()
     {
         $this->actionMock = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -478,7 +481,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         return [
             'ids NOT EQUAL BUT page->load() NOT SUCCESSFUL' => [
                 'pageId' => 123,
-                'internalPageId' => 234,
+                'internalPageId' => null,
                 'pageLoadResultIndex' => 0,
                 'expectedResult' => null,
             ],

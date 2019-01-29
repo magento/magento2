@@ -11,7 +11,7 @@
             <label>Fraud Protection</label>
             <tab>sales</tab>
             <resource>Magento_Sales::fraud_protection</resource>
-            <group id="signifyd" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="signifyd" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                 <fieldset_css>signifyd-logo-header</fieldset_css>
                 <group id="about" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                     <frontend_model>Magento\Signifyd\Block\Adminhtml\System\Config\Fieldset\Info</frontend_model>
@@ -52,7 +52,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>fraud_protection/signifyd/debug</config_path>
                     </field>
-                    <field id="webhook_url" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="webhook_url" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Webhook URL</label>
                         <comment><![CDATA[Your webhook URL will be used to <a href="https://app.signifyd.com/settings/notifications" target="_blank">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento.]]></comment>
                         <attribute type="handler_url">signifyd/webhooks/handler</attribute>

@@ -24,6 +24,7 @@ define([
             scriptLoaded: false,
             braintree: null,
             selectedCardType: null,
+            checkout: null,
             imports: {
                 onActiveChange: 'active'
             }
@@ -147,6 +148,12 @@ define([
 
             this.disableEventListeners();
 
+            if (self.checkout) {
+                self.checkout.teardown(function () {
+                    self.checkout = null;
+                });
+            }
+
             self.braintree.setup(self.clientToken, 'custom', {
                 id: self.selector,
                 hostedFields: self.getHostedFields(),
@@ -154,7 +161,8 @@ define([
                 /**
                  * Triggered when sdk was loaded
                  */
-                onReady: function () {
+                onReady: function (checkout) {
+                    self.checkout = checkout;
                     $('body').trigger('processStop');
                     self.enableEventListeners();
                 },

@@ -10,7 +10,7 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 abstract class AbstractAggregateCalculator extends AbstractCalculator
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -86,7 +86,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function calculateWithTaxNotInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -149,6 +149,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $rowTaxBeforeDiscount = array_sum($rowTaxesBeforeDiscount);
         $rowTotalInclTax = $rowTotal + $rowTaxBeforeDiscount;
         $priceInclTax = $rowTotalInclTax / $quantity;
+
         if ($round) {
             $priceInclTax = $this->calculationTool->round($priceInclTax);
         }

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EnableDisableBundleProductStatusTest">
         <annotations>
             <features value="Bundle"/>
@@ -72,16 +72,21 @@
         <!--Go to page-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Testing disabled view-->
-        <actionGroup ref="FindProductToEdit" stepKey="FindProductEditPage"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="GoToProductCatalog"/>
+        <waitForPageLoad stepKey="WaitForCatalogProductPageToLoad"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="FindProductEditPage">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="ClickProductInGrid"/>
         <click stepKey="ClickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown2"/>
         <waitForPageLoad stepKey="PauseForSave"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>

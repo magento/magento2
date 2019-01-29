@@ -6,12 +6,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
+class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -127,15 +128,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                 $model->initFromSkeleton($this->getRequest()->getParam('skeleton_set'));
             }
             $model->save();
-            $this->messageManager->addSuccess(__('You saved the attribute set.'));
+            $this->messageManager->addSuccessMessage(__('You saved the attribute set.'));
         } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $hasError = true;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $hasError = true;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while saving the attribute set.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the attribute set.'));
             $hasError = true;
         }
 

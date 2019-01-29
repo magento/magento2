@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
@@ -50,12 +51,12 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
      * @return bool|array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateValue($value)
     {
@@ -67,34 +68,21 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
         }
 
-        if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
+        if (!$attribute->getIsRequired() && empty($value)) {
+            return true;
+        }
+
+        if (empty($value) && $value !== '0' && $attribute->getDefaultValue() === null) {
             $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
-        if (!$errors && !$attribute->getIsRequired() && empty($value)) {
-            return true;
-        }
+        $validateLengthResult = $this->validateLength($attribute, $value);
+        $errors = array_merge($errors, $validateLengthResult);
 
-        // validate length
-        $length = $this->_string->strlen(trim($value));
+        $validateInputRuleResult = $this->validateInputRule($value);
+        $errors = array_merge($errors, $validateInputRuleResult);
 
-        $validateRules = $attribute->getValidateRules();
-        if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
-            $label = __($attribute->getStoreLabel());
-            $v = $validateRules['min_text_length'];
-            $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
-        }
-        if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
-            $label = __($attribute->getStoreLabel());
-            $v = $validateRules['max_text_length'];
-            $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
-        }
-
-        $result = $this->_validateInputRule($value);
-        if ($result !== true) {
-            $errors = array_merge($errors, $result);
-        }
         if (count($errors) == 0) {
             return true;
         }
@@ -141,5 +129,46 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         $value = $this->_applyOutputFilter($value);
 
         return $value;
+    }
+
+    /**
+     * Validates value length by attribute rules
+     *
+     * @param \Magento\Eav\Model\Attribute $attribute
+     * @param string $value
+     * @return array errors
+     */
+    private function validateLength(\Magento\Eav\Model\Attribute $attribute, string $value): array
+    {
+        $errors = [];
+        $length = $this->_string->strlen(trim($value));
+        $validateRules = $attribute->getValidateRules();
+
+        if (!empty($validateRules['input_validation'])) {
+            if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
+                $label = __($attribute->getStoreLabel());
+                $v = $validateRules['min_text_length'];
+                $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
+            }
+            if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
+                $label = __($attribute->getStoreLabel());
+                $v = $validateRules['max_text_length'];
+                $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Validate value by attribute input validation rule.
+     *
+     * @param string $value
+     * @return array
+     */
+    private function validateInputRule(string $value): array
+    {
+        $result = $this->_validateInputRule($value);
+        return \is_array($result) ? $result : [];
     }
 }

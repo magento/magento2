@@ -54,7 +54,7 @@ class CheckSalesRulesAvailability
         }
 
         if ($disabledRulesCount) {
-            $this->messageManager->addWarning(
+            $this->messageManager->addWarningMessage(
                 __(
                     '%1 Cart Price Rules based on "%2" attribute have been disabled.',
                     $disabledRulesCount,

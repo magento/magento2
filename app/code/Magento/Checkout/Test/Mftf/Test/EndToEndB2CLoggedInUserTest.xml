@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
         <!-- Step 3: User adds products to cart -->
         <comment userInput="Start of adding products to cart" stepKey="startOfAddingProductsToCart" after="endOfBrowsingCatalog"/>
@@ -96,14 +96,10 @@
         <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" after="commentCheckCartInformation"/>
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart" after="cartOpenCart">
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="subtotal" value="E2EB2CQuote.subtotal"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shipping" value="E2EB2CQuote.shipping"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="total" value="E2EB2CQuote.total"/>
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shipping" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
         </actionGroup>
 
         <!-- Check simple product 1 in cart -->
@@ -157,14 +153,10 @@
         <!-- Check order summary in checkout -->
         <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="checkoutFillingShippingSection" />
         <actionGroup ref="CheckOrderSummaryInCheckoutActionGroup" stepKey="checkoutCheckOrderSummary" after="commentCheckOrderSummaryInCheckout">
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="subtotal" value="E2EB2CQuote.subtotal"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shippingTotal" value="E2EB2CQuote.shipping"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="total" value="E2EB2CQuote.total"/>
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shippingTotal" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
         </actionGroup>
 
         <!-- Check ship to information in checkout -->

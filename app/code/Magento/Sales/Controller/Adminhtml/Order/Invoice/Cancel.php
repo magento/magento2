@@ -31,11 +31,11 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
             )->addObject(
                 $invoice->getOrder()
             )->save();
-            $this->messageManager->addSuccess(__('You canceled the invoice.'));
+            $this->messageManager->addSuccessMessage(__('You canceled the invoice.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Invoice canceling error'));
+            $this->messageManager->addErrorMessage(__('Invoice canceling error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

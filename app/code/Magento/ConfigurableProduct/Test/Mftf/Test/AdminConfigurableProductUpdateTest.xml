@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigurableProductBulkUpdateTest">
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -16,6 +16,7 @@
             <description value="admin should be able to bulk update attributes of configurable products"/>
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
@@ -78,6 +79,7 @@
             <description value="Admin should be able to remove a product configuration"/>
             <testCaseId value="MC-63"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
@@ -170,6 +172,7 @@
             <description value="Admin should be able to disable a product configuration"/>
             <testCaseId value="MC-119"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>

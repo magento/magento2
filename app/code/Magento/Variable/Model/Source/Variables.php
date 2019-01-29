@@ -24,6 +24,16 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     private $configVariables = [];
 
     /**
+     * @var array
+     */
+    private $configPaths = [];
+
+    /**
+     * @var \Magento\Config\Model\Config\Structure\SearchInterface
+     */
+    private $configStructure;
+
+    /**
      * Constructor.
      *
      * @param \Magento\Config\Model\Config\Structure\SearchInterface $configStructure
@@ -33,25 +43,8 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
         \Magento\Config\Model\Config\Structure\SearchInterface $configStructure,
         array $configPaths = []
     ) {
-        foreach ($configPaths as $groupPath => $groupElements) {
-            $groupPathElements = explode('/', $groupPath);
-            $path = [];
-            $labels = [];
-            foreach ($groupPathElements as $groupPathElement) {
-                $path[] = $groupPathElement;
-                $labels[] = __(
-                    $configStructure->getElementByConfigPath(implode('/', $path))->getLabel()
-                );
-            }
-            $this->configVariables[$groupPath]['label'] = implode(' / ', $labels);
-            foreach (array_keys($groupElements) as $elementPath) {
-                $this->configVariables[$groupPath]['elements'][] = [
-                    'value' => $elementPath,
-                    'label' => __($configStructure->getElementByConfigPath($elementPath)->getLabel()),
-                ];
-            }
-        }
-        $this->configVariables;
+        $this->configStructure = $configStructure;
+        $this->configPaths = $configPaths;
     }
 
     /**
@@ -64,7 +57,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     {
         $optionArray = [];
         if ($withGroup) {
-            foreach ($this->configVariables as $configVariableGroup) {
+            foreach ($this->getConfigVariables() as $configVariableGroup) {
                 $group = [
                     'label' => $configVariableGroup['label']
                 ];
@@ -79,7 +72,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
                 $optionArray[] = $group;
             }
         } else {
-            foreach ($this->configVariables as $configVariableGroup) {
+            foreach ($this->getConfigVariables() as $configVariableGroup) {
                 foreach ($configVariableGroup['elements'] as $element) {
                     $optionArray[] = [
                         'value' => '{{config path="' . $element['value'] . '"}}',
@@ -110,12 +103,43 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     private function getFlatConfigVars()
     {
         $result = [];
-        foreach ($this->configVariables as $configVariableGroup) {
+        foreach ($this->getConfigVariables() as $configVariableGroup) {
             foreach ($configVariableGroup['elements'] as $element) {
                 $element['group_label'] = $configVariableGroup['label'];
                 $result[] = $element;
             }
         }
         return $result;
+    }
+
+    /**
+     * Merge config with user defined data
+     *
+     * @return array
+     */
+    private function getConfigVariables()
+    {
+        if (empty($this->configVariables)) {
+            foreach ($this->configPaths as $groupPath => $groupElements) {
+                $groupPathElements = explode('/', $groupPath);
+                $path = [];
+                $labels = [];
+                foreach ($groupPathElements as $groupPathElement) {
+                    $path[] = $groupPathElement;
+                    $labels[] = __(
+                        $this->configStructure->getElementByConfigPath(implode('/', $path))->getLabel()
+                    );
+                }
+                $this->configVariables[$groupPath]['label'] = implode(' / ', $labels);
+                foreach (array_keys($groupElements) as $elementPath) {
+                    $this->configVariables[$groupPath]['elements'][] = [
+                        'value' => $elementPath,
+                        'label' => __($this->configStructure->getElementByConfigPath($elementPath)->getLabel()),
+                    ];
+                }
+            }
+        }
+
+        return $this->configVariables;
     }
 }

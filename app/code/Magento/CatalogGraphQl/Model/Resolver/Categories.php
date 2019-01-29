@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -15,9 +16,8 @@ use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlattener;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
-use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\CatalogGraphQl\Model\Category\Hydrator as CategoryHydrator;
 
 /**
  * Resolver for category objects the product is assigned to.
@@ -37,11 +37,6 @@ class Categories implements ResolverInterface
     private $categoryIds = [];
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $dataObjectProcessor;
-
-    /**
      * @var AttributesJoiner
      */
     private $attributesJoiner;
@@ -57,33 +52,42 @@ class Categories implements ResolverInterface
     private $valueFactory;
 
     /**
-     * Category constructor.
+     * @var CategoryHydrator
+     */
+    private $categoryHydrator;
+
+    /**
      * @param CollectionFactory $collectionFactory
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param AttributesJoiner $attributesJoiner
      * @param CustomAttributesFlattener $customAttributesFlattener
      * @param ValueFactory $valueFactory
+     * @param CategoryHydrator $categoryHydrator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        DataObjectProcessor $dataObjectProcessor,
         AttributesJoiner $attributesJoiner,
         CustomAttributesFlattener $customAttributesFlattener,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        CategoryHydrator $categoryHydrator
     ) {
         $this->collection = $collectionFactory->create();
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->attributesJoiner = $attributesJoiner;
         $this->customAttributesFlattener = $customAttributesFlattener;
         $this->valueFactory = $valueFactory;
+        $this->categoryHydrator = $categoryHydrator;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $value['model'];
         $categoryIds = $product->getCategoryIds();
@@ -97,19 +101,24 @@ class Categories implements ResolverInterface
             }
 
             if (!$this->collection->isLoaded()) {
-                $that->attributesJoiner->join($info->fieldASTs[0], $this->collection);
+                $that->attributesJoiner->join($info->fieldNodes[0], $this->collection);
                 $this->collection->addIdFilter($this->categoryIds);
             }
             /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
             foreach ($this->collection as $item) {
                 if (in_array($item->getId(), $categoryIds)) {
-                    $categories[$item->getId()] = $this->dataObjectProcessor->buildOutputDataArray(
-                        $item,
-                        CategoryInterface::class
-                    );
-                    $categories[$item->getId()] = $this->customAttributesFlattener
-                        ->flatten($categories[$item->getId()]);
-                    $categories[$item->getId()]['product_count'] = $item->getProductCount();
+                    // Try to extract all requested fields from the loaded collection data
+                    $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
+                    $categories[$item->getId()]['model'] = $item;
+                    $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
+                    $extractedFields = array_keys($categories[$item->getId()]);
+                    $foundFields = array_intersect($requestedFields, $extractedFields);
+                    if (count($requestedFields) === count($foundFields)) {
+                        continue;
+                    }
+
+                    // If not all requested fields were extracted from the collection, start more complex extraction
+                    $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item);
                 }
             }
 

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontEditBundleProductTest">
         <annotations>
             <features value="Bundle"/>
@@ -94,9 +94,8 @@
         <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
 
-        <!-- Choose both of the options on the storefront -->
-        <click stepKey="selectFirstBundleOption2" selector="{{StorefrontBundledSection.nthBundledOption('1','1')}}"/>
-        <click stepKey="selectSecondBundleOption2" selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}"/>
+        <!-- Check second one option to choose both of the options on the storefront -->
+        <click selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}" stepKey="selectSecondBundleOption2"/>
 
         <waitForPageLoad stepKey="waitForPriceUpdate3"/>
         <see stepKey="seeDoublePrice" selector="{{StorefrontBundledSection.configuredPrice}}" userInput="2,460.00"/>

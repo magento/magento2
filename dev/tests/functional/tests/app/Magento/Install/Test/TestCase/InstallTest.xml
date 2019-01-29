@@ -17,7 +17,7 @@
         <variation name="InstallTestVariation2" firstConstraint="Magento\Install\Test\Constraint\AssertSuccessInstall" summary="Install with custom encryption key and changed currency and locale">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/keyOwn" xsi:type="string">I want to use my own encryption key</data>
-            <data name="install/keyValue" xsi:type="string">123123qa</data>
+            <data name="install/keyValue" xsi:type="string">I_want_to_use_my_own__encryption</data>
             <data name="install/storeLanguage" xsi:type="string">German (Germany)</data>
             <data name="install/storeCurrency" xsi:type="string">Euro (EUR)</data>
             <data name="currencySymbol" xsi:type="string">€</data>

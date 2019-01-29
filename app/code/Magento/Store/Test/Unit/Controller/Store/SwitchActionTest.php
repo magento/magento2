@@ -8,13 +8,15 @@ namespace Magento\Store\Test\Unit\Controller\Store;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreSwitcher;
+use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -58,6 +60,12 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
      */
     private $redirectMock;
 
+    /** @var StoreSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $storeSwitcher;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
@@ -73,6 +81,10 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->redirectMock =
             $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)->getMock();
+        $this->storeSwitcher = $this->getMockBuilder(StoreSwitcher::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['switch'])
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
             \Magento\Store\Controller\Store\SwitchAction::class,
@@ -83,81 +95,48 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $this->storeManagerMock,
                 '_request' => $this->requestMock,
                 '_response' => $this->responseMock,
-                '_redirect' => $this->redirectMock
+                '_redirect' => $this->redirectMock,
+                'storeSwitcher' => $this->storeSwitcher
             ]
         );
     }
 
-    public function testExecuteSuccessWithoutUseStoreInUrl()
+    /**
+     * @return void
+     */
+    public function testExecute()
     {
         $storeToSwitchToCode = 'sv2';
         $defaultStoreViewCode = 'default';
         $expectedRedirectUrl = "magento.com/{$storeToSwitchToCode}";
-        $currentActiveStoreMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
         $defaultStoreViewMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
         $storeToSwitchToMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isUseStoreInUrl'])
             ->getMockForAbstractClass();
 
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($currentActiveStoreMock);
-        $this->requestMock->expects($this->once())->method('getParam')->willReturn($storeToSwitchToCode);
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                [StoreResolver::PARAM_NAME, null, $storeToSwitchToCode],
+                ['___from_store', null, $defaultStoreViewCode]
+            ]
+        );
+        $this->storeRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($defaultStoreViewCode)
+            ->willReturn($defaultStoreViewMock);
         $this->storeRepositoryMock
             ->expects($this->once())
             ->method('getActiveStoreByCode')
+            ->with($storeToSwitchToCode)
             ->willReturn($storeToSwitchToMock);
-        $this->storeManagerMock
-            ->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->willReturn($defaultStoreViewMock);
-        $defaultStoreViewMock->expects($this->once())->method('getId')->willReturn($defaultStoreViewCode);
-        $storeToSwitchToMock->expects($this->once())->method('getId')->willReturn($storeToSwitchToCode);
-        $storeToSwitchToMock->expects($this->once())->method('isUseStoreInUrl')->willReturn(false);
+        $this->storeSwitcher->expects($this->once())
+            ->method('switch')
+            ->with($defaultStoreViewMock, $storeToSwitchToMock, $expectedRedirectUrl)
+            ->willReturn($expectedRedirectUrl);
+
         $this->redirectMock->expects($this->once())->method('getRedirectUrl')->willReturn($expectedRedirectUrl);
-        $this->responseMock->expects($this->once())->method('setRedirect')->with($expectedRedirectUrl);
-
-        $this->model->execute();
-    }
-
-    public function testExecuteSuccessWithUseStoreInUrl()
-    {
-        $currentActiveStoreCode = 'sv1';
-        $storeToSwitchToCode = 'sv2';
-        $defaultStoreViewCode = 'default';
-        $originalRedirectUrl = "magento.com/{$currentActiveStoreCode}/test-page/test-sub-page";
-        $expectedRedirectUrl = "magento.com/{$storeToSwitchToCode}/test-page/test-sub-page";
-        $currentActiveStoreMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isUseStoreInUrl', 'getBaseUrl'])
-            ->getMockForAbstractClass();
-        $defaultStoreViewMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
-        $storeToSwitchToMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isUseStoreInUrl', 'getBaseUrl'])
-            ->getMockForAbstractClass();
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($currentActiveStoreMock);
-        $this->requestMock->expects($this->once())->method('getParam')->willReturn($storeToSwitchToCode);
-        $this->storeRepositoryMock
-            ->expects($this->once())
-            ->method('getActiveStoreByCode')
-            ->willReturn($storeToSwitchToMock);
-        $this->storeManagerMock
-            ->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->willReturn($defaultStoreViewMock);
-        $defaultStoreViewMock->expects($this->once())->method('getId')->willReturn($defaultStoreViewCode);
-        $storeToSwitchToMock->expects($this->once())->method('getId')->willReturn($storeToSwitchToCode);
-        $storeToSwitchToMock->expects($this->once())->method('isUseStoreInUrl')->willReturn(true);
-        $this->redirectMock->expects($this->any())->method('getRedirectUrl')->willReturn($originalRedirectUrl);
-        $currentActiveStoreMock
-            ->expects($this->any())
-            ->method('getBaseUrl')
-            ->willReturn("magento.com/{$currentActiveStoreCode}");
-        $storeToSwitchToMock
-            ->expects($this->once())
-            ->method('getBaseUrl')
-            ->willReturn("magento.com/{$storeToSwitchToCode}");
         $this->responseMock->expects($this->once())->method('setRedirect')->with($expectedRedirectUrl);
 
         $this->model->execute();

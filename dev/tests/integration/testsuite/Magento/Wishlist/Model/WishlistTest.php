@@ -6,6 +6,7 @@
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
@@ -84,5 +85,40 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             '{"qty":2'
         );
         $this->wishlist->addNewItem($product);
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     */
+    public function testGetItemCollection()
+    {
+        $productSku = 'simple';
+        $customerId = 1;
+
+        $this->wishlist->loadByCustomerId($customerId, true);
+        $itemCollection = $this->wishlist->getItemCollection();
+        /** @var \Magento\Wishlist\Model\Item $item */
+        $item = $itemCollection->getFirstItem();
+        $this->assertEquals($productSku, $item->getProduct()->getSku());
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     */
+    public function testGetItemCollectionWithDisabledProduct()
+    {
+        $productSku = 'simple';
+        $customerId = 1;
+
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku);
+        $product->setStatus(ProductStatus::STATUS_DISABLED);
+        $productRepository->save($product);
+
+        $this->wishlist->loadByCustomerId($customerId, true);
+        $itemCollection = $this->wishlist->getItemCollection();
+        $this->assertEmpty($itemCollection->getItems());
     }
 }

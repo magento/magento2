@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
+use Magento\Customer\Api\Data\GroupInterface;
+
 /**
  * Products mass update inventory tab
  *
@@ -30,19 +32,28 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     protected $disabledFields = [];
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_backorders = $backorders;
         $this->stockConfiguration = $stockConfiguration;
+        $this->serializer = $serializer ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -70,11 +81,13 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * Retrieve current store id
      *
      * @return int
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getStoreId()
     {
-        $storeId = $this->getRequest()->getParam('store');
-        return intval($storeId);
+        $storeId = (int)$this->getRequest()->getParam('store');
+
+        return $storeId;
     }
 
     /**
@@ -89,6 +102,22 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
+     * Returns min_sale_qty configuration for the ALL Customer Group
+     *
+     * @return float
+     */
+    public function getDefaultMinSaleQty()
+    {
+        $default = $this->stockConfiguration->getDefaultConfigValue('min_sale_qty');
+        if (!is_numeric($default)) {
+            $default = $this->serializer->unserialize($default);
+            $default = $default[GroupInterface::CUST_GROUP_ALL] ?? 1;
+        }
+
+        return (float) $default;
+    }
+
+    /**
      * Tab settings
      *
      * @return \Magento\Framework\Phrase
@@ -99,6 +128,8 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
+     * Return Tab title.
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
@@ -107,7 +138,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -115,7 +146,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isHidden()
     {
@@ -123,6 +154,8 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
+     * Get availability status.
+     *
      * @param string $fieldName
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

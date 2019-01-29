@@ -19,6 +19,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 
 /**
+ * Product helper
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -104,7 +106,7 @@ class Helper
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param CustomOptionFactory|null $customOptionFactory
-     * @param ProductLinkFactory |null $productLinkFactory
+     * @param ProductLinkFactory|null $productLinkFactory
      * @param ProductRepositoryInterface|null $productRepository
      * @param LinkTypeProvider|null $linkTypeProvider
      * @param AttributeFilter|null $attributeFilter
@@ -159,6 +161,7 @@ class Helper
         }
 
         $productData = $this->normalize($productData);
+        $productData = $this->convertSpecialFromDateStringToObject($productData);
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
@@ -364,6 +367,8 @@ class Helper
     }
 
     /**
+     * Get link resolver instance
+     *
      * @return LinkResolver
      * @deprecated 101.0.0
      */
@@ -376,6 +381,8 @@ class Helper
     }
 
     /**
+     * Get DateTimeFilter instance
+     *
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      * @deprecated 101.0.0
      */
@@ -390,6 +397,7 @@ class Helper
 
     /**
      * Remove ids of non selected websites from $websiteIds array and return filtered data
+     *
      * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
      * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
      *
@@ -451,5 +459,21 @@ class Helper
         }
 
         return $product->setOptions($customOptions);
+    }
+
+    /**
+     * Convert string date presentation into object
+     *
+     * @param array $productData
+     * @return array
+     */
+    private function convertSpecialFromDateStringToObject($productData)
+    {
+        if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
+            $productData['special_from_date'] = $this->getDateTimeFilter()->filter($productData['special_from_date']);
+            $productData['special_from_date'] = new \DateTime($productData['special_from_date']);
+        }
+
+        return $productData;
     }
 }

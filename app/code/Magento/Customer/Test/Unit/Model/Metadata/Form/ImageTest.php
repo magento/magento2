@@ -259,7 +259,7 @@ class ImageTest extends AbstractFormTestCase
         )->getMockForAbstractClass();
         $validationRuleMock->expects($this->any())
             ->method('getName')
-            ->willReturn('max_image_heght');
+            ->willReturn('max_image_height');
         $validationRuleMock->expects($this->any())
             ->method('getValue')
             ->willReturn($maxImageHeight);

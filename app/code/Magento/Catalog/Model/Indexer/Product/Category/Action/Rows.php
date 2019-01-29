@@ -17,6 +17,8 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Category rows indexer.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -161,7 +163,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 $this->getIndexTable($store->getId()),
                 ['product_id IN (?)' => $this->limitationByProducts]
             );
-        };
+        }
     }
 
     /**
@@ -213,6 +215,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Returns a list of category ids which are assigned to product ids in the index
      *
+     * @param array $productIds
      * @return \Magento\Framework\Indexer\CacheContext
      */
     private function getCategoryIdsFromIndex(array $productIds)
@@ -228,7 +231,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                         ->distinct()
                 )
             );
-        };
+        }
         $parentCategories = $categoryIds;
         foreach ($categoryIds as $categoryId) {
             $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));

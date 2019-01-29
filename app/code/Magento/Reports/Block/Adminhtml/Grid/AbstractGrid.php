@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
+/**
+ * Backend reports grid
+ */
 class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -90,9 +94,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get resource collection name
      *
-     * @codeCoverageIgnore
-     *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getResourceCollectionName()
     {
@@ -100,6 +103,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return reports collection
+     *
      * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
@@ -111,6 +116,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve array of columns that should be aggregated
+     *
      * @return array
      */
     protected function _getAggregatedColumns()
@@ -170,12 +177,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _getStoreIds()
     {
-        $filterData = $this->getFilterData();
-        if ($filterData) {
-            $storeIds = explode(',', $filterData->getData('store_ids'));
-        } else {
-            $storeIds = [];
-        }
+        $storeIds = $this->getFilteredStores();
         // By default storeIds array contains only allowed stores
         $allowedStoreIds = array_keys($this->_storeManager->getStores());
         // And then array_intersect with post data for prevent unauthorized stores reports
@@ -191,6 +193,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Apply sorting and filtering to collection
+     *
      * @return $this|\Magento\Backend\Block\Widget\Grid
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -280,6 +284,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return count totals
+     *
      * @return array
      */
     public function getCountTotals()
@@ -302,6 +308,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
             );
 
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
+            $this->_addCustomFilter($totalsCollection, $filterData);
 
             if ($totalsCollection->load()->getSize() < 1 || !$filterData->getData('from')) {
                 $this->setTotals(new \Magento\Framework\DataObject());
@@ -313,10 +320,13 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
                 }
             }
         }
+
         return parent::getCountTotals();
     }
 
     /**
+     * Retrieve subtotal items
+     *
      * @return array
      */
     public function getSubTotals()
@@ -358,6 +368,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return current currency code
+     *
      * @return string|\Magento\Directory\Model\Currency $currencyCode
      */
     public function getCurrentCurrencyCode()
@@ -397,6 +409,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * Adds custom filter to resource collection
+     *
      * Can be overridden in child classes if custom filter needed
      *
      * @param \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection $collection
@@ -408,5 +421,36 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _addCustomFilter($collection, $filterData)
     {
         return $this;
+    }
+
+    /**
+     * Return stores by website, group and store id
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getFilteredStores(): array
+    {
+        $storeIds = [];
+
+        $filterData = $this->getFilterData();
+        if ($filterData) {
+            if ($filterData->getWebsite()) {
+                $storeIds = array_keys(
+                    $this->_storeManager->getWebsite($filterData->getWebsite())->getStores()
+                );
+            }
+
+            if ($filterData->getGroup()) {
+                $storeIds = array_keys(
+                    $this->_storeManager->getGroup($filterData->getGroup())->getStores()
+                );
+            }
+
+            if ($filterData->getData('store_ids')) {
+                $storeIds = explode(',', $filterData->getData('store_ids'));
+            }
+        }
+        return is_array($storeIds) ? $storeIds : [];
     }
 }

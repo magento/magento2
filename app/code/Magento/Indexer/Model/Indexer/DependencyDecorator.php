@@ -256,7 +256,10 @@ class DependencyDecorator implements IndexerInterface
         $this->indexer->reindexRow($id);
         $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
         foreach ($dependentIndexerIds as $indexerId) {
-            $this->indexerRegistry->get($indexerId)->reindexRow($id);
+            $dependentIndexer = $this->indexerRegistry->get($indexerId);
+            if (!$dependentIndexer->isScheduled()) {
+                $dependentIndexer->reindexRow($id);
+            }
         }
     }
 
@@ -268,7 +271,10 @@ class DependencyDecorator implements IndexerInterface
         $this->indexer->reindexList($ids);
         $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
         foreach ($dependentIndexerIds as $indexerId) {
-            $this->indexerRegistry->get($indexerId)->reindexList($ids);
+            $dependentIndexer = $this->indexerRegistry->get($indexerId);
+            if (!$dependentIndexer->isScheduled()) {
+                $dependentIndexer->reindexList($ids);
+            }
         }
     }
 }

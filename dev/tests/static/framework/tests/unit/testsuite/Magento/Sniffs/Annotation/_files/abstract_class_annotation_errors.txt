@@ -1,0 +1,10 @@
+FILE: ...o/Sniffs/Annotation/_fixtures/AbstractClassAnnotationFixture.php
+----------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 11 | ERROR | [x] Interface or abstract class is missing annotation
+    |       |     block
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY\n
+
+

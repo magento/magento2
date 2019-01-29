@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnProductTest">
         <annotations>
             <features value="Catalog"/>
@@ -32,16 +32,19 @@
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
-        <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForShortDescription" />
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}"  stepKey="TinyMCE4ShortDescription" />
+        <click selector="{{ProductDescriptionWysiwygSection.EditArea}}" stepKey="focusProductDescriptionWysiwyg"/>
         <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForShortDescription" />
+        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />
+        <click selector="{{ProductShortDescriptionWysiwygSection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg"/>
         <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn1" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget1" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable1" />
-        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="scrollToDesShowHideBtn" />
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="scrollToDesShowHideBtn2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn2" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" stepKey="waitForInsertImage2" />
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage2"/>

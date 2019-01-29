@@ -223,7 +223,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
             ->method('save');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('The invoice has been captured.');
 
         $invoiceMock->expects($this->once())
@@ -304,7 +304,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message);
 
         $invoiceMock->expects($this->once())
@@ -355,7 +355,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message);
 
         $invoiceMock->expects($this->once())

@@ -37,7 +37,6 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation5">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
@@ -45,7 +44,6 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation6">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />

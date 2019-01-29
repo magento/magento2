@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
@@ -189,6 +190,23 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->logger->expects(self::never())
             ->method('error');
+
+        $this->placeOrder->execute($this->observer);
+    }
+
+    public function testExecuteWithOrderPendingPayment()
+    {
+        $orderId = 1;
+        $storeId = 2;
+
+        $this->withActiveSignifydIntegration(true, $storeId);
+        $this->withOrderEntity($orderId, $storeId);
+        $this->orderEntity->method('getState')
+            ->willReturn(Order::STATE_PENDING_PAYMENT);
+        $this->withAvailablePaymentMethod(true);
+
+        $this->creationService->expects(self::never())
+            ->method('createForOrder');
 
         $this->placeOrder->execute($this->observer);
     }

@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -19,6 +20,7 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoDbIsolation disabled
  */
 class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,12 +44,43 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $filterBuilder;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = BootstrapHelper::getObjectManager();
         $this->quoteRepository = $this->objectManager->create(QuoteRepository::class);
         $this->searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $this->filterBuilder = $this->objectManager->create(FilterBuilder::class);
+    }
+
+    /**
+     * Tests that quote saved with custom store id has same store id after getting via repository.
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testGetQuoteWithCustomStoreId()
+    {
+        $secondStoreCode = 'fixture_second_store';
+        $reservedOrderId = 'test01';
+
+        $storeRepository = $this->objectManager->create(StoreRepository::class);
+        $secondStore = $storeRepository->get($secondStoreCode);
+
+        // Set store_id in quote to second store_id
+        $quote = $this->getQuote($reservedOrderId);
+        $quote->setStoreId($secondStore->getId());
+        $this->quoteRepository->save($quote);
+
+        $savedQuote = $this->quoteRepository->get($quote->getId());
+
+        $this->assertEquals(
+            $secondStore->getId(),
+            $savedQuote->getStoreId(),
+            'Quote store id should be equal with store id value in DB'
+        );
     }
 
     /**
@@ -75,7 +108,6 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testSaveWithNotExistingCustomerAddress()
@@ -124,6 +156,24 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
                 ->getAddress()
                 ->getCustomerAddressId()
         );
+    }
+
+    /**
+     * Returns quote by reserved order id.
+     *
+     * @param string $reservedOrderId
+     * @return CartInterface
+     */
+    private function getQuote(string $reservedOrderId)
+    {
+        $searchCriteria = $this->getSearchCriteria($reservedOrderId);
+        $searchResult = $this->quoteRepository->getList($searchCriteria);
+        $items = $searchResult->getItems();
+
+        /** @var CartInterface $quote */
+        $quote = array_pop($items);
+
+        return $quote;
     }
 
     /**

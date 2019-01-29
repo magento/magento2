@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDownloadableProductSetEditContentTest" extends="AdminSimpleProductSetEditContentTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Create/edit downloadable product"/>
+            <title value="Admin should be able to set/edit product Content when editing a downloadable product"/>
+            <description value="Admin should be able to set/edit product Content when editing a downloadable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3426"/>
+            <group value="Downloadable"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <after>
+            <!-- Delete downloadable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!--Checking content storefront-->
+        <amOnPage url="{{DownloadableProduct.sku}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

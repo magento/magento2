@@ -44,7 +44,7 @@ class Iframe extends \Magento\Payment\Block\Form
     /**
      * @var string
      */
-    protected $_template = 'hss/js.phtml';
+    protected $_template = 'Magento_Paypal::hss/js.phtml';
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -110,13 +110,13 @@ class Iframe extends \Magento\Payment\Block\Form
         if (in_array($paymentCode, $this->_hssHelper->getHssMethods())) {
             $this->_paymentMethodCode = $paymentCode;
             $templatePath = str_replace('_', '', $paymentCode);
-            $templateFile = "{$templatePath}/iframe.phtml";
+            $templateFile = "Magento_Paypal::{$templatePath}/iframe.phtml";
             $directory = $this->readFactory->create($this->reader->getModuleDir('', 'Magento_Paypal'));
             $file = $this->resolver->getTemplateFileName($templateFile, ['module' => 'Magento_Paypal']);
             if ($file && $directory->isExist($directory->getRelativePath($file))) {
                 $this->setTemplate($templateFile);
             } else {
-                $this->setTemplate('hss/iframe.phtml');
+                $this->setTemplate('Magento_Paypal::hss/iframe.phtml');
             }
         }
     }
@@ -198,7 +198,7 @@ class Iframe extends \Magento\Payment\Block\Form
     protected function _toHtml()
     {
         if ($this->_isAfterPaymentSave()) {
-            $this->setTemplate('hss/js.phtml');
+            $this->setTemplate('Magento_Paypal::hss/js.phtml');
             return parent::_toHtml();
         }
         if (!$this->_shouldRender) {

@@ -76,12 +76,12 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             $errors = $user->validate();
             if ($errors !== true && !empty($errors)) {
                 foreach ($errors as $error) {
-                    $this->messageManager->addError($error);
+                    $this->messageManager->addErrorMessage($error);
                 }
             } else {
                 $user->save();
                 $user->sendNotificationEmailsIfRequired();
-                $this->messageManager->addSuccess(__('You saved the account.'));
+                $this->messageManager->addSuccessMessage(__('You saved the account.'));
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
@@ -91,12 +91,12 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while saving account.'));
+            $this->messageManager->addErrorMessage(__('An error occurred while saving account.'));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

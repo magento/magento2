@@ -167,4 +167,6 @@
             <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
         </arguments>
     </type>
+    <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
+    <preference for="Magento\Backend\Model\Image\UploadResizeConfigInterface" type="Magento\Backend\Model\Image\UploadResizeConfig" />
 </config>

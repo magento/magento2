@@ -629,7 +629,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
     public function dataProviderForGetAccessTokenVerifierInvalidTest()
     {
         // Verifier is not a string
-        return [[3, 3], ['wrong_length', 'wrong_length'], ['verifier', 'doesnt match']];
+        return [[3, 3], ['wrong_length', 'wrong_length'], ['verifier', 'doesn\'t match']];
     }
 
     public function testGetAccessToken()
