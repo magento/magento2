@@ -74,7 +74,6 @@
             <argument name="rule" value="PriceRuleWithCondition"/>
             <argument name="condition" value="Category"/>
             <argument name="operation" value="equals or greater than"/>
-            <argument name="ruleToChange2" value="..."/>
             <argument name="totalQuantity" value="2"/>
             <argument name="value" value="{{_defaultCategory.name}}"/>
         </actionGroup>
