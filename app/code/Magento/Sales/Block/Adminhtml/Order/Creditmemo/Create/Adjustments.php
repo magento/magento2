@@ -50,7 +50,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Initialize creditmemo agjustment totals
+     * Initialize creditmemo adjustment totals
      *
      * @return $this
      */
