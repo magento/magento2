@@ -120,12 +120,12 @@ define([
 
         /**
          * @param {*} amount
-         * @param {*} totalper
-         * @param {*} per
+         * @param {*} totalPercentage
+         * @param {*} percentage
          * @return {*|String}
          */
-        getPercerntAmount: function (amount, totalper, per) {
-            return parseFloat((amount * per) / totalper);
+        getPercerntAmount: function (amount, totalPercentage, percentage) {
+            return parseFloat((amount * percentage) / totalPercentage);
         },
 
         /**
