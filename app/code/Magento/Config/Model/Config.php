@@ -705,7 +705,9 @@ class Config extends \Magento\Framework\DataObject
             false;
 
         if ($currentConfigMetaData && isset($currentConfigMetaData['protected'])) {
-            return false;
+            return true;
         }
+
+        return false;
     }
 }
