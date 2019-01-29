@@ -9,9 +9,9 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as DataProvider;
@@ -143,7 +143,6 @@ class Collection
 
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($this->parentProducts as $product) {
-
             $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
@@ -169,24 +168,20 @@ class Collection
     }
 
     /**
-     * Get attributes codes
+     * Get attributes code
      *
-     * @param Product $currentProduct
+     * @param \Magento\Catalog\Model\Product $currentProduct
      * @return array
      */
     private function getAttributesCodes(Product $currentProduct): array
     {
         $attributeCodes = [];
-        $attributes = $currentProduct->getAttributes();
-        foreach ($attributes as $key => $attribute) {
-            $isVisible = (int)$attribute->getIsVisibleOnFront();
-            if (!$isVisible) {
-                continue;
+        $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
+        foreach ($allowAttributes as $attribute) {
+            $productAttribute = $attribute->getProductAttribute();
+            if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
+                $attributeCodes[] = $productAttribute->getAttributeCode();
             }
-            if (!in_array($key, $attributeCodes)) {
-               continue;
-            }
-            $attributeCodes[] = $key;
         }
 
         return $attributeCodes;
