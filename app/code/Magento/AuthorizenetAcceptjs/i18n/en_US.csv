@@ -16,3 +16,6 @@ Authorize.net,Authorize.net
 "cvvResultCode","CVV Response Code"
 "cavvResultCode","CAVV Response Code"
 "Enable Credit Card Verification Field","Enable Credit Card Verification Field"
+"ccLast4","Last 4 Digits of Card"
+"There was an error while trying to process the refund.","There was an error while trying to process the refund."
+"This transaction cannot be refunded with its current status.","This transaction cannot be refunded with its current status."

@@ -9,7 +9,12 @@
         <input type="radio"
                name="payment[method]"
                class="radio"
-               attr="id: getCode()" ko-value="getCode()" ko-checked="isChecked" click="selectPaymentMethod" visible="isRadioButtonVisible()"/>
+               attr="id: getCode()"
+               ko-value="getCode()"
+               ko-checked="isChecked"
+               click="selectPaymentMethod"
+               visible="isRadioButtonVisible()"
+        />
         <label attr="for: getCode()" class="label">
             <span translate="getTitle()"></span>
         </label>
@@ -31,7 +36,7 @@
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="click: beforePlaceOrder, attr: {title: $t('Place Order')}"
-                        >
+                >
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>

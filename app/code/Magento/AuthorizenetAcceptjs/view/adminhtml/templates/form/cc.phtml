@@ -87,4 +87,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     <input type="hidden" id="<?= /* @noEscape */ $code ?>_opaque_data_value"
            name="payment[opaqueDataValue]"
            value="<?=$block->escapeHtmlAttr($block->getInfoData('opaqueDataValue')) ?>"/>
+    <input type="hidden" id="<?= /* @noEscape */ $code ?>_cc_last_4"
+           name="payment[ccLast4]"
+           value="<?=$block->escapeHtmlAttr($block->getInfoData('ccLast4')) ?>"/>
 </fieldset>

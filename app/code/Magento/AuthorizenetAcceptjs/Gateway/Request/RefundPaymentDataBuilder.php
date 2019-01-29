@@ -13,9 +13,9 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Adds the basic payment information to the request
+ * Adds the basic refund information to the request
  */
-class PaymentDataBuilder implements BuilderInterface
+class RefundPaymentDataBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
@@ -32,6 +32,7 @@ class PaymentDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function build(array $buildSubject): array
     {
@@ -40,13 +41,14 @@ class PaymentDataBuilder implements BuilderInterface
         $data = [];
 
         if ($payment instanceof Payment) {
-            $dataDescriptor = $payment->getAdditionalInformation('opaqueDataDescriptor');
-            $dataValue = $payment->getAdditionalInformation('opaqueDataValue');
-
-            $data['transactionRequest']['payment'] = [
-                'opaqueData' => [
-                    'dataDescriptor' => $dataDescriptor,
-                    'dataValue' => $dataValue
+            $data = [
+                'transactionRequest' => [
+                    'payment' => [
+                        'creditCard' => [
+                            'cardNumber' => $payment->getAdditionalInformation('ccLast4'),
+                            'expirationDate' => 'XXXX'
+                        ]
+                    ]
                 ]
             ];
         }

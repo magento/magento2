@@ -158,12 +158,13 @@ class PaymentResponseHandlerTest extends TestCase
         $this->paymentMock->method('getParentTransactionId')
             ->willReturn(null);
         // Assert data is added
-        $this->paymentMock->expects($this->once())
-            ->method('addData')
-            ->with([
-                'opaqueDataDescriptor' => 'descriptor',
-                'opaqueDataValue' => 'value',
-            ]);
+
+        $this->paymentMock->expects($this->exactly(2))
+            ->method('setAdditionalInformation')
+            ->withConsecutive(
+                ['opaqueDataDescriptor', 'descriptor'],
+                ['opaqueDataValue', 'value']
+            );
 
         $response = [
             'transactionResponse' => [

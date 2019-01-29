@@ -77,7 +77,7 @@ class CaptureStrategyCommand implements CommandInterface
      */
     public function execute(array $commandSubject)
     {
-        /** @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterface $paymentDO */
+        /** @var PaymentDataObjectInterface $paymentDO */
         $paymentDO = $this->subjectReader->readPayment($commandSubject);
 
         $command = $this->getCommand($paymentDO);

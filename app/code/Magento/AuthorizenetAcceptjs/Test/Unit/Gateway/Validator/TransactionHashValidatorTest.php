@@ -251,6 +251,22 @@ class TransactionHashValidatorTest extends TestCase
                     'amount' => '123.00',
                     'response' => [
                         'transactionResponse' => [
+                            'transId' => '123',
+                            'refTransID' => '0',
+                            'transHashSha2' => '1DBD16DED0DA02F52A22A9AD71A49F70BD2ECD42437552889912DD5CE'
+                                . 'CBA0E09A5E8E6221DA74D98A46E5F77F7774B6D9C39CADF3E9A33D85870A6958DA7C8B2'
+                        ]
+                    ]
+                ],
+                true,
+                [],
+                []
+            ],
+            [
+                [
+                    'amount' => '123.00',
+                    'response' => [
+                        'transactionResponse' => [
                             'transHashSha2' => 'bad'
                         ]
                     ]

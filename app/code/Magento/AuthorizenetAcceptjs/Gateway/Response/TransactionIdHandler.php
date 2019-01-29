@@ -13,12 +13,10 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Processes payment information from a response
+ * Processes transaction id for the payment
  */
-class PaymentResponseHandler implements HandlerInterface
+class TransactionIdHandler implements HandlerInterface
 {
-    private const RESPONSE_CODE_HELD = 4;
-
     /**
      * @var SubjectReader
      */
@@ -42,14 +40,15 @@ class PaymentResponseHandler implements HandlerInterface
         $transactionResponse = $response['transactionResponse'];
 
         if ($payment instanceof Payment) {
-            $payment->setCcLast4($payment->getAdditionalInformation('ccLast4'));
-            $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
-            $payment->setIsTransactionClosed(false);
-
-            if ($transactionResponse['responseCode'] == self::RESPONSE_CODE_HELD) {
-                $payment->setIsTransactionPending(true)
-                    ->setIsFraudDetected(true);
+            if (!$payment->getParentTransactionId()
+                || $transactionResponse['transId'] != $payment->getParentTransactionId()
+            ) {
+                $payment->setTransactionId($transactionResponse['transId']);
             }
+            $payment->setTransactionAdditionalInfo(
+                'real_transaction_id',
+                $transactionResponse['transId']
+            );
         }
     }
 }

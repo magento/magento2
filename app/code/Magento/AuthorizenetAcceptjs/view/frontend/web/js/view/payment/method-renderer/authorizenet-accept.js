@@ -60,7 +60,8 @@ define([
                 method: this.getCode(),
                 'additional_data': {
                     opaqueDataDescriptor: this.tokens ? this.tokens.opaqueDataDescriptor : null,
-                    opaqueDataValue: this.tokens ? this.tokens.opaqueDataValue : null
+                    opaqueDataValue: this.tokens ? this.tokens.opaqueDataValue : null,
+                    ccLast4: this.creditCardNumber().substr(-4)
                 }
             };
         },
@@ -97,7 +98,10 @@ define([
             cardData.cardNumber = this.creditCardNumber();
             cardData.month = this.creditCardExpMonth();
             cardData.year = this.creditCardExpYear();
-            cardData.cardCode = this.creditCardVerificationNumber();
+
+            if (this.hasVerification()) {
+                cardData.cardCode = this.creditCardVerificationNumber();
+            }
 
             secureData.authData = authData;
             secureData.cardData = cardData;
@@ -116,6 +120,15 @@ define([
                     self.tokens = null;
                     self._showErrors(messages);
                 });
+        },
+
+        /**
+         * Should the cvv field be used
+         *
+         * @return {Boolean}
+         */
+        hasVerification: function () {
+            return window.checkoutConfig.payment[this.getCode()].useCvv;
         },
 
         /**

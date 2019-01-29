@@ -99,13 +99,15 @@ define([
          * @param {Object} tokens
          */
         setPaymentDetails: function (tokens) {
+            var $ccNumber = $(this.getSelector('cc_number')),
+                ccLast4 = $ccNumber.val().replace(/[^\d]/g, '');
+
             $(this.getSelector('opaque_data_descriptor')).val(tokens.opaqueDataDescriptor);
             $(this.getSelector('opaque_data_value')).val(tokens.opaqueDataValue);
-            $([
-                this.getSelector('cc_number'),
-                this.getSelector('cc_exp_month'),
-                this.getSelector('cc_exp_year')
-            ].join(',')).val('');
+            $(this.getSelector('cc_last_4')).val(ccLast4);
+            $ccNumber.val('');
+            $(this.getSelector('cc_exp_month')).val('');
+            $(this.getSelector('cc_exp_year')).val('');
 
             if (this.useCvv) {
                 $(self.getSelector('cc_cid')).val('');

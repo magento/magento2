@@ -38,7 +38,7 @@
                 <currency>USD</currency>
                 <environment>production</environment>
                 <privateInfoKeys>authCode,avsResultCode,cvvResultCode,cavvResultCode</privateInfoKeys>
-                <paymentInfoKeys>accountType,authCode,avsResultCode,cvvResultCode,cavvResultCode</paymentInfoKeys>
+                <paymentInfoKeys>accountType,ccLast4,authCode,avsResultCode,cvvResultCode,cavvResultCode</paymentInfoKeys>
             </authorizenet_acceptjs>
         </payment>
     </default>

@@ -60,11 +60,22 @@ class TransactionHashValidator extends AbstractValidator
     public function validate(array $validationSubject): ResultInterface
     {
         $response = $this->subjectReader->readResponse($validationSubject);
+        $storeId = $this->subjectReader->readStoreId($validationSubject);
 
         if (!empty($response['transactionResponse']['transHashSha2'])) {
-            return $this->validateSha512Hash($validationSubject);
+            return $this->validateHash(
+                $validationSubject,
+                $this->config->getTransactionSignatureKey($storeId),
+                'transHashSha2',
+                'generateSha512Hash'
+            );
         } elseif (!empty($response['transactionResponse']['transHash'])) {
-            return $this->validateMd5Hash($validationSubject);
+            return $this->validateHash(
+                $validationSubject,
+                $this->config->getLegacyTransactionHash($storeId),
+                'transHash',
+                'generateMd5Hash'
+            );
         }
 
         return $this->createResult(
@@ -80,16 +91,30 @@ class TransactionHashValidator extends AbstractValidator
      * Validates the response again the legacy MD5 spec
      *
      * @param array $validationSubject
+     * @param string $storedHash
+     * @param string $hashField
+     * @param string $generateFunction
      * @return ResultInterface
      */
-    private function validateMd5Hash(array $validationSubject): ResultInterface
-    {
+    private function validateHash(
+        array $validationSubject,
+        string $storedHash,
+        string $hashField,
+        string $generateFunction
+    ): ResultInterface {
         $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
-        $storedHash = $this->config->getLegacyTransactionHash($storeId);
         $transactionResponse = $response['transactionResponse'];
 
-        if (empty($transactionResponse['refTransID'])) {
+        /*
+         * Authorize.net is inconsistent with how they hash. Refund uses the amount when referencing a transaction
+         * but will use 0 when voiding or when refunding without a reference.
+         */
+        if (empty($transactionResponse['refTransID'])
+            || (!empty($transactionResponse['transId'])
+                // Yes, their naming uses inconsistent letter casing for transId and refTransID.
+                && $transactionResponse['refTransID'] !== $transactionResponse['transId'])
+        ) {
             try {
                 $amount = $this->subjectReader->readAmount($validationSubject);
             } catch (\InvalidArgumentException $e) {
@@ -97,63 +122,18 @@ class TransactionHashValidator extends AbstractValidator
                 $amount = 0;
             }
         } else {
+            // Non-refund reference transactions (void) don't use the amount
             $amount = 0;
         }
 
-        $hash = $this->generateMd5Hash(
+        $hash = $this->{$generateFunction}(
             $storedHash,
             $this->config->getLoginId($storeId),
             sprintf('%.2F', $amount),
             $transactionResponse['transId'] ?? ''
         );
 
-        if (Security::compareStrings($hash, $transactionResponse['transHash'])) {
-            return $this->createResult(true);
-        }
-
-        return $this->createResult(
-            false,
-            [
-                __('The authenticity of the gateway response could not be verified.')
-            ],
-            [self::ERROR_TRANSACTION_HASH]
-        );
-    }
-
-    /**
-     * Validates the response against the new SHA-512 spec
-     *
-     * @param array $validationSubject
-     * @return ResultInterface
-     */
-    private function validateSha512Hash(array $validationSubject)
-    {
-        $storeId = $this->subjectReader->readStoreId($validationSubject);
-        $response = $this->subjectReader->readResponse($validationSubject);
-        $storedKey = $this->config->getTransactionSignatureKey($storeId);
-        $transactionResponse = $response['transactionResponse'];
-
-        // Yes, their naming uses inconsistent casing.
-        if (empty($transactionResponse['refTransID'])) {
-            try {
-                $amount = $this->subjectReader->readAmount($validationSubject);
-            } catch (\InvalidArgumentException $e) {
-                // Void will not contain the amount and will use 0.00 for hashing
-                $amount = 0;
-            }
-        } else {
-            // Reference transactions don't use the amount
-            $amount = 0;
-        }
-
-        $hash = $this->generateSha512Hash(
-            $storedKey,
-            $this->config->getLoginId($storeId),
-            sprintf('%.2F', $amount),
-            $transactionResponse['transId'] ?? ''
-        );
-
-        if (Security::compareStrings($hash, $transactionResponse['transHashSha2'])) {
+        if (Security::compareStrings($hash, $transactionResponse[$hashField])) {
             return $this->createResult(true);
         }
 
@@ -174,6 +154,7 @@ class TransactionHashValidator extends AbstractValidator
      * @param string $amount
      * @param string $transactionId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function generateMd5Hash(
         $merchantMd5,
@@ -192,6 +173,7 @@ class TransactionHashValidator extends AbstractValidator
      * @param string $amount
      * @param string $transactionId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function generateSha512Hash(
         $merchantKey,

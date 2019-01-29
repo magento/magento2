@@ -23,6 +23,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
     private $additionalInformationList = [
         'opaqueDataDescriptor',
         'opaqueDataValue',
+        'ccLast4'
     ];
 
     /**
