@@ -139,7 +139,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * Limited to 64 characters in MySQL.
      *
      * @param string $name
-     * @return string $name
+     * @return string
      * @throws InputException
      */
     private function addPrefix(string $name): string

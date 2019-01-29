@@ -21,7 +21,7 @@ define([], function () {
 
     /**
      * CVV number validation.
-     * Validate digit count fot CVV code.
+     * Validate digit count for CVV code.
      *
      * @param {*} value
      * @param {Number} maxLength
