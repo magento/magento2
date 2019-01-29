@@ -192,7 +192,7 @@
         </column>
         <column name="special_price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="110">
             <settings>
-                <addField>false</addField>
+                <addField>true</addField>
                 <filter>textRange</filter>
                 <label translate="true">Special Price</label>
             </settings>
