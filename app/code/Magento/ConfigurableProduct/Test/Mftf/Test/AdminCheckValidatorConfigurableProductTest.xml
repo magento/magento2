@@ -80,12 +80,13 @@
         <switchToIFrame stepKey="switchOutOfIFrame"/>
 
         <!-- Generate products -->
-        <actionGroup ref="AdminGenerateConfigurations" stepKey="generateProducts">
+        <actionGroup ref="AdminGenerateProductConfigurations" stepKey="generateProducts">
             <argument name="attributeCode" value="{{productAttributeWithDropdownTwoOptions.attribute_code}}"/>
             <argument name="qty" value="100"/>
             <argument name="price" value="10"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonVisible"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitForPopUpVisible"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
@@ -104,6 +105,7 @@
 
         <!--Click on "Save"-->
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductAgain"/>
 
         <!--Click on "Confirm". Product is saved, success message appears -->
