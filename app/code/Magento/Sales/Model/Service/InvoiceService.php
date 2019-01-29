@@ -216,6 +216,12 @@ class InvoiceService implements InvoiceManagementInterface
                     if (!isset($qtys[$child->getId()])) {
                         $qtys[$child->getId()] = $child->getQtyToInvoice();
                     }
+                    $parentId = $orderItem->getParentItemId();
+                    if ($parentId && array_key_exists($parentId, $qtys)) {
+                        $qtys[$orderItem->getId()] = $qtys[$parentId];
+                    } else {
+                        continue;
+                    }
                 }
             } elseif ($orderItem->getParentItem()) {
                 $parent = $orderItem->getParentItem();
@@ -223,6 +229,7 @@ class InvoiceService implements InvoiceManagementInterface
                     $qtys[$parent->getId()] = $parent->getQtyToInvoice();
                 }
             }
+            $this->prepareItemQty($orderItem, $qtys);
         }
     }
 
