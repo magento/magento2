@@ -1224,12 +1224,12 @@ define([
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
                 isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (!_.isUndefined(gallery)) {
-                    if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
-                        imagesToUpdate = imagesToUpdate.concat(initialImages);
-                    }
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
 
-                    imagesToUpdate = this._setImageIndex(imagesToUpdate);
+                imagesToUpdate = this._setImageIndex(imagesToUpdate);
+                if (!_.isUndefined(gallery)) {
                     gallery.updateData(imagesToUpdate);
                 }
 

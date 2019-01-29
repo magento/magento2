@@ -177,7 +177,7 @@ define([
          * @private
          */
         clearEvents: function () {
-            if (!_.isUndefined(this.fotoramaItem)) {
+            if (this.fotoramaItem !== undefined) {
                 this.fotoramaItem.off(
                     'fotorama:show.' + this.PV +
                     ' fotorama:showend.' + this.PV +
