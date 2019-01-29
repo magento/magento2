@@ -35,12 +35,14 @@ define([
     var checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
+        postcodeElements = [],
         postcodeElementName = 'postcode';
 
     validators.push(defaultValidator);
 
     return {
         validateAddressTimeout: 0,
+        validateZipCodeTimeout: 0,
         validateDelay: 2000,
 
         /**
@@ -78,11 +80,7 @@ define([
             }
 
             $.each(elements, function (index, field) {
-                var elementBinding = self.doElementBinding.bind(self),
-                    fullPath = formPath + '.' + field,
-                    func = uiRegistry.async(fullPath);
-
-                func(elementBinding);
+                uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
             });
         },
 
@@ -104,6 +102,7 @@ define([
 
             if (element.index === postcodeElementName) {
                 this.bindHandler(element, delay);
+                postcodeElements.push(element);
             }
         },
 
@@ -135,10 +134,20 @@ define([
                 });
             } else {
                 element.on('value', function () {
+                    clearTimeout(self.validateZipCodeTimeout);
+                    self.validateZipCodeTimeout = setTimeout(function () {
+                        if (element.index === postcodeElementName) {
+                            self.postcodeValidation(element);
+                        } else {
+                            $.each(postcodeElements, function (index, elem) {
+                                self.postcodeValidation(elem);
+                            });
+                        }
+                    }, delay);
+
                     if (!formPopUpState.isVisible()) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            self.postcodeValidation(element);
                             self.validateFields();
                         }, delay);
                     }
@@ -151,7 +160,7 @@ define([
          * @return {*}
          */
         postcodeValidation: function (postcodeElement) {
-            var countryId = $('select[name="country_id"]').val(),
+            var countryId = $('select[name="country_id"]:visible').val(),
                 validationResult,
                 warnMessage;
 

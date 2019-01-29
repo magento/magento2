@@ -18,7 +18,7 @@
             <testCaseId value="MC-65"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="DEVOPS-3618"/>
+                <issueId value="MC-5777"/>
             </skip>
         </annotations>
         <before>
@@ -78,7 +78,7 @@
             <testCaseId value="MC-93"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="DEVOPS-3618"/>
+                <issueId value="MC-5777"/>
             </skip>
         </annotations>
         <before>
@@ -104,7 +104,7 @@
             <testCaseId value="MC-69"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="DEVOPS-3618"/>
+                <issueId value="MC-5777"/>
             </skip>
         </annotations>
         <before>
@@ -130,7 +130,7 @@
             <testCaseId value="MC-60"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="DEVOPS-3618"/>
+                <issueId value="MC-5777"/>
             </skip>
         </annotations>
         <before>
@@ -156,7 +156,7 @@
             <testCaseId value="MC-71"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="DEVOPS-3618"/>
+                <issueId value="MC-5777"/>
             </skip>
         </annotations>
         <before>

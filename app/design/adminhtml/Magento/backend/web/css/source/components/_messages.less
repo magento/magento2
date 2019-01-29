@@ -76,7 +76,8 @@
         position: absolute;
         speak: none;
         text-shadow: none;
-        top: 1.5rem;
+        top: 50%;
+        margin-top: -1.25rem;
         width: auto;
     }
 }
@@ -110,7 +111,7 @@
         content: @alert-icon__error__content;
         font-size: @alert-icon__error__font-size;
         left: 2.2rem;
-        margin-top: 0.5rem;
+        margin-top: .5rem;
     }
 }
 
@@ -121,15 +122,6 @@
     }
 }
 
-.adminhtml-import-index   {
-    .message-success {
-        &:before {
-            color: @alert-icon__success__color;
-            content: @alert-icon__success__content;
-            top: 2.3rem;
-        }
-    }
-}
 .message-spinner {
     &:before {
         display: none;

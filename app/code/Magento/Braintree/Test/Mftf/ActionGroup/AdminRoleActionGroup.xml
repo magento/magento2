@@ -16,7 +16,7 @@
     </actionGroup>
 
     <!--Create new role-->
-    <actionGroup name="AdminCreateRole">
+    <actionGroup name="AdminCreateNewRole">
         <arguments>
             <argument name="role" type="string" defaultValue=""/>
             <argument name="resource" type="string" defaultValue="All"/>
