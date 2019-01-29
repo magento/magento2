@@ -27,7 +27,7 @@ class Address implements AddressInterface
     /**
      * @var string
      */
-    private $streetAddress;
+    private $street;
 
     /**
      * @var string
@@ -44,20 +44,20 @@ class Address implements AddressInterface
      *
      * @param string $country
      * @param string $postcode
-     * @param string $streetAddress
+     * @param string $street
      * @param string $region
      * @param string $city
      */
     public function __construct(
         string $country,
         string $postcode,
-        string $streetAddress,
+        string $street,
         string $region,
         string $city
     ) {
         $this->country = $country;
         $this->postcode = $postcode;
-        $this->streetAddress = $streetAddress;
+        $this->street = $street;
         $this->region = $region;
         $this->city = $city;
     }
@@ -81,9 +81,9 @@ class Address implements AddressInterface
     /**
      * @inheritdoc
      */
-    public function getStreetAddress(): string
+    public function getStreet(): string
     {
-        return $this->streetAddress;
+        return $this->street;
     }
 
     /**
