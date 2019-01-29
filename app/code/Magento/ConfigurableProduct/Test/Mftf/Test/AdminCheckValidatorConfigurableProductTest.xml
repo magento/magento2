@@ -52,15 +52,13 @@
 
         <!-- Find the product that we just created using the product grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsFilter" />
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForProductFilterLoad"/>
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProduct"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
-        <!-- Create configurations based off the Text Swatch we created earlier -->
+        <!-- Create configurations for product we created earlier -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
 
         <!--Create new attribute-->
@@ -81,24 +79,12 @@
         <waitForPageLoad stepKey="waitForSaveAttribute"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
 
-        <!--Find attribute in grid and select-->
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
-        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilterInput}}" userInput="{{productAttributeWithDropdownTwoOptions.attribute_code}}" stepKey="fillFilterAttributeCodeField"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
-        <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep"/>
-        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanelSection.selectAllByAttribute(productAttributeWithDropdownTwoOptions.attribute_code)}}" stepKey="waitForNextPageOpened"/>
-        <click selector="{{AdminCreateProductConfigurationsPanelSection.selectAllByAttribute(productAttributeWithDropdownTwoOptions.attribute_code)}}" stepKey="clickSelectAll"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
-        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForNextPageOpened1"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
-        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="enterAttributePrice"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
-        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep2"/>
-        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened2"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
+        <!-- Generate products -->
+        <actionGroup ref="AdminGenerateConfigurations" stepKey="generateProducts">
+            <argument name="attributeCode" value="{{productAttributeWithDropdownTwoOptions.attribute_code}}"/>
+            <argument name="qty" value="100"/>
+            <argument name="price" value="10"/>
+        </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonVisible"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitForPopUpVisible"/>
@@ -111,10 +97,10 @@
 
         <!--See that validation message is shown under the fields-->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" stepKey="scrollTConfigurationTab"/>
-        <see userInput="Please enter less or equal than 64 symbols." selector="{{AdminProductFormConfigurationsSection.confProductSkuMessage('0')}}" stepKey="seeValidationMessage"/>
+        <see userInput="Please enter less or equal than 64 symbols." selector="{{AdminProductFormConfigurationsSection.skuValidationMessage('0')}}" stepKey="seeValidationMessage"/>
 
         <!--Edit "SKU" with valid quantity-->
-        <fillField selector="{{AdminProductFormConfigurationsSection.confProductSku('0')}}" userInput="{{ApiConfigurableProduct.sku}}-thisIsShortName" stepKey="fillValidValue"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.configurableMatrixSku('0')}}" userInput="{{ApiConfigurableProduct.sku}}-thisIsShortName" stepKey="fillValidValue"/>
 
         <!--Click on "Save"-->
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
@@ -123,6 +109,6 @@
         <!--Click on "Confirm". Product is saved, success message appears -->
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
-        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveProductMessage"/>
     </test>
 </tests>
