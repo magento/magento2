@@ -131,16 +131,17 @@ class Navigation extends Block
      */
     public function isCategoryVisible(Category $category, $qty)
     {
-        $link = $this->_rootElement->find(sprintf($this->optionTitle, 'Category'), Locator::SELECTOR_XPATH);
-        if ($link->isVisible()) {
-            $link->click();
+        $link = sprintf($this->categoryName, $category->getName());
+
+        if (!$this->_rootElement->find($link, Locator::SELECTOR_XPATH)->isVisible()) {
+            $this->openFilterContainer('Category', $link);
             return $this->_rootElement->find(
-                sprintf($this->categoryName, $category->getName()) . sprintf($this->productQtyInCategory, $qty),
+                $link . sprintf($this->productQtyInCategory, $qty),
                 Locator::SELECTOR_XPATH
             )->isVisible();
         } else {
             return $this->_rootElement->find(
-                sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
+                $link . sprintf($this->productQty, $qty),
                 Locator::SELECTOR_XPATH
             )->isVisible();
         }
