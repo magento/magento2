@@ -1224,12 +1224,14 @@ define([
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
                 isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
-                    imagesToUpdate = imagesToUpdate.concat(initialImages);
-                }
+                if (!_.isUndefined(gallery)) {
+                    if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                        imagesToUpdate = imagesToUpdate.concat(initialImages);
+                    }
 
-                imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+                    imagesToUpdate = this._setImageIndex(imagesToUpdate);
+                    gallery.updateData(imagesToUpdate);
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
