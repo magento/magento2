@@ -112,8 +112,9 @@ define([
             rates = parent.rates;
             totalPercentage = 0;
             _.each(rates, function (rate) {
-                totalPercentage += parseFloat(rate.percent); 
+                totalPercentage += parseFloat(rate.percent);
             });
+            
             return this.getFormattedPrice(this.getPercerntAmount(amount, totalPercentage, percentage));
         },
 
