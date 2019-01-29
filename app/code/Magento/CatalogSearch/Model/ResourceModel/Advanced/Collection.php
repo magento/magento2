@@ -296,7 +296,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Get fielter builder.
+     * Get filter builder.
      *
      * @return FilterBuilder
      */
