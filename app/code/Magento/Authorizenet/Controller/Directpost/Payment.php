@@ -17,7 +17,7 @@ use Magento\Framework\App\Action\Action;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-abstract class Payment extends Action implements HttpPostActionInterface
+abstract class Payment extends Action
 {
     /**
      * Core registry

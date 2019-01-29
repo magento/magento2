@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Observer;
 
 use Magento\Framework\Event\Observer;
-use Magento\Payment\Observer\AbstractDataAssignObserver as AbstractDataAssignObserverAlias;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Adds the payment info to the payment object
  */
-class DataAssignObserver extends AbstractDataAssignObserverAlias
+class DataAssignObserver extends AbstractDataAssignObserver
 {
     /**
      * @var array

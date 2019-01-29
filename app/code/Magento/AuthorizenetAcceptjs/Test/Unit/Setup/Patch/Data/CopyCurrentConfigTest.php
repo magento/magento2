@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Setup;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Setup\Patch\Data;
 
-use Magento\AuthorizenetAcceptjs\Setup\InstallData;
+use Magento\AuthorizenetAcceptjs\Setup\Patch\Data\CopyCurrentConfig;
 use Magento\Config\Model\ResourceModel\Config as ResourceConfig;
 use Magento\Framework\App\Config;
 use Magento\Framework\Encryption\Encryptor;
@@ -17,7 +17,7 @@ use Magento\Setup\Module\DataSetup;
 use Magento\Setup\Model\ModuleContext;
 use PHPUnit\Framework\TestCase;
 
-class InstallDataTest extends TestCase
+class CopyCurrentConfigTest extends TestCase
 {
     /**
      * @var \Magento\Framework\App\Config
@@ -79,15 +79,16 @@ class InstallDataTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $installer = $objectManager->getObject(
-            InstallData::class,
+            CopyCurrentConfig::class,
             [
+                'moduleDataSetup' => $this->setup,
                 'scopeConfig' => $this->scopeConfig,
                 'resourceConfig' => $this->resourceConfig,
                 'encryptor' => $this->encryptor
             ]
         );
 
-        $installer->install($this->setup, $this->context);
+        $installer->apply($this->context);
     }
 
     public function testMigrateDataNullFields(): void
@@ -106,14 +107,15 @@ class InstallDataTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $installer = $objectManager->getObject(
-            InstallData::class,
+            CopyCurrentConfig::class,
             [
+                'moduleDataSetup' => $this->setup,
                 'scopeConfig' => $this->scopeConfig,
                 'resourceConfig' => $this->resourceConfig,
                 'encryptor' => $this->encryptor
             ]
         );
 
-        $installer->install($this->setup, $this->context);
+        $installer->apply($this->context);
     }
 }

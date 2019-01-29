@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
-namespace Magento\AuthorizenetAcceptjs\Setup;
+
+namespace Magento\AuthorizenetAcceptjs\Setup\Patch\Data;
 
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -12,15 +13,19 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class InstallData
- *
- * Migrates Authorize.net DirectPost configuration values to the new Accept.js module.
+ * Copies the Authorize.net DirectPost configuration values to the new Accept.js module.
  */
-class InstallData implements InstallDataInterface
+class CopyCurrentConfig implements DataPatchInterface
 {
+    private const DIRECTPOST_PATH = 'payment/authorizenet_directpost';
+    private const ACCEPTJS_PATH = 'payment/authorizenet_acceptjs';
+    private const PAYMENT_PATH_FORMAT = '%s/%s';
+
     /**
      * @var ScopeConfigInterface
      */
@@ -36,16 +41,44 @@ class InstallData implements InstallDataInterface
      */
     private $encryptor;
 
-    private const DIRECTPOST_PATH = 'payment/authorizenet_directpost';
-    private const ACCEPTJS_PATH = 'payment/authorizenet_acceptjs';
-    private const PAYMENT_PATH_FORMAT = '%s/%s';
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
 
     /**
+     * @var array
+     */
+    private $configFieldsToMigrate = [
+        'cctypes',
+        'debug',
+        'email_customer',
+        'order_status',
+        'payment_action',
+        'currency',
+        'allow_specific',
+        'specificcountry',
+        'min_order_total',
+        'max_order_total'
+    ];
+
+    /**
+     * @var array
+     */
+    private $encryptedConfigFieldsToMigrate = [
+        'login',
+        'trans_key',
+        'trans_md5'
+    ];
+
+    /**
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $resourceConfig
      * @param EncryptorInterface $encryptor
      */
     public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
         ScopeConfigInterface $scopeConfig,
         ConfigInterface  $resourceConfig,
         EncryptorInterface $encryptor
@@ -53,40 +86,17 @@ class InstallData implements InstallDataInterface
         $this->scopeConfig = $scopeConfig;
         $this->resourceConfig = $resourceConfig;
         $this->encryptor = $encryptor;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * Migrate DirectPost values in store scope to Accept.js
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context): void
+    public function apply()
     {
-        $setup->startSetup();
+        $this->moduleDataSetup->startSetup();
 
-        $configFieldsToMigrate = [
-            'cctypes',
-            'debug',
-            'email_customer',
-            'order_status',
-            'payment_action',
-            'currency',
-            'allow_specific',
-            'specificcountry',
-            'min_order_total',
-            'max_order_total'
-        ];
-
-        $encryptedConfigFieldsToMigrate = [
-            'login',
-            'trans_key',
-            'trans_md5'
-        ];
-
-        foreach ($configFieldsToMigrate as $field) {
+        foreach ($this->configFieldsToMigrate as $field) {
             $configValue = $this->getOldConfigValue($field);
 
             if (!empty($configValue)) {
@@ -94,7 +104,7 @@ class InstallData implements InstallDataInterface
             }
         }
 
-        foreach ($encryptedConfigFieldsToMigrate as $field) {
+        foreach ($this->encryptedConfigFieldsToMigrate as $field) {
             $configValue = $this->getOldConfigValue($field);
 
             if (!empty($configValue)) {
@@ -102,7 +112,7 @@ class InstallData implements InstallDataInterface
             }
         }
 
-        $setup->endSetup();
+        $this->moduleDataSetup->endSetup();
     }
 
     /**
@@ -134,5 +144,21 @@ class InstallData implements InstallDataInterface
             $value,
             ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

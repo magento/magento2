@@ -654,7 +654,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             case self::RESPONSE_CODE_ERROR:
                 $errorMessage = $this->dataHelper->wrapGatewayError($this->getResponse()->getXResponseReasonText());
                 $order = $this->getOrderFromResponse();
-                $this->paymentFailures->handle((int)$order->getQuoteId(), $errorMessage);
+                $this->paymentFailures->handle((int)$order->getQuoteId(), (string)$errorMessage);
                 throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(

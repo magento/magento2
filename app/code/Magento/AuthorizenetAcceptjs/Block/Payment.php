@@ -15,6 +15,8 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Represents the payment block for the admin checkout form
+ *
+ * @api
  */
 class Payment extends Template
 {

@@ -40,7 +40,7 @@ define([
                 acceptjsFactory(self.environment)
                     .done(function (client) {
                         self.acceptjsClient = client;
-                        self._createTokens(deferred, data)
+                        self._createTokens(deferred, data);
                     });
             }
 
@@ -65,7 +65,7 @@ define([
                         deferred.reject(messages);
                     }
                 });
-            }.bind(this));
+            });
         }
     });
 });
