@@ -6,7 +6,7 @@
  */
 -->
 <req:ShipmentRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.2.xsd" schemaVersion="6.2">
+                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.0.xsd" schemaVersion="6.0">
     <Request xmlns="">
         <ServiceHeader>
             <MessageTime>currentTime</MessageTime>
@@ -14,10 +14,6 @@
             <SiteID>some ID</SiteID>
             <Password>some password</Password>
         </ServiceHeader>
-        <MetaData>
-            <SoftwareName>Software_Product_Name_30_Char_</SoftwareName>
-            <SoftwareVersion>10Char_Ver</SoftwareVersion>
-        </MetaData>
     </Request>
     <RegionCode xmlns="">CHECKED</RegionCode>
     <RequestedPickupTime xmlns="">N</RequestedPickupTime>

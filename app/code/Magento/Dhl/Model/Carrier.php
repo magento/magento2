@@ -1418,8 +1418,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             '<req:ShipmentRequest' .
             ' xmlns:req="http://www.dhl.com"' .
             ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' .
-            ' xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.2.xsd"' .
-            ' schemaVersion="6.2" />';
+            ' xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.0.xsd"' .
+            ' schemaVersion="6.0" />';
         $xml = $this->_xmlElFactory->create(['data' => $xmlStr]);
 
         $nodeRequest = $xml->addChild('Request', '', '');
@@ -1432,10 +1432,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         );
         $nodeServiceHeader->addChild('SiteID', (string)$this->getConfigData('id'));
         $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
-
-        $nodeMetaData = $nodeRequest->addChild('MetaData');
-        $nodeMetaData->addChild('SoftwareName', $this->buildSoftwareName());
-        $nodeMetaData->addChild('SoftwareVersion', $this->buildSoftwareVersion());
 
         $originRegion = $this->getCountryParams(
             $this->_scopeConfig->getValue(
