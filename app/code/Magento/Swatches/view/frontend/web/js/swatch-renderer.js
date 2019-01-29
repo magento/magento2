@@ -1229,6 +1229,7 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
+
                 if (!_.isUndefined(gallery)) {
                     gallery.updateData(imagesToUpdate);
                 }
