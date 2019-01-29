@@ -25,11 +25,11 @@ return [
             . ' <fileFormat name="name_one" model="1model"/></config>',
         [
             "Element 'entityType', attribute 'model': [facet 'pattern'] The value '1' is not accepted by the " .
-            "pattern '[a-zA-Z_\\\\]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
+            "pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
             "Element 'entityType', attribute 'model': '1' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n",
             "Element 'fileFormat', attribute 'model': [facet 'pattern'] The value '1model' is not " .
-            "accepted by the pattern '[a-zA-Z_\\\\]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
+            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
             "Element 'fileFormat', attribute 'model': '1model' is not a valid " .
             "value of the atomic type 'modelName'.\nLine: 1\n"
         ],
