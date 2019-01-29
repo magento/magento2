@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Message;
 
+use Magento\Framework\Debug;
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
 
