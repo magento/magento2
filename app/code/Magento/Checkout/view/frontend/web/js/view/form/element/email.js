@@ -42,6 +42,9 @@ define([
             listens: {
                 email: 'emailHasChanged',
                 emailFocused: 'validateEmail'
+            },
+            ignoreTmpls: {
+                email: true
             }
         },
         checkDelay: 2000,
@@ -177,7 +180,7 @@ define([
         },
 
         /**
-         * Resolves an initial sate of a login form.
+         * Resolves an initial state of a login form.
          *
          * @returns {Boolean} - initial visibility state.
          */
