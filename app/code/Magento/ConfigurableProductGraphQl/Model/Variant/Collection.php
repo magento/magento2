@@ -47,9 +47,9 @@ class Collection
     private $metadataPool;
 
     /**
-     * @var int[]
+     * @var Product[]
      */
-    private $parentIds = [];
+    private $parentProducts = [];
 
     /**
      * @var array
@@ -83,19 +83,22 @@ class Collection
     }
 
     /**
-     * Add parent Id to collection filter
+     * Add parent to collection filter
      *
-     * @param int $id
+     * @param Product $product
      * @return void
      */
-    public function addParentId(int $id) : void
+    public function addParentProduct(Product $product) : void
     {
-        if (!in_array($id, $this->parentIds) && !empty($this->childrenMap)) {
-            $this->childrenMap = [];
-            $this->parentIds[] = $id;
-        } elseif (!in_array($id, $this->parentIds)) {
-            $this->parentIds[] = $id;
+        if (isset($this->parentProducts[$product->getId()])) {
+            return;
         }
+
+        if (!empty($this->childrenMap)) {
+            $this->childrenMap = [];
+
+        }
+        $this->parentProducts[$product->getId()] = $product;
     }
 
     /**
@@ -130,20 +133,24 @@ class Collection
      * Fetch all children products from parent id's.
      *
      * @return array
+     * @throws \Exception
      */
     private function fetch() : array
     {
-        if (empty($this->parentIds) || !empty($this->childrenMap)) {
+        if (empty($this->parentProducts) || !empty($this->childrenMap)) {
             return $this->childrenMap;
         }
 
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        foreach ($this->parentIds as $id) {
+        foreach ($this->parentProducts as $product) {
+
+            $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
+            $childCollection->addAttributeToSelect($attributeData);
+
             /** @var Product $product */
-            $product = $this->productFactory->create();
-            $product->setData($linkField, $id);
+            $product->setData($linkField, $product->getId());
             $childCollection->setProductFilter($product);
 
             /** @var Product $childProduct */
@@ -159,5 +166,29 @@ class Collection
         }
 
         return $this->childrenMap;
+    }
+
+    /**
+     * Get attributes codes
+     *
+     * @param Product $currentProduct
+     * @return array
+     */
+    private function getAttributesCodes(Product $currentProduct): array
+    {
+        $attributeCodes = [];
+        $attributes = $currentProduct->getAttributes();
+        foreach ($attributes as $key => $attribute) {
+            $isVisible = (int)$attribute->getIsVisibleOnFront();
+            if (!$isVisible) {
+                continue;
+            }
+            if (!in_array($key, $attributeCodes)) {
+               continue;
+            }
+            $attributeCodes[] = $key;
+        }
+
+        return $attributeCodes;
     }
 }
