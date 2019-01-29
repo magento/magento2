@@ -1232,7 +1232,6 @@
                                     <label>Label</label>
                                     <comment><![CDATA[The installment feature is available only in these locales: en_MX, es_MX, en_BR, pt_BR.]]></comment>
                                     <config_path>paypal/style/checkout_page_button_label</config_path>
-                                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\ButtonStylesLabel</frontend_model>
                                     <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getLabel</source_model>
                                     <depends>
                                         <field id="checkout_page_button_customize">1</field>
