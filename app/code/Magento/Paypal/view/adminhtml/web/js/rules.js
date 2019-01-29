@@ -620,6 +620,6 @@ define([
             ) {
                 this.removeCreditOption($target, $owner, data);
             }
-        },
+        }
     });
 });

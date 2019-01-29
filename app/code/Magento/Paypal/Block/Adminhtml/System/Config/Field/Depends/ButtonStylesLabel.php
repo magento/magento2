@@ -19,7 +19,7 @@ class ButtonStylesLabel extends AbstractEnable
      *
      * @return string
      */
-    protected function getDataAttributeName(): string
+    protected function getDataAttributeName()
     {
         return 'button-label';
     }
