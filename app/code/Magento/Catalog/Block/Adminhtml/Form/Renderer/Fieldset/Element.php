@@ -29,7 +29,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
     }
 
     /**
-     * Retireve associated with element attribute object
+     * Retrieve associated with element attribute object
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
