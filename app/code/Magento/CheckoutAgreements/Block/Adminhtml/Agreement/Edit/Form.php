@@ -54,14 +54,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
         array $data = [],
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_systemStore = $systemStore;
         $this->agreementModeOptions = $agreementModeOptions;
         $this->wysiwygConfig = $wysiwygConfig ?: ObjectManager::getInstance()
-                ->get(Config::class);
+                ->get(\Magento\Cms\Model\Wysiwyg\Config::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()
-                ->get(ScopeConfigInterface::class);
+                ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
        parent::__construct($context, $registry, $formFactory, $data);
     }
 
