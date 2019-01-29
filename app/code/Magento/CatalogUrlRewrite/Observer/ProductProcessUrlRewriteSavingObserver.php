@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserver
@@ -33,19 +37,28 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $productUrlPathGenerator;
 
     /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
-     * @param ProductUrlPathGenerator|null $productUrlPathGenerator
+     * @param ProductUrlPathGenerator|null $urlPathGenerator
+     * @param CollectionFactory|null $collectionFactory
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator = null
+        ProductUrlPathGenerator $urlPathGenerator = null,
+        CollectionFactory $collectionFactory = null
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
-        $this->productUrlPathGenerator = $productUrlPathGenerator ?: ObjectManager::getInstance()
+        $this->productUrlPathGenerator = $urlPathGenerator ?: ObjectManager::getInstance()
             ->get(ProductUrlPathGenerator::class);
+        $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()
+            ->get(CollectionFactory::class);
     }
 
     /**
@@ -69,7 +82,27 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 $product->unsUrlPath();
                 $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+                return;
             }
+        }
+        $this->validateUrlKey($product);
+    }
+
+    /**
+     * @param Product $product
+     * @throws UrlAlreadyExistsException
+     */
+    private function validateUrlKey(Product $product)
+    {
+        $productCollection = $this->collectionFactory->create();
+        $productCollection->addFieldToFilter(
+            'url_key',
+            ['in' => $product->getUrlKey()]
+        );
+        $productCollection->getSelect()->where('e.entity_id != ?', $product->getId());
+
+        if ($productCollection->getItems()) {
+            throw new UrlAlreadyExistsException();
         }
     }
 }
