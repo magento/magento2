@@ -526,7 +526,7 @@ class Uploader
      */
     private function _getMimeType()
     {
-        return $this->fileMime->getMimeType($this->_file['tmp_name'], $this->_file['type']);
+        return $this->fileMime->getMimeTypeOrDefault($this->_file['tmp_name'], $this->_file['type']);
     }
 
     /**

@@ -79,12 +79,44 @@ class Mime
     /**
      * Get mime type of a file
      *
+     * @deprecated
+     * @see getMimeTypeOrDefault Where default mime type has been moved to params
+     *
+     * @param string $file
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function getMimeType($file)
+    {
+        if (!file_exists($file)) {
+            throw new \InvalidArgumentException("File '$file' doesn't exist");
+        }
+
+        $result = null;
+        $extension = $this->getFileExtension($file);
+
+        if (function_exists('mime_content_type')) {
+            $result = $this->getNativeMimeType($file);
+        }
+
+        if (null === $result && isset($this->mimeTypes[$extension])) {
+            $result = $this->mimeTypes[$extension];
+        } elseif (null === $result) {
+            $result = 'application/octet-stream';
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get mime type of a file or return default one
+     *
      * @param string $file
      * @param string $default
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getMimeType($file, $default = 'application/octet-stream')
+    public function getMimeTypeOrDefault($file, $default = 'application/octet-stream')
     {
         if (!file_exists($file)) {
             throw new \InvalidArgumentException("File '$file' doesn't exist");
@@ -105,6 +137,7 @@ class Mime
 
         return $result;
     }
+
 
     /**
      * Get mime type by the native mime_content_type function.
