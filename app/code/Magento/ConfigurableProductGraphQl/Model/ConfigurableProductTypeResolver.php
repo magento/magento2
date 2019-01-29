@@ -16,12 +16,18 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as Type;
 class ConfigurableProductTypeResolver implements TypeResolverInterface
 {
     /**
+     * Configurable product type resolver code
+     */
+    const TYPE_RESOLVER = 'ConfigurableProduct';
+
+    /**
      * {@inheritdoc}
      */
     public function resolveType(array $data) : string
     {
         if (isset($data['type_id']) && $data['type_id'] == Type::TYPE_CODE) {
-            return 'ConfigurableProduct';
+            return self::TYPE_RESOLVER;
+
         }
         return '';
     }
