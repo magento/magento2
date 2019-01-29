@@ -126,7 +126,8 @@ class SmartButton extends Template implements ShortcutInterface
         return $this->payment->isAvailable($this->session->getQuote())
             && $this->isInContext()
             && $this->isVisibleOnCart()
-            && $this->getQuoteId();
+            && $this->getQuoteId()
+            && !$this->getIsInCatalogProduct();
     }
 
     /**
