@@ -85,7 +85,6 @@ class SynonymReader extends AbstractDb
      */
     private function queryByPhrase($phrase)
     {
-        $phrase = rtrim($phrase, "-");
         $matchQuery = $this->fullTextSelect->getMatchQuery(
             ['synonyms' => 'synonyms'],
             $phrase,
