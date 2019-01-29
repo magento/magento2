@@ -115,7 +115,7 @@ define([
                 totalPercentage += parseFloat(rate.percent);
             });
             
-            return this.getFormattedPrice(this.getPercerntAmount(amount, totalPercentage, percentage));
+            return this.getFormattedPrice(this.getPercentAmount(amount, totalPercentage, percentage));
         },
 
         /**
@@ -124,7 +124,7 @@ define([
          * @param {*} percentage
          * @return {*|String}
          */
-        getPercerntAmount: function (amount, totalPercentage, percentage) {
+        getPercentAmount: function (amount, totalPercentage, percentage) {
             return parseFloat((amount * percentage) / totalPercentage);
         },
 
