@@ -577,6 +577,7 @@ class ConfigurablePanel extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => $name,
             'visibleIfCanEdit' => false,
+            'labelVisible' => false,
             'imports' => [
                 'visible' => '!${$.provider}:${$.parentScope}.canEdit'
             ],
@@ -595,6 +596,7 @@ class ConfigurablePanel extends AbstractModifier
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => $label,
             'dataScope' => '',
+            'showLabel' => false
         ];
         $container['children'] = [
             $name . '_edit' => $fieldEdit,
