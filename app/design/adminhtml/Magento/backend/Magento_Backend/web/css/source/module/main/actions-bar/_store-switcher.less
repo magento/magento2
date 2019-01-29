@@ -10,11 +10,6 @@
 //  ToDo UI: Consist old styles, should be changed with new design
 
 .store-switcher {
-    color: @text__color; // ToDo UI: Delete with admin scope
-    float: left;
-    font-size: round(@font-size__base - .1rem, 1);
-    margin-top: .7rem;
-
     .admin__action-dropdown {
         background-color: @page-main-actions__background-color;
         margin-left: .5em;
@@ -47,8 +42,8 @@
             width: 7px;
         }
         &::-webkit-scrollbar-thumb {
-            border-radius: 4px;
             background-color: rgba(0, 0, 0, .5);
+            border-radius: 4px;
         }
 
         li {
@@ -116,6 +111,12 @@
             }
         }
     }
+
+    color: @text__color; // ToDo UI: Delete with admin scope
+    float: left;
+    font-size: round(@font-size__base - .1rem, 1);
+    margin-top: .59rem;
+
 }
 
 .store-switcher-label {
@@ -239,7 +240,6 @@
 
     .store-switcher-label {
         display: inline-block;
-        margin-top: @indent__s;
     }
 }
 

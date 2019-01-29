@@ -32,4 +32,13 @@
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
     </actionGroup>
+
+    <actionGroup name="GuestCheckoutFillingShippingSectionWithoutPaymentsActionGroup" extends="GuestCheckoutFillingShippingSectionActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.isPaymentSection}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+    </actionGroup>
+
+    <actionGroup name="GuestCheckoutFillingShippingSectionWithoutRegionActionGroup" extends="GuestCheckoutFillingShippingSectionActionGroup">
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{customerAddressVar.country}}" after="enterPostcode" stepKey="selectCountry"/>
+        <remove keyForRemoval="selectRegion"/>
+    </actionGroup>
 </actionGroups>
