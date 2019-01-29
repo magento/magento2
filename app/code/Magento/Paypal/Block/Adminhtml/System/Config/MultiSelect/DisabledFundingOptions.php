@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect;
 
+use Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable;
 use Magento\Paypal\Model\Config\StructurePlugin;
 use Magento\Backend\Block\Template\Context;
 use Magento\Paypal\Model\Config;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Config\Block\System\Config\Form\Field;
 
 /**
  * Class DisabledFundingOptions
  */
-class DisabledFundingOptions extends Field
+class DisabledFundingOptions extends AbstractEnable
 {
     /**
      * @var Config
@@ -51,6 +51,16 @@ class DisabledFundingOptions extends Field
             $element->setValues($this->filterValuesForPaypalCredit($fundingOptions));
         }
         return parent::render($element);
+    }
+
+    /**
+     * Getting the name of a UI attribute
+     *
+     * @return string
+     */
+    protected function getDataAttributeName(): string
+    {
+        return 'disable-funding-options';
     }
 
     /**

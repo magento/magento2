@@ -76,11 +76,11 @@ class ButtonStyles
     {
         return [
             'checkout' => __('Checkout'),
-            'credit' => __('Credit'),
             'pay' => __('Pay'),
             'buynow' => __('Buy Now'),
             'paypal' => __('PayPal'),
-            'installment' => __('Installment')
+            'installment' => __('Installment'),
+            'credit' => __('Credit')
         ];
     }
 

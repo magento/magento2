@@ -66,6 +66,18 @@ define([
             dependsBmlApiSortOrder:    '[data-enable="bml-api-sort-order"]',
 
             /**
+             * An attribute of the element responsible for the visibility of the
+             * button Label credit option (data attribute)
+             */
+            dependsButtonLabel: '[data-enable="button-label"]',
+
+            /**
+             * An attribute of the element responsible for the visibility of the
+             * button Label credit option on load (data attribute)
+             */
+            dependsDisableFundingOptions: '[data-enable="disable-funding-options"]',
+
+            /**
              * Templates element selectors
              */
             templates: {
@@ -119,7 +131,9 @@ define([
                                 }
                             };
 
-                        if (solution.getValue($(this)) === elementEvent.value) {
+                        if (solution.getValue($(this)) === elementEvent.value ||
+                            solution.getMultiselectValue($(this), elementEvent)
+                        ) {
                             if (predicate.name) {
                                 require([
                                     'Magento_Paypal/js/predicate/' + predicate.name
@@ -145,6 +159,29 @@ define([
             }
 
             return $element.val();
+        },
+
+        /**
+         * Get multiselect value
+         *
+         * @param {Object} $element
+         * @param {Object} elementEvent
+         * @returns {boolean}
+         */
+        getMultiselectValue: function($element, elementEvent) {
+            var value;
+
+            if (!$element.prop('multiple')) {
+                return false;
+            }
+
+            value = $.inArray(elementEvent.value, $element.val()) >= 0;
+
+            if (elementEvent.include) {
+                value = (value ? 'true' : 'false') === elementEvent.include;
+            }
+
+            return value;
         },
 
         /**
@@ -175,6 +212,8 @@ define([
                                 dependsMerchantId: this.dependsMerchantId,
                                 dependsBmlSortOrder: this.dependsBmlSortOrder,
                                 dependsBmlApiSortOrder: this.dependsBmlApiSortOrder,
+                                dependsButtonLabel: this.dependsButtonLabel,
+                                dependsDisableFundingOptions: this.dependsDisableFundingOptions,
                                 solutionsElements: this.solutionsElements,
                                 argument: instance.argument
                             }
