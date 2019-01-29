@@ -71,7 +71,7 @@
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
         <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
-        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct" />
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveProductButton" />
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForProductToSave"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
