@@ -8,6 +8,24 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .toolbar {
+        &.wishlist-toolbar {
+            .limiter {
+                float: right;
+            }
+            .main .pages {
+                display: inline-block;
+                position: relative;
+                z-index: 0;
+            }
+            .toolbar-amount,
+            .limiter {
+                display: inline-block;
+                z-index: 1;
+            }
+        }
+    }
+
     .form.wishlist.items {
         .actions-toolbar {
             &:extend(.abs-reset-left-margin all);
@@ -194,6 +212,7 @@
 
                 &-actions {
                     display: block;
+                    float: left;
 
                     .action {
                         margin-right: 15px;

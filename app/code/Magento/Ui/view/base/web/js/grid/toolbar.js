@@ -557,7 +557,7 @@ define([
         },
 
         /**
-         * Handles changes of windows' top scroll postion.
+         * Handles changes of windows' top scroll position.
          */
         onWindowScrollTop: function () {
             this.updateTableOffset()

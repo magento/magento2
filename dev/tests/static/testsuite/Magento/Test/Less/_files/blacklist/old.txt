@@ -4,6 +4,7 @@ app/design/adminhtml/Magento/backend/Magento_ConfigurableProduct/web/css/source/
 app/design/adminhtml/Magento/backend/Magento_Developer/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Enterprise/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Msrp/web/css/source/_module-old.less
+app/design/adminhtml/Magento/backend/Magento_Sales/web/css/source/module/_order.less
 app/design/adminhtml/Magento/backend/Magento_Tax/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Theme/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Ui/web/css/source/_module-old.less
