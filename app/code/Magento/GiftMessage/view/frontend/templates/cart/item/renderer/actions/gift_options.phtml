@@ -10,7 +10,7 @@
 ?>
 <?php if (!$block->isVirtual()): ?>
     <div id="gift-options-cart-item-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>"
-        data-bind="scope:'giftOptionsCartItem-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>'"
+        data-bind="scope:'giftOptionsCartItem-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>',css: {'no-display': !window.giftOptionsConfig.isItemLevelGiftOptionsEnabled}"
         class="gift-options-cart-item">
         <!-- ko template: getTemplate() --><!-- /ko -->
         <script type="text/x-magento-init">
