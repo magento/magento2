@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 1 -->
-        <actionGroup ref="CreateOrderToPrintPageActionGroup" stepKey="createOrderToPrint">
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint">
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
 
@@ -64,7 +64,7 @@
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 2 -->
-        <actionGroup ref="CreateOrderToPrintPageActionGroup" stepKey="createOrderToPrint2">
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint2">
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
 

@@ -60,6 +60,16 @@ $tierPrices[] = $tierPriceFactory->create(
     ]
 )->setExtensionAttributes($tierPriceExtensionAttributes1);
 
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 3.2,
+            'value' => 6,
+        ]
+    ]
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
 $tierPriceExtensionAttributes2 = $tpExtensionAttributesFactory->create()
     ->setWebsiteId($adminWebsite->getId())
     ->setPercentageValue(50);
