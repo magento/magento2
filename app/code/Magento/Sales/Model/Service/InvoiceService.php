@@ -229,7 +229,6 @@ class InvoiceService implements InvoiceManagementInterface
                     $qtys[$parent->getId()] = $parent->getQtyToInvoice();
                 }
             }
-            $this->prepareItemQty($orderItem, $qtys);
         }
     }
 
