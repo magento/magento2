@@ -147,12 +147,10 @@ class CustomerRepositoryTest extends WebapiAbstract
      * Validate update by invalid customer.
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage The consumer isn't authorized to access %resources.
+     * @expectedExceptionMessageRegExp  /The consumer isn't authorized to access \%resources.|Function \("customerCustomerRepositoryV1Save"\) is not a valid method for this service/
      */
     public function testInvalidCustomerUpdate()
     {
-        $this->_markTestAsRestOnly();
-
         //Create first customer and retrieve customer token.
         $firstCustomerData = $this->_createCustomer();
 
@@ -181,6 +179,12 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'token' => $token,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+                'token' => $token
             ]
         ];
 
