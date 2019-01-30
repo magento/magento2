@@ -285,6 +285,7 @@
             <settings>
                 <validation>
                     <rule name="validate-date" xsi:type="boolean">true</rule>
+                    <rule name="validate-date-range" xsi:type="string">custom_theme_from</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">To</label>

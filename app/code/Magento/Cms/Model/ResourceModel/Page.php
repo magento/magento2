@@ -115,6 +115,14 @@ class Page extends AbstractDb
             $object->setData($field, $value);
         }
 
+        if (!$this->isValidPageCustomThemeDateRange($object)) {
+            throw new LocalizedException(
+                __(
+                    "Custom theme \"From\" date cannot be later or same with \"To\" date."
+                )
+            );
+        }
+
         if (!$this->isValidPageIdentifier($object)) {
             throw new LocalizedException(
                 __(
@@ -263,6 +271,28 @@ class Page extends AbstractDb
     protected function isValidPageIdentifier(AbstractModel $object)
     {
         return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
+    }
+
+    /**
+     * Chech whether page custom theme from date is
+     * lower than custom theme to date
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    protected function isValidPageCustomThemeDateRange(AbstractModel $object)
+    {
+        $fromDate = $object->getData('custom_theme_from');
+        $toDate = $object->getData('custom_theme_to');
+
+        if ($this->dateTime->isEmptyDate($fromDate) || $this->dateTime->isEmptyDate($toDate)) {
+            return true;
+        }
+
+        $fromDate = new \DateTime($fromDate);
+        $toDate = new \DateTime($toDate);
+
+        return $toDate > $fromDate;
     }
 
     /**
