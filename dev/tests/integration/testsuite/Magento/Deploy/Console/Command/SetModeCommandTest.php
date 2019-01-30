@@ -146,7 +146,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         );
         $commandOutput = $this->commandTester->getDisplay();
 
-        $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
+        $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode(), $commandOutput);
 
         $this->assertContains('Deployment of static content complete', $commandOutput);
         $this->assertContains('Enabled production mode', $commandOutput);
