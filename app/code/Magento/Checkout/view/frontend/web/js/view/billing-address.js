@@ -40,7 +40,6 @@ function (
     'use strict';
 
     var lastSelectedBillingAddress = null,
-    
         newAddressOption = {
             /**
              * Get new address label
@@ -57,7 +56,7 @@ function (
         });
 
     addressOptions.push(newAddressOption);
-    var isbothAddressSame = null;
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/billing-address'
@@ -96,7 +95,6 @@ function (
                 } else {
                     this.isAddressSameAsShipping(
                         newAddress != null &&
-                         isbothAddressSame &&
                         newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
                     );
                 }
@@ -129,13 +127,10 @@ function (
          */
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
-                isbothAddressSame = true;
                 selectBillingAddress(quote.shippingAddress());
-
                 this.updateAddresses();
                 this.isAddressDetailsVisible(true);
             } else {
-                isbothAddressSame = false;
                 lastSelectedBillingAddress = quote.billingAddress();
                 quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
