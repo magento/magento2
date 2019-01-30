@@ -424,18 +424,26 @@ class Product extends AbstractResource
     /**
      * Check availability display product in category
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|int $product
      * @param int $categoryId
      * @return string
      */
     public function canBeShowInCategory($product, $categoryId)
     {
+        if ($product instanceof \Magento\Catalog\Model\Product) {
+            $productId = $product->getEntityId();
+            $storeId = $product->getStoreId();
+        } else {
+            $productId = $product;
+            $storeId = $this->_storeManager->getStore()->getId();
+        }
+
         $select = $this->getConnection()->select()->from(
-            $this->tableMaintainer->getMainTable($product->getStoreId()),
+            $this->tableMaintainer->getMainTable($storeId),
             'product_id'
         )->where(
             'product_id = ?',
-            (int)$product->getEntityId()
+            (int)$productId
         )->where(
             'category_id = ?',
             (int)$categoryId

@@ -43,7 +43,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected $response;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @var UrlFinderInterface
      */
     protected $urlFinder;
 
@@ -72,7 +72,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Match corresponding URL Rewrite and modify request.
      *
      * @param RequestInterface|HttpRequest $request
-     *
      * @return ActionInterface|null
      */
     public function match(RequestInterface $request)
@@ -104,6 +103,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Process redirect
+     *
      * @param RequestInterface $request
      * @param UrlRewrite $rewrite
      *
@@ -121,6 +122,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Redirect to target URL
+     *
      * @param RequestInterface|HttpRequest $request
      * @param string $url
      * @param int $code
@@ -135,6 +138,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Find rewrite based on request data
+     *
      * @param string $requestPath
      * @param int $storeId
      * @return UrlRewrite|null

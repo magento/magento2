@@ -45,6 +45,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
         $this->actionFactory = $this->createMock(\Magento\Framework\App\ActionFactory::class);
         $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -59,7 +60,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->router = (new ObjectManager($this))->getObject(
+        $this->router = $objectManager->getObject(
             \Magento\UrlRewrite\Controller\Router::class,
             [
                 'actionFactory' => $this->actionFactory,

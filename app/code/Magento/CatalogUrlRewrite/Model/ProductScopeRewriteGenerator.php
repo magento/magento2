@@ -13,6 +13,7 @@ use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -173,28 +174,31 @@ class ProductScopeRewriteGenerator
         $mergeDataProvider->merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
         );
-        $mergeDataProvider->merge(
-            $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-        );
-        $mergeDataProvider->merge(
-            $this->currentUrlRewritesRegenerator->generate(
-                $storeId,
-                $product,
-                $productCategories,
-                $rootCategoryId
-            )
-        );
-        $mergeDataProvider->merge(
-            $url = $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-        );
-        $mergeDataProvider->merge(
-            $url = $this->currentUrlRewritesRegenerator->generateAnchor(
-                $storeId,
-                $product,
-                $productCategories,
-                $rootCategoryId
-            )
-        );
+
+        if ($this->isCategoryProductRewritesEnabled($storeId)) {
+            $mergeDataProvider->merge(
+                $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            );
+            $mergeDataProvider->merge(
+                $this->currentUrlRewritesRegenerator->generate(
+                    $storeId,
+                    $product,
+                    $productCategories,
+                    $rootCategoryId
+                )
+            );
+            $mergeDataProvider->merge(
+                $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            );
+            $mergeDataProvider->merge(
+                $this->currentUrlRewritesRegenerator->generateAnchor(
+                    $storeId,
+                    $product,
+                    $productCategories,
+                    $rootCategoryId
+                )
+            );
+        }
         return $mergeDataProvider->getData();
     }
 
@@ -216,10 +220,12 @@ class ProductScopeRewriteGenerator
     }
 
     /**
+     * Check if URL key has been changed
+     *
      * Checks if URL key has been changed for provided category and returns reloaded category,
      * in other case - returns provided category.
      *
-     * @param $storeId
+     * @param int $storeId
      * @param Category $category
      * @return Category
      */
@@ -235,5 +241,21 @@ class ProductScopeRewriteGenerator
             return $category;
         }
         return $this->categoryRepository->get($category->getEntityId(), $storeId);
+    }
+
+    /**
+     * Check config for "generate product rewrites on category save"
+     *
+     * @param int $storeId
+     * @return bool
+     */
+    private function isCategoryProductRewritesEnabled($storeId)
+    {
+        $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        return (bool)$scopeConfig->getValue(
+            'catalog/seo/generate_rewrites_on_save',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }
