@@ -188,6 +188,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Load allowed countries for all stores
+     *
+     * @param null|int|string|\Magento\Store\Model\Store $store
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     */
+    public function loadByAllStore($store = null)
+    {
+        $allowedCountries = $this->getAllowedCountriesReader()
+            ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
+        return $this;
+    }
+
+    /**
      * Loads Item By Id
      *
      * @param string $countryId
