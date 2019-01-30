@@ -232,7 +232,7 @@ class Product extends AbstractResource
     /**
      * Retrieve product category identifiers
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
     public function getCategoryIds($product)
@@ -244,7 +244,7 @@ class Product extends AbstractResource
     /**
      * Get product identifier by sku
      *
-     * @param string $sku
+     * @param  string $sku
      * @return int|false
      */
     public function getIdBySku($sku)
@@ -289,7 +289,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -601,7 +601,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($object)
     {
@@ -641,7 +641,8 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @since 101.0.0
      */
@@ -683,6 +684,8 @@ class Product extends AbstractResource
     }
 
     /**
+     * Return instantiation of EntityManager
+     *
      * @return \Magento\Framework\EntityManager\EntityManager
      */
     private function getEntityManager()
@@ -695,6 +698,8 @@ class Product extends AbstractResource
     }
 
     /**
+     * Return instantiation of ProductWebsiteLink
+     *
      * @deprecated 101.1.0
      * @return ProductWebsiteLink
      */
@@ -704,6 +709,8 @@ class Product extends AbstractResource
     }
 
     /**
+     * Return instantiation of productCategoryLink
+     *
      * @deprecated 101.1.0
      * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
      */
@@ -721,6 +728,7 @@ class Product extends AbstractResource
      * Store id is required to correctly identify attribute value we are working with.
      *
      * {@inheritdoc}
+     *
      * @since 101.1.0
      */
     protected function getAttributeRow($entity, $object, $attribute)

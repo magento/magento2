@@ -96,6 +96,7 @@ class UrlRewriteHandler
      * @param MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param Json|null $serializer
      * @param ProductScopeRewriteGenerator|null $productScopeRewriteGenerator
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,

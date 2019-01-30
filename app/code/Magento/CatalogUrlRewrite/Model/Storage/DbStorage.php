@@ -177,7 +177,8 @@ class DbStorage extends BaseDbStorage
 
             if ($categoryFromDb === false
                 || !$productResource->canBeShowInCategory(
-                    $productFromDb[UrlRewrite::ENTITY_ID], $categoryFromDb[UrlRewrite::ENTITY_ID]
+                    $productFromDb[UrlRewrite::ENTITY_ID],
+                    $categoryFromDb[UrlRewrite::ENTITY_ID]
                 )
             ) {
                 return null;

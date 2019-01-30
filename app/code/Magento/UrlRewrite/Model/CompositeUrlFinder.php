@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\UrlRewrite\Model;
 
 use Magento\Framework\ObjectManagerInterface;
+use \Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class CompositeUrlFinder
@@ -32,6 +33,7 @@ class CompositeUrlFinder implements UrlFinderInterface
     /**
      * @param array $children
      * @param ObjectManagerInterface $objectManager
+     * @param MergeDataProviderFactory $mergeDataProviderFactory
      */
     public function __construct(
         array $children,
@@ -83,5 +85,4 @@ class CompositeUrlFinder implements UrlFinderInterface
         });
         return $this->children;
     }
-
 }
