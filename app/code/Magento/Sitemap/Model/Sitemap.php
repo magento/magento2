@@ -159,7 +159,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @var string
      * @since 100.2.0
      */
-    protected $_cacheTag = true;
+    protected $_cacheTag = [Value::CACHE_TAG];
 
     /**
      * Item resolver
