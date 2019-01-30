@@ -29,12 +29,7 @@
 
 <?php foreach ($items as $_item): ?>
     <?php
-        $orderItem = $_item->getOrderItem();
-        if ($orderItem->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $shipTogether = !$orderItem->isShipSeparately();
-        } else {
-            $shipTogether = !$orderItem->getParentItem()->isShipSeparately();
-        }
+        $shipTogether = $block->isShipTogether($_item);
     ?>
     <?php $block->setPriceDataObject($_item) ?>
     <?php if ($_item->getOrderItem()->getParentItem()): ?>
