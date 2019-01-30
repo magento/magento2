@@ -9,7 +9,8 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_InventoryCatalogAdminUi/product/grid/cell/source-items.html'
+            bodyTmpl: 'Magento_InventoryCatalogAdminUi/product/grid/cell/source-items.html',
+            itemsToDisplay: 5
         },
 
         /**
@@ -20,6 +21,14 @@ define([
          */
         getSourceItemsData: function (record) {
             return record[this.index] ? record[this.index] : [];
+        },
+
+        /**
+         * @param {Object} record - Record object
+         * @returns {Array} Result array
+         */
+        getSourceItemsDataCut: function (record) {
+            return this.getSourceItemsData(record).slice(0, this.itemsToDisplay);
         }
     });
 });
