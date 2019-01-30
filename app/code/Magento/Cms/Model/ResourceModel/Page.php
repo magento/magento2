@@ -274,16 +274,16 @@ class Page extends AbstractDb
     }
 
     /**
-     * Chech whether page custom theme from date is
+     * Check whether page custom theme from date is
      * lower than custom theme to date
      *
-     * @param AbstractModel $object
+     * @param CmsPage $object
      * @return bool
      */
-    private function isValidPageCustomThemeDateRange(AbstractModel $object)
+    private function isValidPageCustomThemeDateRange(CmsPage $object)
     {
-        $fromDate = $object->getData('custom_theme_from');
-        $toDate = $object->getData('custom_theme_to');
+        $fromDate = $object->getData(CmsPage::CUSTOM_THEME_FROM);
+        $toDate = $object->getData(CmsPage::CUSTOM_THEME_TO);
 
         if ($this->dateTime->isEmptyDate($fromDate) || $this->dateTime->isEmptyDate($toDate)) {
             return true;
