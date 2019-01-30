@@ -87,11 +87,14 @@ class ConfigTest extends TestCase
     {
         return [
             ['getLoginId', 'login', 'username', 'username'],
+            ['getEnvironment', 'environment', 'production', 'production'],
+            ['getClientKey', 'public_client_key', 'abc', 'abc'],
             ['getTransactionKey', 'trans_key', 'password', 'password'],
             ['getLegacyTransactionHash', 'trans_md5', 'abc123', 'abc123'],
             ['getTransactionSignatureKey', 'trans_signature_key', 'abc123', 'abc123'],
             ['getPaymentAction', 'payment_action', 'authorize', 'authorize'],
             ['shouldEmailCustomer', 'email_customer', true, true],
+            ['isCvvEnabled', 'cvv_enabled', true, true],
             ['getAdditionalInfoKeys', 'paymentInfoKeys', 'a,b,c', ['a', 'b', 'c']],
         ];
     }

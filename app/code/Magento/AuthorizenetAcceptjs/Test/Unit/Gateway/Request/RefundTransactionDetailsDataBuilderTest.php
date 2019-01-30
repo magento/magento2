@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionDetailsDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use PHPUnit\Framework\TestCase;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 
-class RefundDataBuilderTest extends TestCase
+class RefundTransactionDetailsDataBuilderTest extends TestCase
 {
     /**
-     * @var RefundDataBuilder
+     * @var RefundTransactionDetailsDataBuilder
      */
     private $builder;
 
@@ -37,42 +37,29 @@ class RefundDataBuilderTest extends TestCase
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
+        $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->builder = new RefundDataBuilder(
-            new SubjectReader()
-        );
+        $this->builder = new RefundTransactionDetailsDataBuilder(new SubjectReader());
     }
 
     public function testBuild()
     {
-        $this->paymentMock->method('getAdditionalInformation')
-            ->willReturnMap([
-                ['opaqueDataDescriptor', 'encfoo'],
-                ['opaqueDataValue', 'encbar']
-            ]);
+        $transactionMock = $this->createMock(Transaction::class);
 
-        $this->paymentMock->method('decrypt')
-            ->willReturnMap([
-                ['encfoo', 'foo'],
-                ['encbar', 'bar']
-            ]);
+        $this->paymentMock->method('getAuthorizationTransaction')
+            ->willReturn($transactionMock);
+
+        $transactionMock->method('getParentTxnId')
+            ->willReturn('foo');
 
         $expected = [
-            'transactionRequest' => [
-                'payment' => [
-                    'opaqueData' => [
-                        'dataDescriptor' => 'foo',
-                        'dataValue' => 'bar'
-                    ]
-                ]
-            ]
+            'transId' => 'foo'
         ];
 
         $buildSubject = [
             'payment' => $this->paymentDOMock,
-            'amount' => 123.45
         ];
 
         $this->assertEquals($expected, $this->builder->build($buildSubject));

@@ -3,25 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Request\VoidDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundReferenceTransactionDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class VoidDataBuilderTest extends TestCase
+class RefundReferenceTransactionDataBuilderTest extends TestCase
 {
-    private const REQUEST_TYPE_VOID = 'voidTransaction';
-
     /**
-     * @var VoidDataBuilder
+     * @var RefundReferenceTransactionDataBuilder
      */
     private $builder;
 
@@ -39,30 +37,33 @@ class VoidDataBuilderTest extends TestCase
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
+        $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->builder = new VoidDataBuilder(new SubjectReader());
+        $this->builder = new RefundReferenceTransactionDataBuilder(new SubjectReader());
     }
 
     public function testBuild()
     {
         $transactionMock = $this->createMock(Transaction::class);
+
         $this->paymentMock->method('getAuthorizationTransaction')
             ->willReturn($transactionMock);
-        $transactionMock->method('getParentTxnId')
-            ->willReturn('myref');
 
-        $buildSubject = [
-            'payment' => $this->paymentDOMock
-        ];
+        $transactionMock->method('getParentTxnId')
+            ->willReturn('foo');
 
         $expected = [
             'transactionRequest' => [
-                'transactionType' => self::REQUEST_TYPE_VOID,
-                'refTransId' => 'myref',
+                'refTransId' => 'foo'
             ]
         ];
+
+        $buildSubject = [
+            'payment' => $this->paymentDOMock,
+        ];
+
         $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }

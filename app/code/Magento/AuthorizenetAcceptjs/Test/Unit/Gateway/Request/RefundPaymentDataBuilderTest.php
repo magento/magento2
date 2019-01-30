@@ -3,25 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Request\VoidDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundPaymentDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Order\Payment\Transaction;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class VoidDataBuilderTest extends TestCase
+class RefundPaymentDataBuilderTest extends TestCase
 {
-    private const REQUEST_TYPE_VOID = 'voidTransaction';
-
     /**
-     * @var VoidDataBuilder
+     * @var RefundPaymentDataBuilder
      */
     private $builder;
 
@@ -42,27 +38,33 @@ class VoidDataBuilderTest extends TestCase
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->builder = new VoidDataBuilder(new SubjectReader());
+        $this->builder = new RefundPaymentDataBuilder(
+            new SubjectReader()
+        );
     }
 
     public function testBuild()
     {
-        $transactionMock = $this->createMock(Transaction::class);
-        $this->paymentMock->method('getAuthorizationTransaction')
-            ->willReturn($transactionMock);
-        $transactionMock->method('getParentTxnId')
-            ->willReturn('myref');
-
-        $buildSubject = [
-            'payment' => $this->paymentDOMock
-        ];
+        $this->paymentMock->method('getAdditionalInformation')
+            ->with('ccLast4')
+            ->willReturn('1111');
 
         $expected = [
             'transactionRequest' => [
-                'transactionType' => self::REQUEST_TYPE_VOID,
-                'refTransId' => 'myref',
+                'payment' => [
+                    'creditCard' => [
+                        'cardNumber' => '1111',
+                        'expirationDate' => 'XXXX'
+                    ]
+                ]
             ]
         ];
+
+        $buildSubject = [
+            'payment' => $this->paymentDOMock,
+            'amount' => 123.45
+        ];
+
         $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }

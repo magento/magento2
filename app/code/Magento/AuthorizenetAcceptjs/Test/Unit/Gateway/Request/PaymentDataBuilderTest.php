@@ -9,7 +9,6 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Request\PaymentDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -33,11 +32,6 @@ class PaymentDataBuilderTest extends TestCase
      */
     private $paymentDOMock;
 
-    /**
-     * @var PassthroughDataObject
-     */
-    private $passthroughData;
-
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
@@ -45,12 +39,8 @@ class PaymentDataBuilderTest extends TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->passthroughData = new PassthroughDataObject();
 
-        $this->builder = new PaymentDataBuilder(
-            new SubjectReader(),
-            $this->passthroughData
-        );
+        $this->builder = new PaymentDataBuilder(new SubjectReader());
     }
 
     public function testBuild()
@@ -59,12 +49,6 @@ class PaymentDataBuilderTest extends TestCase
             ->willReturnMap([
                 ['opaqueDataDescriptor', 'foo'],
                 ['opaqueDataValue', 'bar']
-            ]);
-
-        $this->paymentMock->method('encrypt')
-            ->willReturnMap([
-                ['foo', 'encfoo'],
-                ['bar', 'encbar']
             ]);
 
         $expected = [
@@ -84,7 +68,5 @@ class PaymentDataBuilderTest extends TestCase
         ];
 
         $this->assertEquals($expected, $this->builder->build($buildSubject));
-        $this->assertEquals('encfoo', $this->passthroughData->getData('opaqueDataDescriptor'));
-        $this->assertEquals('encbar', $this->passthroughData->getData('opaqueDataValue'));
     }
 }

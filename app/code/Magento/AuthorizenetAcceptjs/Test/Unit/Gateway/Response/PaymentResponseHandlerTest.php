@@ -47,54 +47,22 @@ class PaymentResponseHandlerTest extends TestCase
 
     public function testHandleDefaultResponse()
     {
-        $this->paymentMock->method('getParentTransactionId')
-            ->willReturn(null);
-        // Assert the id is set
-        $this->paymentMock->expects($this->once())
-            ->method('setTransactionId')
-            ->with('thetransid');
-        // Assert the id is set in the additional info for later
-        $this->paymentMock->expects($this->once())
-            ->method('setTransactionAdditionalInfo')
-            ->with('real_transaction_id', 'thetransid');
+        $this->paymentMock->method('getAdditionalInformation')
+            ->with('ccLast4')
+            ->willReturn('1234');
         // Assert the avs code is saved
         $this->paymentMock->expects($this->once())
             ->method('setCcAvsStatus')
             ->with('avshurray');
         $this->paymentMock->expects($this->once())
+            ->method('setCcLast4')
+            ->with('1234');
+        $this->paymentMock->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(false);
-        // opaque data wasn't provided
-        $this->paymentMock->expects($this->never())
-            ->method('setAdditionalInformation');
 
         $response = [
             'transactionResponse' => [
-                'transId' => 'thetransid',
-                'avsResultCode' => 'avshurray',
-                'responseCode' => self::RESPONSE_CODE_APPROVED,
-            ]
-        ];
-        $subject = [
-            'payment' => $this->paymentDOMock
-        ];
-
-        $this->builder->handle($subject, $response);
-        // Assertions are part of mocking above
-    }
-
-    public function testHandleDifferenceInTransactionId()
-    {
-        $this->paymentMock->method('getParentTransactionId')
-            ->willReturn('somethingElse');
-        // Assert the id is set
-        $this->paymentMock->expects($this->once())
-            ->method('setTransactionId')
-            ->with('thetransid');
-
-        $response = [
-            'transactionResponse' => [
-                'transId' => 'thetransid',
                 'avsResultCode' => 'avshurray',
                 'responseCode' => self::RESPONSE_CODE_APPROVED,
             ]
@@ -109,16 +77,6 @@ class PaymentResponseHandlerTest extends TestCase
 
     public function testHandleHeldResponse()
     {
-        $this->paymentMock->method('getParentTransactionId')
-            ->willReturn(null);
-        // Assert the id is set
-        $this->paymentMock->expects($this->once())
-            ->method('setTransactionId')
-            ->with('thetransid');
-        // Assert the id is set in the additional info for later
-        $this->paymentMock->expects($this->once())
-            ->method('setTransactionAdditionalInfo')
-            ->with('real_transaction_id', 'thetransid');
         // Assert the avs code is saved
         $this->paymentMock->expects($this->once())
             ->method('setCcAvsStatus')
@@ -140,47 +98,8 @@ class PaymentResponseHandlerTest extends TestCase
 
         $response = [
             'transactionResponse' => [
-                'transId' => 'thetransid',
                 'avsResultCode' => 'avshurray',
                 'responseCode' => self::RESPONSE_CODE_HELD,
-            ]
-        ];
-        $subject = [
-            'payment' => $this->paymentDOMock
-        ];
-
-        $this->builder->handle($subject, $response);
-        // Assertions are part of mocking above
-    }
-
-    public function testHandleOpaqueData()
-    {
-        $this->paymentMock->method('getParentTransactionId')
-            ->willReturn(null);
-        // Assert data is added
-
-        $this->paymentMock->expects($this->exactly(2))
-            ->method('setAdditionalInformation')
-            ->withConsecutive(
-                ['opaqueDataDescriptor', 'descriptor'],
-                ['opaqueDataValue', 'value']
-            );
-
-        $response = [
-            'transactionResponse' => [
-                'transId' => 'thetransid',
-                'avsResultCode' => 'avshurray',
-                'responseCode' => self::RESPONSE_CODE_APPROVED,
-                'userFields' => [
-                    [
-                        'name' => 'opaqueDataDescriptor',
-                        'value' => 'descriptor'
-                    ],
-                    [
-                        'name' => 'opaqueDataValue',
-                        'value' => 'value'
-                    ]
-                ]
             ]
         ];
         $subject = [

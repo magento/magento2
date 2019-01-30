@@ -94,11 +94,7 @@ class TransactionDetailsCommand implements CommandInterface
             throw new CommandException(__('There was an error while trying to process the refund.'));
         }
 
-        return new ArrayResult([
-            'type' =>  $response['transaction']['transactionType'],
-            'status' => $response['transaction']['transactionStatus'],
-            'responseCode' => $response['transaction']['responseCode']
-        ]);
+        return new ArrayResult($response);
     }
 }
 

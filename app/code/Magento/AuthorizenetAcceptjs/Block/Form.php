@@ -15,7 +15,7 @@ use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Model\Config as PaymentConfig;
 
 /**
- * Class Form
+ * Block for representing the payment form
  */
 class Form extends Cc
 {

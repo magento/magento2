@@ -11,15 +11,13 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
-use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Chooses the best method of returning the payment based on the status of the transaction
  */
 class RefundTransactionStrategyCommand implements CommandInterface
 {
-    private const REFUND = 'refund';
+    private const REFUND = 'refund_settled';
     private const VOID = 'void';
 
     /**
@@ -64,18 +62,13 @@ class RefundTransactionStrategyCommand implements CommandInterface
      */
     private function getCommand(array $commandSubject)
     {
-        /** @var PaymentDataObjectInterface $paymentDO */
-        $paymentDO = $this->subjectReader->readPayment($commandSubject);
-        $payment = $paymentDO->getPayment();
-        ContextHelper::assertOrderPayment($payment);
-
         $details = $this->commandPool->get('get_transaction_details')
             ->execute($commandSubject)
             ->get();
 
-        if ($details['status'] === 'capturedPendingSettlement') {
+        if ($details['transaction']['transactionStatus'] === 'capturedPendingSettlement') {
             return self::VOID;
-        } elseif ($details['status'] !== 'settledSuccessfully') {
+        } elseif ($details['transaction']['transactionStatus'] !== 'settledSuccessfully') {
             throw new CommandException(__('This transaction cannot be refunded with its current status.'));
         }
 
