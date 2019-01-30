@@ -132,7 +132,7 @@ define([
                             };
 
                         if (solution.getValue($(this)) === elementEvent.value ||
-                            ($(this).prop('multiple') && solution.checkMultiselectValue($(this), elementEvent))
+                            $(this).prop('multiple') && solution.checkMultiselectValue($(this), elementEvent)
                         ) {
                             if (predicate.name) {
                                 require([
@@ -168,7 +168,7 @@ define([
          * @param {Object} elementEvent
          * @returns {Boolean}
          */
-        checkMultiselectValue: function($element, elementEvent) {
+        checkMultiselectValue: function ($element, elementEvent) {
             var isValueSelected = $.inArray(elementEvent.value, $element.val()) >= 0;
 
             if (elementEvent.include) {
