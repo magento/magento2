@@ -23,7 +23,8 @@ use Magento\Framework\App\DeploymentConfig\Writer;
  *
  * {@inheritdoc}
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 {
@@ -147,10 +148,6 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
 
-        $this->assertContains('Deploy using quick strategy', $commandOutput);
-        $this->assertContains('frontend/Magento/blank/en_US', $commandOutput);
-        $this->assertContains('adminhtml/Magento/backend', $commandOutput);
-        $this->assertContains('Execution time:', $commandOutput);
         $this->assertContains('Deployment of static content complete', $commandOutput);
         $this->assertContains('Enabled production mode', $commandOutput);
     }

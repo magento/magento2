@@ -27,4 +27,6 @@ return [
     \Magento\Framework\App\Config\ScopeConfigInterface::class => \Magento\TestFramework\App\Config::class,
     \Magento\Framework\Lock\Backend\Cache::class =>
         \Magento\TestFramework\Lock\Backend\DummyLocker::class,
+    \Magento\Framework\ShellInterface::class => \Magento\TestFramework\App\Shell::class,
+    \Magento\Framework\App\Shell::class => \Magento\TestFramework\App\Shell::class,
 ];
