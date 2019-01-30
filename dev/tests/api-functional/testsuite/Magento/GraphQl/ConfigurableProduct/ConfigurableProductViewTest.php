@@ -407,6 +407,7 @@ QUERY;
                 $variantArray['product']['price']
             );
             $configurableOptions = $this->getConfigurableOptions();
+            $this->assertEquals(1, count($variantArray['attributes']));
             foreach ($variantArray['attributes'] as $attribute) {
                 $hasAssertion = false;
                 foreach ($configurableOptions as $option) {
