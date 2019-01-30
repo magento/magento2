@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-97140"/>
             <group value="sales"/>
             <group value="tax"/>
+            <skip>
+                <issueId value="MAGETWO-97826"/>
+            </skip>
         </annotations>
         <before>
             <!--Create category-->

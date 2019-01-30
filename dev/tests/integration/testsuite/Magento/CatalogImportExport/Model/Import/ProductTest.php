@@ -741,7 +741,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with images works properly
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -792,7 +791,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that errors occurred during importing images are logged.
      *
-     * @magentoDataIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture mediaImportImageFixtureError
@@ -2190,7 +2188,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with images for non-default store works properly.
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      */
@@ -2237,12 +2234,25 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that imported product stock status with backorders functionality enabled can be set to 'out of stock'.
      *
-     * @magentoDataIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithBackordersEnabled()
     {
         $this->importFile('products_to_import_with_backorders_enabled_and_0_qty.csv');
+        $product = $this->getProductBySku('simple_new');
+        $this->assertFalse($product->getDataByKey('quantity_and_stock_status')['is_in_stock']);
+    }
+
+    /**
+     * Test that imported product stock status with stock quantity > 0 and backorders functionality disabled
+     * can be set to 'out of stock'.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithBackordersDisabled()
+    {
+        $this->importFile('products_to_import_with_backorders_disabled_and_not_0_qty.csv');
         $product = $this->getProductBySku('simple_new');
         $this->assertFalse($product->getDataByKey('quantity_and_stock_status')['is_in_stock']);
     }
@@ -2364,7 +2374,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with non existing images does not broke roles on existing images.
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      * @return void
