@@ -388,6 +388,17 @@
             position: relative;
         }
     }
+
+    .form.search.advanced {
+        .field.price {
+            .with-addon {
+                .input-text {
+                    width: 100%;
+                    flex-basis: auto;
+                }
+            }
+        }
+    }
 }
 
 //
@@ -451,7 +462,8 @@
     .form.password.reset,
     .form.send.confirmation,
     .form.password.forget,
-    .form.create.account {
+    .form.create.account,
+    .form.search.advanced {
         min-width: 600px;
         width: 50%;
     }
