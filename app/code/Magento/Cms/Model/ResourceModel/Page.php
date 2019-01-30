@@ -280,7 +280,7 @@ class Page extends AbstractDb
      * @param AbstractModel $object
      * @return bool
      */
-    protected function isValidPageCustomThemeDateRange(AbstractModel $object)
+    private function isValidPageCustomThemeDateRange(AbstractModel $object)
     {
         $fromDate = $object->getData('custom_theme_from');
         $toDate = $object->getData('custom_theme_to');
