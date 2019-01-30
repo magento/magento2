@@ -7,6 +7,7 @@
 /**
  * Test class for \Magento\Paypal\Model\Ipn
  */
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Sales\Model\Order;
@@ -40,6 +41,10 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+
+        $orderStatus = $this->createPartialMock(\Magento\Sales\Model\Order\Config::class, ['getStateDefaultStatus']);
+        $orderStatus->expects($this->any())->method('getStateDefaultStatus')->with(\Magento\Sales\Model\Order::STATE_PROCESSING)->will($this->returnValue(\Magento\Sales\Model\Order::STATE_PROCESSING));
+
         $methods = [
             'create',
             'loadByIncrementId',
@@ -53,7 +58,8 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             'getEmailSent',
             'save',
             'getState',
-            'setStatus'
+            'setStatus',
+            'getConfig'
         ];
         $this->_orderMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, $methods);
         $this->_orderMock->expects($this->any())->method('create')->will($this->returnSelf());
@@ -63,6 +69,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $this->_orderMock->expects($this->any())->method('getStoreId')->will($this->returnSelf());
         $this->_orderMock->expects($this->any())->method('getEmailSent')->will($this->returnValue(true));
         $this->_orderMock->expects($this->any())->method('setStatus')->will($this->returnValue(true));
+        $this->_orderMock->expects($this->any())->method('getConfig')->will($this->returnValue($orderStatus));
 
         $this->configFactory = $this->createPartialMock(\Magento\Paypal\Model\ConfigFactory::class, ['create']);
         $configMock = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)

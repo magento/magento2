@@ -80,7 +80,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
     public function processIpnRequest()
     {
         $this->_addDebugData('ipn', $this->getRequestData());
-
+        xdebug_break();
         try {
             $this->_getConfig();
             $this->_postBack();
@@ -298,8 +298,10 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             $this->getRequestData('mc_gross'),
             $skipFraudDetection && $parentTransactionId
         );
-        $this->_order->setStatus($this->_order->getConfig()->getStateDefaultStatus(
-            \Magento\Sales\Model\Order::STATE_PROCESSING));
+        if ($skipFraudDetection) {
+            $this->_order->setStatus($this->_order->getConfig()->getStateDefaultStatus(
+                \Magento\Sales\Model\Order::STATE_PROCESSING));
+        }
         $this->_order->save();
 
         // notify customer
@@ -378,7 +380,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainPendingReason($reason)))
             ->setTransactionId($this->getRequestData('txn_id'))
             ->setIsTransactionClosed(0)
-            ->update(false);
+            ->update(true);
         $this->_order->save();
     }
 
