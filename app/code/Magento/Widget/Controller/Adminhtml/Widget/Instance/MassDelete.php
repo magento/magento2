@@ -14,7 +14,7 @@ use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Widget\Api\DeleteWidgetInstanceByIdInterface;
+use Magento\Widget\Model\DeleteWidgetInstanceById;
 
 /**
  * Class MassDelete
@@ -29,17 +29,17 @@ class MassDelete extends Action implements HttpPostActionInterface
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var DeleteWidgetInstanceByIdInterface
+     * @var DeleteWidgetInstanceById
      */
     private $deleteWidgetInstanceById;
 
     /**
      * @param Context $context
-     * @param DeleteWidgetInstanceByIdInterface $deleteWidgetInstanceById
+     * @param DeleteWidgetInstanceById $deleteWidgetInstanceById
      */
     public function __construct(
         Context $context,
-        DeleteWidgetInstanceByIdInterface $deleteWidgetInstanceById
+        DeleteWidgetInstanceById $deleteWidgetInstanceById
     ) {
         parent::__construct($context);
         $this->deleteWidgetInstanceById = $deleteWidgetInstanceById;
@@ -49,6 +49,7 @@ class MassDelete extends Action implements HttpPostActionInterface
      * Execute action
      *
      * @return Redirect
+     * @throws \Exception
      */
     public function execute()
     {
@@ -66,7 +67,7 @@ class MassDelete extends Action implements HttpPostActionInterface
             return $resultRedirect->setPath('*/*/');
         }
 
-        foreach ($instanceIds as $key => $instanceId) {
+        foreach ($instanceIds as $instanceId) {
             try {
                 $this->deleteWidgetInstanceById->execute((int) $instanceId);
                 $deletedInstances++;
@@ -82,7 +83,7 @@ class MassDelete extends Action implements HttpPostActionInterface
         if (count($notDeletedInstances)) {
             $this->messageManager->addErrorMessage(__(
                 'Widget(s) with ID(s) %1 were not found',
-                implode(',', $notDeletedInstances)
+                trim(implode(', ', $notDeletedInstances))
             ));
         }
 

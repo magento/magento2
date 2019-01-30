@@ -7,7 +7,6 @@
 namespace Magento\Widget\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Widget\Api\DeleteWidgetInstanceByIdInterface;
 use Magento\Widget\Model\ResourceModel\Widget\Instance as InstanceResourceModel;
 use Magento\Widget\Model\Widget\InstanceFactory as WidgetInstanceFactory;
 use Magento\Widget\Model\Widget\Instance as WidgetInstance;
@@ -15,7 +14,7 @@ use Magento\Widget\Model\Widget\Instance as WidgetInstance;
 /**
  * Class DeleteWidgetInstanceById
  */
-class DeleteWidgetInstanceById implements DeleteWidgetInstanceByIdInterface
+class DeleteWidgetInstanceById
 {
     /**
      * @var InstanceResourceModel
@@ -42,29 +41,31 @@ class DeleteWidgetInstanceById implements DeleteWidgetInstanceByIdInterface
     /**
      * Delete widget instance by given instance ID
      *
-     * @param int $id
+     * @param int $instanceId
      * @return void
+     * @throws \Exception
      */
-    public function execute(int $id)
+    public function execute(int $instanceId)
     {
-        $model = $this->getById($id);
-        var_dump($model->getData(), $id);
+        $model = $this->getWidgetById($instanceId);
+
         $this->resourceModel->delete($model);
     }
 
     /**
-     * @param int $id
+     * @param int $instanceId
      * @return WidgetInstance
      * @throws NoSuchEntityException
      */
-    private function getById(int $id)
+    private function getWidgetById(int $instanceId)
     {
+        /** @var WidgetInstance $widgetInstance */
         $widgetInstance = $this->instanceFactory->create();
 
-        $this->resourceModel->load($widgetInstance, $id);
+        $this->resourceModel->load($widgetInstance, $instanceId);
 
         if (!$widgetInstance->getId()) {
-            throw NoSuchEntityException::singleField('instance_id', $id);
+            throw NoSuchEntityException::singleField('instance_id', $instanceId);
         }
 
         return $widgetInstance;
