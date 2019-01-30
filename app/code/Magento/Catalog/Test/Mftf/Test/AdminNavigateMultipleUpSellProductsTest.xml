@@ -19,9 +19,6 @@
         </annotations>
 
         <before>
-            <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-
             <!--Create Simple Products-->
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
@@ -75,8 +72,14 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
+
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
+            <!--Logout as admin-->
+            <actionGroup ref="logout" stepKey="logout"/>
+
             <!--Delete created data-->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -87,9 +90,8 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deletecreateConfigChildProduct2"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deletecreateConfigChildProduct1"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
-
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open Product Index Page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
@@ -118,7 +120,7 @@
         <waitForPageLoad stepKey="waitForConfigProductToBeAdded"/>
         <click stepKey="clickOnRelatedProducts1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
         <click stepKey="clickOnSaveButton" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <waitForPageLoad stepKey="waitForLoading1"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Go to Product Index Page -->
@@ -141,7 +143,7 @@
         <waitForPageLoad stepKey="waitForSimpleProductToBeAdded"/>
         <scrollTo selector="{{AdminProductFormActionSection.saveButton}}" stepKey="scrollToTheSaveButton"/>
         <click stepKey="clickOnSaveButton1" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading1"/>
+        <waitForPageLoad stepKey="waitForLoading2"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown1"/>
         <waitForPageLoad stepKey="waitForUpdatesTobeSaved1"/>
 
