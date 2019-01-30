@@ -74,4 +74,16 @@
         <data key="website_id">0</data>
         <requiredEntity type="address">US_Address_NY</requiredEntity>
     </entity>
+    <entity name="Customer_With_Different_Default_Billing_Shipping_Addresses" type="customer">
+        <data key="group_id">1</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Default_Billing_Address_TX</requiredEntity>
+        <requiredEntity type="address">US_Default_Shipping_Address_CA</requiredEntity>
+    </entity>
 </entities>
