@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+
+    <system>
+        <section id="cataloginventory">
+            <group id="source_selection_distance_based" translate="label" type="text" sortOrder="600" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>Distance Provider for Distance Based SSA</label>
+                <field id="provider" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0"
+                       showInStore="0" canRestore="1">
+                    <label>Provider</label>
+                    <source_model>Magento\InventoryDistanceBasedSourceSelectionAdminUi\Model\Config\Source\DistanceProvider</source_model>
+                </field>
+            </group>
+            <group id="source_selection_distance_based_google" translate="label" type="text" sortOrder="650" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>Google Distance Provider</label>
+                <field id="api_key" translate="label" type="password" sortOrder="10" showInDefault="1" showInWebsite="0"
+                       showInStore="0">
+                    <label>Google API key</label>
+                    <comment>Geocoding API and Distance Matrix API must enabled in your Google API key to support this feature.</comment>
+                </field>
+                <field id="mode" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0"
+                       showInStore="0" canRestore="1">
+                    <source_model>Magento\InventoryDistanceBasedSourceSelectionAdminUi\Model\Config\Source\GoogleDistanceProvider\Mode</source_model>
+                    <label>Computation mode</label>
+                </field>
+                <field id="value" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0"
+                       showInStore="0" canRestore="1">
+                    <source_model>Magento\InventoryDistanceBasedSourceSelectionAdminUi\Model\Config\Source\GoogleDistanceProvider\Value</source_model>
+                    <label>Value</label>
+                </field>
+                <!-- TODO: Add avoids and traffic models: https://developers.google.com/maps/documentation/distance-matrix/intro#travel_modes -->
+            </group>
+        </section>
+    </system>
+</config>
