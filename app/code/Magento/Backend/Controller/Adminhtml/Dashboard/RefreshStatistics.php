@@ -5,8 +5,8 @@
  */
 
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
-
-class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics implements HttpGetActionInterface
 {
     /**
      * @param \Magento\Backend\App\Action\Context $context
