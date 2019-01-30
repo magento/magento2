@@ -35,10 +35,13 @@
         <element name="freeShipping" type="select" selector="select[name='simple_free_shipping']"/>
         <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
         <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
+        <element name="actionsAggregator" type="select" selector="#actions__1__aggregator"/>
+        <element name="actionsValue" type="select" selector="#actions__1__value"/>
         <element name="operator" type="select" selector="select[name*='[operator]']"/>
         <element name="childAttribute" type="select" selector="select[name*='new_child']"/>
         <element name="optionInput" type="input" selector="ul[class*='rule-param-children'] input[name*='[value]']"/>
         <element name="actionValue" type="input" selector=".rule-param-edit input"/>
+        <element name="applyAction" type="text" selector=".rule-param-apply" timeout="30"/>
         <element name="actionOperator" type="select" selector=".rule-param-edit select"/>
 
         <!-- Manage Coupon Codes sub-form -->
