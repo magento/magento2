@@ -147,7 +147,6 @@ class CustomerRepositoryTest extends WebapiAbstract
      * Validate update by invalid customer.
      *
      * @expectedException \Exception
-     * @expectedExceptionMessageRegExp  /The consumer isn't authorized to access \%resources.|Function \("customerCustomerRepositoryV1Save"\) is not a valid method for this service/
      */
     public function testInvalidCustomerUpdate()
     {
