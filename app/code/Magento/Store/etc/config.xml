@@ -113,7 +113,7 @@
                 <weekend>0,6</weekend>
             </locale>
             <file>
-                <protected_extensions protected="true">
+                <protected_extensions>
                     <php>php</php>
                     <php3>php3</php3>
                     <php4>php4</php4>

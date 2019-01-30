@@ -6,7 +6,6 @@
 namespace Magento\Config\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
-use Magento\Framework\App\Config\Initial as Reader;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\App\ObjectManager;
@@ -116,11 +115,6 @@ class Config extends \Magento\Framework\DataObject
     private $scopeTypeNormalizer;
 
     /**
-     * @var Reader
-     */
-    private $initialConfigReader;
-
-    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Config\Model\Config\Structure $configStructure
@@ -132,7 +126,6 @@ class Config extends \Magento\Framework\DataObject
      * @param array $data
      * @param ScopeResolverPool|null $scopeResolverPool
      * @param ScopeTypeNormalizer|null $scopeTypeNormalizer
-     * @param Reader|null $initialConfigReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -146,8 +139,7 @@ class Config extends \Magento\Framework\DataObject
         SettingChecker $settingChecker = null,
         array $data = [],
         ScopeResolverPool $scopeResolverPool = null,
-        ScopeTypeNormalizer $scopeTypeNormalizer = null,
-        ?Reader $initialConfigReader = null
+        ScopeTypeNormalizer $scopeTypeNormalizer = null
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -163,8 +155,6 @@ class Config extends \Magento\Framework\DataObject
             ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
         $this->scopeTypeNormalizer = $scopeTypeNormalizer
             ?? ObjectManager::getInstance()->get(ScopeTypeNormalizer::class);
-        $this->initialConfigReader = $initialConfigReader ?:
-            ObjectManager::getInstance()->get(Reader::class);
     }
 
     /**
@@ -422,10 +412,6 @@ class Config extends \Magento\Framework\DataObject
                 );
 
                 if ($isReadOnly) {
-                    continue;
-                }
-
-                if ($this->isProtectedNode($groupPath . '/' . $fieldId)) {
                     continue;
                 }
 
@@ -691,23 +677,5 @@ class Config extends \Magento\Framework\DataObject
         }
 
         return $data;
-    }
-
-    /**
-     * Checks if node has 'protected' attribute by given path
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isProtectedNode(string $path): bool
-    {
-        $currentConfigMetaData = $this->initialConfigReader->getMetadata()[$path] ??
-            false;
-
-        if ($currentConfigMetaData && isset($currentConfigMetaData['protected'])) {
-            return true;
-        }
-
-        return false;
     }
 }

@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
+use Magento\Config\Model\Config\Structure;
 
 /**
  * System Configuration Save Controller
@@ -157,7 +159,10 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 'store' => $store,
                 'groups' => $this->_getGroupsForSave(),
             ];
-            /** @var \Magento\Config\Model\Config $configModel  */
+
+            $configData = $this->filterNodes($configData);
+
+            /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
             $this->_eventManager->dispatch('admin_system_config_save', [
@@ -187,5 +192,31 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 '_nosid' => true
             ]
         );
+    }
+
+    /**
+     * Filters nodes by checking exist in system.xml
+     *
+     * @param array $configData
+     * @return array
+     */
+    private function filterNodes(array $configData): array
+    {
+        $systemXmlConfig = $this->_configStructure->getFieldPaths();
+
+        foreach ($configData['groups'] as $configKey => $configFields) {
+            foreach (array_keys($configFields['fields']) as $configFieldName) {
+                $systemConfigArrayKey = $configData['section'] . '/' .
+                    $configKey . '/' .
+                    $configFieldName;
+                if (array_key_exists($systemConfigArrayKey, $systemXmlConfig)) {
+                    continue;
+                }
+
+                unset($configData['groups'][$configKey]['fields'][$configFieldName]);
+            }
+        }
+
+        return $configData;
     }
 }
