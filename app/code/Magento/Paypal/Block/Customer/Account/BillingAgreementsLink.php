@@ -32,10 +32,7 @@ class BillingAgreementsLink extends SortLink
         $moduleEnabled = $this->_scopeConfig->getValue(self::XML_PATH_PAYPAL_PAYMENT_ENABLED);
         $baSignupType = $this->_scopeConfig->getValue(self::XML_PATH_BILLING_AGREEMENT_SIGNUP);
 
-        if (
-            !$moduleEnabled ||
-            $baSignupType == PaypalConfig::EC_BA_SIGNUP_NEVER
-        ) {
+        if (!$moduleEnabled || $baSignupType == PaypalConfig::EC_BA_SIGNUP_NEVER) {
             return '';
         }
 
