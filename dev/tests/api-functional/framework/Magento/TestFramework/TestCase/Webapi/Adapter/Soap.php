@@ -46,7 +46,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
