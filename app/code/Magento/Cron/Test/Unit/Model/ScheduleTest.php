@@ -206,14 +206,14 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->willReturn('UTC');
 
         $this->dateTimeFactory->method('create')
-            ->willReturn(new \DateTime(null, new \DateTimeZone('UTC')));
+            ->willReturn(new \DateTime());
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
             \Magento\Cron\Model\Schedule::class,
             [
                 'timezoneConverter' => $this->timezoneConverter,
-                'dateTimeFactory' => $this->dateTimeFactory
+                'dateTimeFactory' => $this->dateTimeFactory,
             ]
         );
 
@@ -242,14 +242,14 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->willReturn('UTC');
 
         $this->dateTimeFactory->method('create')
-            ->willReturn(new \DateTime(null, new \DateTimeZone('UTC')));
+            ->willReturn(new \DateTime());
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
             \Magento\Cron\Model\Schedule::class,
             [
                 'timezoneConverter' => $this->timezoneConverter,
-                'dateTimeFactory' => $this->dateTimeFactory
+                'dateTimeFactory' => $this->dateTimeFactory,
             ]
         );
 
@@ -272,7 +272,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function tryScheduleDataProvider(): array
     {
         $date = '2011-12-13 14:15:16';
-        $timestamp = (new \DateTime($date, new \DateTimeZone('UTC')))->getTimestamp();
+        $timestamp = (new \DateTime($date))->getTimestamp();
         $day = 'Monday';
         return [
             [$date, [], false],
@@ -286,7 +286,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             [$timestamp, ['*', '14', '*', '*', '*'], true],
             [$timestamp, ['*', '*', '13', '*', '*'], true],
             [$timestamp, ['*', '*', '*', '12', '*'], true],
-            [(new \DateTime($day, new \DateTimeZone('UTC')))->getTimestamp(), ['*', '*', '*', '*', '1'], true],
+            [(new \DateTime($day))->getTimestamp(), ['*', '*', '*', '*', '1'], true],
         ];
     }
 

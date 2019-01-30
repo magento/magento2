@@ -62,8 +62,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param TimezoneInterface $timezoneConverter
-     * @param DateTimeFactory $dateTimeFactory
+     * @param TimezoneInterface|null $timezoneConverter
+     * @param DateTimeFactory|null $dateTimeFactory
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -125,7 +125,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         if (!is_numeric($time)) {
             //convert time from UTC to admin store timezone
             //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
-            $dateTimeUtc = $this->dateTimeFactory->create($time, new \DateTimeZone('UTC'));
+            $dateTimeUtc = $this->dateTimeFactory->create($time);
             $time = $dateTimeUtc->getTimestamp();
         }
         $time = $storeDateTime->setTimestamp($time);
