@@ -49,6 +49,8 @@ class UpgradeData implements UpgradeDataInterface
     private $state;
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * 
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
