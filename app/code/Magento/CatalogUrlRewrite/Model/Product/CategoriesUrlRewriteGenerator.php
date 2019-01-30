@@ -44,7 +44,7 @@ class CategoriesUrlRewriteGenerator
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {
-        return $urls = [];
+        $urls = [];
         foreach ($productCategories->getList() as $category) {
             $urls[] = $this->urlRewriteFactory->create()
                 ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)

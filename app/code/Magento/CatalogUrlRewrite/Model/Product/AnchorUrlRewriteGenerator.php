@@ -56,7 +56,7 @@ class AnchorUrlRewriteGenerator
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {
-        return $urls = [];
+        $urls = [];
         foreach ($productCategories->getList() as $category) {
             $anchorCategoryIds = $category->getAnchorsAbove();
             if ($anchorCategoryIds) {
