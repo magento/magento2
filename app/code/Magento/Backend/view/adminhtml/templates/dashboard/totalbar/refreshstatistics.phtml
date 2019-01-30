@@ -8,21 +8,13 @@
     <div class="page-actions-inner">
         <div class="page-actions-buttons">
             <?= $block->getChildHtml() ?>
-
-            <form class="action-element"
-                  action="<?= $block->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
-                  method="post">
-                <input
-                    name="form_key"
-                    type="hidden"
-                    value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
                 <button
                     class="action-primary"
-                    type="submit"
+                    type="button"
+                    onclick="setLocation('<?= $block->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>')"
                     title="<?= $block->escapeHtmlAttr(__('Reload Data')) ?>">
                     <?= $block->escapeHtml(__('Reload Data')) ?>
                 </button>
-            </form>
         </div>
     </div>
 </div>
