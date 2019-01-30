@@ -10,11 +10,13 @@ namespace Magento\Catalog\Model\Product\Type;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice;
 use Magento\Catalog\Api\Data\SpecialPriceInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Product special price model.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FrontSpecialPrice extends Price
 {
@@ -75,7 +77,7 @@ class FrontSpecialPrice extends Price
             $specialPrice,
             $product->getSpecialFromDate(),
             $product->getSpecialToDate(),
-            $product->getStore()
+            WebsiteInterface::ADMIN_CODE
         );
         $product->setData('special_price', $specialPrice);
 
