@@ -55,7 +55,7 @@ class PredispatchReviewObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
                                  ->disableOriginalConstructor()
@@ -82,7 +82,7 @@ class PredispatchReviewObserverTest extends TestCase
     /**
      * Test with enabled review active config.
      */
-    public function testReviewEnabled() : void
+    public function testReviewEnabled()
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -107,7 +107,7 @@ class PredispatchReviewObserverTest extends TestCase
     /**
      * Test with disabled review active config.
      */
-    public function testReviewDisabled() : void
+    public function testReviewDisabled()
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
