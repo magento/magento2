@@ -171,7 +171,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param string $addressType
      */
-    public function fillQuoteAddressIdInSalesOrderAddressByType(ModuleDataSetupInterface $setup, $addressType)
+    private function fillQuoteAddressIdInSalesOrderAddressByType(ModuleDataSetupInterface $setup, $addressType)
     {
         $salesConnection = $setup->getConnection('sales');
 
@@ -205,12 +205,13 @@ class UpgradeData implements UpgradeDataInterface
             $this->fillQuoteAddressIdInSalesOrderAddressProcessBatch($setup, $result, $addressType);
         }
     }
+
     /**
      * @param ModuleDataSetupInterface $setup
      * @param array $orderAddresses
      * @param string $addressType
      */
-    public function fillQuoteAddressIdInSalesOrderAddressProcessBatch(
+    private function fillQuoteAddressIdInSalesOrderAddressProcessBatch(
         ModuleDataSetupInterface $setup,
         array $orderAddresses,
         $addressType
