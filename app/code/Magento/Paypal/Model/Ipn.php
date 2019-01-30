@@ -80,7 +80,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
     public function processIpnRequest()
     {
         $this->_addDebugData('ipn', $this->getRequestData());
-        xdebug_break();
         try {
             $this->_getConfig();
             $this->_postBack();
