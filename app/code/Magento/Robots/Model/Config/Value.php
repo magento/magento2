@@ -35,7 +35,7 @@ class Value extends ConfigValue implements IdentityInterface
      * @var string
      * @since 100.2.0
      */
-    protected $_cacheTag = true;
+    protected $_cacheTag = [self::CACHE_TAG];
 
     /**
      * @var StoreResolver
