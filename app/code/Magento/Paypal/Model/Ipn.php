@@ -298,6 +298,8 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             $this->getRequestData('mc_gross'),
             $skipFraudDetection && $parentTransactionId
         );
+        $this->_order->setStatus($this->_order->getConfig()->getStateDefaultStatus(
+            \Magento\Sales\Model\Order::STATE_PROCESSING));
         $this->_order->save();
 
         // notify customer

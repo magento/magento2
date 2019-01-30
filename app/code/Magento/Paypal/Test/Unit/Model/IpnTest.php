@@ -53,6 +53,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             'getEmailSent',
             'save',
             'getState',
+            'setStatus'
         ];
         $this->_orderMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, $methods);
         $this->_orderMock->expects($this->any())->method('create')->will($this->returnSelf());
@@ -61,6 +62,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $this->_orderMock->expects($this->any())->method('getMethod')->will($this->returnSelf());
         $this->_orderMock->expects($this->any())->method('getStoreId')->will($this->returnSelf());
         $this->_orderMock->expects($this->any())->method('getEmailSent')->will($this->returnValue(true));
+        $this->_orderMock->expects($this->any())->method('setStatus')->will($this->returnValue(true));
 
         $this->configFactory = $this->createPartialMock(\Magento\Paypal\Model\ConfigFactory::class, ['create']);
         $configMock = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)
