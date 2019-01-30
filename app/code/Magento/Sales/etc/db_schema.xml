@@ -22,119 +22,119 @@
                 comment="Store Id"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_discount_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Canceled"/>
-        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Refunded"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="base_shipping_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Canceled"/>
-        <column xsi:type="decimal" name="base_shipping_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Invoiced"/>
-        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Refunded"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="base_shipping_tax_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Refunded"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Canceled"/>
-        <column xsi:type="decimal" name="base_subtotal_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Invoiced"/>
-        <column xsi:type="decimal" name="base_subtotal_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Refunded"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Canceled"/>
-        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Invoiced"/>
-        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Refunded"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Order Rate"/>
-        <column xsi:type="decimal" name="base_total_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Canceled"/>
-        <column xsi:type="decimal" name="base_total_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Invoiced"/>
-        <column xsi:type="decimal" name="base_total_invoiced_cost" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_total_invoiced_cost" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Total Invoiced Cost"/>
-        <column xsi:type="decimal" name="base_total_offline_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_total_offline_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Total Offline Refunded"/>
-        <column xsi:type="decimal" name="base_total_online_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_total_online_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Total Online Refunded"/>
-        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Paid"/>
         <column xsi:type="decimal" name="base_total_qty_ordered" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Total Qty Ordered"/>
-        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Refunded"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="decimal" name="discount_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Canceled"/>
-        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Invoiced"/>
-        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Refunded"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="shipping_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Canceled"/>
-        <column xsi:type="decimal" name="shipping_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Invoiced"/>
-        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Refunded"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="shipping_tax_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_tax_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping Tax Refunded"/>
         <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Store To Base Rate"/>
         <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Store To Order Rate"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="subtotal_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Canceled"/>
-        <column xsi:type="decimal" name="subtotal_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Invoiced"/>
-        <column xsi:type="decimal" name="subtotal_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Refunded"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="decimal" name="tax_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Canceled"/>
-        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Invoiced"/>
-        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Refunded"/>
-        <column xsi:type="decimal" name="total_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Canceled"/>
-        <column xsi:type="decimal" name="total_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Invoiced"/>
-        <column xsi:type="decimal" name="total_offline_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_offline_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Offline Refunded"/>
-        <column xsi:type="decimal" name="total_online_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_online_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Online Refunded"/>
-        <column xsi:type="decimal" name="total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Paid"/>
         <column xsi:type="decimal" name="total_qty_ordered" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty Ordered"/>
-        <column xsi:type="decimal" name="total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Refunded"/>
         <column xsi:type="smallint" name="can_ship_partially" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Can Ship Partially"/>
@@ -163,27 +163,27 @@
                 comment="Quote Id"/>
         <column xsi:type="int" name="shipping_address_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Shipping Address Id"/>
-        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
-        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Negative"/>
-        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="base_total_due" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_due" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Due"/>
-        <column xsi:type="decimal" name="payment_authorization_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="payment_authorization_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Payment Authorization Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="total_due" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_due" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Due"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
@@ -230,25 +230,25 @@
                 identity="false" default="0" comment="Total Item Count"/>
         <column xsi:type="int" name="customer_gender" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Customer Gender"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Refunded"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Refunded"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
         <column xsi:type="varchar" name="coupon_rule_name" nullable="true" length="255"
                 comment="Coupon Sales Rule Name"/>
@@ -304,13 +304,13 @@
         <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Paid"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Paid"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
         <column xsi:type="varchar" name="base_currency_code" nullable="true" length="3" comment="Base Currency Code"/>
@@ -326,13 +326,13 @@
                 comment="Shipping Method Name"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="255" comment="Customer Email"/>
         <column xsi:type="varchar" name="customer_group" nullable="true" length="255" comment="Customer Group"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping and handling amount"/>
         <column xsi:type="varchar" name="customer_name" nullable="true" length="255" comment="Customer Name"/>
         <column xsi:type="varchar" name="payment_method" nullable="true" length="255" comment="Payment Method"/>
-        <column xsi:type="decimal" name="total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Refunded"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -513,78 +513,78 @@
                 comment="Base Original Price"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Tax Percent"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Tax Invoiced"/>
-        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Tax Invoiced"/>
         <column xsi:type="decimal" name="discount_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Discount Percent"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Discount Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Discount Invoiced"/>
-        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Amount Refunded"/>
-        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Amount Refunded"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Row Total"/>
-        <column xsi:type="decimal" name="base_row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Row Total"/>
-        <column xsi:type="decimal" name="row_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="row_invoiced" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Row Invoiced"/>
-        <column xsi:type="decimal" name="base_row_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_row_invoiced" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Row Invoiced"/>
         <column xsi:type="decimal" name="row_weight" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Row Weight"/>
-        <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Tax Before Discount"/>
-        <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Before Discount"/>
         <column xsi:type="varchar" name="ext_order_item_id" nullable="true" length="255" comment="Ext Order Item Id"/>
         <column xsi:type="smallint" name="locked_do_invoice" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Locked Do Invoice"/>
         <column xsi:type="smallint" name="locked_do_ship" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Locked Do Ship"/>
-        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
-        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Price Incl Tax"/>
-        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Refunded"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Refunded"/>
         <column xsi:type="decimal" name="tax_canceled" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Tax Canceled"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Canceled"/>
-        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Refunded"/>
-        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Refunded"/>
-        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Refunded"/>
-        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Refunded"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
@@ -605,41 +605,41 @@
                 comment="Entity Id"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent Id"/>
-        <column xsi:type="decimal" name="base_shipping_captured" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_captured" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Captured"/>
-        <column xsi:type="decimal" name="shipping_captured" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_captured" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Captured"/>
-        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Refunded"/>
-        <column xsi:type="decimal" name="base_amount_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_amount_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount Paid"/>
-        <column xsi:type="decimal" name="amount_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Canceled"/>
-        <column xsi:type="decimal" name="base_amount_authorized" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_authorized" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Authorized"/>
-        <column xsi:type="decimal" name="base_amount_paid_online" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_paid_online" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Paid Online"/>
-        <column xsi:type="decimal" name="base_amount_refunded_online" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_refunded_online" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Refunded Online"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="amount_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Paid"/>
-        <column xsi:type="decimal" name="amount_authorized" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_authorized" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Authorized"/>
-        <column xsi:type="decimal" name="base_amount_ordered" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_amount_ordered" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount Ordered"/>
-        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Refunded"/>
-        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Refunded"/>
-        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Refunded"/>
-        <column xsi:type="decimal" name="amount_ordered" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_ordered" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Ordered"/>
-        <column xsi:type="decimal" name="base_amount_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Canceled"/>
         <column xsi:type="int" name="quote_payment_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Quote Payment Id"/>
@@ -663,7 +663,7 @@
         <column xsi:type="varchar" name="cc_ss_start_month" nullable="true" length="128" comment="Cc Ss Start Month"/>
         <column xsi:type="varchar" name="echeck_account_type" nullable="true" length="255"
                 comment="Echeck Account Type"/>
-        <column xsi:type="varchar" name="last_trans_id" nullable="true" length="32" comment="Last Trans Id"/>
+        <column xsi:type="varchar" name="last_trans_id" nullable="true" length="255" comment="Last Trans Id"/>
         <column xsi:type="varchar" name="cc_cid_status" nullable="true" length="32" comment="Cc Cid Status"/>
         <column xsi:type="varchar" name="cc_owner" nullable="true" length="128" comment="Cc Owner"/>
         <column xsi:type="varchar" name="cc_type" nullable="true" length="32" comment="Cc Type"/>
@@ -840,9 +840,9 @@
                 comment="Entity Id"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent Id"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
@@ -929,43 +929,43 @@
                 comment="Entity Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Store Id"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Order Rate"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Order Rate"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Base Rate"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
         <column xsi:type="int" name="billing_address_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Billing Address Id"/>
@@ -994,19 +994,19 @@
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Refunded"/>
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
@@ -1077,15 +1077,15 @@
         <column xsi:type="varchar" name="shipping_address" nullable="true" length="255" comment="Shipping Address"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping and handling amount"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -1143,11 +1143,11 @@
                 comment="Base Price"/>
         <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_row_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Row Total"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total"/>
         <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
@@ -1220,53 +1220,53 @@
                 comment="Entity Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Store Id"/>
-        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Order Rate"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Order Rate"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Negative"/>
-        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Base Rate"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="base_adjustment" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_adjustment" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Adjustment"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="adjustment" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Order Id"/>
@@ -1295,17 +1295,17 @@
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
@@ -1362,7 +1362,7 @@
         <column xsi:type="varchar" name="billing_name" nullable="true" length="255" comment="Billing Name"/>
         <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Status"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="32" comment="Order Status"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
@@ -1376,15 +1376,15 @@
         <column xsi:type="varchar" name="payment_method" nullable="true" length="32" comment="Payment Method"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping and handling amount"/>
-        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
-        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
-        <column xsi:type="decimal" name="order_base_grand_total" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="order_base_grand_total" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Order Grand Total"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -1593,31 +1593,31 @@
                 default="0" comment="Total Qty Ordered"/>
         <column xsi:type="decimal" name="total_qty_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Total Qty Invoiced"/>
-        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Income Amount"/>
-        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Revenue Amount"/>
-        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Profit Amount"/>
-        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Invoiced Amount"/>
-        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Canceled Amount"/>
-        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Paid Amount"/>
-        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Refunded Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Tax Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Tax Amount Actual"/>
-        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount"/>
-        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount Actual"/>
-        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount"/>
-        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount Actual"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1647,31 +1647,31 @@
                 default="0" comment="Total Qty Ordered"/>
         <column xsi:type="decimal" name="total_qty_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Total Qty Invoiced"/>
-        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Income Amount"/>
-        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Revenue Amount"/>
-        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Profit Amount"/>
-        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Invoiced Amount"/>
-        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Canceled Amount"/>
-        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Paid Amount"/>
-        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Refunded Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Tax Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Tax Amount Actual"/>
-        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount"/>
-        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount Actual"/>
-        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount"/>
-        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount Actual"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1737,11 +1737,11 @@
         <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Refunded"/>
-        <column xsi:type="decimal" name="online_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="online_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Online Refunded"/>
-        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Offline Refunded"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1767,11 +1767,11 @@
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Refunded"/>
-        <column xsi:type="decimal" name="online_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="online_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Online Refunded"/>
-        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Offline Refunded"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1798,9 +1798,9 @@
                 comment="Shipping Description"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="total_shipping" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_shipping" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Shipping"/>
-        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Shipping Actual"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1829,9 +1829,9 @@
                 comment="Shipping Description"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="total_shipping" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_shipping" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Shipping"/>
-        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Shipping Actual"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1957,17 +1957,17 @@
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <column xsi:type="decimal" name="percent" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Percent"/>
-        <column xsi:type="decimal" name="amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount"/>
         <column xsi:type="int" name="priority" padding="11" unsigned="false" nullable="false" identity="false"
                 comment="Priority"/>
         <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false"
                 comment="Position"/>
-        <column xsi:type="decimal" name="base_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount"/>
         <column xsi:type="smallint" name="process" padding="6" unsigned="false" nullable="false" identity="false"
                 comment="Process"/>
-        <column xsi:type="decimal" name="base_real_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_real_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Real Amount"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_id"/>
@@ -1987,13 +1987,13 @@
                 comment="Item Id"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Real Tax Percent For Item"/>
-        <column xsi:type="decimal" name="amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Tax amount for the item and tax rate"/>
-        <column xsi:type="decimal" name="base_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Base tax amount for the item and tax rate"/>
-        <column xsi:type="decimal" name="real_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="real_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Real tax amount for the item and tax rate"/>
-        <column xsi:type="decimal" name="real_base_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="real_base_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Real base tax amount for the item and tax rate"/>
         <column xsi:type="int" name="associated_item_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Id of the associated item"/>
