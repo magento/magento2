@@ -165,12 +165,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @var CategoryLinkManagementInterface
      */
-    private $categoryLinkManagement;
-
-    /**
-     * @var AssignProductToCategories
-     */
-    private $assignProductToCategories = false;
+    private $linkManagement;
 
     /**
      * ProductRepository constructor.
@@ -227,7 +222,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
         ReadExtensions $readExtensions = null,
-        CategoryLinkManagementInterface $categoryLinkManagement = null
+        CategoryLinkManagementInterface $linkManagement = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -252,7 +247,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->cacheLimit = (int)$cacheLimit;
         $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ReadExtensions::class);
-        $this->categoryLinkManagement = $categoryLinkManagement ?:\Magento\Framework\App\ObjectManager::getInstance()
+        $this->linkManagement = $linkManagement ?:\Magento\Framework\App\ObjectManager::getInstance()
             ->get(CategoryLinkManagementInterface::class);
     }
 
@@ -587,6 +582,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function save(ProductInterface $product, $saveOptions = false)
     {
+        $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
 
         try {
@@ -604,7 +600,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $extensionAttributes = $product->getExtensionAttributes();
             if (empty($extensionAttributes->__toArray())) {
                 $product->setExtensionAttributes($existingProduct->getExtensionAttributes());
-                $this->assignProductToCategories = true;
+                $assignToCategories = true;
             }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
@@ -642,8 +638,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         $this->saveProduct($product);
-        if ($this->assignProductToCategories === true) {
-            $this->categoryLinkManagement->assignProductToCategories(
+        if ($assignToCategories === true) {
+            $this->linkManagement->assignProductToCategories(
                 $product->getSku(),
                 $product->getCategoryIds()
             );
