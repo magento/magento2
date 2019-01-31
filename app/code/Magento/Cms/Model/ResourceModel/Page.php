@@ -104,6 +104,13 @@ class Page extends AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
+        if (!$this->validateDateRange($object)) {
+            throw new LocalizedException(
+                __(
+                    "End Date must follow Start Date."
+                )
+            );
+        }
         /*
          * For two attributes which represent timestamp data in DB
          * we should make converting such as:
@@ -263,6 +270,33 @@ class Page extends AbstractDb
     protected function isValidPageIdentifier(AbstractModel $object)
     {
         return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
+    }
+
+    /**
+     *  Validate date range
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    protected function validateDateRange(AbstractModel $object)
+    {
+        $fromDate = $toDate = null;
+
+        if ($object->getData('custom_theme_from') && $object->getData('custom_theme_to')) {
+            $fromDate = $object->getData('custom_theme_from');
+            $toDate = $object->getData('custom_theme_to');
+        }
+
+        if ($fromDate && $toDate) {
+            $fromDate = new \DateTime($fromDate);
+            $toDate = new \DateTime($toDate);
+
+            if ($fromDate > $toDate) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
