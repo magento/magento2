@@ -6,9 +6,10 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Problem;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
-class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem implements HttpGetActionInterface
+class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Newsletter problems report page
