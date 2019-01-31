@@ -10,7 +10,6 @@ namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Paym
 
 /**
  * Class Index
- * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index

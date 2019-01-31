@@ -13,7 +13,6 @@ use Magento\Sales\Controller\Adminhtml\Order\Create\Reorder as BaseReorder;
 
 /**
  * Class Reorder
- * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Reorder extends BaseReorder implements HttpPostActionInterface

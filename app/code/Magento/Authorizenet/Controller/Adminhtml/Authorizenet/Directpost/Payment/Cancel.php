@@ -13,7 +13,6 @@ use Magento\Sales\Controller\Adminhtml\Order\Create\Cancel as BaseCancel;
 
 /**
  * Class Cancel
- * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Cancel extends BaseCancel implements HttpPostActionInterface

@@ -13,7 +13,6 @@ use Magento\Sales\Controller\Adminhtml\Order\Create\AddConfigured as BaseAddConf
 
 /**
  * Class AddConfigured
- * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class AddConfigured extends BaseAddConfigured implements HttpPutActionInterface

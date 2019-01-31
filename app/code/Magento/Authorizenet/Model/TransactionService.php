@@ -16,7 +16,6 @@ use Magento\Payment\Model\Method\Logger;
 
 /**
  * Class TransactionService
- * @package Magento\Authorizenet\Model
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class TransactionService

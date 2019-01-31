@@ -13,7 +13,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class ProcessData
- * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class ProcessData extends BaseProcessData implements HttpPostActionInterface

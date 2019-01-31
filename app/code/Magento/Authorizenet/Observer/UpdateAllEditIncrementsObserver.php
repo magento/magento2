@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class UpdateAllEditIncrementsObserver
- * @package Magento\Authorizenet\Observer
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class UpdateAllEditIncrementsObserver implements ObserverInterface
