@@ -242,9 +242,11 @@ class InvoiceService implements InvoiceManagementInterface
     {
         if ($orderItem->getProductType() == Type::TYPE_BUNDLE && !$orderItem->isShipSeparately()) {
             foreach ($orderItem->getChildrenItems() as $childItem) {
-                $bundleSelectionAttributes = $this->serializer->unserialize(
-                    $childItem->getProductOptionByCode('bundle_selection_attributes')
-                );
+                $bundleSelectionAttributes = $childItem->getProductOptionByCode('bundle_selection_attributes');
+                if (is_string($bundleSelectionAttributes)) {
+                    $bundleSelectionAttributes = $this->serializer->unserialize($bundleSelectionAttributes);
+                }
+
                 $qtys[$childItem->getId()] = $qtys[$orderItem->getId()] * $bundleSelectionAttributes['qty'];
             }
         }
