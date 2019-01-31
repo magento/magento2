@@ -61,7 +61,9 @@ class QueryComplexityLimiter
     public function execute(): void
     {
         DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
-        DocumentValidator::addRule(new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled()));
+        DocumentValidator::addRule(
+            new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled())
+        );
         DocumentValidator::addRule(new QueryDepth($this->queryDepth));
     }
 }
