@@ -117,12 +117,6 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddValueSortToCollection()
     {
-        $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
-                         ->will($this->returnSelf());
-
-        $this->collection->expects($this->once())->method('order')->with('check_sql asc')
-                         ->will($this->returnSelf());
-
         $this->collection->expects($this->any())->method('getConnection')
                          ->will($this->returnSelf());
         $this->collection->expects($this->any())->method('getCheckSql')

@@ -103,7 +103,7 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * @param string $dir direction
      * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
-    public function addValueSortToCollection(AbstractCollection $collection, string $dir = Collection::SORT_ORDER_DESC) : AbstractSource
+    public function addValueSortToCollection($collection, string $dir = Collection::SORT_ORDER_DESC) : AbstractSource
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $attributeId = $this->getAttribute()->getId();
