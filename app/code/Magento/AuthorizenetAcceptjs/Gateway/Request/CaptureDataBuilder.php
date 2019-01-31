@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
@@ -17,10 +16,8 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Adds the meta transaction information to the request
  */
-class TransactionTypeDataBuilder implements BuilderInterface
+class CaptureDataBuilder implements BuilderInterface
 {
-    private const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
-    private const REQUEST_AUTH_ONLY = 'authOnlyTransaction';
     private const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'priorAuthCaptureTransaction';
 
     /**
@@ -29,27 +26,19 @@ class TransactionTypeDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var PassthroughDataObject
      */
     private $passthroughData;
 
     /**
      * @param SubjectReader $subjectReader
-     * @param Config $config
      * @param PassthroughDataObject $passthroughData
      */
     public function __construct(
         SubjectReader $subjectReader,
-        Config $config,
         PassthroughDataObject $passthroughData
     ) {
         $this->subjectReader = $subjectReader;
-        $this->config = $config;
         $this->passthroughData = $passthroughData;
     }
 
@@ -60,31 +49,25 @@ class TransactionTypeDataBuilder implements BuilderInterface
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
-        $transactionData = [
-            'transactionRequest' => []
-        ];
+        $data = [];
 
         if ($payment instanceof Payment) {
             $authTransaction = $payment->getAuthorizationTransaction();
-            if ($authTransaction) {
-                $refId = $authTransaction->getAdditionalInformation('real_transaction_id');
-                $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
-                $transactionData['transactionRequest']['refTransId'] = $refId;
-            } else {
-                $storeId = $this->subjectReader->readStoreId($buildSubject);
-                $defaultAction = $this->config->getPaymentAction($storeId) === 'authorize'
-                    ? self::REQUEST_AUTH_ONLY
-                    : self::REQUEST_AUTH_AND_CAPTURE;
+            $refId = $authTransaction->getAdditionalInformation('real_transaction_id');
 
-                $transactionData['transactionRequest']['transactionType'] = $defaultAction;
-            }
+            $data = [
+                'transactionRequest' => [
+                    'transactionType' => self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE,
+                    'refTransId' => $refId
+                ]
+            ];
 
             $this->passthroughData->setData(
                 'transactionType',
-                $transactionData['transactionRequest']['transactionType']
+                $data['transactionRequest']['transactionType']
             );
         }
 
-        return $transactionData;
+        return $data;
     }
 }

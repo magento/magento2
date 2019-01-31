@@ -23,7 +23,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
  */
 class CaptureStrategyCommand implements CommandInterface
 {
-    private const AUTHORIZE = 'authorize';
+    private const SALE = 'sale';
     private const CAPTURE = 'settle';
 
     /**
@@ -99,7 +99,7 @@ class CaptureStrategyCommand implements CommandInterface
         // If auth transaction does not exist then execute authorize&capture command
         $captureExists = $this->captureTransactionExists($payment);
         if (!$payment->getAuthorizationTransaction() && !$captureExists) {
-            return self::AUTHORIZE;
+            return self::SALE;
         }
 
         return self::CAPTURE;

@@ -9,25 +9,37 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
+use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Adds the reference transaction to the request
+ * Adds the meta transaction information to the request
  */
-class RefundTransactionDetailsDataBuilder implements BuilderInterface
+class SaleDataBuilder implements BuilderInterface
 {
+    private const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
+
     /**
      * @var SubjectReader
      */
     private $subjectReader;
 
     /**
-     * @param SubjectReader $subjectReader
+     * @var PassthroughDataObject
      */
-    public function __construct(SubjectReader $subjectReader)
-    {
+    private $passthroughData;
+
+    /**
+     * @param SubjectReader $subjectReader
+     * @param PassthroughDataObject $passthroughData
+     */
+    public function __construct(
+        SubjectReader $subjectReader,
+        PassthroughDataObject $passthroughData
+    ) {
         $this->subjectReader = $subjectReader;
+        $this->passthroughData = $passthroughData;
     }
 
     /**
@@ -40,16 +52,16 @@ class RefundTransactionDetailsDataBuilder implements BuilderInterface
         $data = [];
 
         if ($payment instanceof Payment) {
-            $authorizationTransaction = $payment->getAuthorizationTransaction();
-            $transactionId = $authorizationTransaction->getParentTxnId();
-
-            if (empty($transactionId)) {
-                $transactionId = $authorizationTransaction->getTxnId();
-            }
-
             $data = [
-                'transId' => $transactionId
+                'transactionRequest' => [
+                    'transactionType' => self::REQUEST_AUTH_AND_CAPTURE,
+                ]
             ];
+
+            $this->passthroughData->setData(
+                'transactionType',
+                $data['transactionRequest']['transactionType']
+            );
         }
 
         return $data;

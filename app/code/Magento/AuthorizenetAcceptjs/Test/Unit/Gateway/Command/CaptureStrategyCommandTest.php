@@ -120,7 +120,7 @@ class CaptureStrategyCommandTest extends TestCase
         // Assert authorize command was used
         $this->commandPoolMock->expects($this->once())
             ->method('get')
-            ->with('authorize')
+            ->with('sale')
             ->willReturn($this->commandMock);
         // Assert execute was called and with correct data
         $this->commandMock->expects($this->once())

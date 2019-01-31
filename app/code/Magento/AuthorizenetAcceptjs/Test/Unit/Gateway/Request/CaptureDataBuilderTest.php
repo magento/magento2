@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
-use Magento\AuthorizenetAcceptjs\Gateway\Request\TransactionTypeDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\CaptureDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -16,10 +15,10 @@ use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class TransactionTypeDataBuilderTest extends TestCase
+class CaptureDataBuilderTest extends TestCase
 {
     /**
-     * @var TransactionTypeDataBuilder
+     * @var CaptureDataBuilder
      */
     private $builder;
 
@@ -34,27 +33,20 @@ class TransactionTypeDataBuilderTest extends TestCase
     private $paymentDOMock;
 
     /**
-     * @var Config|MockObject
-     */
-    private $configMock;
-
-    /**
      * @var PassthroughDataObject
      */
     private $passthroughData;
 
     protected function setUp()
     {
-        $this->configMock = $this->createMock(Config::class);
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
         $this->passthroughData = new PassthroughDataObject();
 
-        $this->builder = new TransactionTypeDataBuilder(
+        $this->builder = new CaptureDataBuilder(
             new SubjectReader(),
-            $this->configMock,
             $this->passthroughData
         );
     }
@@ -81,40 +73,5 @@ class TransactionTypeDataBuilderTest extends TestCase
 
         $this->assertEquals($expected, $this->builder->build($buildSubject));
         $this->assertEquals('priorAuthCaptureTransaction', $this->passthroughData->getData('transactionType'));
-    }
-
-    /**
-     * @dataProvider defaultActionProvider
-     */
-    public function testBuildWillPerformDefaultActionWhenAuthorizeTransactionDoesntExists($configValue, $expectedType)
-    {
-        $this->configMock->method('getPaymentAction')
-            ->with(123)
-            ->willReturn($configValue);
-        $this->paymentMock->method('getAuthorizationTransaction')
-            ->willReturn(null);
-
-        $expected = [
-            'transactionRequest' => [
-                'transactionType' => $expectedType
-            ]
-        ];
-
-        $buildSubject = [
-            'store_id' => 123,
-            'payment' => $this->paymentDOMock,
-        ];
-
-        $this->assertEquals($expected, $this->builder->build($buildSubject));
-        $this->assertEquals($expectedType, $this->passthroughData->getData('transactionType'));
-    }
-
-    public function defaultActionProvider()
-    {
-        return [
-            ['authorize', 'authOnlyTransaction'],
-            ['authorize_capture', 'authCaptureTransaction'],
-            ['someothervalue', 'authCaptureTransaction'],
-        ];
     }
 }
