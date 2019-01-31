@@ -727,7 +727,7 @@ class Product extends AbstractResource
      * Extends parent method to be appropriate for product.
      * Store id is required to correctly identify attribute value we are working with.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @since 101.1.0
      */
