@@ -328,4 +328,21 @@
         </assertEquals>
     </actionGroup>
 
+    <!-- This action group goes to the product index page, opens the drop down and clicks the specified product type for adding a product -->
+    <actionGroup name="GoToSpecifiedCreateProductPage">
+        <arguments>
+            <argument type="string" name="productType" defaultValue="simple"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct(productType)}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForFormToLoad"/>
+    </actionGroup>
+
+    <!-- This action group simply navigates to the product catalog page -->
+    <actionGroup name="GoToProductCatalogPage">
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+    </actionGroup>
+
 </actionGroups>

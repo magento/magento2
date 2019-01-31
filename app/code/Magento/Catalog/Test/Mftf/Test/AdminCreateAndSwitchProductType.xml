@@ -13,7 +13,7 @@
             <features value="Catalog"/>
             <stories value="Product Type Switching"/>
             <title value="Admin should be able to switch a new product from simple to virtual"/>
-            <description value="Admin should be able to switch a new product from simple to virtual at the time the product is created"/>
+            <description value="After selecting a simple product when adding Admin should be switch to virtual implicitly"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10925"/>
             <group value="testMe"/>
@@ -22,6 +22,9 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
         </before>
         <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetSearch"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
@@ -51,7 +54,7 @@
             <features value="Catalog"/>
             <stories value="Product Type Switching"/>
             <title value="Admin should be able to switch a new product from virtual to simple"/>
-            <description value="Admin should be able to switch a new product from virtual to simple at the time the product is created"/>
+            <description value="After selecting a virtual product when adding Admin should be switch to simple implicitly"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10925"/>
             <group value="testMe"/>
