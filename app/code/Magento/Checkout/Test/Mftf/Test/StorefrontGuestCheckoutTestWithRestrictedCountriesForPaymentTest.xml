@@ -29,8 +29,8 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <magentoCLI command="config:set payment/checkmo/allowspecific" arguments="0" stepKey="unsetAllowSpecificCountiesValue"/>
-            <magentoCLI command="config:set payment/checkmo/specificcountry" arguments="''" stepKey="unsetSpecificCountryValue" />
+            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="unsetAllowSpecificCountiesValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="unsetSpecificCountryValue" />
         </after>
 
         <!-- Add product to cart -->
