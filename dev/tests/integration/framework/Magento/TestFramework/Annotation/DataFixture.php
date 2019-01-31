@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Implementation of the @magentoDataFixture DocBlock annotation
- */
-
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use PHPUnit\Framework\Exception;
 
+/**
+ * Implementation of the @magentoDataFixture DocBlock annotation.
+ */
 class DataFixture
 {
     /**
@@ -178,6 +177,10 @@ class DataFixture
     }
 
     /**
+     * Get method annotations.
+     *
+     * Overwrites class-defined annotations.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
