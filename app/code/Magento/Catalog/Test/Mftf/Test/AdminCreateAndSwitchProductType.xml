@@ -16,7 +16,8 @@
             <description value="After selecting a simple product when adding Admin should be switch to virtual implicitly"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10925"/>
-            <group value="testMe"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -57,7 +58,8 @@
             <description value="After selecting a virtual product when adding Admin should be switch to simple implicitly"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10925"/>
-            <group value="testMe"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="openProductFillForm">
             <argument name="productType" value="virtual"/>
