@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\App;
+
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
  */
