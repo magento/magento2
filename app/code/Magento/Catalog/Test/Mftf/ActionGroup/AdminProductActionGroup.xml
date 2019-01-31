@@ -333,6 +333,7 @@
         <arguments>
             <argument type="string" name="productType" defaultValue="simple"/>
         </arguments>
+        <comment userInput="actionGroup:GoToSpecifiedCreateProductPage" stepKey="actionGroupComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addTypeProduct(productType)}}" stepKey="clickAddProduct"/>
@@ -341,8 +342,16 @@
 
     <!-- This action group simply navigates to the product catalog page -->
     <actionGroup name="GoToProductCatalogPage">
+        <comment userInput="actionGroup:GoToProductCatalogPage" stepKey="actionGroupComment"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
     </actionGroup>
 
+    <actionGroup name="SetProductUrlKey">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{product.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+    </actionGroup>
 </actionGroups>

@@ -23,6 +23,7 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
         </before>
         <after>
+            <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
@@ -33,22 +34,31 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <!-- Open Dropdown and select simple product option -->
+        <comment stepKey="beforeOpenProductFillForm" userInput="Selecting Product from the Add Product Dropdown"/>
         <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="openProductFillForm">
             <argument name="productType" value="simple"/>
         </actionGroup>
 
         <!-- Fill form for Virtual Product Type -->
+        <comment stepKey="beforeFillProductForm" userInput="Filling Product Form"/>
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetProductUrlKey" stepKey="setProductUrl">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
         <!-- Check that product was added with implicit type change -->
+        <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
         <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetSearch"/>
         <actionGroup ref="filterProductGridByName" stepKey="searchForProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Virtual Product"  stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
     </test>
     <test name="AdminCreateVirtualProductSwitchToSimpleTest" extends="AdminCreateSimpleProductSwitchToVirtualTest">
         <annotations>
