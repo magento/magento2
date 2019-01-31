@@ -971,7 +971,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $data = $connection->fetchCol($select, $bind);
 
         if ($object->getData($entityIdField)) {
-            return $this->uniqueValidator->validate($attribute, $object, $entityIdField, $data);
+            return $this->uniqueValidator->validate($attribute, $object, $this, $entityIdField, $data);
         }
 
         return !count($data);
