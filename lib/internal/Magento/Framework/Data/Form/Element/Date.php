@@ -9,11 +9,15 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * Date element
+ */
 class Date extends AbstractElement
 {
     /**
@@ -50,8 +54,7 @@ class Date extends AbstractElement
     }
 
     /**
-     * If script executes on x64 system, converts large
-     * numeric values to timestamp limit
+     * If script executes on x64 system, converts large numeric values to timestamp limit
      *
      * @param int $value
      * @return int
@@ -82,13 +85,14 @@ class Date extends AbstractElement
             $this->_value = $value;
             return $this;
         }
-        if (preg_match('/^[0-9]+$/', $value)) {
-            $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
-            return $this;
-        }
 
         try {
-            $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            if (preg_match('/^[0-9]+$/', $value)) {
+                $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
+            } else {
+                $this->_value = new \DateTime($value);
+                $this->_value->setTimezone(new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            }
         } catch (\Exception $e) {
             $this->_value = '';
         }
@@ -97,6 +101,7 @@ class Date extends AbstractElement
 
     /**
      * Get date value as string.
+     *
      * Format can be specified, or it will be taken from $this->getFormat()
      *
      * @param string $format (compatible with \DateTime)
@@ -146,7 +151,7 @@ class Date extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('admin__control-text  input-text');
+        $this->addClass('admin__control-text input-text input-date');
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {

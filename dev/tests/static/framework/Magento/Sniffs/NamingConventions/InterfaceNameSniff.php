@@ -8,12 +8,15 @@ namespace Magento\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
+/**
+ * Validates that interface name ends with "Interface" suffix.
+ */
 class InterfaceNameSniff implements Sniff
 {
     const INTERFACE_SUFFIX = 'Interface';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -21,7 +24,7 @@ class InterfaceNameSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $sourceFile, $stackPtr)
     {
