@@ -10,6 +10,7 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Block;
 
 use Magento\AuthorizenetAcceptjs\Block\Payment;
 use Magento\AuthorizenetAcceptjs\Model\Ui\ConfigProvider;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,7 +32,7 @@ class PaymentTest extends TestCase
     {
         $contextMock = $this->createMock(Context::class);
         $this->configMock = $this->createMock(ConfigProvider::class);
-        $this->block = new Payment($contextMock, $this->configMock);
+        $this->block = new Payment($contextMock, $this->configMock, new Json());
     }
 
     public function testConfigIsCreated()

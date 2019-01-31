@@ -16,6 +16,8 @@ use Magento\Payment\Model\Config as PaymentConfig;
 
 /**
  * Block for representing the payment form
+ *
+ * @api
  */
 class Form extends Cc
 {
@@ -53,7 +55,7 @@ class Form extends Cc
      *
      * @return boolean
      */
-    public function isCvvEnabled()
+    public function isCvvEnabled(): bool
     {
         return $this->config->isCvvEnabled($this->sessionQuote->getStoreId());
     }

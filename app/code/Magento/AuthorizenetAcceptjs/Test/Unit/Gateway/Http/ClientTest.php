@@ -11,6 +11,7 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Client;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
@@ -96,7 +97,8 @@ class ClientTest extends TestCase
          */
         $apiClient = $this->objectManager->getObject(Client::class, [
             'httpClientFactory' => $this->httpClientFactory,
-            'paymentLogger' => $this->paymentLogger
+            'paymentLogger' => $this->paymentLogger,
+            'json' => new Json()
         ]);
 
         $result = $apiClient->placeRequest($this->getTransferObjectMock($request));
@@ -145,7 +147,8 @@ class ClientTest extends TestCase
         $apiClient = $this->objectManager->getObject(Client::class, [
             'httpClientFactory' => $this->httpClientFactory,
             'paymentLogger' => $this->paymentLogger,
-            'logger' => $this->logger
+            'logger' => $this->logger,
+            'json' => new Json()
         ]);
 
         $apiClient->placeRequest($this->getTransferObjectMock($request));
@@ -192,7 +195,8 @@ class ClientTest extends TestCase
         $apiClient = $this->objectManager->getObject(Client::class, [
             'httpClientFactory' => $this->httpClientFactory,
             'paymentLogger' => $this->paymentLogger,
-            'logger' => $this->logger
+            'logger' => $this->logger,
+            'json' => new Json()
         ]);
 
         $apiClient->placeRequest($this->getTransferObjectMock($request));

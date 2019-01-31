@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Block;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Element\Template\Context;
@@ -26,17 +27,25 @@ class Payment extends Template
     private $config;
 
     /**
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param Context $context
      * @param ConfigProviderInterface $config
+     * @param Json $json
      * @param array $data
      */
     public function __construct(
         Context $context,
         ConfigProviderInterface $config,
+        Json $json,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
+        $this->json = $json;
     }
 
     /**
@@ -48,7 +57,7 @@ class Payment extends Template
         $config = $payment[$this->getMethodCode()];
         $config['code'] = $this->getMethodCode();
 
-        return json_encode($config);
+        return $this->json->serialize($config);
     }
 
     /**

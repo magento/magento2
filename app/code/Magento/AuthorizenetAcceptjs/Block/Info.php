@@ -13,6 +13,8 @@ use Magento\Payment\Block\ConfigurableInfo;
 
 /**
  * Translates the labels for the info block
+ *
+ * @api
  */
 class Info extends ConfigurableInfo
 {
@@ -22,7 +24,7 @@ class Info extends ConfigurableInfo
      * @param string $field
      * @return Phrase
      */
-    protected function getLabel($field)
+    protected function getLabel($field): Phrase
     {
         return __($field);
     }

@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
+use InvalidArgumentException;
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -43,21 +45,29 @@ class Client implements ClientInterface
     private $config;
 
     /**
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param PaymentLogger $paymentLogger
      * @param LoggerInterface $logger
      * @param ZendClientFactory $httpClientFactory
      * @param Config $config
+     * @param Json $json
      */
     public function __construct(
         PaymentLogger $paymentLogger,
         LoggerInterface $logger,
         ZendClientFactory $httpClientFactory,
-        Config $config
+        Config $config,
+        Json $json
     ) {
         $this->httpClientFactory = $httpClientFactory;
         $this->config = $config;
         $this->paymentLogger = $paymentLogger;
         $this->logger = $logger;
+        $this->json = $json;
     }
 
     /**
@@ -83,7 +93,7 @@ class Client implements ClientInterface
         try {
             $client->setUri($url);
             $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-            $client->setRawData(json_encode($request), 'application/json');
+            $client->setRawData($this->json->serialize($request), 'application/json');
             $client->setMethod(ZendClient::POST);
 
             $responseBody = $client->request()
@@ -96,9 +106,9 @@ class Client implements ClientInterface
 
             $log['response'] = $responseBody;
 
-            $data = json_decode($responseBody, true);
-
-            if (json_last_error()) {
+            try {
+                $data = $this->json->unserialize($responseBody);
+            } catch (InvalidArgumentException $e) {
                 throw new \Exception('Invalid JSON was returned by the gateway');
             }
 
