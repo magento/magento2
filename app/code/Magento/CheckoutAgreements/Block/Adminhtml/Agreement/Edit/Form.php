@@ -7,6 +7,9 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 
 use \Magento\Framework\App\ObjectManager;
 
+/**
+ * Class Form
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -34,7 +37,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
    const XML_PATH_SHOW_EDITOR = 'checkout/options/enable_wysiwyg_editor';
     
-
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -59,9 +61,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_systemStore = $systemStore;
         $this->agreementModeOptions = $agreementModeOptions;
         $this->wysiwygConfig = $wysiwygConfig ?: ObjectManager::getInstance()
-                ->get(\Magento\Cms\Model\Wysiwyg\Config::class);
+            ->get(\Magento\Cms\Model\Wysiwyg\Config::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()
-                ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+            ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
        parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -79,6 +81,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare form
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
