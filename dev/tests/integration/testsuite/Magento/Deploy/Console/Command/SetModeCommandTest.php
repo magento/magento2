@@ -94,6 +94,14 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
 
         $this->clearStaticFiles();
+        // enable default mode
+        $this->commandTester = new CommandTester($this->getStaticContentDeployCommand());
+        $this->commandTester->execute(
+            ['mode' => 'default']
+        );
+        $commandOutput = $this->commandTester->getDisplay();
+        $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
+        $this->assertContains('Enabled default mode', $commandOutput);
     }
 
     /**
@@ -111,23 +119,11 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
     {
         if ($this->prevMode === 'production') {
             //in production mode, so we have to switch to dev, then to production
-            $this->clearStaticFiles();
             $this->enableAndAssertDeveloperMode();
             $this->enableAndAssertProductionMode();
         } else {
             //already in non production mode
-            //$this->clearStaticFiles();
             $this->enableAndAssertProductionMode();
-
-            // enable previous mode
-            $this->clearStaticFiles();
-            $this->commandTester = new CommandTester($this->getStaticContentDeployCommand());
-            $this->commandTester->execute(
-                ['mode' => $this->prevMode]
-            );
-            $commandOutput = $this->commandTester->getDisplay();
-            $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
-            $this->assertContains('Enabled ' . $this->prevMode . ' mode', $commandOutput);
         }
     }
 
@@ -139,7 +135,6 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
     private function enableAndAssertProductionMode()
     {
         // Enable production mode
-        $this->clearStaticFiles();
         $this->commandTester = new CommandTester($this->getStaticContentDeployCommand());
         $this->commandTester->execute(
             ['mode' => 'production']

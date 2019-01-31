@@ -10,6 +10,8 @@ namespace Magento\TestFramework\App;
 class Shell extends \Magento\Framework\App\Shell
 {
     /**
+     * Override app/shell by running bin/magento located in the integration test and pass environment parameters
+     *
      * @inheritdoc
      */
     public function execute($command, array $arguments = [])

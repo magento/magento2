@@ -58,6 +58,10 @@ class DeploymentConfig
     public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         $config = $this->reader->load();
+        // ignore compiled_config setting because is not set in default mode
+        if (isset($config['cache_types']['compiled_config'])) {
+            unset($config['cache_types']['compiled_config']);
+        }
         if ($this->config != $config) {
             $error = "\n\nERROR: deployment configuration is corrupted. The application state is no longer valid.\n"
                 . 'Further tests may fail.'
