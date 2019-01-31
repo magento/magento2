@@ -1456,17 +1456,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $optionData
      * @return mixed
      */
-    private function getOptionValue($optionName, $defaultOptionsData, $optionData)
+    private function getOptionValue(string $optionName, array $defaultOptionsData, array $optionData)
     {
         $optionId = $optionData['option_id'];
 
-        if (array_key_exists($optionName, $optionData) && $optionData[$optionName] !== null) {
+        if (isset($optionData[$optionName])) {
             return $optionData[$optionName];
         }
 
-        if (array_key_exists($optionId, $defaultOptionsData)
-            && array_key_exists($optionName, $defaultOptionsData[$optionId])
-        ) {
+        if (isset($defaultOptionsData[$optionId][$optionName])) {
             return $defaultOptionsData[$optionId][$optionName];
         }
 

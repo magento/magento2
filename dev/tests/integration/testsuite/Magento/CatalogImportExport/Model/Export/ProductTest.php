@@ -325,6 +325,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     *
+     * @return void
      */
     public function testExportWithCustomOptionsAndSecondStore()
     {
