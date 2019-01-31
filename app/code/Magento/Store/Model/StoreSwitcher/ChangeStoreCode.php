@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
@@ -27,10 +28,10 @@ class ChangeStoreCode implements StoreSwitcherInterface
     {
         if ($fromStore->isUseStoreInUrl()) {
             if (\strpos($redirectUrl, $fromStore->getBaseUrl()) !== false) {
-                $redirectUrl = \str_replace($fromStore->getBaseUrl(), $targetStore->getBaseUrl(), $redirectUrl);
-            } else {
-                $redirectUrl = $targetStore->getBaseUrl();
+                return \str_replace($fromStore->getBaseUrl(), $targetStore->getBaseUrl(), $redirectUrl);
             }
+
+            $redirectUrl = $targetStore->getBaseUrl();
         }
 
         return $redirectUrl;
