@@ -27,7 +27,7 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}} {{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
             </actionGroup>
-            <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku '{{name}}'"/>
+            <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="'{{name}}'"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
