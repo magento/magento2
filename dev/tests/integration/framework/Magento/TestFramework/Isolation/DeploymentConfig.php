@@ -87,7 +87,8 @@ class DeploymentConfig
      * @param string $path
      * @return array
      */
-    private function filterIgnoredConfigValues(array $config, string $path = '') {
+    private function filterIgnoredConfigValues(array $config, string $path = '')
+    {
         foreach ($config as $configKeyName => $configValue) {
             $newPath = !empty($path) ?  $path . '/' . $configKeyName : $configKeyName;
             if (is_array($configValue)) {
