@@ -380,4 +380,15 @@ TEMPLATE;
         $dataObject->setAllVisibleItems($visibleItems);
         return $dataObject;
     }
+
+    /**
+     * Test adding callbacks when already filtering.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInappropriateCallbacks()
+    {
+        $this->templateFilter->setVariables(['filter' => $this->templateFilter]);
+        $this->templateFilter->filter('Test {{var filter.addAfterFilterCallback(\'mb_strtolower\')}}');
+    }
 }
