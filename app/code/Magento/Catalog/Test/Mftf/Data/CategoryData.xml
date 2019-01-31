@@ -44,11 +44,11 @@
     </entity>
     <entity name="FirstLevelSubCat" type="category">
         <data key="name" unique="suffix">FirstLevelSubCategory</data>
-        <data key="name_lwr" unique="suffix">subcategory</data>
+        <data key="name_lwr" unique="suffix">firstlevelsubcategory</data>
     </entity>
     <entity name="SecondLevelSubCat" type="category">
         <data key="name" unique="suffix">SecondLevelSubCategory</data>
-        <data key="name_lwr" unique="suffix">subcategory</data>
+        <data key="name_lwr" unique="suffix">secondlevelsubcategory</data>
     </entity>
     <entity name="ThirdLevelSubCat" type="category">
         <data key="name" unique="suffix">ThirdLevelSubCategory</data>
