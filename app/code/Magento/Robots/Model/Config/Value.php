@@ -32,9 +32,8 @@ class Value extends ConfigValue implements IdentityInterface
     const CACHE_TAG = 'robots';
 
     /**
-     * Model cache tag for clear cache in after save and after delete
+     * @inheritdoc
      *
-     * @var string
      * @since 100.2.0
      */
     protected $_cacheTag = [self::CACHE_TAG];
