@@ -44,7 +44,10 @@ class VoidDataBuilder implements BuilderInterface
 
         if ($payment instanceof Payment) {
             $authorizationTransaction = $payment->getAuthorizationTransaction();
-            $refId = $authorizationTransaction->getParentTxnId();
+            $refId = $authorizationTransaction->getAdditionalInformation('real_transaction_id');
+            if (empty($refId)) {
+                $refId = $authorizationTransaction->getParentTxnId();
+            }
 
             $transactionData['transactionRequest'] = [
                 'transactionType' => self::REQUEST_TYPE_VOID,
