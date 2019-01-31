@@ -172,22 +172,6 @@ return [
             ],
         ],
         '/V1/testmodule1' => [
-            'GET' => [
-                'secure' => false,
-                'service' => [
-                    'class' => \Magento\TestModule1\Service\V1\AllSoapAndRestInterface::class,
-                    'method' => 'item',
-                ],
-                'resources' => [
-                    'Magento_Test1::default' => true,
-                ],
-                'parameters' => [
-                    'id' => [
-                        'force' => true,
-                        'value' => null,
-                    ],
-                ],
-            ],
             'POST' => [
                 'secure' => false,
                 'service' => [
@@ -196,6 +180,22 @@ return [
                 ],
                 'resources' => [
                     'Magento_Test1::resource1' => true,
+                ],
+                'parameters' => [
+                    'id' => [
+                        'force' => true,
+                        'value' => null,
+                    ],
+                ],
+            ],
+            'GET' => [
+                'secure' => false,
+                'service' => [
+                    'class' => \Magento\TestModule1\Service\V1\AllSoapAndRestInterface::class,
+                    'method' => 'item',
+                ],
+                'resources' => [
+                    'Magento_Test1::default' => true,
                 ],
                 'parameters' => [
                     'id' => [
@@ -256,24 +256,6 @@ return [
                 'resources' => [
                     'Magento_Test1::resource1' => true,
                     'Magento_Test1::resource2' => true,
-                ],
-                'parameters' => [
-                    'id' => [
-                        'force' => true,
-                        'value' => null,
-                    ],
-                ],
-            ],
-        ],
-        '/V1/testmodule1' => [
-            'POST' => [
-                'secure' => false,
-                'service' => [
-                    'class' => 'Magento\TestModule1\Service\V1\AllSoapAndRestInterface',
-                    'method' => 'create',
-                ],
-                'resources' => [
-                    'Magento_Test1::resource1' => true,
                 ],
                 'parameters' => [
                     'id' => [
