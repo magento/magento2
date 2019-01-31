@@ -176,8 +176,8 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
                     [
                         'name' => $attribute->getAttributeCode(),
                         'label' => __($attribute->getStoreLabel()),
-                        'class' => $attribute->getFrontendClass(),
-                        'required' => $attribute->isRequired()
+                        'class' => $this->getValidationClasses($attribute),
+                        'required' => $attribute->isRequired(),
                     ]
                 );
                 if ($inputType == 'multiline') {
@@ -226,5 +226,51 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     public function getFormValues()
     {
         return [];
+    }
+
+    /**
+     * Retrieve frontend classes according validation rules
+     *
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     *
+     * @return string
+     */
+    private function getValidationClasses(\Magento\Customer\Api\Data\AttributeMetadataInterface $attribute) : string
+    {
+        $out = [];
+        $out[] = $attribute->getFrontendClass();
+
+        $textLengthValidateClasses = $this->getTextLengthValidateClasses($attribute);
+        if (!empty($textLengthValidateClasses)) {
+            $out = array_merge($out, $textLengthValidateClasses);
+        }
+
+        $out = !empty($out) ? implode(' ', array_unique(array_filter($out))) : '';
+        return $out;
+    }
+
+    /**
+     * Retrieve validation classes by min_text_length and max_text_length rules
+     *
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     *
+     * @return array
+     */
+    private function getTextLengthValidateClasses(\Magento\Customer\Api\Data\AttributeMetadataInterface $attribute) : array
+    {
+        $classes = [];
+
+        $validateRules = $attribute->getValidationRules();
+        if (!empty($validateRules['min_text_length'])) {
+            $classes[] = 'minimum-length-' . $validateRules['min_text_length'];
+        }
+        if (!empty($validateRules['max_text_length'])) {
+            $classes[] = 'maximum-length-' . $validateRules['max_text_length'];
+        }
+        if (!empty($classes)) {
+            $classes[] = 'validate-length';
+        }
+
+        return $classes;
     }
 }
