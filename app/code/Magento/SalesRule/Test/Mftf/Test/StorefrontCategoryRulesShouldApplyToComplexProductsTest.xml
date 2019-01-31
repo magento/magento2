@@ -85,11 +85,13 @@
         <!-- 3: Open configurable product 1 and add all his child products to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct1.custom_attributes[url_key]$$)}}" stepKey="amOnConfigurableProductPage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect('$$createConfigProductAttributeCreateConfigurableProduct1.attribute[frontend_labels][0][label]$$')}}"  userInput="$$createConfigProductAttributeOption1CreateConfigurableProduct1.option[store_labels][0][label]$$" stepKey="selectOption"/>
+        <waitForPageLoad stepKey="waitForProductDataChange"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigurableProductToCart">
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct1$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect('$$createConfigProductAttributeCreateConfigurableProduct1.attribute[frontend_labels][0][label]$$')}}"  userInput="$$createConfigProductAttributeOption2CreateConfigurableProduct1.option[store_labels][0][label]$$" stepKey="selectOption2"/>
+        <waitForPageLoad stepKey="waitForProductDataChange2"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigurableProductToCart2">
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct1$$"/>
             <argument name="productCount" value="2"/>
@@ -101,11 +103,13 @@
         <!-- 3: Open configurable product 2 and add all his child products to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct2.custom_attributes[url_key]$$)}}" stepKey="amOnConfigurableProductPage2"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect('$$createConfigProductAttributeCreateConfigurableProduct2.attribute[frontend_labels][0][label]$$')}}"  userInput="$$createConfigProductAttributeOption1CreateConfigurableProduct2.option[store_labels][0][label]$$" stepKey="selectOption3"/>
+        <waitForPageLoad stepKey="waitForProductDataChange3"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigurableProductToCart3">
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct2$$"/>
             <argument name="productCount" value="3"/>
         </actionGroup>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect('$$createConfigProductAttributeCreateConfigurableProduct2.attribute[frontend_labels][0][label]$$')}}"  userInput="$$createConfigProductAttributeOption2CreateConfigurableProduct2.option[store_labels][0][label]$$" stepKey="selectOption4"/>
+        <waitForPageLoad stepKey="waitForProductDataChange4"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigurableProductToCart4">
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct2$$"/>
             <argument name="productCount" value="4"/>
