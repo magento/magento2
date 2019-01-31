@@ -26,12 +26,12 @@ return [
         ["Element 'entity', attribute 'notallowed': The attribute 'notallowed' is not allowed.\nLine: 1\n"],
     ],
     'entity_model_with_invalid_value' => [
-        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="afwer34" ' .
+        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="34afwer" ' .
         'behaviorModel="test" /></config>',
         [
-            "Element 'entity', attribute 'model': [facet 'pattern'] The value 'afwer34' is not " .
-            "accepted by the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
-            "Element 'entity', attribute 'model': 'afwer34' is not a valid value of the atomic type" .
+            "Element 'entity', attribute 'model': [facet 'pattern'] The value '34afwer' is not " .
+            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
+            "Element 'entity', attribute 'model': '34afwer' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
     ],
@@ -40,7 +40,7 @@ return [
         '</config>',
         [
             "Element 'entity', attribute 'behaviorModel': [facet 'pattern'] The value '666' is not accepted by " .
-            "the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
+            "the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
             "Element 'entity', attribute 'behaviorModel': '666' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
