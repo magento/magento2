@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
@@ -162,6 +163,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $readExtensions;
 
     /**
+     * @var CategoryLinkManagementInterface
+     */
+    private $categoryLinkManagement;
+
+    /**
+     * @var AssignProductToCategories
+     */
+    private $assignProductToCategories = false;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -187,6 +198,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
      * @param ReadExtensions|null $readExtensions
+     * @param Magento\Catalog\Api\CategoryLinkManagementInterface|null $categoryLinkManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -214,7 +226,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
-        ReadExtensions $readExtensions = null
+        ReadExtensions $readExtensions = null,
+        CategoryLinkManagementInterface $categoryLinkManagement = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -239,6 +252,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->cacheLimit = (int)$cacheLimit;
         $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ReadExtensions::class);
+        $this->categoryLinkManagement = $categoryLinkManagement ?:\Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CategoryLinkManagementInterface::class);
     }
 
     /**
@@ -589,6 +604,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $extensionAttributes = $product->getExtensionAttributes();
             if (empty($extensionAttributes->__toArray())) {
                 $product->setExtensionAttributes($existingProduct->getExtensionAttributes());
+                $this->assignProductToCategories = true;
             }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
@@ -626,6 +642,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         $this->saveProduct($product);
+        if ($this->assignProductToCategories === true) {
+            $this->categoryLinkManagement->assignProductToCategories(
+                $product->getSku(),
+                $product->getCategoryIds()
+            );
+        }
         $this->removeProductFromLocalCache($product->getSku());
         unset($this->instancesById[$product->getId()]);
 
