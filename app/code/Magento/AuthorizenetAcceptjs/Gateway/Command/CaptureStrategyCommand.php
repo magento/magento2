@@ -75,7 +75,7 @@ class CaptureStrategyCommand implements CommandInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $commandSubject)
+    public function execute(array $commandSubject): void
     {
         /** @var PaymentDataObjectInterface $paymentDO */
         $paymentDO = $this->subjectReader->readPayment($commandSubject);
@@ -91,7 +91,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param PaymentDataObjectInterface $paymentDO
      * @return string
      */
-    private function getCommand(PaymentDataObjectInterface $paymentDO)
+    private function getCommand(PaymentDataObjectInterface $paymentDO): string
     {
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
@@ -111,7 +111,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param OrderPaymentInterface $payment
      * @return bool
      */
-    private function captureTransactionExists(OrderPaymentInterface $payment)
+    private function captureTransactionExists(OrderPaymentInterface $payment): bool
     {
         $this->searchCriteriaBuilder->addFilters(
             [

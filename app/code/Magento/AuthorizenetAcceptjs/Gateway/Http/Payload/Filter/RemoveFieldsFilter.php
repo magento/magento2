@@ -31,7 +31,7 @@ class RemoveFieldsFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    public function filter(array $data)
+    public function filter(array $data): array
     {
         foreach ($this->fields as $field) {
             unset($data[$field]);

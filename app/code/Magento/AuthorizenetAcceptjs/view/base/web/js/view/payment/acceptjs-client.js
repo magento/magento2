@@ -17,31 +17,33 @@ define([
         },
 
         /**
-         * @{inheritDoc}
+         * @{inheritdoc}
          */
         initialize: function () {
             validatorHandler.initialize();
 
             this._super();
+
+            return this;
         },
 
         /**
          * Creates the token pair with the provided data
          *
+         * @param {Object} data
          * @return {jQuery.Deferred}
          */
         createTokens: function (data) {
-            var self = this,
-                deferred = $.Deferred();
+            var deferred = $.Deferred();
 
-            if (self.acceptjsClient) {
-                self._createTokens(deferred, data);
+            if (this.acceptjsClient) {
+                this._createTokens(deferred, data);
             } else {
-                acceptjsFactory(self.environment)
+                acceptjsFactory(this.environment)
                     .done(function (client) {
-                        self.acceptjsClient = client;
-                        self._createTokens(deferred, data);
-                    });
+                        this.acceptjsClient = client;
+                        this._createTokens(deferred, data);
+                    }.bind(this));
             }
 
             return deferred.promise();

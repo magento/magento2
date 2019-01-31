@@ -16,9 +16,7 @@ define([
             dependency = 'acceptjssandbox';
         }
 
-        require(
-            [dependency],
-            function (accept) {
+        require([dependency], function (accept) {
                 var $body = $('body');
 
                 /*

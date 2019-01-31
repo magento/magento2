@@ -8,10 +8,9 @@
 ?>
 <script type="text/x-magento-init">
     {
-        "*": {
+        "#payment_form_<?= $block->escapeJs($block->escapeHtml($block->getMethodCode())) ?>": {
             "Magento_AuthorizenetAcceptjs/js/payment-form": {
-                "config": <?= /* @noEscape */ $block->getPaymentConfig() ?>,
-                "formSelector": "#payment_form_<?= $block->escapeJs($block->escapeHtml($block->getMethodCode())) ?>"
+                "config": <?= /* @noEscape */ $block->getPaymentConfig() ?>
             }
         }
     }

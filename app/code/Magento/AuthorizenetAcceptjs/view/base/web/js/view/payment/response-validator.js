@@ -14,7 +14,7 @@ define([
          * Validate Authorizenet-Acceptjs response
          *
          * @param {Object} context
-         * @returns {Object}
+         * @returns {jQuery.Deferred}
          */
         validate: function (context) {
             var state = $.Deferred(),

@@ -6,10 +6,9 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/lib/view/utils/dom-observer',
-    'mage/translate',
+    'Magento_Ui/js/lib/view/utils/async',
     'Magento_AuthorizenetAcceptjs/js/view/payment/acceptjs-client'
-], function ($, Class, alert, domObserver, $t, AcceptjsClient) {
+], function ($, Class, alert, async, AcceptjsClient) {
     'use strict';
 
     return Class.extend({
@@ -38,25 +37,23 @@ define([
         },
 
         /**
-         * Set list of observable attributes
-         *
-         * @returns {exports.initObservable}
+         * @{inheritdoc}
          */
         initObservable: function () {
-            var self = this;
-
-            self.$selector = $('#' + self.selector);
+            this.$selector = $('#' + self.selector);
             this._super()
                 .observe('active');
 
             // re-init payment method events
-            self.$selector.off('changePaymentMethod.' + this.code)
+            this.$selector.off('changePaymentMethod.' + this.code)
                 .on('changePaymentMethod.' + this.code, this.changePaymentMethod.bind(this));
 
             // listen block changes
-            domObserver.get('#' + self.container, function () {
-                self.$selector.off('submit');
-            });
+            async.async({
+                selector: '#' + this.container
+            }, function () {
+                this.$selector.off('submit');
+            }.bind(this));
 
             return this;
         },
@@ -66,7 +63,7 @@ define([
          *
          * @param {Object} event
          * @param {String} method
-         * @returns {exports.changePaymentMethod}
+         * @returns {Object}
          */
         changePaymentMethod: function (event, method) {
             this.active(method === this.code);
@@ -110,7 +107,7 @@ define([
             $(this.getSelector('cc_exp_year')).val('');
 
             if (this.useCvv) {
-                $(self.getSelector('cc_cid')).val('');
+                $(this.getSelector('cc_cid')).val('');
             }
         },
 
@@ -118,8 +115,7 @@ define([
          * Trigger order submit
          */
         submitOrder: function () {
-            var self = this,
-                authData = {},
+            var authData = {},
                 cardData = {},
                 secureData = {};
 
@@ -129,12 +125,12 @@ define([
             authData.clientKey = this.clientKey;
             authData.apiLoginID = this.apiLoginID;
 
-            cardData.cardNumber = $(self.getSelector('cc_number')).val();
-            cardData.month = $(self.getSelector('cc_exp_month')).val();
-            cardData.year = $(self.getSelector('cc_exp_year')).val();
+            cardData.cardNumber = $(this.getSelector('cc_number')).val();
+            cardData.month = $(this.getSelector('cc_exp_month')).val();
+            cardData.year = $(this.getSelector('cc_exp_year')).val();
 
             if (this.useCvv) {
-                cardData.cardCode = $(self.getSelector('cc_cid')).val();
+                cardData.cardCode = $(this.getSelector('cc_cid')).val();
             }
 
             secureData.authData = authData;
@@ -145,19 +141,19 @@ define([
             this.acceptjsClient.createTokens(secureData)
                 .always(function () {
                     $('body').trigger('processStop');
-                    self.enableEventListeners();
-                })
+                    this.enableEventListeners();
+                }.bind(this))
                 .done(function (tokens) {
-                    self.setPaymentDetails(tokens);
-                    self.placeOrder.call(self);
-                })
+                    this.setPaymentDetails(tokens);
+                    this.placeOrder.call(self);
+                }.bind(this))
                 .fail(function (messages) {
-                    self.tokens = null;
+                    this.tokens = null;
 
                     if (messages.length > 0) {
-                        self._showError(messages[0]);
+                        this._showError(messages[0]);
                     }
-                });
+                }.bind(this));
 
             return false;
         },

@@ -17,7 +17,7 @@ interface FilterInterface
      * Filters some data before use
      *
      * @param array $data
-     * @return mixed
+     * @return array
      */
-    public function filter(array $data);
+    public function filter(array $data): array;
 }

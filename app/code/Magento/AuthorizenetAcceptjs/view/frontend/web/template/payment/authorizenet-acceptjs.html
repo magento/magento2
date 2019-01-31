@@ -26,7 +26,7 @@
         </div>
         <form class="form" id="co-payment-form" method="post" afterRender="initFormElement">
             <render args="ccForm" />
-            <input type="submit" id="authorizenet_acceptjs_submit"  style="display:none" />
+            <input type="submit" id="authorizenet_acceptjs_submit" class="hidden" />
         </form>
         <div class="checkout-agreements-block">
             <each args="$parent.getRegion('before-place-order')" render="" />
@@ -35,9 +35,10 @@
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
-                        data-bind="click: beforePlaceOrder, attr: {title: $t('Place Order')}"
+                        click="beforePlaceOrder"
+                        attr="title: $t('Place Order')"
                 >
-                    <span data-bind="i18n: 'Place Order'"></span>
+                    <span translate="'Place Order'"></span>
                 </button>
             </div>
         </div>

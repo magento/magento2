@@ -15,7 +15,7 @@ use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
-use \Magento\Payment\Gateway\Command\Result\ArrayResult;
+use Magento\Payment\Gateway\Command\Result\ArrayResult;
 
 /**
  * Chooses the best method of capture based on the context of the payment
@@ -84,14 +84,14 @@ class TransactionDetailsCommand implements CommandInterface
         } catch (Exception $e) {
             $this->logger->critical($e);
 
-            throw new CommandException(__('There was an error while trying to process the refund.'));
+            throw new CommandException(__('There was an error while trying to process the request.'));
         }
 
         $result = $this->validator->validate(
             array_merge($commandSubject, ['response' => $response])
         );
         if (!$result->isValid()) {
-            throw new CommandException(__('There was an error while trying to process the refund.'));
+            throw new CommandException(__('There was an error while trying to process the request.'));
         }
 
         return new ArrayResult($response);

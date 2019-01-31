@@ -83,8 +83,7 @@ define([
          * Prepare data to place order
          */
         beforePlaceOrder: function () {
-            var self = this,
-                authData = {},
+            var authData = {},
                 cardData = {},
                 secureData = {};
 
@@ -113,13 +112,13 @@ define([
                     fullScreenLoader.stopLoader();
                 })
                 .done(function (tokens) {
-                    self.tokens = tokens;
-                    self.placeOrder();
-                })
+                    this.tokens = tokens;
+                    this.placeOrder();
+                }.bind(this))
                 .fail(function (messages) {
-                    self.tokens = null;
-                    self._showErrors(messages);
-                });
+                    this.tokens = null;
+                    this._showErrors(messages);
+                }.bind(this));
         },
 
         /**

@@ -18,7 +18,7 @@ class Cctype extends PaymentCctype
     /**
      * @inheritdoc
      */
-    public function getAllowedTypes()
+    public function getAllowedTypes(): array
     {
         return ['VI', 'MC', 'AE', 'DI', 'JCB', 'DN'];
     }

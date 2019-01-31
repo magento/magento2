@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway;
 
 use Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source\Environment;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Houses configuration for this gateway

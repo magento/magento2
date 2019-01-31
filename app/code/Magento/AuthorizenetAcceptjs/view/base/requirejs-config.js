@@ -5,7 +5,7 @@
 
 var config = {
     shim: {
-        acceptjstest: {
+        acceptjs: {
             exports: 'Accept'
         },
         acceptjssandbox: {

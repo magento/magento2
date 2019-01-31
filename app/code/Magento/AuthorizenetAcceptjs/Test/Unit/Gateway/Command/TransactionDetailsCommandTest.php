@@ -120,7 +120,7 @@ class TransactionDetailsCommandTest extends TestCase
     }
 
     /**
-     * @expectedExceptionMessage There was an error while trying to process the refund.
+     * @expectedExceptionMessage There was an error while trying to process the request.
      * @expectedException \Magento\Payment\Gateway\Command\CommandException
      */
     public function testExceptionIsThrownAndLoggedWhenRequestFails()
@@ -155,7 +155,7 @@ class TransactionDetailsCommandTest extends TestCase
         $this->command->execute($buildSubject);
     }
     /**
-     * @expectedExceptionMessage There was an error while trying to process the refund.
+     * @expectedExceptionMessage There was an error while trying to process the request.
      * @expectedException \Magento\Payment\Gateway\Command\CommandException
      */
     public function testExceptionIsThrownWhenResponseIsInvalid()

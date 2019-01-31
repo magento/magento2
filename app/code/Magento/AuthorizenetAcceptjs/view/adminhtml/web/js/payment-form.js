@@ -4,13 +4,12 @@
  */
 define([
     'Magento_AuthorizenetAcceptjs/js/authorizenet',
-    'jquery',
-    'domReady!'
+    'jquery'
 ], function (AuthorizenetAcceptjs, $) {
     'use strict';
 
-    return function (data) {
-        var $form = $(data.formSelector),
+    return function (data, element) {
+        var $form = $(element),
             config = data.config;
 
         config.active = $form.length > 0 && !$form.is(':hidden');
