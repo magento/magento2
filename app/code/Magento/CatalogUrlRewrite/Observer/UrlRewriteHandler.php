@@ -97,6 +97,7 @@ class UrlRewriteHandler
      * @param Json|null $serializer
      * @param ProductScopeRewriteGenerator|null $productScopeRewriteGenerator
      * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
