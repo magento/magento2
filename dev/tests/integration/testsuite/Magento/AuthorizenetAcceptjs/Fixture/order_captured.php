@@ -19,7 +19,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface as Transactio
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
-
 $addressData = include __DIR__ . '/../../Sales/_files/address_data.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
@@ -57,6 +56,10 @@ $order->setIncrementId('100000002')
     ->setPayment($payment);
 
 $payment->setParentTransactionId(4321);
+
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+$orderRepository->save($order);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);

@@ -10,24 +10,25 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Command;
 
 use Magento\AuthorizenetAcceptjs\Gateway\AbstractTest;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
+use Magento\Sales\Model\Order\Payment;
 
-class TransactionDetailsCommandTest extends AbstractTest
+class VoidCommandTest extends AbstractTest
 {
     /**
-     * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_captured.php
+     * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_auth_only.php
      */
-    public function testTransactionDetails()
+    public function testVoidCommand()
     {
         /** @var CommandPoolInterface $commandPool */
         $commandPool = $this->objectManager->get('AuthorizenetAcceptjsCommandPool');
-        $command = $commandPool->get('get_transaction_details');
+        $command = $commandPool->get('void');
 
         $order = $this->getOrderWithIncrementId('100000002');
         $payment = $order->getPayment();
         $paymentDO = $this->paymentFactory->create($payment);
 
-        $expectedRequest = include __DIR__ . '/../../_files/expected_request/transaction_details.php';
-        $response = include __DIR__ . '/../../_files/response/transaction_details_settled_capture.php';
+        $expectedRequest = include __DIR__ . '/../../_files/expected_request/void.php';
+        $response = include __DIR__ . '/../../_files/response/void.php';
 
         $this->clientMock->method('setRawData')
             ->with(json_encode($expectedRequest), 'application/json');
@@ -35,12 +36,14 @@ class TransactionDetailsCommandTest extends AbstractTest
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));
 
-        $result = $command->execute([
+        $command->execute([
             'payment' => $paymentDO
         ]);
 
-        $resultData = $result->get();
+        /** @var Payment $payment */
 
-        $this->assertEquals($response, $resultData);
+        $this->assertTrue($payment->getIsTransactionClosed());
+        $this->assertTrue($payment->getShouldCloseParentTransaction());
+        $this->assertEquals('1234', $payment->getTransactionAdditionalInfo()['real_transaction_id']);
     }
 }

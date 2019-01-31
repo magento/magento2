@@ -9,9 +9,22 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway;
 
 use Magento\Payment\Model\Method\Adapter;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends AbstractTest
+class ConfigTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
     public function testVerifyConfiguration()
     {
         /** @var Adapter $paymentAdapter */
