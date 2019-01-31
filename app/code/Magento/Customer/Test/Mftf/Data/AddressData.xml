@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerAddressSimple" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">12</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">US</data>
+        <array key="street">
+            <item>7700 W Parmer Ln</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">1234568910</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">78729</data>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
+    </entity>
+    <entity name="US_Address_TX" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
+    <entity name="US_Address_TX_Default_Billing" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
+    <entity name="US_Address_NY" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="country_id">US</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country">United States</data>
+    </entity>
+    <entity name="US_Address_NY_Default_Shipping" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="country_id">US</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country">United States</data>
+    </entity>
+    <entity name="US_Address_NY_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>Apt. 113</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="country_id">US</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country">United States</data>
+    </entity>
+    <entity name="US_Address_CA" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+            <item>113</item>
+        </array>
+        <data key="city">Los Angeles</data>
+        <data key="state">California</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">90001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
+    <!--If required other field can be added to UK_Address entity, dont modify any existing data-->
+    <entity name="UK_Address" type="address">
+        <array key="street">
+        <item>7700 xyz street</item>
+        <item>113</item>
+        </array>
+        <data key="city">London</data>
+        <data key="country_id">GB</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="province">JS</data>
+    </entity>
+    <entity name="UK_Not_Default_Address" type="address">
+        <data key="firstname">Jane</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+        </array>
+        <data key="city">London</data>
+        <data key="postcode">SE1 7RW</data>
+        <data key="country_id">GB</data>
+        <data key="telephone">444-44-444-44</data>
+    </entity>
+    <entity name="US_Address_Utah" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>1234 Some Utah address</item>
+        </array>
+        <data key="city">Provo</data>
+        <data key="state">Utah</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">84001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionUT</requiredEntity>
+    </entity>
+    <entity name="UK_Simple_Address" extends="UK_Not_Default_Address">
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+            <item>7700 xyz street</item>
+        </array>
+        <data key="state">California</data>
+    </entity>
+    <entity name="US_Default_Billing_Address_TX" type="address" extends="US_Address_TX">
+        <data key="default_billing">false</data>
+        <data key="default_shipping">true</data>
+    </entity>
+    <entity name="US_Default_Shipping_Address_CA" type="address" extends="US_Address_CA">
+        <data key="default_billing">true</data>
+        <data key="default_shipping">false</data>
+    </entity>
+</entities>

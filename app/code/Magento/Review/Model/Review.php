@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
@@ -13,6 +14,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
 /**
  * Review model
  *
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Review\Model\Review setCreatedAt(string $value)
  * @method \Magento\Review\Model\Review setEntityId(int $value)
@@ -21,6 +23,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
  * @method int getStatusId()
  * @method \Magento\Review\Model\Review setStatusId(int $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Review extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
@@ -161,7 +164,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Review');
+        $this->_init(\Magento\Review\Model\ResourceModel\Review::class);
     }
 
     /**
@@ -324,6 +327,9 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
                 if ($summary->getEntityPkValue() == $item->getEntityId()) {
                     $item->setRatingSummary($summary);
                 }
+            }
+            if (!$item->getRatingSummary()) {
+                $item->setRatingSummary(new DataObject());
             }
         }
 

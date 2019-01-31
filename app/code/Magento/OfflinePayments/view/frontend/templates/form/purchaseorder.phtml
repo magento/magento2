@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,13 +10,13 @@
  */
 $methodCode = $block->escapeHtml($block->getMethodCode());
 ?>
-<fieldset class="fieldset items <?php /* @noEscape */ echo $methodCode ?>" id="payment_form_<?php /* @noEscape */ echo $methodCode ?>" style="display: none">
+<fieldset class="fieldset items <?= /* @noEscape */ $methodCode ?>" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display: none">
     <div class="field number required">
-        <label for="po_number" class="label"><span><?php echo $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
+        <label for="po_number" class="label"><span><?= $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
         <div class="control">
-            <input type="text" id="po_number" name="payment[po_number]" title="<?php echo $block->escapeHtml(__('Purchase Order Number')) ?>"
+            <input type="text" id="po_number" name="payment[po_number]" title="<?= $block->escapeHtml(__('Purchase Order Number')) ?>"
                    class="input-text required-entry"
-                   value="<?php echo $block->escapeHtml($block->getInfoData('po_number')) ?>" />
+                   value="<?= $block->escapeHtml($block->getInfoData('po_number')) ?>" />
         </div>
     </div>
 </fieldset>

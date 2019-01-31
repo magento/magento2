@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,7 +59,7 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
 
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getSearchBlock()->isPlaceholderContains($welcomeText),
             "Locale not applied."
         );

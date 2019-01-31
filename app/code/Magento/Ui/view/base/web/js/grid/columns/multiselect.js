@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -226,6 +230,15 @@ define([
         },
 
         /**
+        * Selects or deselects all records on the current page.
+        *
+        * @returns {Multiselect} Chainable.
+        */
+        togglePage: function () {
+            return this.isPageSelected() ? this.deselectPage() : this.selectPage();
+        },
+
+        /**
          * Clears the array of not selected records.
          *
          * @returns {Multiselect} Chainable.
@@ -255,7 +268,7 @@ define([
          * Returns identifier of a record.
          *
          * @param {*} id - Id of a record or its' index in a rows array.
-         * @param {Boolean} [isIndex=false] - Flag that specifies whith what
+         * @param {Boolean} [isIndex=false] - Flag that specifies with what
          *      kind of identifier we are dealing with.
          * @returns {*}
          */

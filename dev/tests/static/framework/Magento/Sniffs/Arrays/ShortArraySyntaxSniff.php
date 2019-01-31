@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Arrays;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
-class ShortArraySyntaxSniff implements PHP_CodeSniffer_Sniff
+/**
+ * Validate short array syntax is used.
+ */
+class ShortArraySyntaxSniff implements Sniff
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -19,10 +22,14 @@ class ShortArraySyntaxSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $sourceFile, $stackPtr)
+    public function process(File $sourceFile, $stackPtr)
     {
-        $sourceFile->addError('Short array syntax must be used; expected "[]" but found "array()"', $stackPtr);
+        $sourceFile->addError(
+            'Short array syntax must be used; expected "[]" but found "array()"',
+            $stackPtr,
+            'ShortArraySyntax'
+        );
     }
 }

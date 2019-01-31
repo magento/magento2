@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 ?>
 <header class="header">
-    <img class="logo" src="<?php echo $this->basePath() ?>/pub/images/magento-icon.svg" alt="Magento"/>
+    <img class="logo" src="<?= $this->basePath() ?>/pub/images/magento-icon.svg" alt="Magento"/>
     <h1 class="header-title">A 404 error occurred</h1>
 </header>
 
@@ -37,7 +37,7 @@
     }
     ?>
 
-    <p><?php echo $reasonMessage ?></p>
+    <p><?= $reasonMessage ?></p>
 
 <?php endif ?>
 
@@ -45,7 +45,7 @@
 
     <dl>
         <dt>Controller:</dt>
-        <dd><?php echo $this->escapeHtml( $this->controller ) ?>
+        <dd><?= $this->escapeHtml( $this->controller ) ?>
             <?php
             if ( isset( $this->controller_class )
                  && $this->controller_class
@@ -64,21 +64,21 @@
     <?php if ( isset( $this->exception ) && $this->exception instanceof Exception ): ?>
         <hr/>
         <h2>Additional information:</h2>
-        <h3><?php echo get_class( $this->exception ); ?></h3>
+        <h3><?= get_class( $this->exception ) ?></h3>
         <dl>
             <dt>File:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->exception->getFile() ?>:<?php echo $this->exception->getLine() ?></pre>
+                <pre class="prettyprint linenums"><?= $this->exception->getFile() ?>:<?= $this->exception->getLine() ?></pre>
             </dd>
 
             <dt>Message:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->exception->getMessage() ?></pre>
+                <pre class="prettyprint linenums"><?= $this->exception->getMessage() ?></pre>
             </dd>
 
             <dt>Stack trace:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->exception->getTraceAsString() ?></pre>
+                <pre class="prettyprint linenums"><?= $this->exception->getTraceAsString() ?></pre>
             </dd>
         </dl>
         <?php
@@ -90,21 +90,21 @@
             <ul class="unstyled">
                 <?php while ( $e ) : ?>
                     <li>
-                        <h3><?php echo get_class( $e ); ?></h3>
+                        <h3><?= get_class( $e ) ?></h3>
                         <dl>
                             <dt>File:</dt>
                             <dd>
-                                <pre class="prettyprint linenums"><?php echo $e->getFile() ?>:<?php echo $e->getLine() ?></pre>
+                                <pre class="prettyprint linenums"><?= $e->getFile() ?>:<?= $e->getLine() ?></pre>
                             </dd>
 
                             <dt>Message:</dt>
                             <dd>
-                                <pre class="prettyprint linenums"><?php echo $e->getMessage() ?></pre>
+                                <pre class="prettyprint linenums"><?= $e->getMessage() ?></pre>
                             </dd>
 
                             <dt>Stack trace:</dt>
                             <dd>
-                                <pre class="prettyprint linenums"><?php echo $e->getTraceAsString() ?></pre>
+                                <pre class="prettyprint linenums"><?= $e->getTraceAsString() ?></pre>
                             </dd>
                         </dl>
                     </li>

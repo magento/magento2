@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class AssertAdvancedSearchNoResult extends AbstractConstraint
      */
     public function processAssert(AdvancedResult $resultPage)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $resultPage->getSearchResultBlock()->isVisibleMessages(self::ERROR_MESSAGE),
             "The error message '" . self::ERROR_MESSAGE . "' is not visible."
         );

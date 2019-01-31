@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-class SelectFactoryTest extends \PHPUnit_Framework_TestCase
+class SelectFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
-        $selectRenderer = $this->getMockBuilder('Magento\Framework\DB\Select\SelectRenderer')
+        $selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $parts = [];
-        $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model = new \Magento\Framework\DB\SelectFactory($selectRenderer, $parts);
-        $this->assertInstanceOf('Magento\Framework\DB\Select', $model->create($adapter));
+        $this->assertInstanceOf(\Magento\Framework\DB\Select::class, $model->create($adapter));
     }
 }

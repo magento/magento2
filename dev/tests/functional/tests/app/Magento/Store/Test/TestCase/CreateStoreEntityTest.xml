@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\CreateStoreEntityTest" summary="Create Store View" ticketId="MAGETWO-27647">
         <variation name="CreateStoreEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">store_name_%isolation%</data>
             <data name="store/data/code" xsi:type="string">storecode_%isolation%</data>
             <data name="store/data/is_active" xsi:type="string">Enabled</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend" />
         </variation>
         <variation name="CreateStoreEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">store_name_%isolation%</data>
             <data name="store/data/code" xsi:type="string">storecode_%isolation%</data>
             <data name="store/data/is_active" xsi:type="string">Disabled</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend" />
         </variation>
         <variation name="CreateStoreEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="store/data/group_id/dataset" xsi:type="string">custom</data>
             <data name="store/data/name" xsi:type="string">store_name_%isolation%</data>
             <data name="store/data/code" xsi:type="string">storecode_%isolation%</data>
@@ -41,7 +40,7 @@
             <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend" />
         </variation>
         <variation name="CreateStoreEntityTestVariation4" summary="Create New Localized Store View" ticketId="MAGETWO-12405">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">DE_%isolation%</data>
             <data name="store/data/code" xsi:type="string">de_%isolation%</data>
@@ -50,6 +49,19 @@
             <data name="welcomeText" xsi:type="string">Den gesamten Shop durchsuchen</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
+        </variation>
+        <variation name="CreateStoreEntityTestVariation5" summary="Check the absence of delete button" ticketId="MAGETWO-17475">
+            <data name="store/dataset" xsi:type="string">custom_store</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNoDeleteButton" />
+        </variation>
+        <variation name="CreateDisabledStoreView" summary="Create disabled store view" ticketId="MAGETWO-17475">
+            <data name="store/data/group_id/dataset" xsi:type="string">custom_new_group</data>
+            <data name="store/data/name" xsi:type="string">store_name_%isolation%</data>
+            <data name="store/data/code" xsi:type="string">storecode_%isolation%</data>
+            <data name="store/data/is_active" xsi:type="string">Disabled</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreDisabledErrorSaveMessage" />
         </variation>
     </testCase>
 </config>

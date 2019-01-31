@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Customer address model
  *
+ * @api
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
@@ -120,11 +122,13 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Init model
+     *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\ResourceModel\Address');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Address::class);
     }
 
     /**
@@ -138,7 +142,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         // Set all attributes
         $attributes = $this->dataProcessor
-            ->buildOutputDataArray($address, '\Magento\Customer\Api\Data\AddressInterface');
+            ->buildOutputDataArray($address, \Magento\Customer\Api\Data\AddressInterface::class);
 
         foreach ($attributes as $attributeCode => $attributeData) {
             if (AddressInterface::REGION === $attributeCode) {
@@ -152,9 +156,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         // Need to explicitly set this due to discrepancy in the keys between model and data object
         $this->setIsDefaultBilling($address->isDefaultBilling());
         $this->setIsDefaultShipping($address->isDefaultShipping());
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
-        }
         $customAttributes = $address->getCustomAttributes();
         if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
@@ -166,17 +167,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
         if ($this->getCustomerId() || $this->getParentId()) {
-            if ($this->getCustomer()->getDefaultBillingAddress()) {
-                $defaultBillingAddressId = $this->getCustomer()->getDefaultBillingAddress()->getId();
-            }
-            if ($this->getCustomer()->getDefaultShippingAddress()) {
-                $defaultShippingAddressId = $this->getCustomer()->getDefaultShippingAddress()->getId();
-            }
+            $customer = $this->getCustomer();
+            $defaultBillingAddressId = $customer->getDefaultBilling() ?: $defaultBillingAddressId;
+            $defaultShippingAddressId = $customer->getDefaultShipping() ?: $defaultShippingAddressId;
         }
         return parent::getDataModel($defaultBillingAddressId, $defaultShippingAddressId);
     }
@@ -259,6 +257,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Clone object handler
+     *
      * @return void
      */
     public function __clone()
@@ -299,6 +299,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Create customer model
+     *
      * @return Customer
      */
     protected function _createCustomer()
@@ -354,7 +356,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
     {
@@ -363,8 +366,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * Get new AttributeList dependency for application code.
+     *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @deprecated
+     * @deprecated 100.0.6
      */
     private function getAttributeList()
     {
@@ -374,5 +378,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             );
         }
         return $this->attributeList;
+    }
+
+    /**
+     * Retrieve attribute set id for customer address.
+     *
+     * @return int
+     * @since 100.2.0
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS;
     }
 }

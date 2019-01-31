@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
@@ -60,7 +58,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => '\Magento\Framework\App\ResourceConnection',
+                            'description' => '\\' . \Magento\Framework\App\ResourceConnection::class,
                         ],
                     ],
                 ]
@@ -73,7 +71,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => '\Magento\Framework\DB\Adapter\AdapterInterface',
+                            'description' => '\\' . \Magento\Framework\DB\Adapter\AdapterInterface::class,
                         ],
                     ],
                 ]
@@ -182,7 +180,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     'name' => 'resource',
-                    'type' => '\Magento\Framework\App\ResourceConnection'
+                    'type' => '\\' . \Magento\Framework\App\ResourceConnection::class
                 ],
             ],
             'body' => "\$this->"

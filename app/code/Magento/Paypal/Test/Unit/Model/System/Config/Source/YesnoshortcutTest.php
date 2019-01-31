@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\System\Config\Source;
 
 use Magento\Paypal\Model\System\Config\Source\Yesnoshortcut;
 
-class YesnoshortcutTest extends \PHPUnit_Framework_TestCase
+class YesnoshortcutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Yesnoshortcut

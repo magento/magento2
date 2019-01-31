@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\AclResource\Config;
@@ -27,6 +27,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function getSchema()
     {
@@ -35,6 +37,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function getPerFileSchema()
     {

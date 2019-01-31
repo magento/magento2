@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-class OrderRendererTest extends \PHPUnit_Framework_TestCase
+class OrderRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {
-        $quoteMock = $this->getMockBuilder('Magento\Framework\DB\Platform\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Framework\DB\Platform\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $parts = [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,11 @@ namespace Magento\Setup\Test\Unit\Controller;
 use Magento\Setup\Model\Navigation;
 use Magento\Setup\Controller\StartUpdater;
 
-class StartUpdaterTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class StartUpdaterTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class StartUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StartUpdater|\PHPUnit_Framework_MockObject_MockObject
@@ -43,17 +47,17 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->payloadValidator = $this->getMock('Magento\Setup\Model\PayloadValidator', [], [], '', false);
-        $this->updaterTaskCreator = $this->getMock('Magento\Setup\Model\UpdaterTaskCreator', [], [], '', false);
+        $this->payloadValidator = $this->createMock(\Magento\Setup\Model\PayloadValidator::class);
+        $this->updaterTaskCreator = $this->createMock(\Magento\Setup\Model\UpdaterTaskCreator::class);
 
         $this->controller = new StartUpdater(
             $this->updaterTaskCreator,
             $this->payloadValidator
         );
-        $this->request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $this->response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-        $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $this->request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $this->response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $this->mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -72,7 +76,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 

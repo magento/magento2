@@ -1,0 +1,230 @@
+{
+    "salesrule": {
+        "column": {
+            "rule_id": true,
+            "name": true,
+            "description": true,
+            "from_date": true,
+            "to_date": true,
+            "uses_per_customer": true,
+            "is_active": true,
+            "conditions_serialized": true,
+            "actions_serialized": true,
+            "stop_rules_processing": true,
+            "is_advanced": true,
+            "product_ids": true,
+            "sort_order": true,
+            "simple_action": true,
+            "discount_amount": true,
+            "discount_qty": true,
+            "discount_step": true,
+            "apply_to_shipping": true,
+            "times_used": true,
+            "is_rss": true,
+            "coupon_type": true,
+            "use_auto_generation": true,
+            "uses_per_coupon": true
+        },
+        "index": {
+            "SALESRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "salesrule_coupon": {
+        "column": {
+            "coupon_id": true,
+            "rule_id": true,
+            "code": true,
+            "usage_limit": true,
+            "usage_per_customer": true,
+            "times_used": true,
+            "expiration_date": true,
+            "is_primary": true,
+            "created_at": true,
+            "type": true
+        },
+        "index": {
+            "SALESRULE_COUPON_RULE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_COUPON_RULE_ID_SALESRULE_RULE_ID": true,
+            "SALESRULE_COUPON_CODE": true,
+            "SALESRULE_COUPON_RULE_ID_IS_PRIMARY": true
+        }
+    },
+    "salesrule_coupon_usage": {
+        "column": {
+            "coupon_id": true,
+            "customer_id": true,
+            "times_used": true
+        },
+        "index": {
+            "SALESRULE_COUPON_USAGE_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_COUPON_USAGE_COUPON_ID_SALESRULE_COUPON_COUPON_ID": true,
+            "SALESRULE_COUPON_USAGE_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
+    "salesrule_customer": {
+        "column": {
+            "rule_customer_id": true,
+            "rule_id": true,
+            "customer_id": true,
+            "times_used": true
+        },
+        "index": {
+            "SALESRULE_CUSTOMER_RULE_ID_CUSTOMER_ID": true,
+            "SALESRULE_CUSTOMER_CUSTOMER_ID_RULE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "SALESRULE_CUSTOMER_RULE_ID_SALESRULE_RULE_ID": true
+        }
+    },
+    "salesrule_label": {
+        "column": {
+            "label_id": true,
+            "rule_id": true,
+            "store_id": true,
+            "label": true
+        },
+        "index": {
+            "SALESRULE_LABEL_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_LABEL_RULE_ID_SALESRULE_RULE_ID": true,
+            "SALESRULE_LABEL_STORE_ID_STORE_STORE_ID": true,
+            "SALESRULE_LABEL_RULE_ID_STORE_ID": true
+        }
+    },
+    "salesrule_product_attribute": {
+        "column": {
+            "rule_id": true,
+            "website_id": true,
+            "customer_group_id": true,
+            "attribute_id": true
+        },
+        "index": {
+            "SALESRULE_PRODUCT_ATTRIBUTE_WEBSITE_ID": true,
+            "SALESRULE_PRODUCT_ATTRIBUTE_CUSTOMER_GROUP_ID": true,
+            "SALESRULE_PRODUCT_ATTRIBUTE_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_PRD_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "SALESRULE_PRD_ATTR_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true,
+            "SALESRULE_PRODUCT_ATTRIBUTE_RULE_ID_SALESRULE_RULE_ID": true,
+            "SALESRULE_PRODUCT_ATTRIBUTE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "salesrule_coupon_aggregated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "coupon_code": true,
+            "coupon_uses": true,
+            "subtotal_amount": true,
+            "discount_amount": true,
+            "total_amount": true,
+            "subtotal_amount_actual": true,
+            "discount_amount_actual": true,
+            "total_amount_actual": true,
+            "rule_name": true
+        },
+        "index": {
+            "SALESRULE_COUPON_AGGREGATED_STORE_ID": true,
+            "SALESRULE_COUPON_AGGREGATED_RULE_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_COUPON_AGGREGATED_STORE_ID_STORE_STORE_ID": true,
+            "SALESRULE_COUPON_AGGRED_PERIOD_STORE_ID_ORDER_STS_COUPON_CODE": true
+        }
+    },
+    "salesrule_coupon_aggregated_updated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "coupon_code": true,
+            "coupon_uses": true,
+            "subtotal_amount": true,
+            "discount_amount": true,
+            "total_amount": true,
+            "subtotal_amount_actual": true,
+            "discount_amount_actual": true,
+            "total_amount_actual": true,
+            "rule_name": true
+        },
+        "index": {
+            "SALESRULE_COUPON_AGGREGATED_UPDATED_STORE_ID": true,
+            "SALESRULE_COUPON_AGGREGATED_UPDATED_RULE_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_COUPON_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID": true,
+            "UNQ_7196FA120A4F0F84E1B66605E87E213E": true
+        }
+    },
+    "salesrule_coupon_aggregated_order": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "coupon_code": true,
+            "coupon_uses": true,
+            "subtotal_amount": true,
+            "discount_amount": true,
+            "total_amount": true,
+            "rule_name": true
+        },
+        "index": {
+            "SALESRULE_COUPON_AGGREGATED_ORDER_STORE_ID": true,
+            "SALESRULE_COUPON_AGGREGATED_ORDER_RULE_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_COUPON_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID": true,
+            "UNQ_1094D1FBBCBB11704A29DEF3ACC37D2B": true
+        }
+    },
+    "salesrule_website": {
+        "column": {
+            "rule_id": true,
+            "website_id": true
+        },
+        "index": {
+            "SALESRULE_WEBSITE_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_WEBSITE_RULE_ID_SALESRULE_RULE_ID": true,
+            "SALESRULE_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "salesrule_customer_group": {
+        "column": {
+            "rule_id": true,
+            "customer_group_id": true
+        },
+        "index": {
+            "SALESRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALESRULE_CUSTOMER_GROUP_RULE_ID_SALESRULE_RULE_ID": true,
+            "SALESRULE_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true
+        }
+    }
+}

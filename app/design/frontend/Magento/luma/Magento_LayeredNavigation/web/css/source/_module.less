@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -32,7 +32,7 @@
 
                 &[data-count]:after {
                     .lib-css(color, @color-white);
-                    background: @color-orange-red1;
+                    background: @theme__color__secondary;
                     border-radius: 2px;
                     content: attr(data-count);
                     display: inline-block;
@@ -178,6 +178,8 @@
 
                 .count {
                     .lib-css(color, @filter-quantity);
+                    font-weight: @font-weight__light;
+                    padding-left: 5px;
                     padding-right: 5px;
 
                     &:before {

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Contact\Model\MailInterface" type="Magento\Contact\Model\Mail" />
+    <preference for="Magento\Contact\Model\ConfigInterface" type="Magento\Contact\Model\Config" />
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="contact/email/recipient_email" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

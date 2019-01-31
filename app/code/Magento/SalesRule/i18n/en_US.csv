@@ -40,15 +40,15 @@ Status,Status
 Coupons/Discounts,Coupons/Discounts
 Promotions,Promotions
 "You deleted the rule.","You deleted the rule."
-"We can\'t delete the rule right now. Please review the log and try again.","We can\'t delete the rule right now. Please review the log and try again."
-"We can\'t find a rule to delete.","We can\'t find a rule to delete."
+"We can't delete the rule right now. Please review the log and try again.","We can't delete the rule right now. Please review the log and try again."
+"We can't find a rule to delete.","We can't find a rule to delete."
 "This rule no longer exists.","This rule no longer exists."
 "Edit Rule","Edit Rule"
 "New Rule","New Rule"
 "New Cart Price Rule","New Cart Price Rule"
 "Rule is not defined","Rule is not defined"
-"Invalid data provided","Invalid data provided"
 "%1 coupon(s) have been generated.","%1 coupon(s) have been generated."
+"Invalid data provided","Invalid data provided"
 "Something went wrong while generating coupons. Please review the log and try again.","Something went wrong while generating coupons. Please review the log and try again."
 Catalog,Catalog
 "The wrong rule is specified.","The wrong rule is specified."
@@ -68,7 +68,7 @@ Discount,Discount
 "No Coupon","No Coupon"
 "Specific Coupon","Specific Coupon"
 Auto,Auto
-"Can\'t acquire coupon.","Can\'t acquire coupon."
+"Can't acquire coupon.","Can't acquire coupon."
 "Update the Product","Update the Product"
 "Special Price","Special Price"
 "To Fixed Value","To Fixed Value"
@@ -79,7 +79,6 @@ Auto,Auto
 Subtotal,Subtotal
 "Total Items Quantity","Total Items Quantity"
 "Total Weight","Total Weight"
-"Payment Method","Payment Method"
 "Shipping Method","Shipping Method"
 "Shipping Postcode","Shipping Postcode"
 "Shipping Region","Shipping Region"
@@ -120,7 +119,6 @@ Inactive,Inactive
 "Some coupons are invalid.","Some coupons are invalid."
 "Item totals are not set for the rule.","Item totals are not set for the rule."
 "%1 Cart Price Rules based on ""%2"" attribute have been disabled.","%1 Cart Price Rules based on ""%2"" attribute have been disabled."
-"To test exception","To test exception"
 "Apply Discount Code","Apply Discount Code"
 "Enter discount code","Enter discount code"
 "Apply Discount","Apply Discount"
@@ -133,25 +131,26 @@ Promotion,Promotion
 Priority,Priority
 "Cart Price Rule","Cart Price Rule"
 Back,Back
+"Currently Active","Currently Active"
 "Rule Information","Rule Information"
 "Rule Name","Rule Name"
 Description,Description
 Websites,Websites
 "Customer Groups","Customer Groups"
 Coupon,Coupon
+"
+                    If you select and save the rule you will be able to generate multiple coupon codes.
+                ","
+                    If you select and save the rule you will be able to generate multiple coupon codes.
+                "
 "Use Auto Generation","Use Auto Generation"
-"
-                        If you select and save the rule you will be able to generate multiple coupon codes.
-                    ","
-                        If you select and save the rule you will be able to generate multiple coupon codes.
-                    "
 "Uses per Coupon","Uses per Coupon"
-"Uses per Customer","Uses per Customer"
 "
-                        Usage limit enforced for logged in customers only.
-                    ","
-                        Usage limit enforced for logged in customers only.
-                    "
+                    Usage limit enforced for logged in customers only.
+                ","
+                    Usage limit enforced for logged in customers only.
+                "
+"Uses per Customer","Uses per Customer"
 From,From
 To,To
 "Public In RSS Feed","Public In RSS Feed"
@@ -159,6 +158,8 @@ Apply,Apply
 "Discount Amount","Discount Amount"
 "Maximum Qty Discount is Applied To","Maximum Qty Discount is Applied To"
 "Discount Qty Step (Buy X)","Discount Qty Step (Buy X)"
+"Discount amount is applied to subtotal only","Discount amount is applied to subtotal only"
+"Discount amount is applied to subtotal and shipping amount separately","Discount amount is applied to subtotal and shipping amount separately"
 "Apply to Shipping Amount","Apply to Shipping Amount"
 "Discard subsequent rules","Discard subsequent rules"
 "Default Rule Label for All Store Views","Default Rule Label for All Store Views"

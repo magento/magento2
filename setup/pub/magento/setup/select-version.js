@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ angular.module('select-version', ['ngStorage'])
         $scope.upgradeReadyForNext = false;
         $scope.upgradeProcessed = false;
         $scope.upgradeProcessError = false;
+        $scope.upgradeAlreadyLatestVersion = false;
         $scope.upgradeProcessErrorMessage = '';
         $scope.componentsReadyForNext = true;
         $scope.componentsProcessed = false;
@@ -27,17 +28,27 @@ angular.module('select-version', ['ngStorage'])
         };
 
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
-            .success(function (data) {
+            .then(function successCallback(resp) {
+                var data = resp.data;
+
                 if (data.responseType != 'error') {
-                    if (data.packages.length == 1) {
-                        $scope.upgradeProcessError = true;
+                    $scope.upgradeProcessError = true;
+
+                    angular.forEach(data.packages, function (value, key) {
+                        if (!value.current) {
+                            return $scope.upgradeProcessError = false;
+                        }
+                    });
+
+                    if ($scope.upgradeProcessError) {
                         $scope.upgradeProcessErrorMessage = "You're already using the latest version, there's nothing for us to do.";
+                        $scope.upgradeAlreadyLatestVersion = true;
                     } else {
                         $scope.selectedOption = [];
                         $scope.versions = [];
                         $scope.data = data;
                         angular.forEach(data.packages, function (value, key) {
-                            if (value.stable) {
+                            if (value.stable && !value.current) {
                                 $scope.versions.push({
                                     'versionInfo': angular.toJson({
                                         'package': value.package,
@@ -45,10 +56,15 @@ angular.module('select-version', ['ngStorage'])
                                     }),
                                     'version': value
                                 });
+                            } else if (value.stable && value.current) {
+                                $scope.currentVersion = value.name;
                             }
                         });
-                        $scope.selectedOption = $scope.versions[0].versionInfo;
-                        $scope.upgradeReadyForNext = true;
+
+                        if ($scope.versions.length > 0) {
+                            $scope.selectedOption = $scope.versions[0].versionInfo;
+                            $scope.upgradeReadyForNext = true;
+                        }
                     }
 
                 } else {
@@ -56,8 +72,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.upgradeProcessErrorMessage = $sce.trustAsHtml(data.error);
                 }
                 $scope.upgradeProcessed = true;
-            })
-            .error(function (data) {
+            }, function errorCallback() {
                 $scope.upgradeProcessError = true;
             });
 
@@ -90,14 +105,16 @@ angular.module('select-version', ['ngStorage'])
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
                     $scope.componentsReadyForNext = false;
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
-                        success(function (data) {
+                        then(function successCallback(resp) {
+                            var data = resp.data;
+
                             if (data.responseType != 'error') {
                                 $scope.components = data.components;
                                 $scope.displayComponents = data.components;
                                 $scope.totalForGrid = data.total;
                                 $scope.total = data.total;
                                 $scope.currentPage = 1;
-                                $scope.rowLimit = 20;
+                                $scope.rowLimit = '20';
                                 $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
                                 for (var i = 0; i < $scope.totalForGrid; i++) {
                                     $scope.packages.push({
@@ -110,8 +127,7 @@ angular.module('select-version', ['ngStorage'])
                                 $scope.componentsProcessError = true;
                             }
                             $scope.componentsProcessed = true;
-                        })
-                        .error(function (data) {
+                        }, function errorCallback() {
                             $scope.componentsProcessError = true;
                         });
                 }
@@ -158,7 +174,7 @@ angular.module('select-version', ['ngStorage'])
             $scope.selectedOption = [];
             $scope.versions = [];
             angular.forEach($scope.data.packages, function (value, key) {
-                if (value.stable || $scope.showUnstable) {
+                if ((value.stable || $scope.showUnstable) && !value.current) {
                     $scope.versions.push({
                         'versionInfo': angular.toJson({
                             'package': value.package,
@@ -168,9 +184,12 @@ angular.module('select-version', ['ngStorage'])
                     });
                 }
             });
-            $scope.selectedOption = $scope.versions[0].versionInfo;
-            $scope.upgradeReadyForNext = true;
-        }
+
+            if ($scope.versions.length > 0) {
+                $scope.selectedOption = $scope.versions[0].versionInfo;
+                $scope.upgradeReadyForNext = true;
+            }
+        };
 
         $scope.update = function() {
             var selectedVersionInfo = angular.fromJson($scope.selectedOption);

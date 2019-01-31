@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
 
-use Magento\ImportExport\Model\Import;
+use Magento\Framework\Phrase;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which is used for tests
@@ -31,24 +32,22 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_entityBehaviors = [
         'catalog_product' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Basic::class,
             'code' => 'basic_behavior',
-            'notes' => [
-                \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => "Note: Product IDs will be regenerated."
-            ],
+            'notes' => [],
         ],
         'customer_composite' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Basic::class,
             'code' => 'basic_behavior',
             'notes' => [],
         ],
         'customer' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
             'code' => 'custom_behavior',
             'notes' => [],
         ],
         'customer_address' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
             'code' => 'custom_behavior',
             'notes' => [],
         ],
@@ -60,17 +59,17 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_uniqueBehaviors = [
-        'basic_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
-        'custom_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+        'basic_behavior' => \Magento\ImportExport\Model\Source\Import\Behavior\Basic::class,
+        'custom_behavior' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
     ];
 
     protected function setUp()
     {
         $this->_importConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ImportExport\Model\Import\Config'
+            \Magento\ImportExport\Model\Import\Config::class
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ImportExport\Model\Import',
+            Import::class,
             ['importConfig' => $this->_importConfig]
         );
     }
@@ -82,7 +81,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Customer\Collection'
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
 
         $existCustomersCount = count($customersCollection->load());
@@ -92,7 +91,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setData(
             Import::FIELD_NAME_VALIDATION_STRATEGY,
-            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+            ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
         );
         $this->_model->importSource();
 
@@ -105,10 +104,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateSource()
     {
+        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
+
         $this->_model->setEntity('catalog_product');
+        $this->_model->setData(Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
+        $this->_model->setData(Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
+
         /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [['sku', 'name']]
         );
         $source->expects($this->any())->method('_getNextRow')->will($this->returnValue(false));
@@ -122,7 +126,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testValidateSourceException()
     {
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],
             '',
             false
@@ -154,6 +158,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityBehaviors()
     {
+        $this->prepareProductNotes();
+
         $importModel = $this->_model;
         $actualBehaviors = $importModel->getEntityBehaviors();
 
@@ -194,5 +200,25 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey($behaviorCode, $actualBehaviors);
             $this->assertEquals($behaviorClass, $actualBehaviors[$behaviorCode]);
         }
+    }
+
+    /**
+     * Add Catalog Product Notes to expected results.
+     *
+     * @return void
+     * @ SuppressWarnings(PHPMD.)
+     */
+    private function prepareProductNotes(): void
+    {
+        $this->_entityBehaviors['catalog_product']['notes'] =
+            [
+                Import::BEHAVIOR_APPEND => new Phrase('New product data is added to the existing product data for'
+                    . ' the existing entries in the database. All fields except sku can be updated.'),
+                Import::BEHAVIOR_REPLACE => new Phrase('The existing product data is replaced with new data.'
+                    . ' <b>Exercise caution when replacing data because the existing product data will be completely'
+                    . ' cleared and all references in the system will be lost.</b>'),
+                Import::BEHAVIOR_DELETE => new  Phrase('Any entities in the import data that already exist in the'
+                    . ' database are deleted from the database.'),
+            ];
     }
 }

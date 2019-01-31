@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
 
@@ -51,13 +54,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['quote', 'select'],
-            [],
-            '',
-            false
-        );
+        $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['quote', 'select']);
         $select = new \Magento\Framework\DB\Select($connection, $this->getSelectRenderer($this->objectManager));
         $connection
             ->expects($this->any())
@@ -67,12 +64,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($select);
-        $resource = $this->getMock(
-            'Magento\Wishlist\Model\ResourceModel\Item',
-            ['getConnection', 'getMainTable', 'getTableName', 'getTable'],
-            [],
-            '',
-            false
+        $resource = $this->createPartialMock(
+            \Magento\Wishlist\Model\ResourceModel\Item::class,
+            ['getConnection', 'getMainTable', 'getTableName', 'getTable']
         );
 
         $resource
@@ -92,20 +86,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getTable')
             ->will($this->returnValue('testMainTableName'));
 
-        $catalogConfFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\ConfigFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $catalogConfFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\ConfigFactory::class,
+            ['create']
         );
 
-        $catalogConf = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Config',
-            ['getEntityTypeId'],
-            [],
-            '',
-            false
+        $catalogConf = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Config::class,
+            ['getEntityTypeId']
         );
         $catalogConf
             ->expects($this->once())
@@ -117,12 +105,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($catalogConf));
 
-        $attribute = $this->getMock(
-            'Magento\Catalog\Model\Entity\Attribute',
-            ['loadByCode', 'getBackendTable', 'getId'],
-            [],
-            '',
-            false
+        $attribute = $this->createPartialMock(
+            \Magento\Catalog\Model\Entity\Attribute::class,
+            ['loadByCode', 'getBackendTable', 'getId']
         );
         $attribute
             ->expects($this->once())
@@ -138,12 +123,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($this->attrId));
 
-        $catalogAttrFactory = $this->getMock(
-            'Magento\Catalog\Model\Entity\AttributeFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $catalogAttrFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\Entity\AttributeFactory::class,
+            ['create']
         );
 
         $catalogAttrFactory
@@ -151,32 +133,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($attribute));
 
-        $store = $this->getMock(
-            'Magento\Store\Model\Store',
-            ['getId'],
-            [],
-            '',
-            false
-        );
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $store
             ->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($this->storeId));
 
-        $storeManager = $this->getMock(
-            'Magento\Store\Model\StoreManager',
-            ['getStore'],
-            [],
-            '',
-            false
-        );
+        $storeManager = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
         $storeManager
             ->expects($this->once())
             ->method('getStore')
             ->will($this->returnValue($store));
 
         $this->collection = $this->objectManager->getObject(
-            'Magento\Wishlist\Model\ResourceModel\Item\Collection',
+            \Magento\Wishlist\Model\ResourceModel\Item\Collection::class,
             [
                 'resource' => $resource,
                 'catalogConfFactory' => $catalogConfFactory,
@@ -185,7 +155,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -197,7 +167,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProductNameFilter()
     {
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())

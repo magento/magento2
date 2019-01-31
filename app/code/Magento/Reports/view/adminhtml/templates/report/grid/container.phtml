@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 ?>
 
 <div class="reports-content">
-    <?php echo $block->getChildHtml('grid.filter.form') ?>
+    <?= $block->getChildHtml('grid.filter.form') ?>
 </div>
 
-<?php echo $block->getGridHtml() ?>
+<?= $block->getGridHtml() ?>
 
 <script>
 require([
@@ -33,7 +32,9 @@ require([
         }
 
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
+            setLocation('<?= /* @escapeNotVerified */ $block->getFilterUrl() ?>filter/'+
+                Base64.encode(Form.serializeElements(elements))+'/'
+            );
         }
     }
 //]]>

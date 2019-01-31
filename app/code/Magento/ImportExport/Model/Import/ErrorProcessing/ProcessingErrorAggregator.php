@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -77,7 +77,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $errorMessage = null,
         $errorDescription = null
     ) {
-        if ($this->isErrorAlreadyAdded($rowNumber, $errorCode)) {
+        if ($this->isErrorAlreadyAdded($rowNumber, $errorCode, $columnName)) {
             return $this;
         }
         $this->processErrorStatistics($errorLevel);
@@ -325,6 +325,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $this->items = [];
         $this->errorStatistics = [];
         $this->invalidRows = [];
+        $this->skippedRows = [];
 
         return $this;
     }
@@ -332,13 +333,14 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param int $rowNum
      * @param string $errorCode
+     * @param string $columnName
      * @return bool
      */
-    protected function isErrorAlreadyAdded($rowNum, $errorCode)
+    protected function isErrorAlreadyAdded($rowNum, $errorCode, $columnName = null)
     {
         $errors = $this->getErrorsByCode([$errorCode]);
         foreach ($errors as $error) {
-            if ($rowNum == $error->getRowNumber()) {
+            if ($rowNum == $error->getRowNumber() && $columnName == $error->getColumnName()) {
                 return true;
             }
         }

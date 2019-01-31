@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Tax\Block\Sales\Order;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Tax extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -260,12 +264,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initDiscount()
     {
-        //        $store  = $this->getStore();
-        //        $parent = $this->getParentBlock();
-        //        if ($this->_config->displaySales) {
-        //
-        //        } elseif ($this->_config->displaySales) {
-        //        }
     }
 
     /**

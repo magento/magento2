@@ -1,15 +1,18 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Api;
 
+use Magento\Framework\Exception\InputException;
+
 /**
  * Interface for managing customers accounts.
  * @api
+ * @since 100.0.2
  */
 interface AccountManagementInterface
 {
@@ -28,13 +31,15 @@ interface AccountManagementInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
      * @param string $redirectUrl
+     * @param string[] $extensions
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createAccount(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
         $password = null,
-        $redirectUrl = ''
+        $redirectUrl = '',
+        $extensions = []
     );
 
     /**
@@ -45,6 +50,7 @@ interface AccountManagementInterface
      * @param string $hash Password hash that we can save directly
      * @param string $redirectUrl URL fed to welcome email templates. Can be used by templates to, for example, direct
      *                            the customer to a product they were looking at after pressing confirmation link.
+     * @param string[] $extensions
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
@@ -53,7 +59,8 @@ interface AccountManagementInterface
     public function createAccountWithPasswordHash(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
         $hash,
-        $redirectUrl = ''
+        $redirectUrl = '',
+        $extensions = []
     );
 
     /**
@@ -143,19 +150,24 @@ interface AccountManagementInterface
     /**
      * Reset customer password.
      *
-     * @param string $email
+     * @param string $email If empty value given then the customer
+     * will be matched by the RP token.
      * @param string $resetToken
      * @param string $newPassword
+     *
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InputException
      */
     public function resetPassword($email, $resetToken, $newPassword);
 
     /**
      * Check if password reset token is valid.
      *
-     * @param int $customerId
+     * @param int $customerId If null is given then a customer
+     * will be matched by the RP token.
      * @param string $resetPasswordLinkToken
+     *
      * @return bool True if the token is valid
      * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired

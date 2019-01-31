@@ -1,9 +1,7 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/*global alert:true*/
 
 define([
     'jquery',
@@ -16,6 +14,7 @@ define([
             options: {
                 categoryIdSelector: 'input[name="id"]',
                 categoryPathSelector: 'input[name="path"]',
+                categoryParentSelector: 'input[name="parent"]',
                 refreshUrl: config.refreshUrl
             },
 
@@ -47,6 +46,7 @@ define([
                 } else {
                     $(this.options.categoryIdSelector).val(data.id).change();
                     $(this.options.categoryPathSelector).val(data.path).change();
+                    $(this.options.categoryParentSelector).val(data.parentId).change();
                 }
             }
         };

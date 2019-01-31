@@ -1,0 +1,170 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@button-advanced-reports__background-color: #007dbd;
+@button-advanced-reports__color: @color-white;
+
+@button-advanced-reports__hover__background-color: darken(@button-advanced-reports__background-color, 3%);
+@button-advanced-reports__hover__border-color: @button-advanced-reports__background-color;
+
+//
+//  Dashboard Section
+//  _____________________________________________
+
+.dashboard-advanced-reports {
+    .lib-vendor-prefix-display(flex);
+    border-color: @color-gray89;
+    border-style: solid;
+    border-width: 1px 0;
+    margin-bottom: @indent__l;
+    padding: @indent__m 0;
+}
+
+.dashboard-advanced-reports-title {
+    &:extend(.dashboard-item-title all);
+    margin-bottom: @indent__s;
+}
+
+.dashboard-advanced-reports-content {
+    line-height: @line-height__xl;
+}
+
+.dashboard-advanced-reports-actions {
+    .lib-vendor-prefix-flex-basis(auto);
+    .lib-vendor-prefix-flex-grow(1);
+    .lib-vendor-prefix-flex-shrink(1);
+    align-self: center;
+    margin-left: @indent__m;
+    margin-right: @page-main-actions__padding;
+    text-align: right;
+}
+
+.action-advanced-reports {
+    &:extend(.abs-action-l all);
+    &:extend(.abs-action-pattern all);
+    background-color: @button-advanced-reports__background-color;
+    border-color: @button-advanced-reports__background-color;
+    color: @button-advanced-reports__color;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
+    white-space: nowrap;
+
+    &:after {
+        &:extend(.abs-icon all);
+        content: @icon-external-link__content;
+        font-size: @font-size__xs;
+        vertical-align: super;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: @button-advanced-reports__hover__background-color;
+        border-color: @button-advanced-reports__hover__border-color;
+        box-shadow: @button__hover__box-shadow;
+        color: @button-advanced-reports__color;
+        text-decoration: none;
+    }
+
+    &.disabled,
+    &[disabled] {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+//
+//  Modal on dashboard
+//  ---------------------------------------------
+
+.advanced-reports-subscription-modal {
+    .modal-inner-wrap {
+        margin-top: 13rem;
+        max-width: 75rem;
+
+        .modal-content,
+        .modal-header {
+            padding-left: 4rem;
+            padding-right: 4rem;
+
+            .action-close {
+                display: none;
+            }
+        }
+    }
+
+    .admin__fieldset {
+        padding: 0;
+    }
+}
+
+.advanced-reports-subscription-text {
+    line-height: @line-height__xl;
+    padding-bottom: 8rem;
+}
+
+.advanced-reports-subscription-close {
+    display: block;
+    float: right;
+}
+
+.advanced-reports-subscription-modal {
+    h1:first-of-type {
+        background: url("Magento_Analytics::images/analytics-icon.svg") no-repeat;
+        background-size: 55px 49.08px;
+        padding: 1.5rem 0 2rem 7rem;
+    }
+}
+
+//
+//  Configuration
+//  _____________________________________________
+
+.config-additional-comment {
+    border-color: @color-gray80;
+    border-style: solid;
+    border-width: 1px 0;
+    margin: @indent__l 0;
+    padding: @indent__m;
+}
+
+.config-additional-comment-title {
+    margin-bottom: @indent__xs;
+}
+
+.config-additional-comment-content {
+    line-height: @line-height__l;
+}
+
+.config-vertical-title {
+    clear: both;
+    color: rgb(48, 48, 48);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: .025em;
+    padding: 1.9rem 2.8rem 1.9rem 0;
+    position: relative;
+}
+
+.config-vertical-comment {
+    line-height: 1.5;
+    margin-bottom: .5em;
+    margin-top: 1rem;
+}
+
+/**
+ * @codingStandardsIgnoreStart
+ */
+#row_analytics_general_vertical {
+    >td.config-vertical-label {
+        >label.admin__field-label {
+            padding-right: 0;
+        }
+    }
+}

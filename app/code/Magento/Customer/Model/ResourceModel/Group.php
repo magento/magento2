@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
@@ -128,5 +128,66 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
         /** @var \Magento\Customer\Model\Group $group */
         $group->setCode(substr($group->getCode(), 0, $group::GROUP_CODE_MAX_LENGTH));
         return parent::_beforeSave($group);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getId() == \Magento\Customer\Model\Group::CUST_GROUP_ALL) {
+            $this->skipReservedId($object);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Here we do not allow to save systems reserved ID.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    private function skipReservedId(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $tableFieldsWithoutIdField = $this->getTableFieldsWithoutIdField();
+        $select = $this->getConnection()->select();
+        $select->from(
+            [$this->getMainTable()],
+            $tableFieldsWithoutIdField
+        )
+            ->where('customer_group_id = ?', \Magento\Customer\Model\Group::CUST_GROUP_ALL);
+
+        $query = $this->getConnection()->insertFromSelect(
+            $select,
+            $this->getMainTable(),
+            $tableFieldsWithoutIdField
+        );
+        $this->getConnection()->query($query);
+        $lastInsertId = $this->getConnection()->lastInsertId();
+
+        $query = $this->getConnection()->deleteFromSelect(
+            $select,
+            $this->getMainTable()
+        );
+        $this->getConnection()->query($query);
+
+        $object->setId($lastInsertId);
+    }
+
+    /**
+     * Get main table fields except of ID field.
+     *
+     * @return array
+     */
+    private function getTableFieldsWithoutIdField()
+    {
+        $fields = $this->getConnection()->describeTable($this->getMainTable());
+        if (isset($fields['customer_group_id'])) {
+            unset($fields['customer_group_id']);
+        }
+
+        return array_keys($fields);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@
             <div id="product_composite_configure_form_confirmed" style="display:none;"></div>
         </div>
         <input type="hidden" name="as_js_varname" value="iFrameResponse" />
-        <input type="hidden" name="form_key" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+        <input type="hidden" name="form_key" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
     </form>
     <div id="product_composite_configure_confirmed" style="display:none;"></div>
 

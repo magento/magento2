@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Onepage;
 
 use Magento\Framework\DataObject;
@@ -29,13 +30,18 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
 
         $result = new DataObject();
         try {
-            $agreementsValidator = $this->_objectManager->get('Magento\CheckoutAgreements\Model\AgreementsValidator');
+            $agreementsValidator = $this->_objectManager->get(
+                \Magento\CheckoutAgreements\Model\AgreementsValidator::class
+            );
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $result->setData('success', false);
                 $result->setData('error', true);
                 $result->setData(
                     'error_messages',
-                    __('Please agree to all the terms and conditions before placing the order.')
+                    __(
+                        "The order wasn't placed. "
+                        . "First, agree to the terms and conditions, then try placing your order again."
+                    )
                 );
                 return $this->resultJsonFactory->create()->setData($result->getData());
             }
@@ -72,8 +78,8 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_objectManager->get('Magento\Checkout\Helper\Data')
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(\Magento\Checkout\Helper\Data::class)
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());
             $result->setData(
                 'success',
@@ -102,8 +108,8 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                 $this->getOnepage()->getCheckout()->setUpdateSection(null);
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_objectManager->get('Magento\Checkout\Helper\Data')
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(\Magento\Checkout\Helper\Data::class)
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());
             $result->setData('success', false);
             $result->setData('error', true);

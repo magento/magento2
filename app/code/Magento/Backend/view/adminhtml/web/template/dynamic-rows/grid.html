@@ -1,11 +1,11 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 
-<div class="admin__field-complex" if="element.addButton">
+<div class="admin__field-complex" if="$data.addButton">
     <div class="admin__field-complex-title">
         <span class="label" translate="'User Agent Rules'"></span>
     </div>
@@ -16,7 +16,7 @@
                 class="action-secondary"
                 type="button"
                 click="processingAddChild.bind($data, false, false, false)">
-            <span text="addButtonLabel"/>
+            <span translate="addButtonLabel"/>
         </button>
     </div>
 
@@ -27,14 +27,14 @@
 <div class="admin__field admin__field-wide"
      visible="visible"
      disabled="disabled"
-     css="element.setClasses(element)"
+     css="$data.setClasses($data)"
      attr="'data-index': index">
-    <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span text="element.label"/>
+    <label if="$data.label" class="admin__field-label" attr="for: $data.uid">
+        <span translate="$data.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
-        <div class="admin__control-table-pagination" visible="!!$data.recordData().length">
+        <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                 <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
@@ -51,10 +51,10 @@
 
                         <th repeat="foreach: labels, item: '$label'"
                             class="data-grid-th"
-                            text="$label().label"
                             visible="$label().visible"
                             disable="$label().disabled"
                             css="setClasses($label())">
+                            <span translate="$label().label"/>
                         </th>
                     </tr>
                 </thead>
@@ -85,7 +85,7 @@
 <div class="messages">
     <div class="message message-notice notice">
         <span
-            translate="'Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered.'"></span>
+            translate="'Search strings are either normal strings or regular expressions (PCRE). They are matched in the same order as entered.'"></span>
         <br>
         <span
             translate="'Examples'"></span>:

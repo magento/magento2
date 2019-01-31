@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Http\Client;
@@ -16,9 +16,9 @@ class TransactionRefund extends AbstractTransaction
      */
     protected function process(array $data)
     {
-        return $this->adapter->refund(
-            $data['transaction_id'],
-            $data[PaymentDataBuilder::AMOUNT]
-        );
+        $storeId = $data['store_id'] ?? null;
+
+        return $this->adapterFactory->create($storeId)
+            ->refund($data['transaction_id'], $data[PaymentDataBuilder::AMOUNT]);
     }
 }

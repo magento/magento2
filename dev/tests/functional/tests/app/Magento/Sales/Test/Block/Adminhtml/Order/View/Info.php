@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,14 @@ class Info extends Block
     protected $group = '//th[text()="Customer Group"]/following-sibling::*';
 
     /**
+     * Item Options
+     *
+     * @var string
+     */
+    protected $itemOptions = '//div[@class=\'product-sku-block\' and contains(normalize-space(.), \'{SKU}\')]'
+    . '/following-sibling::*[@class="item-options"]';
+
+    /**
      * Get email from the data inside block
      *
      * @return string
@@ -47,5 +55,29 @@ class Info extends Block
     public function getCustomerGroup()
     {
         return $this->_rootElement->find($this->group, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Get Product options
+     *
+     * @param int $sku
+     * @return array
+     */
+    public function getProductOptions($sku)
+    {
+        $selector = str_replace('{SKU}', $sku, $this->itemOptions);
+        $productOption = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+        $result = [];
+        if ($productOption->isPresent()) {
+            $keyItem = $productOption->getElements('dt');
+            $valueItem = $productOption->getElements('dd');
+            foreach ($keyItem as $key => $item) {
+                $result[$item->getText()] = null;
+                if (isset($valueItem[$key])) {
+                    $result[$item->getText()] = $valueItem[$key]->getText();
+                }
+            }
+        }
+        return $result;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -85,6 +85,9 @@ $invoiceFactory = $objectManager->get(\Magento\Sales\Api\InvoiceManagementInterf
 $invoice = $invoiceFactory->prepareInvoice($order, [$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
+$order->save();
+
+$invoice = $objectManager->get(\Magento\Sales\Api\InvoiceRepositoryInterface::class)->get($invoice->getId());
 
 /** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
 $creditmemoFactory = $objectManager->get(\Magento\Sales\Model\Order\CreditmemoFactory::class);

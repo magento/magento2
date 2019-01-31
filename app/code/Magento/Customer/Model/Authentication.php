@@ -1,16 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
+/**
+ * Class Authentication
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Authentication implements AuthenticationInterface
 {
     /**
@@ -51,6 +57,11 @@ class Authentication implements AuthenticationInterface
     protected $customerRepository;
 
     /**
+     * @var CustomerAuthUpdate
+     */
+    private $customerAuthUpdate;
+
+    /**
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
@@ -72,7 +83,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processAuthenticationFailure($customerId)
     {
@@ -105,11 +116,11 @@ class Authentication implements AuthenticationInterface
         }
 
         $customerSecure->setFailuresNum($failuresNum);
-        $this->customerRepository->save($this->customerRepository->getById($customerId));
+        $this->getCustomerAuthUpdate()->saveAuth($customerId);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function unlock($customerId)
     {
@@ -117,7 +128,7 @@ class Authentication implements AuthenticationInterface
         $customerSecure->setFailuresNum(0);
         $customerSecure->setFirstFailure(null);
         $customerSecure->setLockExpires(null);
-        $this->customerRepository->save($this->customerRepository->getById($customerId));
+        $this->getCustomerAuthUpdate()->saveAuth($customerId);
     }
 
     /**
@@ -141,7 +152,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isLocked($customerId)
     {
@@ -150,12 +161,12 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authenticate($customerId, $password)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-        $hash = $customerSecure->getPasswordHash();
+        $hash = $customerSecure->getPasswordHash() ?? '';
         if (!$this->encryptor->validateHash($password, $hash)) {
             $this->processAuthenticationFailure($customerId);
             if ($this->isLocked($customerId)) {
@@ -164,5 +175,20 @@ class Authentication implements AuthenticationInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
         return true;
+    }
+
+    /**
+     * Get customer authentication update model
+     *
+     * @return \Magento\Customer\Model\CustomerAuthUpdate
+     * @deprecated 100.1.1
+     */
+    private function getCustomerAuthUpdate()
+    {
+        if ($this->customerAuthUpdate === null) {
+            $this->customerAuthUpdate =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerAuthUpdate::class);
+        }
+        return $this->customerAuthUpdate;
     }
 }

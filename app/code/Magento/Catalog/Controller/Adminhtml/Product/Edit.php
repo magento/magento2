@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
      * Array of actions which can be processed without secret key validation
@@ -42,7 +44,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
     public function execute()
     {
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $store = $storeManager->getStore($storeId);
         $storeManager->setCurrentStore($store->getCode());
@@ -52,12 +54,12 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         if (($productId && !$product->getEntityId())) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $this->messageManager->addError(__('This product doesn\'t exist.'));
+            $this->messageManager->addErrorMessage(__('This product doesn\'t exist.'));
             return $resultRedirect->setPath('catalog/*/');
-        } else if ($productId === 0) {
+        } elseif ($productId === 0) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $this->messageManager->addError(__('Invalid product id. Should be numeric value greater than 0'));
+            $this->messageManager->addErrorMessage(__('Invalid product id. Should be numeric value greater than 0'));
             return $resultRedirect->setPath('catalog/*/');
         }
 
@@ -70,7 +72,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         $resultPage->getConfig()->getTitle()->prepend(__('Products'));
         $resultPage->getConfig()->getTitle()->prepend($product->getName());
 
-        if (!$this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->isSingleStoreMode()
+        if (!$this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->isSingleStoreMode()
             &&
             ($switchBlock = $resultPage->getLayout()->getBlock('store_switcher'))
         ) {
@@ -82,11 +84,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
                         ['_current' => true, 'active_tab' => null, 'tab' => null, 'store' => null]
                     )
                 );
-        }
-
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($product->getStoreId());
         }
 
         return $resultPage;

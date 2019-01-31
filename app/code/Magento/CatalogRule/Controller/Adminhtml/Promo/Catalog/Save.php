@@ -1,18 +1,24 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\App\Request\DataPersistorInterface;
 
-class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
+/**
+ * Save action for catalog rule
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpPostActionInterface
 {
     /**
      * @var DataPersistorInterface
@@ -36,7 +42,9 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     }
 
     /**
-     * @return void
+     * Execute save action from catalog rule
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -45,11 +53,11 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 
             /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
             $ruleRepository = $this->_objectManager->get(
-                'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
+                \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface::class
             );
 
             /** @var \Magento\CatalogRule\Model\Rule $model */
-            $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
+            $model = $this->_objectManager->create(\Magento\CatalogRule\Model\Rule::class);
 
             try {
                 $this->_eventManager->dispatch(
@@ -57,6 +65,17 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPostValue();
+
+                $filterValues = ['from_date' => $this->_dateFilter];
+                if ($this->getRequest()->getParam('to_date')) {
+                    $filterValues['to_date'] = $this->_dateFilter;
+                }
+                $inputFilter = new \Zend_Filter_Input(
+                    $filterValues,
+                    [],
+                    $data
+                );
+                $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model = $ruleRepository->get($id);
@@ -65,7 +84,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
-                        $this->messageManager->addError($errorMessage);
+                        $this->messageManager->addErrorMessage($errorMessage);
                     }
                     $this->_getSession()->setPageData($data);
                     $this->dataPersistor->set('catalog_rule', $data);
@@ -80,13 +99,13 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 
                 $model->loadPost($data);
 
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData($data);
                 $this->dataPersistor->set('catalog_rule', $data);
 
                 $ruleRepository->save($model);
 
-                $this->messageManager->addSuccess(__('You saved the rule.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData(false);
+                $this->messageManager->addSuccessMessage(__('You saved the rule.'));
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData(false);
                 $this->dataPersistor->clear('catalog_rule');
 
                 if ($this->getRequest()->getParam('auto_apply')) {
@@ -95,7 +114,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 } else {
                     if ($model->isRuleBehaviorChanged()) {
                         $this->_objectManager
-                            ->create('Magento\CatalogRule\Model\Flag')
+                            ->create(\Magento\CatalogRule\Model\Flag::class)
                             ->loadSelf()
                             ->setState(1)
                             ->save();
@@ -108,13 +127,13 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 }
                 return;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData($data);
                 $this->dataPersistor->set('catalog_rule', $data);
                 $this->_redirect('catalog_rule/*/edit', ['id' => $this->getRequest()->getParam('rule_id')]);
                 return;

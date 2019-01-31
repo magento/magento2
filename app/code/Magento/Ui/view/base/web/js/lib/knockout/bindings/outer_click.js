@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates outerClick binding and registers in to ko.bindingHandlers object */
@@ -42,7 +42,7 @@ define([
     /**
      * Document click handler which in case if event target is not
      * a descendant of provided container element,
-     * invokes specfied in configuration callback.
+     * invokes specified in configuration callback.
      *
      * @param {HTMLElement} container
      * @param {Object} config

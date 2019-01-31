@@ -1,13 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Api;
+
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 
 class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -77,7 +78,6 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
         $this->assertCount(2, $option['values']);
 
-
         foreach ($option['values'] as $value) {
             $this->assertTrue(is_array($value));
             $this->assertNotEmpty($value);
@@ -88,7 +88,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetUndefinedProduct()
     {
@@ -101,7 +101,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
      */
     public function testGetUndefinedOption()
     {
-        $expectedMessage = 'Requested option doesn\'t exist: %1';
+        $expectedMessage = 'The "%1" entity that was requested doesn\'t exist. Verify the entity and try again.';
         $productSku = 'configurable';
         $attributeId = -42;
         try {
@@ -141,6 +141,12 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
      */
     public function testAdd()
     {
+        /** @var AttributeRepositoryInterface $attributeRepository */
+        $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
+
+        /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
+        $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
+
         $productSku = 'simple';
         $serviceInfo = [
             'rest' => [
@@ -154,7 +160,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             ]
         ];
         $option = [
-            'attribute_id' => 'test_configurable',
+            'attribute_id' => $attribute->getAttributeId(),
             'label' => 'Test',
             'values' => [
                 [

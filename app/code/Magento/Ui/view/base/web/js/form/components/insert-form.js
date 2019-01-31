@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     './insert',
     'mageUtils',
@@ -38,7 +41,10 @@ define([
 
         el.innerHTML = elem;
         actions = el.getElementsByClassName(actionsClass)[0];
-        el.removeChild(actions);
+
+        if (actions) {
+            el.removeChild(actions);
+        }
 
         return el.innerHTML;
     }

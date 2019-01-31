@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
 
-class UnionRendererTest extends \PHPUnit_Framework_TestCase
+class UnionRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {
         $model = new \Magento\Framework\DB\Select\UnionRenderer();
-        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $selectPart = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $selectPart = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectPart->expects($this->exactly(2))

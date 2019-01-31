@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -11,7 +11,7 @@ use Magento\Integration\Model\Config\Consolidated\Reader as ConfigReader;
 /**
  * Integration config reader test.
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $fileResolverMock;
@@ -22,13 +22,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->fileResolverMock = $this->getMockBuilder('Magento\Framework\Config\FileResolverInterface')
+        $this->fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->configReader = $objectManager->create(
-            'Magento\Integration\Model\Config\Consolidated\Reader',
+            \Magento\Integration\Model\Config\Consolidated\Reader::class,
             ['fileResolver' => $this->fileResolverMock]
         );
     }

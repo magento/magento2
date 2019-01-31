@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,15 @@ namespace Magento\Security\Model\ResourceModel;
 
 /**
  * Admin Session Info mysql resource
+ *
+ * @api
+ * @since 100.1.0
  */
 class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 100.1.0
      */
     protected $dateTime;
 
@@ -34,10 +38,11 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * Initialize resource model
      *
      * @return void
+     * @since 100.1.0
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Security\Setup\InstallSchema::ADMIN_SESSIONS_DB_TABLE_NAME, 'id');
+        $this->_init('admin_user_session', 'id');
     }
 
     /**
@@ -46,6 +51,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int $timestamp
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.1.0
      */
     public function deleteSessionsOlderThen($timestamp)
     {
@@ -67,6 +73,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int|null $updateOlderThen
      * @return int The number of affected rows.
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.1.0
      */
     public function updateStatusByUserId(
         $status,

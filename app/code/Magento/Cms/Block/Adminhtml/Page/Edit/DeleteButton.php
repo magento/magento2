@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Edit;
@@ -12,9 +12,8 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class DeleteButton extends GenericButton implements ButtonProviderInterface
 {
-
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getButtonData()
     {
@@ -25,7 +24,7 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
                 'class' => 'delete',
                 'on_click' => 'deleteConfirm(\'' . __(
                     'Are you sure you want to do this?'
-                ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                ) . '\', \'' . $this->getDeleteUrl() . '\', {"data": {}})',
                 'sort_order' => 20,
             ];
         }
@@ -33,6 +32,8 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
     }
 
     /**
+     * Url to send delete requests to.
+     *
      * @return string
      */
     public function getDeleteUrl()

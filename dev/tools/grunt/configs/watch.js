@@ -1,18 +1,21 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 'use strict';
 
 var combo  = require('./combo'),
-    themes = require('./themes'),
+    themes = require('../tools/files-router').get('themes'),
     _      = require('underscore');
 
 var themeOptions = {};
 
 _.each(themes, function(theme, name) {
     themeOptions[name] = {
+        'options': {
+            livereload: true
+        },
         'files': [
             '<%= combo.autopath(\''+name+'\', path.pub) %>/**/*.less'
         ],

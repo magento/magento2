@@ -2,13 +2,17 @@
 /**
  * Catalog product copier. Creates product duplicate
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 
+/**
+ * The copier creates product duplicates.
+ */
 class Copier
 {
     /**
@@ -49,17 +53,22 @@ class Copier
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      */
-    public function copy(\Magento\Catalog\Model\Product $product)
+    public function copy(Product $product)
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
-        $duplicate->setData($product->getData());
+        $productData = $product->getData();
+        $productData = $this->removeStockItem($productData);
+        $duplicate->setData($productData);
         $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
-        $duplicate->setOriginalId($product->getEntityId());
+        $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
         $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
         $duplicate->setCreatedAt(null);
         $duplicate->setUpdatedAt(null);
@@ -74,6 +83,7 @@ class Copier
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
             $duplicate->setUrlKey($urlKey);
+            $duplicate->setData(Product::URL_PATH, null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
@@ -81,7 +91,6 @@ class Copier
             }
         } while (!$isDuplicateSaved);
         $this->getOptionRepository()->duplicate($product, $duplicate);
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
             $duplicate->getData($metadata->getLinkField())
@@ -90,28 +99,49 @@ class Copier
     }
 
     /**
+     * Returns product option repository.
+     *
      * @return Option\Repository
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getOptionRepository()
     {
         if (null === $this->optionRepository) {
             $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Option\Repository');
+                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
         }
         return $this->optionRepository;
     }
 
     /**
+     * Returns metadata pool.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Remove stock item
+     *
+     * @param array $productData
+     * @return array
+     */
+    private function removeStockItem(array $productData)
+    {
+        if (isset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            $extensionAttributes = $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+            if (null !== $extensionAttributes->getStockItem()) {
+                $extensionAttributes->setData('stock_item', null);
+            }
+        }
+        return $productData;
     }
 }

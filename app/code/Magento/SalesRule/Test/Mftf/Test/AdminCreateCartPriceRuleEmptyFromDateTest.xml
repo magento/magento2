@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleEmptyFromDateTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Admin should be able to create a cart price rule with no starting date"/>
+            <description value="Admin should be able to create a cart price rule without specifying the from_date and it should be set with the current date"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-5299"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete the cart price rule we made during the test -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
+            </actionGroup>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Set timezone-->
+        <!--Set timezone so we need compare with the same timezone used in "generateDate" action-->
+        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig"/>
+        <waitForPageLoad stepKey="waitForConfigPage"/>
+        <wait stepKey="wait" time="10"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
+        <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
+        <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="America/Los_Angeles" stepKey="setTimezone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+
+        <!-- Create a cart price rule based on a coupon code  -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+
+        <!-- Verify initial successful save -->
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{_defaultCoupon.code}}" stepKey="filterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
+        <see selector="{{AdminCartPriceRulesSection.nameColumns}}" userInput="{{_defaultCoupon.code}}" stepKey="seeRuleInResults"/>
+
+        <!-- Verify further on the Rule's edit page -->
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(_defaultCoupon.code)}}" stepKey="goToEditRule"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="seeRuleName"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="seeWebsites"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="seeCouponType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="seeCouponCode"/>
+        <generateDate date="now" format="m/j/Y" timezone="America/Los_Angeles" stepKey="today"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="$today" stepKey="seeCorrectFromDate"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="" stepKey="seeEmptyToDate"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions2"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="seeActionType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="seeDiscountAmount"/>
+
+        <!-- Spot check the storefront -->
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">
+            <argument name="coupon" value="_defaultCoupon"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$5.00" stepKey="seeDiscountTotal"/>
+
+        <!--Reset timezone-->
+        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset"/>
+        <waitForPageLoad stepKey="waitForConfigPageReset"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionReset"/>
+        <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="$originalTimezone" stepKey="resetTimezone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>
+    </test>
+</tests>

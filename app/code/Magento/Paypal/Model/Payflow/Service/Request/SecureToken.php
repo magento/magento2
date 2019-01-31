@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Request;
@@ -11,7 +11,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class SecureToken
@@ -59,6 +58,7 @@ class SecureToken
      */
     public function requestToken(Quote $quote)
     {
+        $this->transparent->setStore($quote->getStoreId());
         $request = $this->transparent->buildBasicRequest();
 
         $request->setTrxtype(Payflowpro::TRXTYPE_AUTH_ONLY);

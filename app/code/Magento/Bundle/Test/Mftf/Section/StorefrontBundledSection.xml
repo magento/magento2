@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontBundledSection">
+        <element name="productCheckbox" type="select" selector="//*[@id='customizeTitle']/following-sibling::div[{{arg1}}]//div[{{arg2}}][@class='field choice']/input" parameterized="true"/>
+        <element name="bundleProductsPrice" type="text" selector="//*[@class='bundle-info']//*[contains(@id,'product-price')]/span"/>
+        <element name="nthBundledOption" type="input" selector=".option:nth-of-type({{numOption}}) .choice:nth-of-type({{numOptionSelect}}) input" parameterized="true"/>
+        <element name="addToCart" type="button" selector="#bundle-slide" timeout="30"/>
+        <element name="addToCartConfigured" type="button" selector="#product-addtocart-button" timeout="30"/>
+        <element name="updateCart" type="button" selector="#product-updatecart-button" timeout="30"/>
+        <element name="configuredPrice" type="block" selector=".price-configured_price .price"/>
+        <element name="fixedPricing" type="text" selector="//div[@class='price-box price-final_price']//span[@id]//..//span[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="customizeProduct" type="button" selector="//*[@id='bundle-slide']"/>
+        <element name="customizableBundleItemOption" type="text" selector="//div[@class='field choice'][1]//input[@type='checkbox']"/>
+        <element name="customizableBundleItemOption2" type="text" selector="//div[@class='field choice'][2]//input[@type='checkbox']"/>
+        <element name="nthOptionDiv" type="block" selector="#product-options-wrapper div.field.option:nth-of-type({{var}})" parameterized="true"/>
+        <element name="nthItemOptionsTitle" type="text" selector="dl.item-options dt:nth-of-type({{var}})" parameterized="true"/>
+        <element name="nthItemOptionsValue" type="text" selector="dl.item-options dd:nth-of-type({{var}})" parameterized="true"/>
+        <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
+        <element name="pageNotFound" type="text" selector="//h1[@class='page-title']//span[contains(., 'Whoops, our bad...')]"/>
+        <element name="dropDownOptionOneProducts" type="select" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//select" parameterized="true"/>
+        <element name="productInBundle" type="select" selector="//label//span[contains(text(), '{{productName}}')]" parameterized="true"/>
+        <element name="dropDownOptionOneQuantity" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input" parameterized="true"/>
+        <element name="radioButtonOptionTwoProducts" type="checkbox" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field choice'][{{productNumber}}]/input" parameterized="true"/>
+        <element name="radioButtonOptionTwoQuantity" type="input" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field qty qty-holder']//input" parameterized="true"/>
+        <element name="checkboxOptionThreeProducts" type="checkbox" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field choice'][{{productNumber}}]/input" parameterized="true"/>
+        <element name="multiselectOptionFourProducts" type="multiselect" selector="//label//span[contains(text(), '{{productName}}')]/../..//select[@multiple='multiple']" parameterized="true"/>
+        <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
+        <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>
+    </section>
+</sections>

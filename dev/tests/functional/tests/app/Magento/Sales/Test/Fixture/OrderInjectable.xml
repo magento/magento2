@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -206,5 +206,7 @@
         <field name="gw_card_tax_refunded" is_required="" />
         <field name="id" />
         <field name="price" is_required="1" group="null" repository="Magento\Sales\Test\Repository\OrderInjectable\Price" />
+        <field name="refund" is_required="" />
+        <field name="invoice" is_required="" repository="Magento\Sales\Test\Repository\OrderInjectable\Invoice" />
     </fixture>
 </config>

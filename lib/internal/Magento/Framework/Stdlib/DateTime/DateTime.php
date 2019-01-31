@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\Stdlib\DateTime;
 /**
  * Date conversion model
  *
- * @author Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class DateTime
 {
@@ -39,7 +39,6 @@ class DateTime
      *
      * @param  string|null $timezone
      * @return int offset between timezone and gmt
-     * @api
      */
     public function calculateOffset($timezone = null)
     {
@@ -85,7 +84,6 @@ class DateTime
      * @param  string $format
      * @param  int|string $input date in GMT timezone
      * @return string
-     * @api
      */
     public function date($format = null, $input = null)
     {
@@ -99,7 +97,7 @@ class DateTime
     /**
      * Forms GMT timestamp
      *
-     * @param  int|string $input date in current timezone
+     * @param  int|string|\DateTimeInterface $input date in current timezone
      * @return int
      */
     public function gmtTimestamp($input = null)
@@ -108,6 +106,8 @@ class DateTime
             return (int)gmdate('U');
         } elseif (is_numeric($input)) {
             $result = $input;
+        } elseif ($input instanceof \DateTimeInterface) {
+            $result = $input->getTimestamp();
         } else {
             $result = strtotime($input);
         }
@@ -130,17 +130,23 @@ class DateTime
      */
     public function timestamp($input = null)
     {
-        if ($input === null) {
-            $result = $this->gmtTimestamp();
-        } elseif (is_numeric($input)) {
-            $result = $input;
-        } else {
-            $result = strtotime($input);
+        switch (true) {
+            case ($input === null):
+                $result = $this->gmtTimestamp();
+                break;
+            case (is_numeric($input)):
+                $result = $input;
+                break;
+            case ($input instanceof \DateTimeInterface):
+                $result = $input->getTimestamp();
+                break;
+            default:
+                $result = strtotime($input);
         }
+
         $date = $this->_localeDate->date($result);
-        $timestamp = $date->getTimestamp();
-        unset($date);
-        return $timestamp;
+
+        return $date->getTimestamp();
     }
 
     /**
@@ -148,7 +154,6 @@ class DateTime
      *
      * @param  string $type
      * @return int
-     * @api
      */
     public function getGmtOffset($type = 'seconds')
     {

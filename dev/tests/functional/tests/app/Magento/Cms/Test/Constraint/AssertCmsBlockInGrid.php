@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,7 @@ class AssertCmsBlockInGrid extends AbstractConstraint
             $pieces = explode('/', $filter['store_id']);
             $filter['store_id'] = end($pieces);
         }
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsBlockIndex->getCmsBlockGrid()->isRowVisible($filter, false, false),
             'CMS Block with '
             . 'title \'' . $filter['title'] . '\', '

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Plugin;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OrderSaveTest extends \PHPUnit_Framework_TestCase
+class OrderSaveTest extends \PHPUnit\Framework\TestCase
 {
     const ORDERID = 123;
     const ITEMID = 151;
@@ -42,20 +42,20 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderTaxFactoryMock = $this->getMockBuilder(
-            '\Magento\Tax\Model\Sales\Order\TaxFactory'
+            \Magento\Tax\Model\Sales\Order\TaxFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->taxItemFactoryMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Tax\ItemFactory')
+        $this->taxItemFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Tax\ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subjectMock = $this->getMockForAbstractClass('\Magento\Sales\Api\OrderRepositoryInterface');
+        $this->subjectMock = $this->getMockForAbstractClass(\Magento\Sales\Api\OrderRepositoryInterface::class);
 
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
-            '\Magento\Tax\Model\Plugin\OrderSave',
+            \Magento\Tax\Model\Plugin\OrderSave::class,
             [
                 'orderTaxFactory' => $this->orderTaxFactoryMock,
                 'taxItemFactory' => $this->taxItemFactoryMock,
@@ -63,9 +63,12 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupOrderMock()
     {
-        $orderMock = $this->getMockBuilder('\Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -80,9 +83,12 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         return $orderMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupExtensionAttributeMock()
     {
-        $orderExtensionAttributeMock = $this->getMockBuilder('\Magento\Sales\Api\Data\OrderExtensionInterface')
+        $orderExtensionAttributeMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -95,12 +101,14 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         return $orderExtensionAttributeMock;
     }
 
+    /**
+     * @param $expectedTaxes
+     */
     protected function verifyOrderTaxes($expectedTaxes)
     {
         $index = 0;
-        $orderTaxes = [];
         foreach ($expectedTaxes as $orderTaxId => $orderTaxData) {
-            $orderTaxMock = $this->getMockBuilder('\Magento\Tax\Model\Sales\Order\Tax')
+            $orderTaxMock = $this->getMockBuilder(\Magento\Tax\Model\Sales\Order\Tax::class)
                 ->disableOriginalConstructor()
                 ->setMethods(
                     [
@@ -122,15 +130,16 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             $this->orderTaxFactoryMock->expects($this->at($index))
                 ->method('create')
                 ->willReturn($orderTaxMock);
-            $orderTaxes[] = $orderTaxMock;
             $index++;
         }
     }
 
+    /**
+     * @param $expectedItemTaxes
+     */
     public function verifyItemTaxes($expectedItemTaxes)
     {
         $index = 0;
-        $itemTaxes = [];
         foreach ($expectedItemTaxes as $itemTax) {
             $itemTaxMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Tax\Item::class)
                 ->disableOriginalConstructor()
@@ -150,7 +159,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             $this->taxItemFactoryMock->expects($this->at($index))
                 ->method('create')
                 ->willReturn($itemTaxMock);
-            $itemTaxes[] = $itemTaxMock;
             $index++;
         }
     }
@@ -177,7 +185,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             ->method('getItemAppliedTaxes')
             ->willReturn($itemAppliedTaxes);
 
-        $orderItemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -214,93 +222,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
      */
     public function afterSaveDataProvider()
     {
-        $orderTaxDetailsApplied = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getRates'])
-            ->getMockForAbstractClass();
-
-        $orderTaxDetailsApplied->expects($this->at(0))
-            ->method('getRates')
-            ->willReturn(
-                [
-                    [
-                        'percent' => 6,
-                        'code' => 'IL',
-                        'title' => 'IL',
-                    ],
-                    [
-                        'percent' => 5,
-                        'code' => 'US',
-                        'title' => 'US',
-                    ]
-                ]
-            );
-        $orderTaxDetailsApplied->expects($this->at(1))
-            ->method('getRates')
-            ->willReturn(
-                [
-                    [
-                        'percent' => 3,
-                        'code' => 'CityTax',
-                        'title' => 'CityTax',
-                    ],
-                ]
-            );
-        $orderTaxDetailsApplied->expects($this->at(2))
-            ->method('getRates')
-            ->willReturn(
-                [
-                    [
-                        'percent' => 6,
-                        'code' => 'IL',
-                        'title' => 'IL',
-                    ],
-                    [
-                        'percent' => 5,
-                        'code' => 'US',
-                        'title' => 'US',
-                    ],
-                ]
-            );
-        $orderTaxDetailsApplied->expects($this->at(3))
-            ->method('getRates')
-            ->willReturn(
-                [
-                    [
-                        'percent' => 3,
-                        'code' => 'CityTax',
-                        'title' => 'CityTax',
-                    ],
-                ]
-            );
-        $orderTaxDetailsApplied->expects($this->at(4))
-            ->method('getRates')
-            ->willReturn(
-                [
-                    [
-                        'percent' => 6,
-                        'code' => 'IL',
-                        'title' => 'IL',
-                    ],
-                    [
-                        'percent' => 5,
-                        'code' => 'US',
-                        'title' => 'US',
-                    ],
-                ]
-            );
-        $orderTaxDetailsApplied->expects($this->at(5))
-            ->method('getRates')
-            ->willReturn(
-                [
-                    [
-                        'percent' => 3,
-                        'code' => 'CityTax',
-                        'title' => 'CityTax',
-                    ],
-                ]
-            );
-
         return [
             //one item with shipping
             //three tax rates: state and national tax rates of 6 and 5 percent with priority 0
@@ -312,14 +233,35 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                         'base_amount' => 0.66,
                         'percent' => 11,
                         'id' => 'ILUS',
-                        'extension_attributes' => $orderTaxDetailsApplied,
+                        'extension_attributes' => [
+                            'rates' => [
+                                [
+                                    'percent' => 6,
+                                    'code' => 'IL',
+                                    'title' => 'IL',
+                                ],
+                                [
+                                    'percent' => 5,
+                                    'code' => 'US',
+                                    'title' => 'US',
+                                ],
+                            ]
+                        ],
                     ],
                     [
                         'amount' => 0.2,
                         'base_amount' => 0.2,
                         'percent' => 3.33,
                         'id' => 'CityTax',
-                        'extension_attributes' => $orderTaxDetailsApplied,
+                        'extension_attributes' => [
+                            'rates' => [
+                                [
+                                    'percent' => 3,
+                                    'code' => 'CityTax',
+                                    'title' => 'CityTax',
+                                ],
+                            ]
+                        ],
                     ],
                 ],
                 'item_applied_taxes' => [
@@ -335,7 +277,20 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                                 'base_amount' => 0.11,
                                 'percent' => 11,
                                 'id' => 'ILUS',
-                                'extension_attributes' => $orderTaxDetailsApplied,
+                                'extension_attributes' => [
+                                    'rates' => [
+                                        [
+                                            'percent' => 6,
+                                            'code' => 'IL',
+                                            'title' => 'IL',
+                                        ],
+                                        [
+                                            'percent' => 5,
+                                            'code' => 'US',
+                                            'title' => 'US',
+                                        ],
+                                    ]
+                                ],
                             ],
                             //city tax
                             [
@@ -343,7 +298,15 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                                 'base_amount' => 0.03,
                                 'percent' => 3.33,
                                 'id' => 'CityTax',
-                                'extension_attributes' => $orderTaxDetailsApplied,
+                                'extension_attributes' => [
+                                    'rates' => [
+                                        [
+                                            'percent' => 3,
+                                            'code' => 'CityTax',
+                                            'title' => 'CityTax',
+                                        ],
+                                    ]
+                                ],
                             ],
                         ],
                     ],
@@ -359,7 +322,20 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                                 'base_amount' => 0.55,
                                 'percent' => 11,
                                 'id' => 'ILUS',
-                                'extension_attributes' => $orderTaxDetailsApplied,
+                                'extension_attributes' => [
+                                    'rates' => [
+                                        [
+                                            'percent' => 6,
+                                            'code' => 'IL',
+                                            'title' => 'IL',
+                                        ],
+                                        [
+                                            'percent' => 5,
+                                            'code' => 'US',
+                                            'title' => 'US',
+                                        ],
+                                    ]
+                                ],
                             ],
                             //city tax
                             [
@@ -367,7 +343,15 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                                 'base_amount' => 0.17,
                                 'percent' => 3.33,
                                 'id' => 'CityTax',
-                                'extension_attributes' => $orderTaxDetailsApplied,
+                                'extension_attributes' => [
+                                    'rates' => [
+                                        [
+                                            'percent' => 3,
+                                            'code' => 'CityTax',
+                                            'title' => 'CityTax',
+                                        ],
+                                    ]
+                                ],
                             ],
                         ],
                     ],

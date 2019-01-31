@@ -1,21 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
+/**
+ * Index structure factory
+ *
+ * @api
+ * @since 100.1.0
+ */
 class IndexStructureFactory
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 100.1.0
      */
     protected $objectManager = null;
 
@@ -23,39 +29,29 @@ class IndexStructureFactory
      * Instance name to create
      *
      * @var string
+     * @since 100.1.0
      */
     protected $structures = null;
-
     /**
-     * @var ScopeConfigInterface
+     * @var EngineResolverInterface
      */
-    private $scopeConfig;
-
-    /**
-     * Configuration path by which current indexer handler stored
-     *
-     * @var string
-     */
-    private $configPath;
+    private $engineResolver;
 
     /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string $configPath
+     * @param EngineResolverInterface $engineResolver
      * @param string[] $structures
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
-        $configPath,
+        EngineResolverInterface $engineResolver,
         array $structures = []
     ) {
         $this->objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->configPath = $configPath;
         $this->structures = $structures;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -63,10 +59,11 @@ class IndexStructureFactory
      *
      * @param array $data
      * @return IndexStructureInterface
+     * @since 100.1.0
      */
     public function create(array $data = [])
     {
-        $currentStructure = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        $currentStructure = $this->engineResolver->getCurrentSearchEngine();
         if (!isset($this->structures[$currentStructure])) {
             throw new \LogicException(
                 'There is no such index structure: ' . $currentStructure
@@ -76,7 +73,7 @@ class IndexStructureFactory
 
         if (!$indexStructure instanceof IndexStructureInterface) {
             throw new \InvalidArgumentException(
-                $indexStructure . ' doesn\'t implement \Magento\Framework\Indexer\IndexStructureInterface'
+                $currentStructure . ' index structure doesn\'t implement '. IndexStructureInterface::class
             );
         }
 

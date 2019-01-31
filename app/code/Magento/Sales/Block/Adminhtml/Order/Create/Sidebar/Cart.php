@@ -1,14 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
+
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Adminhtml sales order create sidebar cart block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -57,6 +64,17 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getItemPrice(Product $product)
+    {
+        $customPrice = $this->getCartItemCustomPrice($product);
+        $price = $customPrice ?? $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
+
+        return $this->convertPrice($price);
+    }
+
+    /**
      * Retrieve display item qty availability
      *
      * @return true
@@ -100,7 +118,7 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
         $deleteAllConfirmString = __('Are you sure you want to delete all items from shopping cart?');
         $this->addChild(
             'empty_customer_cart_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Clear Shopping Cart'),
                 'onclick' => 'order.clearShoppingCart(\'' . $deleteAllConfirmString . '\')'
@@ -108,5 +126,24 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
         );
 
         return parent::_prepareLayout();
+    }
+
+    /**
+     * Returns cart item custom price.
+     *
+     * @param Product $product
+     * @return float|null
+     */
+    private function getCartItemCustomPrice(Product $product): ?float
+    {
+        $items = $this->getItemCollection();
+        foreach ($items as $item) {
+            $productItemId = $this->getProduct($item)->getId();
+            if ($productItemId === $product->getId() && $item->getCustomPrice()) {
+                return (float)$item->getCustomPrice();
+            }
+        }
+
+        return null;
     }
 }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Shell;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -12,7 +13,9 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Driver
 {
-    /** @var CommandRendererInterface */
+    /**
+     * @var \Magento\Framework\Shell\CommandRendererInterface
+     */
     private $commandRenderer;
 
     /**
@@ -31,12 +34,11 @@ class Driver
      * @return Response
      * @throws LocalizedException
      */
-
     public function execute($command, $arguments)
     {
         $disabled = explode(',', str_replace(' ', ',', ini_get('disable_functions')));
         if (in_array('exec', $disabled)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase("exec function is disabled."));
+            throw new LocalizedException(new \Magento\Framework\Phrase('The exec function is disabled.'));
         }
 
         $command = $this->commandRenderer->render($command, $arguments);

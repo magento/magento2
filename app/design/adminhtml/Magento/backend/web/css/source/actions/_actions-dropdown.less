@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -168,6 +168,9 @@
     width: auto;
     z-index: 1;
 
+    /**
+     * @codingStandardsIgnoreStart
+     */
     &:hover {
         &:extend(.abs-form-control-pattern:hover);
     }
@@ -227,13 +230,10 @@
     display: inline-block;
 
     input[type='text'] {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
+        .lib-css(appearance, none, 1);
         border: 0;
         display: inline;
         margin: 0;
-        width: 6rem;
 
         body._keyfocus &:focus {
             box-shadow: none;
@@ -369,9 +369,7 @@
 }
 
 .selectmenu-item-action {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+    .lib-css(appearance, none, 1);
     background: transparent;
     border: 0;
     color: @text__color;

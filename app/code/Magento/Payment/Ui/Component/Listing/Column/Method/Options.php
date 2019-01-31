@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Ui\Component\Listing\Column\Method;
@@ -25,8 +25,9 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      *
      * @param \Magento\Payment\Helper\Data $paymentHelper
      */
-    public function __construct(\Magento\Payment\Helper\Data $paymentHelper)
-    {
+    public function __construct(
+        \Magento\Payment\Helper\Data $paymentHelper
+    ) {
         $this->paymentHelper = $paymentHelper;
     }
 

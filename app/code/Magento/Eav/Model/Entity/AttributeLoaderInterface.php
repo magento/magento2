@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,8 +17,8 @@ interface AttributeLoaderInterface
      * Retrieve configuration for all attributes
      *
      * @param AbstractEntity $resource
-     * @param DataObject|null $object
+     * @param DataObject|null $entity
      * @return AbstractEntity
      */
-    public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null);
+    public function loadAllAttributes(AbstractEntity $resource, DataObject $entity = null);
 }

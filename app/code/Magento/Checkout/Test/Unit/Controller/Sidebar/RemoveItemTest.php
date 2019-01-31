@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RemoveItemTest extends \PHPUnit_Framework_TestCase
+class RemoveItemTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Checkout\Controller\Sidebar\RemoveItem */
     protected $removeItem;
@@ -44,12 +44,12 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sidebarMock = $this->getMock('Magento\Checkout\Model\Sidebar', [], [], '', false);
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->sidebarMock = $this->createMock(\Magento\Checkout\Model\Sidebar::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->responseMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [],
             '',
             false,
@@ -57,18 +57,15 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
             true,
             ['representJson']
         );
-        $this->resultPageFactoryMock = $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false);
-        $this->resultRedirectFactory = $this->getMock(
+        $this->resultPageFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
+        $this->resultRedirectFactory = $this->createPartialMock(
             \Magento\Framework\Controller\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->removeItem = $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Controller\Sidebar\RemoveItem',
+            \Magento\Checkout\Controller\Sidebar\RemoveItem::class,
             [
                 'sidebar' => $this->sidebarMock,
                 'logger' => $this->loggerMock,
@@ -80,7 +77,7 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
 
             ]
         );
-        $formKeyValidatorMock = $this->getMock('Magento\Framework\Data\Form\FormKey\Validator', [], [], '', false);
+        $formKeyValidatorMock = $this->createMock(\Magento\Framework\Data\Form\FormKey\Validator::class);
         $this->setPropertyValue($this->removeItem, 'formKeyValidator', $formKeyValidatorMock);
     }
 
@@ -239,7 +236,7 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWhenFormKeyValidationFailed()
     {
-        $resultRedirect = $this->getMock(\Magento\Framework\Controller\Result\Redirect::class, [], [], '', false);
+        $resultRedirect = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
         $resultRedirect->expects($this->once())->method('setPath')->with('*/cart/')->willReturnSelf();
         $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($resultRedirect);
         $this->getPropertyValue($this->removeItem, 'formKeyValidator')

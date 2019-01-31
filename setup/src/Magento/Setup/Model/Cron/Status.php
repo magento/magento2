@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model\Cron;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class which provides access to the current status of the Magento setup application.
@@ -215,7 +215,7 @@ class Status
             } catch (FileSystemException $e) {
                 throw new \RuntimeException(sprintf('"%s" cannot be created.', $pathToFlagFile));
             }
-        } else if ($this->varReaderWriter->isExist($pathToFlagFile)) {
+        } elseif ($this->varReaderWriter->isExist($pathToFlagFile)) {
             $this->varReaderWriter->delete($pathToFlagFile);
         }
         return $this;

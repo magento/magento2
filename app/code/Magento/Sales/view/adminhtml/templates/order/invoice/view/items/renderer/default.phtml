@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,17 +12,17 @@
 <?php $_item->setStoreId($_item->getInvoice()->getStoreId()) ?>
 <?php $block->setPriceDataObject($_item) ?>
 <tr>
-    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-price">
-        <?php echo $block->getColumnHtml($_item, 'price'); ?>
+        <?= $block->getColumnHtml($_item, 'price') ?>
     </td>
-    <td class="col-qty"><?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?></td>
+    <td class="col-qty"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
     <td class="col-subtotal">
-        <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
+        <?= $block->getColumnHtml($_item, 'subtotal') ?>
     </td>
-    <td class="col-tax"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-discount"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-tax"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discount"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
-        <?php echo $block->getColumnHtml($_item, 'total'); ?>
+        <?= $block->getColumnHtml($_item, 'total') ?>
     </td>
 </tr>

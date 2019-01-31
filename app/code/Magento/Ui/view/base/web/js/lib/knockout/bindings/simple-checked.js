@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -68,7 +68,7 @@ define([
         }
     };
 
-    ko.expressionRewriting.twoWayBindings.simpleChecked = true;
+    ko.expressionRewriting._twoWayBindings.simpleChecked = true;
 
     renderer.addAttribute('simpleChecked');
     renderer.addAttribute('simple-checked', {

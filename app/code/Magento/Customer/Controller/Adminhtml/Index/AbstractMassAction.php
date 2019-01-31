@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -73,7 +73,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
 
     /**
      * Return component referer url
-     * TODO: Technical dept referer url should be implement as a part of Action configuration in in appropriate way
+     * TODO: Technical dept referer url should be implement as a part of Action configuration in appropriate way
      *
      * @return null|string
      */

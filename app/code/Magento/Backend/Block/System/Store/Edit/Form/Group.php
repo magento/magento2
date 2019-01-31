@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Edit\Form;
@@ -116,6 +116,18 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 'name' => 'group[name]',
                 'label' => __('Name'),
                 'value' => $groupModel->getName(),
+                'required' => true,
+                'disabled' => $groupModel->isReadOnly()
+            ]
+        );
+
+        $fieldset->addField(
+            'group_code',
+            'text',
+            [
+                'name' => 'group[code]',
+                'label' => __('Code'),
+                'value' => $groupModel->getCode(),
                 'required' => true,
                 'disabled' => $groupModel->isReadOnly()
             ]

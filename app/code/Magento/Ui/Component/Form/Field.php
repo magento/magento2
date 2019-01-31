@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Form;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -13,6 +14,8 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Field
+ * @api
+ * @since 100.0.2
  */
 class Field extends AbstractComponent
 {
@@ -71,7 +74,7 @@ class Field extends AbstractComponent
         $formElement = $this->getData('config/formElement');
         if (null === $formElement) {
             throw new LocalizedException(__(
-                'The configuration parameter "formElement" is a required for "%1" field.',
+                'The "formElement" configuration parameter is required for the "%1" field.',
                 $this->getName()
             ));
         }

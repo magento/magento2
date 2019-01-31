@@ -1,18 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="notifications">
-            <block class="Magento\AdminNotification\Block\System\Messages"
-                   name="system_messages"
-                   as="system_messages"
-                   before="-"
-                   template="Magento_AdminNotification::system/messages.phtml"/>
+            <uiComponent name="notification_area"/>
             <block class="Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup"
                    name="unread_system_messages"
                    as="unread_system_messages"
@@ -20,11 +16,11 @@
             <block class="Magento\AdminNotification\Block\Window"
                    name="notification_window"
                    as="notification_window"
-                   acl="Magento_AdminNotification::show_toolbar"
-                   template="notification/window.phtml"/>
+                   aclResource="Magento_AdminNotification::show_toolbar"
+                   template="Magento_AdminNotification::notification/window.phtml"/>
         </referenceContainer>
         <referenceContainer name="header">
-            <block class="Magento\AdminNotification\Block\ToolbarEntry" name="notification.messages" before="user" template="toolbar_entry.phtml"/>
+            <block class="Magento\AdminNotification\Block\ToolbarEntry" name="notification.messages" before="user" template="Magento_AdminNotification::toolbar_entry.phtml"/>
         </referenceContainer>
     </body>
 </page>

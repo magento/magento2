@@ -2,7 +2,7 @@
 /**
  * Resource Setup Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module;
@@ -11,6 +11,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Module\Setup\SetupCache;
 
+/**
+ * @api
+ */
 class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSetupInterface
 {
     /**

@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <listingToolbar name="listing_top"></listingToolbar>
+    <listingToolbar name="listing_top"/>
     <columns name="product_attributes_columns">
-        <column name="is_filterable">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\LayeredNavigation\Model\Attribute\Source\FilterableOptions</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
-                </item>
-            </argument>
+        <column name="is_filterable" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\LayeredNavigation\Model\Attribute\Source\FilterableOptions"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Use in Layered Navigation</label>
+            </settings>
         </column>
     </columns>
 </listing>

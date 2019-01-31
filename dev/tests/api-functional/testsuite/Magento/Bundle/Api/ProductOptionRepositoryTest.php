@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Api;
@@ -31,8 +31,8 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
                     'position' => 0,
                     'can_change_quantity' => 1,
                     'is_default' => false,
-                    'price' => null,
-                    'price_type' => null,
+                    'price' => 2.75,
+                    'price_type' => 0,
                 ],
             ],
         ];
@@ -72,8 +72,8 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
                         'position' => 0,
                         'can_change_quantity' => 1,
                         'is_default' => false,
-                        'price' => null,
-                        'price_type' => null,
+                        'price' => 2.75,
+                        'price_type' => 0,
                     ],
                 ],
             ],

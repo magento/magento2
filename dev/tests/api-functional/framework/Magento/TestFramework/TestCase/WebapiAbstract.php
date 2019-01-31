@@ -1,8 +1,6 @@
 <?php
 /**
- * Generic test case for Web API functional tests.
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
@@ -10,11 +8,15 @@ namespace Magento\TestFramework\TestCase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Webapi\Model\Soap\Fault;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Test case for Web API functional tests for REST and SOAP.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
+abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 {
     /** TODO: Reconsider implementation of fixture-management methods after implementing several tests */
     /**#@+
@@ -94,8 +96,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_webApiAdaptersMap = [
-        self::ADAPTER_SOAP => 'Magento\TestFramework\TestCase\Webapi\Adapter\Soap',
-        self::ADAPTER_REST => 'Magento\TestFramework\TestCase\Webapi\Adapter\Rest',
+        self::ADAPTER_SOAP => \Magento\TestFramework\TestCase\Webapi\Adapter\Soap::class,
+        self::ADAPTER_REST => \Magento\TestFramework\TestCase\Webapi\Adapter\Rest::class,
     ];
 
     /**
@@ -287,7 +289,9 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
                     sprintf('Declaration of the requested Web API adapter "%s" was not found.', $webApiAdapterCode)
                 );
             }
-            $this->_webApiAdapters[$webApiAdapterCode] = new $this->_webApiAdaptersMap[$webApiAdapterCode]();
+            $this->_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
+                $this->_webApiAdaptersMap[$webApiAdapterCode]
+            );
         }
         return $this->_webApiAdapters[$webApiAdapterCode];
     }
@@ -341,9 +345,9 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('isSecureArea');
         if ($flag) {
-            $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', $flag);
+            $objectManager->get(\Magento\Framework\Registry::class)->register('isSecureArea', $flag);
         }
     }
 
@@ -421,16 +425,16 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
             //set application path
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
-            $config = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+            $config = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $options = $config->getOptions();
             $currentCacheDir = $options->getCacheDir();
             $currentEtcDir = $options->getEtcDir();
             /** @var Filesystem $filesystem */
-            $filesystem = $objectManager->get('Magento\Framework\Filesystem');
+            $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
             $options->setCacheDir($filesystem->getDirectoryRead(DirectoryList::CACHE)->getAbsolutePath());
             $options->setEtcDir($filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath());
 
-            $this->_appCache = $objectManager->get('Magento\Framework\App\Cache');
+            $this->_appCache = $objectManager->get(\Magento\Framework\App\Cache::class);
 
             //revert paths options
             $options->setCacheDir($currentCacheDir);
@@ -477,13 +481,13 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $config \Magento\Config\Model\Config */
-        $config = $objectManager->create('Magento\Config\Model\Config');
+        $config = $objectManager->create(\Magento\Config\Model\Config::class);
         $data[$group]['fields'][$node]['value'] = $value;
         $config->setSection($section)->setGroups($data)->save();
 
         if ($restore && !isset($this->_origConfigValues[$path])) {
             $this->_origConfigValues[$path] = (string)$objectManager->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
+                \Magento\Framework\App\Config\ScopeConfigInterface::class
             )->getNode(
                 $path,
                 'default'
@@ -493,8 +497,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         //refresh local cache
         if ($cleanAppCache) {
             if ($updateLocalConfig) {
-                $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+                $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class)->reinit();
+                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
             }
 
             if (!$this->_cleanAppConfigCache()) {
@@ -572,7 +576,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         if ($traceString) {
             /** Check error trace */
             $traceNode = Fault::NODE_DETAIL_TRACE;
-            $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\App\State::class)
                 ->getMode();
             if ($mode == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 /** Developer mode changes tested behavior and it cannot properly be tested for now */
@@ -636,27 +641,15 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         $wrappedErrorsNode = Fault::NODE_DETAIL_WRAPPED_ERRORS;
         if ($expectedWrappedErrors) {
             $wrappedErrorNode = Fault::NODE_DETAIL_WRAPPED_ERROR;
-            $wrappedErrorNodeFieldName = 'fieldName';
-            $wrappedErrorNodeValue = Fault::NODE_DETAIL_WRAPPED_ERROR_VALUE;
             $actualWrappedErrors = [];
             if (isset($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
-                if (is_array($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
-                    foreach ($errorDetails->$wrappedErrorsNode->$wrappedErrorNode as $error) {
-                        $actualParameters = [];
-                        foreach ($error->parameters->parameter as $parameter) {
-                            $actualParameters[$parameter->key] = $parameter->value;
-                        }
-                        $actualWrappedErrors[] = [
-                            'message' => $error->message,
-                            'params' => $actualParameters,
-                        ];
+                $errorNode = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
+                if (is_array($errorNode)) {
+                    foreach ($errorNode as $error) {
+                        $actualWrappedErrors[] = $this->getActualWrappedErrors($error);
                     }
                 } else {
-                    $error = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
-                    $actualWrappedErrors[] = [
-                        "fieldName" => $error->$wrappedErrorNodeFieldName,
-                        "value" => $error->$wrappedErrorNodeValue,
-                    ];
+                    $actualWrappedErrors[] = $this->getActualWrappedErrors($errorNode);
                 }
             }
             $this->assertEquals(
@@ -670,5 +663,27 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
                 "Wrapped errors are not expected in fault details."
             );
         }
+    }
+
+    /**
+     * @param \stdClass $errorNode
+     * @return array
+     */
+    private function getActualWrappedErrors(\stdClass $errorNode)
+    {
+        $actualParameters = [];
+        $parameterNode = $errorNode->parameters->parameter;
+        if (is_array($parameterNode)) {
+            foreach ($parameterNode as $parameter) {
+                $actualParameters[$parameter->key] = $parameter->value;
+            }
+        } else {
+            $actualParameters[$parameterNode->key] = $parameterNode->value;
+        }
+        return [
+            'message' => $errorNode->message,
+            // Can not rename on parameters due to Backward Compatibility
+            'params' => $actualParameters,
+        ];
     }
 }

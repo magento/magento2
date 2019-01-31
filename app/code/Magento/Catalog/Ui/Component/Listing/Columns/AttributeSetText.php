@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -9,6 +9,10 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 
+/**
+ * @api
+ * @since 101.0.0
+ */
 class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
@@ -18,6 +22,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * @var AttributeSetRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeSetRepository;
 
@@ -45,6 +50,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
+     * @since 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -70,6 +76,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param int $attributeSetId
      * @return string
+     * @since 101.0.0
      */
     protected function renderColumnText($attributeSetId)
     {

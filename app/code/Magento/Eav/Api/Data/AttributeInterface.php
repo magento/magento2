@@ -1,16 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Api\Data;
 
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\MetadataObjectInterface;
+
 /**
  * Interface AttributeInterface
  * @api
+ * @since 100.0.2
  */
-interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
+interface AttributeInterface extends CustomAttributesDataInterface, MetadataObjectInterface
 {
     const ATTRIBUTE_ID = 'attribute_id';
 
@@ -94,7 +98,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
     /**
      * Retrieve entity type id
      *
-     * @return string|null
+     * @return string
      */
     public function getEntityTypeId();
 
@@ -306,4 +310,14 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null
      */
     public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes
+    );
 }

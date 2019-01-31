@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -44,8 +44,8 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
         $valueExpr = $connection->getCheckSql(
             "{$optionTable2}.value_id IS NULL",
-            "{$optionTable1}.value",
-            "{$optionTable2}.value"
+            "{$optionTable1}.option_id",
+            "{$optionTable2}.option_id"
         );
 
         $collection->getSelect()->joinLeft(

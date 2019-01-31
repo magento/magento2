@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config;
@@ -15,7 +15,7 @@ use Magento\Paypal\Model\Config\Rules\Reader;
  *
  * Test for class \Magento\Paypal\Block\Adminhtml\System\Config\ResolutionRules
  */
-class ResolutionRulesTest extends \PHPUnit_Framework_TestCase
+class ResolutionRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResolutionRules

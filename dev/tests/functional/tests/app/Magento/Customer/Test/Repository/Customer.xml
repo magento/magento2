@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,6 +16,9 @@
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123^q</field>
             <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="customer_with_new_customer_group">
@@ -27,6 +30,9 @@
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123^q</field>
             <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="johndoe">
@@ -39,6 +45,9 @@
             <field name="gender" xsi:type="string">Male</field>
             <field name="group_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">General</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
             </field>
         </dataset>
 
@@ -53,13 +62,18 @@
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="dob" xsi:type="string">01/01/1990</field>
             <field name="gender" xsi:type="string">Male</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="defaultBackend">
-            <field name="website_id" xsi:type="string">Main Website</field>
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="johndoe_with_addresses">
@@ -74,10 +88,30 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">US_address</item>
             </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="johndoe_unique">
             <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="address" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address_NY</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="johndoe_unique_firstname">
+            <field name="firstname" xsi:type="string">John%isolation%</field>
             <field name="lastname" xsi:type="string">Doe%isolation%</field>
             <field name="group_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">General</item>
@@ -102,6 +136,9 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">US_address_TX</item>
             </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="johndoe_with_multiple_addresses">
@@ -115,6 +152,9 @@
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">US_address_NY, US_address</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
             </field>
         </dataset>
 
@@ -138,6 +178,9 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">US_address_1</item>
             </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="backend_retailer_customer">
@@ -152,6 +195,9 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">US_address_1</item>
             </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="customer_US">
@@ -162,6 +208,9 @@
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">US_address_1</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
             </field>
         </dataset>
 
@@ -174,6 +223,23 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">UK_address_default_billing</item>
             </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="customer_DE_default_billing_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="address" xsi:type="array">
+                <item name="dataset" xsi:type="string">DE_address_default</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="customer_UK_address_with_VAT">
@@ -184,6 +250,70 @@
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">UK_address_with_VAT</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="customer_UK_US_addresses">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="address" xsi:type="array">
+                <item name="dataset" xsi:type="string">UK_address_default_billing, US_address_default_shipping</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="customer_US_DE_UK">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="address" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address, DE_address, UK_address</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_in_custom_website">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom_store</item>
+            </field>
+        </dataset>
+
+        <dataset name="johndoe_wholesale">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">Wholesale</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="dob" xsi:type="string">01/01/1990</field>
+            <field name="gender" xsi:type="string">Male</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
             </field>
         </dataset>
     </repository>

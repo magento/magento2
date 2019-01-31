@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\TemplateEngine;
 
-class PhpTest extends \PHPUnit_Framework_TestCase
+class PhpTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_PROP_VALUE = 'TEST_PROP_VALUE';
 
@@ -22,7 +22,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_helperFactoryMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_phpEngine = new \Magento\Framework\View\TemplateEngine\Php($this->_helperFactoryMock);
     }
 
@@ -34,7 +34,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $blockMock = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Template'
+            \Magento\Framework\View\Element\Template::class
         )->setMethods(
             ['testMethod']
         )->disableOriginalConstructor()->getMock();
@@ -60,7 +60,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     public function testRenderException()
     {
         $blockMock = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Template'
+            \Magento\Framework\View\Element\Template::class
         )->setMethods(
             ['testMethod']
         )->disableOriginalConstructor()->getMock();
@@ -74,8 +74,8 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testHelperWithInvalidClass()
     {
-        $class = 'Magento\Framework\DataObject';
-        $object = $this->getMock($class, [], [], '', false);
+        $class = \Magento\Framework\DataObject::class;
+        $object = $this->createMock($class);
         $this->_helperFactoryMock->expects(
             $this->once()
         )->method(
@@ -90,7 +90,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 
     public function testHelperWithValidClass()
     {
-        $class = 'Magento\Framework\App\Helper\AbstractHelper';
+        $class = \Magento\Framework\App\Helper\AbstractHelper::class;
         $object = $this->getMockForAbstractClass($class, [], '', false);
         $this->_helperFactoryMock->expects(
             $this->once()

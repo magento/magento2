@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\GiftMessage\Helper;
 
@@ -114,7 +112,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->skipPage($type) && !$this->isMessagesAllowed($type, $entity)) {
             return '';
         }
-        return $this->_layoutFactory->create()->createBlock('Magento\GiftMessage\Block\Message\Inline')
+        return $this->_layoutFactory->create()->createBlock(\Magento\GiftMessage\Block\Message\Inline::class)
             ->setId('giftmessage_form_' . $this->_nextId++)
             ->setDontDisplayContainer($dontDisplayContainer)
             ->setEntity($entity)
@@ -203,7 +201,8 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $result = $this->scopeConfig->getValue(
             self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
         );
         if ($productConfig === null || '' === $productConfig || $productConfig == Boolean::VALUE_USE_CONFIG) {
             return $result;
@@ -327,7 +326,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     public function getGiftMessage($messageId = null)
     {
         $message = $this->_giftMessageFactory->create();
-        if (!is_null($messageId)) {
+        if ($messageId !== null) {
             $message->load($messageId);
         }
         return $message;

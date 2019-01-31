@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateTextSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches"/>
+            <title value="Admin can create product attribute with text swatch"/>
+            <description value="Admin can create product attribute with text swatch"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3078"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create a new product attribute of type "Text Swatch" -->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('0')}}" userInput="red" stepKey="fillSwatch0"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('0')}}" userInput="Something red." stepKey="fillDescription0"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('1')}}" userInput="green" stepKey="fillSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('1')}}" userInput="Something green." stepKey="fillDescription1"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch2"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('2')}}" userInput="blue" stepKey="fillSwatch2"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('2')}}" userInput="Something blue." stepKey="fillDescription2"/>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+        <!-- Save and verify -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
+        <seeInField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('1')}}" userInput="red" stepKey="seeSwatch0"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('1')}}" userInput="Something red." stepKey="seeDescription0"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('2')}}" userInput="green" stepKey="seeSwatch1"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('2')}}" userInput="Something green." stepKey="seeDescription1"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('3')}}" userInput="blue" stepKey="seeSwatch2"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('3')}}" userInput="Something blue." stepKey="seeDescription2"/>
+
+        <!-- Create a configurable product to verify the storefront with -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Create configurations based off the Text Swatch we created earlier -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+
+        <!-- Go to the product page and see text swatch options -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="red" stepKey="seeRed"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('1')}}" userInput="option-label" stepKey="grabRedLabel"/>
+        <assertEquals stepKey="assertRedLabel">
+            <expectedResult type="string">Something red.</expectedResult>
+            <actualResult type="string">{$grabRedLabel}</actualResult>
+        </assertEquals>
+        <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="green" stepKey="seeGreen"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('2')}}" userInput="option-label" stepKey="grabGreenLabel"/>
+        <assertEquals stepKey="assertGreenLabel">
+            <expectedResult type="string">Something green.</expectedResult>
+            <actualResult type="string">{$grabGreenLabel}</actualResult>
+        </assertEquals>
+        <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="blue" stepKey="seeBlue"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('3')}}" userInput="option-label" stepKey="grabBlueLabel"/>
+        <assertEquals stepKey="assertBlueLabel">
+            <expectedResult type="string">Something blue.</expectedResult>
+            <actualResult type="string">{$grabBlueLabel}</actualResult>
+        </assertEquals>
+    </test>
+</tests>

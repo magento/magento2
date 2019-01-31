@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
 /**
  * Class GridPoolTest
  */
-class GridPoolTest extends \PHPUnit_Framework_TestCase
+class GridPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\GridPool
@@ -43,19 +41,11 @@ class GridPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->orderGridMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Grid', [], [], '', false
-        );
-        $this->invoiceGridMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Grid', [], [], '', false
-        );
-        $this->shipmentGridMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Grid', [], [], '', false
-        );
-        $this->creditmemoGridMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Grid', [], [], '', false
-        );
-        $this->statementMock = $this->getMockForAbstractClass('Zend_Db_Statement_Interface');
+        $this->orderGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
+        $this->invoiceGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
+        $this->shipmentGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
+        $this->creditmemoGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
+        $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
         $grids = [
             'order_grid' => $this->orderGridMock,
             'invoice_grid' => $this->invoiceGridMock,

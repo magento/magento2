@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,7 +75,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
 
     /**
      * @var StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $storeManager;
 
@@ -113,25 +113,42 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     }
 
     /**
-     * Lock Stock Item records
+     * Lock Stock Item records.
      *
      * @param int[] $productIds
      * @param int $websiteId
      * @return array
      */
-    public function lockProductsStock($productIds, $websiteId)
+    public function lockProductsStock(array $productIds, $websiteId)
     {
         if (empty($productIds)) {
             return [];
         }
         $itemTable = $this->getTable('cataloginventory_stock_item');
-        $productTable = $this->getTable('catalog_product_entity');
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
-            ->join(['p' => $productTable], 'p.entity_id=si.product_id', ['type_id'])
-            ->where('website_id=?', $websiteId)
+            ->where('website_id = ?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
-        return $this->getConnection()->fetchAll($select);
+
+        $productTable = $this->getTable('catalog_product_entity');
+        $selectProducts = $this->getConnection()->select()->from(['p' => $productTable], [])
+            ->where('entity_id IN (?)', $productIds)
+            ->columns(
+                [
+                    'product_id' => 'entity_id',
+                    'type_id' => 'type_id',
+                ]
+            );
+        $items = [];
+
+        foreach ($this->getConnection()->query($select)->fetchAll() as $si) {
+            $items[$si['product_id']] = $si;
+        }
+        foreach ($this->getConnection()->fetchAll($selectProducts) as $p) {
+            $items[$p['product_id']]['type_id'] = $p['type_id'];
+        }
+        
+        return $items;
     }
 
     /**
@@ -140,7 +157,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     public function correctItemsQty(array $items, $websiteId, $operator)
     {
         if (empty($items)) {
-            return $this;
+            return;
         }
 
         $connection = $this->getConnection();
@@ -189,6 +206,8 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * Set items out of stock basing on their quantities and config settings
      *
+     * @deprecated
+     * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetOutOfStock
      * @param string|int $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
@@ -224,6 +243,8 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * Set items in stock basing on their quantities and config settings
      *
+     * @deprecated
+     * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetInStock
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
@@ -257,6 +278,8 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * Update items low stock date basing on their quantities and config settings
      *
+     * @deprecated
+     * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateLowStockDate
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Pricing\Price;
@@ -17,6 +17,8 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 /**
  * Bundle option price
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class BundleSelectionPrice extends AbstractPrice
 {
@@ -91,7 +93,7 @@ class BundleSelectionPrice extends AbstractPrice
     }
 
     /**
-     * Get the price value for one of selection product
+     * Get the price value for one of selection product.
      *
      * @return bool|float
      */
@@ -99,6 +101,14 @@ class BundleSelectionPrice extends AbstractPrice
     {
         if (null !== $this->value) {
             return $this->value;
+        }
+        $product = $this->selection;
+        $bundleSelectionKey = 'bundle-selection-'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . 'value-'
+            . $product->getSelectionId();
+        if ($product->hasData($bundleSelectionKey)) {
+            return $product->getData($bundleSelectionKey);
         }
 
         $priceCode = $this->useRegularPrice ? BundleRegularPrice::PRICE_CODE : FinalPrice::PRICE_CODE;
@@ -121,7 +131,8 @@ class BundleSelectionPrice extends AbstractPrice
                     'catalog_product_get_final_price',
                     ['product' => $product, 'qty' => $this->bundleProduct->getQty()]
                 );
-                $value = $product->getData('final_price') * ($selectionPriceValue / 100);
+                $price = $this->useRegularPrice ? $product->getData('price') : $product->getData('final_price');
+                $value = $price * ($selectionPriceValue / 100);
             } else {
                 // calculate price for selection type fixed
                 $value = $this->priceCurrency->convert($selectionPriceValue);
@@ -131,6 +142,7 @@ class BundleSelectionPrice extends AbstractPrice
             $value = $this->discountCalculator->calculateDiscount($this->bundleProduct, $value);
         }
         $this->value = $this->priceCurrency->round($value);
+        $product->setData($bundleSelectionKey, $this->value);
 
         return $this->value;
     }
@@ -142,18 +154,29 @@ class BundleSelectionPrice extends AbstractPrice
      */
     public function getAmount()
     {
-        if (!isset($this->amount[$this->getValue()])) {
+        $product = $this->selection;
+        $bundleSelectionKey = 'bundle-selection'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . '-amount-'
+            . $product->getSelectionId();
+        if ($product->hasData($bundleSelectionKey)) {
+            return $product->getData($bundleSelectionKey);
+        }
+        $value = $this->getValue();
+        if (!isset($this->amount[$value])) {
             $exclude = null;
             if ($this->getProduct()->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                 $exclude = $this->excludeAdjustment;
             }
-            $this->amount[$this->getValue()] = $this->calculator->getAmount(
-                $this->getValue(),
+            $this->amount[$value] = $this->calculator->getAmount(
+                $value,
                 $this->getProduct(),
                 $exclude
             );
+            $product->setData($bundleSelectionKey, $this->amount[$value]);
         }
-        return $this->amount[$this->getValue()];
+
+        return $this->amount[$value];
     }
 
     /**
@@ -163,8 +186,7 @@ class BundleSelectionPrice extends AbstractPrice
     {
         if ($this->bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC) {
             return parent::getProduct();
-        } else {
-            return $this->bundleProduct;
         }
+        return $this->bundleProduct;
     }
 }

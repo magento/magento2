@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe" template="payflowlink/redirect.phtml" cacheable="false"/>
+        <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe" template="Magento_Paypal::payflowlink/redirect.phtml" cacheable="false"/>
     </container>
 </layout>

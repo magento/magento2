@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,8 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  * 3. Click "Change Password" link near "Contact Information".
  * 4. Fill form according to data set and save (current password is incorrect).
  * 5. Perform action for specified number of times.
- * 6. "The password doesn't match this account." appears after each change password attempt.
+ * 6. "The password doesn't match this account. Verify the password and try again." appears after each
+ *    change password attempt.
  * 7. Perform all assertions.
  *
  * @ZephyrId MAGETWO-50559
@@ -35,7 +36,7 @@ class LockCustomerOnEditPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**
@@ -112,14 +113,14 @@ class LockCustomerOnEditPageTest extends Injectable
         $this->configData = $configData;
         // Preconditions
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
         $initialCustomer->persist();
 
         // Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $initialCustomer]
         )->run();
 
@@ -142,7 +143,7 @@ class LockCustomerOnEditPageTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }

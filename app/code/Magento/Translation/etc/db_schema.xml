@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="translation" resource="default" engine="innodb" comment="Translations">
+        <column xsi:type="int" name="key_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Key Id of Translation"/>
+        <column xsi:type="varchar" name="string" nullable="false" length="255" default="Translate String"
+                comment="Translation String"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store Id"/>
+        <column xsi:type="varchar" name="translate" nullable="true" length="255" comment="Translate"/>
+        <column xsi:type="varchar" name="locale" nullable="false" length="20" default="en_US" comment="Locale"/>
+        <column xsi:type="bigint" name="crc_string" padding="20" unsigned="false" nullable="false" identity="false"
+                default="1591228201" comment="Translation String CRC32 Hash"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="key_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="TRANSLATION_STORE_ID_STORE_STORE_ID" table="translation" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="TRANSLATION_STORE_ID_LOCALE_CRC_STRING_STRING">
+            <column name="store_id"/>
+            <column name="locale"/>
+            <column name="crc_string"/>
+            <column name="string"/>
+        </constraint>
+    </table>
+</schema>

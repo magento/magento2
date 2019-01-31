@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-class SelectRendererTest extends \PHPUnit_Framework_TestCase
+class SelectRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {
-        $rendererOne = $this->getMockBuilder('Magento\Framework\DB\Select\RendererInterface')
+        $rendererOne = $this->getMockBuilder(\Magento\Framework\DB\Select\RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renders = [
@@ -17,7 +17,7 @@ class SelectRendererTest extends \PHPUnit_Framework_TestCase
             ['renderer' => $rendererOne, 'sort' => 20, 'part' => 'from'],
             ['renderer' => $rendererOne, 'sort' => 5, 'part' => 'from'],
         ];
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $rendererOne->expects($this->any())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
@@ -35,30 +35,29 @@ class AVSResponse implements ValidatorInterface
      * Indicates whether AVS response is international (Y),
      * US (N), or cannot be determined (X). Client version
      * 3.06 or later is required.
+     * @deprecated
+     * @see \Magento\Paypal\Model\Payflow\Service\Response\Validator\IAVSResponse
      */
     const IAVS = 'iavs';
 
-    /** Values of the response */
+    /**#@+ Values of the response */
     const RESPONSE_YES = 'y';
 
     const RESPONSE_NO = 'n';
 
     const RESPONSE_NOT_SUPPORTED = 'x';
-    /**  */
+    /**#@-*/
 
-    /** Values of the validation settings payments */
+    /**#@+ Values of the validation settings payments */
     const CONFIG_ON = 1;
 
     const CONFIG_OFF = 0;
-    /**  */
+    /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $avsCheck = [
         'avsaddr' => 'avs_street',
         'avszip' => 'avs_zip',
-        'iavs' => 'avs_international',
     ];
 
     /**
@@ -67,7 +66,6 @@ class AVSResponse implements ValidatorInterface
     protected $errorsMessages = [
         'avs_street' => 'AVS address does not match.',
         'avs_zip' => 'AVS zip does not match.',
-        'avs_international' => 'International AVS indicator does not match.',
     ];
 
     /**

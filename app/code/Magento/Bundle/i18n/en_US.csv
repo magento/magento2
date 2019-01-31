@@ -24,8 +24,9 @@ Delete,Delete
 "Product with specified sku: ""%1"" does not contain option: ""%2""","Product with specified sku: ""%1"" does not contain option: ""%2"""
 "Child with specified sku: ""%1"" already assigned to product: ""%2""","Child with specified sku: ""%1"" already assigned to product: ""%2"""
 "Product with specified sku: %1 is not a bundle product","Product with specified sku: %1 is not a bundle product"
-"Requested bundle option product doesn\'t exist","Requested bundle option product doesn\'t exist"
-"Requested option doesn\'t exist","Requested option doesn\'t exist"
+"Requested bundle option product doesn't exist","Requested bundle option product doesn't exist"
+"%fieldName is a required field.","%fieldName is a required field."
+"Requested option doesn't exist","Requested option doesn't exist"
 "Cannot delete option with id %1","Cannot delete option with id %1"
 "Could not save option","Could not save option"
 "Price Range","Price Range"
@@ -36,37 +37,35 @@ Separately,Separately
 "The options you selected are not available.","The options you selected are not available."
 "The required options you selected are not available.","The required options you selected are not available."
 "Please select all required options.","Please select all required options."
-"We can\'t add this item to your shopping cart right now.","We can\'t add this item to your shopping cart right now."
+"We can't add this item to your shopping cart right now.","We can't add this item to your shopping cart right now."
 N/A,N/A
 Percent,Percent
-"Ship Bundle Items","Ship Bundle Items"
-"We can\'t save custom-defined options for bundles with dynamic pricing.","We can\'t save custom-defined options for bundles with dynamic pricing."
+"We can't save custom-defined options for bundles with dynamic pricing.","We can't save custom-defined options for bundles with dynamic pricing."
 Cancel,Cancel
 "Add Selected Products","Add Selected Products"
-[GLOBAL],[GLOBAL]
 "Add Option","Add Option"
 "New Option","New Option"
 "Option Title","Option Title"
+"Default Title","Default Title"
+"Store View Title","Store View Title"
 "Input Type","Input Type"
 Drop-down,Drop-down
 "Radio Buttons","Radio Buttons"
 Checkbox,Checkbox
 "Multiple Select","Multiple Select"
 Required,Required
-Default,Default
+"Is Default","Is Default"
 Name,Name
 "Default Quantity","Default Quantity"
 "User Defined","User Defined"
 "Price Type","Price Type"
-"Dynamic Price","Dynamic Price"
-"Dynamic SKU","Dynamic SKU"
-"Dynamic Weight","Dynamic Weight"
 None,None
 Quantity:,Quantity:
 "Choose a selection...","Choose a selection..."
-"Store View Title","Store View Title"
+"Ship Bundle Items","Ship Bundle Items"
 Position,Position
 "There are no products in this option.","There are no products in this option."
+Default,Default
 Ordered,Ordered
 Invoiced,Invoiced
 Shipped,Shipped

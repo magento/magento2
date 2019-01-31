@@ -2,7 +2,7 @@
 /**
  * Data Model implementing the Address interface
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Data;
@@ -17,7 +17,6 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
 {
     const KEY_STORE_ID = 'store_id';
     const KEY_STORE_LABEL = 'store_label';
-
 
     /**
      * Get storeId

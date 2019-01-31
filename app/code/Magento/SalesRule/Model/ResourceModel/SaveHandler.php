@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
-use Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
@@ -37,11 +36,14 @@ class SaveHandler implements AttributeInterface
     }
 
     /**
+     * Save handler
+     *
      * @param string $entityType
      * @param array $entityData
      * @param array $arguments
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {

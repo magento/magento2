@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'mageUtils',
@@ -35,7 +39,7 @@ define([
         getLabel: function (value, format) {
             var date = moment(this._super());
 
-            date = date.isValid() ?
+            date = date.isValid() && value[this.index] ?
                 date.format(format || this.dateFormat) :
                 '';
 

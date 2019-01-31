@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Controller\Paypal;
 
 use Magento\Checkout\Model\Session;
@@ -73,7 +74,7 @@ abstract class AbstractAction extends Action
     protected function validateQuote($quote)
     {
         if (!$quote || !$quote->getItemsCount()) {
-            throw new \InvalidArgumentException(__('We can\'t initialize checkout.'));
+            throw new \InvalidArgumentException(__('Checkout failed to initialize. Verify and try again.'));
         }
     }
 }

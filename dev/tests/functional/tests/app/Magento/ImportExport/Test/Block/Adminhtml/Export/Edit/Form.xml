@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,5 +13,11 @@
         <file_format>
             <input>select</input>
         </file_format>
+        <product composite="1">
+            <sku>
+                <input>input</input>
+                <selector>[name="export_filter[sku]"]</selector>
+            </sku>
+        </product>
     </fields>
 </mapping>

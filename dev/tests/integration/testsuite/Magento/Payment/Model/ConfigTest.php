@@ -2,7 +2,7 @@
 /**
  * \Magento\Payment\Model\Config
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class ConfigTest
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -24,10 +24,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
-        $cache = $objectManager->create('Magento\Framework\App\Cache');
+        $cache = $objectManager->create(\Magento\Framework\App\Cache::class);
         $cache->clean();
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Framework\Config\FileResolverInterface'
+            \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
         $fileList = [
             file_get_contents(__DIR__ . '/_files/payment.xml'),
@@ -35,10 +35,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
         $reader = $objectManager->create(
-            'Magento\Payment\Model\Config\Reader',
+            \Magento\Payment\Model\Config\Reader::class,
             ['fileResolver' => $fileResolverMock]
         );
-        $data = $objectManager->create('Magento\Payment\Model\Config\Data', ['reader' => $reader]);
+        $data = $objectManager->create(\Magento\Payment\Model\Config\Data::class, ['reader' => $reader]);
         $this->model = $objectManager->create(Config::class, ['dataStorage' => $data]);
     }
 
@@ -76,7 +76,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
-        $cache = $objectManager->create('Magento\Framework\App\Cache');
+        $cache = $objectManager->create(\Magento\Framework\App\Cache::class);
         $cache->clean();
     }
 }

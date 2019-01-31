@@ -2,17 +2,20 @@
 "Ttl value ""%1"" is not valid. Please use only numbers equal or greater than zero.","Ttl value ""%1"" is not valid. Please use only numbers equal or greater than zero."
 "Built-in Cache","Built-in Cache"
 "Varnish Cache (Recommended)","Varnish Cache (Recommended)"
+"Unsupported varnish version","Unsupported varnish version"
 "Full Page Cache","Full Page Cache"
 "Caching Application","Caching Application"
 "Varnish Configuration","Varnish Configuration"
 "Access list","Access list"
-"IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
-                            If field is empty default value localhost will be saved.","IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
+"IPs access list separated with ',' that can purge Varnish configuration for config file generation.
+                            If field is empty default value localhost will be saved.","IPs access list separated with ',' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved."
 "Backend host","Backend host"
 "Specify backend host for config file generation. If field is empty default value localhost will be saved.","Specify backend host for config file generation. If field is empty default value localhost will be saved."
 "Backend port","Backend port"
 "Specify backend port for config file generation. If field is empty default value 8080 will be saved.","Specify backend port for config file generation. If field is empty default value 8080 will be saved."
+"Grace period","Grace period"
+"Specify grace period in seconds for config file generation. If field is empty default value 300 will be saved. This grace period will be used to serve cached content when the server is healthy. If the server is not healthy, cached content will be served for 3 days before failing.","Specify grace period in seconds for config file generation. If field is empty default value 300 will be saved. This grace period will be used to serve cached content when the server is healthy. If the server is not healthy, cached content will be served for 3 days before failing."
 "TTL for public content","TTL for public content"
 "Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. ","Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. "
 "Page Cache","Page Cache"

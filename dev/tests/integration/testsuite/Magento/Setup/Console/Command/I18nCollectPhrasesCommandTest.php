@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
+class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var I18nCollectPhrasesCommand
@@ -27,7 +27,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $property = new \ReflectionProperty('\Magento\Setup\Module\I18n\ServiceLocator', '_dictionaryGenerator');
+        $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
         $property->setAccessible(true);
         $property->setValue(null);
         $property->setAccessible(false);

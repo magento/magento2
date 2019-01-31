@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -9,6 +9,9 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -54,7 +57,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -99,7 +102,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -120,7 +123,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Order Total'),
                 'index' => 'grand_total',
                 'type' => 'currency',
-                'currency' => 'order_currency_code'
+                'currency' => 'order_currency_code',
+                'rate'  => 1
             ]
         );
 
@@ -139,7 +143,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                     'filter' => false,
                     'sortable' => false,
                     'width' => '100px',
-                    'renderer' => 'Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action'
+                    'renderer' => \Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action::class
                 ]
             );
         }
@@ -159,7 +163,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {

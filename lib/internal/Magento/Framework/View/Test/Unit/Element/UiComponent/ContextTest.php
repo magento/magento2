@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,42 +11,63 @@ namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 
-class ContextTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context
      */
     protected $context;
 
+    /**
+     * @var ActionPoolInterface
+     */
+    private $actionPool;
+
+    /**
+     * @var \Magento\Framework\AuthorizationInterface
+     */
+    private $authorization;
+
     protected function setUp()
     {
-        $pageLayout = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')->getMock();
-        $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+        $pageLayout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)->getMock();
+        $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $buttonProviderFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $actionPoolFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
+        $this->actionPool = $this->getMockBuilder(ActionPoolInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $actionPoolFactory->method('create')->willReturn($this->actionPool);
         $contentTypeFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')->getMock();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')->getMock();
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMock();
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)->getMock();
         $uiComponentFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
+        $this->authorization = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\UiComponent\Context',
+            \Magento\Framework\View\Element\UiComponent\Context::class,
             [
                 'pageLayout'            => $pageLayout,
                 'request'               => $request,
@@ -55,9 +76,60 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 'contentTypeFactory'    => $contentTypeFactory,
                 'urlBuilder'            => $urlBuilder,
                 'processor'             => $processor,
-                'uiComponentFactory'    => $uiComponentFactory
+                'uiComponentFactory'    => $uiComponentFactory,
+                'authorization'         => $this->authorization,
             ]
         );
+    }
+
+    public function testAddButtonWithoutAclResource()
+    {
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->actionPool->expects($this->once())->method('add');
+        $this->authorization->expects($this->never())->method('isAllowed');
+
+        $this->context->addButtons([
+            'button_1' => [
+                'name' => 'button_1',
+            ],
+        ], $component);
+    }
+
+    public function testAddButtonWithAclResourceAllowed()
+    {
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->actionPool->expects($this->once())->method('add');
+        $this->authorization->expects($this->once())->method('isAllowed')->willReturn(true);
+
+        $this->context->addButtons([
+            'button_1' => [
+                'name' => 'button_1',
+                'aclResource' => 'Magento_Framwork::acl',
+            ],
+        ], $component);
+    }
+
+    public function testAddButtonWithAclResourceDenied()
+    {
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->actionPool->expects($this->never())->method('add');
+        $this->authorization->expects($this->once())->method('isAllowed')->willReturn(false);
+
+        $this->context->addButtons([
+            'button_1' => [
+                'name' => 'button_1',
+                'aclResource' => 'Magento_Framwork::acl',
+            ],
+        ], $component);
     }
 
     /**

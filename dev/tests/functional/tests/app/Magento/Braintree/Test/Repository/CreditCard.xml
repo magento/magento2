@@ -1,29 +1,41 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Braintree\Test\Repository\CreditCard">
-        <dataset name="visa_braintree">
-            <field name="credit_card_number" xsi:type="string">4111111111111111</field>
-            <field name="credit_card_exp_month" xsi:type="string">01</field>
-            <field name="credit_card_exp_year" xsi:type="string">2020</field>
-            <field name="cvv" xsi:type="string">123</field>
-        </dataset>
+    <repository class="Magento\Payment\Test\Repository\CreditCard">
         <dataset name="visa_braintree_3dsecure">
-            <field name="credit_card_number" xsi:type="string">4000000000000002</field>
-            <field name="credit_card_exp_month" xsi:type="string">01</field>
-            <field name="credit_card_exp_year" xsi:type="string">20</field>
-            <field name="cvv" xsi:type="string">123</field>
+            <field name="payment_code" xsi:type="string">braintree</field>
+            <field name="cc_number" xsi:type="string">4000000000000002</field>
+            <field name="cc_exp_month" xsi:type="string">01</field>
+            <field name="cc_exp_year" xsi:type="string">20</field>
+            <field name="cc_cid" xsi:type="string">123</field>
         </dataset>
+
         <dataset name="visa_braintree_3dsecure_failed">
-            <field name="credit_card_number" xsi:type="string">4000000000000028</field>
-            <field name="credit_card_exp_month" xsi:type="string">01</field>
-            <field name="credit_card_exp_year" xsi:type="string">2020</field>
-            <field name="cvv" xsi:type="string">123</field>
+            <field name="payment_code" xsi:type="string">braintree</field>
+            <field name="cc_number" xsi:type="string">4000000000000028</field>
+            <field name="cc_exp_month" xsi:type="string">01</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
+            <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
+
+        <dataset name="visa_braintree_fraud_rejected">
+            <field name="payment_code" xsi:type="string">braintree</field>
+            <field name="cc_number" xsi:type="string">4000111111111511</field>
+            <field name="cc_exp_month" xsi:type="string">01</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
+            <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
+
+        <dataset name="visa_braintree_no_cvv">
+            <field name="payment_code" xsi:type="string">braintree</field>
+            <field name="cc_number" xsi:type="string">4111111111111111</field>
+            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
         </dataset>
     </repository>
 </config>

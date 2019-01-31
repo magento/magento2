@@ -5,6 +5,7 @@
 Ready,Ready
 Processing,Processing
 Never,Never
+"%1 index is locked by another reindex process. Skipping.","%1 index is locked by another reindex process. Skipping."
 "Index Management","Index Management"
 "Please select indexers.","Please select indexers."
 "%1 indexer(s) are in ""Update by Schedule"" mode.","%1 indexer(s) are in ""Update by Schedule"" mode."
@@ -13,6 +14,7 @@ Never,Never
 "One or more <a href=""%1"">indexers are invalid</a>. Make sure your <a href=""%2"" target=""_blank"">Magento cron job</a> is running.","One or more <a href=""%1"">indexers are invalid</a>. Make sure your <a href=""%2"" target=""_blank"">Magento cron job</a> is running."
 "State for the same indexer","State for the same indexer"
 "State for the same view","State for the same view"
+"Field '%1' not found","Field '%1' not found"
 "Some Exception Message","Some Exception Message"
 "Test Phrase","Test Phrase"
 "Change indexer mode","Change indexer mode"

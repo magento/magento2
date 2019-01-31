@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,14 +9,14 @@
 ?>
 
 <?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
-<?php $options = $block->decorateArray($block->getOptions()); ?>
+<?php $options = $block->decorateArray($block->getOptions(true)); ?>
 <?php if (count($options)): ?>
 <fieldset id="catalog_product_composite_configure_fields_bundle"
-          class="fieldset admin__fieldset composite-bundle<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
-    <legend class="legend admin__legend"><span><?php /* @escapeNotVerified */ echo __('Bundle Items') ?></span></legend><br />
+          class="fieldset admin__fieldset composite-bundle<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+    <legend class="legend admin__legend"><span><?= /* @escapeNotVerified */ __('Bundle Items') ?></span></legend><br />
     <?php foreach ($options as $option) : ?>
         <?php if ($option->getSelections()) : ?>
-            <?php echo $block->getOptionHtml($option); ?>
+            <?= $block->getOptionHtml($option) ?>
         <?php endif; ?>
     <?php endforeach; ?>
 </fieldset>
@@ -71,7 +71,7 @@ require([
             }
         }
     };
-    ProductConfigure.bundleControl = new BundleControl(<?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>);
+    ProductConfigure.bundleControl = new BundleControl(<?= /* @escapeNotVerified */ $block->getJsonConfig() ?>);
 });
 </script>
 

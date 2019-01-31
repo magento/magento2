@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test table name
@@ -25,7 +25,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUniqRulesNamesList()
     {
-        $dbAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $dbAdapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->setMethods(['_connect', 'quote'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -38,10 +38,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $selectRenderer = $this->getMockBuilder('Magento\Framework\DB\Select\SelectRenderer')
+        $selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock, $selectRenderer]);
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->setMethods(['from'])
+            ->setConstructorArgs([$dbAdapterMock, $selectRenderer])
+            ->getMock();
         $select->expects(
             $this->once()
         )->method(
@@ -53,12 +56,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($select)
         );
 
-        $connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'fetchAll'],
-            [],
-            '',
-            false
+        $connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'fetchAll']
         );
         $connectionMock->expects($this->once())->method('select')->will($this->returnValue($select));
         $connectionMock->expects(
@@ -71,35 +71,23 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'fetchAllCallback'])
         );
 
-        $resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false
-        );
+        $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
 
-        $flagFactory = $this->getMock('Magento\Reports\Model\FlagFactory', [], [], '', false);
-        $createdatFactoryMock = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $flagFactory = $this->createMock(\Magento\Reports\Model\FlagFactory::class);
+        $createdatFactoryMock = $this->createPartialMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory::class,
+            ['create']
         );
-        $updatedatFactoryMock = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $updatedatFactoryMock = $this->createPartialMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory::class,
+            ['create']
         );
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectHelper->getObject(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule',
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class,
             [
                 'resource' => $resourceMock,
                 'reportsFlagFactory' => $flagFactory,

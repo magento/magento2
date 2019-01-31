@@ -1,25 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
-use Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped;
-use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Api\ProductLinkRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductLinkExtensionInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
-use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Catalog\Api\ProductLinkRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
+use Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -34,6 +34,7 @@ class GroupedTest extends AbstractModifierTest
     const LINKED_PRODUCT_NAME = 'linked';
     const LINKED_PRODUCT_QTY = '0';
     const LINKED_PRODUCT_POSITION = 1;
+    const LINKED_PRODUCT_POSITION_CALCULATED = 1;
     const LINKED_PRODUCT_PRICE = '1';
 
     /**
@@ -80,7 +81,6 @@ class GroupedTest extends AbstractModifierTest
      * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
-
 
     protected function setUp()
     {
@@ -213,6 +213,7 @@ class GroupedTest extends AbstractModifierTest
                             'price' => null,
                             'qty' => self::LINKED_PRODUCT_QTY,
                             'position' => self::LINKED_PRODUCT_POSITION,
+                            'positionCalculated' => self::LINKED_PRODUCT_POSITION_CALCULATED,
                             'thumbnail' => null,
                             'type_id' => null,
                             'status' => null,

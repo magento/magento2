@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Sql;
@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Sql;
 /**
  * Class LimitExpression
  */
-class LimitExpression extends \Zend_Db_Expr
+class LimitExpression extends Expression
 {
     /**
      * @var string
@@ -41,19 +41,19 @@ class LimitExpression extends \Zend_Db_Expr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __toString()
     {
         $sql = $this->sql;
-        $count = intval($this->count);
+        $count = (int)$this->count;
         if ($count <= 0) {
             /** @see Zend_Db_Adapter_Exception */
             #require_once 'Zend/Db/Adapter/Exception.php';
             throw new \Zend_Db_Adapter_Exception("LIMIT argument count=$count is not valid");
         }
 
-        $offset = intval($this->offset);
+        $offset = (int)$this->offset;
         if ($offset < 0) {
             /** @see Zend_Db_Adapter_Exception */
             #require_once 'Zend/Db/Adapter/Exception.php';

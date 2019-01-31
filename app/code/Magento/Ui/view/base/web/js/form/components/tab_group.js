@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -61,7 +65,7 @@ define([
                 invalid;
 
             invalid = _.find(result, function (item) {
-                return !item.valid;
+                return typeof item !== 'undefined' && !item.valid;
             });
 
             if (invalid) {

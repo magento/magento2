@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
@@ -79,7 +79,7 @@ abstract class View extends \Magento\Backend\App\Action
                 ->get($this->getRequest()->getParam('invoice_id'));
             $this->registry->register('current_invoice', $invoice);
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Invoice capturing error'));
+            $this->messageManager->addErrorMessage(__('Invoice capturing error'));
             return false;
         }
 
@@ -89,7 +89,7 @@ abstract class View extends \Magento\Backend\App\Action
     /**
      * @return InvoiceRepository
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getInvoiceRepository()
     {

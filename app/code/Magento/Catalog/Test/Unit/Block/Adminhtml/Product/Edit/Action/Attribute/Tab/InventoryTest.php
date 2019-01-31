@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
+use Magento\Customer\Api\Data\GroupInterface;
+
 /**
  * Class InventoryTest
  */
-class InventoryTest extends \PHPUnit_Framework_TestCase
+class InventoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders|\PHPUnit_Framework_MockObject_MockObject
@@ -44,28 +46,16 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Template\Context',
-            ['getRequest'],
-            [],
-            '',
-            false
-        );
-        $this->backordersMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Source\Backorders',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getRequest']);
+        $this->backordersMock = $this->createMock(\Magento\CatalogInventory\Model\Source\Backorders::class);
         $this->stockConfigurationMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockConfigurationInterface',
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
             [],
             '',
             false
         );
         $this->requestMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             ['getParam'],
             '',
             false
@@ -76,11 +66,12 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->requestMock));
 
         $this->inventory = $objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory',
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory::class,
             [
                 'context' => $this->contextMock,
                 'backorders' => $this->backordersMock,
-                'stockConfiguration' => $this->stockConfigurationMock
+                'stockConfiguration' => $this->stockConfigurationMock,
+                'serializer' => new \Magento\Framework\Serialize\Serializer\Json(),
             ]
         );
     }
@@ -136,6 +127,32 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('return-value'));
 
         $this->assertEquals('return-value', $this->inventory->getDefaultConfigValue('field-name'));
+    }
+
+    /**
+     * @dataProvider getDefaultMinSaleQtyDataProvider
+     * @param string $expected
+     * @param string $default
+     */
+    public function testGetDefaultMinSaleQty($expected, $default)
+    {
+        $this->stockConfigurationMock->method('getDefaultConfigValue')->willReturn($default);
+        $this->assertEquals($expected, $this->inventory->getDefaultMinSaleQty());
+    }
+
+    public function getDefaultMinSaleQtyDataProvider()
+    {
+        return [
+            'single-default-value' => [
+                22, '22'
+            ],
+            'no-default-for-all-group' => [
+                1, json_encode(['12' => '111'])
+            ],
+            'default-for-all-group' => [
+                5, json_encode(['12' => '111', GroupInterface::CUST_GROUP_ALL => '5'])
+            ]
+        ];
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -24,6 +24,9 @@ class ScheduleDesignUpdateTest extends AbstractModifierTest
 
     public function testModifyMeta()
     {
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(1);
         $this->assertSame([], $this->getModel()->modifyMeta([]));
     }
 

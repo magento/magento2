@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Search;
 
@@ -12,8 +10,11 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Search;
  * Search collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
-class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements
+    \Magento\Search\Model\SearchCollectionInterface
 {
     /**
      * Attribute collection
@@ -121,7 +122,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_searchQuery = $query;
         $this->addFieldToFilter(
             $this->getEntity()->getLinkField(),
-            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query))]);
+            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query))]
+        );
         return $this;
     }
 

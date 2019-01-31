@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Framework\DataObject;
 
 /**
  * Utility class for copying data sets between objects
  */
-namespace Magento\Framework\DataObject;
-
 class Copy
 {
     /**
@@ -116,14 +116,13 @@ class Copy
     }
 
     /**
-     * Get data from object|array to object|array containing fields
-     * from fieldset matching an aspect.
+     * Get data from object|array to object|array containing fields from fieldset matching an aspect.
      *
      * @param string $fieldset
      * @param string $aspect a field name
      * @param array|\Magento\Framework\DataObject $source
      * @param string $root
-     * @return array $data
+     * @return array
      *
      * @api
      */
@@ -214,9 +213,9 @@ class Copy
 
         if ($targetIsArray) {
             $target[$targetCode] = $value;
-        } else if ($target instanceof \Magento\Framework\DataObject) {
+        } elseif ($target instanceof \Magento\Framework\DataObject) {
             $target->setDataUsingMethod($targetCode, $value);
-        } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+        } elseif ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
             $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
         } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $target->setData($targetCode, $value);
@@ -232,7 +231,7 @@ class Copy
     /**
      * Access the extension get method
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $source
      * @param string $code
      *
      * @return mixed
@@ -265,7 +264,7 @@ class Copy
     /**
      * Access the extension set method
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $target
      * @param string $code
      * @param mixed $value
      *

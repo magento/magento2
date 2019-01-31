@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
 use Magento\Backend\App\Action;
@@ -78,7 +79,7 @@ abstract class Cart extends \Magento\Backend\App\Action
     {
         $this->_customerId = (int)$this->getRequest()->getParam('customer_id');
         if (!$this->_customerId) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('No customer ID defined.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__("The customer ID isn't defined."));
         }
 
         $quoteItemId = (int)$this->getRequest()->getParam('id');
@@ -90,12 +91,12 @@ abstract class Cart extends \Magento\Backend\App\Action
             $this->_quote = $this->quoteFactory->create();
         }
         $this->_quote->setWebsite(
-            $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)
+            $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getWebsite($websiteId)
         );
 
         $this->_quoteItem = $this->_quote->getItemById($quoteItemId);
         if (!$this->_quoteItem) {
-            throw new LocalizedException(__('Please correct the quote items and try again.'));
+            throw new LocalizedException(__('The quote items are incorrect. Verify the quote items and try again.'));
         }
 
         return $this;

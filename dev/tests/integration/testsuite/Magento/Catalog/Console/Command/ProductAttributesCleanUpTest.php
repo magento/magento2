@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
+class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CommandTester
@@ -32,14 +32,14 @@ class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->command = $this->objectManager->create('Magento\Catalog\Console\Command\ProductAttributesCleanUp');
-        $this->attributeResource = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Attribute');
+        $this->command = $this->objectManager->create(\Magento\Catalog\Console\Command\ProductAttributesCleanUp::class);
+        $this->attributeResource = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Attribute::class);
         $this->tester = new CommandTester($this->command);
 
         // Prepare data fixtures for test
         $store = $this->prepareAdditionalStore();
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
         $product->setName('Simple fixture store');
         $product->setStoreId($store->getId());
@@ -50,6 +50,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testExecute()
     {
@@ -87,15 +88,15 @@ class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
     private function prepareAdditionalStore()
     {
         /** @var \Magento\Store\Model\Website $website */
-        $website = $this->objectManager->create('Magento\Store\Model\Website');
+        $website = $this->objectManager->create(\Magento\Store\Model\Website::class);
         $website->load('test');
 
         /** @var \Magento\Store\Model\Store $store */
-        $store = $this->objectManager->create('Magento\Store\Model\Store');
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
         $store->load('fixturestore');
 
         /** @var \Magento\Store\Model\Group $storeGroup */
-        $storeGroup = $this->objectManager->create('Magento\Store\Model\Group');
+        $storeGroup = $this->objectManager->create(\Magento\Store\Model\Group::class);
         $storeGroup->setWebsiteId($website->getId());
         $storeGroup->setName('Fixture Store Group');
         $storeGroup->setRootCategoryId(2);
@@ -106,8 +107,6 @@ class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
             ->setGroupId($storeGroup->getId())
             ->save();
 
-        /* Refresh stores memory cache */
-        $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
         return $store;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\Control;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class DummyButtonTest
  */
-class DummyButtonTest extends \PHPUnit_Framework_TestCase
+class DummyButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Checks that button data for button dummy is empty array

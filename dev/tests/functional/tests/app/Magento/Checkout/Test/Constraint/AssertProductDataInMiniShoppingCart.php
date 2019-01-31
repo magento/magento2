@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that product price and qty in mini shopping cart equal to expected price from data set.
+ * Assert that product price and qty in  mini shopping cart are equal to expected price from data set.
  */
 class AssertProductDataInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that product price and qty in  mini shopping cart are equal to expected price from data set.
+     * Assert that product price and qty in mini shopping cart equal to expected price from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -56,7 +56,7 @@ class AssertProductDataInMiniShoppingCart extends AbstractAssertForm
         }
 
         $error = $this->verifyData($productsData, $miniCartData, true);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**

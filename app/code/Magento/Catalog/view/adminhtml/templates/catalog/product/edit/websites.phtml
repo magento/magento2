@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,35 +8,35 @@
 
 ?>
 <fieldset id="grop_fields" class="fieldset">
-    <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Product In Websites') ?></span></legend>
+    <legend class="legend"><span><?= /* @escapeNotVerified */ __('Product In Websites') ?></span></legend>
     <br>
     <?php if ($block->getProductId()): ?>
     <div class="messages">
         <div class="message message-notice">
-            <?php /* @escapeNotVerified */ echo __('To hide an item in catalog or search results, set the status to "Disabled".') ?>
+            <?= /* @escapeNotVerified */ __('To hide an item in catalog or search results, set the status to "Disabled".') ?>
         </div>
     </div>
     <?php endif; ?>
     <div class="store-scope">
-        <?php echo $block->getHintHtml() ?>
+        <?= $block->getHintHtml() ?>
         <div class="store-tree">
             <?php $_websites = $block->getWebsiteCollection() ?>
             <?php foreach ($_websites as $_website): ?>
             <div class="website-name">
-                <input name="product[website_ids][]" value="<?php /* @escapeNotVerified */ echo $_website->getId() ?>" <?php if ($block->isReadonly()): ?>  disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>" type="checkbox"<?php if ($block->hasWebsite($_website->getId()) || !$block->getProductId() && count($_websites) === 1): ?> checked="checked"<?php endif; ?> />
-                <label for="product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>"><?php echo $block->escapeHtml($_website->getName()) ?></label>
+                <input name="product[website_ids][]" value="<?= /* @escapeNotVerified */ $_website->getId() ?>" <?php if ($block->isReadonly()): ?>  disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>" type="checkbox"<?php if ($block->hasWebsite($_website->getId()) || !$block->getProductId() && count($_websites) === 1): ?> checked="checked"<?php endif; ?> />
+                <label for="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
             </div>
-            <dl class="webiste-groups" id="product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>_data">
+            <dl class="webiste-groups" id="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>_data">
                 <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
-                <dt><?php echo $block->escapeHtml($_group->getName()) ?></dt>
+                <dt><?= $block->escapeHtml($_group->getName()) ?></dt>
                 <dd>
                     <ul>
                         <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                         <li>
-                            <?php echo $block->escapeHtml($_store->getName()) ?>
+                            <?= $block->escapeHtml($_store->getName()) ?>
                             <?php if ($block->getWebsites() && !$block->hasWebsite($_website->getId())): ?>
-                            <span class="website-<?php /* @escapeNotVerified */ echo $_website->getId() ?>-select" style="display:none">
-                            <?php echo __('(Copy data from: %1)', $block->getChooseFromStoreHtml($_store)) ?>
+                            <span class="website-<?= /* @escapeNotVerified */ $_website->getId() ?>-select" style="display:none">
+                            <?= __('(Copy data from: %1)', $block->getChooseFromStoreHtml($_store)) ?>
                             </span>
                             <?php endif; ?>
                         </li>

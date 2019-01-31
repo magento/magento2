@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use \Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product;
 
-class CopierTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CopierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -41,29 +46,22 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->copyConstructorMock = $this->getMock('\Magento\Catalog\Model\Product\CopyConstructorInterface');
-        $this->productFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ProductFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->copyConstructorMock = $this->createMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
+        $this->productFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ProductFactory::class,
+            ['create']
         );
-        $this->optionRepositoryMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Option\Repository',
-            [],
-            [],
-            '',
-            false
+        $this->optionRepositoryMock = $this->createMock(
+            \Magento\Catalog\Model\Product\Option\Repository::class
         );
         $this->optionRepositoryMock;
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->createMock(Product::class);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
 
-        $this->metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $this->metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($this->metadata);
@@ -80,25 +78,43 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
     public function testCopy()
     {
+        $stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+            ->getMock();
+        $extensionAttributes = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtension::class)
+            ->setMethods(['getStockItem', 'setData'])
+            ->getMock();
+        $extensionAttributes
+            ->expects($this->once())
+            ->method('getStockItem')
+            ->willReturn($stockItem);
+        $extensionAttributes
+            ->expects($this->once())
+            ->method('setData')
+            ->with('stock_item', null);
+
+        $productData = [
+            'product data' => ['product data'],
+            ProductInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributes,
+        ];
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
         $this->productMock->expects($this->any())->method('getData')->willReturnMap([
-            ['', null, 'product data'],
+            ['', null, $productData],
             ['linkField', null, '1'],
         ]);
 
-        $resourceMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
+        $resourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
 
-        $duplicateMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+        $duplicateMock = $this->createPartialMock(
+            Product::class,
             [
                 '__wakeup',
                 'setData',
                 'setOptions',
                 'getData',
                 'setIsDuplicate',
-                'setOriginalId',
+                'setOriginalLinkId',
                 'setStatus',
                 'setCreatedAt',
                 'setUpdatedAt',
@@ -108,16 +124,13 @@ class CopierTest extends \PHPUnit_Framework_TestCase
                 'save',
                 'setUrlKey',
                 'getUrlKey',
-            ],
-            [],
-            '',
-            false
+            ]
         );
         $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
-        $duplicateMock->expects($this->once())->method('setOriginalId')->with(1);
+        $duplicateMock->expects($this->once())->method('setOriginalLinkId')->with(1);
         $duplicateMock->expects(
             $this->once()
         )->method(
@@ -135,10 +148,10 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         )->with(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
-        $duplicateMock->expects($this->once())->method('setData')->with('product data');
+        $duplicateMock->expects($this->atLeastOnce())->method('setData')->willReturn($duplicateMock);
         $this->copyConstructorMock->expects($this->once())->method('build')->with($this->productMock, $duplicateMock);
         $duplicateMock->expects($this->once())->method('getUrlKey')->willReturn('urk-key-1');
-        $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2');
+        $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2')->willReturn($duplicateMock);
         $duplicateMock->expects($this->once())->method('save');
 
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');

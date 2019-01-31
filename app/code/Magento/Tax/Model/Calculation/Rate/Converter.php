@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation\Rate;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\FormatInterface;
 
 /**
  * Tax Rate Model converter.
@@ -23,16 +26,25 @@ class Converter
     protected $taxRateTitleDataObjectFactory;
 
     /**
+     * @var FormatInterface|null
+     */
+    private $format;
+
+    /**
      * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
-     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
+     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
+     * @param FormatInterface|null $format
      */
     public function __construct(
         \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
-        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
+        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
+        FormatInterface $format = null
     ) {
         $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
         $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
+        $this->format = $format ?: ObjectManager::getInstance()->get(FormatInterface::class);
     }
+
     /**
      * Convert a tax rate data object to an array of associated titles
      *
@@ -71,7 +83,7 @@ class Converter
             'tax_postcode' => $taxRate->getTaxPostcode(),
             'code' => $taxRate->getCode(),
             'rate' => $taxRate->getRate(),
-            'zip_is_range' => $returnNumericLogic?0:false,
+            'zip_is_range' => $returnNumericLogic ? 0 : false,
         ];
 
         if ($taxRateFormData['tax_region_id'] === '0') {
@@ -79,7 +91,7 @@ class Converter
         }
 
         if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $taxRateFormData['zip_is_range'] = $returnNumericLogic?1:true;
+            $taxRateFormData['zip_is_range'] = $returnNumericLogic ? 1 : true;
             $taxRateFormData['zip_from'] = $taxRate->getZipFrom();
             $taxRateFormData['zip_to'] = $taxRate->getZipTo();
         }
@@ -109,7 +121,6 @@ class Converter
         return $taxRateFormData;
     }
 
-
     /**
      * Convert an array to a tax rate data object
      *
@@ -124,7 +135,7 @@ class Converter
             ->setTaxRegionId($this->extractFormData($formData, 'tax_region_id'))
             ->setTaxPostcode($this->extractFormData($formData, 'tax_postcode'))
             ->setCode($this->extractFormData($formData, 'code'))
-            ->setRate($this->extractFormData($formData, 'rate'));
+            ->setRate($this->format->getNumber($this->extractFormData($formData, 'rate')));
         if (isset($formData['zip_is_range']) && $formData['zip_is_range']) {
             $taxRate->setZipFrom($this->extractFormData($formData, 'zip_from'))
                 ->setZipTo($this->extractFormData($formData, 'zip_to'))->setZipIsRange(1);

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Legacy\Magento\Framework\ObjectManager;
 
-class DiConfigTest extends \PHPUnit_Framework_TestCase
+class DiConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testObsoleteDiFormat()
     {
@@ -70,7 +70,7 @@ class DiConfigTest extends \PHPUnit_Framework_TestCase
         $xml = simplexml_load_file($file);
         foreach ($xml->xpath('//type') as $type) {
             $this->assertNotContains(
-                'Magento\Framework\Console\CommandList',
+                \Magento\Framework\Console\CommandList::class,
                 $type->attributes(),
                 'Use \Magento\Framework\Console\CommandListInterface instead of \Magento\Framework\Console\CommandList'
             );

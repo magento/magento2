@@ -2,7 +2,7 @@
 /**
  * Magento-specific SOAP server.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
@@ -31,7 +31,7 @@ class Server
     const REQUEST_PARAM_LIST_WSDL = 'wsdl_list';
 
     /**
-     * @var \Magento\Framework\App\AreaLIst
+     * @var \Magento\Framework\App\AreaList
      */
     protected $_areaList;
 

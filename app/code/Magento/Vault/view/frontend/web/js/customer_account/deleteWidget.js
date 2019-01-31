@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -22,7 +22,7 @@ define([
                  * Default action on button click
                  */
                 click: function (event) { //eslint-disable-line no-unused-vars
-                    deleteButton.form.submit();
+                    $(deleteButton.form).submit();
                 }
             }
         ];

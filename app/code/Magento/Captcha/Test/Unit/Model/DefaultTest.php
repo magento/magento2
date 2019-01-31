@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Model;
 
-class DefaultTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Expiration frame
@@ -21,7 +24,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         'enable' => '1',
         'font' => 'linlibertine',
         'mode' => 'after_fail',
-        'forms' => 'user_forgotpassword,user_create,guest_checkout,register_during_checkout',
+        'forms' => 'user_forgotpassword,user_create',
         'failed_attempts_login' => '3',
         'failed_attempts_ip' => '1000',
         'timeout' => '7',
@@ -32,8 +35,6 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         'always_for' => [
             'user_create',
             'user_forgotpassword',
-            'guest_checkout',
-            'register_during_checkout',
             'contact_us',
         ],
     ];
@@ -87,13 +88,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $this->session = $this->_getSessionStub();
 
-        $this->_storeManager = $this->getMock(
-            'Magento\Store\Model\StoreManager',
-            ['getStore'],
-            [],
-            '',
-            false
-        );
+        $this->_storeManager = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
         $this->_storeManager->expects(
             $this->any()
         )->method(
@@ -103,7 +98,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
 
         // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->any()
         )->method(
@@ -111,18 +106,15 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 [
-                    'Magento\Captcha\Helper\Data' => $this->_getHelperStub(),
-                    'Magento\Customer\Model\Session' => $this->session,
+                    \Magento\Captcha\Helper\Data::class => $this->_getHelperStub(),
+                    \Magento\Customer\Model\Session::class => $this->session,
                 ]
             )
         );
 
-        $this->_resLogFactory = $this->getMock(
-            'Magento\Captcha\Model\ResourceModel\LogFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->_resLogFactory = $this->createPartialMock(
+            \Magento\Captcha\Model\ResourceModel\LogFactory::class,
+            ['create']
         );
         $this->_resLogFactory->expects(
             $this->any()
@@ -145,7 +137,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBlockName()
     {
-        $this->assertEquals($this->_object->getBlockName(), 'Magento\Captcha\Block\Captcha\DefaultCaptcha');
+        $this->assertEquals($this->_object->getBlockName(), \Magento\Captcha\Block\Captcha\DefaultCaptcha::class);
     }
 
     /**
@@ -191,7 +183,13 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         self::$_defaultConfig['case_sensitive'] = '1';
         $this->assertFalse($this->_object->isCorrect('abcdef5'));
-        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]];
+        $sessionData = [
+            'user_create_word' => [
+                'data' => 'AbCdEf5',
+                'words' => 'AbCdEf5',
+                'expires' => time() + self::EXPIRE_FRAME
+            ]
+        ];
         $this->_object->getSession()->setData($sessionData);
         self::$_defaultConfig['case_sensitive'] = '0';
         $this->assertTrue($this->_object->isCorrect('abcdef5'));
@@ -232,7 +230,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->_object->getWord(), 'AbCdEf5');
         $this->_object->getSession()->setData(
-            ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() - 360]]
+            ['user_create_word' => ['data' => 'AbCdEf5', 'words' => 'AbCdEf5','expires' => time() - 360]]
         );
         $this->assertNull($this->_object->getWord());
     }
@@ -246,17 +244,22 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $sessionArgs = $helper->getConstructArguments(
-            'Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             ['storage' => new \Magento\Framework\Session\Storage()]
         );
-        $session = $this->getMock(
-            'Magento\Customer\Model\Session',
-            ['isLoggedIn', 'getUserCreateWord'],
-            $sessionArgs
-        );
+        $session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->setMethods(['isLoggedIn', 'getUserCreateWord'])
+            ->setConstructorArgs($sessionArgs)
+            ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]]);
+        $session->setData([
+            'user_create_word' => [
+                'data' => 'AbCdEf5',
+                'words' => 'AbCdEf5',
+                'expires' => time() + self::EXPIRE_FRAME
+            ]
+        ]);
         return $session;
     }
 
@@ -267,7 +270,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     protected function _getHelperStub()
     {
         $helper = $this->getMockBuilder(
-            'Magento\Captcha\Helper\Data'
+            \Magento\Captcha\Helper\Data::class
         )->disableOriginalConstructor()->setMethods(
             ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
         )->getMock();
@@ -301,12 +304,9 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getResourceModelStub()
     {
-        $resourceModel = $this->getMock(
-            'Magento\Captcha\Model\ResourceModel\Log',
-            ['countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt', '__wakeup'],
-            [],
-            '',
-            false
+        $resourceModel = $this->createPartialMock(
+            \Magento\Captcha\Model\ResourceModel\Log::class,
+            ['countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt', '__wakeup']
         );
 
         $resourceModel->expects($this->any())->method('logAttempt');
@@ -342,7 +342,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getStoreStub()
     {
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['isAdmin', 'getBaseUrl']);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/pub/media/'));
         $store->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
         return $store;
@@ -364,13 +364,15 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
     }
 
+    /**
+     * @return array
+     */
     public function isShownToLoggedInUserDataProvider()
     {
         return [
             [true, 'contact_us'],
             [false, 'user_create'],
-            [false, 'user_forgotpassword'],
-            [false, 'guest_checkout']
+            [false, 'user_forgotpassword']
         ];
     }
 }

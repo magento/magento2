@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 ?>
 <?php if ($block->getChildHtml()): ?>
 <section class="admin__page-section order-gift-options">
-    <div class="admin__page-section-title"><strong class="title"><?php /* @escapeNotVerified */ echo __('Gift Options') ?></strong></div>
-    <?php echo $block->getChildHtml() ?>
+    <div class="admin__page-section-title"><strong class="title"><?= /* @escapeNotVerified */ __('Gift Options') ?></strong></div>
+    <?= $block->getChildHtml() ?>
 </section>
 <?php endif ?>

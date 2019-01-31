@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -152,13 +152,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     /**
      * Set customer registry
      *
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $customerRegistry
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
-
         $this->customerRegistry = $customerRegistry;
     }
 
@@ -166,13 +165,15 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer registry
      *
      * @return \Magento\Customer\Model\CustomerRegistry
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getCustomerRegistry()
     {
 
         if (!($this->customerRegistry instanceof \Magento\Customer\Model\CustomerRegistry)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Model\CustomerRegistry');
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\CustomerRegistry::class
+            );
         } else {
             return $this->customerRegistry;
         }
@@ -187,10 +188,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         if (!$this->customer) {
             $this->customer = $this->customerDataFactory->create();
+            $data = $this->_backendSession->getCustomerData();
             $this->dataObjectHelper->populateWithArray(
                 $this->customer,
-                $this->_backendSession->getCustomerData()['account'],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                $data['account'],
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
         }
         return $this->customer;
@@ -458,7 +460,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             'customer/online_customers/online_minutes_interval',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return (int)$configValue > 0 ? (int)$configValue : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
     /**

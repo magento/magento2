@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'ko',
     'underscore',
@@ -16,6 +19,7 @@ define([
     return Collection.extend({
         defaults: {
             template: 'ui/grid/listing',
+            listTemplate: 'ui/list/listing',
             stickyTmpl: 'ui/grid/sticky/listing',
             viewSwitcherTmpl: 'ui/grid/view-switcher',
             positions: false,
@@ -25,6 +29,11 @@ define([
                     value: 'grid',
                     label: 'Grid',
                     template: '${ $.template }'
+                },
+                list: {
+                    value: 'list',
+                    label: 'List',
+                    template: '${ $.listTemplate }'
                 }
             },
             dndConfig: {

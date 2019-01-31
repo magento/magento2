@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -11,9 +11,29 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnBackend">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
     <type name="Magento\Backend\Test\Constraint\AssertStoreCanBeLocalized">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Test\Constraint\AssertLocaleCodeVisibility">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Test\Constraint\AssertDeveloperSectionVisibility">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
 </config>

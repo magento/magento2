@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -18,6 +18,6 @@ class CaptchaStringResolver
     {
         $captchaParams = $request->getPost(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE);
 
-        return isset($captchaParams[$formId]) ? $captchaParams[$formId] : '';
+        return $captchaParams[$formId] ?? '';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model;
@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -41,7 +42,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Data changes flag (true after setData|unsetData call)
-     * @var $_hasDataChange bool
+     * @var bool
      */
     protected $_hasDataChanges = false;
 
@@ -215,6 +216,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Remove unneeded properties from serialization
+     *
      * @return string[]
      */
     public function __sleep()
@@ -244,9 +247,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function __wakeup()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_registry = $objectManager->get('Magento\Framework\Registry');
+        $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
 
-        $context = $objectManager->get('Magento\Framework\Model\Context');
+        $context = $objectManager->get(\Magento\Framework\Model\Context::class);
         if ($context instanceof \Magento\Framework\Model\Context) {
             $this->_appState = $context->getAppState();
             $this->_eventManager = $context->getEventDispatcher();
@@ -336,8 +339,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array  $key
-     * @param mixed         $value
+     * @param string|array $key
+     * @param mixed $value
      * @return $this
      */
     public function setData($key, $value = null)
@@ -463,6 +466,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -491,6 +495,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @deprecated because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
@@ -511,6 +516,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @deprecated because collections should be used directly via factory
      */
     public function getCollection()
     {
@@ -523,16 +529,13 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param integer $modelId
      * @param null|string $field
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0 because entities must not be responsible for their own loading.
+     * Service contracts should persist entities. Use resource model "load" or collections to implement
+     * service contract model loading operations.
      */
     public function load($modelId, $field = null)
     {
-        $this->_beforeLoad($modelId, $field);
         $this->_getResource()->load($this, $modelId, $field);
-        $this->_afterLoad();
-        $this->setOrigData();
-        $this->_hasDataChanges = false;
-        $this->updateStoredData();
         return $this;
     }
 
@@ -578,13 +581,25 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Process operation before object load
+     *
+     * @param string $identifier
+     * @param string|null $field
+     * @return void
+     * @since 100.2.0
+     */
+    public function beforeLoad($identifier, $field = null)
+    {
+        $this->_beforeLoad($identifier, $field);
+    }
+
+    /**
      * Object after load processing. Implemented as public interface for supporting objects after load in collections
      *
      * @return $this
      */
     public function afterLoad()
     {
-        $this->getResource()->afterLoad($this);
         $this->_afterLoad();
         $this->updateStoredData();
         return $this;
@@ -603,6 +618,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Check if save is allowed
+     *
      * @return bool
      */
     public function isSaveAllowed()
@@ -611,6 +628,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Set flag property _hasDataChanges
+     *
      * @param bool $flag
      * @return void
      */
@@ -624,7 +643,10 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated
+     *
+     * @deprecated 100.1.0 because entities must not be responsible for their own persistence.
+     * Service contracts should persist entities. Use resource model "save" to implement
+     * service contract persistence operations.
      */
     public function save()
     {
@@ -703,6 +725,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Returns validator, which contains all rules to validate this model.
+     *
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|false
@@ -717,6 +740,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Creates validator for the model with all validation rules in it.
+     *
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|bool
@@ -754,6 +778,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Get list of cache tags applied to model object.
+     *
      * Return false if cache tags are not supported by model
      *
      * @return array|false
@@ -809,7 +834,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated 100.1.0 because entities must not be responsible for their own deletion.
+     * Service contracts should delete entities. Use resource model "delete" method to implement
+     * service contract persistence operations.
      */
     public function delete()
     {
@@ -867,6 +894,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Retrieve model resource
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated because resource models should be used directly
      */
     public function getResource()
     {

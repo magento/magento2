@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple\WebsiteData">
+        <dataset name="custom_price_in_main_and_custom_websites">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="number">15</item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="price" xsi:type="number">20</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

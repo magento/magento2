@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Condition;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Combine extends AbstractCondition
 {
     /**
@@ -28,7 +32,7 @@ class Combine extends AbstractCondition
 
         parent::__construct($context, $data);
         $this->setType(
-            'Magento\Rule\Model\Condition\Combine'
+            \Magento\Rule\Model\Condition\Combine::class
         )->setAggregator(
             'all'
         )->setValue(
@@ -42,14 +46,13 @@ class Combine extends AbstractCondition
         $this->loadAggregatorOptions();
         $options = $this->getAggregatorOptions();
         if ($options) {
-            foreach (array_keys($options) as $aggregator) {
-                $this->setAggregator($aggregator);
-                break;
-            }
+            reset($options);
+            $this->setAggregator(key($options));
         }
     }
 
     /* start aggregator methods */
+
     /**
      * @return $this
      */
@@ -85,9 +88,10 @@ class Combine extends AbstractCondition
     public function getAggregatorElement()
     {
         if ($this->getAggregator() === null) {
-            foreach (array_keys($this->getAggregatorOption()) as $key) {
-                $this->setAggregator($key);
-                break;
+            $options = $this->getAggregatorOption();
+            if ($options) {
+                reset($options);
+                $this->setAggregator(key($options));
             }
         }
         return $this->getForm()->addField(
@@ -101,7 +105,7 @@ class Combine extends AbstractCondition
                 'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
@@ -273,7 +277,7 @@ class Combine extends AbstractCondition
                 'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Newchild')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Newchild::class)
         );
     }
 

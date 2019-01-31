@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\User\Edit;
@@ -8,10 +8,6 @@ namespace Magento\User\Block\User\Edit;
 /**
  * Adminhtml permissions user edit form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
- */
-/**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic

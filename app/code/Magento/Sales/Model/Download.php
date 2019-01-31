@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
@@ -8,6 +8,9 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class Download. Represents download logic for files
+ */
 class Download
 {
     /**
@@ -36,6 +39,8 @@ class Download
     protected $rootDirBasePath;
 
     /**
+     * Constructor method
+     *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
@@ -78,11 +83,14 @@ class Download
         $this->_fileFactory->create(
             $info['title'],
             ['value' => $this->_rootDir->getRelativePath($relativePath), 'type' => 'filename'],
-            $this->rootDirBasePath
+            $this->rootDirBasePath,
+            $info['type']
         );
     }
 
     /**
+     * Method checks, if file can be returned depends on the given filepath
+     *
      * @param string $relativePath
      * @return bool
      */

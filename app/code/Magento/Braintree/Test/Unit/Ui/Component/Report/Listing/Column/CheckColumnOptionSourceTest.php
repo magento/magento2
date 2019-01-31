@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Listing\Column;
@@ -12,7 +12,7 @@ use Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType;
 /**
  * Class CheckColumnOptionSourceTest
  */
-class CheckColumnOptionSourceTest extends \PHPUnit_Framework_TestCase
+class CheckColumnOptionSourceTest extends \PHPUnit\Framework\TestCase
 {
     public function testPaymentTypeSource()
     {

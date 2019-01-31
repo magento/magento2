@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,6 @@ class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected $localeFormat;
 
-
     /**
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      */
@@ -27,7 +26,6 @@ class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Framework\Locale\FormatInterface $localeFormat
     ) {
         $this->localeFormat = $localeFormat;
-
     }
 
     /**

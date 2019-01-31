@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Checkout;
@@ -15,7 +15,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      *
      * @var string
      */
-    protected $_template = 'checkout/grandtotal.phtml';
+    protected $_template = 'Magento_Tax::checkout/grandtotal.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config

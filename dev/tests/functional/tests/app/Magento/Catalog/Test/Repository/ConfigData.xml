@@ -1,12 +1,29 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="category_flat">
+            <field name="catalog/frontend/flat_catalog_category" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="category_flat_rollback">
+            <field name="catalog/frontend/flat_catalog_category" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
         <dataset name="product_flat">
             <field name="catalog/frontend/flat_catalog_product" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -20,6 +37,83 @@
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="empty_product_mask_sku">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string"/>
+            </field>
+        </dataset>
+        <dataset name="empty_product_mask_sku_rollback">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string">{{name}}</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="attribute_product_mask_sku">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string">{{name}} {{country_of_manufacture}}</item>
+            </field>
+        </dataset>
+        <dataset name="attribute_product_mask_sku_rollback">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string">{{name}}</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="inventory_threshold_5">
+            <field name="cataloginventory/options/stock_threshold_qty" xsi:type="array">
+                <item name="value" xsi:type="number">5</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_threshold_5_rollback">
+            <field name="cataloginventory/options/stock_threshold_qty" xsi:type="array">
+                <item name="value" xsi:type="number">0</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="inventory_max_qty_5">
+            <field name="cataloginventory/item_options/max_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">5</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_max_qty_5_rollback">
+            <field name="cataloginventory/item_options/max_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">0</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="inventory_min_qty_3">
+            <field name="cataloginventory/item_options/min_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">3</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_min_qty_3_rollback">
+            <field name="cataloginventory/item_options/min_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">0</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="price_scope_website">
+            <field name="catalog/price/scope" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Website</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="price_scope_website_rollback">
+            <field name="catalog/price/scope" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Global</item>
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>

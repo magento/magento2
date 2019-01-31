@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Constraint;
@@ -24,7 +24,7 @@ class AssertCreditCardNotPresentOnCheckout extends AbstractConstraint
         CheckoutOnepage $checkoutOnepage,
         $deletedCreditCard
     ) {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $checkoutOnepage->getVaultPaymentBlock()->isSavedCreditCardPresent($deletedCreditCard),
             'Credit card is present on checkout.'
         );

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
@@ -52,11 +53,11 @@ class Stock extends UnsubscribeController
                 throw new NoSuchEntityException();
             }
 
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
+            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Stock::class)
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                         ->getStore()
                         ->getWebsiteId()
                 )
@@ -70,7 +71,10 @@ class Stock extends UnsubscribeController
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addException(
+                $e,
+                __("The alert subscription couldn't update at this time. Please try again later.")
+            );
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;

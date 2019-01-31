@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -83,6 +83,7 @@
         <field name="visibility" is_required="0" group="product-details" />
         <field name="id" />
         <field name="bundle_selections" is_required="1" group="bundle" source="Magento\Bundle\Test\Fixture\BundleProduct\BundleSelections" repository="Magento\Bundle\Test\Repository\BundleProduct\BundleSelection" />
+        <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
         <field name="checkout_data" is_required="1" group="null" repository="Magento\Bundle\Test\Repository\BundleProduct\CheckoutData" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="type_id" />

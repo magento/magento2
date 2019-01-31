@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Model\Payflow;
 
-use Magento\Framework\DataObject;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflowpro;
@@ -37,12 +37,12 @@ class Transparent extends Payflowpro implements TransparentInterface
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * @var ResponseValidator
@@ -133,7 +133,6 @@ class Transparent extends Payflowpro implements TransparentInterface
         return $this->responseValidator;
     }
 
-
     /**
      * Do not validate payment form using server methods
      *
@@ -167,6 +166,9 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token);
         $request->setData('amt', $this->formatPrice($amount));
+        $request->setData('currency', $order->getBaseCurrencyCode());
+        $request->setData('taxamt', $this->formatPrice($order->getBaseTaxAmount()));
+        $request->setData('freightamt', $this->formatPrice($order->getBaseShippingAmount()));
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -176,7 +178,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            throw new LocalizedException(__('Error processing payment. Please try again later.'));
+            throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 
         $this->setTransStatus($payment, $response);
@@ -184,6 +186,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->createPaymentToken($payment, $token);
 
         $payment->unsAdditionalInformation(self::CC_DETAILS);
+        $payment->unsAdditionalInformation(self::PNREF);
 
         return $this;
     }

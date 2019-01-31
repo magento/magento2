@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Service\V1;
 
@@ -40,7 +38,7 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
     public function testOrderCommentAdd()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
         $commentData = [
@@ -74,8 +72,14 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
 
         $commentData = reset($comments);
         foreach ($commentData as $key => $value) {
-            $this->assertEquals($commentData[OrderStatusHistoryInterface::COMMENT], $statusHistoryComment->getComment());
-            $this->assertEquals($commentData[OrderStatusHistoryInterface::PARENT_ID], $statusHistoryComment->getParentId());
+            $this->assertEquals(
+                $commentData[OrderStatusHistoryInterface::COMMENT],
+                $statusHistoryComment->getComment()
+            );
+            $this->assertEquals(
+                $commentData[OrderStatusHistoryInterface::PARENT_ID],
+                $statusHistoryComment->getParentId()
+            );
             $this->assertEquals(
                 $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED],
                 $statusHistoryComment->getIsCustomerNotified()

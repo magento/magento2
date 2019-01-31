@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\SetupInfo;
 use Magento\Framework\App\Bootstrap;
 
-class HttpTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -65,23 +68,23 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $cookieReaderMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieReaderInterface')
+        $cookieReaderMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $routeConfigMock = $this->getMockBuilder('Magento\Framework\App\Route\ConfigInterface\Proxy')
+        $routeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Route\ConfigInterface\Proxy::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $pathInfoProcessorMock = $this->getMockBuilder('Magento\Framework\App\Request\PathInfoProcessorInterface')
+        $pathInfoProcessorMock = $this->getMockBuilder(\Magento\Framework\App\Request\PathInfoProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
+        $converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->setConstructorArgs([
                 'cookieReader' => $cookieReaderMock,
                 'converter' => $converterMock,
@@ -91,28 +94,28 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ])
             ->setMethods(['getFrontName'])
             ->getMock();
-        $this->areaListMock = $this->getMockBuilder('Magento\Framework\App\AreaList')
+        $this->areaListMock = $this->getMockBuilder(\Magento\Framework\App\AreaList::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCodeByFrontName'])
             ->getMock();
-        $this->configLoaderMock = $this->getMockBuilder('Magento\Framework\App\ObjectManager\ConfigLoader')
+        $this->configLoaderMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager\ConfigLoader::class)
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->frontControllerMock = $this->getMockBuilder('Magento\Framework\App\FrontControllerInterface')
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->frontControllerMock = $this->getMockBuilder(\Magento\Framework\App\FrontControllerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->http = $this->objectManager->getObject(
-            'Magento\Framework\App\Http',
+            \Magento\Framework\App\Http::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'eventManager' => $this->eventManagerMock,
@@ -141,7 +144,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())->method('configure')->with([]);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\App\FrontControllerInterface')
+            ->with(\Magento\Framework\App\FrontControllerInterface::class)
             ->will($this->returnValue($this->frontControllerMock));
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
@@ -180,7 +183,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleDeveloperModeNotInstalled()
     {
-        $dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $dir->expects($this->once())->method('getAbsolutePath')->willReturn(__DIR__);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
@@ -205,7 +208,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new \Exception('strange error')));
         $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->responseMock->expects($this->once())->method('setHeader')->with('Content-Type', 'text/plain');
-        $constraint = new \PHPUnit_Framework_Constraint_StringStartsWith('1 exception(s):');
+        $constraint = new \PHPUnit\Framework\Constraint\StringStartsWith('1 exception(s):');
         $this->responseMock->expects($this->once())->method('setBody')->with($constraint);
         $this->responseMock->expects($this->once())->method('sendResponse');
         $bootstrap = $this->getBootstrapNotInstalled();
@@ -219,7 +222,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->responseMock->expects($this->once())->method('sendHeaders');
-        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $bootstrap = $this->createMock(\Magento\Framework\App\Bootstrap::class);
         $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(false);
         $this->assertTrue($this->http->catchException(
             $bootstrap,
@@ -234,7 +237,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     private function getBootstrapNotInstalled()
     {
-        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $bootstrap = $this->createMock(\Magento\Framework\App\Bootstrap::class);
         $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(true);
         $bootstrap->expects($this->once())->method('getErrorCode')->willReturn(Bootstrap::ERR_IS_INSTALLED);
         return $bootstrap;

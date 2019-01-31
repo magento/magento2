@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -11,7 +12,9 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Framework\App\ObjectManager;
 
-/** Quote billing address write service object. */
+/**
+ * Quote billing address write service object.
+ */
 class BillingAddressManagement implements BillingAddressManagementInterface
 {
     /**
@@ -41,6 +44,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     protected $addressRepository;
 
     /**
+     * @var \Magento\Quote\Model\ShippingAddressAssignment
+     */
+    private $shippingAddressAssignment;
+
+    /**
      * Constructs a quote billing address service object.
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
@@ -61,31 +69,48 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+        $address->setCustomerId($quote->getCustomerId());
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
         try {
+            $this->getShippingAddressAssignment()->setAddress($quote, $address, $useForShipping);
             $quote->setDataChanges(true);
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please check input data.'));
+            throw new InputException(__('The address failed to save. Verify the address and try again.'));
         }
         return $quote->getBillingAddress()->getId();
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function get($cartId)
     {
         $cart = $this->quoteRepository->getActive($cartId);
         return $cart->getBillingAddress();
+    }
+
+    /**
+     * Get shipping address assignment
+     *
+     * @return \Magento\Quote\Model\ShippingAddressAssignment
+     * @deprecated 100.2.0
+     */
+    private function getShippingAddressAssignment()
+    {
+        if (!$this->shippingAddressAssignment) {
+            $this->shippingAddressAssignment = ObjectManager::getInstance()
+                ->get(\Magento\Quote\Model\ShippingAddressAssignment::class);
+        }
+        return $this->shippingAddressAssignment;
     }
 }

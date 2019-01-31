@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -18,7 +18,7 @@ use Magento\Ui\Component\Form;
  * Class DownloadablePanelTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
+class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -51,9 +51,9 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->getMock(ProductInterface::class);
-        $this->locatorMock = $this->getMock(LocatorInterface::class);
-        $this->arrayManagerMock = $this->getMock(ArrayManager::class, [], [], '', false);
+        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->downloadablePanel = $this->objectManagerHelper->getObject(
             DownloadablePanel::class,
             [

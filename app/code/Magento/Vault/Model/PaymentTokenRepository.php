@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Vault\Api\Data;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterfaceFactory;
@@ -52,12 +53,20 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     protected $collectionFactory;
 
     /**
-     * @param \Magento\Vault\Model\ResourceModel\PaymentToken $resourceModel
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * PaymentTokenRepository constructor.
+     *
+     * @param PaymentTokenResourceModel $resourceModel
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         PaymentTokenResourceModel $resourceModel,
@@ -65,7 +74,8 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resourceModel = $resourceModel;
         $this->paymentTokenFactory = $paymentTokenFactory;
@@ -73,28 +83,25 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionFactory = $collectionFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
      * Lists payment tokens that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface Payment token search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Vault\Model\ResourceModel\PaymentToken\Collection $collection */
         $collection = $this->collectionFactory->create();
-        /** @var FilterGroup $group */
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
-
+        $this->collectionProcessor->process($searchCriteria, $collection);
         /** @var \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
-
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
@@ -126,6 +133,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         }
 
         $tokenModel->setIsActive(false);
+        $tokenModel->setIsVisible(false);
         $tokenModel->save();
 
         return true;
@@ -134,7 +142,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Performs persist operations for a specified payment token.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The payment token.
+     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The payment token.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Saved payment token data.
      */
     public function save(Data\PaymentTokenInterface $paymentToken)
@@ -150,6 +158,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
+     * @deprecated 100.3.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -158,5 +167,21 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
         }
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated 100.3.0
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

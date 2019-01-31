@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class AssertCacheFlushSuccessMessage extends AbstractConstraint
      */
     public function processAssert(AdminCache $adminCache, $successMessage)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $successMessage,
             $adminCache->getMessagesBlock()->getSuccessMessage(),
             'Action is not successful.'

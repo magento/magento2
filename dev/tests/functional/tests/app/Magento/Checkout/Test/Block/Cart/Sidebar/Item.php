@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,7 @@ class Item extends Sidebar
      *
      * @var string
      */
-    protected $price = '.product .price';
+    protected $price = '.minicart-price .price';
 
     /**
      * CSS selector for update button.
@@ -65,7 +65,7 @@ class Item extends Sidebar
         $this->_rootElement->find($this->removeItem)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
         $modal->waitModalWindowToDisappear();
     }
@@ -101,6 +101,13 @@ class Item extends Sidebar
      */
     public function getQty()
     {
+        $rootElement = $this->_rootElement;
+        $qtySelector = $this->qty;
+        $this->browser->waitUntil(
+            function () use ($rootElement, $qtySelector) {
+                return $rootElement->find($qtySelector)->isVisible() ? true : null;
+            }
+        );
         return $this->_rootElement->find($this->qty)->getValue();
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,7 +84,7 @@ class SaveHandler
         $links = [];
         $extensions = $this->dataObjectProcessor->buildOutputDataArray(
             $entity->getExtensionAttributes(),
-            'Magento\Catalog\Api\Data\ProductLinkExtensionInterface'
+            \Magento\Catalog\Api\Data\ProductLinkExtensionInterface::class
         );
         $extensions = is_array($extensions) ? $extensions : [];
         $data = $entity->__toArray();
@@ -97,15 +97,15 @@ class SaveHandler
 
         try {
             $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-            $prodyctHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
-            $productData = $prodyctHydrator->extract($product);
+            $productHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
+            $productData = $productHydrator->extract($product);
             $this->linkResource->saveProductLinks(
                 $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
                 $links,
                 $linkTypesToId[$entity->getLinkType()]
             );
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return $entity;
     }

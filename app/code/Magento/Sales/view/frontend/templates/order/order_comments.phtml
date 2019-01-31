@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@
 <?php $_history = $block->getOrder()->getVisibleStatusHistory() ?>
 <?php if (count($_history)): ?>
     <div class="block block-order-details-comments">
-        <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('About Your Order') ?></strong></div>
+        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('About Your Order') ?></strong></div>
         <div class="block-content">
             <dl class="order-comments">
                 <?php foreach ($_history as $_historyItem): ?>
-                    <dt class="comment-date"><?php /* @escapeNotVerified */ echo $block->formatDate($_historyItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?></dt>
-                    <dd class="comment-content"><?php echo $block->escapeHtml($_historyItem->getComment()) ?></dd>
+                    <dt class="comment-date"><?= /* @escapeNotVerified */ $block->formatDate($_historyItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?></dt>
+                    <dd class="comment-content"><?= $block->escapeHtml($_historyItem->getComment()) ?></dd>
                 <?php endforeach; ?>
             </dl>
 

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -97,6 +97,7 @@
 }
 
 .__collapsible-text-pattern() {
+    line-height: @line-height__l;
     margin-bottom: .5em;
     margin-top: 1rem;
 }
@@ -126,6 +127,21 @@
                 }
             }
         }
+
+        td.admin__collapsible-block-wrapper {
+            .admin__collapsible-title {
+                &:before {
+                    content: @icon-expand-open__content;
+                }
+            }
+            &._show {
+                .admin__collapsible-title {
+                    &:before {
+                        content: @icon-expand-close__content;
+                    } 
+                }
+            }
+        }
     }
 
     &.fieldset-wrapper {
@@ -145,6 +161,14 @@
 
     &.collapsible-block-wrapper-last {
         border-bottom: 0;
+    }
+
+    .admin__dynamic-rows.admin__control-collapsible {   
+        td {
+            &.admin__collapsible-block-wrapper {
+                border-bottom: none;
+            }
+        }
     }
 }
 

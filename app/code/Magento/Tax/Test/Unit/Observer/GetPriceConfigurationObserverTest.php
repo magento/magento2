@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Observer;
 
-use Magento\Tax\Observer\GetPriceConfigurationObserver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class GetPriceConfigurationObserverTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
+class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Observer\GetPriceConfigurationObserver
      */
     protected $model;
+
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -31,7 +33,6 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
-
 
     /**
      * test Execute
@@ -50,24 +51,21 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $className = '\Magento\Framework\Registry';
-        $this->registry = $this->getMock($className, [], [], '', false);
+        $className = \Magento\Framework\Registry::class;
+        $this->registry = $this->createMock($className);
 
-        $className = '\Magento\Tax\Helper\Data';
-        $this->taxData = $this->getMock($className, [], [], '', false);
+        $className = \Magento\Tax\Helper\Data::class;
+        $this->taxData = $this->createMock($className);
 
-        $observerObject=$this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
             ->will($this->returnValue($configObj));
 
-        $baseAmount = $this->getMock(
-            'Magento\Framework\Pricing\Amount\Base',
-            ['getBaseAmount', 'getAdjustmentAmount', 'hasAdjustment'],
-            [],
-            '',
-            false
+        $baseAmount = $this->createPartialMock(
+            \Magento\Framework\Pricing\Amount\Base::class,
+            ['getBaseAmount', 'getAdjustmentAmount', 'hasAdjustment']
         );
 
         $baseAmount->expects($this->any())
@@ -82,9 +80,9 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getAdjustmentAmount')
             ->will($this->returnValue(1.5));
 
-        $priceInfo = $this->getMock('Magento\Framework\Pricing\Priceinfo\Base', ['getPrice'], [], '', false);
+        $priceInfo = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice']);
 
-        $basePrice = $this->getMock('Magento\Catalog\Price\BasePrice', ['getAmount'], [], '', false);
+        $basePrice = $this->createPartialMock(\Magento\Catalog\Pricing\Price\BasePrice::class, ['getAmount']);
 
         $basePrice->expects($this->any())
             ->method('getAmount')
@@ -94,8 +92,8 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->will($this->returnValue($basePrice));
 
-        $prod1 = $this->getMock('Magento\Catalog\Model\Product', ['getId', 'getPriceInfo'], [], '', false);
-        $prod2 = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $prod1 = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getPriceInfo']);
+        $prod2 = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $prod1->expects($this->any())
             ->method('getId')
@@ -106,27 +104,21 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($priceInfo));
 
         $optionCollection =
-            $this->getMock('Magento\Bundle\Model\ResourceModel\Selection\Collection', ['getItems'], [], '', false);
+            $this->createPartialMock(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class, ['getItems']);
 
         $optionCollection->expects($this->any())
             ->method('getItems')
             ->will($this->returnValue([$prod1, $prod2]));
 
         $productInstance =
-            $this->getMock(
-                'Magento\Catalog\Model\Product\Type',
-                ['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds'],
-                [],
-                '',
-                false
+            $this->createPartialMock(
+                \Magento\Catalog\Model\Product\Type::class,
+                ['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds']
             );
 
-        $product=$this->getMock(
-            '\Magento\Bundle\Model\Product\Type',
-            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection'],
-            [],
-            '',
-            false
+        $product = $this->createPartialMock(
+            \Magento\Bundle\Model\Product\Type::class,
+            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection']
         );
         $product->expects($this->any())
             ->method('getTypeInstance')
@@ -151,14 +143,13 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
             ->with('current_product')
             ->will($this->returnValue($product));
 
-
         $this->taxData->expects($this->any())
             ->method('displayPriceIncludingTax')
             ->will($this->returnValue(true));
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Tax\Observer\GetPriceConfigurationObserver',
+            \Magento\Tax\Observer\GetPriceConfigurationObserver::class,
             [
                 'taxData' => $this->taxData,
                 'registry' => $this->registry,
@@ -182,16 +173,14 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 35.50],
                                     'basePrice' => ['amount' => 30.50],
                                 ],
                         ],
                         [
                             'optionId' => 2,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' =>['amount' => 333.50],
                                     'basePrice' => ['amount' => 300.50],
                                 ],
@@ -202,8 +191,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 35.50],
                                     'basePrice' => ['amount' => 35],
                                     'oldPrice' => ['amount' => 35],
@@ -211,8 +199,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                         ],
                         [
                             'optionId' => 2,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' =>['amount' => 333.50],
                                     'basePrice' => ['amount' => 300.50],
                                 ],

@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'Magento_Ui/js/lib/view/utils/async',
@@ -554,7 +557,7 @@ define([
         },
 
         /**
-         * Handles changes of windows' top scroll postion.
+         * Handles changes of windows' top scroll position.
          */
         onWindowScrollTop: function () {
             this.updateTableOffset()

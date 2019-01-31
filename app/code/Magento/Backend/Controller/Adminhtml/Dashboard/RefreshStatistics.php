@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,9 +34,9 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate();
             }
-            $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
+            $this->messageManager->addSuccessMessage(__('We updated lifetime statistic.'));
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
+            $this->messageManager->addErrorMessage(__('We can\'t refresh lifetime statistics.'));
             $this->logger->critical($e);
         }
 

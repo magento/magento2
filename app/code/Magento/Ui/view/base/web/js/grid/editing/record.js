@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'mageUtils',
@@ -46,6 +49,9 @@ define([
                         options: '${ JSON.stringify($.$data.column.options) }'
                     }
                 }
+            },
+            ignoreTmpls: {
+                data: true
             },
             listens: {
                 elems: 'updateFields',
@@ -135,7 +141,7 @@ define([
         },
 
         /**
-         * Creates fields for the specfied columns.
+         * Creates fields for the specified columns.
          *
          * @param {Array} columns - An array of column instances.
          * @returns {Record} Chainable.
@@ -258,7 +264,7 @@ define([
         /**
          * Validates all of the available fields.
          *
-         * @returns {Array} An array with validatation results.
+         * @returns {Array} An array with validation results.
          */
         validate: function () {
             return this.elems.map('validate');
@@ -274,7 +280,7 @@ define([
         },
 
         /**
-         * Counts total errors ammount accros all fields.
+         * Counts total errors amount across all fields.
          *
          * @returns {Number}
          */
@@ -300,7 +306,7 @@ define([
         },
 
         /**
-         * Updates 'fields' array filling it with available edtiors
+         * Updates 'fields' array filling it with available editors
          * or with column instances if associated field is not present.
          *
          * @returns {Record} Chainable.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Test\Legacy\Magento\Framework\Module;
 /**
  * Test for obsolete nodes/attributes in the module.xml
  */
-class ModuleXMLTest extends \PHPUnit_Framework_TestCase
+class ModuleXMLTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file

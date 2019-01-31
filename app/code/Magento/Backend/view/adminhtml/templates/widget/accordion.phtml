@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,16 +14,16 @@
 $items = $block->getItems();
 ?>
 <?php if (!empty($items)): ?>
-    <dl id="tab_content_<?php echo $block->getHtmlId() ?>" name="tab_content_<?php echo $block->getHtmlId() ?>" class="accordion">
+    <dl id="tab_content_<?= $block->getHtmlId() ?>" name="tab_content_<?= $block->getHtmlId() ?>" class="accordion">
     <?php foreach ($items as $_item): ?>
-        <?php echo $block->getChildHtml($_item->getId()) ?>
+        <?= $block->getChildHtml($_item->getId()) ?>
     <?php endforeach ?>
     </dl>
     <script>
         require([
             'mage/adminhtml/accordion'
         ], function(){
-        	tab_content_<?php echo $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $block->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getShowOnlyOne() ?>');
+        	tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?= /* @escapeNotVerified */ $block->getShowOnlyOne() ?>');
     	});
     </script>
 <?php endif; ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Controller\Payment;
@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Webapi\Exception;
-use Magento\Theme;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -63,9 +62,11 @@ class GetNonce extends Action
         try {
             $publicHash = $this->getRequest()->getParam('public_hash');
             $customerId = $this->session->getCustomerId();
-            $result = $this->command->execute(['public_hash' => $publicHash, 'customer_id' => $customerId])->get();
+            $result = $this->command->execute(
+                ['public_hash' => $publicHash, 'customer_id' => $customerId, 'store_id' => $this->session->getStoreId()]
+            )
+                ->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
-
         } catch (\Exception $e) {
             $this->logger->critical($e);
             return $this->processBadRequest($response);

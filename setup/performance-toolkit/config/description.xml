@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<description>
+    <paragraphs>
+        <count-min>7</count-min>
+        <count-max>7</count-max>
+
+        <sentences>
+            <count-min>12</count-min>
+            <count-max>12</count-max>
+
+            <words>
+                <count-min>6</count-min>
+                <count-max>6</count-max>
+            </words>
+        </sentences>
+    </paragraphs>
+
+    <mixin>
+        <tags>br|p|span|h1|b|i</tags>
+    </mixin>
+</description>

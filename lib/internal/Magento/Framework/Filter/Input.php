@@ -23,7 +23,7 @@
  *                      'zend' => 'StringToUpper',
  *                      'args' => array('encoding' => 'utf-8'))),
  *              'item2' => array(
- *                  array('model' => 'Magento\Framework\Filter\Input\MaliciousCode')
+ *                  array('model' => \Magento\Framework\Filter\Input\MaliciousCode::class)
  *              ),
  *              'item3' => array(
  *                  array(
@@ -74,7 +74,7 @@
  *  ));
  * </code>
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
@@ -183,7 +183,7 @@ class Input implements \Zend_Filter_Interface
         if (null === $name) {
             return $this->_filters;
         } else {
-            return isset($this->_filters[$name]) ? $this->_filters[$name] : null;
+            return $this->_filters[$name] ?? null;
         }
     }
 

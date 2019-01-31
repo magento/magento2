@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Weee\Test\Unit\Pricing\Render;
 
-class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
+class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Pricing\Render\TaxAdjustment
@@ -32,16 +32,13 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->weeeHelperMock = $this->getMock(
-            'Magento\Weee\Helper\Data',
-            ['typeOfDisplay', 'isTaxable'],
-            [],
-            '',
-            false
+        $this->weeeHelperMock = $this->createPartialMock(
+            \Magento\Weee\Helper\Data::class,
+            ['typeOfDisplay', 'isTaxable']
         );
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Weee\Pricing\Render\TaxAdjustment',
+            \Magento\Weee\Pricing\Render\TaxAdjustment::class,
             [
                 'weeeHelper' => $this->weeeHelperMock,
             ]

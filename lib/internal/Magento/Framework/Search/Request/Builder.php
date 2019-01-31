@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * @api
+ */
 class Builder
 {
     /**
@@ -166,7 +169,7 @@ class Builder
     {
         /** @var Mapper $mapper */
         $mapper = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Mapper',
+            \Magento\Framework\Search\Request\Mapper::class,
             [
                 'objectManager' => $this->objectManager,
                 'rootQueryName' => $data['query'],
@@ -176,7 +179,7 @@ class Builder
             ]
         );
         return $this->objectManager->create(
-            'Magento\Framework\Search\Request',
+            \Magento\Framework\Search\Request::class,
             [
                 'name' => $data['query'],
                 'indexName' => $data['index'],
@@ -198,7 +201,7 @@ class Builder
         $dimensions = [];
         foreach ($dimensionsData as $dimensionData) {
             $dimensions[$dimensionData['name']] = $this->objectManager->create(
-                'Magento\Framework\Search\Request\Dimension',
+                \Magento\Framework\Search\Request\Dimension::class,
                 $dimensionData
             );
         }

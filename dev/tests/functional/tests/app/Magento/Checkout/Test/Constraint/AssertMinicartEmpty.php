@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,13 +27,14 @@ class AssertMinicartEmpty extends AbstractConstraint
     public function processAssert(
         CmsIndex $cmsIndex
     ) {
-        \PHPUnit_Framework_Assert::assertEquals(
+        $cmsIndex->open();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::TEXT_EMPTY_MINICART,
             $cmsIndex->getCartSidebarBlock()->getEmptyMessage(),
             'Empty minicart message not found'
         );
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $cmsIndex->getCartSidebarBlock()->isItemsQtyVisible(),
             'Minicart is not empty'
         );

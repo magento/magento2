@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,11 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class Storage
+ *
+ * @package Magento\Theme\Model\Wysiwyg
+ */
 class Storage
 {
     /**
@@ -111,25 +116,21 @@ class Storage
     public function uploadFile($targetPath)
     {
         /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
-        $uploader = $this->_objectManager->create('Magento\MediaStorage\Model\File\Uploader', ['fileId' => 'file']);
+        $uploader = $this->_objectManager->create(
+            \Magento\MediaStorage\Model\File\Uploader::class,
+            ['fileId' => 'file']
+        );
         $uploader->setAllowedExtensions($this->_helper->getAllowedExtensionsByType());
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
         $result = $uploader->save($targetPath);
+        unset($result['path']);
 
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
         }
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
-
-        $result['cookie'] = [
-            'name' => $this->_helper->getSession()->getName(),
-            'value' => $this->_helper->getSession()->getSessionId(),
-            'lifetime' => $this->_helper->getSession()->getCookieLifetime(),
-            'path' => $this->_helper->getSession()->getCookiePath(),
-            'domain' => $this->_helper->getSession()->getCookieDomain()
-        ];
 
         return $result;
     }
@@ -160,7 +161,7 @@ class Storage
             $image->resize(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
             $image->save($this->mediaWriteDirectory->getAbsolutePath($thumbnailPath));
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return false;
         }
 

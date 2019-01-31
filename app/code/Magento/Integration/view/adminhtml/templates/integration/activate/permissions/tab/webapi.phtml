@@ -2,7 +2,7 @@
 /**
  * API permissions tab template for integration activation dialog.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block
@@ -13,7 +13,7 @@
 ?>
 <fieldset class="admin__fieldset form-inline entry-edit">
     <?php if ($block->isTreeEmpty()): ?>
-        <p class="empty"><?php /* @escapeNotVerified */ echo __('No permissions requested'); ?></p>
+        <p class="empty"><?= /* @escapeNotVerified */ __('No permissions requested') ?></p>
     <?php else: ?>
         <div class="field" data-role="tree-resources-container">
             <div class="control">
@@ -35,8 +35,8 @@
             });
 
             $('[data-role="resource-tree"]').rolesTree({
-                'treeInitData': <?php /* @escapeNotVerified */ echo $block->getResourcesTreeJson() ?>,
-                'treeInitSelectedData': <?php /* @escapeNotVerified */ echo $block->getSelectedResourcesJson() ?>
+                'treeInitData': <?= /* @escapeNotVerified */ $block->getResourcesTreeJson() ?>,
+                'treeInitSelectedData': <?= /* @escapeNotVerified */ $block->getSelectedResourcesJson() ?>
             });
         });
     </script>

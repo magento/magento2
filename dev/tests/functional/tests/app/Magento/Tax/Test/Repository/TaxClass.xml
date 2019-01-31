@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,17 +12,17 @@
         </dataset>
 
         <dataset name="taxable_goods">
-            <field name="class_id" xsi:type="string">2</field>
+            <field name="id" xsi:type="string">%id%</field>
+            <field name="class_id" xsi:type="string">%id%</field>
             <field name="class_name" xsi:type="string">Taxable Goods</field>
             <field name="class_type" xsi:type="string">PRODUCT</field>
-            <field name="id" xsi:type="string">2</field>
         </dataset>
 
         <dataset name="retail_customer">
-            <field name="class_id" xsi:type="string">3</field>
+            <field name="id" xsi:type="string">%id%</field>
+            <field name="class_id" xsi:type="string">%id%</field>
             <field name="class_name" xsi:type="string">Retail Customer</field>
             <field name="class_type" xsi:type="string">CUSTOMER</field>
-            <field name="id" xsi:type="string">3</field>
         </dataset>
 
         <dataset name="customer_tax_class">
@@ -36,9 +36,9 @@
         </dataset>
 
         <dataset name="None">
+            <field name="id" xsi:type="string">%id%</field>
             <field name="class_name" xsi:type="string">None</field>
             <field name="class_type" xsi:type="string">PRODUCT</field>
-            <field name="id" xsi:type="string">0</field>
         </dataset>
 
         <dataset name="all">

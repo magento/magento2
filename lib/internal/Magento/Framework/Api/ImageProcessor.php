@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,7 +93,7 @@ class ImageProcessor implements ImageProcessorInterface
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
             $dataObjectWithCustomAttributes->getCustomAttributes(),
-            '\Magento\Framework\Api\Data\ImageContentInterface'
+            \Magento\Framework\Api\Data\ImageContentInterface::class
         );
 
         // Return if no images to process
@@ -139,7 +139,7 @@ class ImageProcessor implements ImageProcessorInterface
     public function processImageContent($entityType, $imageContent)
     {
         if (!$this->contentValidator->isValid($imageContent)) {
-            throw new InputException(new Phrase('The image content is not valid.'));
+            throw new InputException(new Phrase('The image content is invalid. Verify the content and try again.'));
         }
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
@@ -172,7 +172,7 @@ class ImageProcessor implements ImageProcessorInterface
      */
     protected function getMimeTypeExtension($mimeType)
     {
-        return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
+        return $this->mimeTypeExtensionMap[$mimeType] ?? '';
     }
 
     /**

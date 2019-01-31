@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ namespace Magento\Wishlist\Block\Customer;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Render;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
@@ -32,6 +36,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $renderZone
      * @param array $arguments
      * @return string
+     * @since 100.1.0
      */
     public function getProductPriceHtml(
         Product $product,
@@ -64,7 +69,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->getLayout()->createBlock(
-                'Magento\Framework\Pricing\Render',
+                \Magento\Framework\Pricing\Render::class,
                 'product.price.render.default',
                 [
                     'data' => [

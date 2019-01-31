@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Product alerts tab
@@ -18,18 +16,26 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/tab/alert.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/tab/alert.phtml';
 
     /**
      * @return $this
      */
     protected function _prepareLayout()
     {
-        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')->setId('productAlerts');
+        $accordion = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Widget\Accordion::class
+        )->setId('productAlerts');
         /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
 
-        $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        $alertStockAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_stock', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $alertPriceAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_price',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $alertStockAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_stock',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
         if ($alertPriceAllow) {
             $accordion->addItem(
@@ -37,7 +43,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
                 [
                     'title' => __('Price Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price'
+                        \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price::class
                     )->toHtml() . '<br />',
                     'open' => true
                 ]
@@ -49,7 +55,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
                 [
                     'title' => __('Stock Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock'
+                        \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock::class
                     ),
                     'open' => true
                 ]
@@ -76,8 +82,14 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
      */
     public function canShowTab()
     {
-        $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        $alertStockAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_stock', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $alertPriceAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_price',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $alertStockAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_stock',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return ($alertPriceAllow || $alertStockAllow) && parent::canShowTab();
     }
 }

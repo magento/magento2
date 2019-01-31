@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Report;
@@ -18,12 +18,18 @@ class FilterMapper
      */
     private $searchFieldsToFiltersMap = [];
 
-    /** @var AppliersPool */
+    /**
+     * @var \Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool
+     */
     private $appliersPool;
 
-    /** @var BraintreeSearchAdapter */
+    /**
+     * @var \Magento\Braintree\Model\Adapter\BraintreeSearchAdapter
+     */
     private $braintreeSearchAdapter;
 
+    /**
+     */
     public function __construct(
         AppliersPool $appliersPool,
         BraintreeSearchAdapter $braintreeSearchAdapter

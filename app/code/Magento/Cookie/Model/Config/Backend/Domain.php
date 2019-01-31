@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Model\Config\Backend;
@@ -10,7 +10,9 @@ namespace Magento\Cookie\Model\Config\Backend;
  */
 class Domain extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\Session\Config\Validator\CookieDomainValidator */
+    /**
+     * @var \Magento\Framework\Session\Config\Validator\CookieDomainValidator
+     */
     protected $configValidator;
 
     /**

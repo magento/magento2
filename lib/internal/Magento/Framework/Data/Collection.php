@@ -1,21 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Data collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ *
+ * @api
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -35,7 +34,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\DataObject';
+    protected $_itemObjectClass = \Magento\Framework\DataObject::class;
 
     /**
      * Order configuration
@@ -236,12 +235,20 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Get current collection page
      *
      * @param  int $displacement
+     * @throws \Magento\Framework\Exception\InputException
      * @return int
      */
     public function getCurPage($displacement = 0)
     {
         if ($this->_curPage + $displacement < 1) {
             return 1;
+        } elseif ($this->_curPage > $this->getLastPageNumber() && $displacement === 0) {
+            throw new InputException(
+                __(
+                    'currentPage value %1 specified is greater than the %2 page(s) available.',
+                    [$this->_curPage, $this->getLastPageNumber()]
+                )
+            );
         } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
             return $this->getLastPageNumber();
         } else {
@@ -287,7 +294,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($this->_totalRecords === null) {
             $this->_totalRecords = count($this->getItems());
         }
-        return intval($this->_totalRecords);
+        return (int)$this->_totalRecords;
     }
 
     /**
@@ -489,12 +496,11 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
-     * Walk through the collection and run model method or external callback
-     * with optional arguments
+     * Walk through the collection and run model method or external callback with optional arguments
      *
      * Returns array with results of callback for each item
      *
-     * @param string $callback
+     * @param callable $callback
      * @param array $args
      * @return array
      */
@@ -503,29 +509,42 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
+            $params = $args;
             if ($useItemCallback) {
                 $cb = [$item, $callback];
             } else {
                 $cb = $callback;
-                array_unshift($args, $item);
+                array_unshift($params, $item);
             }
-            $results[$id] = call_user_func_array($cb, $args);
+            $results[$id] = call_user_func_array($cb, $params);
         }
         return $results;
     }
 
     /**
-     * @param string|array $objMethod
+     * Call method or callback on each item in the collection.
+     *
+     * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
      */
     public function each($objMethod, $args = [])
     {
-        foreach ($args->_items as $k => $item) {
-            $args->_items[$k] = call_user_func($objMethod, $item);
+        if ($objMethod instanceof \Closure) {
+            foreach ($this->getItems() as $item) {
+                $objMethod($item, ...$args);
+            }
+        } elseif (is_array($objMethod)) {
+            foreach ($this->getItems() as $item) {
+                call_user_func($objMethod, $item, ...$args);
+            }
+        } else {
+            foreach ($this->getItems() as $item) {
+                $item->$objMethod(...$args);
+            }
         }
     }
-
+    
     /**
      * Setting data for all collection items
      *
@@ -593,7 +612,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function setItemObjectClass($className)
     {
-        if (!is_a($className, 'Magento\Framework\DataObject', true)) {
+        if (!is_a($className, \Magento\Framework\DataObject::class, true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
         $this->_itemObjectClass = $className;
@@ -732,7 +751,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Convert items array to array for select options
      *
-     * return items array
+     * Return items array
      * array(
      *      $index => array(
      *          'value' => mixed
@@ -761,6 +780,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Returns option array
+     *
      * @return array
      */
     public function toOptionArray()
@@ -769,6 +790,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Returns options hash
+     *
      * @return array
      */
     public function toOptionHash()
@@ -779,12 +802,12 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Convert items array to hash for select options
      *
-     * return items hash
+     * Return items hash
      * array($value => $label)
      *
-     * @param   string $valueField
-     * @param   string $labelField
-     * @return  array
+     * @param string $valueField
+     * @param string $labelField
+     * @return array
      */
     protected function _toOptionHash($valueField = 'id', $labelField = 'name')
     {
@@ -798,8 +821,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve item by id
      *
-     * @param   mixed $idValue
-     * @return  \Magento\Framework\DataObject
+     * @param mixed $idValue
+     * @return \Magento\Framework\DataObject
      */
     public function getItemById($idValue)
     {
@@ -840,7 +863,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getFlag($flag)
     {
-        return isset($this->_flags[$flag]) ? $this->_flags[$flag] : null;
+        return $this->_flags[$flag] ?? null;
     }
 
     /**
@@ -868,7 +891,10 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Sleep handler
+     *
      * @return string[]
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -886,6 +912,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Init not serializable fields
      *
      * @return void
+     * @since 100.0.11
      */
     public function __wakeup()
     {

@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RegisterTest extends \PHPUnit_Framework_TestCase
+class RegisterTest extends \PHPUnit\Framework\TestCase
 {
     /** Constants used by the various unit tests */
     const POST_ACTION_URL = 'http://localhost/index.php/customer/account/createpost';
@@ -48,27 +51,24 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->directoryHelperMock = $this->getMock('Magento\Directory\Helper\Data', [], [], '', false);
-        $this->_customerUrl = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
-        $this->_customerSession = $this->getMock(
-            'Magento\Customer\Model\Session',
-            ['getCustomerFormData'],
-            [],
-            '',
-            false
+        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->directoryHelperMock = $this->createMock(\Magento\Directory\Helper\Data::class);
+        $this->_customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+        $this->_customerSession = $this->createPartialMock(
+            \Magento\Customer\Model\Session::class,
+            ['getCustomerFormData']
         );
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
         $this->_block = new \Magento\Customer\Block\Form\Register(
             $context,
             $this->directoryHelperMock,
-            $this->getMockForAbstractClass('Magento\Framework\Json\EncoderInterface', [], '', false),
-            $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\ResourceModel\Region\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\ResourceModel\Country\CollectionFactory', [], [], '', false),
+            $this->getMockForAbstractClass(\Magento\Framework\Json\EncoderInterface::class, [], '', false),
+            $this->createMock(\Magento\Framework\App\Cache\Type\Config::class),
+            $this->createMock(\Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class),
+            $this->createMock(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class),
             $this->_moduleManager,
             $this->_customerSession,
             $this->_customerUrl
@@ -275,12 +275,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isNewsletterEnabled
-     * @param $expectedValue
+     * @param boolean $isNewsletterEnabled
+     * @param string $isNewsletterActive
+     * @param boolean $expectedValue
      *
      * @dataProvider isNewsletterEnabledProvider
      */
-    public function testIsNewsletterEnabled($isNewsletterEnabled, $expectedValue)
+    public function testIsNewsletterEnabled($isNewsletterEnabled, $isNewsletterActive, $expectedValue)
     {
         $this->_moduleManager->expects(
             $this->once()
@@ -291,6 +292,17 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($isNewsletterEnabled)
         );
+
+        $this->_scopeConfig->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->with(
+            PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE
+        )->will(
+            $this->returnValue($isNewsletterActive)
+        );
+
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
@@ -299,7 +311,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function isNewsletterEnabledProvider()
     {
-        return [[true, true], [false, false]];
+        return [[true, true, true], [true, false, false], [false, true, false], [false, false, false]];
     }
 
     /**
@@ -320,8 +332,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($customerFormData)
         );
-        $form = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
-        $request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface', [], '', false);
+        $form = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
+        $request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
         $formData = $this->_block->getFormData();
         $form->expects(
             $this->once()

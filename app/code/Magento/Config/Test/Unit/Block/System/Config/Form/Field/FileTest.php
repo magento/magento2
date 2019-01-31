@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field\File
@@ -39,7 +39,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->file = $objectManager->getObject(
-            'Magento\Config\Block\System\Config\Form\Field\File',
+            \Magento\Config\Block\System\Config\Form\Field\File::class,
             ['data' => $this->testData]
         );
 

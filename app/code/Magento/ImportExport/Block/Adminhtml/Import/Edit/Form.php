@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
@@ -113,6 +113,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'class' => $behaviorCode,
                     'onchange' => 'varienImport.handleImportBehaviorSelector();',
                     'note' => ' ',
+                    'after_element_html' => $this->getImportBehaviorTooltip(),
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
@@ -126,8 +127,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'class' => $behaviorCode,
                     'disabled' => true,
                     'values' => [
-                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => 'Stop on Error',
-                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => 'Skip error entries'
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => __('Stop on Error'),
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => __('Skip error entries')
                     ],
                     'after_element_html' => $this->getDownloadSampleFileHtml(),
                 ]
@@ -174,6 +175,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 ]
             );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                'text',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                    'label' => __('Empty attribute value constant'),
+                    'title' => __('Empty attribute value constant'),
+                    'required' => true,
+                    'disabled' => true,
+                    'class' => $behaviorCode,
+                    'value' => Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                'checkbox',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                    'label' => __('Fields enclosure'),
+                    'title' => __('Fields enclosure'),
+                    'value' => 1,
+                ]
+            );
         }
 
         // fieldset for file uploading
@@ -189,7 +213,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Select File to Import'),
                 'title' => __('Select File to Import'),
                 'required' => true,
-                'class' => 'input-file'
+                'class' => 'input-file',
+                'note' => __(
+                    'File must be saved in UTF-8 encoding for proper import'
+                ),
             ]
         );
         $fieldsets['upload']->addField(
@@ -224,6 +251,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $html = '<span id="sample-file-span" class="no-display"><a id="sample-file-link" href="#">'
             . __('Download Sample File')
             . '</a></span>';
+        return $html;
+    }
+
+    /**
+     * Get Import Behavior field tooltip
+     *
+     * @return string
+     */
+    private function getImportBehaviorTooltip()
+    {
+        $html = '<div class="admin__field-tooltip tooltip">
+            <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?" 
+                href="https://docs.magento.com/m2/ce/user_guide/system/data-import.html"><span>'
+            . __('What is this?')
+            . '</span></a></div>';
         return $html;
     }
 }

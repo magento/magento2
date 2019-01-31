@@ -1,0 +1,14 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__tooltip-title" if="$data.tooltipTitle.length">
+    <span translate="$data.tooltipTitle"/>
+</div>
+<ul class="items">
+    <li class="item" repeat="foreach: $col.getLabelsArray($row()), item: '$item'">
+        <span text="$item()"/>
+    </li>
+</ul>

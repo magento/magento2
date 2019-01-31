@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 
 /**
@@ -32,18 +34,31 @@ class Minsaleqty
     protected $groupManagement;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var array
+     */
+    private $minSaleQtyCache = [];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param GroupManagementInterface $groupManagement
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Math\Random $mathRandom,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->mathRandom = $mathRandom;
         $this->groupManagement = $groupManagement;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -78,7 +93,7 @@ class Minsaleqty
             if (count($data) == 1 && array_key_exists($this->getAllCustomersGroupId(), $data)) {
                 return (string) $data[$this->getAllCustomersGroupId()];
             }
-            return serialize($data);
+            return $this->serializer->serialize($data);
         } else {
             return '';
         }
@@ -95,7 +110,7 @@ class Minsaleqty
         if (is_numeric($value)) {
             return [$this->getAllCustomersGroupId() => $this->fixQty($value)];
         } elseif (is_string($value) && !empty($value)) {
-            return unserialize($value);
+            return $this->serializer->unserialize($value);
         } else {
             return [];
         }
@@ -173,25 +188,29 @@ class Minsaleqty
      */
     public function getConfigValue($customerGroupId, $store = null)
     {
-        $value = $this->scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
-        $value = $this->unserializeValue($value);
-        if ($this->isEncodedArrayFieldValue($value)) {
-            $value = $this->decodeArrayFieldValue($value);
-        }
-        $result = null;
-        foreach ($value as $groupId => $qty) {
-            if ($groupId == $customerGroupId) {
-                $result = $qty;
-                break;
-            } elseif ($groupId == $this->getAllCustomersGroupId()) {
-                $result = $qty;
+        $key = $customerGroupId . '-' . $store;
+        if (!isset($this->minSaleQtyCache[$key])) {
+            $value = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
+            $value = $this->unserializeValue($value);
+            if ($this->isEncodedArrayFieldValue($value)) {
+                $value = $this->decodeArrayFieldValue($value);
             }
+            $result = null;
+            foreach ($value as $groupId => $qty) {
+                if ($groupId == $customerGroupId) {
+                    $result = $qty;
+                    break;
+                } elseif ($groupId == $this->getAllCustomersGroupId()) {
+                    $result = $qty;
+                }
+            }
+            $this->minSaleQtyCache[$key] = $this->fixQty($result);
         }
-        return $this->fixQty($result);
+        return $this->minSaleQtyCache[$key];
     }
 
     /**

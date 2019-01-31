@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Ui\DataProvider\Product\Form\Modifier;
@@ -12,9 +12,14 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Form;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Class Review
+ * Review modifier for catalog product form
+ *
+ * @api
+ * @since 100.1.0
  */
 class Review extends AbstractModifier
 {
@@ -26,13 +31,20 @@ class Review extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 100.1.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
+     * @since 100.1.0
      */
     protected $urlBuilder;
+
+    /**
+     * @var ModuleManager
+     */
+    private $moduleManager;
 
     /**
      * @param LocatorInterface $locator
@@ -48,10 +60,11 @@ class Review extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function modifyMeta(array $meta)
     {
-        if (!$this->locator->getProduct()->getId()) {
+        if (!$this->locator->getProduct()->getId() || !$this->getModuleManager()->isOutputEnabled('Magento_Review')) {
             return $meta;
         }
 
@@ -105,6 +118,7 @@ class Review extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function modifyData(array $data)
     {
@@ -113,5 +127,20 @@ class Review extends AbstractModifier
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
 
         return $data;
+    }
+
+    /**
+     * Retrieve module manager instance using dependency lookup to keep this class backward compatible.
+     *
+     * @return ModuleManager
+     *
+     * @deprecated 100.2.0
+     */
+    private function getModuleManager()
+    {
+        if ($this->moduleManager === null) {
+            $this->moduleManager = ObjectManager::getInstance()->get(ModuleManager::class);
+        }
+        return $this->moduleManager;
     }
 }

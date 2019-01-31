@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Request;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Session\SessionManagerInterface;
 
+/**
+ * Persist data to session.
+ */
 class DataPersistor implements DataPersistorInterface
 {
     /**
@@ -32,7 +36,7 @@ class DataPersistor implements DataPersistorInterface
      */
     public function set($key, $data)
     {
-        $method = 'set' . ucfirst($key) . 'Data';
+        $method = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key) . 'Data';
         call_user_func_array([$this->session, $method], [$data]);
     }
 
@@ -44,7 +48,7 @@ class DataPersistor implements DataPersistorInterface
      */
     public function get($key)
     {
-        $method = 'get' . ucfirst($key) . 'Data';
+        $method = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key) . 'Data';
         return call_user_func_array([$this->session, $method], []);
     }
 
@@ -56,7 +60,7 @@ class DataPersistor implements DataPersistorInterface
      */
     public function clear($key)
     {
-        $method = 'uns' . ucfirst($key) . 'Data';
+        $method = 'uns' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key) . 'Data';
         call_user_func_array([$this->session, $method], []);
     }
 }

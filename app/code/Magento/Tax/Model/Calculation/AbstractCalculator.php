@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
@@ -9,8 +9,8 @@ use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
 use Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
-use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
+use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation;
 
@@ -29,11 +29,7 @@ abstract class AbstractCalculator
     const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
 
-    /**
-     * Tax details item data object factory
-     *
-     * @var TaxDetailsItemInterfaceFactory
-     */
+    /**#@-*/
     protected $taxDetailsItemDataObjectFactory;
 
     /**
@@ -205,6 +201,7 @@ abstract class AbstractCalculator
     {
         $this->customerId = $customerId;
     }
+
     // @codeCoverageIgnoreEnd
 
     /**

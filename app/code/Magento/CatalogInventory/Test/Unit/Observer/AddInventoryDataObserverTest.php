@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
 use Magento\CatalogInventory\Observer\AddInventoryDataObserver;
 
-class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
+class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AddInventoryDataObserver
@@ -31,14 +31,14 @@ class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockHelper = $this->getMock('Magento\CatalogInventory\Helper\Stock', [], [], '', false);
+        $this->stockHelper = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
 
-        $this->event = $this->getMockBuilder('Magento\Framework\Event')
+        $this->event = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
 
-        $this->eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $this->eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
@@ -48,7 +48,7 @@ class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->event));
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\CatalogInventory\Observer\AddInventoryDataObserver',
+            \Magento\CatalogInventory\Observer\AddInventoryDataObserver::class,
             [
                 'stockHelper' => $this->stockHelper,
             ]
@@ -57,7 +57,7 @@ class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAddInventoryData()
     {
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 

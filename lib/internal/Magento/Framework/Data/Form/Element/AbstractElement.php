@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
 /**
  * Data form abstract class
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -200,6 +201,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Set form.
+     *
      * @param AbstractForm $form
      * @return $this
      */
@@ -237,6 +240,7 @@ abstract class AbstractElement extends AbstractForm
             'onchange',
             'disabled',
             'readonly',
+            'autocomplete',
             'tabindex',
             'placeholder',
             'data-form-part',
@@ -325,6 +329,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Get Ui Id.
+     *
      * @param null|string $suffix
      * @return string
      */
@@ -352,8 +358,13 @@ abstract class AbstractElement extends AbstractForm
             $html .= '<label class="addbefore" for="' . $htmlId . '">' . $beforeElementHtml . '</label>';
         }
 
-        $html .= '<input id="' . $htmlId . '" name="' . $this->getName() . '" ' . $this->_getUiId() . ' value="' .
-            $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
+        if (is_array($this->getValue())) {
+            foreach ($this->getValue() as $value) {
+                $html .= $this->getHtmlForInputByValue($this->_escape($value));
+            }
+        } else {
+            $html .= $this->getHtmlForInputByValue($this->getEscapedValue());
+        }
 
         $afterElementJs = $this->getAfterElementJs();
         if ($afterElementJs) {
@@ -572,5 +583,18 @@ abstract class AbstractElement extends AbstractForm
     public function isLocked()
     {
         return $this->getData($this->lockHtmlAttribute) == 1;
+    }
+
+    /**
+     * Get input html by sting value.
+     *
+     * @param string|null $value
+     *
+     * @return string
+     */
+    private function getHtmlForInputByValue($value)
+    {
+        return '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->_getUiId()
+            . ' value="' . $value . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
     }
 }

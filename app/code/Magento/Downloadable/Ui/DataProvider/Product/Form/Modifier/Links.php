@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
@@ -230,6 +230,7 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Title'),
+            'showLabel' => false,
             'dataScope' => '',
         ];
         $titleField['arguments']['data']['config'] = [
@@ -255,6 +256,7 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Price'),
+            'showLabel' => false,
             'dataScope' => '',
         ];
         $priceField['arguments']['data']['config'] = [
@@ -288,6 +290,7 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('File'),
+            'showLabel' => false,
             'dataScope' => '',
         ];
         $fileTypeField['arguments']['data']['config'] = [
@@ -350,6 +353,7 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Sample'),
+            'showLabel' => false,
             'dataScope' => '',
         ];
         $sampleTypeField['arguments']['data']['config'] = [
@@ -425,6 +429,7 @@ class Links extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Max. Downloads'),
+            'showLabel' => false,
             'dataScope' => '',
         ];
         $numberOfDownloadsField['arguments']['data']['config'] = [

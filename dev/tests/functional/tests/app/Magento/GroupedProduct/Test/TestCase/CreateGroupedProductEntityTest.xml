@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\GroupedProduct\Test\TestCase\CreateGroupedProductEntityTest" summary="Create Grouped Product" ticketId="MAGETWO-24877">
         <variation name="CreateGroupedProductEntityTestVariation1" summary="Create Grouped Product and Assign It to the Category" ticketId="MAGETWO-13610">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
@@ -57,6 +57,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateGroupedProductEntityTestVariation5" summary="Create with no required products">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
@@ -109,6 +110,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateGroupedProductEntityTestVariation10" summary="Create Grouped Product and Assign it on Custom Website">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>

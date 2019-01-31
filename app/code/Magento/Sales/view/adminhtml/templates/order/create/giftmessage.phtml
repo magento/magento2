@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,11 @@
 <?php $_items = $block->getItems(); ?>
 <div id="order-giftmessage" class="giftmessage-order-create">
     <fieldset class="admin__fieldset">
-        <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Gift Message for the Entire Order') ?></span></legend>
+        <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Gift Message for the Entire Order') ?></span></legend>
         <br>
         <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('main', $block->getQuote(), $block->getStoreId())): ?>
-            <p><?php /* @escapeNotVerified */ echo __('Leave this box blank if you don\'t want to leave a gift message for the entire order.') ?></p>
-            <?php echo $block->getFormHtml($block->getQuote(), 'main') ?>
+            <p><?= /* @escapeNotVerified */ __('Leave this box blank if you don\'t want to leave a gift message for the entire order.') ?></p>
+            <?= $block->getFormHtml($block->getQuote(), 'main') ?>
         <?php endif; ?>
     </fieldset>
 <script>

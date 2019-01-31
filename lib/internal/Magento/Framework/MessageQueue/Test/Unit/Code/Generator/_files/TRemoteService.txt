@@ -1,0 +1,90 @@
+namespace Magento\Framework\MessageQueue\Code\Generator;
+
+/**
+ * Remote class for @see \Magento\Framework\MessageQueue\Code\Generator\TRepositoryInterface
+ */
+class TRepositoryInterfaceRemote implements TRepositoryInterface
+{
+    /**
+     * Publisher
+     *
+     * @var \Magento\Framework\MessageQueue\PublisherInterface
+     */
+    protected $publisher = null;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\MessageQueue\PublisherInterface $publisher
+     */
+    public function __construct(\Magento\Framework\MessageQueue\PublisherInterface $publisher)
+    {
+        $this->publisher = $publisher;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save(\Magento\Framework\MessageQueue\Code\Generator\TInterface $t) : \Magento\Framework\MessageQueue\Code\Generator\TInterface
+    {
+        return $this->publisher->publish(
+            'magento.framework.messageQueue.code.generator.tRepositoryInterface.save',
+            ['t' => $t]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(string $attribute, int $typeId = null) : \Magento\Framework\MessageQueue\Code\Generator\TInterface
+    {
+        return $this->publisher->publish(
+            'magento.framework.messageQueue.code.generator.tRepositoryInterface.get',
+            ['attribute' => $attribute, 'typeId' => $typeId]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getById(int $tId) : \Magento\Framework\MessageQueue\Code\Generator\TInterface
+    {
+        return $this->publisher->publish(
+            'magento.framework.messageQueue.code.generator.tRepositoryInterface.getById',
+            ['tId' => $tId]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    {
+        return $this->publisher->publish(
+            'magento.framework.messageQueue.code.generator.tRepositoryInterface.getList',
+            ['searchCriteria' => $searchCriteria]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(\Magento\Framework\MessageQueue\Code\Generator\TInterface $t) : bool
+    {
+        return $this->publisher->publish(
+            'magento.framework.messageQueue.code.generator.tRepositoryInterface.delete',
+            ['t' => $t]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteById(int $tId) : bool
+    {
+        return $this->publisher->publish(
+            'magento.framework.messageQueue.code.generator.tRepositoryInterface.deleteById',
+            ['tId' => $tId]
+        );
+    }
+}

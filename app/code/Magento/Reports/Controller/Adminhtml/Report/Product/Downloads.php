@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
-class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -28,7 +30,7 @@ class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product
             __('Downloads'),
             __('Downloads')
         )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Product\Downloads')
+            $this->_view->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Product\Downloads::class)
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Downloads Report'));
         $this->_view->renderLayout();

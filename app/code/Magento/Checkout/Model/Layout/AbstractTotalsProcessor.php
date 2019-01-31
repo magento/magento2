@@ -1,12 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Layout;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Abstract totals processor.
+ *
+ * Can be used to process totals information that will be rendered during checkout.
+ * Abstract class provides sorting routing to sort total information based on configuration settings.
+ *
+ * @api
+ */
 abstract class AbstractTotalsProcessor
 {
     /**

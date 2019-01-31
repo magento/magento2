@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="robotsResultPage" type="Magento\Framework\View\Result\Page">
+        <arguments>
+            <argument name="template" xsi:type="string">Magento_Robots::robots.phtml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="robotsResultPageFactory" type="Magento\Framework\View\Result\PageFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">robotsResultPage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Robots\Controller\Index\Index">
+        <arguments>
+            <argument name="resultPageFactory" xsi:type="object">robotsResultPageFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="custom_instructions" xsi:type="array">
+                    <item name="backend_model" xsi:type="string">Magento\Robots\Model\Config\Value</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

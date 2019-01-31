@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
@@ -29,14 +30,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 8. Save Custom variable using correspond saveActions.
  * 9. Perform all assertions.
  *
- * @group Variables_(PS)
+ * @group Variables
  * @ZephyrId MAGETWO-26104
  */
 class UpdateCustomVariableEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -61,18 +61,35 @@ class UpdateCustomVariableEntityTest extends Injectable
     protected $store = null;
 
     /**
+     * Configuration setting.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
+
+    /**
      * Injection data.
      *
      * @param SystemVariableIndex $systemVariableIndex
      * @param SystemVariableNew $systemVariableNew
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __inject(
         SystemVariableIndex $systemVariableIndex,
-        SystemVariableNew $systemVariableNew
+        SystemVariableNew $systemVariableNew,
+        TestStepFactory $testStepFactory
     ) {
         $this->systemVariableIndexPage = $systemVariableIndex;
         $this->systemVariableNewPage = $systemVariableNew;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -82,14 +99,22 @@ class UpdateCustomVariableEntityTest extends Injectable
      * @param SystemVariable $customVariable
      * @param SystemVariable $customVariableOrigin
      * @param string $saveAction
+     * @param string|null $configData [optional]
      * @return array
      */
     public function test(
         FixtureFactory $fixtureFactory,
         SystemVariable $customVariable,
         SystemVariable $customVariableOrigin,
-        $saveAction
+        $saveAction,
+        $configData = null
     ) {
+        // Preconditions
+        $this->configData = $configData;
+        $this->testStepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->run();
         $this->store = $fixtureFactory->createByCode('store', ['dataset' => 'custom']);
         $this->store->persist();
         $customVariableOrigin->persist();
@@ -115,12 +140,12 @@ class UpdateCustomVariableEntityTest extends Injectable
     public function tearDown()
     {
         if ($this->store !== null) {
-            $storeIndex = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreIndex');
+            $storeIndex = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreIndex::class);
             $storeIndex->open();
             $storeIndex->getStoreGrid()->searchAndOpen(['store_title' => $this->store->getName()]);
-            $storeNew = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreNew');
+            $storeNew = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreNew::class);
             $storeNew->getFormPageActions()->delete();
-            $storeDelete = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreDelete');
+            $storeDelete = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreDelete::class);
             $storeDelete->getStoreForm()->fillForm(['create_backup' => 'No']);
             $storeDelete->getFormPageActions()->delete();
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * Renderer for "Action" column in Newsletter templates grid
+     * Renderer for "Action" column in Newsletter templates grid.
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
@@ -26,11 +26,12 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
             $str .= htmlspecialchars($row->getTemplateSenderName()) . ' ';
         }
         if ($row->getTemplateSenderEmail()) {
-            $str .= '[' . $row->getTemplateSenderEmail() . ']';
+            $str .= '[' . htmlspecialchars($row->getTemplateSenderEmail()) . ']';
         }
         if ($str == '') {
             $str .= '---';
         }
+        
         return $str;
     }
 }

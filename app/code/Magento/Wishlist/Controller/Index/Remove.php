@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -10,7 +10,12 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Product\AttributeValueProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Remove extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
@@ -24,17 +29,26 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
     protected $formKeyValidator;
 
     /**
+     * @var AttributeValueProvider
+     */
+    private $attributeValueProvider;
+
+    /**
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param Validator $formKeyValidator
+     * @param AttributeValueProvider|null $attributeValueProvider
      */
     public function __construct(
         Action\Context $context,
         WishlistProviderInterface $wishlistProvider,
-        Validator $formKeyValidator
+        Validator $formKeyValidator,
+        AttributeValueProvider $attributeValueProvider = null
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->formKeyValidator = $formKeyValidator;
+        $this->attributeValueProvider = $attributeValueProvider
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeValueProvider::class);
         parent::__construct($context);
     }
 
@@ -53,7 +67,8 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $id = (int)$this->getRequest()->getParam('item');
-        $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($id);
+        /** @var Item $item */
+        $item = $this->_objectManager->create(Item::class)->load($id);
         if (!$item->getId()) {
             throw new NotFoundException(__('Page not found.'));
         }
@@ -64,6 +79,14 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         try {
             $item->delete();
             $wishlist->save();
+            $productName = $this->attributeValueProvider
+                ->getRawAttributeValue($item->getProductId(), 'name');
+            $this->messageManager->addComplexSuccessMessage(
+                'removeWishlistItemSuccessMessage',
+                [
+                    'product_name' => $productName,
+                ]
+            );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError(
                 __('We can\'t delete the item from Wish List right now because of an error: %1.', $e->getMessage())
@@ -72,14 +95,9 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
             $this->messageManager->addError(__('We can\'t delete the item from the Wish List right now.'));
         }
 
-        $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-        $request = $this->getRequest();
-        $refererUrl = (string)$request->getServer('HTTP_REFERER');
-        $url = (string)$request->getParam(\Magento\Framework\App\Response\RedirectInterface::PARAM_NAME_REFERER_URL);
-        if ($url) {
-            $refererUrl = $url;
-        }
-        if ($request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED) && $refererUrl) {
+        $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
+        $refererUrl = $this->_redirect->getRefererUrl();
+        if ($refererUrl) {
             $redirectUrl = $refererUrl;
         } else {
             $redirectUrl = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));

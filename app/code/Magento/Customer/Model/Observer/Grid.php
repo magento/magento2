@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Observer;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Model\Observer;
 use Magento\Customer\Model\ResourceModel\Customer\Grid as CustomerGrid;
 
 /**
- * @deprecated
+ * @deprecated 100.1.0
  */
 class Grid
 {
@@ -29,7 +29,7 @@ class Grid
     /**
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function syncCustomerGrid()
     {

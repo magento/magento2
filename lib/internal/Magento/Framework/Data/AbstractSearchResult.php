@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
-
 
 /**
  * Class AbstractSearchResult
@@ -16,7 +15,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @var string
      */
-    protected $dataInterface = 'Magento\Framework\DataObject';
+    protected $dataInterface = \Magento\Framework\DataObject::class;
 
     /**
      * Name prefix of events that are dispatched by model
@@ -59,7 +58,13 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     protected $entityFactory;
 
     /**
+     * @var \Magento\Framework\DB\QueryInterface
+     */
+    protected $query;
+    
+    /**
      * @var \Magento\Framework\DB\Select
+     * @deprecated 100.2.0
      */
     protected $select;
 

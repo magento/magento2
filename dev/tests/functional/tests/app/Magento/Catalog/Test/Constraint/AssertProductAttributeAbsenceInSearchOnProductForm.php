@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class AssertProductAttributeAbsenceInSearchOnProductForm extends AbstractConstra
         $filter = [
             'label' => $productAttribute->getFrontendLabel(),
         ];
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $newProductPage->getProductForm()->getAttributesSearchGrid()->isRowVisible($filter),
             'Attribute \'' . $productAttribute->getFrontendLabel() . '\' is found in Attributes grid.'
         );

@@ -1,19 +1,24 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class PathProcessor
+ */
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */
     const ALL_STORE_CODE = 'all';
 
-    /**  @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**
@@ -48,12 +53,12 @@ class PathProcessor
     public function process($pathInfo)
     {
         $pathParts = $this->stripPathBeforeStorecode($pathInfo);
-        $storeCode = $pathParts[0];
+        $storeCode = current($pathParts);
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-        } else if ($storeCode === self::ALL_STORE_CODE) {
+        } elseif ($storeCode === self::ALL_STORE_CODE) {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else {

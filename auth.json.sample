@@ -1,0 +1,11 @@
+{
+    "github-oauth": {
+        "github.com": "<github-personal-access-token>"
+    },
+    "http-basic": {
+        "repo.magento.com": {
+            "username": "<public-key>",
+            "password": "<private-key>"
+        }
+    }
+}

@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
@@ -13,6 +12,8 @@ use Magento\Framework\DB\Select;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
@@ -79,7 +80,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\ResourceModel\Report\OrderFactory $reportOrderFactory
-     * @param null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -823,7 +824,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     ) {
         $template = ($storeId != 0)
             ? '(main_table.base_subtotal - %2$s - %1$s - ABS(main_table.base_discount_amount) - %3$s)'
-            : '((main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) - %3$s) '
+            : '((main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) + %3$s) '
                 . ' * main_table.base_to_global_rate)';
         return sprintf($template, $baseSubtotalRefunded, $baseSubtotalCanceled, $baseDiscountCanceled);
     }

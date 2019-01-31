@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,13 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @deprecated 100.1.6 No more used
+ * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
+ * @api
+ * @since 100.0.3
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class IndexIterator implements \Iterator
 {
@@ -130,9 +137,11 @@ class IndexIterator implements \Iterator
         $this->statusIds = $statusIds;
     }
 
-
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 100.1.6 Since class is deprecated
+     * @since 100.0.3
      */
     public function current()
     {
@@ -141,6 +150,9 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 100.1.6 Since class is deprecated
+     * @since 100.0.3
      */
     public function next()
     {
@@ -237,6 +249,9 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 100.1.6 Since class is deprecated
+     * @since 100.0.3
      */
     public function key()
     {
@@ -245,6 +260,9 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 100.1.6 Since class is deprecated
+     * @since 100.0.3
      */
     public function valid()
     {
@@ -253,6 +271,9 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated 100.1.6 Since class is deprecated
+     * @since 100.0.3
      */
     public function rewind()
     {

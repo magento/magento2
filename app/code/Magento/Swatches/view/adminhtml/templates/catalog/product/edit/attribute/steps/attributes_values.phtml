@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
-<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
+<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName() ?>'">
     <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 2: Attribute Values') ?></h2>
     <div class="steps-wizard-info">
         <span><?= $block->escapeHtml(__('Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU.')) ?></span>
@@ -101,11 +101,11 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
+                    "<?= /* @escapeNotVerified */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
-                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>",
-                        "optionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/getAttributes')?>",
-                        "createOptionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/createOptions')?>"
+                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName() ?>",
+                        "optionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/getAttributes') ?>",
+                        "createOptionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/createOptions') ?>"
                     }
                 }
             }

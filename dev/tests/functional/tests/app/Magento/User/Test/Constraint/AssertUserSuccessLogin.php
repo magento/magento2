@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,8 +24,11 @@ class AssertUserSuccessLogin extends AbstractConstraint
      */
     public function processAssert(User $user, Dashboard $dashboard)
     {
-        $this->objectManager->create('Magento\User\Test\TestStep\LoginUserOnBackendStep', ['user' => $user])->run();
-        \PHPUnit_Framework_Assert::assertTrue(
+        $this->objectManager->create(
+            \Magento\User\Test\TestStep\LoginUserOnBackendStep::class,
+            ['user' => $user]
+        )->run();
+        \PHPUnit\Framework\Assert::assertTrue(
             $dashboard->getAdminPanelHeader()->isLoggedIn(),
             'Admin user was not logged in.'
         );

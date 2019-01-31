@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Client\Element;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Typified element class for conditions.
@@ -25,6 +25,8 @@ use Magento\Mtf\Client\ElementInterface;
  * {Type|Param|Param|...|Param:[Type|Param|Param|...|Param]}
  * 4. Combination condition with list conditions
  * {Type|Param|Param|...|Param:[[Type|Param|...|Param][Type|Param|...|Param]...[Type|Param|...|Param]]}
+ * 5. Top level condition
+ * {TopLevelCondition:[ANY|FALSE]}{Type|Param|Param|...|Param:[[Type|Param|...|Param]...[Type|Param|...|Param]]}
  *
  * Example value:
  * {Products subselection|total amount|greater than|135|ANY:[[Price in cart|is|100][Quantity in cart|is|100]]}
@@ -134,6 +136,13 @@ class ConditionsElement extends SimpleElement
     protected $chooserGridLocator = 'div[id*=chooser]';
 
     /**
+     * Datepicker xpath.
+     *
+     * @var string
+     */
+    private $datepicker = './/*[contains(@class,"ui-datepicker-trigger")]';
+
+    /**
      * Key of last find param.
      *
      * @var int
@@ -187,18 +196,21 @@ class ConditionsElement extends SimpleElement
     protected $exception;
 
     /**
-     * Set value to conditions.
-     *
-     * @param string $value
-     * @return void
+     * @inheritdoc
      */
     public function setValue($value)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-
+        $this->clear();
         $conditions = $this->decodeValue($value);
         $context = $this->find($this->mainCondition, Locator::SELECTOR_XPATH);
-        $this->clear();
+        if (!empty($conditions[0]['TopLevelCondition'])) {
+            array_unshift($this->mapParams, 'aggregator');
+            $condition = $this->parseTopLevelCondition($conditions[0]['TopLevelCondition']);
+            $this->fillCondition($condition['rules'], $context);
+            unset($conditions[0]);
+            array_shift($this->mapParams);
+        }
         $this->addMultipleCondition($conditions, $context);
     }
 
@@ -403,7 +415,16 @@ class ConditionsElement extends SimpleElement
     {
         $value = $param->find('input', Locator::SELECTOR_TAG_NAME);
         if ($value->isVisible()) {
-            $value->setValue($rule);
+            if (!$value->getAttribute('readonly')) {
+                $value->setValue($rule);
+            } else {
+                $datepicker = $param->find(
+                    $this->datepicker,
+                    Locator::SELECTOR_XPATH,
+                    DatepickerElement::class
+                );
+                $datepicker->setValue($rule);
+            }
 
             $apply = $param->find('.//*[@class="rule-param-apply"]', Locator::SELECTOR_XPATH);
             if ($apply->isVisible()) {
@@ -430,7 +451,6 @@ class ConditionsElement extends SimpleElement
         $value = preg_replace('/\[([^\[{])/', '"$1', $value);
         $value = preg_replace('/([^\]}])\]/', '$1"', $value);
         $value = str_replace(array_keys($this->decodeChars), $this->decodeChars, $value);
-
         $value = "[{$value}]";
         $value = json_decode($value, true);
         if (null === $value) {
@@ -458,6 +478,24 @@ class ConditionsElement extends SimpleElement
         return [
             'type' => array_shift($match[1]),
             'rules' => array_values($match[1]),
+        ];
+    }
+
+    /**
+     * Parse top level condition.
+     *
+     * @param string $condition
+     * @return array
+     * @throws \Exception
+     */
+    protected function parseTopLevelCondition($condition)
+    {
+        if (preg_match_all('/([^|]+)\|?/', $condition, $match) === false) {
+            throw new \Exception('Bad format condition');
+        }
+
+        return [
+            'rules' => $match[1],
         ];
     }
 
@@ -496,6 +534,7 @@ class ConditionsElement extends SimpleElement
      * Param wait loader.
      *
      * @param ElementInterface $element
+     * @return void
      */
     protected function waitForCondition(ElementInterface $element)
     {

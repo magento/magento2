@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Mapper;
 
 use \Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser;
 
-class ArgumentParserTest extends \PHPUnit_Framework_TestCase
+class ArgumentParserTest extends \PHPUnit\Framework\TestCase
 {
     public function testParse()
     {

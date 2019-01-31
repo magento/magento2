@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -9,6 +9,7 @@ return [
         'endpoint_url' => 'http://example.com/endpoint1',
         'identity_link_url' => 'http://www.example.com/identity1',
         'resource' => [
+            'Magento_Backend::admin',
             'Magento_Customer::customer',
             'Magento_Customer::manage',
             'Magento_Sales::sales',
@@ -26,6 +27,7 @@ return [
         'endpoint_url' => 'http://example.com/integration2',
         'identity_link_url' => 'http://www.example.com/identity2',
         'resource' => [
+            'Magento_Backend::admin',
             'Magento_Sales::sales',
             'Magento_Sales::sales_operation',
             'Magento_Sales::sales_order',
@@ -40,6 +42,7 @@ return [
     'TestIntegration3' => [
         'email' => 'test-integration3@example.com',
         'resource' => [
+            'Magento_Backend::admin',
             'Magento_Sales::sales',
             'Magento_Sales::sales_operation',
             'Magento_Sales::sales_order',
