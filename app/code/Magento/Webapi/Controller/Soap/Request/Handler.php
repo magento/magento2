@@ -93,6 +93,7 @@ class Handler
      * @param MethodsMap $methodsMapProcessor
      * @param UrlDecoder $urlDecoder
      * @param ParamsOverrider|null $paramsOverrider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         SoapRequest $request,
