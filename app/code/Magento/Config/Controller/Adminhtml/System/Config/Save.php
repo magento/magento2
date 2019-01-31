@@ -202,14 +202,21 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      */
     private function filterNodes(array $configData): array
     {
-        $systemXmlConfig = $this->_configStructure->getFieldPaths();
+        $systemXmlConfig = array_merge(
+            array_keys($this->_configStructure->getFieldPaths()),
+            array_reduce(
+                array_values($this->_configStructure->getFieldPaths()),
+                'array_merge',
+                array()
+            )
+        );
 
         foreach ($configData['groups'] as $configKey => $configFields) {
             foreach (array_keys($configFields['fields']) as $configFieldName) {
                 $systemConfigArrayKey = $configData['section'] . '/' .
                     $configKey . '/' .
                     $configFieldName;
-                if (array_key_exists($systemConfigArrayKey, $systemXmlConfig)) {
+                if (in_array($systemConfigArrayKey, $systemXmlConfig)) {
                     continue;
                 }
 
