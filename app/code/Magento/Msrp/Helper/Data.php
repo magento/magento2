@@ -70,8 +70,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Check if can apply Minimum Advertise price to product
-     * in specific visibility
+     * Check if can apply Minimum Advertise price to product in specific visibility
      *
      * @param int|Product $product
      * @param int|null $visibility Check displaying price in concrete place (by default generally)
@@ -135,6 +134,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if we should show MAP proce before order confirmation
+     *
      * @param int|Product $product
      * @return bool
      */
@@ -144,6 +145,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if any MAP price is larger than as low as value.
+     *
      * @param int|Product $product
      * @return bool|float
      */
@@ -155,7 +158,8 @@ class Data extends AbstractHelper
         $msrp = $product->getMsrp();
         $price = $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE);
         if ($msrp === null) {
-            if ($product->getTypeId() !== \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
+            if ($product->getTypeId()       !== \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
+                && $product->getTypeId() !== \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
                 return false;
             } else {
                 $msrp = $product->getTypeInstance()->getChildrenMsrp($product);
