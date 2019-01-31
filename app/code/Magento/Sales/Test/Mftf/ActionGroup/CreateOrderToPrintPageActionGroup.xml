@@ -34,5 +34,4 @@
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
         <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
     </actionGroup>
-
 </actionGroups>
