@@ -139,16 +139,12 @@ class Filesystem
             ]
         );
 
-        // Cache flush will regenerate needed folders structure for compilation and deploy that were deleted previously
-        $cmd = $this->functionCallPath . 'cache:flush ';
-        $this->shell->execute($cmd);
+        $this->reinitCacheDirectories();
 
         // Trigger code generation
         $this->compile($output);
 
-        // Cache flush will regenerate needed folders structure for compilation and deploy that were deleted previously
-        $cmd = $this->functionCallPath . 'cache:flush ';
-        $this->shell->execute($cmd);
+        $this->reinitCacheDirectories();
 
         // Trigger static assets compilation and deployment
         $this->deployStaticContent($output);
@@ -343,5 +339,16 @@ class Filesystem
             self::PERMISSIONS_DIR,
             self::PERMISSIONS_FILE
         );
+    }
+
+    /**
+     * Flush cache and restore the basic cache directories.
+     *
+     * @throws LocalizedException
+     */
+    private function reinitCacheDirectories()
+    {
+        $command = $this->functionCallPath . 'cache:flush';
+        $this->shell->execute($command);
     }
 }
