@@ -145,6 +145,11 @@ class Filesystem
 
         // Trigger code generation
         $this->compile($output);
+
+        // Cache flush will regenerate needed folders structure for compilation and deploy that were deleted previously
+        $cmd = $this->functionCallPath . 'cache:flush ';
+        $this->shell->execute($cmd);
+
         // Trigger static assets compilation and deployment
         $this->deployStaticContent($output);
     }
