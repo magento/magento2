@@ -155,9 +155,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $dateTime;
 
     /**
-     * Model cache tag for clear cache in after save and after delete
+     * @inheritdoc
      *
-     * @var string
      * @since 100.2.0
      */
     protected $_cacheTag = [Value::CACHE_TAG];
