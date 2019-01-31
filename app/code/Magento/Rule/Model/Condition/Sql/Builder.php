@@ -250,8 +250,24 @@ class Builder
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
-            // Select ::where method adds braces even on empty expression
-            $collection->getSelect()->where($whereExpression);
+            if (!empty($combine->getConditions())) {
+                foreach ($combine->getConditions() as $condition) {
+                    $conditions = $condition->getData()['value'];
+                    $attribute = $condition->getData()['attribute'];
+                }
+                if (!empty($conditions)) {
+                    $conditions = explode(',', $conditions);
+                    foreach ($conditions as &$condition) {
+                        $condition = "'" . trim($condition) . "'";
+                    }
+                    $conditions = implode(', ', $conditions);
+                }
+
+                $collection->getSelect()->where($whereExpression)->order("FIELD($attribute, $conditions)");
+            } else {
+                // Select ::where method adds braces even on empty expression
+                $collection->getSelect()->where($whereExpression);
+            }
         }
     }
 }
