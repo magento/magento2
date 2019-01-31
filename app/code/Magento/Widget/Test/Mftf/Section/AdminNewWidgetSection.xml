@@ -29,6 +29,5 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
-        <element name="selectProduct" type="button" selector=".btn-chooser" timeout="30"/>
     </section>
 </sections>
