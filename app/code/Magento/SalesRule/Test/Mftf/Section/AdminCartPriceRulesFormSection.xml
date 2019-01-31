@@ -24,6 +24,16 @@
         <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
         <element name="priority" type="input" selector="//*[@name='sort_order']"/>
 
+        <!-- Conditions sub-form -->
+        <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>
+        <element name="ruleCondition" type="select" selector="rule[conditions][{{arg}}][new_child]" parameterized="true"/>
+        <element name="ruleParameter" type="text" selector="//span[@class='rule-param']/a[contains(text(), '{{arg}}')]" parameterized="true"/>
+        <element name="ruleOperatorSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
+        <element name="ruleValueInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
+        <element name="chooseValue" type="button" selector="label[for='conditions__{{arg}}__value']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="actionsHeaderOpen" type="button" selector="div[data-index='actions'] div[data-state-collapsible='open']" timeout="30"/>

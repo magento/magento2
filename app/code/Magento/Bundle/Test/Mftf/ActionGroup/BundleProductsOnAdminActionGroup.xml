@@ -51,4 +51,14 @@
     <actionGroup name="CreateBundleProductForTwoSimpleProductsWithRadioTypeOptions" extends="CreateBundleProductForTwoSimpleProducts">
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="Radio Buttons" after="fillOptionTitle" stepKey="selectInputType"/>
     </actionGroup>
+
+    <actionGroup name="CreateBundleProductForOneSimpleProductsWithRadioTypeOption" extends="CreateBundleProductForTwoSimpleProducts">
+        <remove keyForRemoval="clickOnFiltersButton2"/>
+        <remove keyForRemoval="clearFilters2"/>
+        <remove keyForRemoval="fillNameFilter2"/>
+        <remove keyForRemoval="applyFilters2"/>
+        <remove keyForRemoval="selectSecondSimple"/>
+        <remove keyForRemoval="fillDefaultQuantityForSecondProduct"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="Radio Buttons" after="fillOptionTitle" stepKey="selectInputType"/>
+    </actionGroup>
 </actionGroups>
