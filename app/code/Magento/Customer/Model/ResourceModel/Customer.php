@@ -151,7 +151,9 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $customer->setConfirmation(null);
         }
 
-        $this->_validate($customer);
+        if (!$customer->getData('ignore_validation_flag')) {
+            $this->_validate($customer);
+        }
 
         return $this;
     }

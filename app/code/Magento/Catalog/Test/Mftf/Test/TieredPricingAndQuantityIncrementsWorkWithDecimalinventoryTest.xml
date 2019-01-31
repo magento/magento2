@@ -59,6 +59,7 @@
 
         <!--Step5. Open *Advanced Inventory* pop-up. Set *Enable Qty Increments* to *Yes*. Fill *.5* in *Qty Increments*-->
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink2"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="scrollToEnableQtyIncrements"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="clickOnEnableQtyIncrementsUseConfigSettingsCheckbox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="clickOnEnableQtyIncrements"/>
