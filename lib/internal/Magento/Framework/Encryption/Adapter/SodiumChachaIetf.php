@@ -59,12 +59,16 @@ class SodiumChachaIetf implements EncryptionAdapterInterface
         $nonce = mb_substr($data, 0, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, '8bit');
         $payload = mb_substr($data, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, null, '8bit');
 
-        $plainText = sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
-            $payload,
-            $nonce,
-            $nonce,
-            $this->key
-        );
+        try {
+            $plainText = sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
+                $payload,
+                $nonce,
+                $nonce,
+                $this->key
+            );
+        } catch (\SodiumException $e) {
+            $plainText = '';
+        }
 
         return $plainText !== false ? $plainText : '';
     }
