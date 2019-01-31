@@ -686,7 +686,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Mark receiving subscriber of queue newsletter
      *
      * @param  \Magento\Newsletter\Model\Queue $queue
-     * @return boolean
+     * @return Subscriber
      */
     public function received(\Magento\Newsletter\Model\Queue $queue)
     {

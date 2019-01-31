@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller\Manage;
 
@@ -65,9 +66,9 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
     /**
      * Save newsletter subscription preference action
      *
-     * @return void|null
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute()
+    public function execute(): \Magento\Framework\App\ResponseInterface
     {
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('customer/account/');
@@ -110,7 +111,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
             }
         }
-        $this->_redirect('customer/account/');
+        return $this->_redirect('customer/account/');
     }
 
     /**
@@ -119,7 +120,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
      * @param Customer $customer
      * @return void
      */
-    private function setIgnoreValidationFlag($customer)
+    private function setIgnoreValidationFlag(Customer $customer): void
     {
         $customer->setData('ignore_validation_flag', true);
     }

@@ -18,10 +18,11 @@ class MassDelete extends Subscriber
      * @var SubscriberFactory
      */
     private $subscriberFactory;
-    
+
     /**
      * @param Context $context
      * @param FileFactory $fileFactory
+     * @param SubscriberFactory|null $subscriberFactory
      */
     public function __construct(
         Context $context,

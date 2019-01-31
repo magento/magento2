@@ -4,15 +4,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Controller\Subscriber;
 
 class Confirm extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
      * Subscription confirm action
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function execute(): \Magento\Framework\Controller\Result\Redirect
     {
         $id = (int)$this->getRequest()->getParam('id');
         $code = (string)$this->getRequest()->getParam('code');
