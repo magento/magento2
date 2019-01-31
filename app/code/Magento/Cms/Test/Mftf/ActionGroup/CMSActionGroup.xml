@@ -44,7 +44,7 @@
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection" />
     </actionGroup>
-    <actionGroup name="saveAndContinuePageWithSplitButton">
+    <actionGroup name="saveAndCloseCMSBlockWithSplitButton">
         <waitForElementVisible selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="waitForExpandSplitButtonToBeVisible" />
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
