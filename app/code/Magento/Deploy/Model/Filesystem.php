@@ -348,7 +348,7 @@ class Filesystem
      */
     private function reinitCacheDirectories()
     {
-        $command = $this->functionCallPath . 'cache:flush';
+        $command = $this->functionCallPath . 'cache:flush ';
         $this->shell->execute($command);
     }
 }

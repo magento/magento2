@@ -126,12 +126,18 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->method('execute')
             ->with($setupDiCompileCmd);
 
+
+        $setupDiCompileCmd = $this->cmdPrefix . 'cache:flush ';
+        $this->shell->expects(self::at(2))
+            ->method('execute')
+            ->with($setupDiCompileCmd);
+
         $this->initAdminLocaleMock('en_US');
 
         $usedLocales = ['fr_FR', 'de_DE', 'nl_NL', 'en_US'];
         $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
             . implode(' ', $usedLocales);
-        $this->shell->expects(self::at(2))
+        $this->shell->expects(self::at(3))
             ->method('execute')
             ->with($staticContentDeployCmd);
 
