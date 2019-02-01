@@ -7,6 +7,10 @@ namespace Magento\ImportExport\Block\Adminhtml\Export;
 
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Framework\App\ObjectManager;
+use \Magento\ImportExport\Model\Export\ConfigInterface;
+use \Magento\CatalogImportExport\Model\Export\Product\Type\Factory as TypeFactory;
 
 /**
  * Export filter block
@@ -41,17 +45,34 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     ];
 
     /**
+     * @var \Magento\ImportExport\Model\Export\ConfigInterface
+     */
+    private $exportConfig;
+
+    /**
+     * @var \Magento\CatalogImportExport\Model\Export\Product\Type\Factory
+     */
+    private  $typeFactory;
+
+    /**
+     * Filter constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
+     * @param ConfigInterface|null $exportConfig
+     * @param TypeFactory|null $typeFactory
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        array $data = []
+        array $data = [],
+        ConfigInterface $exportConfig = null,
+        TypeFactory $typeFactory = null
     ) {
+        $this->exportConfig = $exportConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->typeFactory = $typeFactory ?: ObjectManager::getInstance()->get(TypeFactory::class);
         $this->_importExportData = $importExportData;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -419,13 +440,31 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @return array
+     */
+    private function getDisabledAttributes()
+    {
+        $disabledAttrs = [];
+        $productTypes = $this->exportConfig->getEntityTypes(CatalogProduct::ENTITY);
+        foreach ($productTypes as $productTypeConfig) {
+            $model = $this->typeFactory->create($productTypeConfig['model']);
+            if ($model instanceof \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType && $model->isSuitable()) {
+                $disabledAttrs = array_merge($disabledAttrs, $model->getDisabledAttrs());
+            }
+        }
+        $disabledAttrs = array_unique($disabledAttrs);
+        return $disabledAttrs;
+    }
+
+    /**
      * Prepare collection by setting page number, sorting etc..
-     *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {
+        $collection->addFieldToFilter('attribute_code', ['nin' => $this->getDisabledAttributes()]);
         $this->setCollection($collection);
         return $this->getCollection();
     }
