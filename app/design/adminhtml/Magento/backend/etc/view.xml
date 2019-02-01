@@ -23,6 +23,8 @@
         </images>
     </media>
     <exclude>
+        <item type="file">Lib::mage/captcha.js</item>
+        <item type="file">Lib::mage/captcha.min.js</item>
         <item type="file">Lib::mage/common.js</item>
         <item type="file">Lib::mage/cookies.js</item>
         <item type="file">Lib::mage/dataPost.js</item>
