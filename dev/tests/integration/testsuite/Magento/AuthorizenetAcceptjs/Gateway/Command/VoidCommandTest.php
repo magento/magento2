@@ -15,6 +15,10 @@ use Magento\Sales\Model\Order\Payment;
 class VoidCommandTest extends AbstractTest
 {
     /**
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
      * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_auth_only.php
      */
     public function testVoidCommand()

@@ -40,7 +40,7 @@ define([
          * @{inheritdoc}
          */
         initObservable: function () {
-            this.$selector = $('#' + self.selector);
+            this.$selector = $('#' + this.selector);
             this._super()
                 .observe('active');
 
@@ -145,7 +145,7 @@ define([
                 }.bind(this))
                 .done(function (tokens) {
                     this.setPaymentDetails(tokens);
-                    this.placeOrder.call(self);
+                    this.placeOrder();
                 }.bind(this))
                 .fail(function (messages) {
                     this.tokens = null;

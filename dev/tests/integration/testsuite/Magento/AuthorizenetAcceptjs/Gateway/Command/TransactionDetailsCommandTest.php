@@ -14,6 +14,10 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 class TransactionDetailsCommandTest extends AbstractTest
 {
     /**
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
      * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_captured.php
      */
     public function testTransactionDetails()

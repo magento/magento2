@@ -46,10 +46,8 @@ abstract class AbstractTest extends TestCase
     protected $responseMock;
 
     /**
-     * @var Config
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected $configMock;
-
     protected function setUp()
     {
         $bootstrap = Bootstrap::getInstance();
@@ -59,26 +57,19 @@ abstract class AbstractTest extends TestCase
         $this->responseMock = $this->createMock(Zend_Http_Response::class);
         $this->clientMock->method('request')
             ->willReturn($this->responseMock);
-        $this->configMock = $this->createMock(Config::class);
-        $this->configMock->method('getApiUrl')
-            ->willReturn('http://example.com/api');
         $this->clientMock->method('setUri')
-            ->with('http://example.com/api');
-        $this->configMock->method('getLoginId')
-            ->willReturn('someusername');
-        $this->configMock->method('getTransactionKey')
-            ->willReturn('somepassword');
-        $this->configMock->method('getTransactionSignatureKey')
-            ->willReturn('abc');
+            ->with('https://apitest.authorize.net/xml/v1/request.api');
         $clientFactoryMock = $this->createMock(ZendClientFactory::class);
         $clientFactoryMock->method('create')
             ->willReturn($this->clientMock);
         /** @var PaymentDataObjectFactory $paymentFactory */
         $this->paymentFactory = $this->objectManager->get(PaymentDataObjectFactory::class);
-        $this->objectManager->configure([ZendClientFactory::class => ['shared' => true]]);
         $this->objectManager->addSharedInstance($clientFactoryMock, ZendClientFactory::class);
-        $this->objectManager->configure([Config::class => ['shared' => true]]);
-        $this->objectManager->addSharedInstance($this->configMock, Config::class);
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(ZendClientFactory::class);
     }
 
     protected function getOrderWithIncrementId(string $incrementId): Order
