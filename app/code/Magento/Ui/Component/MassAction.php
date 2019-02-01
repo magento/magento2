@@ -21,7 +21,12 @@ class MassAction extends AbstractComponent
         $config = $this->getConfiguration();
 
         foreach ($this->getChildComponents() as $actionComponent) {
-            $config['actions'][] = $actionComponent->getConfiguration();
+            $actionComponentConfig = $actionComponent->getConfiguration();
+            $disabledAction = $actionComponentConfig['actionDisable'] ?? false;
+            if ($disabledAction) {
+                continue;
+            }
+            $config['actions'][] = $actionComponentConfig;
         }
 
         $origConfig = $this->getConfiguration();
