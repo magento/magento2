@@ -79,8 +79,8 @@ class CategoryList implements CategoryListInterface
         $collection->load();
 
         $items = [];
-        foreach ($collection->getAllIds() as $id) {
-            $items[] = $this->categoryRepository->get($id);
+        foreach ($collection->getItems() as $category) {
+            $items[] = $this->categoryRepository->get($category->getId());
         }
 
         /** @var CategorySearchResultsInterface $searchResult */
