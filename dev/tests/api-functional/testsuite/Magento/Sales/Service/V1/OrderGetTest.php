@@ -232,5 +232,7 @@ class OrderGetTest extends WebapiAbstract
         $this->assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
         $this->assertNotEmpty($appliedTaxes[0]['applied_taxes']);
         $this->assertEquals(true, $result['extension_attributes']['converting_from_quote']);
+        $this->assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
+        $this->assertNotEmpty($result['extension_attributes']['payment_additional_info']);
     }
 }
