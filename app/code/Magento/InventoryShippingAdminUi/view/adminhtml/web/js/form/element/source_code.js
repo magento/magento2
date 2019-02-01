@@ -6,14 +6,16 @@ define([
 
     return select.extend({
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         setOptions: function (data) {
             var result = this._super(data);
+
             if (data.length === 1) {
                 this.value(data[0].value);
             }
+
             return result;
-        },
+        }
     });
 });
