@@ -50,7 +50,7 @@
             <collapsible>false</collapsible>
             <opened>true</opened>
         </settings>
-        <field name="sourceCode" formElement="select" sortOrder="10">
+        <field name="sourceCode" formElement="select" component="Magento_InventoryShippingAdminUi/js/form/element/source_code" sortOrder="10">
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>

@@ -155,16 +155,16 @@
             <argument name="checkQuantity" value="1"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="waitForShippingMethodsLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButtonVisible"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"/>
-        <waitForPageLoad stepKey="waitFroSecondCheckoutStepPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
@@ -181,17 +181,17 @@
         <see selector="{{AdminProductGridSection.productSalableQty('1',$$customStock.stock[name]$$)}}" userInput="1950" stepKey="checkSalableQtyAfterPlaceOrder"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
 
         <comment userInput="Run 'Source Selection Algorithm'" stepKey="runSourceSelectionAlgorithm"/>
         <click selector="{{AdminSourceSelectionFormSection.sourceSelectionAlgorithmToggle}}" stepKey="openSourceSelectionAlgorithmList"/>
         <click selector="{{AdminSourceSelectionFormSection.selectSourcePriority}}" stepKey="selectSourcePriorityAlgorithm"/>
-        <waitForAjaxLoad stepKey="waitForAlgorithmApplied"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
 
         <comment userInput="Check, 'Source Selection Algorithm' by source priority applied correctly." stepKey="checkAlgorithmAppliedComment"/>
         <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowProductSku('0')}}" userInput="$$product.sku$$" stepKey="checkProductSku"/>
@@ -204,7 +204,7 @@
         <comment userInput="Select source and proceed to shipment" stepKey="selectSourceAndProceedToShipmentComment"/>
         <selectOption selector="{{AdminSourceSelectionFormSection.sourceSelection}}" userInput="$$highPrioritySource.source[name]$$" stepKey="selectSourceToCreateShipment"/>
         <click selector="{{AdminSourceSelectionFormSection.proceedToShipment}}" stepKey="createShipment"/>
-        <waitForPageLoad stepKey="waitForNewShipmentPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
 
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeShipmentOrderStatus"/>
         <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkBasicShipmentOrderInfo">

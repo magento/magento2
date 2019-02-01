@@ -17,12 +17,11 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <skip>
-                <issueId value="MSI-1631"/>
-            </skip>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
@@ -114,8 +113,6 @@
             <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleMsiProduct.name}}"  stepKey="seeSimpleMsiProductNameInFirstRow"/>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSimpleMsiProductSkuInFirstRow"/>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" userInput="{{SimpleMsiProduct.price}}"  stepKey="seeSimpleMsiProductPriceInFirstRow"/>

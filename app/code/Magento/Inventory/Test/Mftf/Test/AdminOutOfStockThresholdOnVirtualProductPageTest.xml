@@ -17,13 +17,11 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
-            <skip>
-                <issueId value="MSI-1535"/>
-            </skip>
         </annotations>
         
         <before>
             <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 5" stepKey="setThreshold1"/>
 
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
             <createData entity="VirtualMsiProduct" stepKey="createProduct1"/>
@@ -54,10 +52,6 @@
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveVirtualProduct1"/>
 
-        <magentoCLI command="config:set cataloginventory/item_options/min_qty 5" stepKey="setMinQtyInConfiguration"/>
-        <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
-
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="newOrderExistingCustomer1">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
@@ -74,6 +68,9 @@
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex2"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock2"/>
 
         <amOnPage url="/$$createProduct1.product[sku]$$.html" stepKey="amOnProductPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>

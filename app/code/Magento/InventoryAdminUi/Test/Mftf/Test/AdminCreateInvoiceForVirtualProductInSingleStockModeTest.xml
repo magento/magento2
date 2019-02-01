@@ -92,11 +92,7 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoad9"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad time="120" stepKey="waitForPageLoad10"/>
-        <!-- TRYING TO FIGURE OUT IF THERE IS AN ERROR HERE -->
-        <comment userInput="Checking for JS errors on the Invoice page" stepKey="cooment1"/>
-        <dontSeeJsError stepKey="dontSeeJsError"/>
-        <!-- TRYING TO FIGURE OUT IF THERE IS AN ERROR HERE -->
+        <waitForPageLoad time="60" stepKey="waitForPageLoad10"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
         <waitForPageLoad stepKey="waitForPageLoad12"/>

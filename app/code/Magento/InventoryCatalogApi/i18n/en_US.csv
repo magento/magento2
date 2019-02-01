@@ -1,0 +1,3 @@
+"Source Validator must implement BulkInventoryTransferValidatorInterface.","Source Validator must implement BulkInventoryTransferValidatorInterface."
+"Source Validator must implement AssignValidatorInterface.","Source Validator must implement AssignValidatorInterface."
+"Source Validator must implement MassUnassignValidatorInterface.","Source Validator must implement MassUnassignValidatorInterface."

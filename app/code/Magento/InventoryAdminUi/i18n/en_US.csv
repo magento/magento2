@@ -1,0 +1,66 @@
+"Edit Source","Edit Source"
+"Edit Source: %name","Edit Source: %name"
+"Source with source code ""%value"" does not exist.","Source with source code ""%value"" does not exist."
+Sources,Sources
+List,List
+"Manage Sources","Manage Sources"
+"[ID: %value] The Source does not exist.","[ID: %value] The Source does not exist."
+"[ID: %value] %message","[ID: %value] %message"
+"Please correct the sent data.","Please correct the sent data."
+"New Source","New Source"
+"Wrong request.","Wrong request."
+"The Source has been saved.","The Source has been saved."
+"The Source does not exist.","The Source does not exist."
+"Could not save Source.","Could not save Source."
+"The Stock has been deleted.","The Stock has been deleted."
+"Edit Stock","Edit Stock"
+"Edit Stock: %name","Edit Stock: %name"
+"Stock with id ""%value"" does not exist.","Stock with id ""%value"" does not exist."
+"Manage Stock","Manage Stock"
+"[ID: %value] The Stock does not exist.","[ID: %value] The Stock does not exist."
+"[ID: %1] ","[ID: %1] "
+"You deleted %1 Stock(s).","You deleted %1 Stock(s)."
+"New Stock","New Stock"
+"The Stock has been saved.","The Stock has been saved."
+"The Stock does not exist.","The Stock does not exist."
+"Could not save Stock.","Could not save Stock."
+"Assigned sources:","Assigned sources:"
+"Are you sure you want to delete this stock?","Are you sure you want to delete this stock?"
+Inventory,Inventory
+Stocks,Stocks
+"Source Information","Source Information"
+Back,Back
+Reset,Reset
+General,General
+Code,Code
+Name,Name
+"Is Enabled","Is Enabled"
+Description,Description
+Latitude,Latitude
+Longitude,Longitude
+"Contact Info","Contact Info"
+"Contact Name","Contact Name"
+Email,Email
+Phone,Phone
+Fax,Fax
+"Address Data","Address Data"
+Country,Country
+State/Province,State/Province
+City,City
+Street,Street
+Postcode,Postcode
+"Add New Source","Add New Source"
+Enabled,Enabled
+Disabled,Disabled
+"Stock Information","Stock Information"
+"Assign Sources","Assign Sources"
+"Assigned Sources","Assigned Sources"
+Priority,Priority
+Unassign,Unassign
+Done,Done
+"Add New Stock","Add New Stock"
+"Delete selected items?","Delete selected items?"
+"Delete items","Delete items"
+Delete,Delete
+ID,ID
+"Assigned sources","Assigned sources"
