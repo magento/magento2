@@ -20,9 +20,8 @@ define([
     var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,
         isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed,
         isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed,
-        totalPercentage = 0,
-        amount = '',
-        rates = '';
+        taxAmount = 0,
+        rates = 0;
 
     return Component.extend({
         defaults: {
@@ -108,24 +107,24 @@ define([
          * @return {*|String}
          */
         getTaxAmount: function (parent, percentage) {
-            amount = parent.amount;
+            var totalPercentage = 0;
+            taxAmount = parent.amount;
             rates = parent.rates;
-            totalPercentage = 0;
             _.each(rates, function (rate) {
                 totalPercentage += parseFloat(rate.percent);
             });
-            
-            return this.getFormattedPrice(this.getPercentAmount(amount, totalPercentage, percentage));
+
+            return this.getFormattedPrice(this.getPercentAmount(taxAmount, totalPercentage, percentage));
         },
 
         /**
-         * @param {*} amount
+         * @param {*} taxAmount
          * @param {*} totalPercentage
          * @param {*} percentage
          * @return {*|String}
          */
-        getPercentAmount: function (amount, totalPercentage, percentage) {
-            return parseFloat((amount * percentage) / totalPercentage);
+        getPercentAmount: function (taxAmount, totalPercentage, percentage) {
+            return parseFloat((taxAmount * percentage) / totalPercentage);
         },
 
         /**
