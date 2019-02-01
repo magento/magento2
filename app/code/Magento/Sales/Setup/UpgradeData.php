@@ -50,7 +50,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * 
+     *
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
