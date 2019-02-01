@@ -59,12 +59,14 @@ class CreateAccount
     }
 
     /**
+     * Creates new customer account
+     *
      * @param array $args
      * @return CustomerInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function execute($args)
+    public function execute(array $args): CustomerInterface
     {
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(

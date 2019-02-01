@@ -85,7 +85,6 @@ class GetCartTest extends GraphQlAbstract
             'reserved_order_id'
         );
 
-
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
         $query = $this->prepareGetCartQuery($maskedQuoteId);
 

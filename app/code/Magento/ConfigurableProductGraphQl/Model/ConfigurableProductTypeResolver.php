@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as Type;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ConfigurableProductTypeResolver implements TypeResolverInterface
 {
@@ -21,13 +21,12 @@ class ConfigurableProductTypeResolver implements TypeResolverInterface
     const TYPE_RESOLVER = 'ConfigurableProduct';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         if (isset($data['type_id']) && $data['type_id'] == Type::TYPE_CODE) {
             return self::TYPE_RESOLVER;
-
         }
         return '';
     }

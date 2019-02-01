@@ -17,6 +17,8 @@ use Magento\Authorization\Model\UserContextInterface;
 class SetUpUserContext
 {
     /**
+     * Set up user context after creating new customer account
+     *
      * @param ContextInterface $context
      * @param CustomerInterface $customer
      */
