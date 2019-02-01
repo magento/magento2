@@ -9,13 +9,14 @@ declare(strict_types=1);
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Authorizenet\Controller\Directpost\Payment;
 
 /**
  * Class ReturnQuote
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class ReturnQuote extends Payment implements HttpGetActionInterface
+class ReturnQuote extends Payment implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * Return customer quote by ajax
