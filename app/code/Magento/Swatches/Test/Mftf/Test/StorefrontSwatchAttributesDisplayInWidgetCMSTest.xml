@@ -28,6 +28,9 @@
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
             <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
