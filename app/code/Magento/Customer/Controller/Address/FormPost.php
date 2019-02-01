@@ -26,6 +26,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
+ * Customer Address Form Post Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FormPost extends \Magento\Customer\Controller\Address implements HttpPostActionInterface
