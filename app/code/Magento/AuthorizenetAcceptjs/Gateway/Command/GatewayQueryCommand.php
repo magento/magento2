@@ -9,6 +9,7 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Command;
 
 use Exception;
 use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
@@ -18,9 +19,9 @@ use Psr\Log\LoggerInterface;
 use Magento\Payment\Gateway\Command\Result\ArrayResult;
 
 /**
- * Chooses the best method of capture based on the context of the payment
+ * Makes a request to the gateway and returns results
  */
-class TransactionDetailsCommand implements CommandInterface
+class GatewayQueryCommand implements CommandInterface
 {
     /**
      * @var BuilderInterface
@@ -73,7 +74,7 @@ class TransactionDetailsCommand implements CommandInterface
      *
      * @throws Exception
      */
-    public function execute(array $commandSubject)
+    public function execute(array $commandSubject): ResultInterface
     {
         $transferO = $this->transferFactory->create(
             $this->requestBuilder->build($commandSubject)

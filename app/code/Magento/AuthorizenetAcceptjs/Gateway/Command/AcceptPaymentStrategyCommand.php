@@ -13,12 +13,12 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
 
 /**
- * Chooses the best method of returning the payment based on the status of the transaction
+ * Chooses the best method of accepting the payment based on the status of the transaction
  */
-class RefundTransactionStrategyCommand implements CommandInterface
+class AcceptPaymentStrategyCommand implements CommandInterface
 {
-    private const REFUND = 'refund_settled';
-    private const VOID = 'void';
+    private const ACCEPT_FDS = 'accept_fds';
+    private const STATUS_NEEDS_APPROVAL = 'FDSPendingReview';
 
     /**
      * @var CommandPoolInterface
@@ -47,31 +47,25 @@ class RefundTransactionStrategyCommand implements CommandInterface
      */
     public function execute(array $commandSubject): void
     {
-        $command = $this->getCommand($commandSubject);
-
-        $this->commandPool->get($command)
-            ->execute($commandSubject);
+        if ($this->shouldAcceptInGateway($commandSubject)) {
+            $this->commandPool->get(self::ACCEPT_FDS)
+                ->execute($commandSubject);
+        }
     }
 
     /**
-     * Determines the command that should be used based on the status of the transaction
+     * Determines if the transaction needs to be accepted in the gateway
      *
      * @param array $commandSubject
-     * @return string
+     * @return bool
      * @throws CommandException
      */
-    private function getCommand(array $commandSubject): string
+    private function shouldAcceptInGateway(array $commandSubject): bool
     {
         $details = $this->commandPool->get('get_transaction_details')
             ->execute($commandSubject)
             ->get();
 
-        if ($details['transaction']['transactionStatus'] === 'capturedPendingSettlement') {
-            return self::VOID;
-        } elseif ($details['transaction']['transactionStatus'] !== 'settledSuccessfully') {
-            throw new CommandException(__('This transaction cannot be refunded with its current status.'));
-        }
-
-        return self::REFUND;
+        return $details['transaction']['transactionStatus'] === self::STATUS_NEEDS_APPROVAL;
     }
 }

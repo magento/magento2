@@ -46,7 +46,7 @@ class AddressDataBuilder implements BuilderInterface
             $result['transactionRequest']['billTo'] = [
                 'firstName' => $billingAddress->getFirstname(),
                 'lastName' => $billingAddress->getLastname(),
-                'company' => $billingAddress->getCompany(),
+                'company' => $billingAddress->getCompany() ?? '',
                 'address' => $billingAddress->getStreetLine1(),
                 'city' => $billingAddress->getCity(),
                 'state' => $billingAddress->getRegionCode(),
@@ -59,7 +59,7 @@ class AddressDataBuilder implements BuilderInterface
             $result['transactionRequest']['shipTo'] = [
                 'firstName' => $shippingAddress->getFirstname(),
                 'lastName' => $shippingAddress->getLastname(),
-                'company' => $shippingAddress->getCompany(),
+                'company' => $shippingAddress->getCompany() ?? '',
                 'address' => $shippingAddress->getStreetLine1(),
                 'city' => $shippingAddress->getCity(),
                 'state' => $shippingAddress->getRegionCode(),
