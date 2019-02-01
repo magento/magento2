@@ -62,7 +62,7 @@ class GetLatLngFromSource
             $sourceAddress = $this->addressInterfaceFactory->create([
                 'country' => $source->getCountryId() ?? '',
                 'postcode' => $source->getPostcode() ?? '',
-                'streetAddress' => $source->getStreet() ?? '',
+                'street' => $source->getStreet() ?? '',
                 'region' => $source->getRegion() ?? '',
                 'city' => $source->getCity() ?? ''
             ]);

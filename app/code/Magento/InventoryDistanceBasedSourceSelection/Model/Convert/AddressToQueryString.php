@@ -20,7 +20,7 @@ class AddressToQueryString
     public function execute(AddressInterface $address): string
     {
         return
-            $address->getStreetAddress() . ', ' .
+            $address->getStreet() . ', ' .
             $address->getPostcode() . ' ' .
             $address->getCity();
     }

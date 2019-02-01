@@ -33,7 +33,7 @@ interface AddressInterface
      *
      * @return string
      */
-    public function getStreetAddress(): string;
+    public function getStreet(): string;
 
     /**
      * Requested shipping region
