@@ -47,7 +47,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->productBuilder->build($this->getRequest());
 
         $block = $this->getRequest()->getParam('gridOnlyBlock');
-        $blockClassSuffix = str_replace(' ', '_', ucwords(str_replace('_', ' ', $block)));
+        $blockClassSuffix = ucwords($block, '_');
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
