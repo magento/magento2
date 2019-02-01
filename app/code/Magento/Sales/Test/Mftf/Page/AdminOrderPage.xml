@@ -8,8 +8,6 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="StorefrontCustomerCreatePage" url="/customer/account/create/" area="storefront" module="Magento_Customer">
-        <section name="StorefrontCustomerCreateFormSection"/>
-        <section name="StoreFrontCustomerAdvancedAttributesSection"/>
+    <page name="AdminOrderPage" url="sales/order/view/order_id/{{var1}}" area="admin" module="Magento_Sales" parameterized="true">
     </page>
 </pages>
