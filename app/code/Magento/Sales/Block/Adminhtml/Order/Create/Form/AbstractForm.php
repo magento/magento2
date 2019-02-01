@@ -240,9 +240,9 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
         $out = [];
         $out[] = $attribute->getFrontendClass();
 
-        $textLengthValidateClasses = $this->getTextLengthValidateClasses($attribute);
-        if (!empty($textLengthValidateClasses)) {
-            $out = array_merge($out, $textLengthValidateClasses);
+        $textClasses = $this->getTextLengthValidateClasses($attribute);
+        if (!empty($textClasses)) {
+            $out = array_merge($out, $textClasses);
         }
 
         $out = !empty($out) ? implode(' ', array_unique(array_filter($out))) : '';
