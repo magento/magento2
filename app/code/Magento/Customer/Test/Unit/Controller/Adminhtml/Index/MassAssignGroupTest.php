@@ -140,7 +140,9 @@ class MassAssignGroupTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
 
-        $this->resultRedirectFactoryMock->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
+        $this->resultRedirectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
 
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
