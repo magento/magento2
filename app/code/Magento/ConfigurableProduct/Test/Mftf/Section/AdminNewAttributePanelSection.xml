@@ -20,5 +20,6 @@
         <element name="optionAdminValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][0]']" parameterized="true"/>
         <element name="optionDefaultStoreValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][1]']" parameterized="true"/>
         <element name="deleteOption" type="button" selector="#delete_button_option_{{row}}" parameterized="true"/>
+        <element name="deleteOptionByName" type="button" selector="//*[contains(@value, '{{arg}}')]/../following-sibling::td[contains(@id, 'delete_button_container')]/button" parameterized="true"/>
     </section>
 </sections>
