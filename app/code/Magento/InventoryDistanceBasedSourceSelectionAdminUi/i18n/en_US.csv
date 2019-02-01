@@ -1,0 +1,11 @@
+Driving,Driving
+Walking,Walking
+Bicycling,Bicycling
+Distance,Distance
+"Time to destination","Time to destination"
+"Distance Provider for Distance Based SSA","Distance Provider for Distance Based SSA"
+Provider,Provider
+"Google Distance Provider","Google Distance Provider"
+"Google API key","Google API key"
+"Computation mode","Computation mode"
+Value,Value

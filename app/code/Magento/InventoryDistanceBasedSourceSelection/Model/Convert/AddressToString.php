@@ -20,7 +20,7 @@ class AddressToString
     public function execute(AddressInterface $address): string
     {
         return implode(' ', [
-            $address->getStreetAddress(),
+            $address->getStreet(),
             $address->getPostcode(),
             $address->getCity(),
             $address->getRegion(),

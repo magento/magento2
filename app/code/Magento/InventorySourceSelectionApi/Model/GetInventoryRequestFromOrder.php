@@ -125,7 +125,7 @@ class GetInventoryRequestFromOrder
         return $this->addressInterfaceFactory->create([
             'country' => $shippingAddress->getCountryId(),
             'postcode' => $shippingAddress->getPostcode(),
-            'streetAddress' => implode("\n", $shippingAddress->getStreet()),
+            'street' => implode("\n", $shippingAddress->getStreet()),
             'region' => $shippingAddress->getRegion() ?? $shippingAddress->getRegionCode() ?? '',
             'city' => $shippingAddress->getCity()
         ]);
