@@ -126,7 +126,6 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->method('execute')
             ->with($setupDiCompileCmd);
 
-
         $setupDiCompileCmd = $this->cmdPrefix . 'cache:flush ';
         $this->shell->expects(self::at(2))
             ->method('execute')
