@@ -151,6 +151,7 @@ class Filesystem
      * @param OutputInterface $output
      * @return void
      * @throws LocalizedException
+     * @throws \Exception
      */
     public function regenerateStatic(
         OutputInterface $output
@@ -165,10 +166,12 @@ class Filesystem
                 DirectoryList::STATIC_VIEW
             ]
         );
+
         $this->reinitCacheDirectories();
-        
         // Trigger code generation
         $this->compile($output);
+
+        $this->reinitCacheDirectories();
         // Trigger static assets compilation and deployment
         $this->deployStaticContent($output);
     }

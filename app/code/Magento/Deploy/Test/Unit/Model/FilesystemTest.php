@@ -143,9 +143,10 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
         $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
             . implode(' ', $usedLocales);
-        $this->shell->expects($this->exactly(3))
+        $this->shell
+            ->expects($this->exactly(4))
             ->method('execute')
-            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$staticContentDeployCmd]);
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
 
         $this->output->expects(self::at(0))
             ->method('writeln')
