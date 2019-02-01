@@ -27,5 +27,6 @@
         "psr-4": {
             "Magento\\CatalogInventory\\": ""
         }
-    }
+    },
+    "abandoned": "magento/inventory-composer-metapackage"
 }

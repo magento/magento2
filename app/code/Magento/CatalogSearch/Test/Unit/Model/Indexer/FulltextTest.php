@@ -116,6 +116,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn($ids);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $consecutiveStoreRebuildArguments = array_map(
             function ($store) use ($ids) {
                 return [$store, $ids];
@@ -186,6 +187,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn($ids);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
             ->willReturn(new \ArrayObject([$indexData, $indexData]));
@@ -204,6 +206,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$id]);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
             ->willReturn(new \ArrayObject([$indexData, $indexData]));

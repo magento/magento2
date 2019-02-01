@@ -125,6 +125,8 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
+     * Creates an invoice based on the order and quantities provided
+     *
      * @param Order $order
      * @param array $qtys
      * @return \Magento\Sales\Model\Order\Invoice
@@ -136,14 +138,14 @@ class InvoiceService implements InvoiceManagementInterface
         $totalQty = 0;
         $qtys = $this->prepareItemsQty($order, $qtys);
         foreach ($order->getAllItems() as $orderItem) {
-            if (!$this->_canInvoiceItem($orderItem)) {
+            if (!$this->_canInvoiceItem($orderItem, $qtys)) {
                 continue;
             }
             $item = $this->orderConverter->itemToInvoiceItem($orderItem);
-            if ($orderItem->isDummy()) {
-                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (isset($qtys[$orderItem->getId()])) {
+            if (isset($qtys[$orderItem->getId()])) {
                 $qty = (double) $qtys[$orderItem->getId()];
+            } elseif ($orderItem->isDummy()) {
+                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
             } elseif (empty($qtys)) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
@@ -170,38 +172,54 @@ class InvoiceService implements InvoiceManagementInterface
     {
         foreach ($order->getAllItems() as $orderItem) {
             if (empty($qtys[$orderItem->getId()])) {
-                continue;
-            }
-            if ($orderItem->isDummy()) {
-                if ($orderItem->getHasChildren()) {
-                    foreach ($orderItem->getChildrenItems() as $child) {
-                        if (!isset($qtys[$child->getId()])) {
-                            $qtys[$child->getId()] = $child->getQtyToInvoice();
-                        }
-                    }
-                } elseif ($orderItem->getParentItem()) {
-                    $parent = $orderItem->getParentItem();
-                    if (!isset($qtys[$parent->getId()])) {
-                        $qtys[$parent->getId()] = $parent->getQtyToInvoice();
-                    }
+                $parentId = $orderItem->getParentItemId();
+                if ($parentId && array_key_exists($parentId, $qtys)) {
+                    $qtys[$orderItem->getId()] = $qtys[$parentId];
+                } else {
+                    continue;
                 }
             }
+            $this->prepareItemQty($orderItem, $qtys);
         }
 
         return $qtys;
     }
 
     /**
-     * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
-     * with parent item which is included to invoice
+     * Prepare qty to invoice item.
+     *
+     * @param Order\Item $orderItem
+     * @param array $qtys
+     * @return void
+     */
+    private function prepareItemQty(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, &$qtys)
+    {
+        if ($orderItem->isDummy()) {
+            if ($orderItem->getHasChildren()) {
+                foreach ($orderItem->getChildrenItems() as $child) {
+                    if (!isset($qtys[$child->getId()])) {
+                        $qtys[$child->getId()] = $child->getQtyToInvoice();
+                    }
+                }
+            } elseif ($orderItem->getParentItem()) {
+                $parent = $orderItem->getParentItem();
+                if (!isset($qtys[$parent->getId()])) {
+                    $qtys[$parent->getId()] = $parent->getQtyToInvoice();
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if order item can be invoiced.
      *
      * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @param array $qtys
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _canInvoiceItem(\Magento\Sales\Api\Data\OrderItemInterface $item)
+    protected function _canInvoiceItem(\Magento\Sales\Api\Data\OrderItemInterface $item, array $qtys = [])
     {
-        $qtys = [];
         if ($item->getLockedDoInvoice()) {
             return false;
         }

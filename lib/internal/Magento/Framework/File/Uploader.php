@@ -136,12 +136,16 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
     const MAX_IMAGE_WIDTH = 1920;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
     const MAX_IMAGE_HEIGHT = 1200;
 
@@ -187,8 +191,7 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with
-     * original or new file name (if specified)
+     * Used to save uploaded file into destination folder with original or new file name (if specified).
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -204,20 +207,22 @@ class Uploader
         $this->_result = false;
         $destinationFile = $destinationFolder;
         $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
-        $fileName = self::getCorrectFileName($fileName);
+        $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
             $this->setAllowCreateFolders(true);
-            $this->_dispretionPath = self::getDispersionPath($fileName);
+            $this->_dispretionPath = static::getDispersionPath($fileName);
             $destinationFile .= $this->_dispretionPath;
             $this->_createDestinationFolder($destinationFile);
         }
 
         if ($this->_allowRenameFiles) {
-            $fileName = self::getNewFileName(self::_addDirSeparator($destinationFile) . $fileName);
+            $fileName = static::getNewFileName(
+                static::_addDirSeparator($destinationFile) . $fileName
+            );
         }
 
-        $destinationFile = self::_addDirSeparator($destinationFile) . $fileName;
+        $destinationFile = static::_addDirSeparator($destinationFile) . $fileName;
 
         try {
             $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
@@ -265,6 +270,8 @@ class Uploader
     }
 
     /**
+     * Set access permissions to file.
+     *
      * @param string $file
      * @return void
      *
@@ -541,7 +548,7 @@ class Uploader
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (is_array($file) && count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
+            if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 

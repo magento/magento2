@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93059"/>
             <group value="ConfigurableProduct"/>
-            <group value="skip"/><!-- MAGETWO-94170 -->
         </annotations>
 
         <before>
@@ -41,7 +40,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         
         <!--Go to storefront-->
-        <amOnPage url="" stepKey="goToHomePage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
         <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>

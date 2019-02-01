@@ -107,7 +107,7 @@
         @_toggle-selector: ~'.action.showcart',
         @_options-selector: ~'.block-minicart',
         @_dropdown-list-width: 320px,
-        @_dropdown-list-position-right: 0px,
+        @_dropdown-list-position-right: 0,
         @_dropdown-list-pointer-position: right,
         @_dropdown-list-pointer-position-left-right: 26px,
         @_dropdown-list-z-index: 101,   
@@ -148,10 +148,10 @@
         .action {
             &.close {
                 .lib-button-icon(
-                @icon-remove,
-                @_icon-font-size: 32px,
-                @_icon-font-line-height: 32px,
-                @_icon-font-text-hide: true
+                    @icon-remove,
+                    @_icon-font-size: 32px,
+                    @_icon-font-line-height: 32px,
+                    @_icon-font-text-hide: true
                 );
                 .lib-button-reset();
                 height: 40px;
@@ -254,12 +254,12 @@
 
             .toggle {
                 .lib-icon-font(
-                @_icon-font-content: @icon-down,
-                @_icon-font-size: 28px,
-                @_icon-font-line-height: 16px,
-                @_icon-font-text-hide: false,
-                @_icon-font-position: after,
-                @_icon-font-display: block
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 16px,
+                    @_icon-font-text-hide: false,
+                    @_icon-font-position: after,
+                    @_icon-font-display: block
                 );
                 cursor: pointer;
                 position: relative;
@@ -274,8 +274,8 @@
             &.active {
                 > .toggle {
                     .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
+                        @_icon-font-content: @icon-up,
+                        @_icon-font-position: after
                     );
                 }
             }
@@ -304,6 +304,7 @@
 
             .weee[data-label] {
                 .lib-font-size(11);
+                
                 .label {
                     &:extend(.abs-no-display all);
                 }
@@ -317,12 +318,12 @@
         .product.options {
             .tooltip.toggle {
                 .lib-icon-font(
-                @icon-down,
-                @_icon-font-size: 28px,
-                @_icon-font-line-height: 28px,
-                @_icon-font-text-hide: true,
-                @_icon-font-margin: -3px 0 0 7px,
-                @_icon-font-position: after
+                    @icon-down,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 28px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-margin: -3px 0 0 7px,
+                    @_icon-font-position: after
                 );
 
                 .details {
@@ -341,7 +342,7 @@
         .item-qty {
             margin-right: @indent__s;
             text-align: center;
-            width: 40px;
+            width: 45px;
         }
 
         .update-cart-item {
@@ -357,19 +358,19 @@
             &.edit,
             &.delete {
                 .lib-icon-font(
-                @icon-settings,
-                @_icon-font-size: 28px,
-                @_icon-font-line-height: 28px,
-                @_icon-font-text-hide: true,
-                @_icon-font-color: @color-gray19,
-                @_icon-font-color-hover: @color-gray19,
-                @_icon-font-color-active: @color-gray19
+                    @icon-settings,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 28px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-color: @color-gray19,
+                    @_icon-font-color-hover: @color-gray19,
+                    @_icon-font-color-active: @color-gray19
                 );
             }
 
             &.delete {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-trash
+                    @_icon-font-content: @icon-trash
                 );
             }
         }
@@ -399,6 +400,7 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .minicart-wrapper {
         margin-left: 13px;
+        
         .block-minicart {
             right: -15px;
             width: 390px;

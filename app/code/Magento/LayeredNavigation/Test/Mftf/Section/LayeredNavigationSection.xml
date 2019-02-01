@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="LayeredNavigationSection">
+        <element name="layeredNavigation" type="select" selector="#catalog_layered_navigation-head"/>
+        <element name="CheckIfTabExpand" type="button" selector="#catalog_layered_navigation-head:not(.open)"/>
+        <element name="NavigationStepCalculation" type="button" selector="#catalog_layered_navigation_price_range_calculation"/>
+        <element name="NavigationStepCalculationSystemValue" type="button" selector="#catalog_layered_navigation_price_range_calculation_inherit"/>
+        <element name="PriceNavigationStep" type="button" selector="#catalog_layered_navigation_price_range_step"/>
+        <element name="PriceNavigationStepSystemValue" type="button" selector="#catalog_layered_navigation_price_range_step_inherit"/>
+    </section>
+
+    <section name="StorefrontLayeredNavigationSection">
+        <element name="shoppingOptionsByName" type="button" selector="//*[text()='Shopping Options']/..//*[contains(text(),'{{arg}}')]" parameterized="true"/>
+    </section>
+</sections>

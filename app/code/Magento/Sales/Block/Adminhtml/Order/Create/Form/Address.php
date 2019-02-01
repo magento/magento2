@@ -136,6 +136,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         $this->searchCriteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->addressMapper = $addressMapper;
+        $this->backendQuoteSession = $sessionQuote;
         parent::__construct(
             $context,
             $sessionQuote,
@@ -217,6 +218,11 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      */
     protected function _prepareForm()
     {
+        $storeId = $this->getCreateOrderModel()
+            ->getSession()
+            ->getStoreId();
+        $this->_storeManager->setCurrentStore($storeId);
+
         $fieldset = $this->_form->addFieldset('main', ['no_container' => true]);
 
         $addressForm = $this->_customerFormFactory->create('customer_address', 'adminhtml_customer_address');
@@ -292,6 +298,8 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     }
 
     /**
+     * Process country options.
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
      * @return void
      */
@@ -306,7 +314,8 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     }
 
     /**
-     * Retrieve Directiry Countries collection
+     * Retrieve Directory Countries collection
+     *
      * @deprecated 100.1.3
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
@@ -322,6 +331,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * Retrieve Backend Quote Session
+     *
      * @deprecated 100.1.3
      * @return Quote
      */

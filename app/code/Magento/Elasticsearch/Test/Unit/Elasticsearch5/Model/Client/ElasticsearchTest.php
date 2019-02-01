@@ -367,7 +367,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'text',
-                                        'index' => 'no',
+                                        'index' => false,
                                     ],
                                 ],
                             ],
@@ -434,7 +434,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'text',
-                                        'index' => 'no',
+                                        'index' => false,
                                     ],
                                 ],
                             ],

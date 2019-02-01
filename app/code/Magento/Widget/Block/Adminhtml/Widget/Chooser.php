@@ -11,6 +11,9 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+/**
+ * Chooser widget block.
+ */
 class Chooser extends \Magento\Backend\Block\Template
 {
     /**
@@ -180,7 +183,7 @@ class Chooser extends \Magento\Backend\Block\Template
             <label class="widget-option-label" id="' .
             $chooserId .
             'label">' .
-            ($this->getLabel() ? $this->getLabel() : __(
+            ($this->getLabel() ? $this->escapeHtml($this->getLabel()) : __(
                 'Not Selected'
             )) .
             '</label>

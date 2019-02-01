@@ -22,6 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
+ *
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
  * @method int getAttributeSetId()
@@ -296,6 +297,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Add search criteria.
+     *
      * @param EntityAttribute $attribute
      * @param mixed $value
      * @return void

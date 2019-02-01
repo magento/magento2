@@ -6,7 +6,9 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification implements HttpGetActionInterface
 {
     /**
      * @return void

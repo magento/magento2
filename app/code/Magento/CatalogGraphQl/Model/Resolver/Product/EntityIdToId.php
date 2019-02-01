@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Fixed the id related data in the product data
+ * @inheritdoc
  *
- * {@inheritdoc}
+ * Fixed the id related data in the product data
  */
 class EntityIdToId implements ResolverInterface
 {
@@ -29,22 +28,15 @@ class EntityIdToId implements ResolverInterface
     private $metadataPool;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param MetadataPool $metadataPool
-     * @param ValueFactory $valueFactory
      */
-    public function __construct(MetadataPool $metadataPool, ValueFactory $valueFactory)
+    public function __construct(MetadataPool $metadataPool)
     {
         $this->metadataPool = $metadataPool;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -52,12 +44,9 @@ class EntityIdToId implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
@@ -67,10 +56,6 @@ class EntityIdToId implements ResolverInterface
             $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
         );
 
-        $result = function () use ($productId) {
-            return $productId;
-        };
-
-        return $this->valueFactory->create($result);
+        return $productId;
     }
 }
