@@ -23,6 +23,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     protected $registry;
 
+    /**
+     * @var array Cache of the current bundle selection items
+     */
     private $selectionCache = [];
 
     /**
