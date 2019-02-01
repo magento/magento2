@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Command\TransactionDetailsCommand;
+use Magento\AuthorizenetAcceptjs\Gateway\Command\GatewayQueryCommand;
 use Magento\Payment\Gateway\Command\Result\ArrayResult;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
@@ -21,10 +21,10 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class TransactionDetailsCommandTest extends TestCase
+class GatewayQueryCommandTest extends TestCase
 {
     /**
-     * @var TransactionDetailsCommand
+     * @var GatewayQueryCommand
      */
     private $command;
 
@@ -67,7 +67,7 @@ class TransactionDetailsCommandTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->validatorMock = $this->createMock(ValidatorInterface::class);
 
-        $this->command = new TransactionDetailsCommand(
+        $this->command = new GatewayQueryCommand(
             $this->requestBuilderMock,
             $this->transferFactoryMock,
             $this->clientMock,

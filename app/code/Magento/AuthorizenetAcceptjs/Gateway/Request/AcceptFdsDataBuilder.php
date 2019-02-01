@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Adds the meta transaction information to the request
  */
-class AcceptFdsTypeDataBuilder implements BuilderInterface
+class AcceptFdsDataBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command;
 
+use Magento\AuthorizenetAcceptjs\Gateway\Command\AcceptPaymentStrategyCommand;
 use Magento\AuthorizenetAcceptjs\Gateway\Command\RefundTransactionStrategyCommand;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
@@ -16,7 +17,7 @@ use Magento\Payment\Gateway\CommandInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class RefundTransactionStrategyCommandTest extends TestCase
+class AcceptPaymentStrategyCommandTest extends TestCase
 {
     /**
      * @var CommandInterface|MockObject
@@ -49,13 +50,13 @@ class RefundTransactionStrategyCommandTest extends TestCase
         $this->commandMock = $this->createMock(CommandInterface::class);
         $this->transactionResultMock = $this->createMock(ResultInterface::class);
         $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
-        $this->command = new RefundTransactionStrategyCommand(
+        $this->command = new AcceptPaymentStrategyCommand(
             $this->commandPoolMock,
             new SubjectReader()
         );
     }
 
-    public function testCommandWillVoidWhenTransactionIsPendingSettlement()
+    public function testCommandWillAcceptInTheGatewayWhenTransactionHasNotBeenAuthorized()
     {
         // Assert command is executed
         $this->commandMock->expects($this->once())
@@ -64,13 +65,13 @@ class RefundTransactionStrategyCommandTest extends TestCase
         $this->commandPoolMock->method('get')
             ->willReturnMap([
                 ['get_transaction_details', $this->transactionDetailsCommandMock],
-                ['void', $this->commandMock]
+                ['accept_fds', $this->commandMock]
             ]);
 
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => 'capturedPendingSettlement'
+                    'transactionStatus' => 'FDSPendingReview'
                 ]
             ]);
 
@@ -86,42 +87,7 @@ class RefundTransactionStrategyCommandTest extends TestCase
         $this->command->execute($buildSubject);
     }
 
-    public function testCommandWillRefundWhenTransactionIsSettled()
-    {
-        // Assert command is executed
-        $this->commandMock->expects($this->once())
-            ->method('execute');
-
-        $this->commandPoolMock->method('get')
-            ->willReturnMap([
-                ['get_transaction_details', $this->transactionDetailsCommandMock],
-                ['refund_settled', $this->commandMock]
-            ]);
-
-        $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => 'settledSuccessfully'
-                ]
-            ]);
-
-        $buildSubject = [
-            'foo' => '123'
-        ];
-
-        $this->transactionDetailsCommandMock->expects($this->once())
-            ->method('execute')
-            ->with($buildSubject)
-            ->willReturn($this->transactionResultMock);
-
-        $this->command->execute($buildSubject);
-    }
-
-    /**
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage This transaction cannot be refunded with its current status.
-     */
-    public function testCommandWillThrowExceptionWhenTransactionIsInInvalidState()
+    public function testCommandWillDoNothingWhenTransactionHasAlreadyBeenAuthorized()
     {
         // Assert command is never executed
         $this->commandMock->expects($this->never())
@@ -135,7 +101,7 @@ class RefundTransactionStrategyCommandTest extends TestCase
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => 'somethingIsWrong'
+                    'transactionStatus' => 'anythingelseisfine'
                 ]
             ]);
 
