@@ -49,7 +49,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                     <?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?>
                                 <?php else: ?>
-                                    <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
+                                    <?= $block->escapeHtml($_formatedOptionValue['value'], ['span']) ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>
