@@ -115,7 +115,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->removeAddress($quote->getBillingAddress()->getId());
             /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
             $customer = $quote->getCustomer();
-            if (is_null($customer->getDefaultBilling())) {
+            if ($customer->getDefaultBilling() === null) {
                 $customer->setDefaultBilling($billingAddress->getId());
             }
             $quote->setBillingAddress($billingAddress);
