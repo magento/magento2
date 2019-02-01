@@ -7,10 +7,10 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCheckValidatorConfigurableProductTest">
         <annotations>
-            <features value="ConfigurableProduct"/>
+            <stories value="Configurable Product"/>
             <title value="Check that validator works correctly when creating Configurations for Configurable Products"/>
             <description value="Verify validator works correctly for Configurable Products"/>
             <severity value="MAJOR"/>
