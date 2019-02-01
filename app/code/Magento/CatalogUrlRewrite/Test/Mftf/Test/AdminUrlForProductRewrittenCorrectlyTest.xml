@@ -46,10 +46,10 @@
         <waitForPageLoad stepKey="waitForStoreViewLoad"/>
 
         <!--Set use default url-->
-        <click selector="{{AdminCreateSimpleProductSection.search}}" stepKey="clickOnSearchEngineOptimization"/>
-        <waitForElementVisible selector="{{AdminProductSearchEngineOptimisationSection.useDefaultUrl}}" stepKey="waitForUseDefaultUrlCheckbox"/>
-        <click selector="{{AdminProductSearchEngineOptimisationSection.useDefaultUrl}}" stepKey="clickUseDefaultUrlCheckbox"/>
-        <fillField selector="{{AdminProductSearchEngineOptimisationSection.urlKey}}" userInput="$$createProduct.sku$$-new" stepKey="changeUrlKey"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickOnSearchEngineOptimization"/>
+        <waitForElementVisible selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="waitForUseDefaultUrlCheckbox"/>
+        <click selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="clickUseDefaultUrlCheckbox"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$createProduct.sku$$-new" stepKey="changeUrlKey"/>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
         <!--Select product and go toUpdate Attribute page-->
