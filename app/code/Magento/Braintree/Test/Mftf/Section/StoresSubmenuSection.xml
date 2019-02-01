@@ -8,8 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontWidgetsSection">
-        <element name="widgetProductsGrid" type="block" selector=".block.widget.block-products-list.grid"/>
-        <element name="widgetProductName" type="text" selector=".product-item-name"/>
+    <section name="StoresSubmenuSection">
+        <element name="configuration" type="button" selector="//li[@id='menu-magento-backend-stores']//li[@data-ui-id='menu-magento-config-system-config']"/>
     </section>
 </sections>
