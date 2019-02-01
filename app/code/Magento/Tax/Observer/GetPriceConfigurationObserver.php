@@ -46,6 +46,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $this->selectionCache = [];
         if ($this->taxData->displayPriceIncludingTax()) {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->registry->registry('current_product');
