@@ -32,7 +32,6 @@
         <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]"/>
         <element name="clickForPriceLink" type="text" selector="//div[@class='price-box price-final_price']//a[contains(text(), 'Click for price')]"/>
 
-
         <!-- The parameter is the nth custom option that you want to get -->
         <element name="nthCustomOption" type="block" selector="//*[@id='product-options-wrapper']/*[@class='fieldset']/*[contains(@class, 'field')][{{customOptionNum}}]" parameterized="true" />
         <!-- The 1st parameter is the nth custom option, the 2nd parameter is the nth value in the option -->

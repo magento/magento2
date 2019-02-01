@@ -53,20 +53,16 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
 
-
             <!-- Create the 2 children that will be a part of the configurable product -->
-            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
-                <field key="price">50.00</field>
+            <createData entity="ApiSimpleProductWithPrice50" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
-            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
-                <field key="price">60.00</field>
+            <createData entity="ApiSimpleProductWithPrice60" stepKey="createConfigChildProduct2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
-            <createData entity="SimpleOne" stepKey="createConfigChildProduct3">
-                <field key="price">70.00</field>
+            <createData entity="ApiSimpleProductWithPrice70" stepKey="createConfigChildProduct3">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption3"/>
             </createData>
