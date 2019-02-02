@@ -5,11 +5,9 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,16 +18,12 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
-    /** @var ProductRepositoryInterface */
-    private $productRepository;
-
     /**
      * Set up
      */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -142,8 +136,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
      */
     public function testUrlKeyHasChangedInStoreviewContextWithPermanentRedirection()
     {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository*/
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Model\Product $product*/
-        $product = $this->productRepository->get('product1');
+        $product = $productRepository->get('product1');
 
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
@@ -237,23 +233,5 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         foreach ($expected as $row) {
             $this->assertContains($row, $actual);
         }
-    }
-
-    /**
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
-     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     * @magentoAppIsolation enabled
-     */
-    public function testDuplicatedUrlKeyInvisibleProduct()
-    {
-        $this->expectException(
-            UrlAlreadyExistsException::class,
-            'URL key for specified store already exists'
-        );
-        /** @var \Magento\Catalog\Model\Product $product*/
-        $product = $this->productRepository->get('simple2');
-        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
-        $product->setUrlKey('simple_product');
-        $product->save();
     }
 }

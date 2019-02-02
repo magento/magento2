@@ -43,7 +43,7 @@ foreach ($options as $option) {
     $productSku = array_shift($productsSku);
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId($attributeSetId)
-        ->setName('Configurable Option Not Available' . $option->getLabel())
+        ->setName('Configurable Option' . $option->getLabel())
         ->setSku('simple_not_avalilable_' . $productSku)
         ->setPrice(11)
         ->setTestConfigurable($option->getValue())
