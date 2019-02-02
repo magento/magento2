@@ -71,6 +71,7 @@ class AddressDataProvider
     private function extractAddressData(QuoteAddress $address): array
     {
         $addressData = [
+            'cart_address_id' => $address->getId(),
             'country' => [
                 'code' => $address->getCountryId(),
                 'label' => $address->getCountry()
