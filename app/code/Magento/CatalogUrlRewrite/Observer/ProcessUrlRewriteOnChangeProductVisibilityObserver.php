@@ -27,18 +27,22 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
      * @var CollectionFactory
      */
     private $productCollectionFactory;
+
     /**
      * @var ProductUrlRewriteGenerator
      */
     private $urlRewriteGenerator;
+
     /**
      * @var UrlPersistInterface
      */
     private $urlPersist;
+
     /**
      * @var ProductUrlPathGenerator
      */
     private $urlPathGenerator;
+
     /**
      * @param CollectionFactory $collectionFactory
      * @param ProductUrlRewriteGenerator $urlRewriteGenerator
@@ -56,6 +60,7 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
         $this->urlPersist = $urlPersist;
         $this->urlPathGenerator = $urlPathGenerator;
     }
+
     /**
      * Generate urls for UrlRewrites and save it in storage
      *
