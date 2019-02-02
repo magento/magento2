@@ -433,11 +433,11 @@ class Installer
             } else {
                 $result[$module] = 1;
             }
-            if (in_array($module, $disable)) {
-                $result[$module] = 0;
-            }
             if (in_array($module, $enable)) {
                 $result[$module] = 1;
+            }
+            if (in_array($module, $disable)) {
+                $result[$module] = 0;
             }
         }
         if (!$dryRun) {
