@@ -68,9 +68,10 @@ class Escaper
      *
      * @param string|array $data
      * @param array|null $allowedTags
+     * @param boolean $allowedQuotes
      * @return string|array
      */
-    public function escapeHtml($data, $allowedTags = null)
+    public function escapeHtml($data, $allowedTags = null, $allowedQuotes = false)
     {
         if (!is_array($data)) {
             $data = (string)$data;
@@ -111,6 +112,8 @@ class Escaper
                 $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
+            } elseif($allowedQuotes) {
+                $result = htmlspecialchars($data, ENT_SUBSTITUTE, 'UTF-8', false);
             } else {
                 $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
