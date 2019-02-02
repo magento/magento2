@@ -19,8 +19,6 @@ use Magento\Sales\Model\Order\Payment;
  */
 class TransactionDetailsResponseHandler implements HandlerInterface
 {
-    private const REAL_TRANSACTION_ID = 'real_transaction_id';
-
     /**
      * @var SubjectReader
      */

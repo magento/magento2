@@ -12,7 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\AbstractTest;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class VoidCommandTest extends AbstractTest
+class RefundSettledCommandTest extends AbstractTest
 {
     /**
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
@@ -27,12 +27,12 @@ class VoidCommandTest extends AbstractTest
         $commandPool = $this->objectManager->get('AuthorizenetAcceptjsCommandPool');
         $command = $commandPool->get('void');
 
-        $order = $this->getOrderWithIncrementId('100000002');
+        $order = $this->getOrderWithIncrementId('100000001');
         $payment = $order->getPayment();
         $paymentDO = $this->paymentFactory->create($payment);
 
-        $expectedRequest = include __DIR__ . '/../../_files/expected_request/void.php';
-        $response = include __DIR__ . '/../../_files/response/void.php';
+        $expectedRequest = include __DIR__ . '/../../_files/expected_request/refund.php';
+        $response = include __DIR__ . '/../../_files/response/refund.php';
 
         $this->clientMock->method('setRawData')
             ->with(json_encode($expectedRequest), 'application/json');
