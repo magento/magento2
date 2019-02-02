@@ -98,4 +98,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config->extend(['\Some\Class' => ['shared' => true]]);
         $this->assertTrue($config->isShared('Some\Class'));
     }
+
+    public function testExtendMergeDifferentConfigsNodesWithSlashIgnoring()
+    {
+        $config = new Config();
+        $config->extend(['Some\Class' => ['arguments' => ['data' => ['key1' => 'value1']]]]);
+        $config->extend(['\Some\Class' => ['arguments' => ['data' => ['key2' => 'value2']]]]);
+        $this->assertEquals(['data' => ['key1' => 'value1', 'key2' => 'value2']], $config->getArguments('Some\Class'));
+    }
 }
