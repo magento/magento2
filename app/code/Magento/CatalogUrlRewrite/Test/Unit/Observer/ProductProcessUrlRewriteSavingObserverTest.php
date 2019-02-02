@@ -6,7 +6,9 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserverTest
@@ -47,21 +49,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     protected $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
-     */
-    private $productCollection;
-
-    /**
-     * @var \Magento\Framework\DB\Select
-     */
-    private $select;
-
-    /**
      * @var \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
      */
     protected $model;
@@ -73,13 +60,13 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     {
         $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
         $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
-            'getId',
-            'dataHasChangedFor',
-            'isVisibleInSiteVisibility',
-            'getIsChangedWebsites',
-            'getIsChangedCategories',
-            'getStoreId'
-        ]);
+                'getId',
+                'dataHasChangedFor',
+                'isVisibleInSiteVisibility',
+                'getIsChangedWebsites',
+                'getIsChangedCategories',
+                'getStoreId'
+            ]);
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
         $this->event = $this->createPartialMock(\Magento\Framework\Event::class, ['getProduct']);
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
@@ -92,28 +79,12 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         $this->productUrlRewriteGenerator->expects($this->any())
             ->method('generate')
             ->will($this->returnValue([3 => 'rewrite']));
-        $this->collectionFactory = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
-        );
-        $this->productCollection = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
-        );
-        $this->select = $this->createMock(
-            \Magento\Framework\DB\Select::class
-        );
-        $this->collectionFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->productCollection));
-        $this->productCollection->expects($this->any())
-            ->method('getSelect')
-            ->will($this->returnValue($this->select));
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
             \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver::class,
             [
                 'productUrlRewriteGenerator' => $this->productUrlRewriteGenerator,
-                'urlPersist' => $this->urlPersist,
-                'collectionFactory' => $this->collectionFactory
+                'urlPersist' => $this->urlPersist
             ]
         );
     }
@@ -132,7 +103,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
-                'expectedReplaceCount'  => 1
+                'expectedReplaceCount'  => 1,
+
             ],
             'no chnages' => [
                 'isChangedUrlKey'       => false,
