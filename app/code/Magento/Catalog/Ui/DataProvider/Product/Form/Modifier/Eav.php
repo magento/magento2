@@ -706,6 +706,9 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+            case 'date':
+                $meta['data']['js_config']['showsTime'] = 1;
+                break;
         }
 
         return $meta;
