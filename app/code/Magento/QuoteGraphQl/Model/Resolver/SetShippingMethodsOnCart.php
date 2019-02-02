@@ -57,26 +57,29 @@ class SetShippingMethodsOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $shippingMethods = $this->arrayManager->get('input/shipping_methods', $args);
+        $shippingAddresses = $this->arrayManager->get('input/shipping_addresses', $args);
         $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
 
         if (!$maskedCartId) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
-        if (!$shippingMethods) {
+        if (!$shippingAddresses) {
             throw new GraphQlInputException(__('Required parameter "shipping_methods" is missing'));
         }
 
-        $shippingMethod = reset($shippingMethods); // This point can be extended for multishipping
+        $shippingAddress = reset($shippingAddresses); // This point can be extended for multishipping
 
-        if (!$shippingMethod['cart_address_id']) {
+        if (!$shippingAddress['cart_address_id']) {
             throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
         }
-        if (!$shippingMethod['shipping_carrier_code']) {
-            throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
+        if (!isset($shippingAddress['shipping_method'])) {
+            throw new GraphQlInputException(__('Required parameter "shipping_method" is missing'));
         }
-        if (!$shippingMethod['shipping_method_code']) {
-            throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
+        if (!$shippingAddress['shipping_method']['carrier_code']) {
+            throw new GraphQlInputException(__('Required parameter "carrier_code" is missing'));
+        }
+        if (!$shippingAddress['shipping_method']['method_code']) {
+            throw new GraphQlInputException(__('Required parameter "method_code" is missing'));
         }
 
         $userId = $context->getUserId();
@@ -84,9 +87,9 @@ class SetShippingMethodsOnCart implements ResolverInterface
 
         $this->setShippingMethodOnCart->execute(
             $cart,
-            $shippingMethod['cart_address_id'],
-            $shippingMethod['shipping_carrier_code'],
-            $shippingMethod['shipping_method_code']
+            $shippingAddress['cart_address_id'],
+            $shippingAddress['shipping_method']['carrier_code'],
+            $shippingAddress['shipping_method']['method_code']
         );
 
         return [
