@@ -25,7 +25,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    private $dataPersistor;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
