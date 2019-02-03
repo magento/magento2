@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use \Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * SalesRule save controller
@@ -20,6 +21,11 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @var TimezoneInterface
      */
     private $timezone;
+    
+    /**
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -27,6 +33,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param TimezoneInterface $timezone
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -39,6 +46,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
         $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             TimezoneInterface::class
         );
+        $this->dataPersistor = $dataPersistor;
     }
 
     /**
@@ -89,6 +97,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                         $this->messageManager->addErrorMessage($errorMessage);
                     }
                     $session->setPageData($data);
+                    $this->dataPersistor->set('sale_rule', $data);
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
                     return;
                 }
