@@ -45,7 +45,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Allow Zero Grandtotal for Creditmemo path
      */
-    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal';
+    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/allow_zero_grandtotal/allow_zero_grandtotal_creditmemo';
 
     /**
      * Identifier for order history item

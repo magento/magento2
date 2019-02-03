@@ -132,7 +132,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+                'sales/allow_zero_grandtotal/allow_zero_grandtotal_creditmemo',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn($isAllowed);
         $this->assertEquals($isAllowed, $this->creditmemo->isAllowZeroGrandTotal());
