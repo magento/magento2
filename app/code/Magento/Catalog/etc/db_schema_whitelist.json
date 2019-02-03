@@ -459,8 +459,7 @@
             "attribute_id": true,
             "entity_id": true,
             "value": true,
-            "media_type": true,
-            "disabled": true
+            "media_type": true
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID": true,
@@ -729,6 +728,7 @@
     "catalog_product_index_website": {
         "column": {
             "website_id": true,
+            "default_store_id": true,
             "website_date": true,
             "rate": true,
             "default_store_id": true
@@ -1003,6 +1003,9 @@
             "is_parent": true,
             "store_id": true,
             "visibility": true
+        },
+        "index": {
+            "CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true

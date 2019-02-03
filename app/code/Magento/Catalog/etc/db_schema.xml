@@ -786,8 +786,6 @@
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
         <column xsi:type="varchar" name="media_type" nullable="false" length="32" default="image"
                 comment="Media entry type"/>
-        <column xsi:type="smallint" name="disabled" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Visibility status"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
         </constraint>
