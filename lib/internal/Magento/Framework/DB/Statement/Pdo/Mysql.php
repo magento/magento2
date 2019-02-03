@@ -61,11 +61,9 @@ class Mysql extends \Zend_Db_Statement_Pdo
             $statement->bindParam($paramName, $bindValues[$name], $dataType, $length, $driverOptions);
         }
 
-        try {
+        return $this->tryExecute(function() use ($statement) {
             return $statement->execute();
-        } catch (\PDOException $e) {
-            throw new \Zend_Db_Statement_Exception($e->getMessage(), (int)$e->getCode(), $e);
-        }
+        });
     }
 
     /**
@@ -88,9 +86,31 @@ class Mysql extends \Zend_Db_Statement_Pdo
         }
 
         if ($specialExecute) {
-            return $this->_executeWithBinding($params);
+           return $this->_executeWithBinding($params);
         } else {
-            return parent::_execute($params);
+            return $this->tryExecute(function() use ($params) {
+                return $params !== null ? $this->_stmt->execute($params) : $this->_stmt->execute();
+            });
+        }
+    }
+
+    /**
+     * Executes query and avoid warnings.
+     *
+     * @param callable $callback
+     * @return bool
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function tryExecute($callback)
+    {
+        $previousLevel = error_reporting(\E_ERROR); // disable warnings for PDO bugs #63812, #74401
+        try {
+            return $callback();
+        } catch (\PDOException $e) {
+            $message = sprintf('%s, query was: %s', $e->getMessage(), $this->_stmt->queryString);
+            throw new \Zend_Db_Statement_Exception($message, (int)$e->getCode(), $e);
+        } finally {
+            error_reporting($previousLevel);
         }
     }
 }
