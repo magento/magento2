@@ -533,7 +533,7 @@ abstract class AbstractType
             }
             if (isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode]))) {
                 if (in_array($attrParams['type'], ['select', 'boolean'])) {
-                    $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
+                    $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])] ?? $rowData[$attrCode];
                 } elseif ('multiselect' == $attrParams['type']) {
                     $resultAttrs[$attrCode] = [];
                     foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode]) as $value) {
