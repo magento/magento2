@@ -6,7 +6,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
-class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Statistics implements HttpPostActionInterface
 {
     /**
      * Refresh statistics for all period
