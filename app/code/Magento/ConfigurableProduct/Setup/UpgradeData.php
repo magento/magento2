@@ -47,16 +47,18 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.2.0') < 0) {
             $relatedProductTypes = $this->getRelatedProductTypes('tier_price', $eavSetup);
-            $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
-            if ($key !== false) {
-                unset($relatedProductTypes[$key]);
-                $this->updateRelatedProductTypes('tier_price', $relatedProductTypes, $eavSetup);
+            if (!empty($relatedProductTypes)) {
+                $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
+                if ($key !== false) {
+                    unset($relatedProductTypes[$key]);
+                    $this->updateRelatedProductTypes('tier_price', $relatedProductTypes, $eavSetup);
+                }
             }
         }
 
         if (version_compare($context->getVersion(), '2.2.1') < 0) {
             $relatedProductTypes = $this->getRelatedProductTypes('manufacturer', $eavSetup);
-            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+            if (!empty($relatedProductTypes) && !in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
                 $relatedProductTypes[] = Configurable::TYPE_CODE;
                 $this->updateRelatedProductTypes('manufacturer', $relatedProductTypes, $eavSetup);
             }
@@ -78,10 +80,17 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function getRelatedProductTypes(string $attributeId, EavSetup $eavSetup)
     {
-        return explode(
-            ',',
-            $eavSetup->getAttribute(Product::ENTITY, $attributeId, 'apply_to')
-        );
+        if ($attribute = $eavSetup->getAttribute(
+            Product::ENTITY,
+            $attributeId,
+            'apply_to'
+        )) {
+            return explode(
+                ',',
+                $attribute
+            );
+        }
+        return [];
     }
 
     /**
