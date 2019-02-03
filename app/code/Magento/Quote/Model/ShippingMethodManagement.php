@@ -168,7 +168,7 @@ class ShippingMethodManagement implements
         }
 
         try {
-             $quote->collectTotals(); 
+            $quote->collectTotals(); 
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('The shipping method can\'t be set. %1', $e->getMessage()));
         }
