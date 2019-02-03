@@ -112,7 +112,7 @@ type CartAddress {
     telephone: String
     address_type: AdressTypeEnum
     selected_shipping_method: CheckoutShippingMethod
-    available_shipping_methods: [CheckoutShippingMethod]
+    available_shipping_methods: [CheckoutAvailableShippingMethod]
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]
@@ -138,7 +138,23 @@ type CheckoutShippingMethod {
     label: String
     free_shipping: Boolean!
     error_message: String
-    # TODO: Add more complex structure for shipping rates
+    amount: Float!
+    base_amount: Float!
+    amount_incl_tax: Float!
+    base_amount_incl_tax: Float!
+}
+
+type CheckoutAvailableShippingMethod {
+    carrier_code: String!
+    carrier_title: String!
+    method_code: String!
+    method_title: String!
+    error_message: String
+    amount: Float!
+    base_amount: Float!
+    price_excl_tax: Float!
+    price_incl_tax: Float!
+    available: Boolean!
 }
 
 enum AdressTypeEnum {

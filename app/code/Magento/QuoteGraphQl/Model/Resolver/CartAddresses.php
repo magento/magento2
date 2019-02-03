@@ -43,6 +43,11 @@ class CartAddresses implements ResolverInterface
 
         $cart = $value['model'];
 
-        return $this->addressDataProvider->getCartAddresses($cart);
+        return $this->addressDataProvider->getCartAddresses($cart, $this->includeShippingMethods($info));
+    }
+
+    private function includeShippingMethods(ResolveInfo $info): bool
+    {
+        return $info->getFieldSelection()['available_shipping_methods'] ?? false;
     }
 }

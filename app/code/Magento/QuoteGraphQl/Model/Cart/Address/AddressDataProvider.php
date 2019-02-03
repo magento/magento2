@@ -10,7 +10,9 @@ namespace Magento\QuoteGraphQl\Model\Cart\Address;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Cart\ShippingMethodConverter;
 
 /**
  * Class AddressDataProvider
@@ -25,23 +27,32 @@ class AddressDataProvider
     private $dataObjectConverter;
 
     /**
+     * @var ShippingMethodConverter
+     */
+    private $shippingMethodConverter;
+
+    /**
      * AddressDataProvider constructor.
      *
      * @param ExtensibleDataObjectConverter $dataObjectConverter
+     * @param ShippingMethodConverter $shippingMethodConverter
      */
     public function __construct(
-        ExtensibleDataObjectConverter $dataObjectConverter
+        ExtensibleDataObjectConverter $dataObjectConverter,
+        ShippingMethodConverter $shippingMethodConverter
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
+        $this->shippingMethodConverter = $shippingMethodConverter;
     }
 
     /**
      * Collect and return information about shipping and billing addresses
      *
      * @param CartInterface $cart
+     * @param bool $includeShippingMethods
      * @return array
      */
-    public function getCartAddresses(CartInterface $cart): array
+    public function getCartAddresses(CartInterface $cart, $includeShippingMethods = false): array
     {
         $addressData = [];
         $shippingAddress = $cart->getShippingAddress();
@@ -50,6 +61,12 @@ class AddressDataProvider
         if ($shippingAddress) {
             $shippingData = $this->dataObjectConverter->toFlatArray($shippingAddress, [], AddressInterface::class);
             $shippingData['address_type'] = 'SHIPPING';
+            if ($includeShippingMethods) {
+                $shippingData['available_shipping_methods'] = $this->extractAvailableShippingRateData(
+                    $cart,
+                    $shippingAddress
+                );
+            }
             $addressData[] = array_merge($shippingData, $this->extractAddressData($shippingAddress));
         }
 
@@ -84,11 +101,42 @@ class AddressDataProvider
                 'code' => $address->getShippingMethod(),
                 'label' => $address->getShippingDescription(),
                 'free_shipping' => $address->getFreeShipping(),
+                'amount' => $address->getShippingAmount(),
+                'base_amount' => $address->getBaseShippingAmount(),
+                'amount_incl_tax' => $address->getShippingInclTax(),
+                'base_amount_incl_tax' => $address->getBaseShippingInclTax(),
             ],
             'items_weight' => $address->getWeight(),
-            'customer_notes' => $address->getCustomerNotes()
+            'customer_notes' => $address->getCustomerNotes(),
+            'quote_id' => $address->getQuoteId(),
         ];
 
         return $addressData;
+    }
+
+    private function extractAvailableShippingRateData(CartInterface $cart, QuoteAddress $address): array
+    {
+        $output = [];
+
+        // Allow shipping rates by setting country id for new addresses
+        if (!$address->getCountryId() && $address->getCountryCode()) {
+            $address->setCountryId($address->getCountryCode());
+        }
+
+        $address->setCollectShippingRates(true);
+        $address->collectShippingRates();
+
+        $shippingRates = $address->getGroupedAllShippingRates();
+        foreach ($shippingRates as $carrierRates) {
+            foreach ($carrierRates as $rate) {
+                $output[] = $this->dataObjectConverter->toFlatArray(
+                    $this->shippingMethodConverter->modelToDataObject($rate, $cart->getQuoteCurrencyCode()),
+                    [],
+                    ShippingMethodInterface::class
+                );
+            }
+        }
+
+        return $output;
     }
 }
