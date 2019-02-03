@@ -2019,7 +2019,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData['custom_options']
         );
         $options = [];
-        $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
+        $optionValues = explode($this->_productEntity->getMultipleLineSeparator(), $rowData['custom_options']);
         $k = 0;
         $name = '';
         foreach ($optionValues as $optionValue) {

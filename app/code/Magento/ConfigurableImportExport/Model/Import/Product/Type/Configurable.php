@@ -566,7 +566,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 )
             );
         }
-        $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
+        $variations = explode($this->_entityModel->getMultipleLineSeparator(), $rowData['configurable_variations']);
         foreach ($variations as $variation) {
             $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
             $additionalRow = [];

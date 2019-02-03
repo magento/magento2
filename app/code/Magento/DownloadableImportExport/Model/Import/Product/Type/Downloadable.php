@@ -438,7 +438,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = $defaultValue;
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
             $options = explode(
-                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                $this->_entityModel->getMultipleLineSeparator(),
                 $rowData[self::COL_DOWNLOADABLE_LINKS]
             );
             foreach ($options as $option) {
@@ -463,7 +463,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = '';
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
             $options = explode(
-                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                $this->_entityModel->getMultipleLineSeparator(),
                 $rowData[self::COL_DOWNLOADABLE_SAMPLES]
             );
             foreach ($options as $option) {
@@ -729,7 +729,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         $options = explode(
-            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+            $this->_entityModel->getMultipleLineSeparator(),
             $rowCol
         );
         foreach ($options as $option) {
@@ -753,7 +753,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         $options = explode(
-            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+            $this->_entityModel->getMultipleLineSeparator(),
             $rowCol
         );
         foreach ($options as $option) {

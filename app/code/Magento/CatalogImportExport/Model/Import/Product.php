@@ -937,6 +937,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Multiple line separator getter.
+     *
+     * @return string
+     */
+    public function getMultipleLineSeparator()
+    {
+        if (!empty($this->_parameters[Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR])) {
+            return $this->_parameters[Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR];
+        }
+        return self::PSEUDO_MULTI_LINE_SEPARATOR;
+    }
+
+    /**
      * Return empty attribute value constant
      *
      * @return string
@@ -2728,6 +2741,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
     {
+        if ($delimiter !== $this->getMultipleLineSeparator()) {
+            $delimiter = $this->getMultipleLineSeparator();
+        }
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
             return explode($delimiter, $values);
         }
@@ -2747,9 +2763,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function getMultiLineSeparatorForRegexp()
     {
         if (!$this->multiLineSeparatorForRegexp) {
-            $this->multiLineSeparatorForRegexp = in_array(self::PSEUDO_MULTI_LINE_SEPARATOR, str_split('[\^$.|?*+(){}'))
-                ? '\\' . self::PSEUDO_MULTI_LINE_SEPARATOR
-                : self::PSEUDO_MULTI_LINE_SEPARATOR;
+            $this->multiLineSeparatorForRegexp = in_array($this->getMultipleLineSeparator(), str_split('[\^$.|?*+(){}'))
+                ? '\\' . $this->getMultipleLineSeparator()
+                : $this->getMultipleLineSeparator();
         }
         return $this->multiLineSeparatorForRegexp;
     }
