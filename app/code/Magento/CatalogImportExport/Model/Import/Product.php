@@ -1610,7 +1610,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
 
                 if (!empty($rowData[$column . '_label'])) {
-                    $labels[$column] = $this->parseMultipleValues($rowData[$column . '_label']);
+                    $labels[$column] = $this->parseMultipleValues(
+                        $rowData[$column . '_label'],
+                        $this->getMultipleLineSeparator()
+                    );
 
                     if (count($labels[$column]) > count($images[$column])) {
                         $labels[$column] = array_slice($labels[$column], 0, count($images[$column]));
@@ -2741,9 +2744,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
     {
-        if ($delimiter !== $this->getMultipleLineSeparator()) {
-            $delimiter = $this->getMultipleLineSeparator();
-        }
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
             return explode($delimiter, $values);
         }
@@ -3034,7 +3034,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         return $this->parseMultiselectValues(
             $labelRow,
-            $this->getMultipleValueSeparator()
+            $this->getMultipleLineSeparator()
         );
     }
 
