@@ -40,13 +40,15 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        TimezoneInterface $timezone = null
+        TimezoneInterface $timezone = null,
+        DataPersistorInterface $dataPersistor = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             TimezoneInterface::class
         );
-        $this->dataPersistor = $dataPersistor;
+        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            DataPersistorInterface::class;
     }
 
     /**
