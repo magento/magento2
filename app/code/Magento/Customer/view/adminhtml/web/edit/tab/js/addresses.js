@@ -442,18 +442,9 @@ define([
                 }
 
                 if (!regionRequired) {
-                    if (regionField.hasClass('required')) {
-                        regionField.removeClass('required');
-                    }
-
-                    if (currentElement.hasClass('required-entry')) {
-                        currentElement.removeClass('required-entry');
-                    }
-
-                    if (currentElement.prop('tagName').toLowerCase() === 'select' &&
-                        currentElement.hasClass('validate-select')) {
-                        currentElement.removeClass('validate-select');
-                    }
+                    regionField.removeClass('required');
+                    currentElement.removeClass('required-entry');
+                    currentElement.removeClass('validate-select');
                 } else {
                     if (regionField.hasClass('required') === false) {
                         regionField.addClass('required');
@@ -485,9 +476,7 @@ define([
                 zipField = $(zipElement).closest('.field-postcode');
 
             if (this.options.optionalZipCountries.indexOf(countryElement.value) !== -1) {
-                if ($(zipElement).hasClass('required-entry')) {
-                    $(zipElement).removeClass('required-entry');
-                }
+                $(zipElement).removeClass('required-entry');
                 $(zipField).removeClass('required');
             } else {
                 $(zipElement).addClass('required-entry');

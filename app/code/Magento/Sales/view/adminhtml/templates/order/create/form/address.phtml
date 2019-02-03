@@ -29,12 +29,10 @@ if ($block->getIsShipping()):
     $_addressChoiceContainerId = 'order-shipping_address_choice';
     ?>
     <script>
-    require(["Magento_Sales/order/create/form"], function(){
-
-        order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
-        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressFormatter->getAddressesJson($addressArray) ?>);
-
-    });
+        require(["Magento_Sales/order/create/form"], function(){
+            order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
+            order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressFormatter->getAddressesJson($addressArray) ?>);
+        });
     </script>
     <?php
 else:
@@ -44,6 +42,7 @@ else:
     <script>
         require(["Magento_Sales/order/create/form"], function(){
             order.billingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
+            order.setAddresses(<?= /* @escapeNotVerified */ $block->getAddressesJson() ?>);
         });
     </script>
     <?php
