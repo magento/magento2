@@ -122,20 +122,6 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                         \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
                         ScopeInterface::SCOPE_STORE
                     );
-                
-                $configlinkStatus =  $this
-                    ->_scopeConfig
-                    ->getValue(
-                        'catalog/downloadable/order_item_status',
-                        ScopeInterface::SCOPE_STORE
-                    );
-                
-                if ($configlinkStatus == \Magento\Sales\Model\Order\Item::STATUS_PENDING) {
-                    $linkStatus = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE;
-                } else {
-                    $linkStatus = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING;
-                }
-                
                 $linkPurchased->setLinkSectionTitle($linkSectionTitle)->save();
                 foreach ($linkIds as $linkId) {
                     if (isset($links[$linkId])) {
@@ -164,7 +150,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                         )->setNumberOfDownloadsBought(
                             $numberOfDownloads
                         )->setStatus(
-                            $linkStatus
+                            \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING
                         )->setCreatedAt(
                             $orderItem->getCreatedAt()
                         )->setUpdatedAt(
