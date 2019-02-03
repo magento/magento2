@@ -791,7 +791,7 @@ class EavSetup
             trim($attributeCode),
             'StringLength',
             ['min' => $minLength, 'max' => $maxLength]
-        );
+        );       
 
         if (!$isAllowedLength) {
             $errorMessage = __(
@@ -802,6 +802,18 @@ class EavSetup
 
             throw new LocalizedException($errorMessage);
         }
+        $validatorAttrCode = new \Zend_Validate_Regex(
+                    ['pattern' => '/^[a-zA-Z\x{600}-\x{6FF}][a-zA-Z\x{600}-\x{6FF}_0-9]{0,60}$/u']
+                );
+                if (!$validatorAttrCode->isValid($attributeCode)) {
+                    $this->messageManager->addErrorMessage(
+                        __(
+                            'Attribute code "%1" is invalid. Please use only letters (a-z or A-Z), ' .
+                            'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
+                            $attributeCode
+                        )
+                    );
+		}
 
         return true;
     }
