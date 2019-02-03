@@ -277,7 +277,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_SCOPE => 'Invalid value in Scope column',
         ValidatorInterface::ERROR_INVALID_WEBSITE => 'Invalid value in Website column (website does not exist?)',
         ValidatorInterface::ERROR_INVALID_STORE => 'Invalid value in Store column (store doesn\'t exist?)',
-        ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Attribute Set column (set doesn\'t exist?)',
+        ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Attribute Set column or attribute_set_code header doesn\'t exist. (set doesn\'t exist?)',
         ValidatorInterface::ERROR_INVALID_TYPE => 'Product Type is invalid or not supported',
         ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exist',
         ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty.',
