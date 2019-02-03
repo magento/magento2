@@ -9,10 +9,10 @@ namespace Magento\ImportExport\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Import model
@@ -80,6 +80,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import multiple value separator.
      */
     const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
+
+    /**
+     * Import multiple field separator.
+     */
+    const FIELD_FIELD_MULTIPLE_LINE_SEPARATOR = '_import_multiple_line_separator';
 
     /**
      * Import empty attribute value constant.
