@@ -531,10 +531,10 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Sets the number of boxes for shipping
+     * Gets the average weight of each box available for shipping
      *
-     * @param int $weight in some measure
-     * @return int
+     * @param float $weight in some measure
+     * @return float
      */
     public function getTotalNumOfBoxes($weight)
     {
@@ -545,7 +545,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         $maxPackageWeight = $this->getConfigData('max_package_weight');
         if ($weight > $maxPackageWeight && $maxPackageWeight != 0) {
             $this->_numBoxes = ceil($weight / $maxPackageWeight);
-            $weight = $weight / $this->_numBoxes;
+            $weight = (float)$weight / $this->_numBoxes;
         }
 
         return $weight;
