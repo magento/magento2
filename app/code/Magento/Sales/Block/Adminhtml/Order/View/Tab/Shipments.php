@@ -21,19 +21,27 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      */
     protected $_coreRegistry = null;
 
+     /**
+     * @var Magento\Framework\AuthorizationInterface
+     */
+    private $authorization;
+    
     /**
      * Collection factory
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\AuthorizationInterface|null $authorization
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\AuthorizationInterface $authorization = null
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->authorization = $authorization?: \Magento\Framework\App\ObjectManager::getInstance()->get(Magento\Framework\AuthorizationInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -68,7 +76,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      */
     public function canShowTab()
     {
-        if ($this->getOrder()->getIsVirtual()) {
+        if ($this->getOrder()->getIsVirtual() || !$this->authorization->isAllowed('Magento_Sales::ship')) {
             return false;
         }
         return true;

@@ -14,6 +14,26 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+     /**
+     * @var Magento\Framework\AuthorizationInterface
+     */
+    private $authorization;
+    
+    /**
+	 * @param \Magento\Framework\View\Element\Context $context
+	 * @param array $data
+	 * @param \Magento\Framework\AuthorizationInterface|null $authorization
+	 */
+    
+	public function __construct(
+		\Magento\Framework\View\Element\Context $context,
+		array $data = [], 
+		\Magento\Framework\AuthorizationInterface $authorization = null
+	){
+		$this->authorization = $authorization ?  : \Magento\Framework\App\ObjectManager::getInstance()->get(Magento\Framework\AuthorizationInterface::class);
+		parent::__construct ($context,$data);
+	}
+    
     /**
      * {@inheritdoc}
      */
@@ -35,7 +55,7 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
      */
     public function canShowTab()
     {
-        return true;
+        return $this->authorization->isAllowed('Magento_Sales::creditmemo');     
     }
 
     /**
@@ -46,3 +66,4 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
         return false;
     }
 }
+
