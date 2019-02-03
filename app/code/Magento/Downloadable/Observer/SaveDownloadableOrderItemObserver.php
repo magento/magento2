@@ -149,8 +149,6 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                             $linkHash
                         )->setNumberOfDownloadsBought(
                             $numberOfDownloads
-                        )->setStatus(
-                            \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING
                         )->setCreatedAt(
                             $orderItem->getCreatedAt()
                         )->setUpdatedAt(
