@@ -91,7 +91,7 @@ class Options
             return false;
         }
         $result = [];
-        $options = explode(';', $options);
+        $options = array_filter(explode(';', $options));
         foreach ($options as $value) {
             $value = $this->escaper->escapeHtml(trim($value));
             $result[$value] = $value;
