@@ -123,6 +123,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         /** @var $customerAddress Address */
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
+        $customer->getAddressesCollection()->clear();
 
         if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())
             || $this->_coreRegistry->registry(self::VIV_PROCESSED_FLAG)
