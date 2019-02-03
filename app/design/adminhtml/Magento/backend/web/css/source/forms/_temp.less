@@ -462,6 +462,18 @@ label.mage-error {
     }
 }
 
+.admin__fieldset{
+    &.downloadable{
+        .admin__control-checkbox {
+            & + label{
+                &:before {
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}
+
 .admin__data-grid-toolbar {
     *,
     *:before,
