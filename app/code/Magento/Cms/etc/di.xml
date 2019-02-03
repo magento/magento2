@@ -12,8 +12,10 @@
                 type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Cms\Api\GetBlockByIdentifierInterface" type="Magento\Cms\Model\GetBlockByIdentifier" />
     <preference for="Magento\Cms\Api\GetPageByIdentifierInterface" type="Magento\Cms\Model\GetPageByIdentifier" />
-    <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
-    <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
+    <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\PageExtensible" />
+    <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\BlockExtensible" />
+    <preference for="Magento\Cms\Api\Data\PageExtensibleInterface" type="Magento\Cms\Model\PageExtensible" />
+    <preference for="Magento\Cms\Api\Data\BlockExtensibleInterface" type="Magento\Cms\Model\BlockExtensible" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
     <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>

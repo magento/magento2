@@ -8,6 +8,8 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data;
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Api\Data\BlockInterfaceFactory;
 use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
@@ -55,7 +57,7 @@ class BlockRepository implements BlockRepositoryInterface
     protected $dataObjectProcessor;
 
     /**
-     * @var \Magento\Cms\Api\Data\BlockInterfaceFactory
+     * @var BlockInterfaceFactory
      */
     protected $dataBlockFactory;
 
@@ -72,7 +74,7 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
-     * @param Data\BlockInterfaceFactory $dataBlockFactory
+     * @param BlockInterfaceFactory $dataBlockFactory
      * @param BlockCollectionFactory $blockCollectionFactory
      * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
@@ -83,7 +85,7 @@ class BlockRepository implements BlockRepositoryInterface
     public function __construct(
         ResourceBlock $resource,
         BlockFactory $blockFactory,
-        \Magento\Cms\Api\Data\BlockInterfaceFactory $dataBlockFactory,
+        BlockInterfaceFactory $dataBlockFactory,
         BlockCollectionFactory $blockCollectionFactory,
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
@@ -105,11 +107,11 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Save Block data
      *
-     * @param \Magento\Cms\Api\Data\BlockInterface $block
+     * @param BlockInterface $block
      * @return Block
      * @throws CouldNotSaveException
      */
-    public function save(Data\BlockInterface $block)
+    public function save(BlockInterface $block)
     {
         if (empty($block->getStoreId())) {
             $block->setStoreId($this->storeManager->getStore()->getId());
@@ -132,7 +134,8 @@ class BlockRepository implements BlockRepositoryInterface
      */
     public function getById($blockId)
     {
-        $block = $this->blockFactory->create();
+        $block = $this->dataBlockFactory->create();
+        /** @var $block BlockInterface|BlockExtensible */
         $this->resource->load($block, $blockId);
         if (!$block->getId()) {
             throw new NoSuchEntityException(__('The CMS block with the "%1" ID doesn\'t exist.', $blockId));
@@ -166,11 +169,11 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Delete Block
      *
-     * @param \Magento\Cms\Api\Data\BlockInterface $block
+     * @param BlockInterface $block
      * @return bool
      * @throws CouldNotDeleteException
      */
-    public function delete(Data\BlockInterface $block)
+    public function delete(BlockInterface $block)
     {
         try {
             $this->resource->delete($block);

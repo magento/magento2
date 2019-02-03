@@ -5,15 +5,35 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
+use Exception;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\Data\PageInterfaceFactory;
+use Magento\Cms\Api\Data\PageSearchResultsInterface;
+use Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory;
+use Magento\Cms\Model\PageExtensible;
+use Magento\Cms\Model\PageFactory;
 use Magento\Cms\Model\PageRepository;
+use Magento\Cms\Model\ResourceModel\Page;
+use Magento\Cms\Model\ResourceModel\Page\Collection;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Magento\Cms\Model\PageRepository
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageRepositoryTest extends \PHPUnit\Framework\TestCase
+class PageRepositoryTest extends TestCase
 {
     /**
      * @var PageRepository
@@ -21,47 +41,52 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page
+     * @var MockObject|Page
      */
     protected $pageResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
+     * @var MockObject|\Magento\Cms\Model\Page
      */
     protected $page;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\PageInterface
+     * @var MockObject|PageExtensible
+     */
+    protected $pageExtensible;
+
+    /**
+     * @var MockObject|PageInterface
      */
     protected $pageData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\PageSearchResultsInterface
+     * @var MockObject|PageSearchResultsInterface
      */
     protected $pageSearchResult;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var MockObject|DataObjectHelper
      */
     protected $dataHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Reflection\DataObjectProcessor
+     * @var MockObject|DataObjectProcessor
      */
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page\Collection
+     * @var MockObject|Collection
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|MockObject
      */
     private $collectionProcessor;
 
@@ -70,43 +95,44 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->pageResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
+        $this->pageResource = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectProcessor = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
+        $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $pageDataFactory = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterfaceFactory::class)
+        $pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $pageSearchResultFactory = $this->getMockBuilder(\Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory::class)
+        $pageDataFactory = $this->getMockBuilder(PageInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class)
+        $pageSearchResultFactory = $this->getMockBuilder(PageSearchResultsInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(0);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)->disableOriginalConstructor()->getMock();
-        $this->pageData = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterface::class)
+        $this->pageExtensible = $this->getMockBuilder(PageExtensible::class)->disableOriginalConstructor()->getMock();
+        $this->pageData = $this->getMockBuilder(PageInterface::class)
             ->getMock();
-        $this->pageSearchResult = $this->getMockBuilder(\Magento\Cms\Api\Data\PageSearchResultsInterface::class)
+        $this->pageSearchResult = $this->getMockBuilder(PageSearchResultsInterface::class)
             ->getMock();
-        $this->collection = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page\Collection::class)
+        $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
@@ -116,7 +142,7 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->page);
         $pageDataFactory->expects($this->any())
             ->method('create')
-            ->willReturn($this->pageData);
+            ->willReturn($this->pageExtensible);
         $pageSearchResultFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->pageSearchResult);
@@ -124,13 +150,13 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->collection);
         /**
-         * @var \Magento\Cms\Model\PageFactory $pageFactory
-         * @var \Magento\Cms\Api\Data\PageInterfaceFactory $pageDataFactory
-         * @var \Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory $pageSearchResultFactory
-         * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
+         * @var PageFactory $pageFactory
+         * @var PageInterfaceFactory $pageDataFactory
+         * @var PageSearchResultsInterfaceFactory $pageSearchResultFactory
+         * @var CollectionFactory $collectionFactory
          */
 
-        $this->dataHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -157,9 +183,9 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->pageResource->expects($this->once())
             ->method('save')
-            ->with($this->page)
+            ->with($this->pageExtensible)
             ->willReturnSelf();
-        $this->assertEquals($this->page, $this->repository->save($this->page));
+        $this->assertEquals($this->pageExtensible, $this->repository->save($this->pageExtensible));
     }
 
     /**
@@ -169,16 +195,16 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $pageId = '123';
 
-        $this->page->expects($this->once())
+        $this->pageExtensible->expects($this->once())
             ->method('getId')
             ->willReturn(true);
-        $this->page->expects($this->once())
+        $this->pageExtensible->expects($this->once())
             ->method('load')
             ->with($pageId)
             ->willReturnSelf();
         $this->pageResource->expects($this->once())
             ->method('delete')
-            ->with($this->page)
+            ->with($this->pageExtensible)
             ->willReturnSelf();
 
         $this->assertTrue($this->repository->deleteById($pageId));
@@ -186,48 +212,45 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
         $this->pageResource->expects($this->once())
             ->method('save')
-            ->with($this->page)
-            ->willThrowException(new \Exception());
-        $this->repository->save($this->page);
+            ->with($this->pageExtensible)
+            ->willThrowException(new Exception());
+        $this->expectException(CouldNotSaveException::class);
+        $this->repository->save($this->pageExtensible);
     }
 
     /**
      * @test
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
         $this->pageResource->expects($this->once())
             ->method('delete')
-            ->with($this->page)
-            ->willThrowException(new \Exception());
-        $this->repository->delete($this->page);
+            ->with($this->pageExtensible)
+            ->willThrowException(new Exception());
+        $this->expectException(CouldNotDeleteException::class);
+        $this->repository->delete($this->pageExtensible);
     }
 
     /**
      * @test
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetByIdException()
     {
         $pageId = '123';
 
-        $this->page->expects($this->once())
+        $this->pageExtensible->expects($this->once())
             ->method('getId')
             ->willReturn(false);
-        $this->page->expects($this->once())
+        $this->pageExtensible->expects($this->once())
             ->method('load')
             ->with($pageId)
             ->willReturnSelf();
+        $this->expectException(NoSuchEntityException::class);
         $this->repository->getById($pageId);
     }
 
@@ -238,10 +261,10 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $total = 10;
 
-        /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
-        $criteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)->getMock();
+        /** @var SearchCriteriaInterface $criteria */
+        $criteria = $this->getMockBuilder(SearchCriteriaInterface::class)->getMock();
 
-        $this->collection->addItem($this->page);
+        $this->collection->addItem($this->pageExtensible);
         $this->collection->expects($this->once())
             ->method('getSize')
             ->willReturn($total);
@@ -261,7 +284,7 @@ class PageRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->pageSearchResult->expects($this->once())
             ->method('setItems')
-            ->with([$this->page])
+            ->with([$this->pageExtensible])
             ->willReturnSelf();
         $this->assertEquals($this->pageSearchResult, $this->repository->getList($criteria));
     }

@@ -198,12 +198,13 @@ class PageRepository implements PageRepositoryInterface
      * Load Page data by given Page Identity
      *
      * @param string $pageId
-     * @return Page
+     * @return Data\PageInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($pageId)
     {
-        $page = $this->pageFactory->create();
+        $page = $this->dataPageFactory->create();
+        /** @var $page PageExtensible */
         $page->load($pageId);
         if (!$page->getId()) {
             throw new NoSuchEntityException(__('The CMS page with the "%1" ID doesn\'t exist.', $pageId));

@@ -5,15 +5,35 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
+use Exception;
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Api\Data\BlockInterfaceFactory;
+use Magento\Cms\Api\Data\BlockSearchResultsInterface;
+use Magento\Cms\Api\Data\BlockSearchResultsInterfaceFactory;
+use Magento\Cms\Model\BlockExtensible;
+use Magento\Cms\Model\BlockFactory;
 use Magento\Cms\Model\BlockRepository;
+use Magento\Cms\Model\ResourceModel\Block;
+use Magento\Cms\Model\ResourceModel\Block\Collection;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Cms\Model\BlockRepository
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
+class BlockRepositoryTest extends TestCase
 {
     /**
      * @var BlockRepository
@@ -21,47 +41,52 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
+     * @var MockObject|Block
      */
     protected $blockResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Block
+     * @var MockObject|Block
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\BlockInterface
+     * @var MockObject|BlockExtensible
+     */
+    protected $blockExtensible;
+
+    /**
+     * @var MockObject|BlockInterface
      */
     protected $blockData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\BlockSearchResultsInterface
+     * @var MockObject|BlockSearchResultsInterface
      */
     protected $blockSearchResult;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var MockObject|DataObjectHelper
      */
     protected $dataHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Reflection\DataObjectProcessor
+     * @var MockObject|DataObjectProcessor
      */
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
+     * @var MockObject|Collection
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|MockObject
      */
     private $collectionProcessor;
 
@@ -70,45 +95,46 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->blockResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
+        $this->blockResource = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectProcessor = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
+        $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $blockFactory = $this->getMockBuilder(\Magento\Cms\Model\BlockFactory::class)
+        $blockFactory = $this->getMockBuilder(BlockFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $blockDataFactory = $this->getMockBuilder(\Magento\Cms\Api\Data\BlockInterfaceFactory::class)
+        $blockDataFactory = $this->getMockBuilder(BlockInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $blockSearchResultFactory = $this->getMockBuilder(
-            \Magento\Cms\Api\Data\BlockSearchResultsInterfaceFactory::class
+            BlockSearchResultsInterfaceFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block\CollectionFactory::class)
+        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(0);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)->disableOriginalConstructor()->getMock();
-        $this->blockData = $this->getMockBuilder(\Magento\Cms\Api\Data\BlockInterface::class)
+        $this->block = $this->getMockBuilder(Block::class)->disableOriginalConstructor()->getMock();
+        $this->blockExtensible = $this->getMockBuilder(BlockExtensible::class)->disableOriginalConstructor()->getMock();
+        $this->blockData = $this->getMockBuilder(BlockInterface::class)
             ->getMock();
-        $this->blockSearchResult = $this->getMockBuilder(\Magento\Cms\Api\Data\BlockSearchResultsInterface::class)
+        $this->blockSearchResult = $this->getMockBuilder(BlockSearchResultsInterface::class)
             ->getMock();
-        $this->collection = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block\Collection::class)
+        $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
@@ -118,7 +144,7 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->block);
         $blockDataFactory->expects($this->any())
             ->method('create')
-            ->willReturn($this->blockData);
+            ->willReturn($this->blockExtensible);
         $blockSearchResultFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->blockSearchResult);
@@ -126,13 +152,13 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->collection);
         /**
-         * @var \Magento\Cms\Model\BlockFactory $blockFactory
-         * @var \Magento\Cms\Api\Data\BlockInterfaceFactory $blockDataFactory
-         * @var \Magento\Cms\Api\Data\BlockSearchResultsInterfaceFactory $blockSearchResultFactory
-         * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
+         * @var BlockFactory $blockFactory
+         * @var BlockInterfaceFactory $blockDataFactory
+         * @var BlockSearchResultsInterfaceFactory $blockSearchResultFactory
+         * @var CollectionFactory $collectionFactory
          */
 
-        $this->dataHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -159,9 +185,9 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->blockResource->expects($this->once())
             ->method('save')
-            ->with($this->block)
+            ->with($this->blockExtensible)
             ->willReturnSelf();
-        $this->assertEquals($this->block, $this->repository->save($this->block));
+        $this->assertEquals($this->blockExtensible, $this->repository->save($this->blockExtensible));
     }
 
     /**
@@ -171,16 +197,16 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $blockId = '123';
 
-        $this->block->expects($this->once())
+        $this->blockExtensible->expects($this->once())
             ->method('getId')
             ->willReturn(true);
         $this->blockResource->expects($this->once())
             ->method('load')
-            ->with($this->block, $blockId)
-            ->willReturn($this->block);
+            ->with($this->blockExtensible, $blockId)
+            ->willReturn($this->blockExtensible);
         $this->blockResource->expects($this->once())
             ->method('delete')
-            ->with($this->block)
+            ->with($this->blockExtensible)
             ->willReturnSelf();
 
         $this->assertTrue($this->repository->deleteById($blockId));
@@ -188,48 +214,45 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
         $this->blockResource->expects($this->once())
             ->method('save')
-            ->with($this->block)
-            ->willThrowException(new \Exception());
-        $this->repository->save($this->block);
+            ->with($this->blockExtensible)
+            ->willThrowException(new Exception());
+        $this->expectException(CouldNotSaveException::class);
+        $this->repository->save($this->blockExtensible);
     }
 
     /**
      * @test
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
         $this->blockResource->expects($this->once())
             ->method('delete')
-            ->with($this->block)
-            ->willThrowException(new \Exception());
-        $this->repository->delete($this->block);
+            ->with($this->blockExtensible)
+            ->willThrowException(new Exception());
+        $this->expectException(CouldNotDeleteException::class);
+        $this->repository->delete($this->blockExtensible);
     }
 
     /**
      * @test
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetByIdException()
     {
         $blockId = '123';
 
-        $this->block->expects($this->once())
+        $this->blockExtensible->expects($this->once())
             ->method('getId')
-            ->willReturn(false);
+            ->willReturn(null);
         $this->blockResource->expects($this->once())
             ->method('load')
-            ->with($this->block, $blockId)
-            ->willReturn($this->block);
+            ->with($this->blockExtensible, $blockId)
+            ->willReturn($this->blockExtensible);
+        $this->expectException(NoSuchEntityException::class);
         $this->repository->getById($blockId);
     }
 
@@ -240,10 +263,10 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $total = 10;
 
-        /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
-        $criteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)->getMock();
+        /** @var SearchCriteriaInterface $criteria */
+        $criteria = $this->getMockBuilder(SearchCriteriaInterface::class)->getMock();
 
-        $this->collection->addItem($this->block);
+        $this->collection->addItem($this->blockExtensible);
         $this->collection->expects($this->once())
             ->method('getSize')
             ->willReturn($total);
@@ -263,7 +286,7 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->blockSearchResult->expects($this->once())
             ->method('setItems')
-            ->with([$this->block])
+            ->with([$this->blockExtensible])
             ->willReturnSelf();
         $this->assertEquals($this->blockSearchResult, $this->repository->getList($criteria));
     }
