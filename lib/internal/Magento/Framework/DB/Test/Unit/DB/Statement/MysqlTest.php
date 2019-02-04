@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Test\Unit\DB\Statement;
 
 use Magento\Framework\DB\Statement\Parameter;
@@ -10,6 +11,9 @@ use Magento\Framework\DB\Statement\Pdo\Mysql;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @inheritdoc
+ */
 class MysqlTest extends TestCase
 {
     /**
@@ -38,7 +42,8 @@ class MysqlTest extends TestCase
     public function setUp()
     {
         $this->adapterMock = $this->getMockForAbstractClass(
-            \Zend_Db_Adapter_Abstract::class, [],
+            \Zend_Db_Adapter_Abstract::class,
+            [],
             '',
             false,
             true,
@@ -56,7 +61,7 @@ class MysqlTest extends TestCase
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
     }
 
-    public function test_executeWithoutParams()
+    public function testExecuteWithoutParams()
     {
         $query = 'SET @a=1;';
         $this->pdoMock->expects($this->once())
@@ -68,13 +73,12 @@ class MysqlTest extends TestCase
         (new Mysql($this->adapterMock, $query))->_execute();
     }
 
-    public function test_executeWhenThrowPDOException()
+    public function testExecuteWhenThrowPDOException()
     {
         $this->expectException(\Zend_Db_Statement_Exception::class);
         $this->expectExceptionMessage('test message, query was:');
         $errorReporting = error_reporting();
         $query = 'SET @a=1;';
-
         $this->pdoMock->expects($this->once())
             ->method('prepare')
             ->with($query)
@@ -88,12 +92,9 @@ class MysqlTest extends TestCase
         (new Mysql($this->adapterMock, $query))->_execute();
     }
 
-    public function test_executeWhenParamsAsPrimitives()
+    public function testExecuteWhenParamsAsPrimitives()
     {
-        $params = [
-            ':param1' => 'value1',
-            ':param2' => 'value2',
-        ];
+        $params = [':param1' => 'value1', ':param2' => 'value2'];
         $query = 'UPDATE `some_table1` SET `col1`=\'val1\' WHERE `param1`=\':param1\' AND `param2`=\':param2\';';
         $this->pdoMock->expects($this->once())
             ->method('prepare')
@@ -108,7 +109,7 @@ class MysqlTest extends TestCase
         (new Mysql($this->adapterMock, $query))->_execute($params);
     }
 
-    public function test_executeWhenParamsAsParameterObject()
+    public function testExecuteWhenParamsAsParameterObject()
     {
         $param1 = $this->createMock(Parameter::class);
         $param1Value = 'SomeValue';

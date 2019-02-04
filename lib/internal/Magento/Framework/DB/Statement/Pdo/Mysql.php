@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\DB\Statement\Pdo;
+
+use Magento\Framework\DB\Statement\Parameter;
 
 /**
  * Mysql DB Statement
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\DB\Statement\Pdo;
-
-use Magento\Framework\DB\Statement\Parameter;
-
 class Mysql extends \Zend_Db_Statement_Pdo
 {
     /**
@@ -61,7 +60,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
             $statement->bindParam($paramName, $bindValues[$name], $dataType, $length, $driverOptions);
         }
 
-        return $this->tryExecute(function() use ($statement) {
+        return $this->tryExecute(function () use ($statement) {
             return $statement->execute();
         });
     }
@@ -86,9 +85,9 @@ class Mysql extends \Zend_Db_Statement_Pdo
         }
 
         if ($specialExecute) {
-           return $this->_executeWithBinding($params);
+            return $this->_executeWithBinding($params);
         } else {
-            return $this->tryExecute(function() use ($params) {
+            return $this->tryExecute(function () use ($params) {
                 return $params !== null ? $this->_stmt->execute($params) : $this->_stmt->execute();
             });
         }
