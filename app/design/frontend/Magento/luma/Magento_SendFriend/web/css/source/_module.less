@@ -47,19 +47,17 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) { 
     .form.send.friend {
         .fieldset {
+             padding-bottom: @indent__xs;
             .field {
                 .control {
                     width: 100%;
                 }  
             }
-            padding-bottom: 10px;
         } 
         .action {
             &.remove {
                 right: 0;
                 margin-left: 0;
-                text-align: right;
-                width: 65px;
                 top: 100%;    
             }
         }
