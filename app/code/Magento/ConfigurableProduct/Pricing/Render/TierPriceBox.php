@@ -34,8 +34,8 @@ class TierPriceBox extends FinalPriceBox
     {
         $product = $this->getSaleableItem();
         foreach ($product->getTypeInstance()->getUsedProducts($product) as $simpleProduct) {
-            if ($simpleProduct->isSalable() &&
-                !empty($simpleProduct->getPriceInfo()->getPrice(TierPrice::PRICE_CODE)->getTierPriceList())
+            if ($simpleProduct->isSalable()
+                && !empty($simpleProduct->getPriceInfo()->getPrice(TierPrice::PRICE_CODE)->getTierPriceList())
             ) {
                 return true;
             }

@@ -11,7 +11,7 @@
     <test name="AdminTierPriceNotAvailableForProductOptionsWithoutTierPriceTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="View configurable product details in storefront"/>
+            <stories value="View configurable product details on storefront"/>
             <title value="Check that 'trie price' block not available for simple product from options without 'trie price'"/>
             <description value="Check that 'trie price' block not available for simple product from options without 'trie price'"/>
             <severity value="MAJOR"/>
@@ -89,6 +89,6 @@
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectOption"/>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="class" stepKey="grabGrabPriceClass"/>
-        <assertNotContains actual="$grabGrabPriceClass" expected=".price-box .price-tier_price" expectedType="string"  stepKey="assertNotEquals"/>
+        <assertNotContains actual="$grabGrabPriceClass" expected=".price-box .price-tier_price" expectedType="string" stepKey="assertNotEquals"/>
     </test>
 </tests>
