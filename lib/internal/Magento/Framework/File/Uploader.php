@@ -140,14 +140,14 @@ class Uploader
      * @deprecated
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 4096;
+    const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 2160;
+    const MAX_IMAGE_HEIGHT = 1200;
 
     /**
      * Resulting of uploaded file
@@ -548,7 +548,7 @@ class Uploader
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (is_array($file) && count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
+            if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 

@@ -1,16 +1,20 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Store\Model\App\Emulation;
 use Magento\Framework\App\ObjectManager;
 
-class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Controller class Generate. Represents requests flow logic for sitemap generation
+ */
+class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpGetActionInterface
 {
     /** @var \Magento\Store\Model\App\Emulation $appEmulation */
     private $appEmulation;

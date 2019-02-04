@@ -120,8 +120,13 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                 ['entity_id', $productId]
             ]
         );
-        $product->expects($this->atLeastOnce())->method('getOrigData')->with('tier_price')
-            ->willReturn($originalTierPrices);
+        $product->expects($this->atLeastOnce())->method('getOrigData')
+            ->willReturnMap(
+                [
+                    ['tier_price', $originalTierPrices],
+                    ['entity_id', $productId]
+                ]
+            );
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
         $product->expects($this->atLeastOnce())->method('setData')->with('tier_price_changed', 1);
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)

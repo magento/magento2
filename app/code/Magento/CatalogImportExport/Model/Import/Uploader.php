@@ -113,15 +113,15 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
         $filePath = null
     ) {
-        if ($filePath !== null) {
-            $this->_setUploadFile($filePath);
-        }
         $this->_imageFactory = $imageFactory;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
+        if ($filePath !== null) {
+            $this->_setUploadFile($filePath);
+        }
     }
 
     /**
@@ -146,7 +146,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string $fileName
      * @param bool $renameFileOff
      * @return array
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function move($fileName, $renameFileOff = false)
@@ -181,9 +180,9 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             }
 
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
-            $filePath = $this->_directory->getRelativePath($filePath . $fileName);
+            $relativePath = $this->_directory->getRelativePath($filePath . $fileName);
             $this->_directory->writeFile(
-                $filePath,
+                $relativePath,
                 $read->readAll()
             );
         }

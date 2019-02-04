@@ -197,12 +197,12 @@ class Save extends Attribute implements HttpPostActionInterface
             $attributeCode = $attributeCode ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
             if (strlen($attributeCode) > 0) {
                 $validatorAttrCode = new \Zend_Validate_Regex(
-                    ['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']
+                    ['pattern' => '/^[a-zA-Z\x{600}-\x{6FF}][a-zA-Z\x{600}-\x{6FF}_0-9]{0,30}$/u']
                 );
                 if (!$validatorAttrCode->isValid($attributeCode)) {
                     $this->messageManager->addErrorMessage(
                         __(
-                            'Attribute code "%1" is invalid. Please use only letters (a-z), ' .
+                            'Attribute code "%1" is invalid. Please use only letters (a-z or A-Z), ' .
                             'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
                             $attributeCode
                         )
@@ -259,13 +259,13 @@ class Save extends Attribute implements HttpPostActionInterface
                 $data['backend_model'] = $this->productHelper->getAttributeBackendModelByInputType(
                     $data['frontend_input']
                 );
+
+                if ($model->getIsUserDefined() === null) {
+                    $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
+                }
             }
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
-
-            if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
-                $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
-            }
 
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {

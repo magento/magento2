@@ -42,4 +42,32 @@
         <data key="is_active">true</data>
         <var key="parent_id" entityType="category" entityKey="id" />
     </entity>
+    <entity name="FirstLevelSubCat" type="category">
+        <data key="name" unique="suffix">FirstLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="SecondLevelSubCat" type="category">
+        <data key="name" unique="suffix">SecondLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="ThirdLevelSubCat" type="category">
+        <data key="name" unique="suffix">ThirdLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="FourthLevelSubCat" type="category">
+        <data key="name" unique="suffix">FourthLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="FifthLevelCat" type="category">
+        <data key="name" unique="suffix">FifthLevelCategory</data>
+        <data key="name_lwr" unique="suffix">category</data>
+    </entity>
+    <entity name="SimpleRootSubCategory" type="category">
+        <data key="name" unique="suffix">SimpleRootSubCategory</data>
+        <data key="name_lwr" unique="suffix">simplerootsubcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="url_key" unique="suffix">simplerootsubcategory</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
 </entities>
