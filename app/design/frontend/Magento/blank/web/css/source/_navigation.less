@@ -131,12 +131,18 @@
                 );
             }
         }
-
         .switcher-dropdown {
             .lib-list-reset-styles();
+            display: none;
             padding: @indent__s 0;
         }
-
+        .switcher-options {
+            &.active {
+                .switcher-dropdown {
+                    display: block;
+                }
+            }
+        } 
         .header.links {
             .lib-list-reset-styles();
             border-bottom: 1px solid @color-gray82;
@@ -207,7 +213,7 @@
         }
 
         .nav-toggle {
-            &:after{
+            &:after {
                 background: rgba(0, 0, 0, @overlay__opacity);
                 content: '';
                 display: block;
