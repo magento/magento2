@@ -100,7 +100,14 @@ class Config implements ClientOptionsInterface
             'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
         ];
         $options = array_merge($defaultOptions, $options);
-        return $options;
+
+        return array_filter(
+            $options,
+            function (string $key) use ($defaultOptions) {
+                return array_key_exists($key, $defaultOptions);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**
