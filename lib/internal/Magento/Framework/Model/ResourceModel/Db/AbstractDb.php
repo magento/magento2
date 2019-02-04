@@ -372,6 +372,8 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getLoadSelect($field, $value, $object)
     {
+        $fields = $this->getConnection()->describeTable($this->getMainTable());
+        $value  = $this->getConnection()->prepareColumnValue($fields[$field], $value);
         $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
         $select = $this->getConnection()->select()->from($this->getMainTable())->where($field . '=?', $value);
         return $select;
