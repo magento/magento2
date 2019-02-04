@@ -97,7 +97,7 @@ define([
          */
         setPaymentDetails: function (tokens) {
             var $ccNumber = $(this.getSelector('cc_number')),
-                ccLast4 = $ccNumber.val().replace(/[^\d]/g, '');
+                ccLast4 = $ccNumber.val().replace(/[^\d]/g, '').substr(-4);
 
             $(this.getSelector('opaque_data_descriptor')).val(tokens.opaqueDataDescriptor);
             $(this.getSelector('opaque_data_value')).val(tokens.opaqueDataValue);
