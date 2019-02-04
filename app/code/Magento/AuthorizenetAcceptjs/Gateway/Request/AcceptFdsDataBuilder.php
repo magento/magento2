@@ -40,7 +40,18 @@ class AcceptFdsDataBuilder implements BuilderInterface
         $data = [];
 
         if ($payment instanceof Payment) {
-            $transactionId = $payment->getAuthorizationTransaction()->getTxnId();
+            $authorizationTransaction = $payment->getAuthorizationTransaction();
+
+            if (empty($authorizationTransaction)) {
+                $transactionId = $payment->getLastTransId();
+            } else {
+                $transactionId = $authorizationTransaction->getParentTxnId();
+
+                if (empty($transactionId)) {
+                    $transactionId = $authorizationTransaction->getTxnId();
+                }
+            }
+
             $data = [
                 'heldTransactionRequest' => [
                     'action' => 'approve',

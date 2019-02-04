@@ -41,10 +41,15 @@ class RefundTransactionDetailsDataBuilder implements BuilderInterface
 
         if ($payment instanceof Payment) {
             $authorizationTransaction = $payment->getAuthorizationTransaction();
-            $transactionId = $authorizationTransaction->getParentTxnId();
 
-            if (empty($transactionId)) {
-                $transactionId = $authorizationTransaction->getTxnId();
+            if (empty($authorizationTransaction)) {
+                $transactionId = $payment->getLastTransId();
+            } else {
+                $transactionId = $authorizationTransaction->getParentTxnId();
+
+                if (empty($transactionId)) {
+                    $transactionId = $authorizationTransaction->getTxnId();
+                }
             }
 
             $data = [

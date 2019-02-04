@@ -230,7 +230,7 @@
                 <item name="request_type" xsi:type="string">AuthorizenetAcceptjsAcceptsFdsRequestTypeBuilder</item>
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
-                <item name="reference_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AcceptFdsTypeDataBuilder</item>
+                <item name="reference_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AcceptFdsDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
