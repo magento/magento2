@@ -126,7 +126,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             if ($applyTaxAfterDiscount) {
                 //TODO: handle originalDiscountAmount
                 $taxableAmount = max($rowTotalForTaxCalculation - $discountAmount, 0);
-                if ($taxableAmount) {
+                if ($taxableAmount && !$applyTaxAfterDiscount) {
                     $taxableAmount = $rowTotalForTaxCalculation;
                 }
                 $rowTaxAfterDiscount = $this->calculationTool->calcTaxAmount(
