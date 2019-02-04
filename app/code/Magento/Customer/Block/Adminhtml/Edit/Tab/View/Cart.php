@@ -94,7 +94,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         $quote = $this->getQuote();
 
         if ($quote) {
-            $collection = $quote->getItemsCollection(false);
+            $collection = $quote->getItemsCollection(true);
         } else {
             $collection = $this->_dataCollectionFactory->create();
         }
