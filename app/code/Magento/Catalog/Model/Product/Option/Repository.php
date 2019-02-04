@@ -182,7 +182,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             }
         }
         $option->save();
-        $this->updateProductOptionsData($product, $option);
         return $option;
     }
 
@@ -249,22 +248,5 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 ->get(\Magento\Framework\EntityManager\HydratorPool::class);
         }
         return $this->hydratorPool;
-    }
-
-    /**
-     * Update product 'has_options' and 'required_options' attributes
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option
-     */
-    private function updateProductOptionsData($product, $option)
-    {
-        if (!$product->getHasOptions() ||
-            ($option->getIsRequire() && !$product->getRequiredOptions())) {
-            $product->setCanSaveCustomOptions(true);
-            $product->setOptionsSaved(true);
-            $product->setOptions([$option]);
-            $product->save();
-        }
     }
 }
