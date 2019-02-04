@@ -15,13 +15,15 @@ use Magento\Bundle\Model\Product\Type as Type;
  */
 class BundleProductTypeResolver implements TypeResolverInterface
 {
+    const BUNDLE_PRODUCT = 'BundleProduct';
+    
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data) : string
     {
         if (isset($data['type_id']) && $data['type_id'] == Type::TYPE_CODE) {
-            return 'BundleProduct';
+            return self::BUNDLE_PRODUCT;
         }
         return '';
     }
