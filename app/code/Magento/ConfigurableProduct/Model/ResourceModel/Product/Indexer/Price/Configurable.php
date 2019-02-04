@@ -12,6 +12,11 @@ use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Configurable Products Price Indexer Resource model
@@ -66,6 +71,11 @@ class Configurable implements DimensionalIndexerInterface
     private $basePriceModifier;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
@@ -74,6 +84,7 @@ class Configurable implements DimensionalIndexerInterface
      * @param BasePriceModifier $basePriceModifier
      * @param bool $fullReindexAction
      * @param string $connectionName
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
@@ -83,7 +94,8 @@ class Configurable implements DimensionalIndexerInterface
         \Magento\Framework\App\ResourceConnection $resource,
         BasePriceModifier $basePriceModifier,
         $fullReindexAction = false,
-        $connectionName = 'indexer'
+        $connectionName = 'indexer',
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
@@ -93,10 +105,11 @@ class Configurable implements DimensionalIndexerInterface
         $this->resource = $resource;
         $this->fullReindexAction = $fullReindexAction;
         $this->basePriceModifier = $basePriceModifier;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \Exception
      */
@@ -184,7 +197,19 @@ class Configurable implements DimensionalIndexerInterface
             ['le' => $this->getTable('catalog_product_entity')],
             'le.' . $linkField . ' = l.parent_id',
             []
-        )->columns(
+        );
+
+        // Does not make sense to extend query if out of stock products won't appear in tables for indexing
+        if ($this->isConfigShowOutOfStock()) {
+            $select->join(
+                ['si' => $this->getTable('cataloginventory_stock_item')],
+                'si.product_id = l.product_id',
+                []
+            );
+            $select->where('si.is_in_stock = ?', Stock::STOCK_IN_STOCK);
+        }
+
+        $select->columns(
             [
                 'le.entity_id',
                 'customer_group_id',
@@ -250,7 +275,7 @@ class Configurable implements DimensionalIndexerInterface
     /**
      * Get connection
      *
-     * return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface
@@ -271,5 +296,18 @@ class Configurable implements DimensionalIndexerInterface
     private function getTable($tableName)
     {
         return $this->resource->getTableName($tableName, $this->connectionName);
+    }
+
+    /**
+     * Is flag Show Out Of Stock setted
+     *
+     * @return bool
+     */
+    private function isConfigShowOutOfStock(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

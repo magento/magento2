@@ -13,6 +13,8 @@ use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class CollectionTest extends BaseCollection
 {

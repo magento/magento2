@@ -7,6 +7,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Model\Option;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
 
 /**
  * Catalog bundle product info block
@@ -170,7 +171,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
         $defaultValues = [];
         $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
-        /** @var \Magento\Framework\DataObject|null $preConfiguredValues */
+        /** @var DataObject|null $preConfiguredValues */
         $preConfiguredValues = $preConfiguredFlag ? $currentProduct->getPreconfiguredValues() : null;
 
         $position = 0;
@@ -193,12 +194,13 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                         $options[$optionId]['selections'][$configValue]['qty'] = $configQty;
                     }
                 }
+                $options = $this->processOptions($optionId, $options, $preConfiguredValues);
             }
             $position++;
         }
         $config = $this->getConfigData($currentProduct, $options);
 
-        $configObj = new \Magento\Framework\DataObject(
+        $configObj = new DataObject(
             [
                 'config' => $config,
             ]
@@ -402,5 +404,31 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'isFixedPrice' => $isFixedPrice,
         ];
         return $config;
+    }
+
+    /**
+     * Set preconfigured quantities and selections to options.
+     *
+     * @param string $optionId
+     * @param array $options
+     * @param DataObject $preConfiguredValues
+     * @return array
+     */
+    private function processOptions(string $optionId, array $options, DataObject $preConfiguredValues)
+    {
+        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
+        $selections = $options[$optionId]['selections'];
+        array_walk($selections, function (&$selection, $selectionId) use ($preConfiguredQtys) {
+            if (is_array($preConfiguredQtys) && isset($preConfiguredQtys[$selectionId])) {
+                $selection['qty'] = $preConfiguredQtys[$selectionId];
+            } else {
+                if ((int)$preConfiguredQtys > 0) {
+                    $selection['qty'] = $preConfiguredQtys;
+                }
+            }
+        });
+        $options[$optionId]['selections'] = $selections;
+
+        return $options;
     }
 }

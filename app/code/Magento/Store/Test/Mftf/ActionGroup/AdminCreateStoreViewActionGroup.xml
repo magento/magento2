@@ -24,7 +24,17 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning" />
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal" />
-        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
+        <waitForElementNotVisible selector="{{AdminNewStoreViewActionsSection.loadingMask}}" stepKey="waitForElementVisible"/>
+    </actionGroup>
+    <!--Save the Store view-->
+    <actionGroup name="AdminCreateStoreViewActionSaveGroup">
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload2"/>
         <see userInput="You saved the store view." stepKey="seeSavedMessage" />
+    </actionGroup>
+    <!--Save the same Store view code for code validation-->
+    <actionGroup name="AdminCreateStoreViewCodeUniquenessActionGroup">
+        <waitForLoadingMaskToDisappear stepKey="waitForForm"/>
+        <see userInput="Store with the same code already exists." stepKey="seeMessage" />
     </actionGroup>
 </actionGroups>
