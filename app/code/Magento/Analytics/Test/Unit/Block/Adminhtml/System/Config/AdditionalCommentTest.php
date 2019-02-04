@@ -36,7 +36,7 @@ class AdditionalCommentTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel'])
+            ->setMethods(['getComment', 'getLabel', 'getHtmlId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)

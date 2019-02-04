@@ -170,7 +170,11 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getHtmlId()
     {
-        return $this->getForm()->getHtmlIdPrefix() . $this->getData('html_id') . $this->getForm()->getHtmlIdSuffix();
+        return $this->_escaper->escapeHtml(
+            $this->getForm()->getHtmlIdPrefix() .
+            $this->getData('html_id') .
+            $this->getForm()->getHtmlIdSuffix()
+        );
     }
 
     /**
@@ -184,7 +188,7 @@ abstract class AbstractElement extends AbstractForm
         if ($suffix = $this->getForm()->getFieldNameSuffix()) {
             $name = $this->getForm()->addSuffixToName($name, $suffix);
         }
-        return $name;
+        return $this->_escaper->escapeHtml($name);
     }
 
     /**
