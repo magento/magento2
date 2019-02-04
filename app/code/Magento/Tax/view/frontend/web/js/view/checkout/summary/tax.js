@@ -108,6 +108,7 @@ define([
          */
         getTaxAmount: function (parent, percentage) {
             var totalPercentage = 0;
+
             taxAmount = parent.amount;
             rates = parent.rates;
             _.each(rates, function (rate) {
@@ -118,13 +119,13 @@ define([
         },
 
         /**
-         * @param {*} taxAmount
+         * @param {*} amount
          * @param {*} totalPercentage
          * @param {*} percentage
          * @return {*|String}
          */
-        getPercentAmount: function (taxAmount, totalPercentage, percentage) {
-            return parseFloat((taxAmount * percentage) / totalPercentage);
+        getPercentAmount: function (amount, totalPercentage, percentage) {
+            return parseFloat(amount * percentage / totalPercentage);
         },
 
         /**
