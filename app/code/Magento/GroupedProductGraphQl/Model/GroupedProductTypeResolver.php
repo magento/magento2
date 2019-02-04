@@ -14,13 +14,14 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped as Type;
  */
 class GroupedProductTypeResolver implements TypeResolverInterface
 {
+    const GROUPED_PRODUCT = 'GroupedProduct';
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data) : string
     {
         if (isset($data['type_id']) && $data['type_id'] == Type::TYPE_CODE) {
-            return 'GroupedProduct';
+            return self::GROUPED_PRODUCT;
         }
         return '';
     }
