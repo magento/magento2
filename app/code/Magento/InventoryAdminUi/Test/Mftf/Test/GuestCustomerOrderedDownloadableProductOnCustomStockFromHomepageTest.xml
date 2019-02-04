@@ -196,7 +196,7 @@
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{colorProductAttribute1.name}}"
              stepKey="seeProductNameInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$100.00" stepKey="seeProductPriceInGrid"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource.source[name]$$ (100)"
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource.source[name]$$ : 100"
              stepKey="seeProductQuantityInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$ : 95"
              stepKey="seeProductSalableQuantityInGrid"/>

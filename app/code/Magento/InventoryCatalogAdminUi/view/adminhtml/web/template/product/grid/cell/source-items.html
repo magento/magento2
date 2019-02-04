@@ -9,7 +9,8 @@
     <ul data-bind="foreach: { data: $col.getSourceItemsDataCut($row()), as: '$sourceItemData' }">
         <li>
             <span data-bind="text: $sourceItemData.source_name"></span>
-            (<span data-bind="text: $sourceItemData.qty"></span>)
+            :
+            <span data-bind="text: $sourceItemData.qty"></span>
         </li>
     </ul>
 </div>

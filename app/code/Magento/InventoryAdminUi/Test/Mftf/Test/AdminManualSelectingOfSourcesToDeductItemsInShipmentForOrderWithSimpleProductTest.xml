@@ -183,10 +183,10 @@
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeProductNameInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeProductSkuInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seeProductPriceInGrid"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource1.source[name]$$ (100)" stepKey="seeProductQuantityInGridSouce1"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource2.source[name]$$ (95)" stepKey="seeProductQuantityInGridSouce2"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource3.source[name]$$ (100)" stepKey="seeProductQuantityInGridSouce3"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource4.source[name]$$ (100)" stepKey="seeProductQuantityInGridSouce4"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource1.source[name]$$ : 100" stepKey="seeProductQuantityInGridSouce1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource2.source[name]$$ : 95" stepKey="seeProductQuantityInGridSouce2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource3.source[name]$$ : 100" stepKey="seeProductQuantityInGridSouce3"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource4.source[name]$$ : 100" stepKey="seeProductQuantityInGridSouce4"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$ : 395" stepKey="seeProductSalableQuantityInGridSouce"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid"/>
