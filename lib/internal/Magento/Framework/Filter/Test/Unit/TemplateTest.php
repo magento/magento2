@@ -216,4 +216,18 @@ EXPECTED_RESULT;
         $this->templateFilter->setVariables(['filter' => $this->templateFilter]);
         $this->templateFilter->filter('Test {{var filter.addAfterFilterCallback(\'mb_strtolower\')}}');
     }
+
+    /**
+     * Check that if calling a method of an object fails expected result is returned.
+     *
+     * @return void
+     */
+    public function testInvalidMethodCall()
+    {
+        $this->templateFilter->setVariables(['dateTime' => '\DateTime']);
+        $this->assertEquals(
+            '\DateTime',
+            $this->templateFilter->filter('{{var dateTime.createFromFormat(\'d\',\'1548201468\')}}')
+        );
+    }
 }
