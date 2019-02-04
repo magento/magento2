@@ -61,16 +61,14 @@ $payment->setParentTransactionId(1234);
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);
 
-/** @var OrderRepositoryInterface $orderRepository */
-$orderRepository = $objectManager->get(OrderRepositoryInterface::class);
-$orderRepository->save($order);
-
 /** @var TransactionBuilder $transactionBuilder */
 $transactionBuilder = $objectManager->create(TransactionBuilder::class);
 $transactionAuthorize = $transactionBuilder->setPayment($payment)
     ->setOrder($order)
     ->setTransactionId(1234)
     ->build(Transaction::TYPE_AUTH);
+
+$transactionAuthorize->setAdditionalInformation('real_transaction_id', '1234');
 
 $transactionRepository = $objectManager->create(TransactionRepositoryInterface::class);
 $transactionRepository->save($transactionAuthorize);

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Command;
 
-
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Command\CommandPool;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
@@ -67,7 +66,7 @@ class TransactionReviewUpdateCommand implements CommandInterface
         $status = $response['transaction']['transactionStatus'];
 
         if (!in_array($status, self::REVIEW_PENDING_STATUSES)) {
-            $denied = in_array($status , self::REVIEW_DECLINED_STATUSES);
+            $denied = in_array($status, self::REVIEW_DECLINED_STATUSES);
             $payment->setData('is_transaction_denied', $denied);
             $payment->setData('is_transaction_approved', !$denied);
         }
