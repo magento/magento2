@@ -98,19 +98,18 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!--Open order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="openOrderById" stepKey="openOrderById">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="openOrderViewPage"/>
-        <waitForPageLoad stepKey="waitForOrderViewPageOpen"/>
 
-        <!--Create Invoice-->
+        <!--Start create invoice-->
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
-        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="1" stepKey="changeQtyToInvoice"/>
-        <waitForElementVisible selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="waitForUpdateQtyEnabled"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
-        <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitForSubmitInvoiceButton"/>
+        <!--Create partial invoice-->
+        <actionGroup ref="CreatePartialInvoice" stepKey="createPartialInvoice">
+            <argument name="rowNumber" value="1"/>
+            <argument name="qtyToInvoice" value="1"/>
+        </actionGroup>
+        <!--Submit Invoice-->
         <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
         <!--Create Shipment-->
         <actionGroup ref="StartCreateShipmentFromOrderPage" stepKey="startCreateShipment"/>
@@ -118,7 +117,7 @@
         <actionGroup ref="SubmitShipment" stepKey="submitShipment"/>
 
         <!--Cancel order-->
-        <actionGroup ref="cancelCompleteOrder" stepKey="cancelOrder"/>
+        <actionGroup ref="cancelProcessingOrder" stepKey="cancelOrder"/>
         <!--Check quantities in "Items Ordered" table-->
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 1" stepKey="seeInvoicedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 1" stepKey="seeShippedQuantity"/>
