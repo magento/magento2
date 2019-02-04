@@ -69,6 +69,10 @@ class FrontSpecialPrice extends Price
      */
     protected function _applySpecialPrice($product, $finalPrice)
     {
+        if (!$product->getSpecialPrice()) {
+            return $finalPrice;
+        }
+
         $specialPrices = $this->getSpecialPrices($product);
         $specialPrice = !(empty($specialPrices)) ? min($specialPrices) : $product->getSpecialPrice();
 
