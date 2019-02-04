@@ -7,6 +7,9 @@ namespace Magento\CacheInvalidate\Model;
 
 use Magento\Framework\Cache\InvalidateLogger;
 
+/**
+ * Purge cache action.
+ */
 class PurgeCache
 {
     const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
@@ -27,6 +30,18 @@ class PurgeCache
     private $logger;
 
     /**
+     * Batch size of the purge request.
+     *
+     * Based on default Varnish 4 http_req_hdr_len size minus a 512 bytes margin for method,
+     * header name, line feeds etc.
+     *
+     * @see https://varnish-cache.org/docs/4.1/reference/varnishd.html
+     *
+     * @var int
+     */
+    private $requestSize = 7680;
+
+    /**
      * Constructor
      *
      * @param \Magento\PageCache\Model\Cache\Server $cacheServer
@@ -44,18 +59,68 @@ class PurgeCache
     }
 
     /**
-     * Send curl purge request
-     * to invalidate cache by tags pattern
+     * Send curl purge request to invalidate cache by tags pattern.
      *
      * @param string $tagsPattern
      * @return bool Return true if successful; otherwise return false
      */
     public function sendPurgeRequest($tagsPattern)
     {
+        $successful = true;
         $socketAdapter = $this->socketAdapterFactory->create();
         $servers = $this->cacheServer->getUris();
-        $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $tagsPattern];
         $socketAdapter->setOptions(['timeout' => 10]);
+
+        $formattedTagsChunks = $this->splitTags($tagsPattern);
+        foreach ($formattedTagsChunks as $formattedTagsChunk) {
+            if (!$this->sendPurgeRequestToServers($socketAdapter, $servers, $formattedTagsChunk)) {
+                $successful = false;
+            }
+        }
+
+        return $successful;
+    }
+
+    /**
+     * Split tags by batches
+     *
+     * @param string $tagsPattern
+     * @return \Generator
+     */
+    private function splitTags(string $tagsPattern) : \Generator
+    {
+        $tagsBatchSize = 0;
+        $formattedTagsChunk = [];
+        $formattedTags = explode('|', $tagsPattern);
+        foreach ($formattedTags as $formattedTag) {
+            if ($tagsBatchSize + strlen($formattedTag) > $this->requestSize - count($formattedTagsChunk) - 1) {
+                yield implode('|', $formattedTagsChunk);
+                $formattedTagsChunk = [];
+                $tagsBatchSize = 0;
+            }
+
+            $tagsBatchSize += strlen($formattedTag);
+            $formattedTagsChunk[] = $formattedTag;
+        }
+        if (!empty($formattedTagsChunk)) {
+            yield implode('|', $formattedTagsChunk);
+        }
+    }
+
+    /**
+     * Send curl purge request to servers to invalidate cache by tags pattern.
+     *
+     * @param \Zend\Http\Client\Adapter\Socket $socketAdapter
+     * @param \Zend\Uri\Uri[] $servers
+     * @param string $formattedTagsChunk
+     * @return bool Return true if successful; otherwise return false
+     */
+    private function sendPurgeRequestToServers(
+        \Zend\Http\Client\Adapter\Socket $socketAdapter,
+        array $servers,
+        string $formattedTagsChunk
+    ): bool {
+        $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $formattedTagsChunk];
         foreach ($servers as $server) {
             $headers['Host'] = $server->getHost();
             try {
@@ -69,12 +134,13 @@ class PurgeCache
                 $socketAdapter->read();
                 $socketAdapter->close();
             } catch (\Exception $e) {
-                $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));
+                $this->logger->critical($e->getMessage(), compact('server', 'formattedTagsChunk'));
+
                 return false;
             }
         }
+        $this->logger->execute(compact('servers', 'formattedTagsChunk'));
 
-        $this->logger->execute(compact('servers', 'tagsPattern'));
         return true;
     }
 }
