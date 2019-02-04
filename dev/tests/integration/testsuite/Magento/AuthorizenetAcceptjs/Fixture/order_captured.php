@@ -61,10 +61,6 @@ $payment->setParentTransactionId(4321);
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);
 
-/** @var OrderRepositoryInterface $orderRepository */
-$orderRepository = $objectManager->get(OrderRepositoryInterface::class);
-$orderRepository->save($order);
-
 /** @var TransactionBuilder $transactionBuilder */
 $transactionBuilder = $objectManager->create(TransactionBuilder::class);
 $transactionAuthorize = $transactionBuilder->setPayment($payment)

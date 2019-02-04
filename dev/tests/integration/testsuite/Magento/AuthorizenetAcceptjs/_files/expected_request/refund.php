@@ -7,31 +7,28 @@
 declare(strict_types=1);
 
 return [
-    'request' => [
-        'payload_type' => 'createTransactionRequest',
+    'createTransactionRequest' => [
         'merchantAuthentication' =>[
             'name' => 'someusername',
             'transactionKey' => 'somepassword',
         ],
         'transactionRequest' => [
-            'transactionType' => 'authOnlyTransaction',
-            'amount' => '15.00',
+            'transactionType' => 'refundTransaction',
+            'amount' => '100.00',
             'payment' => [
-                'opaqueData' => [
-                    'dataDescriptor' => 'mydescriptor',
-                    'dataValue' => 'myvalue',
-                ],
+                'creditCard' => [
+                    'cardNumber' => '1111',
+                    'expirationDate' => 'XXXX'
+                ]
             ],
-            'solution' => [
-                'id' => 'AAA102993',
-            ],
+            'refTransId' => '4321',
             'order' => [
-                'invoiceNumber' => '000000229',
+                'invoiceNumber' => '100000001',
             ],
             'poNumber' => null,
             'customer' => [
-                'id' => null,
-                'email' => 'John.Doe@example.com',
+                'id' => '1',
+                'email' => 'admin@example.com',
             ],
             'billTo' => [
                 'firstName' => 'firstname',
@@ -53,15 +50,7 @@ return [
                 'zip' => '11111',
                 'country' => 'US',
             ],
-            'customerIP' => '127.0.0.1',
-            'userFields' => [
-                'userField' => [
-                    [
-                        'name' => 'transactionType',
-                        'value' => 'authOnlyTransaction',
-                    ],
-                ],
-            ],
+            'customerIP' => '127.0.0.1'
         ],
     ]
 ];

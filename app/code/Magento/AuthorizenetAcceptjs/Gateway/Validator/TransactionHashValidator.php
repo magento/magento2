@@ -118,11 +118,10 @@ class TransactionHashValidator extends AbstractValidator
             try {
                 $amount = $this->subjectReader->readAmount($validationSubject);
             } catch (\InvalidArgumentException $e) {
-                // Void will not contain the amount and will use 0.00 for hashing
                 $amount = 0;
             }
         } else {
-            // Non-refund reference transactions (void) don't use the amount
+            // Non-refund reference transactions (void/capture) don't use the amount
             $amount = 0;
         }
 

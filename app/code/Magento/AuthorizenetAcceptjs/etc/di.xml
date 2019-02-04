@@ -117,6 +117,7 @@
     <virtualType name="AuthorizenetAcceptjsSaleCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsSaleRequest</argument>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsSaleHandler</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsRefundCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\RefundTransactionStrategyCommand">
@@ -127,7 +128,7 @@
     <virtualType name="AuthorizenetAcceptjsRefundSettledCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsRefundRequest</argument>
-            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsCaptureTransactionHandler</argument>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsRefundSettledHandler</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\CaptureStrategyCommand">
@@ -165,6 +166,12 @@
                 <item name="transaction_id" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionIdHandler</item>
                 <item name="payment_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler</item>
                 <item name="transaction_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionDetailsResponseHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsSaleHandler" type="AuthorizenetAcceptjsAuthorizationHandler">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
                 <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>
@@ -172,6 +179,14 @@
     <virtualType name="AuthorizenetAcceptjsCaptureTransactionHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsRefundSettledHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="transaction_id" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionIdHandler</item>
                 <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>

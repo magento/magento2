@@ -46,21 +46,8 @@ class TransactionResponseValidator extends AbstractValidator
     {
         $response = $this->subjectReader->readResponse($validationSubject);
         $transactionResponse = $response['transactionResponse'];
-        $code = $transactionResponse['messages']['message']['code']
-            ?? $transactionResponse['messages']['message'][0]['code']
-            ?? null;
 
-        if (in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
-            && $code
-            && !in_array(
-                $code,
-                [
-                    self::RESPONSE_REASON_CODE_APPROVED,
-                    self::RESPONSE_REASON_CODE_PENDING_REVIEW,
-                    self::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED
-                ]
-            )
-        ) {
+        if ($this->isResponseCodeAnError($transactionResponse)) {
             $errorCodes = [];
             $errorMessages = [];
 
@@ -78,5 +65,29 @@ class TransactionResponseValidator extends AbstractValidator
         }
 
         return $this->createResult(true);
+    }
+
+    /**
+     * Determines if the response code is actually an error
+     *
+     * @param array $transactionResponse
+     * @return bool
+     */
+    private function isResponseCodeAnError(array $transactionResponse): bool
+    {
+        $code = $transactionResponse['messages']['message']['code']
+            ?? $transactionResponse['messages']['message'][0]['code']
+            ?? null;
+
+        return in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
+            && $code
+            && !in_array(
+                $code,
+                [
+                    self::RESPONSE_REASON_CODE_APPROVED,
+                    self::RESPONSE_REASON_CODE_PENDING_REVIEW,
+                    self::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED
+                ]
+            );
     }
 }

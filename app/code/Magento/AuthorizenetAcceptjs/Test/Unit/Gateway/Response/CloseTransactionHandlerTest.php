@@ -42,33 +42,6 @@ class CloseTransactionHandlerTest extends TestCase
         $this->handler = new CloseTransactionHandler(new SubjectReader());
     }
 
-    public function testHandleDoesntCloseAuthorizeTransactions()
-    {
-        $subject = [
-            'payment' => $this->paymentDOMock
-        ];
-        $response = [
-            'transactionResponse' => [
-                'userFields' => [
-                    [
-                        'name' => 'transactionType',
-                        'value' => 'authOnlyTransaction'
-                    ]
-                ]
-            ]
-        ];
-
-        // Assert the transaction is not closed
-        $this->paymentMock->expects($this->never())
-            ->method('setIsTransactionClosed');
-        // Assert the parent transaction is not closed
-        $this->paymentMock->expects($this->never())
-            ->method('setShouldCloseParentTransaction');
-
-        $this->handler->handle($subject, $response);
-        // Assertions are via mock expects above
-    }
-
     public function testHandleClosesTransactionByDefault()
     {
         $subject = [
@@ -89,48 +62,5 @@ class CloseTransactionHandlerTest extends TestCase
 
         $this->handler->handle($subject, $response);
         // Assertions are via mock expects above
-    }
-
-    /**
-     * @dataProvider nonAuthorizeTransactionTypeProvider
-     * @param string $transactionType
-     */
-    public function testHandleClosesTransactionWhenOtherTransactionTypesAreUsed(string $transactionType)
-    {
-        $subject = [
-            'payment' => $this->paymentDOMock
-        ];
-        $response = [
-            'transactionResponse' => [
-                'userFields' => [
-                    [
-                        'name' => 'transactionType',
-                        'value' => $transactionType
-                    ]
-                ]
-            ]
-        ];
-
-        // Assert the transaction is closed
-        $this->paymentMock->expects($this->once())
-            ->method('setIsTransactionClosed')
-            ->with(true);
-        // Assert the parent transaction i closed
-        $this->paymentMock->expects($this->once())
-            ->method('setShouldCloseParentTransaction')
-            ->with(true);
-
-        $this->handler->handle($subject, $response);
-        // Assertions are via mock expects above
-    }
-
-    public function nonAuthorizeTransactionTypeProvider()
-    {
-        return [
-            ['authCaptureTransaction'],
-            ['priorAuthCaptureTransaction'],
-            ['refundTransaction'],
-            ['somethingElseToTriggerDefaultBehavior'],
-        ];
     }
 }

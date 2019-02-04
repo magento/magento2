@@ -7,15 +7,14 @@
 declare(strict_types=1);
 
 return [
-    'transactionResponse' => [
+    'transactionResponse' =>  [
         'responseCode' => '1',
-        'authCode' => 'abc123',
-        'avsResultCode' => 'Y',
-        'cvvResultCode' => 'P',
-        'cavvResultCode' => '2',
-        'transId' => '40024660848',
-        'refTransID' => '',
-        'transHash' => 'foobar',
+        'authCode' => '',
+        'avsResultCode' => 'P',
+        'cvvResultCode' => '',
+        'cavvResultCode' => '',
+        'transId' => '5678',
+        'refTransID' => '4321',
         'testRequest' => '0',
         'accountNumber' => 'XXXX1111',
         'accountType' => 'Visa',
@@ -25,19 +24,17 @@ return [
                 'description' => 'This transaction has been approved.'
             ]
         ],
-        'userFields' => [
-            [
-                'name' => 'transactionType',
-                'value' => 'authOnlyTransaction'
-            ]
-        ],
-        'transHashSha2' => '2FDBC382A938B1D84FEC2DDCC3DF2AAAA89CD9D0A8991C2E26367422ECC4A6878AA',
+        'transHashSha2' => '78BD31BA5BCDF3C3FA3C8373D8DF80EF07FC7E02C3545FCF18A408E2F76ED4F20D'
+            . 'FF007221374B576FDD1BFD953B3E5CF37249CEC4C135EEF975F7B478D8452C',
         'SupplementalDataQualificationIndicator' => 0
     ],
     'messages' => [
         'resultCode' => 'Ok',
         'message' => [
-            ['code' => 'I00001','text' => 'Successful.']
+            [
+                'code' => 'I00001',
+                'text' => 'Successful.'
+            ]
         ]
     ]
 ];
