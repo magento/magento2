@@ -10,6 +10,7 @@
 ?>
 
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+    <div class="toolbar wishlist-toolbar"><?= $block->getChildHtml('wishlist_item_pager'); ?></div>
     <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
@@ -51,5 +52,6 @@
           <input name="entity" value="<%- data.entity %>">
           <% } %>
       </form>
-  </script>
+    </script>
+    <div class="toolbar wishlist-toolbar"><br><?= $block->getChildHtml('wishlist_item_pager'); ?></div>
 <?php endif ?>
