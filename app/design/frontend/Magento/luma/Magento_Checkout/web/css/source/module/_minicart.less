@@ -393,7 +393,17 @@
 //
 //  Mobile
 //  _____________________________________________
-
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .minicart-wrapper {
+        margin-top: @indent__s;
+    }
+    .block-search {
+        margin-top: @indent__s;
+    }
+    .logo {
+        margin-top: 3px;
+    }
+}
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     .minicart-wrapper .block-minicart {
         width: 290px;
