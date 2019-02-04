@@ -7,8 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="GotoCatalogProductsPage">
 
         <!--Click on Catalog item-->
@@ -168,5 +167,4 @@
         <waitForPageLoad stepKey="waitForAllFilterReset"/>
 
     </actionGroup>
-
 </actionGroups>
