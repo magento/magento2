@@ -10,6 +10,9 @@ namespace Magento\Framework\Cache;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Psr\Log\LoggerInterface as Logger;
 
+/**
+ * Invalidate logger cache.
+ */
 class InvalidateLogger
 {
     /**
@@ -34,6 +37,7 @@ class InvalidateLogger
 
     /**
      * Logger invalidate cache
+     *
      * @param mixed $invalidateInfo
      * @return void
      */
@@ -44,6 +48,7 @@ class InvalidateLogger
 
     /**
      * Make extra data to logger message
+     *
      * @param mixed $invalidateInfo
      * @return array
      */

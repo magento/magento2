@@ -140,7 +140,6 @@ class PurgeCache
         $errorCount = count($unresponsiveServerError);
 
         if ($errorCount > 0) {
-
             $loggerMessage = implode(" ", $unresponsiveServerError);
 
             if ($errorCount == count($servers)) {
@@ -150,7 +149,7 @@ class PurgeCache
                 );
                 return false;
             }
-            
+
             $this->logger->warning(
                 'Unresponsive cache server(s) hit' . $loggerMessage,
                 compact('server', 'formattedTagsChunk')
