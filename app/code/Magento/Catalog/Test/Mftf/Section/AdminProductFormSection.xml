@@ -39,6 +39,7 @@
         <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
         <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']"/>
         <element name="save" type="button" selector="#save-button"/>
+        <element name="saveNewAttribute" type="button" selector="//aside[contains(@class, 'create_new_attribute_modal')]//button[@id='save']"/>
         <element name="successMessage" type="text" selector="#messages"/>
         <element name="attributeTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Attributes']"/>
         <element name="attributeLabel" type="input" selector="//input[@name='frontend_label[0]']"/>
