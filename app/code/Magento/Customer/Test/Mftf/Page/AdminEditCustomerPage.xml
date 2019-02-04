@@ -13,5 +13,6 @@
         <section name="AdminCustomerAddressesGridActionsSection"/>
         <section name="AdminCustomerAddressesSection"/>
         <section name="AdminCustomerMainActionsSection"/>
+        <section name="AdminEditCustomerAddressesSection" />
     </page>
 </pages>
