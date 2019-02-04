@@ -6,9 +6,8 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/lib/view/utils/async',
     'Magento_AuthorizenetAcceptjs/js/view/payment/acceptjs-client'
-], function ($, Class, alert, async, AcceptjsClient) {
+], function ($, Class, alert, AcceptjsClient) {
     'use strict';
 
     return Class.extend({
@@ -48,13 +47,6 @@ define([
             this.$selector.off('changePaymentMethod.' + this.code)
                 .on('changePaymentMethod.' + this.code, this.changePaymentMethod.bind(this));
 
-            // listen block changes
-            async.async({
-                selector: '#' + this.container
-            }, function () {
-                this.$selector.off('submit');
-            }.bind(this));
-
             return this;
         },
 
@@ -78,7 +70,6 @@ define([
          */
         onActiveChange: function (isActive) {
             if (!isActive) {
-                this.disableEventListeners();
 
                 return;
             }

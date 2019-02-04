@@ -24,7 +24,10 @@ class TransactionReviewUpdateCommand implements CommandInterface
         'FDSPendingReview',
         'FDSAuthorizedPendingReview'
     ];
-    private const STATUS_REVIEW_DECLINED = 'void';
+    private const REVIEW_DECLINED_STATUSES = [
+        'void',
+        'declined'
+    ];
 
     /**
      * @var CommandPool
@@ -64,7 +67,7 @@ class TransactionReviewUpdateCommand implements CommandInterface
         $status = $response['transaction']['transactionStatus'];
 
         if (!in_array($status, self::REVIEW_PENDING_STATUSES)) {
-            $denied = ($status === self::STATUS_REVIEW_DECLINED);
+            $denied = in_array($status , self::REVIEW_DECLINED_STATUSES);
             $payment->setData('is_transaction_denied', $denied);
             $payment->setData('is_transaction_approved', !$denied);
         }

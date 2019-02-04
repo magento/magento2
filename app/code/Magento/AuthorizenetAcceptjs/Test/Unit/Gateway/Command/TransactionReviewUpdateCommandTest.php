@@ -100,7 +100,11 @@ class TransactionReviewUpdateCommandTest extends TestCase
         $this->command->execute($buildSubject);
     }
 
-    public function testCommandWillMarkTransactionAsDeniedWhenVoid()
+    /**
+     * @dataProvider declinedTransactionStatusesProvider
+     * @param string $status
+     */
+    public function testCommandWillMarkTransactionAsDeniedWhenDeclined(string $status)
     {
         $this->commandPoolMock->method('get')
             ->willReturnMap([
@@ -110,7 +114,7 @@ class TransactionReviewUpdateCommandTest extends TestCase
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => 'void'
+                    'transactionStatus' => $status
                 ]
             ]);
 
@@ -175,6 +179,14 @@ class TransactionReviewUpdateCommandTest extends TestCase
         return [
             ['FDSPendingReview'],
             ['FDSAuthorizedPendingReview']
+        ];
+    }
+
+    public function declinedTransactionStatusesProvider()
+    {
+        return [
+            ['void'],
+            ['declined']
         ];
     }
 }
