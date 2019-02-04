@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<res:DCTResponse xmlns:res="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://www.dhl.com DCT-Response.xsd">
+<res:DCTResponse xmlns:res="http://www.dhl.com"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.dhl.com DCT-Response_global-2.0.xsd">
     <GetQuoteResponse>
         <Response>
             <ServiceHeader>
@@ -16,15 +16,15 @@
             </ServiceHeader>
         </Response>
         <BkgDetails>
-            <OriginServiceArea>
-                <FacilityCode>NUQ</FacilityCode>
-                <ServiceAreaCode>NUQ</ServiceAreaCode>
-            </OriginServiceArea>
-            <DestinationServiceArea>
-                <FacilityCode>BER</FacilityCode>
-                <ServiceAreaCode>BER</ServiceAreaCode>
-            </DestinationServiceArea>
             <QtdShp>
+                <OriginServiceArea>
+                    <FacilityCode>NUQ</FacilityCode>
+                    <ServiceAreaCode>NUQ</ServiceAreaCode>
+                </OriginServiceArea>
+                <DestinationServiceArea>
+                    <FacilityCode>BER</FacilityCode>
+                    <ServiceAreaCode>BER</ServiceAreaCode>
+                </DestinationServiceArea>
                 <GlobalProductCode>E</GlobalProductCode>
                 <LocalProductCode>E</LocalProductCode>
                 <ProductShortName>EXPRESS 9:00</ProductShortName>
@@ -42,9 +42,10 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
-                <DeliveryDate>2014-01-13</DeliveryDate>
+                <DeliveryDate>
+                    <DlvyDateTime>2014-01-13 11:59:00</DlvyDateTime>
+                    <DeliveryDateTimeOffset>+00:00</DeliveryDateTimeOffset>
+                </DeliveryDate>
                 <DeliveryTime>PT9H</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
                 <WeightUnit>LB</WeightUnit>
@@ -101,8 +102,19 @@
                     <TotalTaxAmount>0.000</TotalTaxAmount>
                     <WeightChargeTax>0.000</WeightChargeTax>
                 </QtdSInAdCur>
+                <PickupWindowEarliestTime>09:00:00</PickupWindowEarliestTime>
+                <PickupWindowLatestTime>17:00:00</PickupWindowLatestTime>
+                <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
             <QtdShp>
+                <OriginServiceArea>
+                    <FacilityCode>NUQ</FacilityCode>
+                    <ServiceAreaCode>NUQ</ServiceAreaCode>
+                </OriginServiceArea>
+                <DestinationServiceArea>
+                    <FacilityCode>BER</FacilityCode>
+                    <ServiceAreaCode>BER</ServiceAreaCode>
+                </DestinationServiceArea>
                 <GlobalProductCode>Q</GlobalProductCode>
                 <LocalProductCode>Q</LocalProductCode>
                 <ProductShortName>MEDICAL EXPRESS</ProductShortName>
@@ -120,9 +132,10 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
-                <DeliveryDate>2014-01-13</DeliveryDate>
+                <DeliveryDate>
+                    <DlvyDateTime>2014-01-13 11:59:00</DlvyDateTime>
+                    <DeliveryDateTimeOffset>+00:00</DeliveryDateTimeOffset>
+                </DeliveryDate>
                 <DeliveryTime>PT9H</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
                 <WeightUnit>LB</WeightUnit>
@@ -179,8 +192,19 @@
                     <TotalTaxAmount>0.000</TotalTaxAmount>
                     <WeightChargeTax>0.000</WeightChargeTax>
                 </QtdSInAdCur>
+                <PickupWindowEarliestTime>09:00:00</PickupWindowEarliestTime>
+                <PickupWindowLatestTime>17:00:00</PickupWindowLatestTime>
+                <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
             <QtdShp>
+                <OriginServiceArea>
+                    <FacilityCode>NUQ</FacilityCode>
+                    <ServiceAreaCode>NUQ</ServiceAreaCode>
+                </OriginServiceArea>
+                <DestinationServiceArea>
+                    <FacilityCode>BER</FacilityCode>
+                    <ServiceAreaCode>BER</ServiceAreaCode>
+                </DestinationServiceArea>
                 <GlobalProductCode>Y</GlobalProductCode>
                 <LocalProductCode>Y</LocalProductCode>
                 <ProductShortName>EXPRESS 12:00</ProductShortName>
@@ -198,9 +222,10 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
-                <DeliveryDate>2014-01-13</DeliveryDate>
+                <DeliveryDate>
+                    <DlvyDateTime>2014-01-13 11:59:00</DlvyDateTime>
+                    <DeliveryDateTimeOffset>+00:00</DeliveryDateTimeOffset>
+                </DeliveryDate>
                 <DeliveryTime>PT12H</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
                 <WeightUnit>LB</WeightUnit>
@@ -257,8 +282,19 @@
                     <TotalTaxAmount>0.000</TotalTaxAmount>
                     <WeightChargeTax>0.000</WeightChargeTax>
                 </QtdSInAdCur>
+                <PickupWindowEarliestTime>09:00:00</PickupWindowEarliestTime>
+                <PickupWindowLatestTime>17:00:00</PickupWindowLatestTime>
+                <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
             <QtdShp>
+                <OriginServiceArea>
+                    <FacilityCode>NUQ</FacilityCode>
+                    <ServiceAreaCode>NUQ</ServiceAreaCode>
+                </OriginServiceArea>
+                <DestinationServiceArea>
+                    <FacilityCode>BER</FacilityCode>
+                    <ServiceAreaCode>BER</ServiceAreaCode>
+                </DestinationServiceArea>
                 <GlobalProductCode>3</GlobalProductCode>
                 <LocalProductCode>3</LocalProductCode>
                 <ProductShortName>B2C</ProductShortName>
@@ -275,9 +311,10 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
-                <DeliveryDate>2014-01-13</DeliveryDate>
+                <DeliveryDate>
+                    <DlvyDateTime>2014-01-13 11:59:00</DlvyDateTime>
+                    <DeliveryDateTimeOffset>+00:00</DeliveryDateTimeOffset>
+                </DeliveryDate>
                 <DeliveryTime>PT23H59M</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
                 <WeightUnit>LB</WeightUnit>
@@ -309,8 +346,19 @@
                     <TotalTaxAmount>0.000</TotalTaxAmount>
                     <WeightChargeTax>0.000</WeightChargeTax>
                 </QtdSInAdCur>
+                <PickupWindowEarliestTime>09:00:00</PickupWindowEarliestTime>
+                <PickupWindowLatestTime>17:00:00</PickupWindowLatestTime>
+                <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
             <QtdShp>
+                <OriginServiceArea>
+                    <FacilityCode>NUQ</FacilityCode>
+                    <ServiceAreaCode>NUQ</ServiceAreaCode>
+                </OriginServiceArea>
+                <DestinationServiceArea>
+                    <FacilityCode>BER</FacilityCode>
+                    <ServiceAreaCode>BER</ServiceAreaCode>
+                </DestinationServiceArea>
                 <GlobalProductCode>P</GlobalProductCode>
                 <LocalProductCode>P</LocalProductCode>
                 <ProductShortName>EXPRESS WORLDWIDE</ProductShortName>
@@ -328,9 +376,10 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
-                <DeliveryDate>2014-01-13</DeliveryDate>
+                <DeliveryDate>
+                    <DlvyDateTime>2014-01-13 11:59:00</DlvyDateTime>
+                    <DeliveryDateTimeOffset>+00:00</DeliveryDateTimeOffset>
+                </DeliveryDate>
                 <DeliveryTime>PT23H59M</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
                 <WeightUnit>LB</WeightUnit>
@@ -387,6 +436,9 @@
                     <TotalTaxAmount>0.000</TotalTaxAmount>
                     <WeightChargeTax>0.000</WeightChargeTax>
                 </QtdSInAdCur>
+                <PickupWindowEarliestTime>09:00:00</PickupWindowEarliestTime>
+                <PickupWindowLatestTime>17:00:00</PickupWindowLatestTime>
+                <BookingCutoffOffset>PT1H</BookingCutoffOffset>
             </QtdShp>
         </BkgDetails>
         <Srvs>

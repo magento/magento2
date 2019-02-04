@@ -16,4 +16,8 @@
         <element name="PriceNavigationStep" type="button" selector="#catalog_layered_navigation_price_range_step"/>
         <element name="PriceNavigationStepSystemValue" type="button" selector="#catalog_layered_navigation_price_range_step_inherit"/>
     </section>
+
+    <section name="StorefrontLayeredNavigationSection">
+        <element name="shoppingOptionsByName" type="button" selector="//*[text()='Shopping Options']/..//*[contains(text(),'{{arg}}')]" parameterized="true"/>
+    </section>
 </sections>
