@@ -34,6 +34,12 @@
         <element name="chooseValue" type="button" selector="label[for='conditions__{{arg}}__value']" parameterized="true"/>
         <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
 
+        <!-- Conditions sub-form -->
+        <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
+        <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
+        <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
+
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="actionsHeaderOpen" type="button" selector="div[data-index='actions'] div[data-state-collapsible='open']" timeout="30"/>
