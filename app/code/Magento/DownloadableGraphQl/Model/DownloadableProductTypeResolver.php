@@ -15,13 +15,14 @@ use Magento\Downloadable\Model\Product\Type as Type;
  */
 class DownloadableProductTypeResolver implements TypeResolverInterface
 {
+    const DOWNLOADABLE_PRODUCT = 'DownloadableProduct';
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data) : string
     {
         if (isset($data['type_id']) && $data['type_id'] == Type::TYPE_DOWNLOADABLE) {
-            return 'DownloadableProduct';
+            return self::DOWNLOADABLE_PRODUCT;
         }
         return '';
     }
