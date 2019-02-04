@@ -41,6 +41,7 @@ define([
                     return false;
                 }
             });
+            $('.action.tocart').attr('disabled',false);
         }
     });
 
