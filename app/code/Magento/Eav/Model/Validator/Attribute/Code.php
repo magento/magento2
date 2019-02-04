@@ -32,7 +32,7 @@ class Code  extends AbstractValidator
          * Check attribute_code for allowed characters
          */
         if (trim($attributeCode)
-            && !preg_match('/^[a-z][a-z0-9_]*$/', trim($attributeCode))
+            && !preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]*$/', trim($attributeCode))
         ) {
             throw new LocalizedException(
                 __(
