@@ -116,8 +116,18 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
 
-        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
+        $setupDiCompileCmd = $this->cmdPrefix . 'cache:flush ';
         $this->shell->expects(self::at(0))
+            ->method('execute')
+            ->with($setupDiCompileCmd);
+
+        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
+        $this->shell->expects(self::at(1))
+            ->method('execute')
+            ->with($setupDiCompileCmd);
+
+        $setupDiCompileCmd = $this->cmdPrefix . 'cache:flush ';
+        $this->shell->expects(self::at(2))
             ->method('execute')
             ->with($setupDiCompileCmd);
 
@@ -126,7 +136,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $usedLocales = ['fr_FR', 'de_DE', 'nl_NL', 'en_US'];
         $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
             . implode(' ', $usedLocales);
-        $this->shell->expects(self::at(1))
+        $this->shell->expects(self::at(3))
             ->method('execute')
             ->with($staticContentDeployCmd);
 
