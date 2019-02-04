@@ -392,4 +392,15 @@ TEMPLATE;
             $this->templateFilter->filter('{{var dateTime.createFromFormat(\'d\',\'1548201468\')}}')
         );
     }
+
+    /**
+     * Test adding callbacks when already filtering.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInappropriateCallbacks()
+    {
+        $this->templateFilter->setVariables(['filter' => $this->templateFilter]);
+        $this->templateFilter->filter('Test {{var filter.addAfterFilterCallback(\'mb_strtolower\')}}');
+    }
 }

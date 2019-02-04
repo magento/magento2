@@ -60,6 +60,7 @@ use Psr\Log\LoggerInterface as PsrLogger;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AccountManagement implements AccountManagementInterface
 {
@@ -524,6 +525,8 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customer->setConfirmation(null);
+        // No need to validate customer and customer address while activating customer
+        $this->setIgnoreValidationFlag($customer);
         $this->customerRepository->save($customer);
         $this->getEmailNotification()->newAccount(
             $customer,
@@ -683,8 +686,9 @@ class AccountManagement implements AccountManagementInterface
             $customer = $this->customerRepository->get($email);
         }
 
-        // No need to validate customer address while saving customer reset password token
+        // No need to validate customer and customer address while saving customer reset password token
         $this->disableAddressValidation($customer);
+        $this->setIgnoreValidationFlag($customer);
 
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
@@ -1029,6 +1033,7 @@ class AccountManagement implements AccountManagementInterface
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
+        $this->disableAddressValidation($customer);
         $this->customerRepository->save($customer);
 
         return true;
