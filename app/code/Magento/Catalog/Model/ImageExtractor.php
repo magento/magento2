@@ -20,6 +20,7 @@ class ImageExtractor implements TypeDataExtractorInterface
      * @param \DOMElement $mediaNode
      * @param string $mediaParentTag
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(\DOMElement $mediaNode, $mediaParentTag)
     {
@@ -45,7 +46,7 @@ class ImageExtractor implements TypeDataExtractorInterface
                         || $attributeTagName === 'frame'
                         || $attributeTagName === 'transparency'
                     ) {
-                        $nodeValue = in_array($attribute->nodeValue,  [true, 1, 'true', '1'], true) ?? false;
+                        $nodeValue = in_array($attribute->nodeValue, [true, 1, 'true', '1'], true) ?? false;
                     } else {
                         $nodeValue = $attribute->nodeValue;
                     }

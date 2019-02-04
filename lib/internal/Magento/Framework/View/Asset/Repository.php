@@ -126,6 +126,7 @@ class Repository
      * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateDesignParams(array &$params)
     {
@@ -172,6 +173,8 @@ class Repository
     }
 
     /**
+     * Get theme provider
+     *
      * @return ThemeProviderInterface
      */
     private function getThemeProvider()
@@ -445,6 +448,8 @@ class Repository
     }
 
     /**
+     * Get repository files map
+     *
      * @param string $fileId
      * @param array $params
      * @return RepositoryMap
