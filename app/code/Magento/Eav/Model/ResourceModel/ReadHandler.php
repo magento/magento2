@@ -5,7 +5,11 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
+use Magento\Eav\Model\Config;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\UnionExpression;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
@@ -33,23 +37,21 @@ class ReadHandler implements AttributeInterface
     private $logger;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     private $config;
 
     /**
-     * ReadHandler constructor.
-     *
      * @param MetadataPool $metadataPool
      * @param ScopeResolver $scopeResolver
      * @param LoggerInterface $logger
-     * @param \Magento\Eav\Model\Config $config
+     * @param Config $config
      */
     public function __construct(
         MetadataPool $metadataPool,
         ScopeResolver $scopeResolver,
         LoggerInterface $logger,
-        \Magento\Eav\Model\Config $config
+        Config $config
     ) {
         $this->metadataPool = $metadataPool;
         $this->scopeResolver = $scopeResolver;
@@ -140,24 +142,25 @@ class ReadHandler implements AttributeInterface
                 $select = $connection->select()
                     ->from(
                         ['t' => $attributeTable],
-                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
+                        ['value' => 't.value', 'attribute_id' => 't.attribute_id', 'store_id' => 't.store_id']
                     )
                     ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
                     ->where('attribute_id IN (?)', $attributeIds);
                 foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
-                        $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                        $connection->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
-                    )->order('t.' . $scope->getIdentifier() . ' DESC');
+                    );
                 }
                 $selects[] = $select;
             }
-            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
-                $selects,
-                \Magento\Framework\DB\Select::SQL_UNION_ALL
-            );
-            foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
+            $unionSelect = new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )');
+            $orderedUnionSelect = $connection->select();
+            $orderedUnionSelect->from(['u' => $unionSelect]);
+            $orderedUnionSelect->order('store_id');
+            $attributes = $connection->fetchAll($orderedUnionSelect);
+            foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {
