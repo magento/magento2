@@ -14,6 +14,7 @@ use Magento\Framework\DB\Statement\Parameter;
  */
 class Mysql extends \Zend_Db_Statement_Pdo
 {
+
     /**
      * Executes statement with binding values to it.
      * Allows transferring specific options to DB driver.
