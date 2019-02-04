@@ -18,9 +18,6 @@
             <testCaseId value="MAGETWO-97501"/>
             <group value="customer"/>
             <group value="update"/>
-            <skip>
-                <issueId value="MAGETWO-97504"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>

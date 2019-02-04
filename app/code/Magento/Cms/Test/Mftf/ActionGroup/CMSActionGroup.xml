@@ -44,4 +44,30 @@
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection" />
     </actionGroup>
+    <actionGroup name="DeleteCMSBlockActionGroup">
+        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{CmsPagesPageActionsSection.select(_defaultBlock.title)}}" stepKey="ClickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(_defaultBlock.title)}}" stepKey="ClickOnEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="ClickToConfirm"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <see userInput="You deleted the block." stepKey="VerifyBlockIsDeleted"/>
+    </actionGroup>
+
+    <actionGroup name="AddStoreViewToCmsPage" extends="navigateToCreatedCMSPage">
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <remove keyForRemoval="clickExpandContentTabForPage"/>
+        <remove keyForRemoval="waitForLoadingMaskOfStagingSection"/>
+        <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites" after="waitForPageLoad3"/>
+        <waitForElementVisible selector="{{CmsNewPagePiwSection.selectStoreView(storeViewName)}}" stepKey="waitForStoreGridReload"/>
+        <clickWithLeftButton selector="{{CmsNewPagePiwSection.selectStoreView(storeViewName)}}" stepKey="clickStoreView"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You saved the page." stepKey="seeMessage"/>
+    </actionGroup>
 </actionGroups>
