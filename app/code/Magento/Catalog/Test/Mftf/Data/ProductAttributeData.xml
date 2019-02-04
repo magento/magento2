@@ -115,4 +115,9 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="textProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">text</data>
+        <data key="default_value" unique="suffix">defaultValue</data>
+        <data key="is_required_admin">No</data>
+    </entity>
 </entities>
