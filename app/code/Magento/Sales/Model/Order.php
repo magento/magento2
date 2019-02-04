@@ -11,12 +11,14 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\ProductOption;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
@@ -280,6 +282,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $localeResolver;
 
     /**
+     * @var ProductOption
+     */
+    private $productOption;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -308,6 +315,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param ResolverInterface $localeResolver
+     * @param ProductOption|null $productOption
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -338,7 +346,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ResolverInterface $localeResolver = null
+        ResolverInterface $localeResolver = null,
+        ProductOption $productOption = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -361,6 +370,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->salesOrderCollectionFactory = $salesOrderCollectionFactory;
         $this->priceCurrency = $priceCurrency;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
+        $this->productOption = $productOption ?: ObjectManager::getInstance()->get(ProductOption::class);
 
         parent::__construct(
             $context,
@@ -622,11 +632,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $this->getForcedCanCreditmemo();
         }
 
-        if ($this->canUnhold() || $this->isPaymentReview()) {
-            return false;
-        }
-
-        if ($this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
+        if ($this->canUnhold() || $this->isPaymentReview() ||
+            $this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
             return false;
         }
 
@@ -636,15 +643,52 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * TotalPaid - contains amount, that were not rounded.
          */
         $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
-        if (abs($totalRefunded) < .0001) {
-            return false;
+        if (abs($this->getGrandTotal()) < .0001) {
+            return $this->canCreditmemoForZeroTotal($totalRefunded);
         }
+
+        return $this->canCreditmemoForZeroTotalRefunded($totalRefunded);
+    }
+
+    /**
+     * Retrieve credit memo for zero total refunded availability.
+     *
+     * @param float $totalRefunded
+     * @return bool
+     */
+    private function canCreditmemoForZeroTotalRefunded($totalRefunded)
+    {
+        $isRefundZero = abs($totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
+        $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
+        $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+        if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
             return false;
         }
 
-        if ($this->getActionFlag(self::ACTION_FLAG_EDIT) === false) {
+        return true;
+    }
+    
+    /**
+     * Retrieve credit memo for zero total availability.
+     *
+     * @param float $totalRefunded
+     * @return bool
+     */
+    public function canCreditmemoForZeroTotal($totalRefunded)
+    {
+        $totalPaid = $this->getTotalPaid();
+        //check if total paid is less than grandtotal
+        $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
+        //case when amount is due for invoice
+        $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
+        //case when paid amount is refunded and order has creditmemo created
+        $creditmemos = ($this->getCreditmemosCollection() === false) ?
+             true : (count($this->getCreditmemosCollection()) > 0);
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
+        if (($hasDueAmount || $paidAmtIsRefunded) ||
+            (!$checkAmtTotalPaid &&
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;
@@ -721,11 +765,23 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
+            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() &&
+                !$item->getLockedDoShip() && !$this->isRefunded($item)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Check if item is refunded.
+     *
+     * @param OrderItemInterface $item
+     * @return bool
+     */
+    private function isRefunded(OrderItemInterface $item)
+    {
+        return $item->getQtyRefunded() == $item->getQtyOrdered();
     }
 
     /**
@@ -1092,7 +1148,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Hold
+     * Hold order
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1291,7 +1347,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getItemsCollection($filterByTypes = [], $nonChildrenOnly = false)
     {
@@ -1307,6 +1363,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if ($this->getId()) {
             foreach ($collection as $item) {
                 $item->setOrder($this);
+                $this->productOption->add($item);
             }
         }
         return $collection;
@@ -1316,7 +1373,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get random items collection without related children
      *
      * @param int $limit
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getParentItemsRandomCollection($limit = 1)
     {
@@ -1328,7 +1385,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
@@ -1559,7 +1616,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * GetStatus history by id
+     * Get status history by id
      *
      * @param mixed $statusId
      * @return string|false
@@ -1596,7 +1653,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get real real_order_id
+     * Get real order id
      *
      * @return string
      */
@@ -1651,8 +1708,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve text formatted price value including order rate
      *
-     * @param   float $price
-     * @return  string
+     * @param float $price
+     * @return string
      */
     public function formatPriceTxt($price)
     {
@@ -1673,7 +1730,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Format BasePrice
+     * Format base price
      *
      * @param float $price
      * @return string
@@ -1684,7 +1741,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Format BasePrice Precision
+     * Format Base Price Precision
      *
      * @param float $price
      * @param int $precision
@@ -1901,7 +1958,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Get formatted order created date in store timezone
      *
-     * @param string $format date format type (short|medium|long|full)
+     * @param int $format date format type (\IntlDateFormatter::SHORT|\IntlDateFormatter::MEDIUM
+     * |\IntlDateFormatter::LONG|\IntlDateFormatter::FULL)
      * @return string
      */
     public function getCreatedAtFormatted($format)
@@ -1967,7 +2025,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get IsNotVirtual
+     * Get order is not virtual
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -2068,7 +2126,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get ExtensionAttributes
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
      */
@@ -2112,6 +2170,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Return applied_rule_ids
+     *
+     * Rules are comma separated if there are more than one.
      *
      * @return string|null
      */

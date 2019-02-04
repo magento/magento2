@@ -84,10 +84,13 @@
             <argument name="total"/>
         </arguments>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
-        <waitForText userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" time="30" stepKey="waitForTotal"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.shippingMethodForm}}" visible="false" stepKey="openEstimateShippingSection"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="waitForShippingSection"/>
+        <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectShippingMethod"/>
         <see userInput="${{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
-        <see userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping"/>
         <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
+        <waitForText userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping"/>
         <see userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
     </actionGroup>
 

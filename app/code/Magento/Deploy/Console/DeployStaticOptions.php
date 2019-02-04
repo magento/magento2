@@ -240,7 +240,7 @@ class DeployStaticOptions
             new InputArgument(
                 self::LANGUAGES_ARGUMENT,
                 InputArgument::IS_ARRAY,
-                'Space-separated list of ISO-636 language codes for which to output static view files.'
+                'Space-separated list of ISO-639 language codes for which to output static view files.'
             ),
         ];
     }

@@ -37,12 +37,16 @@
 }
 
 //  Rem line height
-.lib-line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
+.lib-line-height(@heightValue) when not (@heightValue = false) and not (@heightValue = normal) and not (ispercentage(@heightValue)) {
     .lib-font-size-value(@heightValue);
     .lib-css(line-height, @fontValue);
 }
 
 .lib-line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
+    .lib-css(line-height, @heightValue);
+}
+
+.lib-line-height(@heightValue) when (@heightValue = normal) {
     .lib-css(line-height, @heightValue);
 }
 

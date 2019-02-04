@@ -66,7 +66,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                         <?php if ($showCart): ?>
                                             <div class="actions-primary">
                                                 <?php if ($_item->isSaleable()): ?>
-                                                    <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
+                                                    <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)): ?>
                                                         <button class="action tocart primary"
                                                                 data-mage-init='{"redirectUrl":{"url":"<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_item) ?>"}}'
                                                                 type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">

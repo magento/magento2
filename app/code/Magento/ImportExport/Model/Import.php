@@ -481,7 +481,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Provides error aggregator.
+     * Get error aggregator instance.
      *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -621,6 +621,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->addLogComment($messages);
 
         $result = !$errorAggregator->getErrorsCount();
+        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
+            $result = true;
+        }
+
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }

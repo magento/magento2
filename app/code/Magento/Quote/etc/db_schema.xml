@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="quote" resource="checkout" engine="innodb" comment="Sales Flat Quote">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -488,7 +488,7 @@
     </table>
     <table name="quote_id_mask" resource="checkout" engine="innodb" comment="Quote ID and masked ID mapping">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Quote ID"/>
         <column xsi:type="varchar" name="masked_id" nullable="true" length="32" comment="Masked ID"/>

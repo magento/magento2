@@ -137,6 +137,11 @@ class Email extends AbstractModel
     protected $_customerHelper;
 
     /**
+     * @var int
+     */
+    private $storeId = null;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param Data $productAlertData
@@ -207,6 +212,18 @@ class Email extends AbstractModel
     public function setWebsite(\Magento\Store\Model\Website $website)
     {
         $this->_website = $website;
+        return $this;
+    }
+
+    /**
+     * Set store id from product alert.
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId(int $storeId)
+    {
+        $this->storeId = $storeId;
         return $this;
     }
 
@@ -330,30 +347,18 @@ class Email extends AbstractModel
      */
     public function send()
     {
-        if ($this->_website === null || $this->_customer === null) {
-            return false;
-        }
-
-        if (!$this->_website->getDefaultGroup() || !$this->_website->getDefaultGroup()->getDefaultStore()) {
-            return false;
-        }
-
-        if (!in_array($this->_type, ['price', 'stock'])) {
+        if ($this->_website === null || $this->_customer === null || !$this->isExistDefaultStore()) {
             return false;
         }
 
         $products = $this->getProducts();
-        if (count($products) === 0) {
-            return false;
-        }
-
         $templateConfigPath = $this->getTemplateConfigPath();
-        if (!$templateConfigPath) {
+        if (!in_array($this->_type, ['price', 'stock']) || count($products) === 0 || !$templateConfigPath) {
             return false;
         }
 
-        $store = $this->getStore((int) $this->_customer->getStoreId());
-        $storeId = $store->getId();
+        $storeId = $this->storeId ?: (int) $this->_customer->getStoreId();
+        $store = $this->getStore($storeId);
 
         $this->_appEmulation->startEnvironmentEmulation($storeId);
 
@@ -405,16 +410,13 @@ class Email extends AbstractModel
     /**
      * Retrieve the store for the email
      *
-     * @param int|null $customerStoreId
-     *
+     * @param int $storeId
      * @return StoreInterface
      * @throws NoSuchEntityException
      */
-    private function getStore(?int $customerStoreId): StoreInterface
+    private function getStore(int $storeId): StoreInterface
     {
-        return $customerStoreId > 0
-            ? $this->_storeManager->getStore($customerStoreId)
-            : $this->_website->getDefaultStore();
+        return $this->_storeManager->getStore($storeId);
     }
 
     /**
@@ -452,5 +454,18 @@ class Email extends AbstractModel
         return $this->_type === 'price'
             ? self::XML_PATH_EMAIL_PRICE_TEMPLATE
             : self::XML_PATH_EMAIL_STOCK_TEMPLATE;
+    }
+
+    /**
+     * Check if exists default store.
+     *
+     * @return bool
+     */
+    private function isExistDefaultStore(): bool
+    {
+        if (!$this->_website->getDefaultGroup() || !$this->_website->getDefaultGroup()->getDefaultStore()) {
+            return false;
+        }
+        return true;
     }
 }
