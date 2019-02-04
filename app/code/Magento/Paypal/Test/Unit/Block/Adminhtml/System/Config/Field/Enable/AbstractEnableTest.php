@@ -37,6 +37,7 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
             ->setMethods(
                 [
                     'getHtmlId',
+                    'getName',
                     'getTooltip',
                     'getForm',
                 ]
