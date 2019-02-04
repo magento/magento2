@@ -53,16 +53,14 @@
             <argument name="ProductAttributeCode" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
-        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}"
-                   userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
         <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
-                    stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
     <!--Filter product attribute by Attribute Code -->
     <actionGroup name="filterProductAttributeByAttributeCode">
@@ -70,8 +68,7 @@
             <argument name="ProductAttributeCode" type="string"/>
         </arguments>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
-        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}"
-                   userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
         <waitForPageLoad stepKey="waitForUserInput"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
     </actionGroup>
@@ -81,8 +78,7 @@
             <argument name="productAttributeLabel" type="string"/>
         </arguments>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
-        <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}"
-                   userInput="{{productAttributeLabel}}" stepKey="setDefaultLabel"/>
+        <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="{{productAttributeLabel}}" stepKey="setDefaultLabel"/>
         <waitForPageLoad stepKey="waitForUserInput"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
     </actionGroup>
