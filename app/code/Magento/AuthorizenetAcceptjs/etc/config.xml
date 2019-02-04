@@ -24,6 +24,8 @@
                 <can_cancel>1</can_cancel>
                 <can_review_payment>1</can_review_payment>
                 <can_edit>1</can_edit>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <model>AuthorizenetAcceptjsFacade</model>
                 <email_customer>0</email_customer>
                 <login backend_model="Magento\Config\Model\Config\Backend\Encrypted" />

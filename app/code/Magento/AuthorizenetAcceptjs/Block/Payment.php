@@ -50,8 +50,10 @@ class Payment extends Template
 
     /**
      * Retrieves the config that should be used by the block
+     *
+     * @return string
      */
-    public function getPaymentConfig()
+    public function getPaymentConfig(): string
     {
         $payment = $this->config->getConfig()['payment'];
         $config = $payment[$this->getMethodCode()];

@@ -35,7 +35,8 @@
                 <item name="accept_payment" xsi:type="string">AuthorizenetAcceptjsAcceptPaymentCommand</item>
                 <item name="accept_fds" xsi:type="string">AuthorizenetAcceptjsAcceptFdsCommand</item>
                 <item name="deny_payment" xsi:type="string">AuthorizenetAcceptjsCancelCommand</item>
-                <item name="get_transaction_details" xsi:type="string">AuthorizenetAcceptjTransactionDetailsCommand</item>
+                <item name="get_transaction_details" xsi:type="string">AuthorizenetAcceptjsTransactionDetailsCommand</item>
+                <item name="fetch_transaction_information" xsi:type="string">AuthorizenetAcceptjsTransactionReviewUpdateCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -82,12 +83,16 @@
     <!-- End Validators -->
 
     <!-- Gateway Commands -->
-    <virtualType name="AuthorizenetAcceptjTransactionDetailsCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\GatewayQueryCommand">
+    <virtualType name="AuthorizenetAcceptjsTransactionReviewUpdateCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\TransactionReviewUpdateCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsTransactionDetailsCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\GatewayQueryCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsTransactionDetailsRequest</argument>
             <argument name="transferFactory" xsi:type="object">AuthorizenetAcceptjsDefaultTransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client</argument>
-            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsTransactionDetailsHandler</argument>
             <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionDetailsValidator</argument>
         </arguments>
     </virtualType>
