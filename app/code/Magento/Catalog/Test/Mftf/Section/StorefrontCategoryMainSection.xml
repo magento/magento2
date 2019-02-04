@@ -32,5 +32,6 @@
         <element name="asLowAs" type="input" selector="//*[@class='price-box price-final_price']/a/span[@class='price-container price-final_price tax weee']"/>
         <element name="productsList" type="block" selector="#maincontent .column.main"/>
         <element name="productName" type="text" selector=".product.name.product-item-name"/>
+        <element name="productOptionList" type="text" selector="#narrow-by-list"/>
     </section>
 </sections>
