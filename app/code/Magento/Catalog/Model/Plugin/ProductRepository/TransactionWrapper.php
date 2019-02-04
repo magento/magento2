@@ -7,6 +7,9 @@
  */
 namespace Magento\Catalog\Model\Plugin\ProductRepository;
 
+/**
+ * Transaction wrapper for product repository CRUD.
+ */
 class TransactionWrapper
 {
     /**
@@ -24,8 +27,10 @@ class TransactionWrapper
     }
 
     /**
+     * Transaction wrapper for save action.
+     *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $saveOptions
      * @return \Magento\Catalog\Api\Data\ProductInterface
@@ -51,8 +56,10 @@ class TransactionWrapper
     }
 
     /**
+     * Transaction wrapper for delete action.
+     *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return bool
      * @throws \Exception
@@ -76,8 +83,10 @@ class TransactionWrapper
     }
 
     /**
+     * Transaction wrapper for delete by id action.
+     *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param string $productSku
      * @return bool
      * @throws \Exception
