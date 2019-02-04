@@ -18,6 +18,8 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
+    const CONDITION_CODE_PACKAGE_VALUE_WITH_DISCOUNT = 'package_value_with_discount';
+
     /**
      * @var string
      */
@@ -227,12 +229,12 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $codes = [
             'condition_name' => [
                 'package_weight' => __('Weight vs. Destination'),
-                'package_value' => __('Price vs. Destination'),
+                self::CONDITION_CODE_PACKAGE_VALUE_WITH_DISCOUNT => __('Price vs. Destination'),
                 'package_qty' => __('# of Items vs. Destination'),
             ],
             'condition_name_short' => [
                 'package_weight' => __('Weight (and above)'),
-                'package_value' => __('Order Subtotal (and above)'),
+                self::CONDITION_CODE_PACKAGE_VALUE_WITH_DISCOUNT => __('Order Subtotal (and above)'),
                 'package_qty' => __('# of Items (and above)'),
             ],
         ];
