@@ -56,7 +56,11 @@ class AcceptPaymentStrategyCommandTest extends TestCase
         );
     }
 
-    public function testCommandWillAcceptInTheGatewayWhenTransactionHasNotBeenAuthorized()
+    /**
+     * @param string $status
+     * @dataProvider inReviewStatusesProvider
+     */
+    public function testCommandWillAcceptInTheGatewayWhenInFDSReview(string $status)
     {
         // Assert command is executed
         $this->commandMock->expects($this->once())
@@ -71,7 +75,7 @@ class AcceptPaymentStrategyCommandTest extends TestCase
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => 'FDSPendingReview'
+                    'transactionStatus' => $status
                 ]
             ]);
 
@@ -115,5 +119,13 @@ class AcceptPaymentStrategyCommandTest extends TestCase
             ->willReturn($this->transactionResultMock);
 
         $this->command->execute($buildSubject);
+    }
+
+    public function inReviewStatusesProvider()
+    {
+        return [
+            ['FDSPendingReview'],
+            ['FDSAuthorizedPendingReview']
+        ];
     }
 }

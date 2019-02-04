@@ -39,5 +39,6 @@ class ConfigTest extends TestCase
         $this->assertTrue($paymentAdapter->canVoid());
         $this->assertTrue($paymentAdapter->canUseInternal());
         $this->assertTrue($paymentAdapter->canEdit());
+        $this->assertTrue($paymentAdapter->canFetchTransactionInfo());
     }
 }

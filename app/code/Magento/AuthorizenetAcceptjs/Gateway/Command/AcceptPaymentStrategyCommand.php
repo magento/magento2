@@ -18,7 +18,10 @@ use Magento\Payment\Gateway\CommandInterface;
 class AcceptPaymentStrategyCommand implements CommandInterface
 {
     private const ACCEPT_FDS = 'accept_fds';
-    private const STATUS_NEEDS_APPROVAL = 'FDSPendingReview';
+    private const NEEDS_APPROVAL_STATUSES = [
+        'FDSPendingReview',
+        'FDSAuthorizedPendingReview'
+    ];
 
     /**
      * @var CommandPoolInterface
@@ -66,6 +69,6 @@ class AcceptPaymentStrategyCommand implements CommandInterface
             ->execute($commandSubject)
             ->get();
 
-        return $details['transaction']['transactionStatus'] === self::STATUS_NEEDS_APPROVAL;
+        return in_array($details['transaction']['transactionStatus'], self::NEEDS_APPROVAL_STATUSES);
     }
 }
