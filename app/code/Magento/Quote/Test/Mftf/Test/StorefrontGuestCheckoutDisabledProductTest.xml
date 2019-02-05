@@ -74,7 +74,7 @@
         </before>
         <after>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -123,7 +123,7 @@
         <!-- Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.name$$)}}" stepKey="amOnSimpleProductPage2"/>
         <actionGroup ref="StorefrontAddProductToCartQuantityActionGroup" stepKey="addToCart2">
-            <argument name="productName" value="$$createSimpleProduct2$$"/>
+            <argument name="productName" value="$$createSimpleProduct2.name$$"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutCartPage"/>
