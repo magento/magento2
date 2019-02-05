@@ -35,9 +35,6 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
         </before>
-        <after>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
-        </after>
 
         <!--Go to Cms blocks page-->
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
@@ -71,6 +68,7 @@
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
             <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="DeleteCMSBlockActionGroup"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
         </after>
     </test>
 </tests>
