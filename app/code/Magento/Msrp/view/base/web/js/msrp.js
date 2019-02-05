@@ -317,7 +317,7 @@ define([
                 msrpPrice = prices[priceIndex].msrpPrice.amount;
                 finalPrice = prices[priceIndex].finalPrice.amount;
 
-                if(msrpPrice === null || msrpPrice <= finalPrice) {
+                if (msrpPrice === null || msrpPrice <= finalPrice) {
                     this.updateNonMsrpPrice(priceUtils.formatPrice(finalPrice));
                 } else {
                     this.updateMsrpPrice(

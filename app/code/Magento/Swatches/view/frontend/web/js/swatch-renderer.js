@@ -523,7 +523,7 @@ define([
                 label = this.label ? this.label : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
-                    ' index="' + index +'"' +
+                    ' index="' + index + '"' +
                     ' aria-checked="false"' +
                     ' aria-describedby="' + controlId + '"' +
                     ' tabindex="0"' +
@@ -748,7 +748,7 @@ define([
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    parseInt($this.attr('index')) + 1,
+                    parseInt($this.attr('index'), 10) + 1,
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
