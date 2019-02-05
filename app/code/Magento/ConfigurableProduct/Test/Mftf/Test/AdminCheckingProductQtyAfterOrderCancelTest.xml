@@ -98,7 +98,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!--Open order-->
-        <actionGroup ref="openOrderById" stepKey="openOrderById">
+        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
 
@@ -106,7 +106,7 @@
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
         <!--Create partial invoice-->
         <actionGroup ref="CreatePartialInvoice" stepKey="createPartialInvoice">
-            <argument name="rowNumber" value="1"/>
+            <argument name="productSku" value="$createConfigChildProduct.sku$"/>
             <argument name="qtyToInvoice" value="1"/>
         </actionGroup>
         <!--Submit Invoice-->
@@ -117,7 +117,7 @@
         <actionGroup ref="SubmitShipment" stepKey="submitShipment"/>
 
         <!--Cancel order-->
-        <actionGroup ref="cancelProcessingOrder" stepKey="cancelOrder"/>
+        <actionGroup ref="CancelProcessingOrder" stepKey="cancelOrder"/>
         <!--Check quantities in "Items Ordered" table-->
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 1" stepKey="seeInvoicedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 1" stepKey="seeShippedQuantity"/>

@@ -19,7 +19,7 @@
     </actionGroup>
 
     <!--Cancel order that is in processing status-->
-    <actionGroup name="cancelProcessingOrder" extends="cancelPendingOrder">
+    <actionGroup name="CancelProcessingOrder" extends="cancelPendingOrder">
         <remove keyForRemoval="seeOrderStatusCanceled"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" after="seeCancelSuccessMessage" userInput="{{CONST.orderStatusComplete}}" stepKey="seeOrderStatusComplete"/>
     </actionGroup>

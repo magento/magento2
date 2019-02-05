@@ -47,10 +47,10 @@
 
     <actionGroup name="CreatePartialInvoice">
         <arguments>
-            <argument name="rowNumber" type="string" defaultValue="1"/>
+            <argument name="productSku" type="string"/>
             <argument name="qtyToInvoice" type="string" defaultValue="1"/>
         </arguments>
-        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice(rowNumber)}}" userInput="{{qtyToInvoice}}" stepKey="changeQtyToInvoice"/>
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoiceBySku(productSku)}}" userInput="{{qtyToInvoice}}" stepKey="changeQtyToInvoice"/>
         <waitForElementVisible selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="waitForUpdateQtyEnabled"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
         <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
