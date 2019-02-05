@@ -69,4 +69,17 @@
             <requiredEntity createDataKey="getConfigAttributeOption1"/>
         </createData>
     </actionGroup>
+
+    <!-- Create the configurable product, children are not visible individually -->
+    <actionGroup name="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
+        <!-- Create the 2 children that will be a part of the configurable product -->
+        <createData entity="ApiSimpleOneHidden" stepKey="createConfigChildProduct1">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption1"/>
+        </createData>
+        <createData entity="ApiSimpleTwoHidden" stepKey="createConfigChildProduct2">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption2"/>
+        </createData>
+    </actionGroup>
 </actionGroups>
