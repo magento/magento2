@@ -2,14 +2,14 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customerDownloadableProducts: customerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products")
+    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products")
 }
 
-type customerDownloadableProducts {
-    items: [customerDownloadableProduct] @doc(description: "List of purchased downloadable items")
+type CustomerDownloadableProducts {
+    items: [CustomerDownloadableProduct] @doc(description: "List of purchased downloadable items")
 }
 
-type customerDownloadableProduct {
+type CustomerDownloadableProduct {
     order_increment_id: String
     date: String
     status: String
