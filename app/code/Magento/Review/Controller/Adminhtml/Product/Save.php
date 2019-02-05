@@ -9,9 +9,14 @@ use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends ProductController
+/**
+ * Save Review action.
+ */
+class Save extends ProductController implements HttpPostActionInterface
 {
     /**
+     * Save Review action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
