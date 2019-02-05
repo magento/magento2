@@ -21,7 +21,6 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
 
-            <createData entity="CatalogRuleWithAllCustomerGroups" stepKey="createCatalogPriceRule"/>
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
                 <requiredEntity createDataKey="createFirstCategory"/>
@@ -69,14 +68,17 @@
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule">
-                <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
+            <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
+        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveRule"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!--Check Catalog Price Rule for first product-->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>

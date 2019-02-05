@@ -47,9 +47,11 @@
         <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription" />
         <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="selectActive" />
         <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite" />
-        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" parameterArray="{{catalogRule.customer_group_ids}}" stepKey="selectCustomerGroup" />
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
 
     <actionGroup name="CreateCatalogPriceRuleConditionWithAttribute">
@@ -108,5 +110,9 @@
 
     <actionGroup name="selectGeneralCustomerGroupActionGroup">
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="General" stepKey="selectCustomerGroup"/>
+    </actionGroup>
+
+    <actionGroup name="selectNotLoggedInCustomerGroupActionGroup">
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
     </actionGroup>
 </actionGroups>
