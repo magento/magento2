@@ -44,6 +44,16 @@
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection" />
     </actionGroup>
+    <actionGroup name="DeleteCMSBlockActionGroup">
+        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{CmsPagesPageActionsSection.select(_defaultBlock.title)}}" stepKey="ClickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(_defaultBlock.title)}}" stepKey="ClickOnEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="ClickToConfirm"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <see userInput="You deleted the block." stepKey="VerifyBlockIsDeleted"/>
+    </actionGroup>
 
     <actionGroup name="AddStoreViewToCmsPage" extends="navigateToCreatedCMSPage">
         <arguments>
