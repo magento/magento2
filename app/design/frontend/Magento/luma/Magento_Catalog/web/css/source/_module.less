@@ -731,7 +731,7 @@
         .product-items {
             .product-item-info {
                 .product-item-photo {
-                    float: left;
+                    float: none;
                     left: auto;
                     margin: 0 @indent__s @indent__s 0;
                     position: relative;
@@ -1066,5 +1066,8 @@
         .paypal:first-of-type {
             margin-top: 13px;
         }
+    }
+    .sidebar .product-items .product-item-info .product-item-photo {
+        float: left;  
     }
 }
