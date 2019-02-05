@@ -87,7 +87,6 @@ class TransactionReviewUpdateCommandTest extends TestCase
                 ['is_transaction_approved', true]
             );
 
-
         $buildSubject = [
             'payment' => $this->paymentDOMock
         ];
@@ -126,7 +125,6 @@ class TransactionReviewUpdateCommandTest extends TestCase
                 ['is_transaction_approved', false]
             );
 
-
         $buildSubject = [
             'payment' => $this->paymentDOMock
         ];
@@ -160,7 +158,6 @@ class TransactionReviewUpdateCommandTest extends TestCase
         // Assert payment is handled correctly
         $this->paymentMock->expects($this->never())
             ->method('setData');
-
 
         $buildSubject = [
             'payment' => $this->paymentDOMock

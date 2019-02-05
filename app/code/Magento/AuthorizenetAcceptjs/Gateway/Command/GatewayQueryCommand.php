@@ -98,4 +98,3 @@ class GatewayQueryCommand implements CommandInterface
         return new ArrayResult($response);
     }
 }
-
