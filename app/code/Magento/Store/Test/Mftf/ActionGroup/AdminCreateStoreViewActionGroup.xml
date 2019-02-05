@@ -37,4 +37,27 @@
         <waitForLoadingMaskToDisappear stepKey="waitForForm"/>
         <see userInput="Store with the same code already exists." stepKey="seeMessage" />
     </actionGroup>
+    <actionGroup name="navigateToAdminContentManagementPage">
+        <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+    </actionGroup>
+    <actionGroup name="saveStoreConfiguration">
+        <comment userInput="saveStoreConfiguration" stepKey="comment"/>
+        <waitForElementVisible selector="{{StoreConfigSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+    <actionGroup name="saveStoreConfigurationAndValidateFieldError">
+        <arguments>
+            <argument name="inputFieldError" type="string"/>
+            <argument name="errorMessageSelector" type="string"/>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+        <comment userInput="saveStoreConfigurationAndValidateFieldError" stepKey="comment"/>
+        <waitForElementVisible selector="{{StoreConfigSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForElement selector="{{inputFieldError}}" stepKey="waitForErrorField"/>
+        <waitForElementVisible selector="{{errorMessageSelector}}" stepKey="waitForErrorMessage"/>
+        <see selector="{{errorMessageSelector}}" userInput="{{errorMessage}}" stepKey="seeErrorMessage"/>
+    </actionGroup>
 </actionGroups>

@@ -63,4 +63,21 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
                     stepKey="waitForSuccessMessage"/>
     </actionGroup>
+    <actionGroup name="saveProductAttribute">
+        <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="confirmChangeInputTypeModal">
+        <waitForElementVisible selector="{{AdminEditProductAttributesSection.ProductDataMayBeLostConfirmButton}}" stepKey="waitForChangeInputTypeButton"/>
+        <click selector="{{AdminEditProductAttributesSection.ProductDataMayBeLostConfirmButton}}" stepKey="clickChangeInputTypeButton"/>
+        <waitForElementNotVisible selector="{{AdminEditProductAttributesSection.ProductDataMayBeLostModal}}" stepKey="waitForChangeInputTypeModalGone"/>
+    </actionGroup>
+    <actionGroup name="saveProductAttributeInUse">
+        <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
 </actionGroups>
