@@ -1030,12 +1030,8 @@ define([
             _.each(allowedProducts, function (allowedProduct) {
                 optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
 
-                if (_.isEmpty(product)) {
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
                     optionMinPrice = optionFinalPrice;
-                    product = allowedProduct;
-                }
-
-                if (optionFinalPrice < optionMinPrice) {
                     product = allowedProduct;
                 }
             }, this);
@@ -1252,7 +1248,10 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
