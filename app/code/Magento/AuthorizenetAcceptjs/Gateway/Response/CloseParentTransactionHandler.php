@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Processes payment information from a void transaction response
  */
-class CloseTransactionHandler implements HandlerInterface
+class CloseParentTransactionHandler implements HandlerInterface
 {
     /**
      * @var SubjectReader
@@ -39,7 +39,6 @@ class CloseTransactionHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
 
         if ($payment instanceof Payment) {
-            $payment->setIsTransactionClosed(true);
             $payment->setShouldCloseParentTransaction(true);
         }
     }

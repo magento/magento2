@@ -47,6 +47,6 @@ class SettleCommandTest extends AbstractTest
         ]);
 
         /** @var Payment $payment */
-        $this->assertTrue($payment->getIsTransactionClosed());
+        $this->assertTrue($payment->getShouldCloseParentTransaction());
     }
 }

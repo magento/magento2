@@ -66,6 +66,6 @@ class SaleCommandTest extends AbstractTest
         $this->assertSame('123456', $payment->getTransactionId());
         $this->assertSame('123456', $transactionDetails['real_transaction_id']);
         $this->assertTrue($payment->getShouldCloseParentTransaction());
-        $this->assertTrue($payment->getData('is_transaction_closed'));
+        $this->assertFalse($payment->getData('is_transaction_closed'));
     }
 }

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Response;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler;
+use Magento\AuthorizenetAcceptjs\Gateway\Response\CloseParentTransactionHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
@@ -15,10 +15,10 @@ use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class CloseTransactionHandlerTest extends TestCase
+class CloseParentTransactionHandlerTest extends TestCase
 {
     /**
-     * @var CloseTransactionHandler
+     * @var CloseParentTransactionHandler
      */
     private $handler;
 
@@ -39,7 +39,7 @@ class CloseTransactionHandlerTest extends TestCase
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->handler = new CloseTransactionHandler(new SubjectReader());
+        $this->handler = new CloseParentTransactionHandler(new SubjectReader());
     }
 
     public function testHandleClosesTransactionByDefault()
@@ -51,9 +51,9 @@ class CloseTransactionHandlerTest extends TestCase
             'transactionResponse' => []
         ];
 
-        // Assert the transaction is closed
+        // Assert the parent transaction i closed
         $this->paymentMock->expects($this->once())
-            ->method('setIsTransactionClosed')
+            ->method('setShouldCloseParentTransaction')
             ->with(true);
 
         $this->handler->handle($subject, $response);
