@@ -14,6 +14,8 @@ use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Updates quote items store id.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class UpdateQuoteItemStore
 {

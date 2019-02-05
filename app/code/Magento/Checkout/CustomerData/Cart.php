@@ -10,6 +10,8 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
  * Cart source
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Cart extends \Magento\Framework\DataObject implements SectionSourceInterface
 {

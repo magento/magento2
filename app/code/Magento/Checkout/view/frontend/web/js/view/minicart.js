@@ -81,6 +81,7 @@ define([
         maxItemsToDisplay: window.checkout.maxItemsToDisplay,
         cart: {},
 
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         /**
          * @override
          */
@@ -109,6 +110,8 @@ define([
 
             return this._super();
         },
+        //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
         isLoading: ko.observable(false),
         initSidebar: initSidebar,
 
