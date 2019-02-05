@@ -19,9 +19,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Attributes implements ResolverInterface
 {
     /**
-     * Format product's option data to conform to GraphQL schema
-     *
      * @inheritdoc
+     *
+     * Format product's option data to conform to GraphQL schema
      *
      * @param Field $field
      * @param ContextInterface $context
