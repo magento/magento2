@@ -118,11 +118,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'editorConfig' => [
                                 'enabled' => false
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                            ],
+                            'componentType' => \Magento\Ui\Component\Container::NAME,
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $this->assertEquals(
