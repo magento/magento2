@@ -9,8 +9,6 @@
         <column xsi:type="int" name="module9_guest_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Guest ID"/>
         <column xsi:type="date" name="module9_created_at" comment="Created At"/>
-        <column xsi:type="int" name="module9_update_column" padding="11" unsigned="false" nullable="false"
-                identity="false" comment="Module_9 Update Column"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="module9_email_contact_id"/>
         </constraint>
@@ -18,6 +16,8 @@
             <column name="module9_email_contact_id"/>
             <column name="module9_guest_id"/>
         </constraint>
+        <column xsi:type="int" name="module9_update_column" padding="11" unsigned="false" nullable="false"
+                identity="false" comment="Module_9 Update Column"/>
         <constraint xsi:type="foreign" referenceId="MODULE9_UPDATE_FK_MODULE9_IS_GUEST" table="module9_test_main_table"
                     column="module9_is_guest" referenceTable="module8_test_main_table"
                     referenceColumn="module8_is_guest" onDelete="CASCADE"/>
@@ -54,6 +54,12 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="module8_entity_id"/>
         </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_F205D8789B56A8E75BBFC0C68C041E98"
+                    table="module9_test_update_replica_table" column="module8_address"
+                    referenceTable="module8_test_main_table" referenceColumn="module8_content" onDelete="NO ACTION"/>
+        <constraint xsi:type="foreign" referenceId="FK_C7075560727757663A51EC925F4032C9"
+                    table="module9_test_update_replica_table" column="module8_address"
+                    referenceTable="module8_test_main_table" referenceColumn="module8_contact_id" onDelete="NO ACTION"/>
         <constraint xsi:type="foreign" referenceId="FK_8914AF398964FAFB4ED2E382866ABBF4"
                     table="module9_test_update_replica_table" column="module8_entity_id"
                     referenceTable="module8_test_main_table" referenceColumn="module8_email_contact_id"
@@ -63,6 +69,9 @@
         </index>
         <index referenceId="MODULE9_TEST_UPDATE_REPLICA_TABLE_MODULE8_ADDRESS" indexType="btree">
             <column name="module8_address"/>
+        </index>
+        <index referenceId="MODULE9_TEST_UPDATE_REPLICA_TABLE_MODULE8_SECOND_ADDRESS" indexType="btree">
+            <column name="module8_second_address"/>
         </index>
     </table>
 </schema>

@@ -37,7 +37,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '1.0.0', '<')) {
+        if (version_compare($context->getVersion(), '1.0.1', '<')) {
             $tableName = $setup->getTable(self::UPDATE_TABLE);
             $table = $setup->getConnection()->newTable($tableName);
             $table->setComment('Update Test Table for Module8');
@@ -48,6 +48,34 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTable($table);
 
             $this->createSimpleTable($setup, $setup->getTable(self::TEMP_TABLE));
+        }
+
+        if (version_compare($context->getVersion(), '1.0.2', '<')) {
+            $connection = $setup->getConnection();
+            $connection
+                ->dropTable(
+                    InstallSchema::TEMP_TABLE
+                );
+            $connection
+                ->dropColumn(
+                    InstallSchema::SECOND_TABLE,
+                    'module8_temp_column'
+                );
+            $connection
+                ->dropForeignKey(
+                    InstallSchema::SECOND_TABLE,
+                    'MODULE8_INSTALL_FK_ADDRESS_TEST_MAIN_TABLE_MODULE8_CONTENT_TEMP'
+                );
+            $connection
+                ->dropIndex(
+                    InstallSchema::MAIN_TABLE,
+                    'MODULE8_INSTALL_INDEX_TEMP'
+                );
+            $connection
+                ->dropIndex(
+                    InstallSchema::MAIN_TABLE,
+                    'MODULE8_INSTALL_UNIQUE_INDEX_TEMP'
+                );
         }
 
         $setup->endSetup();

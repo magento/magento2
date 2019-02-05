@@ -71,14 +71,14 @@ class SetupInstallTest extends SetupTestCase
                 'UpgradeSchema.php',
                 'Setup'
             );
-        }
 
-        $this->moduleManager->updateRevision(
-            'Magento_TestSetupDeclarationModule9',
-            'setup_install_with_converting',
-            'module.xml',
-            'etc'
-        );
+            $this->moduleManager->updateRevision(
+                $moduleName,
+                'setup_install_with_converting',
+                'module.xml',
+                'etc'
+            );
+        }
 
         $this->cliCommand->install($modules, ['convert-old-scripts' => true]);
 

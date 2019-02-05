@@ -10,8 +10,6 @@
                 identity="false" comment="Is Guest"/>
         <column xsi:type="varchar" name="module8_contact_id" nullable="true" length="15" comment="Contact ID"/>
         <column xsi:type="varchar" name="module8_content" nullable="false" length="15" comment="Content"/>
-        <column xsi:type="int" name="module8_update_column" padding="11" unsigned="false" nullable="false"
-                identity="false" comment="Module_8 Update Column"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="module8_email_contact_id"/>
         </constraint>
@@ -34,6 +32,8 @@
         <index referenceId="MODULE8_INSTALL_INDEX_TEMP" indexType="btree" disabled="true">
             <column name="module8_content"/>
         </index>
+        <column xsi:type="int" name="module8_update_column" padding="11" unsigned="false" nullable="false"
+                identity="false" comment="Module_8 Update Column"/>
     </table>
     <table name="module8_test_second_table" resource="default" engine="innodb" comment="Second Test Table for Module8">
         <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -69,6 +69,16 @@
         <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP" indexType="btree">
             <column name="module8_second_address"/>
         </index>
+    </table>
+    <table name="module8_test_install_temp_table" resource="default" engine="innodb"
+           comment="module8_test_install_temp_table" disabled="true">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="module8_counter" padding="10" unsigned="true" nullable="true" identity="false"
+                default="100" comment="Counter"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module8_entity_id"/>
+        </constraint>
     </table>
     <table name="module8_test_update_table" resource="default" engine="innodb" comment="Update Test Table for Module8">
         <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="false"

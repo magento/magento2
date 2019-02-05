@@ -29,6 +29,11 @@ class InstallSchema implements InstallSchemaInterface
     const SECOND_TABLE = 'module8_test_second_table';
 
     /**
+     * The name of the second table of Module8.
+     */
+    const TEMP_TABLE = 'module8_test_install_temp_table';
+
+    /**
      * @inheritdoc
      * @throws \Zend_Db_Exception
      */
@@ -65,6 +70,8 @@ class InstallSchema implements InstallSchemaInterface
         $this->addIndexesToSecondTable($secondTable);
         $this->addConstraintsToSecondTable($secondTable);
         $installer->getConnection()->createTable($secondTable);
+
+        $this->createSimpleTable($installer, self::TEMP_TABLE);
     }
 
     /**
@@ -103,8 +110,16 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => false
                 ],
                 'Email Contact ID'
-            )
-            ->addColumn(
+            )->addColumn(
+                'module8_contact_group_id',
+                Table::TYPE_INTEGER,
+                10,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ],
+                'Contact Group ID'
+            )->addColumn(
                 'module8_is_guest',
                 Table::TYPE_SMALLINT,
                 null,
@@ -113,8 +128,7 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Is Guest'
-            )
-            ->addColumn(
+            )->addColumn(
                 'module8_contact_id',
                 Table::TYPE_TEXT,
                 15,
@@ -123,6 +137,14 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Contact ID'
+            )->addColumn(
+                'module8_content',
+                Table::TYPE_TEXT,
+                15,
+                [
+                    'nullable' => false,
+                ],
+                'Content'
             );
     }
 
@@ -145,10 +167,16 @@ class InstallSchema implements InstallSchemaInterface
             )->addIndex(
                 'MODULE8_INSTALL_INDEX_3',
                 ['module8_is_guest']
-            )
-            ->addIndex(
+            )->addIndex(
                 'MODULE8_INSTALL_INDEX_4',
                 ['module8_contact_id']
+            )->addIndex(
+                'MODULE8_INSTALL_INDEX_TEMP',
+                ['module8_content']
+            )->addIndex(
+                'MODULE8_INSTALL_UNIQUE_INDEX_TEMP',
+                ['module8_contact_group_id'],
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             );
     }
 
@@ -172,21 +200,18 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => false
                 ],
                 'Entity ID'
-            )
-            ->addColumn(
+            )->addColumn(
                 'module8_contact_id',
                 Table::TYPE_INTEGER,
                 null,
                 [],
                 'Contact ID'
-            )
-            ->addColumn(
+            )->addColumn(
                 'module8_address',
                 Table::TYPE_TEXT,
                 15,
                 [
-                    'unsigned' => true,
-                    'nullable' => true
+                    'nullable' => false,
                 ],
                 'Address'
             )->addColumn(
@@ -211,6 +236,15 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Second Address'
+            )->addColumn(
+                'module8_temp_column',
+                Table::TYPE_TEXT,
+                15,
+                [
+                    'unsigned' => true,
+                    'nullable' => true
+                ],
+                'Temp column for remove'
             );
     }
 
@@ -254,6 +288,47 @@ class InstallSchema implements InstallSchemaInterface
                 'module8_address',
                 self::MAIN_TABLE,
                 'module8_contact_id'
+            )->addForeignKey(
+                'MODULE8_INSTALL_FK_ADDRESS_TEST_MAIN_TABLE_MODULE8_CONTENT_TEMP',
+                'module8_address',
+                self::MAIN_TABLE,
+                'module8_content'
             );
+    }
+
+    /**
+     * Create a simple table.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param $tableName
+     * @throws \Zend_Db_Exception
+     */
+    private function createSimpleTable(SchemaSetupInterface $setup, $tableName): void
+    {
+        $table = $setup->getConnection()->newTable($tableName);
+        $table
+            ->addColumn(
+                'module8_entity_id',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'primary' => true,
+                    'identity' => true,
+                    'nullable' => false,
+                    'unsigned' => true,
+                ],
+                'Entity ID'
+            )->addColumn(
+                'module8_counter',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => true,
+                    'default' => 100
+                ],
+                'Counter'
+            );
+        $setup->getConnection()->createTable($table);
     }
 }
