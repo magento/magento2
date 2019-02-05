@@ -16,8 +16,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
 {
 
     /**
-     * Executes statement with binding values to it.
-     * Allows transferring specific options to DB driver.
+     * Executes statement with binding values to it. Allows transferring specific options to DB driver.
      *
      * @param array $params Array of values to bind to parameter placeholders.
      * @return bool
