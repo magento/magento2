@@ -336,9 +336,9 @@ define([
         /**
          * Update prices for configurable product with MSRP enabled
          *
-         * @param {string} finalPrice
-         * @param {string} msrpPrice
-         * @param {boolean} useDefaultPrice
+         * @param {String} finalPrice
+         * @param {String} msrpPrice
+         * @param {Boolean} useDefaultPrice
          */
         updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice) {
             var options = this.tierOptions || this.options;
@@ -364,7 +364,7 @@ define([
         /**
          * Display non MAP price for irrelevant products
          *
-         * @param {string} price
+         * @param {String} price
          */
         updateNonMsrpPrice: function(price) {
             $(this.options.fallbackPriceElement).html(price);
