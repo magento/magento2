@@ -7,7 +7,8 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminIndexManagementPage" url="indexer/indexer/list/" area="admin" module="Magento_Indexer">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminIndexManagementPage" url="indexer/indexer/list/" area="admin" module="Indexer">
+        <section name="AdminIndexManagementSection"/>
     </page>
 </pages>
