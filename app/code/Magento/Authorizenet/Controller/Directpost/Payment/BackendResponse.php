@@ -18,13 +18,18 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class BackendResponse
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements CsrfAwareActionInterface
+class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements
+    CsrfAwareActionInterface,
+    HttpGetActionInterface,
+    HttpPostActionInterface
 {
     /**
      * @var LoggerInterface

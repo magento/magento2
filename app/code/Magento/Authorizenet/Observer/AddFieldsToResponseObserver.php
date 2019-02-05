@@ -12,6 +12,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class AddFieldsToResponseObserver
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class AddFieldsToResponseObserver implements ObserverInterface

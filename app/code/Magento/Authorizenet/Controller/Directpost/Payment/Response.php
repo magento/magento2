@@ -12,13 +12,14 @@ use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Authorizenet\Controller\Directpost\Payment;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class Response
  * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class Response extends Payment implements CsrfAwareActionInterface, HttpPostActionInterface
+class Response extends Payment implements CsrfAwareActionInterface, HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @inheritDoc
