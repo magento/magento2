@@ -70,6 +70,11 @@ class DeploymentConfig
         if ($key === null) {
             return $this->flatData;
         }
+
+        if (isset($this->flatData[$key]) && $this->flatData[$key] === null) {
+            return '';
+        }
+
         return $this->flatData[$key] ?? $defaultValue;
     }
 
