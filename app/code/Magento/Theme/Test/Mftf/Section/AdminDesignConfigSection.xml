@@ -14,5 +14,12 @@
         <element name="watermarkSection" type="text" selector="[data-index='watermark'] .admin__fieldset-wrapper-content"/>
         <element name="imageUploadInputByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader')]//input" parameterized="true"/>
         <element name="imageUploadPreviewByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader-preview')]//img" parameterized="true"/>
+        <element name="addSelectedFromMediaGallery" type="input" selector="//button[contains(@title,'Add Selected')]"/>
+        <element name="htmlHeaderSection" type="text" selector="[data-index='head']"/>
+        <element name="selectFromGalleryByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader')]//label[contains(text(), 'Select from Gallery')]" parameterized="true"/>
+        <element name="imageUploadFromMediaGallery" type="input" selector="//input[contains(@class,'fileupload')]" />
+        <element name="saveConfiguration" type="input" selector="//button[contains(@title, 'Save Configuration')]" />
+        <element name="successNotification" type="text" selector="//div[contains(@data-ui-id, 'messages-message-success')]" />
+        <element name="useDefaultByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader')]//span[contains(text(), 'Use Default Value')]" parameterized="true" />
     </section>
 </sections>

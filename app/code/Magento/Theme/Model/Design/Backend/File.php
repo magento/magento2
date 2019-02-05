@@ -88,23 +88,27 @@ class File extends BackendFile
     {
         $values = $this->getValue();
         $value = reset($values) ?: [];
-        if (!isset($value['file'])) {
+        $file = $value['file'] ?? $value['name'];
+        if (!isset($file)) {
             throw new LocalizedException(
                 __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
             );
         }
         if (isset($value['exists'])) {
-            $this->setValue($value['file']);
+            $this->setValue($file);
             return $this;
         }
 
-        $filename = basename($value['file']);
+        $filename = basename($file);
+        $relativeMediaUrl = $this->getRelativeMediaPath($value['url']);
+        $tmpMediaPath = $this->_mediaDirectory->isFile($relativeMediaUrl) ?
+            $relativeMediaUrl : $this->getTmpMediaPath($filename);
         $result = $this->_mediaDirectory->copyFile(
-            $this->getTmpMediaPath($filename),
+            $tmpMediaPath,
             $this->_getUploadDir() . '/' . $filename
         );
         if ($result) {
-            $this->_mediaDirectory->delete($this->getTmpMediaPath($filename));
+            $this->_mediaDirectory->delete($tmpMediaPath);
             if ($this->_addWhetherScopeInfo()) {
                 $filename = $this->_prependScopeInfo($filename);
             }
@@ -230,5 +234,16 @@ class File extends BackendFile
             $this->mime = ObjectManager::getInstance()->get(Mime::class);
         }
         return $this->mime;
+    }
+
+    /**
+     * Get Relative Media Path
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getRelativeMediaPath(string $path)
+    {
+        return str_replace('/pub/media', '', $path);
     }
 }

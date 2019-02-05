@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryImageUploadTest">
+        <annotations>
+            <features value="Content"/>
+            <stories value="Content"/>
+            <title value="MC-5784: Image fields using imageUploader UIComponent cannot use gallery image"/>
+            <description value="Admin should be able to use Image Uploader to add Gallery Images"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13832"/>
+            <group value="Content"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <waitForPageLoad stepKey="waitForPageload1"/>
+        <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
+        <waitForPageLoad stepKey="waitForPageload2"/>
+        <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection"/>
+        <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection"/>
+
+        <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
+        <wait time="3" stepKey="waitForAddingdSelectedImages"/>
+        <attachFile selector="{{AdminDesignConfigSection.imageUploadFromMediaGallery}}" userInput="adobe-base.jpg" stepKey="attachFile1"/>
+        <wait time="3" stepKey="waitForAddingSelectedImages"/>
+        <click selector="{{AdminDesignConfigSection.addSelectedFromMediaGallery}}" stepKey="addSelectedImages"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Head')}}" stepKey="waitForPreviewImage"/>
+        <wait time="3" stepKey="waitForWrapperToClose"/>
+        <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification"/>
+        <waitForPageLoad stepKey="waitForPageloadSuccess"/>
+
+        <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView2"/>
+        <waitForPageLoad stepKey="waitForPageload3"/>
+        <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection2"/>
+        <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection2"/>
+
+        <click selector="{{AdminDesignConfigSection.useDefaultByFieldsetName('Head')}}" stepKey="clickUseDefault"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Head')}}" stepKey="waitForPreviewImage2"/>
+        <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration2"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification2"/>
+        <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
+    </test>
+</tests>
