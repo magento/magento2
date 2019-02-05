@@ -107,21 +107,20 @@ class TransactionHashValidator extends AbstractValidator
         $transactionResponse = $response['transactionResponse'];
 
         /*
-         * Authorize.net is inconsistent with how they hash. Refund uses the amount when referencing a transaction
-         * but will use 0 when voiding or when refunding without a reference.
+         * Authorize.net is inconsistent with how they hash and heuristically trying to detect whether or not they used
+         * the amount to calculate the hash is risky because their responses are incorrect in some cases.
+         * Refund uses the amount when referencing a transaction but will use 0 when refunding without a reference.
+         * Non-refund reference transactions such as (void/capture) don't use the amount. Authorize/auth&capture
+         * transactions will use amount but if there is an AVS error the response will indicate the transaction was a
+         * reference transaction so this can't be heuristically detected by looking at combinations of refTransID
+         * and transId (yes they also mixed the letter casing for "id"). Their documentation doesn't talk about this
+         * and to make this even better, none of their official SDKs support the new hash field to compare
+         * implementations. Therefore the only way to safely validate this hash without failing for even more
+         * unexpected corner cases we simply need to validate with and without the amount.
          */
-        if (empty($transactionResponse['refTransID'])
-            || (!empty($transactionResponse['transId'])
-                // Yes, their naming uses inconsistent letter casing for transId and refTransID.
-                && $transactionResponse['refTransID'] !== $transactionResponse['transId'])
-        ) {
-            try {
-                $amount = $this->subjectReader->readAmount($validationSubject);
-            } catch (\InvalidArgumentException $e) {
-                $amount = 0;
-            }
-        } else {
-            // Non-refund reference transactions (void/capture) don't use the amount
+        try {
+            $amount = $this->subjectReader->readAmount($validationSubject);
+        } catch (\InvalidArgumentException $e) {
             $amount = 0;
         }
 
@@ -131,8 +130,19 @@ class TransactionHashValidator extends AbstractValidator
             sprintf('%.2F', $amount),
             $transactionResponse['transId'] ?? ''
         );
+        $valid = Security::compareStrings($hash, $transactionResponse[$hashField]);
 
-        if (Security::compareStrings($hash, $transactionResponse[$hashField])) {
+        if (!$valid && $amount > 0) {
+            $hash = $this->{$generateFunction}(
+                $storedHash,
+                $this->config->getLoginId($storeId),
+                '0.00',
+                $transactionResponse['transId'] ?? ''
+            );
+            $valid = Security::compareStrings($hash, $transactionResponse[$hashField]);
+        }
+
+        if ($valid) {
             return $this->createResult(true);
         }
 
