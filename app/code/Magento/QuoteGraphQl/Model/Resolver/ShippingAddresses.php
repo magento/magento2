@@ -16,7 +16,7 @@ use Magento\QuoteGraphQl\Model\Cart\Address\AddressDataProvider;
 /**
  * @inheritdoc
  */
-class CartAddresses implements ResolverInterface
+class ShippingAddresses implements ResolverInterface
 {
     /**
      * @var AddressDataProvider
@@ -43,6 +43,6 @@ class CartAddresses implements ResolverInterface
 
         $cart = $value['model'];
 
-        return $this->addressDataProvider->getCartAddresses($cart);
+        return $this->addressDataProvider->getShippingAddresses($cart);
     }
 }

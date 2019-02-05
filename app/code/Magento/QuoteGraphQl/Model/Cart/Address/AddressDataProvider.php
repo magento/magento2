@@ -36,27 +36,45 @@ class AddressDataProvider
     }
 
     /**
-     * Collect and return information about shipping and billing addresses
+     * Collect and return information about shipping addresses
      *
      * @param CartInterface $cart
      * @return array
      */
-    public function getCartAddresses(CartInterface $cart): array
+    public function getShippingAddresses(CartInterface $cart): array
     {
         $addressData = [];
         $shippingAddress = $cart->getShippingAddress();
-        $billingAddress = $cart->getBillingAddress();
 
         if ($shippingAddress) {
             $shippingData = $this->dataObjectConverter->toFlatArray($shippingAddress, [], AddressInterface::class);
-            $shippingData['address_type'] = 'SHIPPING';
-            $addressData[] = array_merge($shippingData, $this->extractAddressData($shippingAddress));
+            $shippingMethodData = explode('_', $shippingAddress->getShippingMethod());
+            $shippingData['selected_shipping_method'] = [
+                'carrier_code' => $shippingMethodData[0],
+                'method_code' => $shippingMethodData[1],
+                'label' => $shippingAddress->getShippingDescription(),
+                'free_shipping' => $shippingAddress->getFreeShipping()
+            ];
+            $addressData['shipping_addresses'] = array_merge($shippingData, $this->extractAddressData($shippingAddress));
         }
+
+        return $addressData;
+    }
+
+    /**
+     * Collect and return information about billing address
+     *
+     * @param CartInterface $cart
+     * @return array
+     */
+    public function getBillingAddress(CartInterface $cart): array
+    {
+        $addressData = [];
+        $billingAddress = $cart->getBillingAddress();
 
         if ($billingAddress) {
             $billingData = $this->dataObjectConverter->toFlatArray($billingAddress, [], AddressInterface::class);
-            $billingData['address_type'] = 'BILLING';
-            $addressData[] = array_merge($billingData, $this->extractAddressData($billingAddress));
+            $addressData['billing_address'] = array_merge($billingData, $this->extractAddressData($billingAddress));
         }
 
         return $addressData;
@@ -81,11 +99,6 @@ class AddressDataProvider
                 'label' => $address->getRegion()
             ],
             'street' => $address->getStreet(),
-            'selected_shipping_method' => [
-                'code' => $address->getShippingMethod(),
-                'label' => $address->getShippingDescription(),
-                'free_shipping' => $address->getFreeShipping(),
-            ],
             'items_weight' => $address->getWeight(),
             'customer_notes' => $address->getCustomerNotes()
         ];

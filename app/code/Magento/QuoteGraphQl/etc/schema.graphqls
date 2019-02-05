@@ -101,7 +101,8 @@ type Cart {
     cart_id: String
     items: [CartItemInterface]
     applied_coupon: AppliedCoupon
-    addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddresses")
+    shipping_addresses: [CartAddress] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
+    billing_address: CartAddress @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
 }
 
 type CartAddress {
@@ -115,7 +116,6 @@ type CartAddress {
     postcode: String
     country: CartAddressCountry
     telephone: String
-    address_type: AdressTypeEnum
     selected_shipping_method: CheckoutShippingMethod
     available_shipping_methods: [CheckoutShippingMethod]
     items_weight: Float
@@ -139,10 +139,10 @@ type CartAddressCountry {
 }
 
 type CheckoutShippingMethod {
-    code: String
+    carrier_code: String
+    method_code: String
     label: String
     free_shipping: Boolean!
-    error_message: String
     # TODO: Add more complex structure for shipping rates
 }
 
