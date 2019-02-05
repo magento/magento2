@@ -9,14 +9,15 @@ namespace Magento\GroupedProductGraphQl\Model;
 
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as Type;
+
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class GroupedProductTypeResolver implements TypeResolverInterface
 {
     const GROUPED_PRODUCT = 'GroupedProduct';
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {

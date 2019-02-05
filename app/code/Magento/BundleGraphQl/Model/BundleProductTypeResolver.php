@@ -11,14 +11,14 @@ use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Bundle\Model\Product\Type as Type;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class BundleProductTypeResolver implements TypeResolverInterface
 {
     const BUNDLE_PRODUCT = 'BundleProduct';
     
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {

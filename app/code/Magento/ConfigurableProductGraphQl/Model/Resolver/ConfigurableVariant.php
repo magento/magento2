@@ -71,9 +71,7 @@ class ConfigurableVariant implements ResolverInterface
     }
 
     /**
-     * Fetch and format configurable variants.
-     *
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

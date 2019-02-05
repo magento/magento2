@@ -11,13 +11,13 @@ use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Downloadable\Model\Product\Type as Type;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class DownloadableProductTypeResolver implements TypeResolverInterface
 {
     const DOWNLOADABLE_PRODUCT = 'DownloadableProduct';
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {
