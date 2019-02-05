@@ -13,7 +13,7 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-class AuthorizeCommandTest extends AbstractTest
+class SaleCommandTest extends AbstractTest
 {
     /**
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
@@ -21,19 +21,19 @@ class AuthorizeCommandTest extends AbstractTest
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
      */
-    public function testAuthorizeCommand()
+    public function testSaleCommand()
     {
         /** @var CommandPoolInterface $commandPool */
         $commandPool = $this->objectManager->get('AuthorizenetAcceptjsCommandPool');
-        $command = $commandPool->get('authorize');
+        $command = $commandPool->get('sale');
 
         $order = include __DIR__ . '/../../_files/full_order.php';
         $payment = $order->getPayment();
 
         $paymentDO = $this->paymentFactory->create($payment);
 
-        $expectedRequest = include __DIR__ . '/../../_files/expected_request/authorize.php';
-        $response = include __DIR__ . '/../../_files/response/authorize.php';
+        $expectedRequest = include __DIR__ . '/../../_files/expected_request/sale.php';
+        $response = include __DIR__ . '/../../_files/response/sale.php';
 
         $this->clientMock->method('setRawData')
             ->with(json_encode($expectedRequest), 'application/json');
@@ -56,7 +56,6 @@ class AuthorizeCommandTest extends AbstractTest
         ];
         $this->assertSame('1111', $payment->getCcLast4());
         $this->assertSame('Y', $payment->getCcAvsStatus());
-        $this->assertFalse($payment->getData('is_transaction_closed'));
 
         $transactionDetails = $payment->getTransactionAdditionalInfo();
         foreach ($rawDetails as $key => $value) {
@@ -66,5 +65,7 @@ class AuthorizeCommandTest extends AbstractTest
 
         $this->assertSame('123456', $payment->getTransactionId());
         $this->assertSame('123456', $transactionDetails['real_transaction_id']);
+        $this->assertTrue($payment->getShouldCloseParentTransaction());
+        $this->assertTrue($payment->getData('is_transaction_closed'));
     }
 }

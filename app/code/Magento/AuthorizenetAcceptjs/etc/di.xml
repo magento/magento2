@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\AuthorizenetAcceptjs\Gateway\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="string">authorizenet_acceptjs</argument>
+            <argument name="methodCode" xsi:type="const">Magento\AuthorizenetAcceptjs\Gateway\Config::METHOD</argument>
         </arguments>
     </type>
     <virtualType name="AuthorizenetAcceptjsFacade" type="Magento\Payment\Model\Method\Adapter">
@@ -206,7 +206,7 @@
     <virtualType name="AuthorizenetAcceptjsCancelHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="cancel" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>

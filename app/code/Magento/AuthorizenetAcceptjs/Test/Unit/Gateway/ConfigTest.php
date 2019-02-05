@@ -16,8 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
-    private const METHOD_CODE = 'authorizenet_acceptjs';
-
     /**
      * @var Config
      */
@@ -37,7 +35,7 @@ class ConfigTest extends TestCase
             Config::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'methodCode' => self::METHOD_CODE,
+                'methodCode' => Config::METHOD,
             ]
         );
     }
@@ -122,6 +120,6 @@ class ConfigTest extends TestCase
      */
     private function getPath($field)
     {
-        return sprintf(Config::DEFAULT_PATH_PATTERN, self::METHOD_CODE, $field);
+        return sprintf(Config::DEFAULT_PATH_PATTERN, Config::METHOD, $field);
     }
 }
