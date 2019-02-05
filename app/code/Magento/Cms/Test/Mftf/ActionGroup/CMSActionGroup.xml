@@ -54,7 +54,6 @@
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <see userInput="You deleted the block." stepKey="VerifyBlockIsDeleted"/>
     </actionGroup>
-
     <actionGroup name="AddStoreViewToCmsPage" extends="navigateToCreatedCMSPage">
         <arguments>
             <argument name="storeViewName" type="string"/>
@@ -76,5 +75,12 @@
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClickingSave" />
         <see userInput="You saved the block." stepKey="assertSaveBlockSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="navigateToStorefrontForCreatedPage">
+        <arguments>
+            <argument name="page" type="string"/>
+        </arguments>
+        <amOnPage url="{{page}}" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
