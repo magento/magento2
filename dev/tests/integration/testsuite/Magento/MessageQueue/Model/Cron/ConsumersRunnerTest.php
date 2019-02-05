@@ -130,8 +130,6 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
      */
     public function testSpecificConsumerAndRerun()
     {
-        $this->markTestSkipped('MC-5904: Test Fails randomly,');
-
         $specificConsumer = 'quoteItemCleaner';
         $pidFilePath = $this->getPidFileName($specificConsumer);
         $config = $this->config;
