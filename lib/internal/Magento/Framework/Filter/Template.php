@@ -368,8 +368,8 @@ class Template implements \Zend_Filter_Interface
                 }
                 $last = $i;
             } elseif (isset($stackVars[$i - 1]['variable'])
-                && is_object($stackVars[$i - 1]['variable'])
-                && $stackVars[$i]['type'] == 'method'
+                      && is_object($stackVars[$i - 1]['variable'])
+                      && $stackVars[$i]['type'] == 'method'
             ) {
                 // Calling object methods
                 $object = $stackVars[$i - 1]['variable'];
