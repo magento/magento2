@@ -40,6 +40,15 @@
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
+
+    <!--Create Dynamic Block Rotate Widget-->
+    <actionGroup name="AdminCreateDynamicBlocksRotatorWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <selectOption selector="{{AdminNewWidgetSection.displayMode}}" userInput="{{widget.display_mode}}" stepKey="selectDisplayMode"/>
+        <selectOption selector="{{AdminNewWidgetSection.restrictTypes}}" userInput="{{widget.restrict_type}}" stepKey="selectRestrictType"/>
+        <click selector="{{AdminMainActionsSection.saveAndContinue}}" stepKey="clickSaveWidget"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+    </actionGroup>
+
     <actionGroup name="AdminDeleteWidgetActionGroup">
         <arguments>
             <argument name="widget"/>
