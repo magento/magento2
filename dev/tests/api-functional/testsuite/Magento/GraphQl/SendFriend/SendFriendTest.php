@@ -20,14 +20,9 @@ class SendFriendTest extends GraphQlAbstract
      * @var SendFriendFactory
      */
     private $sendFriendFactory;
-    /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
 
     protected function setUp()
     {
-        $this->dataObjectFactory = Bootstrap::getObjectManager()->get(DataObjectFactory::class);
         $this->sendFriendFactory = Bootstrap::getObjectManager()->get(SendFriendFactory::class);
     }
 
@@ -120,7 +115,9 @@ mutation {
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
         $this->graphQlQuery($query);
     }
 
@@ -191,7 +188,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
      */
-    public function testSendWithoutRecipentsName()
+    public function testSendWithoutRecipientName()
     {
         $query =
             <<<QUERY
@@ -236,7 +233,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
      */
-    public function testSendWithoutRecipentsEmail()
+    public function testSendWithoutRecipientEmail()
     {
         $query =
             <<<QUERY
@@ -460,7 +457,9 @@ mutation {
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("You can't send messages more than {$sendFriend->getMaxSendsToFriend()} times an hour.");
+        $this->expectExceptionMessage(
+            "You can't send messages more than {$sendFriend->getMaxSendsToFriend()} times an hour."
+        );
 
         for ($i = 0; $i <= $sendFriend->getMaxSendsToFriend() + 1; $i++) {
             $this->graphQlQuery($query);
