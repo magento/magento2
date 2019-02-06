@@ -33,7 +33,7 @@ class KeyValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->keyValidator->isValid($key));
     }
 
-    public function isValidDataProvider()
+    public function isValidDataProvider() : array
     {
         return [
             '32 numbers' => ['12345678901234567890123456789012'],
