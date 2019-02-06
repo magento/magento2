@@ -32,6 +32,12 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
     public function testEditAction()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\DesignInterface::class
+        )->setDefaultDesignTheme()->getDesignTheme();
+        $this->getRequest()->setParam('theme_id', $theme->getId());
         $this->dispatch('backend/admin/widget_instance/edit');
         $this->assertContains('<option value="cms_page_link" selected="selected">', $this->getResponse()->getBody());
     }
