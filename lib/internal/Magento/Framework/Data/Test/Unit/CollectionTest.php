@@ -149,14 +149,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for getCurPage with exception.
      *
-     * @expectedException \Magento\Framework\Exception\StateException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage currentPage value 10 specified is greater than the 1 page(s) available.
      * @return void
      */
     public function testGetCurPageWithException()
     {
         $this->_model->setCurPage(10);
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->_model->getCurPage();
     }
 
