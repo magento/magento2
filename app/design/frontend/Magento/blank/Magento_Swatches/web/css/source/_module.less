@@ -91,6 +91,10 @@
             &-options {
                 margin-top: @indent__s;
 
+                &:focus {
+                    box-shadow: none;
+                }
+
                 .swatch-option-tooltip-layered .title {
                     .lib-css(color, @swatch-option-tooltip-layered-title__color);
                     width: 100%;
@@ -131,6 +135,10 @@
             position: relative;
             text-align: center;
             text-overflow: ellipsis;
+
+            &:focus {
+                box-shadow: @focus__box-shadow;
+            }
 
             &.text {
                 .lib-css(background, @swatch-option-text__background);
