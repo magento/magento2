@@ -96,7 +96,6 @@ class Collection
 
         if (!empty($this->childrenMap)) {
             $this->childrenMap = [];
-
         }
         $this->parentProducts[$product->getId()] = $product;
     }
