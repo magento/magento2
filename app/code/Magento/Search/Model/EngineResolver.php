@@ -61,6 +61,7 @@ class EngineResolver implements EngineResolverInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param array $engines
+     * @param LoggerInterface $logger
      * @param string $path
      * @param string $scopeType
      * @param string $scopeCode
