@@ -172,12 +172,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
         if ($this->getCustomerId() || $this->getParentId()) {
-            if ($this->getCustomer()->getDefaultBillingAddress()) {
-                $defaultBillingAddressId = $this->getCustomer()->getDefaultBillingAddress()->getId();
-            }
-            if ($this->getCustomer()->getDefaultShippingAddress()) {
-                $defaultShippingAddressId = $this->getCustomer()->getDefaultShippingAddress()->getId();
-            }
+            $customer = $this->getCustomer();
+            $defaultBillingAddressId = $customer->getDefaultBilling() ?: $defaultBillingAddressId;
+            $defaultShippingAddressId = $customer->getDefaultShipping() ?: $defaultShippingAddressId;
         }
         return parent::getDataModel($defaultBillingAddressId, $defaultShippingAddressId);
     }
