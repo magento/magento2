@@ -11,6 +11,7 @@
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="createProduct" xsi:type="string">simple</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid" />
@@ -23,12 +24,14 @@
         <variation name="ProductTypeSwitchingOnCreationTestVariation2">
             <data name="createProduct" xsi:type="string">simple</data>
             <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation3">
             <data name="createProduct" xsi:type="string">configurable</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_without_category</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
@@ -42,6 +45,7 @@
         <variation name="ProductTypeSwitchingOnCreationTestVariation5">
             <data name="createProduct" xsi:type="string">virtual</data>
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
@@ -71,6 +75,7 @@
         <variation name="ProductTypeSwitchingOnCreationTestVariation8">
             <data name="createProduct" xsi:type="string">downloadable</data>
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
