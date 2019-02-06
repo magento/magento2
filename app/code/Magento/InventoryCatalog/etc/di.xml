@@ -96,10 +96,6 @@
         <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
         <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
     </type>
-    <type name="Magento\Catalog\Model\ProductRepository">
-        <plugin name="cleanLocalCacheAfterSaveOrDeleteProduct" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ProductRepository\CleanGetProductIdsBySkusCache"/>
-        <plugin name="cleanLocalProductTypesCacheAfterSaveOrDeleteProduct" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ProductRepository\CleanGetProductTypesBySkusCache"/>
-    </type>
     <!-- Mass Source Assignment -->
     <preference for="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface"
                 type="Magento\InventoryCatalog\Model\BulkSourceAssign"/>
