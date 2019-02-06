@@ -16,7 +16,8 @@ use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
-
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
 /**
  * Class ShipmentLoader
  *
@@ -110,7 +111,15 @@ class ShipmentLoader extends DataObject
         $orderId = $this->getOrderId();
         $shipmentId = $this->getShipmentId();
         if ($shipmentId) {
-            $shipment = $this->shipmentRepository->get($shipmentId);
+            try {
+                $shipment = $this->shipmentRepository->get($shipmentId);
+            } catch (NoSuchEntityException $e) {  
+                $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
+                return false;
+            } catch (InputException $e) {
+                $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
+                return false;
+            }
         } elseif ($orderId) {
             $order = $this->orderRepository->get($orderId);
 
