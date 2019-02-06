@@ -5,7 +5,7 @@
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 
-use \Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Form
@@ -21,12 +21,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\CheckoutAgreements\Model\AgreementModeOptions
      */
     protected $agreementModeOptions;
-    
+
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
     private $wysiwygConfig;
-    
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -35,8 +35,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Editor config path
      */
-   const XML_PATH_SHOW_EDITOR = 'checkout/options/enable_wysiwyg_editor';
-    
+    const XML_PATH_SHOW_EDITOR = 'checkout/options/enable_wysiwyg_editor';
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -64,7 +64,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ->get(\Magento\Cms\Model\Wysiwyg\Config::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-       parent::__construct($context, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -89,7 +89,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('checkout_agreement');
-       
+
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
@@ -188,33 +188,33 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        if($this->scopeConfig->getValue(self::XML_PATH_SHOW_EDITOR)){
-           $fieldset->addField(
-            'content',
-            'editor',
-            [
-                'name' => 'content',
-                'label' => __('Content'),
-                'title' => __('Content'),
-                'style' => 'height:24em;',
-                'required' => true,
-                'wysiwyg' => true,
-                'config' =>$this->wysiwygConfig->getConfig()
-            ]
-        ); 
-       } else {
-        $fieldset->addField(
-            'content',
-            'textarea',
-            [
-                'name' => 'content',
-                'label' => __('Content'),
-                'title' => __('Content'),
-                'style' => 'height:24em;',
-                'required' => true,
-             ]
-        );
-       }
+        if ($this->scopeConfig->getValue(self::XML_PATH_SHOW_EDITOR)) {
+            $fieldset->addField(
+                'content',
+                'editor',
+                [
+                    'name' => 'content',
+                    'label' => __('Content'),
+                    'title' => __('Content'),
+                    'style' => 'height:24em;',
+                    'required' => true,
+                    'wysiwyg' => true,
+                    'config' =>$this->wysiwygConfig->getConfig()
+                ]
+            );
+        } else {
+            $fieldset->addField(
+                'content',
+                'textarea',
+                [
+                    'name' => 'content',
+                    'label' => __('Content'),
+                    'title' => __('Content'),
+                    'style' => 'height:24em;',
+                    'required' => true,
+                 ]
+            );
+        }
 
         $fieldset->addField(
             'content_height',

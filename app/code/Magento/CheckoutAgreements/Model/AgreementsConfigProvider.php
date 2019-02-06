@@ -9,6 +9,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\Widget\Model\Template\Filter;
 
 /**
  * Configuration provider for GiftMessage rendering on "Shipping Method" step of checkout.
@@ -40,7 +41,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     private $activeStoreAgreementsFilter;
 
     /**
-     * @var \Magento\Widget\Model\Template\Filter
+     * @var Filter
      */
     private $templateProcessor;
 
@@ -50,7 +51,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
-     * @param \Magento\Widget\Model\Template\Filter $templateProcessor
+     * @param Filter $templateProcessor
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -59,7 +60,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         \Magento\Framework\Escaper $escaper,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
         ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null,
-        \Magento\Widget\Model\Template\Filter $templateProcessor = null
+        Filter $templateProcessor = null
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
@@ -70,11 +71,11 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter ?: ObjectManager::getInstance()->get(
             ActiveStoreAgreementsFilter::class
         );
-         $this->templateProcessor = $templateProcessor ?: ObjectManager::getInstance()->get(\Magento\Widget\Model\Template\Filter::class);
+         $this->templateProcessor = $templateProcessor ?: ObjectManager::getInstance()->get(Filter::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
