@@ -71,7 +71,7 @@ class DeploymentConfig
             return $this->flatData;
         }
 
-        if (isset($this->flatData[$key]) && $this->flatData[$key] === null) {
+        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';
         }
 
