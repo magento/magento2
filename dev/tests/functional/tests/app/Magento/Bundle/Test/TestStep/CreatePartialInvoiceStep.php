@@ -20,6 +20,11 @@ class CreatePartialInvoiceStep extends \Magento\Sales\Test\TestStep\CreateInvoic
     protected function getItems()
     {
         $items = parent::getItems();
-        return $items[0]->getData()['options'];
+        $items = $items[0]->getData()['options'];
+        foreach ($items as &$item) {
+            $item['value'] = $item['partialInvoiceValue'];
+            $item['sku'] = $item['partialInvoiceSku'];
+        }
+        return $items;
     }
 }

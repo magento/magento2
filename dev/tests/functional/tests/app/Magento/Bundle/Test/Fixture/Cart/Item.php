@@ -45,8 +45,10 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
                 : number_format($bundleOptions['assigned_products'][$optionKey]['data']['selection_price_value'], 2);
             $optionData = [
                 'title' => $checkoutOption['title'],
-                'value' => "{$value} {$price}",
-                'sku' => "{$value}"
+                'value' => "{$qty} x {$value} {$price}",
+                'sku' => "{$qty} x {$value}",
+                'partialInvoiceValue' => "{$value} {$price}",
+                'partialInvoiceSku' => "{$value}"
             ];
 
             $checkoutBundleOptions[$checkoutOptionKey] = $optionData;
