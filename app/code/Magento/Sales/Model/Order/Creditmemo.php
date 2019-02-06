@@ -655,7 +655,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      *
      * @return bool
      */
-    public function isAllowZeroGrandTotal()
+    private function isAllowZeroGrandTotal()
     {
         $isAllowed = $this->scopeConfig->getValue(
             self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
