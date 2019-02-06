@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -20,6 +22,14 @@ class Attributes implements ResolverInterface
      * Format product's option data to conform to GraphQL schema
      *
      * {@inheritdoc}
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return mixed|Value
      */
     public function resolve(
         Field $field,
