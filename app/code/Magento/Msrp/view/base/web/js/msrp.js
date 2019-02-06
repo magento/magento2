@@ -366,7 +366,7 @@ define([
          *
          * @param {String} price
          */
-        updateNonMsrpPrice: function(price) {
+        updateNonMsrpPrice: function (price) {
             $(this.options.fallbackPriceElement).html(price);
             $(this.options.displayPriceContainer).hide();
             $(this.options.mapInfoLinks).hide();
