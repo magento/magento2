@@ -9,7 +9,7 @@
     <system>
         <section id="payment">
             <group id="authorizenet_acceptjs" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Authorize.net</label>
+                <label>Authorize.Net</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -18,7 +18,7 @@
                     </requires>
                 </field>
                 <group id="required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
-                    <label>Basic Authorize.net Settings</label>
+                    <label>Basic Authorize.Net Settings</label>
                     <attribute type="expanded">1</attribute>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="title" translate="label" type="text" sortOrder="10" showInDefault="10" showInWebsite="1" showInStore="1" canRestore="1">
@@ -61,7 +61,7 @@
                     </field>
                 </group>
                 <group id="advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
-                    <label>Advanced Authorize.net Settings</label>
+                    <label>Advanced Authorize.Net Settings</label>
                     <attribute type="expanded">0</attribute>
                     <field id="order_status" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>New Order Status</label>
