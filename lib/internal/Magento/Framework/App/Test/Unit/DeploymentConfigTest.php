@@ -143,11 +143,11 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $key
-     * @param string $expectedFlattenData
+     * @param string|null $expectedFlattenData
      * @return void
      * @dataProvider getDataProvider
      */
-    public function testGet(string $key, string $expectedFlattenData)
+    public function testGet(string $key, $expectedFlattenData)
     {
         $flatData = [
             'key1' => 'value',
