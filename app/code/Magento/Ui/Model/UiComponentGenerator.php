@@ -32,7 +32,6 @@ class UiComponentGenerator
      * UiComponentGenerator constructor.
      * @param ContextFactory $contextFactory
      * @param UiComponentFactory $uiComponentFactory
-     * @param array $data
      */
     public function __construct(
         ContextFactory $contextFactory,
