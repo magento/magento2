@@ -15,7 +15,7 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         parent::setUp();
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
@@ -32,18 +32,18 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
     public function testEditAction()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\DesignInterface::class
-        )->setDefaultDesignTheme()->getDesignTheme();
-        $this->getRequest()->setParam('theme_id', $theme->getId());
         $this->dispatch('backend/admin/widget_instance/edit');
         $this->assertContains('<option value="cms_page_link" selected="selected">', $this->getResponse()->getBody());
     }
 
     public function testBlocksAction()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\DesignInterface::class
+        )->setDefaultDesignTheme()->getDesignTheme();
+        $this->getRequest()->setParam('theme_id', $theme->getId());
         $this->dispatch('backend/admin/widget_instance/blocks');
         $this->assertStringStartsWith('<select name="block" id=""', $this->getResponse()->getBody());
     }
