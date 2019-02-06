@@ -57,6 +57,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
@@ -93,7 +94,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
                     'class' => 'delete',
                     'onclick' => 'deleteConfirm(\'' . __(
                         'Are you sure you want to do this?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\')'
+                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})'
                 ]
             );
         }

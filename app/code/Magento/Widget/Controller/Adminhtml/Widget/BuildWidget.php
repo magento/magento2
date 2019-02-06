@@ -37,10 +37,13 @@ class BuildWidget extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $type = $this->getRequest()->getPost('widget_type');
-        $params = $this->getRequest()->getPost('parameters', []);
-        $asIs = $this->getRequest()->getPost('as_is');
-        $html = $this->_widget->getWidgetDeclaration($type, $params, $asIs);
+        $html = '';
+        if ($this->getRequest()->isPost()) {
+            $type = $this->getRequest()->getPost('widget_type');
+            $params = $this->getRequest()->getPost('parameters', []);
+            $asIs = $this->getRequest()->getPost('as_is');
+            $html = $this->_widget->getWidgetDeclaration($type, $params, $asIs);
+        }
         $this->getResponse()->setBody($html);
     }
 }

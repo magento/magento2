@@ -6,6 +6,7 @@
 namespace Magento\ProductVideo\Test\Unit\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -101,14 +102,16 @@ class RetrieveImageTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactoryMock->expects($this->once())->method('create')->willReturn($this->abstractAdapter);
         $this->curlMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
         $this->storageFileMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
         $this->fileDriverMock = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $managerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMockForAbstractClass();
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($managerMock);
 
         $this->image = $objectManager->getObject(

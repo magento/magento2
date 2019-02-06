@@ -15,7 +15,8 @@
         "jquery",
         'Magento_Ui/js/modal/confirm',
         "jquery/ui",
-        "Magento_Integration/js/integration"
+        "Magento_Integration/js/integration",
+        'mage/dataPost'
     ], function ($, Confirm) {
 
         window.integration = new Integration(
@@ -37,7 +38,7 @@
                     content: "<?= /* @escapeNotVerified */ __("Are you sure you want to delete this integration? You can't undo this action.") ?>",
                     actions: {
                         confirm: function () {
-                            window.location.href = $(e.target).data('url');
+                            $.mage.dataPost().postData({action: $(e.target).data('url'), data: {}});
                         }
                     }
                 });

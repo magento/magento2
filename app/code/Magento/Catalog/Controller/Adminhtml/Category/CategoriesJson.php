@@ -37,9 +37,14 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category
      * Get tree node (Ajax version)
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         if ($this->getRequest()->getParam('expand_all')) {
             $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->setIsTreeWasExpanded(true);
         } else {

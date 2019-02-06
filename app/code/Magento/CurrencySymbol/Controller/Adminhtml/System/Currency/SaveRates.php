@@ -7,15 +7,22 @@
 
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
     /**
      * Save rates action
      *
      * @return void
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $data = $this->getRequest()->getParam('rate');
         if (is_array($data)) {
             try {

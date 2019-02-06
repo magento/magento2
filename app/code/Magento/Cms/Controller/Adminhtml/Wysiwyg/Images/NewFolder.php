@@ -7,7 +7,6 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Creates new folder.
@@ -29,7 +28,6 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
-     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -51,11 +49,11 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException(__('Page not found'));
-        }
-
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new \Exception('Wrong request.');
+            }
+
             $this->_initAction();
             $name = $this->getRequest()->getPost('name');
             $path = $this->getStorage()->getSession()->getCurrentPath();

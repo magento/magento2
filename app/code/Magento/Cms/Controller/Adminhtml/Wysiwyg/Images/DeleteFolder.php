@@ -7,7 +7,6 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Delete image folder.
@@ -58,11 +57,11 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException(__('Page not found'));
-        }
-
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new \Exception('Wrong request.');
+            }
+
             $path = $this->getStorage()->getCmsWysiwygImages()->getCurrentPath();
             if (!$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
