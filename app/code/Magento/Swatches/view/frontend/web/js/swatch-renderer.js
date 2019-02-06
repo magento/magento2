@@ -1242,15 +1242,6 @@ define([
                     });
                 }
 
-                if (typeof gallery === 'undefined') {
-                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
-                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
-                        loadedGallery.first();
-                    }.bind(this));
-                } else {
-                    gallery.first();
-                }
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
