@@ -76,7 +76,7 @@
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
-        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveRule"/>
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
