@@ -10,14 +10,10 @@
         "magento/module-payment": "*",
         "magento/module-sales": "*",
         "magento/module-config": "*",
-        "magento/module-catalog": "*",
         "magento/module-backend": "*",
         "magento/module-checkout": "*",
-        "magento/module-customer": "*",
-        "magento/module-directory": "*",
         "magento/module-store": "*",
-        "magento/module-quote": "*",
-        "magento/module-ui": "*"
+        "magento/module-quote": "*"
     },
     "suggest": {
         "magento/module-config": "*"
