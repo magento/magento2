@@ -136,7 +136,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private function addMessageToSkipErrors(Result $resultBlock)
     {
         $import = $this->getImport();
-        if (!$import->getErrorAggregator()->hasFatalExceptions()) {
+        if (!$import->getErrorAggregator()->hasToBeTerminated()) {
             $resultBlock->addSuccess(
                 __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
                 true
