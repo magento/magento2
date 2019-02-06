@@ -233,7 +233,7 @@ class SchemaPersistor
                     $domIndex = reset($domIndex);
                 }
 
-                $attributeNames = array_diff(array_keys($indexData), ['referenceId', 'columns']);
+                $attributeNames = array_diff(array_keys($indexData), ['referenceId', 'columns', 'name']);
                 foreach ($attributeNames as $attributeName) {
                     $this->updateElementAttribute(
                         $domIndex,
