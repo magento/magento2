@@ -164,7 +164,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->consumersRunner->run();
 
-        sleep(10);
+        sleep(20);
 
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $pidFileFullPath = $this->getPidFileFullPath($consumer->getName());
