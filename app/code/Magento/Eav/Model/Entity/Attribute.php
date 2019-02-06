@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -295,6 +294,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             }
         }
 
+        if ($this->getFrontendInput() == 'media_image') {
+            if (!$this->getFrontendModel()) {
+                $this->setFrontendModel(\Magento\Catalog\Model\Product\Attribute\Frontend\Image::class);
+            }
+        }
+
         if ($this->getBackendType() == 'gallery') {
             if (!$this->getBackendModel()) {
                 $this->setBackendModel(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);
@@ -316,7 +321,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      * @since 100.0.7
      */
     public function afterDelete()

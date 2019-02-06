@@ -44,7 +44,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @var bool
      */
-    protected $_isGateway = false;
+    protected $_isGateway = true;
 
     /**
      * Availability option
