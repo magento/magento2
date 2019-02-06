@@ -109,6 +109,10 @@ class UpdateCustomerAddress implements ResolverInterface
     {
         $address = $this->getCustomerAddressForUser->execute($addressId, $customerId);
         $this->dataObjectHelper->populateWithArray($address, $addressData, AddressInterface::class);
+        if (isset($addressData['region']['region_id'])) {
+            $address->setRegionId($address->getRegion()->getRegionId());
+        }
+
         return $this->addressRepository->save($address);
     }
 }
