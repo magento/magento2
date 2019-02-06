@@ -68,5 +68,4 @@
         <see userInput="{{closedStatus}}" selector="{{ViewOrderSection.confirmClosed}}" stepKey="seeClosed"/>
         -->
     </actionGroup>
-
 </actionGroups>

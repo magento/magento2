@@ -21,6 +21,5 @@
         <element name="transactions" type="button" selector="#sales_order_view_tabs_order_transactions"/>
         <element name="confirmCapture" type="text" selector="//table[@id='order_transactions_table']/tbody/tr/td[6]"/>
         <element name="confirmClosed" type="text" selector="//table[@id='order_transactions_table']/tbody/tr/td[7]"/>
-
     </section>
 </sections>

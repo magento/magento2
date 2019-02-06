@@ -35,5 +35,4 @@
         <click selector="{{GuestAuthorizenetCheckoutSection.update}}" stepKey="updateAddress"/>
         <waitForPageLoad stepKey="waitForUpdate"/>
     </actionGroup>
-
 </actionGroups>

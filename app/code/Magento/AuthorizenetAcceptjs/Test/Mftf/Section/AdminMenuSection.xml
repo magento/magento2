@@ -21,6 +21,5 @@
         <element name="system" type="button" selector="#menu-magento-backend-system"/>
         <element name="findPartners" type="button" selector="#menu-magento-marketplace-partners"/>
         <element name="currencySetup" type="button" selector="//span[text()='Currency Setup']"/>
-
     </section>
 </sections>

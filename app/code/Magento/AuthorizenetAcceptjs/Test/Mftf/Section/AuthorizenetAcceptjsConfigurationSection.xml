@@ -20,6 +20,5 @@
         <element name="paymentActionCheckbox" type="input" selector="#payment_us_authorizenet_acceptjs_required_payment_action_inherit"/>
         <element name="paymentActionSelect" type="select" selector="#payment_us_authorizenet_acceptjs_required_payment_action"/>
         <element name="paymentActionSelectDisabled" type="select" selector="#payment_us_authorizenet_acceptjs_required_payment_action[disabled='disabled']"/>
-
     </section>
 </sections>

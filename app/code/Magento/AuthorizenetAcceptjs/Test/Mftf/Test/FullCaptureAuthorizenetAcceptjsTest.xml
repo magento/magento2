@@ -67,6 +67,5 @@
             <argument name="captureStatus" value="Capture"/>
             <argument name="closedStatus" value="No"/>
         </actionGroup>
-
     </test>
 </tests>
