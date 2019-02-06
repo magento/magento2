@@ -22,6 +22,8 @@ use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
 /**
+ * File Backend
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class File extends BackendFile
@@ -88,7 +90,7 @@ class File extends BackendFile
     {
         $values = $this->getValue();
         $value = reset($values) ?: [];
-        $file = $value['file'] ?? $value['name'];
+        $file = $value['file'] ?? $value['name'] ?? null;
         if (!isset($file)) {
             throw new LocalizedException(
                 __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
@@ -121,7 +123,10 @@ class File extends BackendFile
     }
 
     /**
-     * @return array
+     * After Load
+     *
+     * @return File
+     * @throws LocalizedException
      */
     public function afterLoad()
     {
@@ -170,6 +175,8 @@ class File extends BackendFile
     }
 
     /**
+     * Get Value
+     *
      * @return array
      */
     public function getValue()

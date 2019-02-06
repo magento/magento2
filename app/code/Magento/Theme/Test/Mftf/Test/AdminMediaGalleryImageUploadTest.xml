@@ -49,6 +49,7 @@
 
         <click selector="{{AdminDesignConfigSection.useDefaultByFieldsetName('Head')}}" stepKey="clickUseDefault"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Head')}}" stepKey="waitForPreviewImage2"/>
+        <wait time="3" stepKey="waitForWrapperToClose2"/>
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration2"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification2"/>
         <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
