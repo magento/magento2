@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\SendFriend;
 
-use Magento\Framework\DataObjectFactory;
 use Magento\SendFriend\Model\SendFriend;
 use Magento\SendFriend\Model\SendFriendFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -27,7 +26,7 @@ class SendFriendTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testSendFriend()
     {
@@ -122,7 +121,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testMaxSendEmailToFriend()
     {
@@ -186,31 +185,19 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider sendFriendsErrorsDataProvider
+     * @param string $input
+     * @param string $errorMessage
      */
-    public function testSendWithoutRecipientName()
+    public function testErrors(string $input, string $errorMessage)
     {
         $query =
             <<<QUERY
 mutation {
     sendEmailToFriend(
         input: {
-          product_id: 1	
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }          
-          recipients: [
-              {
-                  name: ""
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: ""
-                  email:"recipient2@mail.com"
-              }
-          ]
+          $input
         } 
     ) {
         sender {
@@ -226,192 +213,13 @@ mutation {
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Please provide Name for all of recipients.');
+        $this->expectExceptionMessage($errorMessage);
         $this->graphQlQuery($query);
     }
 
     /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
-     */
-    public function testSendWithoutRecipientEmail()
-    {
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1	
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }          
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:""
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:""
-              }
-          ]
-        } 
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Please provide Email for all of recipients.');
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
-     */
-    public function testSendWithoutSenderName()
-    {
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1	
-          sender: {
-            name: ""
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }          
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]
-        } 
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Please provide Name of sender.');
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
-     */
-    public function testSendWithoutSenderEmail()
-    {
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1
-          sender: {
-            name: "Name"
-            email: ""
-            message: "Lorem Ipsum"
-        }          
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]
-        } 
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Please provide Email of sender.');
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
-     */
-    public function testSendWithoutSenderMessage()
-    {
-        $query =
-            <<<QUERY
-mutation {
-    sendEmailToFriend(
-        input: {
-          product_id: 1	
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: ""
-        }          
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]
-        } 
-    ) {
-        sender {
-            name
-            email
-            message
-        }
-        recipients {
-            name
-            email
-        }
-    }
-}
-QUERY;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Please provide Message.');
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/SendFriend/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * TODO: use magentoApiConfigFixture (to be merged https://github.com/magento/graphql-ce/pull/351)
      * @magentoApiDataFixture Magento/SendFriend/Fixtures/sendfriend_configuration.php
      */
     public function testLimitMessagesPerHour()
@@ -464,5 +272,86 @@ QUERY;
         for ($i = 0; $i <= $sendFriend->getMaxSendsToFriend() + 1; $i++) {
             $this->graphQlQuery($query);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function sendFriendsErrorsDataProvider()
+    {
+        return [
+            [
+          'product_id: 1	
+         sender: {
+            name: "Name"
+            email: "e@mail.com"
+            message: "Lorem Ipsum"
+        }          
+          recipients: [
+              {
+                  name: ""
+                  email:"recipient1@mail.com"
+               },
+              {
+                  name: ""
+                  email:"recipient2@mail.com"
+              }
+          ]', 'Please provide Name for all of recipients.'
+            ],
+            [
+                'product_id: 1	
+          sender: {
+            name: "Name"
+            email: "e@mail.com"
+            message: "Lorem Ipsum"
+        }          
+          recipients: [
+              {
+                  name: "Recipient Name 1"
+                  email:""
+               },
+              {
+                  name: "Recipient Name 2"
+                  email:""
+              }
+          ]', 'Please provide Email for all of recipients.'
+            ],
+            [
+                'product_id: 1	
+          sender: {
+            name: ""
+            email: "e@mail.com"
+            message: "Lorem Ipsum"
+        }          
+          recipients: [
+              {
+                  name: "Recipient Name 1"
+                  email:"recipient1@mail.com"
+               },
+              {
+                  name: "Recipient Name 2"
+                  email:"recipient2@mail.com"
+              }
+          ]', 'Please provide Name of sender.'
+            ],
+            [
+                'product_id: 1	
+          sender: {
+            name: "Name"
+            email: "e@mail.com"
+            message: ""
+        }          
+          recipients: [
+              {
+                  name: "Recipient Name 1"
+                  email:"recipient1@mail.com"
+               },
+              {
+                  name: "Recipient Name 2"
+                  email:"recipient2@mail.com"
+              }
+          ]', 'Please provide Message.'
+            ]
+        ];
     }
 }
