@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use \Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * SalesRule save controller
@@ -48,7 +48,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
             TimezoneInterface::class
         );
         $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            DataPersistorInterface::class;
+            DataPersistorInterface::class
+        );
     }
 
     /**
