@@ -24,6 +24,8 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
+ * Class for management url rewrites.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UrlRewriteHandler
@@ -125,7 +127,7 @@ class UrlRewriteHandler
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $this->isSkippedProduct[$category->getEntityId()] = [];
-        $saveRewriteHistory = $category->getData('save_rewrites_history');
+        $saveRewriteHistory = (bool)$category->getData('save_rewrites_history');
         $storeId = (int)$category->getStoreId();
 
         if ($category->getChangedProductIds()) {
@@ -156,6 +158,30 @@ class UrlRewriteHandler
     }
 
     /**
+     * Update product url rewrites for changed product.
+     *
+     * @param Category $category
+     * @return array
+     */
+    public function updateProductUrlRewritesForChangedProduct(Category $category): array
+    {
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $this->isSkippedProduct[$category->getEntityId()] = [];
+        $saveRewriteHistory = (bool)$category->getData('save_rewrites_history');
+        $storeIds = $this->getCategoryStoreIds($category);
+
+        if ($category->getChangedProductIds()) {
+            foreach ($storeIds as $storeId) {
+                $this->generateChangedProductUrls($mergeDataProvider, $category, (int)$storeId, $saveRewriteHistory);
+            }
+        }
+
+        return $mergeDataProvider->getData();
+    }
+
+    /**
+     * Delete category rewrites for children.
+     *
      * @param Category $category
      * @return void
      */
@@ -184,6 +210,8 @@ class UrlRewriteHandler
     }
 
     /**
+     * Get category products url rewrites.
+     *
      * @param Category $category
      * @param int $storeId
      * @param bool $saveRewriteHistory
@@ -230,15 +258,15 @@ class UrlRewriteHandler
      *
      * @param MergeDataProvider $mergeDataProvider
      * @param Category $category
-     * @param Product $product
      * @param int $storeId
-     * @param $saveRewriteHistory
+     * @param bool $saveRewriteHistory
+     * @return void
      */
     private function generateChangedProductUrls(
         MergeDataProvider $mergeDataProvider,
         Category $category,
         int $storeId,
-        $saveRewriteHistory
+        bool $saveRewriteHistory
     ) {
         $this->isSkippedProduct[$category->getEntityId()] = $category->getAffectedProductIds();
 
