@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
+
 use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\Catalog\Api\Data\CategoryInterface;
+
 /**
  * Extract data from category tree
  */
@@ -16,14 +19,17 @@ class ExtractDataFromCategoryTree
      * @var Hydrator
      */
     private $categoryHydrator;
+
     /**
-     * @var CategoryInterface;
+     * @var CategoryInterface
      */
     private $iteratingCategory;
+
     /**
      * @var int
      */
     private $startCategoryFetchLevel = 1;
+
     /**
      * @param Hydrator $categoryHydrator
      */
@@ -32,6 +38,7 @@ class ExtractDataFromCategoryTree
     ) {
         $this->categoryHydrator = $categoryHydrator;
     }
+
     /**
      * Extract data from category tree
      *
@@ -58,6 +65,7 @@ class ExtractDataFromCategoryTree
         }
         return $tree;
     }
+
     /**
      * Merge together complex categories trees
      *
@@ -77,6 +85,7 @@ class ExtractDataFromCategoryTree
         }
         return $mergedTree;
     }
+
     /**
      * Recursive method to generate tree for one category path
      *

@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\GraphQl\Catalog;
+
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
@@ -12,16 +14,19 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
+
 class CategoryTest extends GraphQlAbstract
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
      */
     private $objectManager;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
@@ -104,6 +109,7 @@ QUERY;
             $responseDataObject->getData('category/children/0/children/1/id')
         );
     }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
@@ -139,6 +145,7 @@ QUERY;
             $responseDataObject->getData('category/id')
         );
     }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -344,6 +351,7 @@ QUERY;
         ];
         $this->assertEquals($expectedResponse, $response);
     }
+
     /**
      * @param ProductInterface $product
      * @param array $actualResponse
@@ -385,6 +393,7 @@ QUERY;
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
     }
+
     /**
      * @param ProductInterface $product
      * @param array $actualResponse
@@ -403,6 +412,7 @@ QUERY;
         ];
         $this->assertEquals($actualResponse, $assertionMap);
     }
+
     /**
      * @param array $actualResponse
      */
