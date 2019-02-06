@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="AllowGuestCheckoutConfig" dataType="allow_guest_checkout_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/checkout/" method="POST">
+        <object key="groups" dataType="allow_guest_checkout_config">
+            <object key="options" dataType="allow_guest_checkout_config">
+                <object key="fields" dataType="allow_guest_checkout_config">
+                    <object key="guest_checkout" dataType="guest_checkout">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>
