@@ -17,11 +17,14 @@
             <testCaseId value="MC-10899"/>
             <group value="mtf_migrated"/>
         </annotations>
+
         <before>
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
             <!--Create Simple Product-->
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -30,18 +33,26 @@
         <after>
             <!--Delete created entity -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
             <!--<deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>-->
             <actionGroup ref="deleteProductAttribute" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
+
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!-- Open Product Index Page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+
         <!-- Select Created Product-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
+
         <!-- Create New Product Attribute -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
         <waitForPageLoad stepKey="waitForAttributePageToLoad"/>
@@ -54,7 +65,6 @@
         <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="waitForAttributeCodeToVisible"/>
         <scrollTo selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="scrollToAttributeCode"/>
         <fillField selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="fillAttributeCode"/>
-        <selectOption selector="{{AdminCreateNewProductAttributeSection.scope}}" userInput="Global" stepKey="selectScope"/>
         <fillField selector="{{AdminCreateNewProductAttributeSection.defaultValue}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillDefaultValue"/>
         <scrollTo selector="{{AdminCreateNewProductAttributeSection.isUnique}}"   stepKey="scrollToIsUniqueOption"/>
         <checkOption selector="{{AdminCreateNewProductAttributeSection.isUnique}}" stepKey="enableIsUniqueOption"/>
@@ -76,11 +86,13 @@
         <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
         <waitForPageLoad stepKey="waitForProductToSave"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
         <!--Verify product attribute added in product form -->
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
         <waitForElementVisible selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributeToVisible"/>
         <click selector="{{AdminProductFormSection.attributeTab}}" stepKey="clickOnAttribute"/>
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeLabelInProductForm"/>
+
         <!--Verify Product Attribute in Attribute Form -->
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
@@ -89,9 +101,9 @@
         <see selector="{{AdminProductAttributeGridSection.attributeCodeColumn}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="seeAttributeCode"/>
         <see selector="{{AdminProductAttributeGridSection.defaultLabelColumn}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
         <see selector="{{AdminProductAttributeGridSection.isVisibleColumn}}" userInput="Yes" stepKey="seeIsVisibleColumn"/>
-        <see selector="{{AdminProductAttributeGridSection.scopeColumn}}" userInput="Global" stepKey="seeScopeColumn"/>
         <see selector="{{AdminProductAttributeGridSection.isSearchableColumn}}" userInput="Yes" stepKey="seeSearchableColumn"/>
         <see selector="{{AdminProductAttributeGridSection.isComparableColumn}}" userInput="Yes" stepKey="seeComparableColumn"/>
+
         <!--Verify Product Attribute is present in Category Store Front Page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
@@ -105,6 +117,7 @@
         <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="scrollToMoreInformation"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeLabel}}"  userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeLabel"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="{{ProductAttributeOption8.value}}" stepKey="seeAttributeValue"/>
+
         <!--Verify Product Attribute present in search page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage1"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad1"/>
