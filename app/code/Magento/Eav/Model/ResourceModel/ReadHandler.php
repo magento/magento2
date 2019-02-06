@@ -7,7 +7,6 @@ namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\DataObject;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -138,39 +137,73 @@ class ReadHandler implements AttributeInterface
             }
         }
         if (count($attributeTables)) {
+            $identifiers = null;
             foreach ($attributeTables as $attributeTable => $attributeIds) {
                 $select = $connection->select()
                     ->from(
                         ['t' => $attributeTable],
-                        ['value' => 't.value', 'attribute_id' => 't.attribute_id', 'store_id' => 't.store_id']
+                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
                     )
                     ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
                     ->where('attribute_id IN (?)', $attributeIds);
+                $attributeIdentifiers = [];
                 foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
                         $connection->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
                     );
+                    $attributeIdentifiers[] = $scope->getIdentifier();
                 }
+                $attributeIdentifiers = array_unique($attributeIdentifiers);
+                $identifiers = array_intersect($identifiers ?? $attributeIdentifiers, $attributeIdentifiers);
                 $selects[] = $select;
             }
+            $this->applyIdentifierForSelects($selects, $identifiers);
             $unionSelect = new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )');
             $orderedUnionSelect = $connection->select();
             $orderedUnionSelect->from(['u' => $unionSelect]);
-            $orderedUnionSelect->order('store_id');
+            $this->applyIdentifierForUnion($orderedUnionSelect, $identifiers);
             $attributes = $connection->fetchAll($orderedUnionSelect);
             foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {
                     $this->logger->warning(
-                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
+                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}'
                         for entity type '$entityType'."
                     );
                 }
             }
         }
         return $entityData;
+    }
+
+    /**
+     * Apply identifiers column on select array
+     *
+     * @param Select[] $selects
+     * @param array $identifiers
+     */
+    private function applyIdentifierForSelects(array $selects, array $identifiers)
+    {
+        foreach ($selects as $select) {
+            foreach ($identifiers as $identifier) {
+                $select->columns($identifier, 't');
+            }
+        }
+    }
+
+    /**
+     * Apply identifiers order on union select
+     *
+     * @param Select $unionSelect
+     * @param array $identifiers
+     */
+    private function applyIdentifierForUnion(Select $unionSelect, array $identifiers)
+    {
+        foreach ($identifiers as $identifier) {
+            $unionSelect->order($identifier);
+        }
     }
 }
