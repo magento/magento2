@@ -59,8 +59,8 @@
         </actionGroup>
 
         <!-- Select payment and shipping -->
-        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.checkMoneyOrderPaymentOption}}" stepKey="waitForPaymentOptions"/>
-        <selectOption selector="{{AdminOrderFormPaymentSection.checkMoneyOrderPaymentOption}}" userInput="checkmo" stepKey="checkPaymentOption"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" stepKey="waitForPaymentOptions"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" userInput="checkmo" stepKey="checkPaymentOption"/>
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
 
         <!--Verify totals on Order page-->
