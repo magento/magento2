@@ -12,12 +12,10 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface;
-use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Listing\Columns\Column;
 
@@ -32,21 +30,9 @@ class QuantityPerSource extends AbstractModifier
     private $isSingleSourceMode;
 
     /**
-     * @deprecated
-     * @var IsSourceItemManagementAllowedForProductTypeInterface
-     */
-    private $isSourceItemManagementAllowedForProductType;
-
-    /**
      * @var SourceRepositoryInterface
      */
     private $sourceRepository;
-
-    /**
-     * @deprecated
-     * @var GetSourceItemsBySkuInterface
-     */
-    private $getSourceItemsBySku;
 
     /**
      * @var SearchCriteriaBuilder
@@ -64,33 +50,27 @@ class QuantityPerSource extends AbstractModifier
     private $getAllowedProductTypesForSourceItemManagement;
 
     /**
-     * @var array
-     */
-    private $sourcesBySourceCodesCache = [];
-
-    /**
      * @param IsSingleSourceModeInterface $isSingleSourceMode
-     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @param null $isSourceItemManagementAllowedForProductType @deprecated
      * @param SourceRepositoryInterface $sourceRepository
-     * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
+     * @param null $getSourceItemsBySku @deprecated
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param GetAllowedProductTypesForSourceItemManagementInterface $getAllowedProductTypesForSourceItemManagement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         IsSingleSourceModeInterface $isSingleSourceMode,
-        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
+        $isSourceItemManagementAllowedForProductType,
         SourceRepositoryInterface $sourceRepository,
-        GetSourceItemsBySkuInterface $getSourceItemsBySku,
+        $getSourceItemsBySku,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         SourceItemRepositoryInterface $sourceItemRepository = null,
         GetAllowedProductTypesForSourceItemManagementInterface $getAllowedProductTypesForSourceItemManagement = null
     ) {
         $objectManager = ObjectManager::getInstance();
         $this->isSingleSourceMode = $isSingleSourceMode;
-        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->sourceRepository = $sourceRepository;
-        $this->getSourceItemsBySku = $getSourceItemsBySku;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: $objectManager->get(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = $sourceItemRepository ?:
             $objectManager->get(SourceItemRepositoryInterface::class);
@@ -206,23 +186,21 @@ class QuantityPerSource extends AbstractModifier
      */
     private function getSourcesBySourceItems(array $sourceItems): array
     {
-        if (empty($this->sourcesBySourceCodesCache)) {
-            $newSourceCodes = [];
+        $newSourceCodes = $sourcesBySourceCodes = [];
 
-            foreach ($sourceItems as $sourceItem) {
-                $newSourceCodes[] = $sourceItem->getSourceCode();
-            }
-
-            $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter(SourceInterface::SOURCE_CODE, $newSourceCodes, 'in')
-                ->create();
-            $sources = $this->sourceRepository->getList($searchCriteria)->getItems();
-
-            foreach ($sources as $source) {
-                $this->sourcesBySourceCodesCache[$source->getSourceCode()] = $source;
-            }
+        foreach ($sourceItems as $sourceItem) {
+            $newSourceCodes[] = $sourceItem->getSourceCode();
         }
 
-        return $this->sourcesBySourceCodesCache;
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceInterface::SOURCE_CODE, $newSourceCodes, 'in')
+            ->create();
+        $sources = $this->sourceRepository->getList($searchCriteria)->getItems();
+
+        foreach ($sources as $source) {
+            $sourcesBySourceCodes[$source->getSourceCode()] = $source;
+        }
+
+        return $sourcesBySourceCodes;
     }
 }
