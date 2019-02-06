@@ -175,7 +175,7 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'key' => 'key3',
-                'expectedFlattenData' => '',
+                'expectedFlattenData' => null,
             ],
         ];
     }
