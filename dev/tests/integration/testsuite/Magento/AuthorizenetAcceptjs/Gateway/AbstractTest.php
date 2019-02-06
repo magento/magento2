@@ -70,6 +70,7 @@ abstract class AbstractTest extends TestCase
     protected function tearDown()
     {
         $this->objectManager->removeSharedInstance(ZendClientFactory::class);
+        parent::tearDown();
     }
 
     protected function getOrderWithIncrementId(string $incrementId): Order

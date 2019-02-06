@@ -15,6 +15,7 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -57,6 +58,11 @@ class FetchTransactionInfoCommandTest extends TestCase
      */
     private $configMock;
 
+    /**
+     * @var HandlerInterface
+     */
+    private $handlerMock;
+
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObject::class);
@@ -72,37 +78,33 @@ class FetchTransactionInfoCommandTest extends TestCase
         $this->transactionDetailsCommandMock = $this->createMock(CommandInterface::class);
         $this->transactionResultMock = $this->createMock(ResultInterface::class);
         $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
+        $this->handlerMock = $this->createMock(HandlerInterface::class);
         $this->command = new FetchTransactionInfoCommand(
             $this->commandPoolMock,
             new SubjectReader(),
-            $this->configMock
+            $this->configMock,
+            $this->handlerMock
         );
     }
 
     public function testCommandWillMarkTransactionAsApprovedWhenNotVoid()
     {
+        $response = [
+            'transaction' => [
+                'transactionStatus' => 'authorizedPendingCapture',
+                'foo' => 'abc',
+                'bar' => 'cba',
+                'dontreturnme' => 'justdont'
+            ]
+        ];
+
         $this->commandPoolMock->method('get')
             ->willReturnMap([
                 ['get_transaction_details', $this->transactionDetailsCommandMock],
             ]);
 
         $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => 'authorizedPendingCapture',
-                    'foo' => 'abc',
-                    'bar' => 'cba',
-                    'dontreturnme' => 'justdont'
-                ]
-            ]);
-
-        // Assert payment is handled correctly
-        $this->paymentMock->expects($this->exactly(2))
-            ->method('setData')
-            ->withConsecutive(
-                ['is_transaction_denied', false],
-                ['is_transaction_approved', true]
-            );
+            ->willReturn($response);
 
         $buildSubject = [
             'payment' => $this->paymentDOMock
@@ -113,52 +115,9 @@ class FetchTransactionInfoCommandTest extends TestCase
             ->with($buildSubject)
             ->willReturn($this->transactionResultMock);
 
-        $result = $this->command->execute($buildSubject);
-
-        $expected = [
-            'foo' => 'abc',
-            'bar' => 'cba'
-        ];
-
-        $this->assertSame($expected, $result);
-    }
-
-    /**
-     * @dataProvider declinedTransactionStatusesProvider
-     * @param string $status
-     */
-    public function testCommandWillMarkTransactionAsDeniedWhenDeclined(string $status)
-    {
-        $this->commandPoolMock->method('get')
-            ->willReturnMap([
-                ['get_transaction_details', $this->transactionDetailsCommandMock],
-            ]);
-
-        $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => $status,
-                    'foo' => 'abc',
-                    'bar' => 'cba',
-                    'dontreturnme' => 'justdont'
-                ]
-            ]);
-
-        // Assert payment is handled correctly
-        $this->paymentMock->expects($this->exactly(2))
-            ->method('setData')
-            ->withConsecutive(
-                ['is_transaction_denied', true],
-                ['is_transaction_approved', false]
-            );
-
-        $buildSubject = [
-            'payment' => $this->paymentDOMock
-        ];
-
-        $this->transactionDetailsCommandMock->expects($this->once())
-            ->method('execute')
-            ->with($buildSubject)
+        $this->handlerMock->expects($this->once())
+            ->method('handle')
+            ->with($buildSubject, $response)
             ->willReturn($this->transactionResultMock);
 
         $result = $this->command->execute($buildSubject);
@@ -169,65 +128,5 @@ class FetchTransactionInfoCommandTest extends TestCase
         ];
 
         $this->assertSame($expected, $result);
-    }
-
-    /**
-     * @dataProvider pendingTransactionStatusesProvider
-     * @param string $status
-     */
-    public function testCommandWillDoNothingWhenTransactionIsStillPending(string $status)
-    {
-        $this->commandPoolMock->method('get')
-            ->willReturnMap([
-                ['get_transaction_details', $this->transactionDetailsCommandMock],
-            ]);
-
-        $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => $status,
-                    'foo' => 'abc',
-                    'bar' => 'cba',
-                    'dontreturnme' => 'justdont'
-                ]
-            ]);
-
-        // Assert payment is handled correctly
-        $this->paymentMock->expects($this->never())
-            ->method('setData');
-
-        $buildSubject = [
-            'payment' => $this->paymentDOMock
-        ];
-
-        $this->transactionDetailsCommandMock->expects($this->once())
-            ->method('execute')
-            ->with($buildSubject)
-            ->willReturn($this->transactionResultMock);
-
-        $result = $this->command->execute($buildSubject);
-
-        $expected = [
-            'foo' => 'abc',
-            'bar' => 'cba'
-        ];
-
-        $this->assertSame($expected, $result);
-    }
-
-    public function pendingTransactionStatusesProvider()
-    {
-        return [
-            ['FDSPendingReview'],
-            ['FDSAuthorizedPendingReview']
-        ];
-    }
-
-    public function declinedTransactionStatusesProvider()
-    {
-        return [
-            ['void'],
-            ['declined']
-        ];
     }
 }

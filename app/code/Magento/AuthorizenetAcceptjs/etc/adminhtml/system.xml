@@ -60,14 +60,9 @@
                         <config_path>payment/authorizenet_acceptjs/trans_md5</config_path>
                     </field>
                 </group>
-                <group id="advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                <group id="advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20">
                     <label>Advanced Authorize.Net Settings</label>
                     <attribute type="expanded">0</attribute>
-                    <field id="order_status" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>New Order Status</label>
-                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
-                        <config_path>payment/authorizenet_acceptjs/order_status</config_path>
-                    </field>
                     <field id="currency" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
