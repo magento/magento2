@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93677"/>
             <group value="braintree"/>
+            <skip>
+                <issueId value="MC-13779"/>
+            </skip>
         </annotations>
 
 
