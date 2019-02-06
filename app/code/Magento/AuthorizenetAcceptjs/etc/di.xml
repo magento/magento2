@@ -36,7 +36,7 @@
                 <item name="accept_fds" xsi:type="string">AuthorizenetAcceptjsAcceptFdsCommand</item>
                 <item name="deny_payment" xsi:type="string">AuthorizenetAcceptjsCancelCommand</item>
                 <item name="get_transaction_details" xsi:type="string">AuthorizenetAcceptjsTransactionDetailsCommand</item>
-                <item name="fetch_transaction_information" xsi:type="string">AuthorizenetAcceptjsTransactionReviewUpdateCommand</item>
+                <item name="fetch_transaction_information" xsi:type="string">AuthorizenetAcceptjsFetchTransactionInfoCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -83,7 +83,7 @@
     <!-- End Validators -->
 
     <!-- Gateway Commands -->
-    <virtualType name="AuthorizenetAcceptjsTransactionReviewUpdateCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\TransactionReviewUpdateCommand">
+    <virtualType name="AuthorizenetAcceptjsFetchTransactionInfoCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\FetchTransactionInfoCommand">
         <arguments>
             <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
         </arguments>
@@ -222,7 +222,7 @@
                 <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionDetailsRequestTypeBuilder</item>
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
-                <item name="reference_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionDetailsDataBuilder</item>
+                <item name="reference_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\TransactionDetailsDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>

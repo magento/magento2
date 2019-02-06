@@ -27,6 +27,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const KEY_ADDITIONAL_INFO_KEYS = 'paymentInfoKeys';
     private const KEY_CLIENT_KEY = 'public_client_key';
     private const KEY_CVV_ENABLED = 'cvv_enabled';
+    private const KEY_TRANSACTION_SYNC_KEYS = 'transactionSyncKeys';
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
     private const SOLUTION_ID_SANDBOX = 'AAA102993';
@@ -183,5 +184,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getAdditionalInfoKeys($storeId = null): array
     {
         return explode(',', $this->getValue(Config::KEY_ADDITIONAL_INFO_KEYS, $storeId) ?? '');
+    }
+
+    /**
+     * Returns the keys to be pulled from the transaction and displayed when syncing the transaction
+     *
+     * @param int|null $storeId
+     * @return string[]
+     */
+    public function getTransactionInfoSyncKeys($storeId = null): array
+    {
+        return explode(',', $this->getValue(Config::KEY_TRANSACTION_SYNC_KEYS, $storeId) ?? '');
     }
 }

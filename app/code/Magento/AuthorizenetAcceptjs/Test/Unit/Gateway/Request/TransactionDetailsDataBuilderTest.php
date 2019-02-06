@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionDetailsDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\TransactionDetailsDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use PHPUnit\Framework\TestCase;
@@ -16,10 +16,10 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class RefundTransactionDetailsDataBuilderTest extends TestCase
+class TransactionDetailsDataBuilderTest extends TestCase
 {
     /**
-     * @var RefundTransactionDetailsDataBuilder
+     * @var TransactionDetailsDataBuilder
      */
     private $builder;
 
@@ -41,7 +41,7 @@ class RefundTransactionDetailsDataBuilderTest extends TestCase
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->builder = new RefundTransactionDetailsDataBuilder(new SubjectReader());
+        $this->builder = new TransactionDetailsDataBuilder(new SubjectReader());
     }
 
     public function testBuild()
@@ -60,6 +60,28 @@ class RefundTransactionDetailsDataBuilderTest extends TestCase
 
         $buildSubject = [
             'payment' => $this->paymentDOMock,
+        ];
+
+        $this->assertEquals($expected, $this->builder->build($buildSubject));
+    }
+
+    public function testBuildWithIncludedTransactionId()
+    {
+        $transactionMock = $this->createMock(Transaction::class);
+
+        $this->paymentMock->expects($this->never())
+            ->method('getAuthorizationTransaction');
+
+        $transactionMock->expects($this->never())
+            ->method('getParentTxnId');
+
+        $expected = [
+            'transId' => 'foo'
+        ];
+
+        $buildSubject = [
+            'payment' => $this->paymentDOMock,
+            'transactionId' => 'foo'
         ];
 
         $this->assertEquals($expected, $this->builder->build($buildSubject));

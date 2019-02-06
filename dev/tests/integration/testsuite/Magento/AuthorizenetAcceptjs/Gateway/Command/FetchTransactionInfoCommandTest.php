@@ -12,13 +12,14 @@ use Magento\AuthorizenetAcceptjs\Gateway\AbstractTest;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class TransactionReviewUpdateCommandTest extends AbstractTest
+class FetchTransactionInfoCommandTest extends AbstractTest
 {
     /**
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/transactionSyncKeys transId,transactionType
      * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_auth_only.php
      */
     public function testTransactionApproved()
@@ -40,9 +41,15 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));
 
-        $command->execute([
+        $result = $command->execute([
             'payment' => $paymentDO
         ]);
+
+        $expected = [
+            'transId' => '1234',
+            'transactionType' => 'authOnlyTransaction'
+        ];
+        $this->assertSame($expected, $result);
 
         /** @var Payment $payment */
         $this->assertTrue($payment->getIsTransactionApproved());
@@ -54,6 +61,7 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * * @magentoConfigFixture default_store payment/authorizenet_acceptjs/transactionSyncKeys transId,transactionType
      * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_auth_only.php
      */
     public function testTransactionVoided()
@@ -75,9 +83,15 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));
 
-        $command->execute([
+        $result = $command->execute([
             'payment' => $paymentDO
         ]);
+
+        $expected = [
+            'transId' => '1234',
+            'transactionType' => 'authOnlyTransaction'
+        ];
+        $this->assertSame($expected, $result);
 
         /** @var Payment $payment */
         $this->assertFalse($payment->getIsTransactionApproved());
@@ -89,6 +103,7 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/transactionSyncKeys transId,transactionType
      * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_auth_only.php
      */
     public function testTransactionDenied()
@@ -110,9 +125,15 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));
 
-        $command->execute([
+        $result = $command->execute([
             'payment' => $paymentDO
         ]);
+
+        $expected = [
+            'transId' => '1234',
+            'transactionType' => 'authOnlyTransaction'
+        ];
+        $this->assertSame($expected, $result);
 
         /** @var Payment $payment */
         $this->assertFalse($payment->getIsTransactionApproved());
@@ -124,6 +145,7 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login someusername
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key somepassword
      * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key abc
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/transactionSyncKeys transId,transactionType
      * @magentoDataFixture Magento/AuthorizenetAcceptjs/Fixture/order_auth_only.php
      */
     public function testTransactionPending()
@@ -145,9 +167,15 @@ class TransactionReviewUpdateCommandTest extends AbstractTest
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));
 
-        $command->execute([
+        $result = $command->execute([
             'payment' => $paymentDO
         ]);
+
+        $expected = [
+            'transId' => '1234',
+            'transactionType' => 'authOnlyTransaction'
+        ];
+        $this->assertSame($expected, $result);
 
         /** @var Payment $payment */
         $this->assertNull($payment->getIsTransactionApproved());

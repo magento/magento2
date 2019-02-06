@@ -31,7 +31,7 @@ class SettleCommandTest extends AbstractTest
         $payment = $order->getPayment();
 
         $paymentDO = $this->paymentFactory->create($payment);
-        GatewayQueryCommand
+
         $expectedRequest = include __DIR__ . '/../../_files/expected_request/settle.php';
         $response = include __DIR__ . '/../../_files/response/settle.php';
 

@@ -94,6 +94,7 @@ class ConfigTest extends TestCase
             ['shouldEmailCustomer', 'email_customer', true, true],
             ['isCvvEnabled', 'cvv_enabled', true, true],
             ['getAdditionalInfoKeys', 'paymentInfoKeys', 'a,b,c', ['a', 'b', 'c']],
+            ['getTransactionInfoSyncKeys', 'transactionSyncKeys', 'a,b,c', ['a', 'b', 'c']],
         ];
     }
     public function environmentUrlProvider()
