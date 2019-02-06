@@ -7,7 +7,7 @@
 -->
 <!-- Test XML Example -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteStoreViewActionGroup">
         <arguments>
             <argument name="customStore" defaultValue="customStore"/>
@@ -24,5 +24,11 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
         <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
+    </actionGroup>
+    <actionGroup name="AdminDeleteStoreViewUseStringArgumentsActionGroup" extends="AdminDeleteStoreViewActionGroup">
+        <arguments>
+            <argument name="customStoreName" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStoreName}}" stepKey="fillStoreViewFilterField"/>
     </actionGroup>
 </actionGroups>
