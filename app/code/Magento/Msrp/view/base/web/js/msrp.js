@@ -347,14 +347,14 @@ define([
             $(this.options.displayPriceContainer).show();
             $(this.options.mapInfoLinks).show();
 
-            if(useDefaultPrice || !this.wasOpened) {
+            if (useDefaultPrice || !this.wasOpened) {
                     this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
                     this.$popup.find(this.options.priceLabelId).html(options.realPrice);
                     $(this.options.displayPriceElement).html(msrpPrice);
                     this.wasOpened = true;
             }
 
-            if(!useDefaultPrice) {
+            if (!useDefaultPrice) {
                 this.$popup.find(this.options.msrpPriceElement).html(msrpPrice);
                 this.$popup.find(this.options.priceElement).html(finalPrice);
                 $(this.options.displayPriceElement).html(msrpPrice);
