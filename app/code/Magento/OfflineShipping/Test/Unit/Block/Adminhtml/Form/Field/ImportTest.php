@@ -14,6 +14,11 @@ namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
+    /**
      * @var \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import
      */
     protected $_object;
@@ -29,11 +34,16 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Data\Form::class,
             ['getFieldNameSuffix', 'addSuffixToName', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
         );
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
             \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
-            ['data' => $testData]
+            [
+                'escaper' => $this->escaperMock,
+                'data' => $testData,
+            ]
         );
         $this->_object->setForm($this->_formMock);
     }

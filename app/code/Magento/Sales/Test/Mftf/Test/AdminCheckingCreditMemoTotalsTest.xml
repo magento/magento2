@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-97140"/>
             <group value="sales"/>
             <group value="tax"/>
+            <skip>
+                <issueId value="MAGETWO-97826"/>
+            </skip>
         </annotations>
         <before>
             <!--Create category-->
@@ -91,6 +94,10 @@
         <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
         <waitForLoadingMaskToDisappear stepKey="waitForUpdateTotals"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
+        <waitForElementVisible
+                selector="{{AdminMessagesSection.success}}"
+                time="10"
+                stepKey="waitForMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo."
              stepKey="seeCreatedCreditMemoSuccessMessage"/>
 
