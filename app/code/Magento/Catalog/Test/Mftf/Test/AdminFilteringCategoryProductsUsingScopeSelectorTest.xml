@@ -105,7 +105,6 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="{{SecondWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearWebsitesFilters"/>
             <!--Clear products filter-->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsFilters"/>
