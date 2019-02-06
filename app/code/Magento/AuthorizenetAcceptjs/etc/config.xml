@@ -42,6 +42,7 @@
                 <environment>production</environment>
                 <privateInfoKeys>authCode,avsResultCode,cvvResultCode,cavvResultCode</privateInfoKeys>
                 <paymentInfoKeys>accountType,ccLast4,authCode,avsResultCode,cvvResultCode,cavvResultCode</paymentInfoKeys>
+                <transactionSyncKeys>transactionStatus,responseCode,responseReasonCode,authCode,AVSResponse,cardCodeResponse,CAVVResponse</transactionSyncKeys>
             </authorizenet_acceptjs>
         </payment>
     </default>

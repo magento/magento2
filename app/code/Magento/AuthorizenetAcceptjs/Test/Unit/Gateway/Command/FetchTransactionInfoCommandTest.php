@@ -8,17 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Command;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Command\TransactionReviewUpdateCommand;
+use Magento\AuthorizenetAcceptjs\Gateway\Command\FetchTransactionInfoCommand;
+use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class TransactionReviewUpdateCommandTest extends TestCase
+class FetchTransactionInfoCommandTest extends TestCase
 {
     /**
      * @var CommandInterface|MockObject
@@ -31,7 +33,7 @@ class TransactionReviewUpdateCommandTest extends TestCase
     private $commandPoolMock;
 
     /**
-     * @var TransactionReviewUpdateCommand
+     * @var FetchTransactionInfoCommand
      */
     private $command;
 
@@ -50,18 +52,30 @@ class TransactionReviewUpdateCommandTest extends TestCase
      */
     private $paymentMock;
 
+    /**
+     * @var Config
+     */
+    private $configMock;
+
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObject::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
+        $this->configMock = $this->createMock(Config::class);
+        $this->configMock->method('getTransactionInfoSyncKeys')
+            ->willReturn(['foo', 'bar']);
+        $orderMock = $this->createMock(Order::class);
+        $this->paymentDOMock->method('getOrder')
+            ->willReturn($orderMock);
         $this->transactionDetailsCommandMock = $this->createMock(CommandInterface::class);
         $this->transactionResultMock = $this->createMock(ResultInterface::class);
         $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
-        $this->command = new TransactionReviewUpdateCommand(
+        $this->command = new FetchTransactionInfoCommand(
             $this->commandPoolMock,
-            new SubjectReader()
+            new SubjectReader(),
+            $this->configMock
         );
     }
 
@@ -75,7 +89,10 @@ class TransactionReviewUpdateCommandTest extends TestCase
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => 'authorizedPendingCapture'
+                    'transactionStatus' => 'authorizedPendingCapture',
+                    'foo' => 'abc',
+                    'bar' => 'cba',
+                    'dontreturnme' => 'justdont'
                 ]
             ]);
 
@@ -96,7 +113,14 @@ class TransactionReviewUpdateCommandTest extends TestCase
             ->with($buildSubject)
             ->willReturn($this->transactionResultMock);
 
-        $this->command->execute($buildSubject);
+        $result = $this->command->execute($buildSubject);
+
+        $expected = [
+            'foo' => 'abc',
+            'bar' => 'cba'
+        ];
+
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -113,7 +137,10 @@ class TransactionReviewUpdateCommandTest extends TestCase
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => $status
+                    'transactionStatus' => $status,
+                    'foo' => 'abc',
+                    'bar' => 'cba',
+                    'dontreturnme' => 'justdont'
                 ]
             ]);
 
@@ -134,7 +161,14 @@ class TransactionReviewUpdateCommandTest extends TestCase
             ->with($buildSubject)
             ->willReturn($this->transactionResultMock);
 
-        $this->command->execute($buildSubject);
+        $result = $this->command->execute($buildSubject);
+
+        $expected = [
+            'foo' => 'abc',
+            'bar' => 'cba'
+        ];
+
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -151,7 +185,10 @@ class TransactionReviewUpdateCommandTest extends TestCase
         $this->transactionResultMock->method('get')
             ->willReturn([
                 'transaction' => [
-                    'transactionStatus' => $status
+                    'transactionStatus' => $status,
+                    'foo' => 'abc',
+                    'bar' => 'cba',
+                    'dontreturnme' => 'justdont'
                 ]
             ]);
 
@@ -168,7 +205,14 @@ class TransactionReviewUpdateCommandTest extends TestCase
             ->with($buildSubject)
             ->willReturn($this->transactionResultMock);
 
-        $this->command->execute($buildSubject);
+        $result = $this->command->execute($buildSubject);
+
+        $expected = [
+            'foo' => 'abc',
+            'bar' => 'cba'
+        ];
+
+        $this->assertSame($expected, $result);
     }
 
     public function pendingTransactionStatusesProvider()
