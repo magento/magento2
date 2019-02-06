@@ -10,7 +10,7 @@ namespace Magento\VaultGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\VaultGraphQl\Model\VisibleTokenRetriever;
+use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 
 /**
@@ -19,9 +19,9 @@ use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 class PaymentTokens implements ResolverInterface
 {
     /**
-     * @var VisibleTokenRetriever
+     * @var PaymentTokenManagement
      */
-    private $visibleTokenRetriever;
+    private $paymentTokenManagement;
 
     /**
      * @var CheckCustomerAccount
@@ -29,14 +29,14 @@ class PaymentTokens implements ResolverInterface
     private $checkCustomerAccount;
 
     /**
-     * @param VisibleTokenRetriever $visibleTokenRetriever
+     * @param PaymentTokenManagement $paymentTokenManagement
      * @param CheckCustomerAccount $checkCustomerAccount
      */
     public function __construct(
-        VisibleTokenRetriever $visibleTokenRetriever,
+        PaymentTokenManagement $paymentTokenManagement,
         CheckCustomerAccount $checkCustomerAccount
     ) {
-        $this->visibleTokenRetriever = $visibleTokenRetriever;
+        $this->paymentTokenManagement = $paymentTokenManagement;
         $this->checkCustomerAccount = $checkCustomerAccount;
     }
 
@@ -55,7 +55,7 @@ class PaymentTokens implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        $tokens = $this->visibleTokenRetriever->getVisibleAvailableTokens($currentUserId);
+        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($currentUserId);
         $result = [];
 
         foreach ($tokens as $token) {

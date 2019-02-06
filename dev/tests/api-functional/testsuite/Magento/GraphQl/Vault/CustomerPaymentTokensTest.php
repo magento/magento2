@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Vault;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\VaultGraphQl\Model\VisibleTokenRetriever;
+use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\ResourceModel\PaymentToken as TokenResource;
 use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory;
 
@@ -22,7 +22,7 @@ class CustomerPaymentTokensTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var VisibleTokenRetriever
+     * @var PaymentTokenManagement
      */
     private $paymentTokenManagement;
 
@@ -41,7 +41,7 @@ class CustomerPaymentTokensTest extends GraphQlAbstract
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->paymentTokenManagement = Bootstrap::getObjectManager()->get(VisibleTokenRetriever::class);
+        $this->paymentTokenManagement = Bootstrap::getObjectManager()->get(PaymentTokenManagement::class);
         $this->tokenResource = Bootstrap::getObjectManager()->get(TokenResource::class);
         $this->tokenCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
     }
@@ -151,7 +151,6 @@ QUERY;
         $this->assertArrayHasKey('type', $token);
         // Validate gateway token is NOT returned
         $this->assertArrayNotHasKey('gateway_token', $token);
-
     }
 
     /**
