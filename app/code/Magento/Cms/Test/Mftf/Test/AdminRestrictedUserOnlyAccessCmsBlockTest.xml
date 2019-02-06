@@ -45,12 +45,13 @@
         </after>
 
         <!--login as restricted user-->
-        <amOnPage stepKey="amOnAdminLoginPage" url="{{AdminLoginPage.url}}"/>
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$createRestrictedAdmin.username$$" stepKey="fillUsername" />
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="$$createRestrictedAdmin.password$$" stepKey="fillPassword"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn2" />
+        <actionGroup ref="AdminLoginAsAnyUser" stepKey="logAsNewUser">
+            <argument name="login" value="$$createRestrictedAdmin.username$$"/>
+            <argument name="password" value="$$createRestrictedAdmin.password$$"/>
+        </actionGroup>
+
         <!--Verify that The system shows information included in "Blocks"-->
-        <see stepKey="seeBlocksPage" userInput="Blocks"/>
+        <see userInput="Blocks" stepKey="seeBlocksPage"/>
         <seeInCurrentUrl url="{{AdminCmsBlockGridPage.url}}" stepKey="assertUrl"/>
         <!--Log Out-->
         <actionGroup ref="logout" stepKey="logOut"/>
