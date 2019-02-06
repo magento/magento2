@@ -36,6 +36,14 @@
         <see userInput='You used coupon code "{{couponCode}}".' selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 
+    <!-- Apply Sales Rule Coupon to the cart -->
+    <actionGroup name="StorefrontTryingToApplyCouponActionGroup" extends="StorefrontApplyCouponActionGroup">
+        <remove keyForRemoval="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.error}}" stepKey="waitError"/>
+        <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{{couponCode}}" is not valid.'
+             stepKey="seeErrorMessages"/>
+    </actionGroup>
+
     <!-- Cancel Sales Rule Coupon applied to the cart -->
     <actionGroup name="StorefrontCancelCouponActionGroup">
         <waitForElement selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
