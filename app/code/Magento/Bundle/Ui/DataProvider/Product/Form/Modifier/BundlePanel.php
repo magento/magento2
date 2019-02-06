@@ -85,7 +85,7 @@ class BundlePanel extends AbstractModifier
             $meta[$groupCode]['arguments']['data']['config'] = [
                 'componentType' => Fieldset::NAME,
                 'label' => __('Bundle Items'),
-                'collapsible' => true
+                'collapsible' => true,
             ];
 
             $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
