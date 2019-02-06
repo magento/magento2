@@ -196,8 +196,23 @@ class Save extends Attribute implements HttpPostActionInterface
                 : $this->getRequest()->getParam('attribute_code');
             $attributeCode = $attributeCode ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
             if (strlen($attributeCode) > 0) {
+                $attributeCodeIsValid = true;
+                $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
+                $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+
+                if (strlen($attributeCode) < $minLength || strlen($attributeCode) > $maxLength) {
+                    $this->messageManager->addErrorMessage(
+                        __(
+                            'An attribute code must not be less than %1 and more than %2 characters.',
+                            $minLength,
+                            $maxLength
+                        )
+                    );
+                    $attributeCodeIsValid = false;
+                }
+
                 $validatorAttrCode = new \Zend_Validate_Regex(
-                    ['pattern' => '/^[a-zA-Z\x{600}-\x{6FF}][a-zA-Z\x{600}-\x{6FF}_0-9]{0,30}$/u']
+                    ['pattern' => '/^[a-zA-Z]+[a-zA-Z0-9_]$/u']
                 );
                 if (!$validatorAttrCode->isValid($attributeCode)) {
                     $this->messageManager->addErrorMessage(
@@ -207,6 +222,10 @@ class Save extends Attribute implements HttpPostActionInterface
                             $attributeCode
                         )
                     );
+                    $attributeCodeIsValid = false;
+                }
+
+                if (!$attributeCodeIsValid) {
                     return $this->returnResult(
                         'catalog/*/edit',
                         ['attribute_id' => $attributeId, '_current' => true],
