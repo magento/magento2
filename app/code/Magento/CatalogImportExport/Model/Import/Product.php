@@ -1610,9 +1610,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
 
                 if (!empty($rowData[$column . '_label'])) {
-                    $labels[$column] = $this->parseMultipleValues(
+                    $labels[$column] = $this->parseMultiselectValues(
                         $rowData[$column . '_label'],
-                        $this->getMultipleLineSeparator()
+                        $this->getMultipleValueSeparator()
                     );
 
                     if (count($labels[$column]) > count($images[$column])) {
