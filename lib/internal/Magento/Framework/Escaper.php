@@ -47,6 +47,7 @@ class Escaper
     private $escapeAsUrlAttributes = ['href'];
 
     /**
+     * Escaper constructor.
      * @param \Magento\Framework\ZendEscaper|null $escaper
      * @param \Psr\Log\LoggerInterface|null $logger
      */
