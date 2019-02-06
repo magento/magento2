@@ -11,25 +11,25 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\Address\AddressDataProvider;
+use Magento\QuoteGraphQl\Model\Cart\Address\ShippingMethodsDataProvider;
 
 /**
  * @inheritdoc
  */
-class CartAddresses implements ResolverInterface
+class CartAddressShippingMethods implements ResolverInterface
 {
     /**
-     * @var AddressDataProvider
+     * @var ShippingMethodsDataProvider
      */
-    private $addressDataProvider;
+    private $shippingMethodsDataProvider;
 
     /**
-     * @param AddressDataProvider $addressDataProvider
+     * @param ShippingMethodsDataProvider $shippingMethodsDataProvider
      */
     public function __construct(
-        AddressDataProvider $addressDataProvider
+        ShippingMethodsDataProvider $shippingMethodsDataProvider
     ) {
-        $this->addressDataProvider = $addressDataProvider;
+        $this->shippingMethodsDataProvider = $shippingMethodsDataProvider;
     }
 
     /**
@@ -38,11 +38,9 @@ class CartAddresses implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($value['model'])) {
-            throw new LocalizedException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" values should be specified'));
         }
 
-        $cart = $value['model'];
-
-        return $this->addressDataProvider->getCartAddresses($cart);
+        return $this->shippingMethodsDataProvider->getAvailableShippingMethods($value['model']);
     }
 }

@@ -112,7 +112,7 @@ type CartAddress {
     telephone: String
     address_type: AdressTypeEnum
     selected_shipping_method: CheckoutShippingMethod
-    available_shipping_methods: [CheckoutAvailableShippingMethod]
+    available_shipping_methods: [CheckoutAvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressShippingMethods")
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]

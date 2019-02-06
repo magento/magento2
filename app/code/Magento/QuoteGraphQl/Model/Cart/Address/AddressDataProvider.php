@@ -49,10 +49,9 @@ class AddressDataProvider
      * Collect and return information about shipping and billing addresses
      *
      * @param CartInterface $cart
-     * @param bool $includeShippingMethods
      * @return array
      */
-    public function getCartAddresses(CartInterface $cart, $includeShippingMethods = false): array
+    public function getCartAddresses(CartInterface $cart): array
     {
         $addressData = [];
         $shippingAddress = $cart->getShippingAddress();
@@ -61,12 +60,6 @@ class AddressDataProvider
         if ($shippingAddress) {
             $shippingData = $this->dataObjectConverter->toFlatArray($shippingAddress, [], AddressInterface::class);
             $shippingData['address_type'] = 'SHIPPING';
-            if ($includeShippingMethods) {
-                $shippingData['available_shipping_methods'] = $this->extractAvailableShippingRateData(
-                    $cart,
-                    $shippingAddress
-                );
-            }
             $addressData[] = array_merge($shippingData, $this->extractAddressData($shippingAddress));
         }
 
@@ -88,6 +81,7 @@ class AddressDataProvider
     private function extractAddressData(QuoteAddress $address): array
     {
         $addressData = [
+            'model' => $address,
             'country' => [
                 'code' => $address->getCountryId(),
                 'label' => $address->getCountry()
