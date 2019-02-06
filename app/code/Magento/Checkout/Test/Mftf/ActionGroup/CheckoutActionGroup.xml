@@ -46,8 +46,8 @@
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
         <arguments>
-            <argument name="customerVar"/>
-            <argument name="customerAddressVar"/>
+            <argument name="customerVar" defaultValue="CustomerEntityOne"/>
+            <argument name="customerAddressVar" defaultValue="CustomerAddressSimple"/>
         </arguments>
         <waitForElementVisible selector="{{CheckoutShippingSection.firstName}}" stepKey="waitForFirstNameFieldAppears" time="30"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
