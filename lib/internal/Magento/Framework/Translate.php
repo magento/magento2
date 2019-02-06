@@ -60,7 +60,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_viewDesign;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface $cache
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
 
