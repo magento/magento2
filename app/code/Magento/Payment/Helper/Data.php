@@ -269,9 +269,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($this->getPaymentMethods() as $code => $data) {
             if (!empty($data['active'])) {
                 $storedTitle = $this->getMethodInstance($code)->getConfigData('title', $store);
-                if (isset($storedTitle)) {
+                if (!empty($storedTitle)) {
                     $methods[$code] = $storedTitle;
-                } elseif (isset($data['title'])) {
+                } elseif (!empty($data['title'])) {
                     $methods[$code] = $data['title'];
                 }
             }

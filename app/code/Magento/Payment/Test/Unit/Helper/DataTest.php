@@ -284,7 +284,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 [
                     Data::XML_PATH_PAYMENT_METHODS => [
                         $paymentMethod['code'] => $paymentMethod['data'],
-                    ]
+                    ],
                 ]
             );
 
@@ -327,7 +327,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function paymentMethodListDataProvider()
+    public function paymentMethodListDataProvider(): array
     {
         return [
             'Payment method with changed title' =>
@@ -343,7 +343,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                             'title' => 'Payment Title',
                         ],
                     ],
-                    ['payment_method' => 'Config Payment Title']
+                    ['payment_method' => 'Config Payment Title'],
                 ],
             'Payment method with default title' =>
                 [
