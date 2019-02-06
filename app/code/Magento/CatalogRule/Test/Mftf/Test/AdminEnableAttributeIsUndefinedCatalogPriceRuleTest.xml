@@ -106,15 +106,20 @@
         </createData>
 
         <!--Create new Catalog Price Rule-->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage1"/>
         <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule1">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
+        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup1"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition1">
             <argument name="attributeName" value="$$createSecondProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
-        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveRule1"/>
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
 
         <!--Check Catalog Price Rule for third product-->
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>
