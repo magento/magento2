@@ -86,7 +86,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     public function testDeleteActionNoGroupId()
     {
-        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/group/delete');
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL));
     }
@@ -100,7 +100,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $groupId = $this->findGroupIdWithCode(self::CUSTOMER_GROUP_CODE);
         $this->getRequest()->setParam('id', $groupId);
-        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/group/delete');
 
         /**
@@ -121,7 +121,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testDeleteActionNonExistingGroupId()
     {
         $this->getRequest()->setParam('id', 10000);
-        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/group/delete');
 
         /**

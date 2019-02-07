@@ -103,8 +103,6 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Controller\Adminhtml\Order\Cancel::class,
             [
                 'context' => $this->context,
-                //'request' => $this->request,
-                //'response' => $this->response,
                 'orderRepository' => $this->orderRepositoryMock
             ]
         );
