@@ -15,6 +15,9 @@
             <description value="Capture an order placed using Authorize.net Accept.js"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-12255"/>
+            <skip>
+                <issueId value="DEVOPS-4604"/>
+            </skip>
             <group value="AuthorizenetAcceptjs"/>
             <group value="ThirdPartyPayments"/>
         </annotations>

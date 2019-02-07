@@ -59,6 +59,11 @@ class TransactionResponseValidator extends AbstractValidator
                     $errorCodes[] = $message['code'];
                     $errorMessages[] = $message['description'];
                 }
+            } elseif (isset($transactionResponse['errors'])) {
+                foreach ($transactionResponse['errors'] as $message) {
+                    $errorCodes[] = $message['errorCode'];
+                    $errorMessages[] = $message['errorCode'];
+                }
             }
 
             return $this->createResult(false, $errorMessages, $errorCodes);
@@ -77,6 +82,7 @@ class TransactionResponseValidator extends AbstractValidator
     {
         $code = $transactionResponse['messages']['message']['code']
             ?? $transactionResponse['messages']['message'][0]['code']
+            ?? $transactionResponse['errors'][0]['errorCode']
             ?? null;
 
         return in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
