@@ -180,9 +180,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve page direct URL
      *
-     * @param null $pageId
-     * @return string|null
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param string $pageId
+     * @return string
      */
     public function getPageUrl($pageId = null)
     {
