@@ -32,8 +32,8 @@
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <!--Run full reindex and clear caches -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
@@ -57,6 +57,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Select Created Category-->
+        <magentoCLI command="indexer:reindex" stepKey="reindexBeforeFlow"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
