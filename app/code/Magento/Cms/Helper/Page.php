@@ -180,14 +180,15 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve page direct URL
      *
-     * @param string $pageId
-     * @return string
+     * @param null $pageId
+     * @return string|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getPageUrl($pageId = null)
     {
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->_pageFactory->create();
-        if ($pageId !== null && $pageId !== $page->getId()) {
+        if ($pageId !== null) {
             $page->setStoreId($this->_storeManager->getStore()->getId());
             $page->load($pageId);
         }
