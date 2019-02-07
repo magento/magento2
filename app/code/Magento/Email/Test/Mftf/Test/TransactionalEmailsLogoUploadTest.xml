@@ -12,10 +12,10 @@
         <annotations>
             <features value="Email"/>
             <stories value="Email"/>
-            <title value="MC-10932:Error when uploading a Transactional Emails logo"/>
+            <title value="MC-13908: Uploading a Transactional Emails logo"/>
             <description value="Transactional Emails Logo should be able to be uploaded in the admin and previewed"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10932"/>
+            <testCaseId value="MC-13908"/>
             <group value="LogoUpload"/>
         </annotations>
         <!--Login to Admin Area-->
