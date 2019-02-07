@@ -11,7 +11,7 @@
     <!--Go to all users-->
     <actionGroup name="GoToAllUsers">
         <click selector="{{AdminCreateUserSection.system}}" stepKey="clickOnSystemIcon"/>
-        <waitForElementVisible selector="{{AdminCreateUserSection.allUsers}}" stepKey="waitForSystemsMenuToOpen"/>
+        <waitForPageLoad stepKey="waitForSystemsPageToOpen"/>
         <click selector="{{AdminCreateUserSection.allUsers}}" stepKey="clickToSelectUserRoles"/>
         <waitForPageLoad stepKey="waitForUserRolesPageToOpen"/>
     </actionGroup>
