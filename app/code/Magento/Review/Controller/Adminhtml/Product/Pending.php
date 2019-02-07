@@ -24,6 +24,7 @@ class Pending extends ProductController
         }
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_pending');
         $resultPage->getConfig()->getTitle()->prepend(__('Customer Reviews'));
         $resultPage->getConfig()->getTitle()->prepend(__('Pending Reviews'));
         $this->coreRegistry->register('usePendingFilter', true);

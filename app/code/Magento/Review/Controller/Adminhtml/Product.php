@@ -69,7 +69,7 @@ abstract class Product extends Action
     {
         switch ($this->getRequest()->getActionName()) {
             case 'pending':
-                return $this->_authorization->isAllowed('Magento_Review::pending');
+                return $this->_authorization->isAllowed('Magento_Review::reviews_pending');
                 break;
             default:
                 return $this->_authorization->isAllowed('Magento_Review::reviews_all');
