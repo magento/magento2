@@ -19,6 +19,8 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Message\ManagerInterface;
 
 /**
+ * Unit tests for Magento\Customer\Controller\Account\EditPost.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditPostTest extends \PHPUnit\Framework\TestCase
@@ -98,6 +100,9 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
      */
     private $customerMapperMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->prepareContext();
@@ -707,6 +712,8 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Executes methods needed for new Customer.
+     *
      * @param int $customerId
      * @param \PHPUnit_Framework_MockObject_MockObject $address
      * @return \PHPUnit_Framework_MockObject_MockObject
@@ -720,9 +727,9 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
             ->method('setId')
             ->with($customerId)
             ->willReturnSelf();
-        $newCustomerMock->expects($this->once())
+        $newCustomerMock->expects($this->atLeastOnce())
             ->method('getAddresses')
-            ->willReturn(null);
+            ->willReturn([]);
         $newCustomerMock->expects($this->once())
             ->method('setAddresses')
             ->with([$address])
@@ -732,6 +739,8 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Executes methods needed for existing Customer.
+     *
      * @param int $customerId
      * @param \PHPUnit_Framework_MockObject_MockObject $address
      * @return \PHPUnit_Framework_MockObject_MockObject
@@ -741,7 +750,7 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
         $currentCustomerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
 
-        $currentCustomerMock->expects($this->once())
+        $currentCustomerMock->expects($this->atLeastOnce())
             ->method('getAddresses')
             ->willReturn([$address]);
 
