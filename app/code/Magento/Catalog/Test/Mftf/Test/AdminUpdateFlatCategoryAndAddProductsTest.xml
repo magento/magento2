@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MQE-1424" />
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
@@ -66,7 +69,7 @@
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
         <scrollToTopOfPage stepKey="scrollOnTopOfPage"/>
-        <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <conditionalClick selector="{{CatalogProductsSection.resetFilter}}" dependentSelector="{{CatalogProductsSection.resetFilter}}" visible="true" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForProductsToLoad"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$createSimpleProduct.name$$"  stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>

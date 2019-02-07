@@ -73,7 +73,7 @@
         <element name="addUpSellProduct" type="button" selector="button[data-index='button_upsell']" timeout="30"/>
     </section>
     <section name="AdminAddRelatedProductsModalSection">
-        <element name="AddSelectedProductsButton" type="button" selector="//aside[contains(@class, 'upsell_modal')]//button[contains(@class, 'action-primary')]" timeout="30"/>
+        <element name="AddSelectedProductsButton" type="button" selector="//aside[contains(@class, 'related_modal')]//button[contains(@class, 'action-primary')]" timeout="30"/>
     </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>
