@@ -78,20 +78,20 @@
     <!-- Check the Cart -->
     <actionGroup name="StorefrontCheckCartActionGroup">
         <arguments>
-            <argument name="subtotal"/>
-            <argument name="shipping"/>
-            <argument name="shippingMethod"/>
-            <argument name="total"/>
+            <argument name="subtotal" type="string"/>
+            <argument name="shipping" type="string"/>
+            <argument name="shippingMethod" type="string"/>
+            <argument name="total" type="string"/>
         </arguments>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.shippingMethodForm}}" visible="false" stepKey="openEstimateShippingSection"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="waitForShippingSection"/>
         <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectShippingMethod"/>
-        <see userInput="${{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
         <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
-        <waitForText userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping"/>
-        <see userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping"/>
+        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
     </actionGroup>
 
     <!-- Open the Cart from Minicart-->

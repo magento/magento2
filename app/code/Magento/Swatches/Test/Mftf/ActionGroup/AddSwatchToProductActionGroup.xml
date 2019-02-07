@@ -62,4 +62,21 @@
         <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
+    <actionGroup name="AddVisualSwatchToProductWithStorefrontConfigActionGroup" extends="AddVisualSwatchToProductActionGroup">
+        <arguments>
+            <argument name="attribute" defaultValue="visualSwatchAttribute"/>
+            <argument name="option1" defaultValue="visualSwatchOption1"/>
+            <argument name="option2" defaultValue="visualSwatchOption2"/>
+        </arguments>
+
+        <!-- Go to Storefront Properties tab -->
+        <click selector="{{AdminNewAttributePanel.storefrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab" after="fillDefaultStoreLabel2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.storefrontPropertiesTitle}}" stepKey="waitTabLoad" after="goToStorefrontPropertiesTab"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" stepKey="switchOnUsInSearch" userInput="Yes" after="waitTabLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.visibleInAdvancedSearch}}" stepKey="switchOnVisibleInAdvancedSearch" userInput="Yes" after="switchOnUsInSearch"/>
+        <selectOption selector="{{AdminNewAttributePanel.comparableOnStorefront}}" stepKey="switchOnComparableOnStorefront" userInput="Yes" after="switchOnVisibleInAdvancedSearch"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" stepKey="selectUseInLayer" userInput="Filterable (with results)" after="switchOnComparableOnStorefront"/>
+        <selectOption selector="{{AdminNewAttributePanel.visibleOnCatalogPagesOnStorefront}}" stepKey="switchOnVisibleOnCatalogPagesOnStorefront" userInput="Yes" after="selectUseInLayer"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInProductListing}}" stepKey="switchOnUsedInProductListing" userInput="Yes" after="switchOnVisibleOnCatalogPagesOnStorefront"/>
+    </actionGroup>
 </actionGroups>
