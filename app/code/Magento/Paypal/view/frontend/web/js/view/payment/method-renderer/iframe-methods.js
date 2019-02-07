@@ -4,10 +4,9 @@
  */
 define([
     'Magento_Checkout/js/view/payment/default',
-    'ko',
     'Magento_Paypal/js/model/iframe',
     'Magento_Checkout/js/model/full-screen-loader'
-], function (Component, ko, iframe, fullScreenLoader) {
+], function (Component, iframe, fullScreenLoader) {
     'use strict';
 
     return Component.extend({
