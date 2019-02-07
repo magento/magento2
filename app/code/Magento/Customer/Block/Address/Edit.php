@@ -112,6 +112,32 @@ class Edit extends \Magento\Directory\Block\Data
     {
         parent::_prepareLayout();
 
+        $this->initAddressObject();
+
+        $this->pageConfig->getTitle()->set($this->getTitle());
+
+        if ($postedData = $this->_customerSession->getAddressFormData(true)) {
+            $postedData['region'] = [
+                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
+                'region' => $postedData['region'],
+            ];
+            $this->dataObjectHelper->populateWithArray(
+                $this->_address,
+                $postedData,
+                \Magento\Customer\Api\Data\AddressInterface::class
+            );
+        }
+        $this->precheckRequiredAttributes();
+        return $this;
+    }
+
+    /**
+     * Initialize address object.
+     *
+     * @return void
+     */
+    private function initAddressObject()
+    {
         // Init address object
         if ($addressId = $this->getRequest()->getParam('id')) {
             try {
@@ -133,20 +159,15 @@ class Edit extends \Magento\Directory\Block\Data
             $this->_address->setLastname($customer->getLastname());
             $this->_address->setSuffix($customer->getSuffix());
         }
+    }
 
-        $this->pageConfig->getTitle()->set($this->getTitle());
-
-        if ($postedData = $this->_customerSession->getAddressFormData(true)) {
-            $postedData['region'] = [
-                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
-                'region' => $postedData['region'],
-            ];
-            $this->dataObjectHelper->populateWithArray(
-                $this->_address,
-                $postedData,
-                \Magento\Customer\Api\Data\AddressInterface::class
-            );
-        }
+    /**
+     * Precheck attributes that may be required in attribute configuration.
+     *
+     * @return void
+     */
+    private function precheckRequiredAttributes()
+    {
         $precheckAttributes = $this->getData('check_attributes_on_render');
         $requiredAttributesPrechecked = [];
         if (!empty($precheckAttributes) && is_array($precheckAttributes)) {
@@ -158,7 +179,6 @@ class Edit extends \Magento\Directory\Block\Data
             }
         }
         $this->setData('required_attributes_prechecked', $requiredAttributesPrechecked);
-        return $this;
     }
 
     /**
