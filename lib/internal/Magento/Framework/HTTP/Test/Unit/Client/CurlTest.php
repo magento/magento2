@@ -20,7 +20,7 @@ class CurlTest extends TestCase
      * Check that HTTP client can be used only for HTTP.
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Protocol "telnet" not supported or disabled in libcurl
+     * @expectedExceptionMessageRegExp  /Protocol .?telnet.? not supported or disabled in libcurl/
      */
     public function testInvalidProtocol()
     {
