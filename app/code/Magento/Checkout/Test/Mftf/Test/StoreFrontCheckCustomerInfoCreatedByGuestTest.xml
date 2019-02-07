@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckCustomerInfoCreatedByGuestTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check customer information created by guest"/>
+            <title value="Check Customer Information Created By Guest"/>
+            <description value="Check customer information after placing the order as the guest who created an account"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95932"/>
+            <useCaseId value="MAGETWO-95820"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="_defaultProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct" />
+            <deleteData createDataKey="category" stepKey="deleteCategory" />
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$product.name$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypePassword"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypeConfirmationPassword"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
+        <see userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
+        <see stepKey="seeCustomerName" userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminShipmentOrderInformationSection.customerName}}"/>
+    </test>
+</tests>

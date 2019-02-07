@@ -15,7 +15,7 @@
             <title value="Customer Checkout"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="#"/>
+            <testCaseId value="MC-5922"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -26,10 +26,13 @@
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!--Clear filters-->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
@@ -48,6 +51,8 @@
         <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <waitForPageLoad stepKey="s39"/>
         <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
         <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
@@ -76,6 +81,7 @@
 
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
+        <waitForElementVisible selector="{{AdminCustomerFiltersSection.filtersButton}}" time="30" stepKey="waitFiltersButton"/>
         <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
         <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
@@ -163,7 +169,8 @@
         <click stepKey="selectFirstShippingMethod1" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect1" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="clickNextOnShippingMethodLoad1" selector="{{CheckoutShippingMethodsSection.next}}" />
-        <waitForPageLoad stepKey="waitForPaymentLoad1"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <waitForElement stepKey="waitForPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
         <see stepKey="seeBillingAddressIsCorrect1" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" />
         <click stepKey="clickPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" />
@@ -186,7 +193,8 @@
         <click stepKey="selectFirstShippingMethod2" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect2" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="clickNextOnShippingMethodLoad2" selector="{{CheckoutShippingMethodsSection.next}}" />
-        <waitForPageLoad stepKey="waitForPaymentLoad2"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <waitForElement stepKey="waitForPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
         <see stepKey="seeBillingAddressIsCorrect2" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{UK_Not_Default_Address.street[0]}}" />
         <click stepKey="clickPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" />
@@ -242,8 +250,7 @@
         <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}" />
         <waitForPageLoad stepKey="waitBillingForm"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.noQuotes}}" stepKey="waitMessage"/>
-        <see userInput="No Payment method available." stepKey="checkMessage"/>
+        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
         <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
