@@ -21,5 +21,3 @@
         <element name="logoPreview" type ="text" selector="[alt ='magento-logo.png']"/>
     </section>
 </sections>
-
-
