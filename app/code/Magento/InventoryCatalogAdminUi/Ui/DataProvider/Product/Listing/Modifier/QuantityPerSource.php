@@ -189,11 +189,11 @@ class QuantityPerSource extends AbstractModifier
         $newSourceCodes = $sourcesBySourceCodes = [];
 
         foreach ($sourceItems as $sourceItem) {
-            $newSourceCodes[] = $sourceItem->getSourceCode();
+            $newSourceCodes[$sourceItem->getSourceCode()] = $sourceItem->getSourceCode();
         }
 
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceInterface::SOURCE_CODE, $newSourceCodes, 'in')
+            ->addFilter(SourceInterface::SOURCE_CODE, array_keys($newSourceCodes), 'in')
             ->create();
         $sources = $this->sourceRepository->getList($searchCriteria)->getItems();
 
