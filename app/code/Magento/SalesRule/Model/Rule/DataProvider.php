@@ -62,7 +62,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $registry,
         \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
-        DataPersistorInterface $dataPersistor,
+        DataPersistorInterface $dataPersistor = null,
         array $meta = [],
         array $data = []
     ) {
@@ -70,7 +70,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->coreRegistry = $registry;
         $this->metadataValueProvider = $metadataValueProvider;
         $meta = array_replace_recursive($this->getMetadataValues(), $meta);
-        $this->dataPersistor = $dataPersistor;
+        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            DataPersistorInterface::class
+        );
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
