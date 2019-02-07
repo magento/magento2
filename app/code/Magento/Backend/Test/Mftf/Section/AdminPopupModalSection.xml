@@ -5,11 +5,10 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminSalesConfigSection">
-        <element name="enableMAPUseSystemValue" type="checkbox" selector="#sales_msrp_enabled_inherit"/>
-        <element name="enableMAPSelect" type="select" selector="#sales_msrp_enabled"/>
+    <section name="AdminPopupModalSection">
+        <element name="message" type="text" selector="aside.modal-popup .modal-content .popup-window-content"/>
+        <element name="ok" type="button" selector="//span[contains(text(),'Ok')]/ancestor::button"/>
     </section>
 </sections>
