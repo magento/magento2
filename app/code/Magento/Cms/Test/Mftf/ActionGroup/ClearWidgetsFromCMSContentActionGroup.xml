@@ -12,6 +12,10 @@
         <waitForPageLoad stepKey="waitEditHomePagePageToLoad"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
         <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand"/>
+        <executeJS function="jQuery('[id=\'cms_page_form_content_ifr\']').attr('name', 'preview-iframe')" stepKey="setPreviewFrameName"/>
+        <switchToIFrame selector="preview-iframe" stepKey="switchToIframe"/>
+        <fillField selector="{{TinyMCESection.EditorContent}}" userInput="Hello TinyMCE4!" stepKey="clearWidgets"/>
+        <switchToIFrame stepKey="switchOutFromIframe"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE4!');" stepKey="executeJSFillContent1"/>
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget"/>
         <waitForPageLoad stepKey="waitSaveToBeApplied"/>

@@ -32,6 +32,7 @@
         <element name="InsertTable" type="button" selector=".mce-i-table" />
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
+        <element name="EditorContent" type="input" selector="#tinymce"/>
     </section>
     <section name="MediaGallerySection">
         <element name="Browse" type="button" selector=".mce-i-browse"/>
