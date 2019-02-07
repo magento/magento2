@@ -171,7 +171,13 @@ class WebapiDecorator implements CurlInterface
      */
     protected function isValidIntegration()
     {
-        $this->write($_ENV['app_frontend_url'] . 'rest/V1/modules', [], CurlInterface::GET);
+        $url = rtrim($_ENV['app_frontend_url'], '/');
+        if (strpos($url, 'index.php') === false) {
+            $url .=  '/index.php/rest/V1/modules';
+        } else {
+            $url .= '/rest/V1/modules';
+        }
+        $this->write($url, [], CurlInterface::GET);
         $response = json_decode($this->read(), true);
 
         return (null !== $response) && !isset($response['message']);
@@ -237,6 +243,10 @@ class WebapiDecorator implements CurlInterface
      */
     public function getWebapiToken()
     {
+        // Request token if integration is no longer valid
+        if (!$this->isValidIntegration()) {
+            $this->init();
+        }
         return $this->webapiToken;
     }
 }

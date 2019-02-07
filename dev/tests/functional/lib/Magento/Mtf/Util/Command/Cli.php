@@ -72,7 +72,9 @@ class Cli
      */
     private function prepareParamArray($command, $options = [])
     {
-        $command .= ' ' . implode(' ', $options);
+        if (!empty($options)) {
+            $command .= ' ' . implode(' ', $options);
+        }
         return [
             'token' => urlencode($this->webapiHandler->getWebapiToken()),
             'command' => urlencode($command)
