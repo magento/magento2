@@ -157,7 +157,7 @@ class Edit extends \Magento\Directory\Block\Data
                 }
             }
         }
-        $this->setData('required_attributed_prechecked', $requiredAttributesPrechecked);
+        $this->setData('required_attributes_prechecked', $requiredAttributesPrechecked);
         return $this;
     }
 
