@@ -6,7 +6,6 @@
 
 namespace Magento\Quote\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Setup\ConvertSerializedDataToJsonFactory;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -36,6 +35,8 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     /**
      * PatchInitial constructor.
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param QuoteSetupFactory $quoteSetupFactory
+     * @param ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory
      */
     public function __construct(
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
