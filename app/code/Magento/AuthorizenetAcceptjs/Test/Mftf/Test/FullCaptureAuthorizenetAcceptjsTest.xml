@@ -65,10 +65,10 @@
 
         <!--View and validate order-->
         <actionGroup ref="ViewAndValidateOrderActionGroup" stepKey="viewAndValidateOrder">
-            <argument name="amount" value="$128.00"/>
-            <argument name="status" value="Processing"/>
-            <argument name="captureStatus" value="Capture"/>
-            <argument name="closedStatus" value="No"/>
+            <argument name="amount" value="{{AuthorizenetAcceptjsOrderValidationData.twoSimpleProductsOrderAmount}}"/>
+            <argument name="status" value="{{AuthorizenetAcceptjsOrderValidationData.processingStatusProcessing}}"/>
+            <argument name="captureStatus" value="{{AuthorizenetAcceptjsOrderValidationData.captureStatusCapture}}"/>
+            <argument name="closedStatus" value="{{AuthorizenetAcceptjsOrderValidationData.closedStatusNo}}"/>
         </actionGroup>
     </test>
 </tests>
