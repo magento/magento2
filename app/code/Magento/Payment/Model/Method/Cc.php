@@ -10,6 +10,8 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 
 /**
+ * Credit Card payment method legacy implementation.
+ *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.8
@@ -93,6 +95,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate()
     {
@@ -205,6 +208,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Check if verification should be used.
+     *
      * @return bool
      * @api
      */
@@ -218,6 +223,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Get list of credit cards verification reg exp.
+     *
      * @return array
      * @api
      */
@@ -242,6 +249,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Validate expiration date
+     *
      * @param string $expYear
      * @param string $expMonth
      * @return bool
@@ -292,6 +301,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Get code for "other" credit cards.
+     *
      * @param string $type
      * @return bool
      * @api
