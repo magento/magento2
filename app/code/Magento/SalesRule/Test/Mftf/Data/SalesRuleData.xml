@@ -145,6 +145,14 @@
         <data key="simple_free_shipping">1</data>
     </entity>
 
+    <entity name="PriceRuleWithCondition" type="SalesRule">
+        <data key="name" unique="suffix">SalesRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Fixed amount discount for whole cart</data>
+        <data key="discountAmount">50</data>
+    </entity>
+
     <entity name="SalesRuleSpecificCouponWithPercentDiscount" type="SalesRule">
         <data key="name" unique="suffix">SimpleSalesRule</data>
         <data key="description">Sales Rule Description</data>
