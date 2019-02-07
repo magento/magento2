@@ -12,5 +12,6 @@
         <section name="StorefrontPropertiesSection"/>
         <section name="AdvancedAttributePropertiesSection"/>
         <section name="AdminAttributeOptionsSection"/>
+        <section name="AttributeManageSwatchSection"/>
     </page>
 </pages>
