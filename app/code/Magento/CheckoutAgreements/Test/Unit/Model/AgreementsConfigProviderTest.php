@@ -8,6 +8,9 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Tests for AgreementsConfigProvider.
+ */
 class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -35,6 +38,9 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $agreementsFilterMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -59,10 +65,16 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test for getConfig if content is HTML.
+     *
+     * @return void
+     */
     public function testGetConfigIfContentIsHtml()
     {
         $content = 'content';
         $checkboxText = 'checkbox_text';
+        $escapedCheckboxText = 'escaped_checkbox_text';
         $mode = \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO;
         $agreementId = 100;
         $expectedResult = [
@@ -71,12 +83,12 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
                 'agreements' => [
                     [
                         'content' => $content,
-                        'checkboxText' => $checkboxText,
+                        'checkboxText' => $escapedCheckboxText,
                         'mode' => $mode,
-                        'agreementId' => $agreementId
-                    ]
-                ]
-            ]
+                        'agreementId' => $agreementId,
+                    ],
+                ],
+            ],
         ];
 
         $this->scopeConfigMock->expects($this->once())
@@ -93,6 +105,11 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn([$agreement]);
+
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->with($checkboxText)
+            ->willReturn($escapedCheckboxText);
 
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(true);
         $agreement->expects($this->once())->method('getContent')->willReturn($content);
@@ -103,11 +120,17 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
 
+    /**
+     * Test for getConfig if content is not HTML.
+     *
+     * @return void
+     */
     public function testGetConfigIfContentIsNotHtml()
     {
         $content = 'content';
         $escapedContent = 'escaped_content';
         $checkboxText = 'checkbox_text';
+        $escapedCheckboxText = 'escaped_checkbox_text';
         $mode = \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO;
         $agreementId = 100;
         $expectedResult = [
@@ -116,12 +139,12 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
                 'agreements' => [
                     [
                         'content' => $escapedContent,
-                        'checkboxText' => $checkboxText,
+                        'checkboxText' => $escapedCheckboxText,
                         'mode' => $mode,
-                        'agreementId' => $agreementId
-                    ]
-                ]
-            ]
+                        'agreementId' => $agreementId,
+                    ],
+                ],
+            ],
         ];
 
         $this->scopeConfigMock->expects($this->once())
@@ -139,8 +162,11 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteriaMock)
             ->willReturn([$agreement]);
 
-        $this->escaperMock->expects($this->once())->method('escapeHtml')->with($content)->willReturn($escapedContent);
-
+        $this->escaperMock->expects($this->at(0))->method('escapeHtml')->with($content)->willReturn($escapedContent);
+        $this->escaperMock->expects($this->at(1))
+            ->method('escapeHtml')
+            ->with($checkboxText)
+            ->willReturn($escapedCheckboxText);
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(false);
         $agreement->expects($this->once())->method('getContent')->willReturn($content);
         $agreement->expects($this->once())->method('getCheckboxText')->willReturn($checkboxText);
