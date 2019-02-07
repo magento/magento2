@@ -19,9 +19,6 @@
         <element name="doneButton" type="button" selector="//aside[contains(@class,'product_form_product_form_advanced_inventory_modal')]//button[contains(@data-role,'action')]" timeout="5"/>
         <element name="useConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_manage_stock]']"/>
         <element name="manageStock" type="select" selector="//*[@name='product[stock_data][manage_stock]']"/>
+        <element name="advancedInventoryCloseButton" type="button" selector=".product_form_product_form_advanced_inventory_modal button.action-close" timeout="30"/>
     </section>
 </sections>
-
-
-
-

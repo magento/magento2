@@ -27,6 +27,7 @@
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
+        <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button[@data-action='remove-selected-item']" parameterized="true" timeout="30"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="advancedInventoryLink" type="button" selector="//button[contains(@data-index, 'advanced_inventory_button')]" timeout="30"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
