@@ -187,7 +187,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     {
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->_pageFactory->create();
-        if ($pageId !== null && $pageId !== $page->getId()) {
+        if ($pageId !== null) {
             $page->setStoreId($this->_storeManager->getStore()->getId());
             $page->load($pageId);
         }
