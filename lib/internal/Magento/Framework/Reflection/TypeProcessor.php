@@ -562,7 +562,7 @@ class TypeProcessor
     /**
      * Return true if the passed type is a simple type
      *
-     * eg.:
+     * Eg.:
      * Return true with; array, string, ...
      * Return false with: SomeClassName
      *
@@ -577,7 +577,7 @@ class TypeProcessor
     /**
      * Get basic type for a class name
      *
-     * eg.:
+     * Eg.:
      * SomeClassName[] => SomeClassName
      *
      * @param string $className
@@ -592,7 +592,7 @@ class TypeProcessor
     /**
      * Return true if it is a FQ class name
      *
-     * eg.:
+     * Eg.:
      * SomeClassName => false
      * \My\NameSpace\SomeClassName => true
      *

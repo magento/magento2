@@ -58,8 +58,7 @@ class Amqp
     }
 
     /**
-     * Check that the RabbitMQ instance has the management plugin installed and the api
-     * is available.
+     * Check that the RabbitMQ instance has the management plugin installed and the api is available.
      *
      * @return bool
      */
@@ -92,6 +91,7 @@ class Amqp
     /**
      * Get declared exchange bindings.
      *
+     * @param string $name
      * @return array
      */
     public function getExchangeBindings($name)
@@ -119,6 +119,8 @@ class Amqp
     }
 
     /**
+     * Clear Queue
+     *
      * @param string $name
      * @param int $numMessages
      * @return string
@@ -138,7 +140,7 @@ class Amqp
     /**
      * Delete connection
      *
-     * @param $name
+     * @param string $name
      * @return string $data
      */
     public function deleteConnection($name)

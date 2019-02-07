@@ -97,8 +97,8 @@ class Street extends \Magento\Framework\App\Config\Value
                 break;
 
             case ScopeConfigInterface::SCOPE_TYPE_DEFAULT:
-                 $attribute->setData('multiline_count', 2);
-                 break;
+                $attribute->setData('multiline_count', 2);
+                break;
         }
         $attribute->save();
         return $result;
