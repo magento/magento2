@@ -7,7 +7,6 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="ConfigureAuthorizenetAcceptjs">
         <arguments>
             <argument name="paymentAction" type="string"/>
@@ -19,14 +18,13 @@
         <click stepKey="clickOnConfiguration" selector="{{StoresSubmenuSection.configuration}}"/>
         <waitForPageLoad stepKey="waitForSales"/>
         <waitForElementVisible stepKey="waitForVisibleHack" selector="{{AdminMenuSection.currencySetup}}"/>
-        <scrollTo stepKey="scrollToSales" selector="{{ConfigurationListSection.sales}}"/>
-        <click stepKey="clickOnSales" selector="{{ConfigurationListSection.sales}}" />
+        <scrollTo stepKey="scrollToSales" selector="{{StoresConfigurationListSection.sales}}"/>
+        <click stepKey="clickOnSales" selector="{{StoresConfigurationListSection.sales}}" />
         <waitForPageLoad stepKey="waitForPaymentMethods"/>
-        <click stepKey="clickOnPaymentMethods" selector="{{ConfigurationListSection.salesPaymentMethods}}" />
+        <click stepKey="clickOnPaymentMethods" selector="{{StoresConfigurationListSection.salesPaymentMethods}}" />
         <waitForPageLoad stepKey="waitForOpenConfiguration"/>
         <scrollTo stepKey="scrollToOpenConfig" selector="{{AuthorizenetAcceptjsConfigurationSection.openSectionToggle}}"/>
         <conditionalClick stepKey="openConfiguration" selector="{{AuthorizenetAcceptjsConfigurationSection.openSectionToggle}}" dependentSelector="{{AuthorizenetAcceptjsConfigurationSection.alreadyOpenSectionToggle}}" visible="false"/>
-
 
         <!-- Fill Auth.net fields and save -->
         <waitForPageLoad stepKey="waitToFillApiLogin"/>
@@ -43,6 +41,6 @@
     </actionGroup>
 
     <actionGroup name="DisableAuthorizenetAcceptjs">
-        <magentoCLI stepKey="disableBrainTree" command="config:set payment/authorizenet_acceptjs/active 0"/>
+        <magentoCLI stepKey="disableAuthorizenetAcceptjs" command="config:set payment/authorizenet_acceptjs/active 0"/>
     </actionGroup>
 </actionGroups>

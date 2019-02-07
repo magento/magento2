@@ -7,7 +7,6 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="FillPaymentInformation">
         <click stepKey="clickOnAuthorizenetToggle" selector="{{AuthorizenetCheckoutSection.selectAuthorizenet}}"/>
         <waitForPageLoad stepKey="waitForCardDataSection"/>
