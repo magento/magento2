@@ -12,6 +12,6 @@
         <section name="AdminCustomerMainActionsSection"/>
         <section name="AdminCustomerAccountAddressSection"/>
         <section name="AdminCustomerAccountEditAddressSection"/>
-        <section name="AdminAddCustomerAddressActionGroup"/>
+        <section name="AdminCustomerAccountNewAddressSection"/>
     </page>
 </pages>
