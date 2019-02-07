@@ -132,7 +132,7 @@
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
                                name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[min_sale_qty]"
-                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('min_sale_qty') * 1 ?>"
+                               value="<?= /* @escapeNotVerified */ $block->getDefaultMinSaleQty() * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
