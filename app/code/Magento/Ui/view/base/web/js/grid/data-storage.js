@@ -274,6 +274,7 @@ define([
             }
 
             this.updateData(data.items);
+
             if (this.cacheRequests) {
                 this.cacheRequest(data, params);
             }
