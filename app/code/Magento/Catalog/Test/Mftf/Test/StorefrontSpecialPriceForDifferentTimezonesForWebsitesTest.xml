@@ -32,7 +32,7 @@
             <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
             <!--Set timezone for Main Website-->
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchStoreViewActionGroup">
-                <argument name="storeView" value="_defaultWebsite.name"/>
+                <argument name="scopeName" value="_defaultWebsite.name"/>
             </actionGroup>
             <uncheckOption selector="{{LocaleOptionsSection.useDefault}}"  stepKey="uncheckUseDefault"/>
             <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="Greenwich Mean Time (Africa/Abidjan)" stepKey="setTimezone1"/>
@@ -49,7 +49,7 @@
             <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>
 
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup">
-                <argument name="storeView" value="_defaultWebsite.name"/>
+                <argument name="scopeName" value="_defaultWebsite.name"/>
             </actionGroup>
             <checkOption selector="{{LocaleOptionsSection.useDefault}}"  stepKey="checkUseDefault"/>
             <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset1"/>
