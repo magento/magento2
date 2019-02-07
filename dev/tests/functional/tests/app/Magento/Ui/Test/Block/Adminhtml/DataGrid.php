@@ -373,8 +373,10 @@ class DataGrid extends Grid
             $this->sortGridByField('ID');
         }
         foreach ($items as $item) {
-            //Scroll to the top of the page to be sure current page field is not hidden.
-            $this->browser->find($this->topElementToScroll)->hover();
+            if (!$this->_rootElement->find($this->currentPage, Locator::SELECTOR_XPATH)->isVisible()) {
+                //Scroll to the top of the page to be sure current page field is visible.
+                $this->browser->find($this->topElementToScroll)->hover();
+            }
             $this->_rootElement->find($this->currentPage, Locator::SELECTOR_XPATH)->setValue('');
             $this->waitLoader();
             $selectItem = $this->getRow($item)->find($this->selectItem);
