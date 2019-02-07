@@ -10,6 +10,8 @@
 namespace Magento\Framework\Filter;
 
 /**
+ * Template filter
+ *
  * @api
  */
 class Template implements \Zend_Filter_Interface
@@ -228,8 +230,9 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
-     * a string of the processed value.
+     * Adds a callback to run after main filtering has happened.
+     *
+     * Callback must accept a single argument and return a string of the processed value.
      *
      * @param callable $afterFilterCallback
      * @return $this
@@ -257,6 +260,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get var directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -288,7 +293,7 @@ class Template implements \Zend_Filter_Interface
     {
         // Processing of {template config_path=... [...]} statement
         $templateParameters = $this->getParameters($construction[2]);
-        if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
+        if (!isset($templateParameters['config_path']) || !$this->getTemplateProcessor()) {
             // Not specified template or not set include processor
             $replacedValue = '{Error in template processing}';
         } else {
@@ -302,6 +307,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get depend directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -320,6 +327,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * If directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -374,7 +383,7 @@ class Template implements \Zend_Filter_Interface
         $stackVars = $tokenizer->tokenize();
         $result = $default;
         $last = 0;
-        for ($i = 0; $i < count($stackVars); $i++) {
+        for ($i = 0, $count = count($stackVars); $i < $count; $i++) {
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];

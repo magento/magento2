@@ -291,6 +291,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $dimensionFactory;
 
     /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $emptyItem;
+
+    /**
      * Collection constructor
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -474,8 +479,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Retrieve is flat enabled flag
-     * Return always false if magento run admin
+     * Retrieve is flat enabled. Return always false if magento run admin.
      *
      * @return bool
      */
@@ -506,8 +510,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Standard resource collection initialization
-     * Needed for child classes
+     * Standard resource collection initialization. Needed for child classes.
      *
      * @param string $model
      * @param string $entityModel
@@ -546,14 +549,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Retrieve collection empty item
-     * Redeclared for specifying id field name without getting resource model inside model
+     * Get collection empty item. Redeclared for specifying id field name without getting resource model inside model.
      *
      * @return \Magento\Framework\DataObject
      */
     public function getNewEmptyItem()
     {
-        $object = parent::getNewEmptyItem();
+        if (null === $this->emptyItem) {
+            $this->emptyItem = parent::getNewEmptyItem();
+        }
+        $object = clone $this->emptyItem;
         if ($this->isEnabledFlat()) {
             $object->setIdFieldName($this->getEntity()->getIdFieldName());
         }
@@ -633,8 +638,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Add attribute to entities in collection
-     * If $attribute=='*' select all attributes
+     * Add attribute to entities in collection. If $attribute=='*' select all attributes.
      *
      * @param array|string|integer|\Magento\Framework\App\Config\Element $attribute
      * @param bool|string $joinType
@@ -670,8 +674,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Processing collection items after loading
-     * Adding url rewrites, minimal prices, final prices, tax percents
+     * Processing collection items after loading. Adding url rewrites, minimal prices, final prices, tax percents.
      *
      * @return $this
      */
@@ -682,9 +685,27 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $this->_prepareUrlDataObject();
+        $this->prepareStoreId();
 
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', ['collection' => $this]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add Store ID to products from collection.
+     *
+     * @return $this
+     */
+    protected function prepareStoreId()
+    {
+        if ($this->getStoreId() !== null) {
+            /** @var $item \Magento\Catalog\Model\Product */
+            foreach ($this->_items as $item) {
+                $item->setStoreId($this->getStoreId());
+            }
         }
 
         return $this;
@@ -756,8 +777,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Adding product website names to result collection
-     * Add for each product websites information
+     * Adding product website names to result collection. Add for each product websites information.
      *
      * @return $this
      */
@@ -768,7 +788,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -819,14 +839,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         foreach ($this as $product) {
             if (isset($productWebsites[$product->getId()])) {
                 $product->setData('websites', $productWebsites[$product->getId()]);
+                $product->setData('website_ids', $productWebsites[$product->getId()]);
             }
         }
         return $this;
     }
 
     /**
-     * Add store availability filter. Include availability product
-     * for store website
+     * Add store availability filter. Include availability product for store website.
      *
      * @param null|string|bool|int|Store $store
      * @return $this
@@ -1115,11 +1135,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get SQL for get record count
      *
-     * @param null $select
+     * @param Select $select
      * @param bool $resetLeftJoins
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
-    protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
+    protected function _getSelectCountSql(?Select $select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
         $countSelect = $select === null ? $this->_getClearSelect() : $this->_buildClearSelect($select);
@@ -1357,8 +1377,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Add URL rewrites data to product
-     * If collection loadded - run processing else set flag
+     * Add URL rewrites data to product. If collection loadded - run processing else set flag.
      *
      * @param int|string $categoryId
      * @return $this
@@ -1412,8 +1431,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['cu' => $this->getTable('catalog_url_rewrite_product_category')],
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.category_id IN (?)', $this->_urlRewriteCategory);
+        } else {
+            $select->joinLeft(
+                ['cu' => $this->getTable('catalog_url_rewrite_product_category')],
+                'u.url_rewrite_id=cu.url_rewrite_id'
+            )->where('cu.url_rewrite_id IS NULL');
         }
-
+        
         // more priority is data with category id
         $urlRewrites = [];
 
@@ -1518,7 +1542,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add attribute to filter
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string $attribute
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string|array $attribute
      * @param array $condition
      * @param string $joinType
      * @return $this
@@ -1581,7 +1605,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
@@ -1792,7 +1817,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             }
             $conditions[] = $this->getConnection()->quoteInto(
                 'product_website.website_id IN(?)',
-                $filters['website_ids']
+                $filters['website_ids'],
+                'int'
             );
         } elseif (isset(
             $filters['store_id']
@@ -1804,7 +1830,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         ) {
             $joinWebsite = true;
             $websiteId = $this->_storeManager->getStore($filters['store_id'])->getWebsiteId();
-            $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId);
+            $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId, 'int');
         }
 
         $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
@@ -2000,12 +2026,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $conditions = [
             'cat_index.product_id=e.entity_id',
-            $this->getConnection()->quoteInto('cat_index.store_id=?', $filters['store_id']),
+            $this->getConnection()->quoteInto('cat_index.store_id=?', $filters['store_id'], 'int'),
         ];
         if (isset($filters['visibility']) && !isset($filters['store_table'])) {
-            $conditions[] = $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility']);
+            $conditions[] = $this->getConnection()->quoteInto(
+                'cat_index.visibility IN(?)',
+                $filters['visibility'],
+                'int'
+            );
         }
-        $conditions[] = $this->getConnection()->quoteInto('cat_index.category_id=?', $filters['category_id']);
+        $conditions[] = $this->getConnection()->quoteInto('cat_index.category_id=?', $filters['category_id'], 'int');
         if (isset($filters['category_is_anchor'])) {
             $conditions[] = $this->getConnection()->quoteInto('cat_index.is_parent=?', $filters['category_is_anchor']);
         }
@@ -2188,7 +2218,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getLinkField() . ' IN(?)',
             $productIds
         )->order(
-            $this->getLinkField()
+            'qty'
         );
         return $select;
     }
@@ -2343,7 +2373,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Retrieve Media gallery resource.
+     *
      * @deprecated 101.0.1
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
      */
     private function getMediaGalleryResource()

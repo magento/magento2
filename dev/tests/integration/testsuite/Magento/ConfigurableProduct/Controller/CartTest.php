@@ -9,6 +9,8 @@
  */
 namespace Magento\ConfigurableProduct\Controller;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -85,6 +87,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'remove' => 0,
             'coupon_code' => 'test'
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->dispatch(
             'checkout/cart/couponPost/'

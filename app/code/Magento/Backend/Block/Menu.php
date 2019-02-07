@@ -9,12 +9,12 @@ namespace Magento\Backend\Block;
 /**
  * Backend menu block
  *
- * @api
- * @method \Magento\Backend\Block\Menu setAdditionalCacheKeyInfo(array $cacheKeyInfo)
+ * @method $this setAdditionalCacheKeyInfo(array $cacheKeyInfo)
  * @method array getAdditionalCacheKeyInfo()
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Menu extends \Magento\Backend\Block\Template
 {
@@ -75,21 +75,22 @@ class Menu extends \Magento\Backend\Block\Template
     private $anchorRenderer;
 
     /**
-     * @var ConfigInterface
+     * @var \Magento\Framework\App\Route\ConfigInterface
      */
     private $routeConfig;
 
     /**
-     * @param Template\Context $context
+     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
+     * @param \Magento\Framework\App\Route\ConfigInterface|null $routeConfig
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -141,6 +142,7 @@ class Menu extends \Magento\Backend\Block\Template
 
     /**
      * Render menu item mouse events
+     *
      * @param \Magento\Backend\Model\Menu\Item $menuItem
      * @return string
      */
@@ -216,7 +218,7 @@ class Menu extends \Magento\Backend\Block\Template
     {
         $routeId = $this->routeConfig->getRouteByFrontName($match[1]);
         return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/' . $this->_url->getSecretKey(
-            $routeId,
+            $routeId ?: $match[1],
             $match[2],
             $match[3]
         );
@@ -354,7 +356,7 @@ class Menu extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Menu\Item $menuItem
      * @param int $level
      * @param int $limit
-     * @param $id int
+     * @param int|null $id
      * @return string HTML code
      */
     protected function _addSubMenu($menuItem, $level, $limit, $id = null)

@@ -18,6 +18,7 @@
         <data key="urlKey" unique="suffix">testurlkey</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
+        <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -180,6 +181,9 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductUrlKey</requiredEntity>
     </entity>
+    <entity name="SetProductVisibilityHidden" type="product2">
+        <data key="visibility">1</data>
+    </entity>
     <entity name="ProductImage" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="price">1.00</data>
@@ -301,6 +305,20 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="SimpleProductWithCustomAttributeSet" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <var key="attribute_set_id" entityKey="attribute_set_id" entityType="CatalogAttributeSet"/>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="weight">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="productWithOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <data key="file">magento.jpg</data>
@@ -418,5 +436,87 @@
         <data key="urlKey" unique="suffix">api-simple-product</data>
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
+    <entity name="simpleProductForMassUpdate" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">massUpdateProductName</data>
+        <data key="keyword">massUpdateProductName</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">masstesturlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="simpleProductForMassUpdate2" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">massUpdateProductName</data>
+        <data key="keyword">massUpdateProductName</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">masstesturlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleSingleQty" type="product2">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="defaultSimpleProduct" type="product">
+        <data key="name" unique="suffix">Testp</data>
+        <data key="sku" unique="suffix">testsku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">560.00</data>
+        <data key="urlKey" unique="suffix">testurl-</data>
+        <data key="status">1</data>
+        <data key="quantity">25</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
+    <entity name="ProductWithLongNameSku" extends="ApiSimpleProduct">
+        <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
+        <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
+    </entity>
+    <entity name="PaginationProduct" type="product">
+        <data key="name" unique="suffix">pagi</data>
+        <data key="sku" unique="suffix">pagisku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">780.00</data>
+        <data key="urlKey" unique="suffix">pagiurl-</data>
+        <data key="status">1</data>
+        <data key="quantity">50</data>
+        <data key="weight">5</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
+    <entity name="Magento3" type="image">
+        <data key="title" unique="suffix">Magento3</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento3.jpg</data>
+        <data key="filename">magento3</data>
+        <data key="file_extension">jpg</data>
     </entity>
 </entities>

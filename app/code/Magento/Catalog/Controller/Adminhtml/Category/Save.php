@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -14,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Category
+class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -146,6 +147,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
                 $category->setParentId($parentCategory->getId());
+                $category->setLevel(null);
             }
 
             /**

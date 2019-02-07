@@ -25,6 +25,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
 
     protected function setUp()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 

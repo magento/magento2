@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-201"/>
             <group value="Downloadable"/>
-            <skip>
-                <issueId value="MC-4063"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
