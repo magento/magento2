@@ -47,6 +47,7 @@ class UiComponentGenerator
      * @param string $name
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return UiComponentInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function generateUiComponent($name, \Magento\Framework\View\LayoutInterface $layout)
     {
