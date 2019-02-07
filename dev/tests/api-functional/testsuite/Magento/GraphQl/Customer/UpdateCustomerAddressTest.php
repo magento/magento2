@@ -218,13 +218,12 @@ MUTATION;
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
         $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");
-        // https://github.com/magento/graphql-ce/issues/270
-//        $assertionRegionMap = [
-//            ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
-//            ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
-//            ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
-//        ];
-//        $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
+        $assertionRegionMap = [
+            ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
+            ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
+            ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
+        ];
+        $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
     }
 
     /**
