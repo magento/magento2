@@ -39,12 +39,12 @@ class UpdateShippingTablerate implements DataPatchInterface
         $connection = $this->moduleDataSetup->getConnection();
         $connection->update(
             $this->moduleDataSetup->getTable('shipping_tablerate'),
-            ['condition_name' => Tablerate::CONDITION_CODE_PACKAGE_VALUE_WITH_DISCOUNT],
+            ['condition_name' => 'package_value_with_discount'],
             [new \Zend_Db_Expr('condition_name = \'package_value\'')]
         );
         $connection->update(
             $this->moduleDataSetup->getTable('core_config_data'),
-            ['value' => Tablerate::CONDITION_CODE_PACKAGE_VALUE_WITH_DISCOUNT],
+            ['value' => 'package_value_with_discount'],
             [
                 new \Zend_Db_Expr('value = \'package_value\''),
                 new \Zend_Db_Expr('path = \'carriers/tablerate/condition_name\'')
