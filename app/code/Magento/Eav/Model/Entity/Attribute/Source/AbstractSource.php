@@ -80,6 +80,8 @@ abstract class AbstractSource implements
     }
 
     /**
+     * Get option id.
+     *
      * @param string $value
      * @return null|string
      */
@@ -91,6 +93,16 @@ abstract class AbstractSource implements
             }
         }
         return null;
+    }
+
+    /**
+     * Clear cached options.
+     *
+     * @return void
+     */
+    public function clearOptions() : void
+    {
+        $this->_options = null;
     }
 
     /**
