@@ -165,7 +165,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
 
         if (is_array($data['value'])) {
             foreach ($data['value'] as &$value) {
-                if (!is_array($value)) {
+                if (is_string($value)) {
                     $value = html_entity_decode($value);
                 }
             }
