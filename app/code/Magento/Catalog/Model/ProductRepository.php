@@ -7,11 +7,11 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
@@ -247,7 +247,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->cacheLimit = (int)$cacheLimit;
         $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ReadExtensions::class);
-        $this->linkManagement = $linkManagement ?:\Magento\Framework\App\ObjectManager::getInstance()
+        $this->linkManagement = $linkManagement ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(CategoryLinkManagementInterface::class);
     }
 
