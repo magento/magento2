@@ -7,14 +7,16 @@
 namespace Magento\Ui\Component\MassAction;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
+ * Filter component.
+ *
  * @api
  * @since 100.0.2
  */
@@ -100,9 +102,13 @@ class Filter
             }
         }
 
+        $filterIds = $this->getFilterIds();
+        if (\is_array($selected)) {
+            $filterIds = array_unique(array_merge($filterIds, $selected));
+        }
         $collection->addFieldToFilter(
             $collection->getIdFieldName(),
-            ['in' => $this->getFilterIds()]
+            ['in' => $filterIds]
         );
 
         return $collection;
