@@ -80,6 +80,13 @@ class PublisherConsumerController
                 "This test relies on *nix shell and should be skipped in Windows environment."
             );
         }
+
+        if (!$this->amqpHelper->isAvailable()) {
+            throw new PreconditionFailedException(
+                'This test relies on RabbitMQ Management Plugin.'
+            );
+        }
+
         $connections = $this->amqpHelper->getConnections();
         foreach (array_keys($connections) as $connectionName) {
             $this->amqpHelper->deleteConnection($connectionName);
