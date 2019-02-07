@@ -13,7 +13,7 @@
             <stories value="Add Downloadable Product"/>
             <title value="Downloadable Product created on Single stock mode by Admin user"/>
             <description value="Downloadable Product created on Single stock mode by Admin user"/>
-            <testCaseId value="1748"/>
+            <testCaseId value="MSI-1748"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="single_mode"/>

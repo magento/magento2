@@ -8,15 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurationApi\Api;
 
 /**
- * Returns stock item configuration data
+ * Returns stock item configuration data by sku and stock id.
  *
  * @api
  */
 interface GetStockItemConfigurationInterface
 {
     /**
-     * Return null if configuration for sku per stock is not exist
-     *
      * @param string $sku
      * @param int $stockId
      * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface

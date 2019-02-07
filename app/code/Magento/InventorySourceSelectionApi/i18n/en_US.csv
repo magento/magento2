@@ -1,0 +1,4 @@
+"There is no such Source Selection Algorithm implemented: %1","There is no such Source Selection Algorithm implemented: %1"
+"%1 doesn't implement SourceSelectionInterface","%1 doesn't implement SourceSelectionInterface"
+"Source Priority","Source Priority"
+"Algorithm which provides Source Selections based on predefined priority of Source","Algorithm which provides Source Selections based on predefined priority of Source"

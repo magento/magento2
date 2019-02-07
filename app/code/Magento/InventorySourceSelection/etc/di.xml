@@ -5,19 +5,30 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface" type="Magento\InventorySourceSelection\Model\Request\InventoryRequest"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface" type="Magento\InventorySourceSelection\Model\Request\ItemRequest"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface" type="Magento\InventorySourceSelection\Model\SourceSelectionAlgorithm"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface" type="Magento\InventorySourceSelection\Model\Result\SourceSelectionItem"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface" type="Magento\InventorySourceSelection\Model\Result\SourceSelectionResult"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface" type="Magento\InventorySourceSelection\Model\SourceSelectionService"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface" type="Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCode"/>
-    <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface"
+                type="Magento\InventorySourceSelection\Model\Request\InventoryRequest"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface"
+                type="Magento\InventorySourceSelection\Model\Request\ItemRequest"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface"
+                type="Magento\InventorySourceSelection\Model\SourceSelectionAlgorithm"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface"
+                type="Magento\InventorySourceSelection\Model\Result\SourceSelectionItem"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface"
+                type="Magento\InventorySourceSelection\Model\Result\SourceSelectionResult"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface"
+                type="Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCode"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\AddressInterface"
+                type="Magento\InventorySourceSelection\Model\Address"/>
+
+    <type name="Magento\InventorySourceSelectionApi\Model\SourceSelectionService">
         <arguments>
             <argument name="sourceSelectionMethods" xsi:type="array">
-                <item name="priority" xsi:type="string">Magento\InventorySourceSelection\Model\Algorithms\PriorityBasedAlgorithm</item>
+                <item name="priority"
+                      xsi:type="string">Magento\InventorySourceSelection\Model\Algorithms\PriorityBasedAlgorithm</item>
             </argument>
         </arguments>
     </type>
+
 </config>

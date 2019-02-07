@@ -228,6 +228,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Split password hash into parts: hash, salt, version
+     *
      * @param string $hash
      * @return array
      */
@@ -243,6 +245,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password hash
+     *
      * @return string
      */
     private function getPasswordHash()
@@ -251,6 +255,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password salt
+     *
      * @return string
      */
     private function getPasswordSalt()
@@ -259,6 +265,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password version
+     *
      * @return array
      */
     private function getPasswordVersion()
@@ -281,6 +289,22 @@ class Encryptor implements EncryptorInterface
             ':' . base64_encode($crypt->encrypt($data));
     }
 
+    /**
+     * Encrypt data using the fastest available algorithm
+     *
+     * @param string $data
+     * @return string
+     */
+    public function encryptWithFastestAvailableAlgorithm($data)
+    {
+        $crypt = $this->getCrypt();
+        if (null === $crypt) {
+            return $data;
+        }
+        return $this->keyVersion .
+            ':' . $this->getCipherVersion() .
+            ':' . base64_encode($crypt->encrypt($data));
+    }
     /**
      * Look for key and crypt versions in encrypted data before decrypting
      *
@@ -391,7 +415,7 @@ class Encryptor implements EncryptorInterface
         string $initVector = null
     ): ?EncryptionAdapterInterface {
         if (null === $key && null === $cipherVersion) {
-            $cipherVersion = self::CIPHER_RIJNDAEL_256;
+            $cipherVersion = $this->getCipherVersion();
         }
 
         if (null === $key) {
@@ -423,5 +447,19 @@ class Encryptor implements EncryptorInterface
         }
 
         return new Mcrypt($key, $cipher, $mode, $initVector);
+    }
+
+    /**
+     * Get cipher version
+     *
+     * @return int
+     */
+    private function getCipherVersion()
+    {
+        if (extension_loaded('sodium')) {
+            return $this->cipher;
+        } else {
+            return self::CIPHER_RIJNDAEL_256;
+        }
     }
 }

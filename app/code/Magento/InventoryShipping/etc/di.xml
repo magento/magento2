@@ -21,6 +21,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryShipping\Model\GetSourceSelectionResultFromInvoice">
+        <arguments>
+            <!-- @deprecated parameter stockByWebsiteIdResolver has been deprecated and not in use now -->
+            <argument name="stockByWebsiteIdResolver" xsi:type="null"/>
+            <!-- @deprecated parameter inventoryRequestFactory has been deprecated and not in use now -->
+            <argument name="inventoryRequestFactory" xsi:type="null"/>
+        </arguments>
+    </type>
     <!-- Return Processor -->
     <type name="Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsChain">
         <arguments>

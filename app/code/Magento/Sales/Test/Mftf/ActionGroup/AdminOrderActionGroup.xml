@@ -94,24 +94,6 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
-    <!--Add a simple product to order with user defined quantity-->
-    <actionGroup name="addSimpleProductToOrderWithCustomQuantity">
-        <arguments>
-            <argument name="product" defaultValue="_defaultProduct"/>
-            <argument name="quantity" type="string"/>
-        </arguments>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMastToDisappear"/>
-        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{quantity}}" stepKey="fillProductQty"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-    </actionGroup>
-
     <!--Add configurable product to order -->
     <actionGroup name="addConfigurableProductToOrder">
         <arguments>
