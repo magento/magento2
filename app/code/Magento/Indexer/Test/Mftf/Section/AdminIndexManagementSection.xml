@@ -11,6 +11,6 @@
     <section name="AdminIndexManagementSection">
         <element name="indexerCheckbox" type="checkbox" selector="#gridIndexer_table input[value='{{indexerId}}']" parameterized="true"/>
         <element name="massActionSelect" type="select" selector="#gridIndexer_massaction-select"/>
-        <element name="massActionSubmit" type="button" selector="#gridIndexer_massaction-form button"/>
+        <element name="massActionSubmit" type="button" selector="#gridIndexer_massaction-form button" timeout="30"/>
     </section>
 </sections>
