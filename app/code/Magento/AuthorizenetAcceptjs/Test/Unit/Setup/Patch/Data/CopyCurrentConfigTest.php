@@ -15,6 +15,8 @@ use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\DataSetup;
 use Magento\Setup\Model\ModuleContext;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 use PHPUnit\Framework\TestCase;
 
 class CopyCurrentConfigTest extends TestCase
@@ -44,6 +46,16 @@ class CopyCurrentConfigTest extends TestCase
      */
     private $context;
 
+    /**
+     * @var \Magento\Store\Model\StoreManager
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Store\Model\Website
+     */
+    private $website;
+
     protected function setUp(): void
     {
         $this->scopeConfig = $this->createMock(Config::class);
@@ -60,21 +72,31 @@ class CopyCurrentConfigTest extends TestCase
             ->willReturn(null);
 
         $this->context = $this->createMock(ModuleContext::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->website = $this->createMock(Website::class);
     }
 
     public function testMigrateData(): void
     {
-        $this->scopeConfig->expects($this->exactly(13))
+        $this->scopeConfig->expects($this->exactly(26))
             ->method('getValue')
             ->willReturn('TestValue');
 
-        $this->resourceConfig->expects($this->exactly(13))
+        $this->resourceConfig->expects($this->exactly(26))
             ->method('saveConfig')
             ->willReturn(null);
 
-        $this->encryptor->expects($this->exactly(3))
+        $this->encryptor->expects($this->exactly(6))
             ->method('encrypt')
             ->willReturn('TestValue');
+
+        $this->website->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeManager->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([$this->website]);
 
         $objectManager = new ObjectManager($this);
 
@@ -84,7 +106,8 @@ class CopyCurrentConfigTest extends TestCase
                 'moduleDataSetup' => $this->setup,
                 'scopeConfig' => $this->scopeConfig,
                 'resourceConfig' => $this->resourceConfig,
-                'encryptor' => $this->encryptor
+                'encryptor' => $this->encryptor,
+                'storeManager' => $this->storeManager
             ]
         );
 
@@ -104,6 +127,10 @@ class CopyCurrentConfigTest extends TestCase
         $this->encryptor->expects($this->never())
             ->method('encrypt');
 
+        $this->storeManager->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([]);
+
         $objectManager = new ObjectManager($this);
 
         $installer = $objectManager->getObject(
@@ -112,7 +139,8 @@ class CopyCurrentConfigTest extends TestCase
                 'moduleDataSetup' => $this->setup,
                 'scopeConfig' => $this->scopeConfig,
                 'resourceConfig' => $this->resourceConfig,
-                'encryptor' => $this->encryptor
+                'encryptor' => $this->encryptor,
+                'storeManager' => $this->storeManager
             ]
         );
 
