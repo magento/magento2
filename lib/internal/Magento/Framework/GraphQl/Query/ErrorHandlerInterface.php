@@ -14,6 +14,9 @@ namespace Magento\Framework\GraphQl\Query;
  */
 interface ErrorHandlerInterface
 {
+    const SERVER_LOG_FILE = 'var/log/graphql/server/exception.log';
+    const CLIENT_LOG_FILE = 'var/log/graphql/client/exception.log';
+    const GENERAL_LOG_FILE = 'var/log/graphql/exception.log';
     /**
      * Handle errors
      *
