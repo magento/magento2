@@ -212,7 +212,7 @@ class Save extends Attribute implements HttpPostActionInterface
                 }
 
                 $validatorAttrCode = new \Zend_Validate_Regex(
-                    ['pattern' => '/^[a-zA-Z]+[a-zA-Z0-9_]+$/u']
+                    ['pattern' => '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u']
                 );
                 if (!$validatorAttrCode->isValid($attributeCode)) {
                     $this->messageManager->addErrorMessage(
