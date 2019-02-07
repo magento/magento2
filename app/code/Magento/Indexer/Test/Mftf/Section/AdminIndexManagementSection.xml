@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminIndexManagementSection">
-        <element name="indexerCheckbox" type="checkbox" selector="input[value='{{indexerName}}']" parameterized="true"/>
+        <element name="indexerCheckbox" type="checkbox" selector="#gridIndexer_table input[value='{{indexerId}}']" parameterized="true"/>
         <element name="massActionSelect" type="select" selector="#gridIndexer_massaction-select"/>
         <element name="massActionSubmit" type="button" selector="#gridIndexer_massaction-form button"/>
     </section>
