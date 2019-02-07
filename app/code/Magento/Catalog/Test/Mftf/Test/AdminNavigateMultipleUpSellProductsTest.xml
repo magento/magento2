@@ -145,7 +145,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheSimpleProduct2ToBeLoaded"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectSimpleProduct1"/>
-        <click stepKey="addSimpleProduct2" selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}"/>
+        <click stepKey="addSimpleProduct2" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
         <waitForPageLoad stepKey="waitForSimpleProductToBeAdded"/>
         <scrollTo selector="{{AdminProductFormActionSection.saveButton}}" stepKey="scrollToTheSaveButton"/>
         <click stepKey="clickOnSaveButton1" selector="{{AdminProductFormActionSection.saveButton}}"/>
