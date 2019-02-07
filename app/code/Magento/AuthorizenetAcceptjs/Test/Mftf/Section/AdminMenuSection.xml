@@ -11,7 +11,7 @@
     <section name="AdminMenuSection">
         <element name="dashboard" type="button" selector="#menu-magento-backend-dashboard"/>
         <element name="sales" type="button" selector="#menu-magento-sales-sales"/>
-        <element name="orders" type="button" selector="//span[text()='Orders']"/>
+        <element name="orders" type="button" selector="//*[@id='menu-magento-sales-sales']//span[text()='Orders']"/>
         <element name="catalog" type="button" selector="#menu-magento-catalog-catalog"/>
         <element name="customers" type="button" selector="#menu-magento-customer-customer"/>
         <element name="marketing" type="button" selector="#menu-magento-backend-marketing"/>
@@ -19,7 +19,5 @@
         <element name="reports" type="button" selector="#menu-magento-reports-report"/>
         <element name="stores" type="button" selector="#menu-magento-backend-stores"/>
         <element name="system" type="button" selector="#menu-magento-backend-system"/>
-        <element name="findPartners" type="button" selector="#menu-magento-marketplace-partners"/>
-        <element name="currencySetup" type="button" selector="//span[text()='Currency Setup']"/>
     </section>
 </sections>

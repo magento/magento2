@@ -7,7 +7,6 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="ViewAndValidateOrderActionGroup">
         <arguments>
             <argument name="amount" type="string"/>
@@ -15,7 +14,7 @@
             <argument name="captureStatus" type="string"/>
             <argument name="closedStatus" type="string"/>
         </arguments>
-        <amOnPage url="/admin" stepKey="navigateToAdmin"/>
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <click selector="{{AdminMenuSection.sales}}" stepKey="clickSales"/>
         <waitForPageLoad stepKey="waitForSalesSubsection"/>
         <click selector="{{AdminMenuSection.orders}}" stepKey="clickOrders"/>
@@ -47,7 +46,7 @@
             <argument name="captureStatus" type="string"/>
             <argument name="closedStatus" type="string"/>
         </arguments>
-        <amOnPage url="/admin" stepKey="navigateToAdmin"/>
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <click selector="{{AdminMenuSection.sales}}" stepKey="clickSales"/>
         <waitForPageLoad stepKey="waitForSalesSubsection"/>
         <click selector="{{AdminMenuSection.orders}}" stepKey="clickOrders"/>
