@@ -22,5 +22,6 @@
         <element name="blockSummary" type="button" selector="#block-summary"/>
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
         <element name="totalsElementByPosition" type="text" selector=".data.table.totals > tbody tr:nth-of-type({{value}}) > th" parameterized="true"/>
+        <element name="tableTotals" type="text" selector="#cart-totals .data.table.totals"/>
     </section>
 </sections>
