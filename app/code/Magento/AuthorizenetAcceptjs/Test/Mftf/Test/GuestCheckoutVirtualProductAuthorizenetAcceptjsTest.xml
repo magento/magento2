@@ -57,7 +57,7 @@
         <waitForPageLoad stepKey="waitForCartToFill"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCartAgain"/>
         <waitForPageLoad stepKey="waitForCartToFillAgain"/>
-        
+
         <!--Checkout steps-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
         <waitForPageLoad stepKey="waitForCheckoutLoad"/>
@@ -73,10 +73,10 @@
 
         <!--View and validate order-->
         <actionGroup ref="ViewAndValidateOrderActionGroupNoSubmit" stepKey="viewAndValidateOrder">
-            <argument name="amount" value="$24.68"/>
-            <argument name="status" value="Processing"/>
-            <argument name="captureStatus" value="Capture"/>
-            <argument name="closedStatus" value="No"/>
+            <argument name="amount" value="{{AuthorizenetAcceptjsOrderValidationData.virtualProductOrderAmount}}"/>
+            <argument name="status" value="{{AuthorizenetAcceptjsOrderValidationData.processingStatusProcessing}}"/>
+            <argument name="captureStatus" value="{{AuthorizenetAcceptjsOrderValidationData.captureStatusCapture}}"/>
+            <argument name="closedStatus" value="{{AuthorizenetAcceptjsOrderValidationData.closedStatusNo}}"/>
         </actionGroup>
     </test>
 </tests>

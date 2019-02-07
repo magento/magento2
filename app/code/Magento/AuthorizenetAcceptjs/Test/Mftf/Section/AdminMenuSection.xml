@@ -19,5 +19,7 @@
         <element name="reports" type="button" selector="#menu-magento-reports-report"/>
         <element name="stores" type="button" selector="#menu-magento-backend-stores"/>
         <element name="system" type="button" selector="#menu-magento-backend-system"/>
+        <element name="findPartners" type="button" selector="#menu-magento-marketplace-partners"/>
+        <element name="currencySetup" type="button" selector="//a[contains(@class, 'item-nav')]//span[text()='Currency Setup']"/>
     </section>
 </sections>
