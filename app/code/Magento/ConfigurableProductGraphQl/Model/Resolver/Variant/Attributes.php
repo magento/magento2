@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -45,12 +46,14 @@ class Attributes implements ResolverInterface
         $data = [];
         foreach ($value['options'] as $option) {
             $code = $option['attribute_code'];
-            if (!isset($value['product']['model'][$code])) {
+            /** @var Product|null $model */
+            $model = $value['product']['model'] ?? null;
+            if (!$model || !$model->getData($code)) {
                 continue;
             }
 
             foreach ($option['values'] as $optionValue) {
-                if ($optionValue['value_index'] != $value['product']['model'][$code]) {
+                if ($optionValue['value_index'] != $model->getData($code)) {
                     continue;
                 }
                 $data[] = [
