@@ -193,7 +193,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
      * @param ReadExtensions|null $readExtensions
-     * @param Magento\Catalog\Api\CategoryLinkManagementInterface|null $categoryLinkManagement
+     * @param Magento\Catalog\Api\CategoryLinkManagementInterface|null $linkManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -638,7 +638,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         $this->saveProduct($product);
-        if ($assignToCategories === true) {
+        if ($assignToCategories === true && $product->getCategoryIds()) {
             $this->linkManagement->assignProductToCategories(
                 $product->getSku(),
                 $product->getCategoryIds()

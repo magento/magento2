@@ -200,7 +200,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setData',
                 'getStoreId',
                 'getMediaGalleryEntries',
-                'getExtensionAttributes'
+                'getExtensionAttributes',
+                'getCategoryIds'
             ]
         );
 
@@ -220,7 +221,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'validate',
                 'save',
                 'getMediaGalleryEntries',
-                'getExtensionAttributes'
+                'getExtensionAttributes',
+                'getCategoryIds'
             ]
         );
         $this->initializedProduct->expects($this->any())
@@ -269,6 +271,12 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->initializedProduct
             ->method('getExtensionAttributes')
             ->willReturn($this->productExtension);
+        $this->product
+            ->method('getCategoryIds')
+            ->willReturn([1, 2, 3, 4]);
+        $this->initializedProduct
+            ->method('getCategoryIds')
+            ->willReturn([1, 2, 3, 4]);
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
