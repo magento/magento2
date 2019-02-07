@@ -165,6 +165,13 @@
     <!-- End Gateway Commands -->
 
     <!-- Handlers -->
+    <virtualType name="AuthorizenetAcceptjsPaymentReviewStatusHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_status" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentReviewStatusHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsAuthorizationHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -344,6 +351,11 @@
     </virtualType>
     <!-- End Error Mapping -->
 
+    <type name="Magento\AuthorizenetAcceptjs\Gateway\Command\FetchTransactionInfoCommand">
+        <arguments>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsPaymentReviewStatusHandler</argument>
+        </arguments>
+    </type>
     <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
         <arguments>
             <argument name="executors" xsi:type="array">

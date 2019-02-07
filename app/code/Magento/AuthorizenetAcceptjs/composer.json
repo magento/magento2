@@ -15,9 +15,6 @@
         "magento/module-store": "*",
         "magento/module-quote": "*"
     },
-    "suggest": {
-        "magento/module-config": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
