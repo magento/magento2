@@ -683,7 +683,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $name Header name to retrieve.
      * @param mixed|null $default Default value to use when the requested header is missing.
-     * @return bool|HeaderInterface
+     * @return bool|string
      */
     public function getHeader($name, $default = false)
     {
