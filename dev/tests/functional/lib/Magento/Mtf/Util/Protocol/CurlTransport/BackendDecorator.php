@@ -99,7 +99,7 @@ class BackendDecorator implements CurlInterface
 
                 $this->transport->write($authUrl, $data, CurlInterface::POST);
                 $response = $this->read();
-                if (strpos($response, 'login-form')) {
+                if (strpos($response, 'login-form') !== false) {
                     continue;
                 }
                 $isAuthorized = true;
