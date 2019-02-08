@@ -65,15 +65,20 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey(4, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[4]);
-        $this->assertEquals('page-cache-redis-compress-data', $options[4]->getName());
+        $this->assertEquals('page-cache-redis-password', $options[4]->getName());
 
         $this->assertArrayHasKey(5, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[5]);
-        $this->assertEquals('page-cache-redis-password', $options[5]->getName());
+        $this->assertEquals('page-cache-redis-compress-data', $options[5]->getName());
 
         $this->assertArrayHasKey(6, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[6]);
-        $this->assertEquals('page-cache-id-prefix', $options[6]->getName());
+        $this->assertEquals('page-cache-redis-compression-library', $options[6]->getName());
+
+        $this->assertArrayHasKey(7, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
+        $this->assertEquals('page-cache-id-prefix', $options[7]->getName());
+
     }
 
     /**
@@ -93,7 +98,8 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'port' => '',
                             'database' => '',
                             'compress_data' => '',
-                            'password' => ''
+                            'password' => '',
+                            'compression_library' => '',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -120,8 +126,9 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'server' => 'foo.bar',
                             'port' => '9000',
                             'database' => '6',
+                            'password' => '',
                             'compress_data' => '1',
-                            'password' => ''
+                            'compression_library' => 'gzip',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -134,7 +141,8 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
             'page-cache-redis-server' => 'foo.bar',
             'page-cache-redis-port' => '9000',
             'page-cache-redis-db' => '6',
-            'page-cache-redis-compress-data' => '1'
+            'page-cache-redis-compress-data' => '1',
+            'page-cache-redis-compression-library' => 'gzip',
         ];
 
         $configData = $this->configList->createConfig($options, $this->deploymentConfigMock);

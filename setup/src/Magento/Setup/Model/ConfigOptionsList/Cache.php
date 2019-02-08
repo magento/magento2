@@ -27,6 +27,8 @@ class Cache implements ConfigOptionsListInterface
     const INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE = 'cache-backend-redis-db';
     const INPUT_KEY_CACHE_BACKEND_REDIS_PORT = 'cache-backend-redis-port';
     const INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD = 'cache-backend-redis-password';
+    const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'cache-backend-redis-compress-data';
+    const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIBRARY = 'cache-backend-redis-compression-library';
     const INPUT_KEY_CACHE_ID_PREFIX = 'cache-id-prefix';
 
     const CONFIG_PATH_CACHE_BACKEND = 'cache/frontend/default/backend';
@@ -34,6 +36,8 @@ class Cache implements ConfigOptionsListInterface
     const CONFIG_PATH_CACHE_BACKEND_DATABASE = 'cache/frontend/default/backend_options/database';
     const CONFIG_PATH_CACHE_BACKEND_PORT = 'cache/frontend/default/backend_options/port';
     const CONFIG_PATH_CACHE_BACKEND_PASSWORD = 'cache/frontend/default/backend_options/password';
+    const CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/default/backend_options/compress_data';
+    const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIBRARY = 'cache/frontend/default/backend_options/compression_library';
     const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
 
     /**
@@ -43,7 +47,9 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER => '127.0.0.1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => '0',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => '6379',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => ''
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => '',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '0',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIBRARY => '',
     ];
 
     /**
@@ -60,7 +66,9 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER => self::CONFIG_PATH_CACHE_BACKEND_SERVER,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_CACHE_BACKEND_PORT,
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIBRARY => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIBRARY,
     ];
 
     /**
@@ -116,11 +124,23 @@ class Cache implements ConfigOptionsListInterface
                 'Redis server password'
             ),
             new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
+                'Set to 1 to compress the cache (use 0 to disable)'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIBRARY,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIBRARY,
+                'Compression library to use [snappy,lzf,l4z,zstd,gzip] (leave blank to determine automatically)'
+            ),
+            new TextConfigOption(
                 self::INPUT_KEY_CACHE_ID_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_ID_PREFIX,
                 'ID prefix for cache keys'
-            )
+            ),
         ];
     }
 
