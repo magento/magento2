@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryImageUploadTest">
+    <test name="AdminDesignConfigMediaGalleryImageUploadTest">
         <annotations>
             <features value="Content"/>
             <stories value="Content"/>
@@ -24,31 +24,35 @@
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
+        <!--Edit Store View-->
+        <comment userInput="Edit Store View" stepKey="editStoreViewComment"/>
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
         <waitForPageLoad stepKey="waitForPageload1"/>
         <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
         <waitForPageLoad stepKey="waitForPageload2"/>
         <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection"/>
         <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection"/>
-
+        <!--Upload Image-->
+        <comment userInput="Upload Image" stepKey="uploadImageComment"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
-        <wait time="3" stepKey="waitForAddingdSelectedImages"/>
-        <attachFile selector="{{AdminDesignConfigSection.imageUploadFromMediaGallery}}" userInput="adobe-base.jpg" stepKey="attachFile1"/>
-        <wait time="3" stepKey="waitForAddingSelectedImages"/>
-        <click selector="{{AdminDesignConfigSection.addSelectedFromMediaGallery}}" stepKey="addSelectedImages"/>
-        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Head')}}" stepKey="waitForPreviewImage"/>
-        <wait time="3" stepKey="waitForWrapperToClose"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="VerifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="attachImage" stepKey="SelectImageFromMediaStorage">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="saveImage" stepKey="insertImage"/>
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification"/>
         <waitForPageLoad stepKey="waitForPageloadSuccess"/>
-
+        <!--Edit Store View-->
+        <comment userInput="Edit Store View" stepKey="editStoreViewComment2"/>
         <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView2"/>
         <waitForPageLoad stepKey="waitForPageload3"/>
         <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection2"/>
         <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection2"/>
-
+        <!--Save Default Configuration-->
+        <comment userInput="Save Default Configuration" stepKey="saveDefaultConfigurationComment"/>
         <click selector="{{AdminDesignConfigSection.useDefaultByFieldsetName('Head')}}" stepKey="clickUseDefault"/>
-        <wait time="3" stepKey="waitForWrapperToClose2"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="waitForWrapperToClose2"/>
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration2"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification2"/>
         <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
