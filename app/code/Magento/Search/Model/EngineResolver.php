@@ -10,6 +10,8 @@ use Magento\Framework\Search\EngineResolverInterface;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Search engine resolver model.
+ *
  * @api
  * @since 100.1.0
  */
