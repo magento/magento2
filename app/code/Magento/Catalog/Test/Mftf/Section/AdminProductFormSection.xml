@@ -56,6 +56,7 @@
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
+        <element name="countryOfManufacture" type="select" selector="select[name='product[country_of_manufacture]']"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -66,10 +67,12 @@
         <element name="LayoutDropdown" type="select" selector="select[name='product[page_layout]']"/>
     </section>
     <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="relatedProductsHeader" type="button" selector=".admin__collapsible-block-wrapper[data-index='related']" timeout="30"/>
         <element name="AddRelatedProductsButton" type="button" selector="button[data-index='button_related']" timeout="30"/>
+        <element name="addUpSellProduct" type="button" selector="button[data-index='button_upsell']" timeout="30"/>
     </section>
     <section name="AdminAddRelatedProductsModalSection">
-        <element name="AddSelectedProductsButton" type="button" selector="//aside[contains(@class, 'product_form_product_form_related_related_modal')]//button/span[contains(text(), 'Add Selected Products')]" timeout="30"/>
+        <element name="AddSelectedProductsButton" type="button" selector=".product_form_product_form_related_upsell_modal .page-actions-buttons .action-primary" timeout="30"/>
     </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>

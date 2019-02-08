@@ -696,4 +696,16 @@
         <data key="urlKey" unique="suffix">virtual-product</data>
         <data key="type_id">virtual</data>
     </entity>
+    <entity name="nameAndAttributeSkuMaskSimpleProduct" type="product">
+        <data key="urlKey" unique="suffix">simple-product</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">10000.00</data>
+        <data key="quantity">657</data>
+        <data key="weight">50</data>
+        <data key="country_of_manufacture">UA</data>
+        <data key="country_of_manufacture_label">Ukraine</data>
+        <data key="type_id">simple</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
 </entities>
