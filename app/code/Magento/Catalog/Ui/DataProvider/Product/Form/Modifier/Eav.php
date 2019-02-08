@@ -539,6 +539,10 @@ class Eav extends AbstractModifier
      */
     private function getAttributeSetId()
     {
+        if((int)$this->request->getParam('set', 0)){
+            return (int)$this->request->getParam('set', 0);
+        }
+        
         return $this->locator->getProduct()->getAttributeSetId();
     }
 
