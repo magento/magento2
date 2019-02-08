@@ -17,9 +17,13 @@
             <testCaseId value="MAGETWO-96469"/>
             <useCaseId value="MAGETWO-96406"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="MQE-1424" />
+            </skip>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <createData entity="NewRootCategory" stepKey="createRootCategory"/>
         </before>
 
@@ -44,6 +48,7 @@
             <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
             <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <!--logout-->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
