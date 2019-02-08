@@ -13,10 +13,10 @@
             <argument name="orderFromDate" type="string"/>
             <argument name="orderToDate" type="string"/>
         </arguments>
-        <click selector="{{AdminOrderReportMainActionsSection.here}}" stepKey="refreshStatistics" />
+        <click selector="{{AdminOrderReportMainActionsSection.refreshStatistics}}" stepKey="refreshStatistics"/>
         <fillField selector="{{AdminOrderReportFilterSection.dateFrom}}" userInput="{{orderFromDate}}" stepKey="fillFromDate"/>
         <fillField selector="{{AdminOrderReportFilterSection.dateTo}}" userInput="{{orderToDate}}" stepKey="fillToDate"/>
-        <selectOption selector="{{AdminOrderReportFilterSection.orderStatus}}" userInput="Any" stepKey="selectAnyOption" />
-        <click selector="{{AdminOrderReportMainActionsSection.showReport}}" stepKey="showReport" />
+        <selectOption selector="{{AdminOrderReportFilterSection.orderStatus}}" userInput="Any" stepKey="selectAnyOption"/>
+        <click selector="{{AdminOrderReportMainActionsSection.showReport}}" stepKey="showReport"/>
     </actionGroup>
 </actionGroups>

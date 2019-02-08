@@ -55,7 +55,7 @@
         <!--Create order invoice-->
         <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment" />
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="createInvoice"/>
-        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>        <!--Invoice created successfully-->
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
         <!--Ship Order-->
         <comment userInput="Admin creates shipment" stepKey="adminCreatesShipmentComment"/>
         <actionGroup ref="StartCreateShipmentFromOrderPage" stepKey="createShipment"/>
@@ -81,7 +81,7 @@
         <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
 
         <!-- Generate Order report -->
-        <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage1"/>
+        <amOnPage url="{{AdminOrdersReportPage.url}}" stepKey="goToAdminOrdersReportPage"/>
         <!-- Get date -->
         <generateDate date="+0 day" format="m/d/Y" stepKey="generateEndDate"/>
         <generateDate date="-1 day" format="m/d/Y" stepKey="generateStartDate"/>
