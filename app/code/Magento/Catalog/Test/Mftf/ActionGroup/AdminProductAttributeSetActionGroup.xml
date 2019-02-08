@@ -53,6 +53,7 @@
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{name}}" stepKey="filterByName"/>
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
         <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
     <!-- Filter By Attribute Label -->
     <actionGroup name="filterProductAttributeByAttributeLabel">
