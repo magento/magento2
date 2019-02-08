@@ -9,7 +9,7 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="NewProductsListWidgetSimpleProductTest">
-        <actionGroup ref="clearPageCache" stepKey="clearPageCache" after="clickSaveProduct"/>
+        <actionGroup ref="clearPageCache" stepKey="clearPageCache" before="amOnCmsPage"/>
     </test>
     <test name="NewProductsListWidgetConfigurableProductTest">
         <actionGroup ref="clearPageCache" stepKey="clearPageCache" after="clickSaveProduct"/>
@@ -18,7 +18,7 @@
         <actionGroup ref="clearPageCache" stepKey="clearPageCache" after="clickSaveProduct"/>
     </test>
     <test name="NewProductsListWidgetVirtualProductTest">
-        <actionGroup ref="clearPageCache" stepKey="clearPageCache" after="clickSaveProduct"/>
+        <actionGroup ref="clearPageCache" stepKey="clearPageCache" before="amOnCmsPage"/>
     </test>
     <test name="NewProductsListWidgetBundleProductTest">
         <actionGroup ref="clearPageCache" stepKey="clearPageCache" after="clickSaveProduct"/>
