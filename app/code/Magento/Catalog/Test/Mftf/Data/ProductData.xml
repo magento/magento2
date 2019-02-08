@@ -711,4 +711,13 @@
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
+    <entity name="ProductShortDescription" type="ProductAttribute">
+        <data key="attribute_code">short_description</data>
+    </entity>
+    <entity name="AddToDefaultSetTopOfContentSection" type="ProductAttributeSet">
+        <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="attributeSetId">4</data>
+        <data key="attributeGroupId">13</data>
+        <data key="sortOrder">0</data>
+    </entity>
 </entities>
