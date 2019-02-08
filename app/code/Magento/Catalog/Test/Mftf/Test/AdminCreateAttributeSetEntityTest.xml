@@ -21,9 +21,13 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         </before>
+        <after>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+        </after>
 
-        <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="goToAttributeSetByName" stepKey="filterProductAttributeSetGridByLabel">
