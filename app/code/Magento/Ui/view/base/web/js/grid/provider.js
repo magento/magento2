@@ -85,7 +85,7 @@ define([
         /**
          * Overrides current data with a provided one.
          *
-         * @param {Object} data - New data object.
+         * @param {Object|null} data - New data object.
          * @returns {Provider} Chainable.
          */
         setData: function (data) {
