@@ -520,7 +520,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             );
 
             $customerData = array_intersect_key($customerData, $originalRequestData['customer']);
-            $originalRequestData['customer'] = array_merge($originalRequestData['customer'],  $customerData);
+            $originalRequestData['customer'] = array_merge($originalRequestData['customer'], $customerData);
         }
 
         return $originalRequestData;
