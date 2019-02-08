@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Model\Template;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Cms Template Filter Model
  */
@@ -39,5 +41,24 @@ class Filter extends \Magento\Email\Model\Template\Filter
     {
         $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()->getBaseMediaDir() . '/' . $params['url'];
+    }
+
+    /**
+     * Validates directive param for traversal path
+     *
+     * @param string $directive
+     * @return string
+     */
+    public function filter($directive)
+    {
+        if (preg_match('#\.\.[\\\/]#', $directive)) {
+            throw new LocalizedException(
+                __(
+                    'Requested file should not include parent directory traversal ("../", "..\\" notation)'
+                )
+            );
+        }
+
+        return parent::filter($directive);
     }
 }
