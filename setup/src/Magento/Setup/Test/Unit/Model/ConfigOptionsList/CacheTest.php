@@ -73,7 +73,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey(6, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('cache-backend-redis-compression-library', $options[7]->getName());
+        $this->assertEquals('cache-backend-redis-compression-lib', $options[7]->getName());
 
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[5]);
@@ -99,7 +99,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'database' => '',
                             'password' => '',
                             'compress_data' => '',
-                            'compression_library' => '',
+                            'compression_lib' => '',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -128,7 +128,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'database' => '5',
                             'password' => '',
                             'compress_data' => '1',
-                            'compression_library' => 'gzip',
+                            'compression_lib' => 'gzip',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -142,7 +142,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'cache-backend-redis-port' => '1234',
             'cache-backend-redis-db' => '5',
             'cache-backend-redis-compress-data' => '1',
-            'cache-backend-redis-compression-library' => 'gzip'
+            'cache-backend-redis-compression-lib' => 'gzip'
         ];
 
         $configData = $this->configOptionsList->createConfig($options, $this->deploymentConfigMock);
