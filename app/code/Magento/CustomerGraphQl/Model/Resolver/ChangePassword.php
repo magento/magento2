@@ -17,7 +17,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * @inheritdoc
+ * Change customer password resolver
  */
 class ChangePassword implements ResolverInterface
 {
@@ -70,11 +70,11 @@ class ChangePassword implements ResolverInterface
         array $args = null
     ) {
         if (!isset($args['currentPassword'])) {
-            throw new GraphQlInputException(__('"currentPassword" value should be specified'));
+            throw new GraphQlInputException(__('Specify the "currentPassword" value.'));
         }
 
         if (!isset($args['newPassword'])) {
-            throw new GraphQlInputException(__('"newPassword" value should be specified'));
+            throw new GraphQlInputException(__('Specify the "newPassword" value.'));
         }
 
         $currentUserId = $context->getUserId();

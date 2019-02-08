@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Review\Model\ResourceModel\Review\Product;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerGroupMainSection">
+        <element name="filterBtn" type="button" selector="//button[text()='Filters']"/>
+        <element name="groupField" type="input" selector="//*[@name='customer_group_code']"/>
+        <element name="applyFiltersBtn" type="button" selector="//*[text()='Apply Filters']"/>
+        <element name="selectFirstRow" type="button" selector="//button[@class='action-select']"/>
+        <element name="deleteBtn" type="button" selector="//*[text()='Delete']"/>
+        <element name="clearAllBtn" type="button" selector="//button[text()='Clear all']"/>
+    </section>
+</sections>
