@@ -45,7 +45,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(6, $options);
+        $this->assertCount(8, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -98,7 +98,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'port' => '',
                             'database' => '',
                             'password' => '',
-                            'compress_data' => '0',
+                            'compress_data' => '1',
                             'compression_library' => '',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),

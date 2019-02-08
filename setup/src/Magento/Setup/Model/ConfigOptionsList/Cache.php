@@ -48,7 +48,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => '0',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => '6379',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => '',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '0',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIBRARY => '',
     ];
 
@@ -127,7 +127,7 @@ class Cache implements ConfigOptionsListInterface
                 self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
-                'Set to 1 to compress the cache (use 0 to disable)'
+                'Set to 0 to disable compression (default is 1, enabled)'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIBRARY,
