@@ -97,6 +97,9 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!--Select SimpleProduct -->
+        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
@@ -108,7 +111,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheProductToLoad"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheSimpleProduct2"/>
-        <click stepKey="addSelectedProduct" selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}"/>
+        <click stepKey="addSelectedProduct" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
         <waitForPageLoad stepKey="waitForProductToBeAdded"/>
         <click stepKey="clickOnAddUpSellProductsButton" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterConfigurableProduct">
@@ -116,7 +119,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheConfigProductToLoad"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheConfigProduct"/>
-        <click stepKey="addSelectedProductButton" selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}"/>
+        <click stepKey="addSelectedProductButton" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
         <waitForPageLoad stepKey="waitForConfigProductToBeAdded"/>
         <click stepKey="clickOnRelatedProducts1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
         <click stepKey="clickOnSaveButton" selector="{{AdminProductFormActionSection.saveButton}}"/>
@@ -128,6 +131,9 @@
         <waitForPageLoad stepKey="waitForProductsToBeLoaded"/>
 
         <!--Select Configurable Product-->
+        <actionGroup ref="filterProductGridBySku" stepKey="findConfigProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
         <click stepKey="openConfigProduct" selector="{{AdminProductGridSection.productRowBySku($$createConfigProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForConfigProductToLoad"/>
 
@@ -139,7 +145,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheSimpleProduct2ToBeLoaded"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectSimpleProduct1"/>
-        <click stepKey="addSimpleProduct2" selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}"/>
+        <click stepKey="addSimpleProduct2" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
         <waitForPageLoad stepKey="waitForSimpleProductToBeAdded"/>
         <scrollTo selector="{{AdminProductFormActionSection.saveButton}}" stepKey="scrollToTheSaveButton"/>
         <click stepKey="clickOnSaveButton1" selector="{{AdminProductFormActionSection.saveButton}}"/>

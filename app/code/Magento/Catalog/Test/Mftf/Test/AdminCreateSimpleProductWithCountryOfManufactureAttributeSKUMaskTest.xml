@@ -20,14 +20,14 @@
         </annotations>
 
         <before>
-            <magentoCLI stepKey="setCountryOfManufacture" command="config:set catalog/fields_masks/sku" arguments="'{{name}} {{country_of_manufacture}}'"/>
+            <magentoCLI stepKey="setCountryOfManufacture" command="config:set catalog/fields_masks/sku" arguments="{{name}}-{{country_of_manufacture}}"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="{{name}}"/>
             <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
-                <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}} {{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
+                <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
             </actionGroup>
-            <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="'{{name}}'"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -39,10 +39,10 @@
 
         <!-- Create simple product with country of manufacture attribute -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}" stepKey="fillSimpleProductName"/>
+        <selectOption selector="{{AdminProductFormSection.countryOfManufacture}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="selectCountryOfManufacture"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.price}}" stepKey="fillSimpleProductPrice"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.weight}}" stepKey="fillSimpleProductWeight"/>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.quantity}}" stepKey="fillSimpleProductQuantity"/>
-        <selectOption selector="{{AdminProductFormSection.countryOfManufacture}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="selectCountryOfManufacture"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForSimpleProductToSave"/>
         <!-- Verify customer see success message -->
@@ -53,9 +53,9 @@
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
-        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}} {{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="fillSkuFilterFieldWithNameAndCountryOfManufactureInput" />
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="fillSkuFilterFieldWithNameAndCountryOfManufactureInput" />
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <waitForPageLoad stepKey="waitForProductSearchAfterApplyingFilters"/>
-        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}} {{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="seeSimpleProductSkuMaskedAsNameAndCountryOfManufacture"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="seeSimpleProductSkuMaskedAsNameAndCountryOfManufacture"/>
     </test>
 </tests>
