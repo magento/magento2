@@ -62,11 +62,5 @@
 
         <!-- See new attribute set -->
         <see selector="{{AdminProductFormSection.attributeSet}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="seeAttributeSetName"/>
-
-        <!--Finish filling the new product page and save the product -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillSimpleProductMain">
-            <argument name="product" value="_defaultProduct"/>
-        </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
     </test>
 </tests>
