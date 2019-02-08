@@ -139,6 +139,22 @@ class AttributesTest extends TestCase
     }
 
     /**
+     * Test getAttribute whitespaces.
+     *
+     * @return void
+     */
+    public function testGetAttributeWhitespacesValue()
+    {
+        $this->phrase = ' ';
+        $this->frontendAttribute
+            ->expects($this->any())
+            ->method('getValue')
+            ->willReturn($this->phrase);
+        $attributes = $this->attributesBlock->getAdditionalData();
+        $this->assertTrue(empty($attributes['phrase']));
+    }
+
+    /**
      * @return void
      */
     public function testGetAttributeHasValue()
