@@ -60,6 +60,6 @@
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstPnroductToWishlist"/>
 
         <!--Assert Correct Error Message-->
-        <see userInput="This is a required field" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsError}}" stepKey="seeError"/>
+        <see userInput="You need to choose options for your item for" stepKey="assertCorrectErrorMessage"/>
     </test>
 </tests>
