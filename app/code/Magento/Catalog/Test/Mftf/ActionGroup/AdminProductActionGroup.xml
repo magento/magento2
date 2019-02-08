@@ -302,9 +302,7 @@
             <argument name="website"/>
             <argument name="product"/>
         </arguments>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductsList"/>
-        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.name)}}"/>
+        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.sku)}}"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openWebsitesList"/>
