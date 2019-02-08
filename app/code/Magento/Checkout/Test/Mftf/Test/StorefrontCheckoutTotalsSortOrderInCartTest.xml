@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutTotalsSortOrderInCartTest">
+        <annotations>
+            <title value="Checkout Totals Sort Order configuration and displaying in cart"/>
+            <stories value="MAGETWO-89397: Wrong Checkout Totals Sort Order in cart"/>
+            <description value="Checkout Totals Sort Order configuration and displaying in cart"/>
+            <features value="Checkout"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-96635"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SaleRule50PercentDiscountNoCoupon" stepKey="createCartRule"/>
+            <createData entity="CheckoutShippingTotalsSortOrder" stepKey="setConfigShippingTotalsSortOrder"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCartRule" stepKey="deleteCartRule"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <createData entity="DefaultTotalsSortOrder" stepKey="setDefaultTotalsSortOrder"/>
+        </after>
+
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyDiscountAmount">
+            <argument name="expectedDiscount" value="-$100"/>
+        </actionGroup>
+
+        <see userInput="Shipping (Flat Rate - Fixed)" selector="{{StorefrontCheckoutCartSummarySection.totalsElementByPosition('3')}}" stepKey="assertElementPosition"/>
+    </test>
+</tests>

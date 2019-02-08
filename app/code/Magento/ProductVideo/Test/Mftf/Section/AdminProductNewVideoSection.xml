@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductNewVideoSection">
+        <element name="saveButton" type="button" selector=".action-primary.video-create-button" timeout="30"/>
+        <element name="saveButtonDisabled" type="text" selector="button.action-primary.video-create-button[disabled='disabled']"/>
+        <element name="videoUrlTextField" type="input" selector="#video_url"/>
+        <element name="videoTitleTextField" type="input" selector="#video_title"/>
+    </section>
+</sections>

@@ -68,6 +68,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->subscriberMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()

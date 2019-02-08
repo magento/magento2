@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPaymentTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Checkout via Guest Checkout with restricted countries for payment"/>
+            <description value="Should be able to place an order as a Guest with restricted countries for payment."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-8243"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set payment/checkmo/allowspecific" arguments="1" stepKey="setAllowSpecificCountiesValue" />
+            <magentoCLI command="config:set payment/checkmo/specificcountry" arguments="GB" stepKey="setSpecificCountryValue" />
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="unsetAllowSpecificCountiesValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="unsetSpecificCountryValue" />
+        </after>
+
+        <!-- Add product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$)}}" stepKey="goToProductPage"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!-- Go to checkout page -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+
+        <!-- Fill US Address and verify that no payment available -->
+        <seeElement selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionWithoutPaymentsActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="Simple_US_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+            <argument name="shippingMethod" value="Flat Rate" type="string"/>
+        </actionGroup>
+
+        <waitForElementVisible selector="{{CheckoutPaymentSection.noPaymentMethods}}" stepKey="waitMessage"/>
+        <see userInput="No Payment method available." stepKey="checkMessage"/>
+
+        <!-- Fill UK Address and verify that payment available and checkout successful -->
+        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
+        <waitForElementVisible selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened1"/>
+
+        <actionGroup ref="GuestCheckoutFillingShippingSectionWithoutRegionActionGroup" stepKey="guestCheckoutFillingShippingSectionUK">
+            <argument name="customerVar" value="Simple_US_Customer" />
+            <argument name="customerAddressVar" value="UK_Default_Address" />
+            <argument name="shippingMethod" value="Flat Rate" type="string"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>

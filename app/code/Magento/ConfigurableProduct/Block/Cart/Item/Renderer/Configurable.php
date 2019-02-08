@@ -70,4 +70,12 @@ class Configurable extends Renderer implements IdentityInterface
         }
         return $identities;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductPriceHtml(\Magento\Catalog\Model\Product $product)
+    {
+        return parent::getProductPriceHtml($this->getChildProduct());
+    }
 }
