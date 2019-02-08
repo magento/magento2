@@ -271,22 +271,4 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         }
         return false;
     }
-
-    /**
-     * Check if this iten should be shipped together
-     *
-     * @param object $item
-     * @return bool
-     */
-    public function isShipTogether($item)
-    {
-        $orderItem = $item->getOrderItem();
-        if ($orderItem->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $shipTogether = !$orderItem->isShipSeparately();
-        } else {
-            $shipTogether = !$orderItem->getParentItem()->isShipSeparately();
-        }
-
-        return $shipTogether;
-    }
 }
