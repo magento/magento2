@@ -18,6 +18,6 @@
     </section>
     <section name="AdminModifyAttributesSection">
         <!-- Parameter is the attribute name -->
-        <element name="dropDownAttributeByName" type="select" selector="//*[text()='{{attributeName}}']/../..//select" parameterized="true"/>
+        <element name="dropDownAttributeByName" type="select" selector="//*[text()='{{attributeName}}']/../../..//select" parameterized="true"/>
     </section>
 </sections>

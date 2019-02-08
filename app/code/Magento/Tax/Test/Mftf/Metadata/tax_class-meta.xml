@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateTaxClass" dataType="taxClass" type="create" auth="adminOauth" url="/V1/taxClasses" method="POST">
+        <contentType>application/json</contentType>
+        <object key="taxClass" dataType="taxClass">
+            <field key="class_name" required="true">string</field>
+            <field key="class_type" required="true">string</field>
+        </object>
+    </operation>
+    <operation name="GetTaxClass" dataType="taxClass" type="get" auth="adminOauth" url="/V1/taxClasses/{return}" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="DeleteTaxClass" dataType="taxClass" type="delete" auth="adminOauth" url="/V1/taxClasses/{return}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

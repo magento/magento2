@@ -30,7 +30,7 @@
     <!--Clear all filters in grid-->
     <actionGroup name="clearFiltersAdminDataGrid">
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
     </actionGroup>
 
     <actionGroup name="AdminGridFilterSearchResultsByInput">

@@ -39,4 +39,12 @@
     <entity name="DefaultRootCategoryGetter" type="category">
         <var key="category" entityKey="category" entityType="category"/>
     </entity>
+    <entity name="GearCategory" type="category">
+        <data key="name" unique="suffix">Gear</data>
+        <data key="url_key" unique="suffix">gear</data>
+    </entity>
+    <entity name="BagsCategory" type="category">
+        <data key="name" unique="suffix">Bags</data>
+        <data key="url_key" unique="suffix">bags</data>
+    </entity>
 </entities>

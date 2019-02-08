@@ -104,7 +104,7 @@ $customerUrl = $block->getCustomerViewUrl();
                 <?php if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()): ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('%1 / %2 rate:', $order->getOrderCurrencyCode(), $order->getBaseCurrencyCode())) ?></th>
-                        <th><?= $block->escapeHtml($order->getBaseToOrderRate()) ?></th>
+                        <td><?= $block->escapeHtml($order->getBaseToOrderRate()) ?></td>
                     </tr>
                 <?php endif; ?>
             </table>
