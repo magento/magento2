@@ -14,7 +14,10 @@ use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
 /**
+ * HTTP Request for current PHP environment.
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Request extends \Zend\Http\PhpEnvironment\Request
 {
@@ -586,6 +589,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
 
     /**
      * Access values contained in the superglobals as public members
+     *
      * Order of precedence: 1. GET, 2. POST, 3. COOKIE, 4. SERVER, 5. ENV
      *
      * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
@@ -795,6 +799,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
+     * Get flag value for whether the request is forwarded or not.
+     *
      * @return bool
      * @codeCoverageIgnore
      */
@@ -804,6 +810,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
+     * Set flag value for whether the request is forwarded or not.
+     *
      * @param bool $forwarded
      * @return $this
      * @codeCoverageIgnore
