@@ -610,6 +610,75 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
+        // scenario 6: 1 item, 1 invoiced, price with included tax
+        // order and invoice with applied full discount
+        $result['creditmemo_with_full_discount'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'shipping_tax_amount' => 0.38,
+                    'base_shipping_tax_amount' => 0.38,
+                    'shipping_discount_tax_compensation_amount' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => 0,
+                    'tax_amount' => 0.38,
+                    'base_tax_amount' => 0.38,
+                    'tax_invoiced' => 0.38,
+                    'base_tax_invoiced' => 0.38,
+                    'tax_refunded' => 0,
+                    'base_tax_refunded' => 0,
+                    'shipping_amount' => 4.62,
+                    'base_shipping_amount' => 4.62,
+
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_invoiced' => 0,
+                            'tax_refunded' => 0,
+                            'base_tax_invoiced' => 0,
+                            'base_tax_refunded' => 0,
+                            'discount_tax_compensation_amount' =>  5.87,
+                            'base_discount_tax_compensation_amount' =>  5.87,
+                            'qty_refunded' => 0,
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => 5,
+                    'base_grand_total' => 5,
+                    'base_shipping_amount' => 4.62,
+                    'tax_amount' => 0.38,
+                    'base_tax_amount' => 0.38,
+                    'invoice' => new MagentoObject(
+                        [
+                            'shipping_tax_amount' => 0.38,
+                            'base_shipping_tax_amount' => 0.38,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 0,
+                        'base_tax_amount' => 0,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 5,
+                    'base_grand_total' => 5,
+                    'tax_amount' => 0.38,
+                    'base_tax_amount' => 0.38,
+                ],
+            ],
+        ];
         return $result;
     }
 
