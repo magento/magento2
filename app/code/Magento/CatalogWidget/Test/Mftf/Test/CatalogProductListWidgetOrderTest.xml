@@ -18,6 +18,9 @@
             <testCaseId value="MC-13794"/>
             <group value="CatalogWidget"/>
             <group value="WYSIWYGDisabled"/>
+            <skip>
+                <issueId value="MC-13923"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
