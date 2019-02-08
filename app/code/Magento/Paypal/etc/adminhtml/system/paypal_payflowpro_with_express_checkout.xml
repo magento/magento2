@@ -43,7 +43,7 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+            <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                 <config_path>payment/payflow_express_bml/sort_order</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                 <depends>
