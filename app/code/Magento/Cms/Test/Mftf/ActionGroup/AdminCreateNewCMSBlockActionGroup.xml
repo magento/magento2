@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillCMSBlockInformation">
+        <arguments>
+            <argument name="title" type="string" defaultValue="{{DefaultCmsBlock.title}}"/>
+            <argument name="identifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
+            <argument name="content" type="string" defaultValue="{{DefaultCmsBlock.content}}"/>
+        </arguments>
+        <fillField selector="{{AdminCmsBlockContentSection.title}}" userInput="{{title}}" stepKey="fillFieldTitle"/>
+        <fillField selector="{{AdminCmsBlockContentSection.identifier}}" userInput="{{identifier}}" stepKey="fillFieldIdentifier"/>
+        <selectOption selector="{{AdminCmsBlockContentSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
+        <fillField selector="{{AdminCmsBlockContentSection.content}}" userInput="{{content}}" stepKey="fillContentField"/>
+    </actionGroup>
+</actionGroups>

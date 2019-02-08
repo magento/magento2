@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCMSBlockActionGroup">
+        <arguments>
+            <argument name="cmsBlockTitle" type="string" defaultValue="{{DefaultCmsBlock.title}}"/>
+        </arguments>
+        <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <click selector="{{CmsPagesPageActionsSection.select(cmsBlockTitle)}}" stepKey="clickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(cmsBlockTitle)}}" stepKey="clickOnDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirm"/>
+        <see userInput="You deleted the block." stepKey="VerifyBlockIsDeleted"/>
+    </actionGroup>
+</actionGroups>

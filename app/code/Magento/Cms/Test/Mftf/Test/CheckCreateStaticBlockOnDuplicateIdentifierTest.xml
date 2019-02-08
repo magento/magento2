@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckCreateStaticBlockOnDuplicateIdentifierTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Block via the Admin"/>
+            <title value="Check static blocks: ID should be unique per Store View"/>
+            <description value="Check static blocks: ID should be unique per Store View"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13912"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+                <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="deleteCMSBlockActionGroup"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+        </after>
+        <!--Go to Cms blocks page-->
+        <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCMSBlocksGridPage"/>
+        <!--Click to create new block-->
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewBlock"/>
+        <actionGroup ref="FillCMSBlockInformation" stepKey="FillOutBlockContent"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveBlockButton"/>
+        <see seelctor="AdminMessagesSection.success" userInput="You saved the block." stepKey="verifyBlockIsSaved"/>
+        <!--Go to Cms blocks page-->
+        <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCMSBlocksGridPage1"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewBlock1"/>
+        <actionGroup ref="FillCMSBlockInformation" stepKey="FillOutBlockContent1"/>
+        <unselectOption selector="{{AdminCmsBlockContentSection.storeView}}" userInput="All Store Views" stepKey="unselectAllStoreViewOption" />
+        <selectOption selector="{{AdminCmsBlockContentSection.storeView}}" parameterArray="[Default Store View, {{SecondStoreUnique.name}}]" stepKey="selectStoreViews" />
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveBlockButton1"/>
+        <waitForPageLoad stepKey="waitForErrorMessageAppear"/>
+        <!--Verify that corresponding message is displayed-->
+        <see selector="{{AdminMessagesSection.error}}" userInput="A block identifier with the same properties already exists in the selected store." stepKey="verifyErrorMessage"/>
+    </test>
+</tests>
