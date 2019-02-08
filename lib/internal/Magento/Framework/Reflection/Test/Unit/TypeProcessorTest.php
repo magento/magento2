@@ -17,6 +17,9 @@ use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
 use Magento\Framework\Reflection\TypeProcessor;
 use Zend\Code\Reflection\ClassReflection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
