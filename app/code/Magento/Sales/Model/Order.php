@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ProductOption;
@@ -750,7 +751,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Retrieve order shipment availability
+     * Retrieve order shipment availability.
      *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -770,11 +771,27 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
+            if ($item->getQtyToShip() > 0
+                && !$item->getIsVirtual()
+                && !$item->getLockedDoShip()
+                && !$this->isRefunded($item)
+            ) {
                 return true;
             }
         }
+
         return false;
+    }
+
+    /**
+     * Check if item is refunded.
+     *
+     * @param OrderItemInterface $item
+     * @return bool
+     */
+    private function isRefunded(OrderItemInterface $item): bool
+    {
+        return $item->getQtyRefunded() == $item->getQtyOrdered();
     }
 
     /**
@@ -1383,7 +1400,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get random items collection with or without related children
+     * Get random items collection with or without related children.
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
@@ -1391,7 +1408,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()
+            ->setOrderFilter($this)
+            ->setRandomOrder()
+            ->setPageSize($limit);
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1405,9 +1425,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $products
         )->setVisibility(
             $this->_productVisibility->getVisibleInSiteIds()
-        )->addPriceData()->setPageSize(
-            $limit
-        )->load();
+        )->addPriceData()->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());
