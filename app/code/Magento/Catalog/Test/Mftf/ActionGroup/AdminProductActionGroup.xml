@@ -70,6 +70,7 @@
 
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
@@ -121,7 +122,6 @@
             <argument name="simpleProduct"/>
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
@@ -160,7 +160,7 @@
 
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
-        <fillField userInput="option1" selector="{{AdminProductCustomizableOptionsSection.optionTitleInput}}" stepKey="fillOptionTitle"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="option1" stepKey="fillOptionTitle"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openTypeDropDown"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeTextField}}" stepKey="selectTypeTextField"/>
         <fillField userInput="20" selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput}}" stepKey="fillMaxChars"/>
@@ -235,7 +235,7 @@
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <checkOption selector="{{AdminProductModalSlideGridSection.productRowCheckboxBySku(sku)}}" stepKey="selectProduct"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
     </actionGroup>
 
@@ -313,4 +313,19 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForSave"/>
     </actionGroup>
+
+    <!--Check tier price with a discount percentage on product-->
+    <actionGroup name="AssertDiscountsPercentageOfProducts">
+        <arguments>
+            <argument name="amount" type="string" defaultValue="45"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <grabValueFrom selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" stepKey="grabProductTierPriceInput"/>
+        <assertEquals stepKey="assertProductTierPriceInput">
+            <expectedResult type="string">{{amount}}</expectedResult>
+            <actualResult type="string">$grabProductTierPriceInput</actualResult>
+        </assertEquals>
+    </actionGroup>
+
 </actionGroups>

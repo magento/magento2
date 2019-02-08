@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="TieredPricingAndQuantityIncrementsWorkWithDecimalinventoryTest">
         <annotations>
             <features value="Catalog"/>
@@ -59,6 +59,7 @@
 
         <!--Step5. Open *Advanced Inventory* pop-up. Set *Enable Qty Increments* to *Yes*. Fill *.5* in *Qty Increments*-->
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink2"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="scrollToEnableQtyIncrements"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="clickOnEnableQtyIncrementsUseConfigSettingsCheckbox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="clickOnEnableQtyIncrements"/>
