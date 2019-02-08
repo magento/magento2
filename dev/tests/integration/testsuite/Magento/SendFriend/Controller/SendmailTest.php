@@ -141,4 +141,3 @@ class SendmailTest extends AbstractController
         $this->getRequest()->setPostValue($post);
     }
 }
-
