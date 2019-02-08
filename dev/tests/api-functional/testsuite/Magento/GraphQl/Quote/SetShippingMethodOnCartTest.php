@@ -79,7 +79,7 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
         self::assertEquals($maskedQuoteId, $response['setShippingMethodsOnCart']['cart']['cart_id']);
-        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['addresses'];
+        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
         self::assertCount(2, $addressesInformation);
         self::assertEquals(
             $addressesInformation[0]['selected_shipping_method']['code'],
@@ -221,7 +221,7 @@ mutation {
     
     cart {
       cart_id,
-      addresses {
+      shipping_addresses {
         selected_shipping_method {
           code
           label
