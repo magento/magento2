@@ -131,10 +131,10 @@ class ImageFactory
      *
      * @param Product $product
      * @param string $imageId
-     * @param array|null $attributes
+     * @param array $attributes
      * @return ImageBlock
      */
-    public function create(Product $product, string $imageId, array $attributes = null): ImageBlock
+    public function create(Product $product, string $imageId, array $attributes = []): ImageBlock
     {
         $viewImageConfig = $this->presentationConfig->getViewConfig()->getMediaAttributes(
             'Magento_Catalog',
