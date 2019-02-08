@@ -98,7 +98,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'port' => '',
                             'database' => '',
                             'password' => '',
-                            'compress_data' => '1',
+                            'compress_data' => '',
                             'compression_library' => '',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
