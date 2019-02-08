@@ -28,18 +28,23 @@
             <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open Product Index Page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+
         <!--Search products using keyword -->
         <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
             <argument name="keyword" value="Testp"/>
         </actionGroup>
+
         <!--Sort Products by ID in descending order-->
         <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+
         <!--Select products-->
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct1.sku$$)}}" stepKey="selectFirstProduct"/>
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct2.sku$$)}}" stepKey="selectSecondProduct"/>
+
         <!-- Update product price-->
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickChangeStatus"/>
@@ -50,6 +55,7 @@
         <click stepKey="clickOnSaveButton" selector="{{AdminEditProductAttributesSection.Save}}"/>
         <waitForPageLoad stepKey="waitForUpdatedProductToSave" />
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 2 record(s) were updated." stepKey="seeAttributeUpateSuccessMsg"/>
+
         <!--Verify product name, sku and updated price-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForFirstProductToLoad"/>

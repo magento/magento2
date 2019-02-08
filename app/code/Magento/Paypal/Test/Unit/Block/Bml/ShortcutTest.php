@@ -8,6 +8,8 @@ namespace Magento\Paypal\Test\Unit\Block\Bml;
 
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\ConfigFactory;
+use Magento\Paypal\Model\Config;
 
 class ShortcutTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,12 +35,24 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
         $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
+
+        $configMock = $this->getMockBuilder(Config::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['setMethod'])
+                ->getMock();
+        $configFactoryMock->expects($this->any())->method('create')->willReturn($configMock);
+
         $this->shortcut = $this->objectManagerHelper->getObject(
             \Magento\Paypal\Block\Bml\Shortcut::class,
             [
                 'paymentData' => $this->paymentHelperMock,
                 'mathRandom' => $this->randomMock,
                 'shortcutValidator' => $this->paypalShortcutHelperMock,
+                'config' => $configFactoryMock
             ]
         );
     }
