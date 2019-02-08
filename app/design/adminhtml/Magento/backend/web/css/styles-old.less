@@ -1076,29 +1076,6 @@
         margin-top: 4px;
     }
 
-    .control {
-        ._has-datepicker {
-            & + .ui-datepicker-trigger {
-                .lib-button-reset();
-                .lib-icon-font(
-                @icon-calendar,
-                @_icon-font-size: 42px,
-                @_icon-font-line-height: 30px,
-                @_icon-font-text-hide: true,
-                @_icon-font-position: after,
-                @_icon-font-color: @field-date-icon--color
-                );
-                display: inline-block;
-                vertical-align: middle;
-
-                &:focus {
-                    outline: 0;
-                    box-shadow: none;
-                }
-            }
-        }
-    }
-
     .nobr {
         white-space: nowrap;
     }
