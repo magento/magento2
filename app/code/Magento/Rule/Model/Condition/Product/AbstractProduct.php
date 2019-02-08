@@ -95,8 +95,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param ProductCategoryList|null $categoryList
      * @param array $data
+     * @param ProductCategoryList|null $categoryList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -710,6 +710,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
     /**
      * Correct '==' and '!=' operators
+     *
      * Categories can't be equal because product is included categories selected by administrator and in their parents
      *
      * @return string
