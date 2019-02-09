@@ -13,14 +13,14 @@
 
     <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
         <ul class="nav-bar">
-            <?php foreach ($block->getSteps() as $step) { ?>
+            <?php foreach ($block->getSteps() as $step): ?>
                 <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= /* @escapeNotVerified */  $step->getComponentName() ?>'}">
                     <a href="#<?= /* @escapeNotVerified */  $step->getComponentName() ?>"
                        data-bind="click: showSpecificStep">
                         <?= /* @escapeNotVerified */  $step->getCaption() ?>
                     </a>
                 </li>
-            <?php } ?>
+            <?php endforeach; ?>
         </ul>
         <div class="nav-bar-outer-actions">
             <div class="action-wrap" data-role="closeBtn">
@@ -45,13 +45,13 @@
         </div>
     </div>
     <div data-role="steps-wizard-tab">
-        <?php foreach ($block->getSteps() as $step) { ?>
+        <?php foreach ($block->getSteps() as $step): ?>
             <div data-bind="visible: selectedStep() == $element.id, css: {'no-display':false}"
                  class="content no-display" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
                  data-role="content">
                 <?= /* @escapeNotVerified */  $step->getContent() ?>
             </div>
-        <?php } ?>
+        <?php endforeach; ?>
     </div>
 </div>
 
