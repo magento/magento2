@@ -158,6 +158,16 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
+     * Return validation url for shopping cart update form
+     *
+     * @return string
+     */
+    public function getValidationUrl()
+    {
+        return $this->getUrl('checkout/cart/updateItemQty', ['_secure' => $this->getRequest()->isSecure()]);
+    }
+
+    /**
      * Verify if display pager on shopping cart
      * If cart block has custom_items and items qty in the shopping cart<limit from stores configuration
      *
