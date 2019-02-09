@@ -36,7 +36,7 @@ class QuoteItemQtyList
             $this->_checkedQuoteItems[$quoteId][$productId]['items']
         )
         ) {
-            $qty += $this->_checkedQuoteItems[$quoteId][$productId]['qty'];
+            $qty = $this->_checkedQuoteItems[$quoteId][$productId]['qty'];
         }
 
         $this->_checkedQuoteItems[$quoteId][$productId]['qty'] = $qty;
