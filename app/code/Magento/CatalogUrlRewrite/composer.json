@@ -9,15 +9,15 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
-        "magento/module-catalog-import-export": "*",
         "magento/module-eav": "*",
-        "magento/module-import-export": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
         "magento/module-url-rewrite": "*"
     },
     "suggest": {
-        "magento/module-webapi": "*"
+        "magento/module-webapi": "*",
+        "magento/module-catalog-import-export": "*",
+        "magento/module-import-export": "*"
     },
     "type": "magento2-module",
     "license": [
