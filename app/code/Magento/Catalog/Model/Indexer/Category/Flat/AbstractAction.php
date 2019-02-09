@@ -130,7 +130,7 @@ class AbstractAction
         $table = $this->connection->newTable(
             $tableName
         )->setComment(
-            sprintf("Catalog Category Flat", $tableName)
+            'Catalog Category Flat'
         );
 
         //Adding columns
@@ -378,7 +378,7 @@ class AbstractAction
         $linkField = $this->getCategoryMetadata()->getLinkField();
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
-                if (isset($row[$linkField]) && isset($row['attribute_id'])) {
+                if (isset($row[$linkField], $row['attribute_id'])) {
                     $attributeId = $row['attribute_id'];
                     if (isset($attributes[$attributeId])) {
                         $attributeCode = $attributes[$attributeId]['attribute_code'];
