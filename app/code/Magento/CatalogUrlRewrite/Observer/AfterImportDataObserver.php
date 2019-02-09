@@ -263,6 +263,7 @@ class AfterImportDataObserver implements ObserverInterface
         if ($this->isGlobalScope($product->getStoreId())) {
             $this->populateGlobalProduct($product);
         } else {
+            $this->storesCache[$product->getStoreId()] = true;
             $this->addProductToImport($product, $product->getStoreId());
         }
         return $this;
