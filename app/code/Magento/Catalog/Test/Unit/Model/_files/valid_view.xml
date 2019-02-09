@@ -11,6 +11,37 @@
             <image id="swatch_thumb_base" type="swatch_thumb">
                 <width>75</width>
                 <height>75</height>
+                <constrain>false</constrain>
+                <aspect_ratio>false</aspect_ratio>
+                <frame>false</frame>
+                <transparency>false</transparency>
+                <background>[255, 25, 2]</background>
+            </image>
+            <image id="swatch_thumb_medium" type="swatch_medium">
+                <width>750</width>
+                <height>750</height>
+                <constrain>true</constrain>
+                <aspect_ratio>true</aspect_ratio>
+                <frame>true</frame>
+                <transparency>true</transparency>
+                <background>[255, 25, 2]</background>
+            </image>
+            <image id="swatch_thumb_large" type="swatch_large">
+                <width>1080</width>
+                <height>720</height>
+                <constrain>0</constrain>
+                <aspect_ratio>0</aspect_ratio>
+                <frame>0</frame>
+                <transparency>0</transparency>
+                <background>[255, 25, 2]</background>
+            </image>
+            <image id="swatch_thumb_small" type="swatch_small">
+                <width>100</width>
+                <height>100</height>
+                <constrain>1</constrain>
+                <aspect_ratio>1</aspect_ratio>
+                <frame>1</frame>
+                <transparency>1</transparency>
                 <background>[255, 25, 2]</background>
             </image>
         </images>
