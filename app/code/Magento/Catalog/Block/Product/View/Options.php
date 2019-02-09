@@ -12,6 +12,7 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Value;
 
 /**
  * @api
@@ -20,11 +21,6 @@ use Magento\Catalog\Model\Product;
  */
 class Options extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * Option type percent
-     */
-    protected static $typePercent = 'percent';
-
     /**
      * @var Product
      */
@@ -165,8 +161,10 @@ class Options extends \Magento\Framework\View\Element\Template
      */
     protected function _getPriceConfiguration($option)
     {
-        $option->getPriceType() == self::$typePercent ? $optionPrice = $option->getPrice(true) :
-        $optionPrice = $this->pricingHelper->currency($option->getPrice(true), false, false);
+        $optionPrice = $option->getPrice(true);
+        if($option->getPriceType() != Value::TYPE_PERCENT) {
+            $optionPrice = $this->pricingHelper->currency($optionPrice, false, false);
+        }
         $data = [
             'prices' => [
                 'oldPrice' => [
