@@ -110,28 +110,12 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Checks that pid files are created
-     *
-     * @return void
-     */
-    public function testCheckThatPidFilesWasCreated()
-    {
-        $this->markTestSkipped('MC-5904: Test Fails randomly,');
-        $this->consumersRunner->run();
-        foreach ($this->consumerConfig->getConsumers() as $consumer) {
-            $this->waitConsumerPidFile($consumer->getName());
-        }
-    }
-
-    /**
      * Tests running of specific consumer and his re-running when it is working
      *
      * @return void
      */
     public function testSpecificConsumerAndRerun()
     {
-        $this->markTestSkipped('MC-5904: Test Fails randomly,');
-
         $specificConsumer = 'quoteItemCleaner';
         $pidFilePath = $this->getPidFileName($specificConsumer);
         $config = $this->config;
@@ -185,23 +169,6 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $pidFileFullPath = $this->getPidFileFullPath($consumer->getName());
             $this->assertFalse(file_exists($pidFileFullPath));
-        }
-    }
-
-    /**
-     * @param string $consumerName
-     * @return void
-     */
-    private function waitConsumerPidFile($consumerName)
-    {
-        $pidFileFullPath = $this->getPidFileFullPath($consumerName);
-        $i = 0;
-        do {
-            sleep(1);
-        } while (!file_exists($pidFileFullPath) && ($i++ < 60));
-
-        if (!file_exists($pidFileFullPath)) {
-            $this->fail($consumerName . ' pid file does not exist.');
         }
     }
 
