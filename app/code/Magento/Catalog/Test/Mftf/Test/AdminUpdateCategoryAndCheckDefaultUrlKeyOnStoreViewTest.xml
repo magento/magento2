@@ -31,20 +31,24 @@
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open Store Page -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
+
         <!--Create Custom Store -->
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
         <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
         <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+
         <!--Create Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="StoreGroup" value="customStore"/>
             <argument name="customStore" value="customStore"/>
         </actionGroup>
+
         <!--Update Category-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>

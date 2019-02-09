@@ -294,6 +294,48 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check bill me later active setting uses disable funding options
+     *
+     * @param string|null $disableFundingOptions
+     * @param int $expectedFlag
+     * @param bool $expectedValue
+     *
+     * @dataProvider isMethodActiveBmlDataProvider
+     */
+    public function testIsMethodActiveBml($disableFundingOptions, $expectedFlag, $expectedValue)
+    {
+        $this->scopeConfigMock->method('getValue')
+            ->with(
+                self::equalTo('payment/paypal_express/disable_funding_options'),
+                self::equalTo('store')
+            )
+            ->willReturn($disableFundingOptions);
+
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with('payment/paypal_express_bml/active')
+            ->willReturn($expectedFlag);
+
+        self::assertEquals($expectedValue, $this->config->isMethodActive('paypal_express_bml'));
+    }
+
+    /**
+     * @return array
+     */
+    public function isMethodActiveBmlDataProvider()
+    {
+        return [
+            ['CREDIT,CARD,ELV', 0, false],
+            ['CREDIT,CARD,ELV', 1, true],
+            ['CREDIT', 0, false],
+            ['CREDIT', 1, true],
+            ['CARD', 0, true],
+            ['CARD', 1, true],
+            [null, 0, true],
+            [null, 1, true]
+        ];
+    }
+
+    /**
      * Checks a case, when notation code based on Magento edition.
      */
     public function testGetBuildNotationCode()
