@@ -174,7 +174,7 @@
                 <label translate="true">Company</label>
             </settings>
         </field>
-        <field name="city" sortOrder="80" formElement="input">
+        <field name="city" sortOrder="100" formElement="input">
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">City</label>
