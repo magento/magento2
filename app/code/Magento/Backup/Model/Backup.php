@@ -242,7 +242,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
     /**
      * Return content of backup file
      *
-     * @return string
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function &getFile()

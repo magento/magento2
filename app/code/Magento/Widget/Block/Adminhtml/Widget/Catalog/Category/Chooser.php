@@ -18,7 +18,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser
      *
      * @param \Magento\Framework\Data\Tree\Node|array $node
      * @param int $level
-     * @return string
+     * @return array
      */
     protected function _getNodeJson($node, $level = 0)
     {
