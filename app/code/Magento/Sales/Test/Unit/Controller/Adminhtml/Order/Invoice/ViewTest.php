@@ -50,7 +50,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $invoiceLoaderMock;
-
+    
     /**
      * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -77,10 +77,20 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $resultPageFactoryMock;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+    
+    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultForwardFactoryMock;
 
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+    
     /**
      * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -117,13 +127,21 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->resultPageMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
-            ->getMock();
-
+            ->getMock();      
         $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -187,7 +205,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
+        	 'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
 
@@ -271,17 +290,27 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn(null);
-
-        $resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
-
-        $this->resultForwardFactoryMock->expects($this->once())
+        
+        $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultForward));
-
-        $this->assertSame($resultForward, $this->controller->execute());
+            ->willReturn($this->resultRedirectMock);
+        
+        $this->setPath('sales/invoice');
+        
+        $this->assertSame(
+            $this->resultRedirectMock,
+            $this->controller->execute()
+        );
+    }
+    /**
+     * @param string $path
+     * @param array $params
+     */
+    protected function setPath($path, $params = [])
+    {
+    	$this->resultRedirectMock->expects($this->once())
+    	->method('setPath')
+    	->with($path, $params)
+    	->willReturnSelf();
     }
 }
