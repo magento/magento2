@@ -173,6 +173,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get Backend Session
+     *
      * @return \Magento\Backend\Model\Session
      */
     public function getBackendSession()
@@ -181,6 +183,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get Math Random
+     *
      * @return \Magento\Framework\Math\Random
      */
     public function getMathRandom()
@@ -189,6 +193,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get Form Key
+     *
      * @return \Magento\Framework\Data\Form\FormKey
      */
     public function getFormKey()
@@ -197,6 +203,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get Class Name Builder
+     *
      * @return \Magento\Framework\Code\NameBuilder
      */
     public function getNameBuilder()
