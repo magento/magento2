@@ -103,6 +103,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $resultForwardMock;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -158,6 +166,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->loaderMock = $this->getMockBuilder(\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+        		\Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
+        ->disableOriginalConstructor()
+        ->setMethods(['create'])
+        ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -216,7 +233,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
@@ -229,16 +246,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->loaderMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
-        $this->resultForwardFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultForwardMock);
-        $this->resultForwardMock->expects($this->once())
-            ->method('forward')
-            ->with('noroute')
-            ->willReturnSelf();
-
-        $this->assertInstanceOf(
-            \Magento\Backend\Model\View\Result\Forward::class,
+      
+        $this->resultRedirectFactoryMock->expects($this->once())
+        ->method('create')
+        ->willReturn($this->resultRedirectMock);
+        
+        $this->setPath('sales/creditmemo');
+        
+        $this->assertSame(
+            $this->resultRedirectMock,
             $this->controller->execute()
         );
     }
@@ -298,5 +314,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             [false],
             [$this->invoiceMock]
         ];
+    }
+    /**
+     * @param string $path
+     * @param array $params
+     */
+    protected function setPath($path, $params = [])
+    {
+    	$this->resultRedirectMock->expects($this->once())
+    	->method('setPath')
+    	->with($path, $params)
+    	->willReturnSelf();
     }
 }
