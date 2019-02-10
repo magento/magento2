@@ -68,16 +68,16 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('cache-backend-redis-password', $options[4]->getName());
 
         $this->assertArrayHasKey(5, $options);
-        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
-        $this->assertEquals('cache-backend-redis-compress-data', $options[6]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
+        $this->assertEquals('cache-backend-redis-compress-data', $options[5]->getName());
 
         $this->assertArrayHasKey(6, $options);
-        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('cache-backend-redis-compression-lib', $options[7]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
+        $this->assertEquals('cache-backend-redis-compression-lib', $options[6]->getName());
 
         $this->assertArrayHasKey(7, $options);
-        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
-        $this->assertEquals('cache-id-prefix', $options[5]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
+        $this->assertEquals('cache-id-prefix', $options[7]->getName());
 
     }
 
