@@ -27,25 +27,17 @@ class View extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     */
-    protected $resultForwardFactory;
-
-    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -74,9 +66,8 @@ class View extends \Magento\Backend\App\Action
                 $resultPage->getConfig()->getTitle()->prepend(__("View Memo"));
             }
             return $resultPage;
-        } else {
-            $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('sales/creditmemo');
         }
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('sales/creditmemo');
     }
 }
