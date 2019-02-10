@@ -244,7 +244,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         return [
             $this->productId => [
                 'configurable_variations' => implode(
-                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                    Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR,
                     [
                         '_sku_' => 'sku=_sku_' . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                             . implode(

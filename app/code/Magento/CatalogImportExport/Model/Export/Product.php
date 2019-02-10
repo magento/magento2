@@ -1026,7 +1026,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         if (!empty($this->collectedMultiselectsData[$storeId][$productLinkId][$code])) {
                             $additionalAttributes[$code] = $fieldName .
                                 ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
-                                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                                    Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR,
                                     $this->wrapValue($this->collectedMultiselectsData[$storeId][$productLinkId][$code])
                                 );
                         }
@@ -1308,7 +1308,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
             if ($shouldBeMerged) {
                 $multiRawData['customOptionsData'][$productLinkId][$storeId] = [];
-                $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
+                $customOptions = implode(Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR, $customOptionsRows);
                 $dataRow = array_merge($dataRow, ['custom_options' => $customOptions]);
             }
         }
@@ -1321,7 +1321,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $dataRow[self::COL_SKU] = $sku;
         $dataRow[self::COL_ATTR_SET] = $attributeSet;
         $dataRow[self::COL_TYPE] = $type;
-        
+
         return $dataRow;
     }
 

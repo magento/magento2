@@ -104,6 +104,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
+     * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_LINE_SEPARATOR
+     */
+    const DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR = '|';
+
+    /**
      * default empty attribute value constant
      */
     const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';

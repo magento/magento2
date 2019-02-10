@@ -18,7 +18,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Basic import model
      *
-     * @var \Magento\ImportExport\Model\Import
+     * @var Import
      */
     protected $_importModel;
 
@@ -36,7 +36,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\ImportExport\Model\Import $importModel
+     * @param Import $importModel
      * @param \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory
      * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
      * @param array $data
@@ -45,7 +45,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\ImportExport\Model\Import $importModel,
+        Import $importModel,
         \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         array $data = []
@@ -117,10 +117,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                $behaviorCode . Import::FIELD_NAME_VALIDATION_STRATEGY,
                 'select',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                    'name' => Import::FIELD_NAME_VALIDATION_STRATEGY,
                     'title' => __(' '),
                     'label' => __(' '),
                     'required' => true,
@@ -134,10 +134,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . '_' . \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                $behaviorCode . '_' . Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                    'name' => Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
                     'label' => __('Allowed Errors Count'),
                     'title' => __('Allowed Errors Count'),
                     'required' => true,
@@ -150,10 +150,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . '_' . \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+                $behaviorCode . '_' . Import::FIELD_FIELD_SEPARATOR,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+                    'name' => Import::FIELD_FIELD_SEPARATOR,
                     'label' => __('Field separator'),
                     'title' => __('Field separator'),
                     'required' => true,
@@ -163,10 +163,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
+                $behaviorCode . Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
+                    'name' => Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
                     'label' => __('Multiple value separator'),
                     'title' => __('Multiple value separator'),
                     'required' => true,
@@ -176,23 +176,23 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR,
+                $behaviorCode . Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR,
+                    'name' => Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR,
                     'label' => __('Multiple Line separator'),
                     'title' => __('Multiple Line separator'),
                     'required' => true,
                     'disabled' => true,
                     'class' => $behaviorCode,
-                    'value' => \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                    'value' => Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR,
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                $behaviorCode . Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                    'name' => Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                     'label' => __('Empty attribute value constant'),
                     'title' => __('Empty attribute value constant'),
                     'required' => true,
@@ -202,10 +202,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                $behaviorCode . Import::FIELDS_ENCLOSURE,
                 'checkbox',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                    'name' => Import::FIELDS_ENCLOSURE,
                     'label' => __('Fields enclosure'),
                     'title' => __('Fields enclosure'),
                     'value' => 1,
@@ -219,10 +219,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['legend' => __('File to Import'), 'class' => 'no-display']
         );
         $fieldsets['upload']->addField(
-            \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE,
+            Import::FIELD_NAME_SOURCE_FILE,
             'file',
             [
-                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE,
+                'name' => Import::FIELD_NAME_SOURCE_FILE,
                 'label' => __('Select File to Import'),
                 'title' => __('Select File to Import'),
                 'required' => true,
@@ -233,10 +233,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
         $fieldsets['upload']->addField(
-            \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR,
+            Import::FIELD_NAME_IMG_FILE_DIR,
             'text',
             [
-                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR,
+                'name' => Import::FIELD_NAME_IMG_FILE_DIR,
                 'label' => __('Images File Directory'),
                 'title' => __('Images File Directory'),
                 'required' => false,

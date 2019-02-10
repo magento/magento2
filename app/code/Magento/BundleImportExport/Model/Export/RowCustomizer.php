@@ -248,7 +248,7 @@ class RowCustomizer implements RowCustomizerInterface
             );
         }
 
-        return rtrim($bundleData, ImportProductModel::PSEUDO_MULTI_LINE_SEPARATOR);
+        return rtrim($bundleData, ImportModel::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR);
     }
 
     /**
@@ -283,7 +283,7 @@ class RowCustomizer implements RowCustomizerInterface
                         array_keys($selectionData)
                     )
                 )
-                . ImportProductModel::PSEUDO_MULTI_LINE_SEPARATOR;
+                . ImportModel::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR;
         }
 
         return $bundleData;

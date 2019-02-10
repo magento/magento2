@@ -96,7 +96,7 @@ class RowCustomizer implements RowCustomizerInterface
 
             $this->configurableData[$product->getId()] = [
                 self::CONFIGURABLE_VARIATIONS_COLUMN => implode(
-                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                    Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR,
                     $variations
                 ),
                 self::CONFIGURABLE_VARIATIONS_LABELS_COLUMN => implode(

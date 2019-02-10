@@ -936,7 +936,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($this->_parameters[Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR])) {
             return $this->_parameters[Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR];
         }
-        return self::PSEUDO_MULTI_LINE_SEPARATOR;
+        return Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR;
     }
 
     /**
@@ -2732,7 +2732,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @return array
      * @since 100.1.2
      */
-    public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
+    public function parseMultiselectValues($values, $delimiter = Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR)
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
             return explode($delimiter, $values);
@@ -2746,7 +2746,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieves escaped PSEUDO_MULTI_LINE_SEPARATOR if it is metacharacter for regular expression
+     * Retrieves escaped Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR if it is metacharacter for regular expression
      *
      * @return string
      */
