@@ -67,6 +67,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $pageTitleMock;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+    /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
      */
     protected $controller;
@@ -95,6 +103,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+        		\Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
+        ->disableOriginalConstructor()
+        ->setMethods(['create'])
+        ->getMock();
         $this->resultPageMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,7 +142,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoaderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock
+        	'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
@@ -193,15 +210,17 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $tracking = [];
 
         $this->loadShipment($orderId, $shipmentId, $shipment, $tracking, null, false);
-        $this->resultForwardFactoryMock->expects($this->once())
+        
+        $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->resultForwardMock);
-        $this->resultForwardMock->expects($this->once())
-            ->method('forward')
-            ->with('noroute')
-            ->willReturnSelf();
-
-        $this->assertEquals($this->resultForwardMock, $this->controller->execute());
+            ->willReturn($this->resultRedirectMock);
+        
+        $this->setPath('sales/shipment');
+        
+        $this->assertSame(
+            $this->resultRedirectMock,
+            $this->controller->execute()
+        );
     }
 
     /**
@@ -231,5 +250,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
             ->willReturn($returnShipment);
+    }
+    /**
+     * @param string $path
+     * @param array $params
+     */
+    protected function setPath($path, $params = [])
+    {
+    	$this->resultRedirectMock->expects($this->once())
+    	->method('setPath')
+    	->with($path, $params)
+    	->willReturnSelf();
     }
 }
