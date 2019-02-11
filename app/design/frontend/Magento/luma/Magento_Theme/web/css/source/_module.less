@@ -144,6 +144,12 @@
         }
     }
 
+    .page-print {
+        .nav-toggle {
+            display: none;
+        }
+    }
+
     .page-main {
         > .page-title-wrapper {
             .page-title + .action {
@@ -309,6 +315,23 @@
 
             .label {
                 &:extend(.abs-visually-hidden all);
+            }
+        }
+    }
+    .page-header {
+        .switcher {
+            .options {
+                ul.dropdown {
+                    right: 0;
+                    &:before {
+                        left: auto;
+                        right: 10px;
+                    }
+                    &:after {
+                        left: auto;
+                        right: 9px;
+                    }
+                }
             }
         }
     }
@@ -626,10 +649,6 @@
         > .widget {
             box-sizing: border-box;
             width: 100%;
-        }
-
-        .ie11 & {
-            height: 100%;
         }
     }
 

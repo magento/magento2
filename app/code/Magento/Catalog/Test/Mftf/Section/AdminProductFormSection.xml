@@ -167,6 +167,12 @@
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
+    <section name="ProductDescriptionWysiwygSection">
+        <element name="EditArea" type="text" selector="#editorproduct_form_description .mce-edit-area"/>
+    </section>
+    <section name="ProductShortDescriptionWysiwygSection">
+        <element name="EditArea" type="text" selector="#editorproduct_form_short_description .mce-edit-area"/>
+    </section>
     <section name="AdminProductFormAdvancedPricingSection">
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
         <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary"/>

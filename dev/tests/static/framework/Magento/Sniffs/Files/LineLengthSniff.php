@@ -20,7 +20,7 @@ class LineLengthSniff extends FilesLineLengthSniff
     protected $previousLineContent = '';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function checkLineLength($phpcsFile, $stackPtr, $lineContent)
     {

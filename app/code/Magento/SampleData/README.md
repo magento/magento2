@@ -69,4 +69,4 @@ If you have deleted certain entities provided by sample data and want to restore
 The deleted sample data entities will be restored. Those entities, which were changed, will preserve these changes and will not be restored to the default view.
 
 ## Documentation
-You can find the more detailed description of sample data manipulation procedures at [http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/install-cli-sample-data.html](http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/install-cli-sample-data.html)
+You can find the more detailed description of sample data manipulation procedures at [https://devdocs.magento.com/guides/v2.0/install-gde/install/cli/install-cli-sample-data.html](https://devdocs.magento.com/guides/v2.0/install-gde/install/cli/install-cli-sample-data.html)
