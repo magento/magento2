@@ -71,6 +71,8 @@ class BackendDecorator implements CurlInterface
         $urls = [];
         $originalUrl = rtrim($_ENV['app_backend_url'], '/') . '/';
         $urls[] = $originalUrl;
+        // It could be the case that the page needs a refresh, so we will try the original one twice
+        $urls[] = $originalUrl;
         if (strpos($originalUrl, '/index.php') !== false) {
             $url2 = str_replace('/index.php', '', $originalUrl);
         } else {
