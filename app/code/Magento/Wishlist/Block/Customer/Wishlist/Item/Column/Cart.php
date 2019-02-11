@@ -68,28 +68,4 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
     {
         return $this->getItem()->getProduct();
     }
-
-    /**
-     * Get min and max qty for wishlist form.
-     *
-     * @return array
-     */
-    public function getMinMaxQty()
-    {
-        $stockItem = $this->stockRegistry->getStockItem(
-            $this->getItem()->getProduct()->getId(),
-            $this->getItem()->getProduct()->getStore()->getWebsiteId()
-        );
-
-        $params = [];
-
-        $params['minAllowed'] = (float)$stockItem->getMinSaleQty();
-        if ($stockItem->getMaxSaleQty()) {
-            $params['maxAllowed'] = (float)$stockItem->getMaxSaleQty();
-        } else {
-            $params['maxAllowed'] = (float)StockDataFilter::MAX_QTY_VALUE;
-        }
-
-        return $params;
-    }
 }

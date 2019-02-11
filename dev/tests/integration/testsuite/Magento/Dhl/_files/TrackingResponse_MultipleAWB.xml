@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<req:TrackingResponse xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com TrackingResponse.xsd">
+    <Response>
+        <ServiceHeader>
+            <MessageTime>2018-02-27T12:43:44+01:00</MessageTime>
+            <MessageReference>1234567890123456789012345678</MessageReference>
+            <SiteID>CustomerSiteID</SiteID>
+        </ServiceHeader>
+    </Response>
+    <AWBInfo>
+        <AWBNumber>4781584780</AWBNumber>
+        <Status>
+            <ActionStatus>success</ActionStatus>
+        </Status>
+        <ShipmentInfo>
+            <OriginServiceArea>
+                <ServiceAreaCode>PEK</ServiceAreaCode>
+                <Description>BEIJING-CHN</Description>
+            </OriginServiceArea>
+            <DestinationServiceArea>
+                <ServiceAreaCode>PHL</ServiceAreaCode>
+                <Description>WEST PHILADELPHIA,PA-USA</Description>
+            </DestinationServiceArea>
+            <ShipperName>THE EXP HIGH SCH ATT TO BNU</ShipperName>
+            <ShipperAccountNumber>123456789</ShipperAccountNumber>
+            <ConsigneeName>HAVEFORD COLLEGE</ConsigneeName>
+            <ShipmentDate>2017-12-25T14:38:00</ShipmentDate>
+            <Pieces>1</Pieces>
+            <Weight>0.5</Weight>
+            <WeightUnit>K</WeightUnit>
+            <GlobalProductCode>D</GlobalProductCode>
+            <ShipmentDesc>DOCUMENT</ShipmentDesc>
+            <DlvyNotificationFlag>Y</DlvyNotificationFlag>
+            <Shipper>
+                <City>BEIJING</City>
+                <PostalCode>100032</PostalCode>
+                <CountryCode>CN</CountryCode>
+            </Shipper>
+            <Consignee>
+                <City>HAVERFORD</City>
+                <DivisionCode>PA</DivisionCode>
+                <PostalCode>19041</PostalCode>
+                <CountryCode>US</CountryCode>
+            </Consignee>
+            <ShipperReference>
+                <ReferenceID>2469</ReferenceID>
+            </ShipperReference>
+            <ShipmentEvent>
+                <Date>2017-12-25</Date>
+                <Time>14:38:00</Time>
+                <ServiceEvent>
+                    <EventCode>SD</EventCode>
+                    <Description>Shipment information received</Description>
+                </ServiceEvent>
+                <Signatory/>
+                <ServiceArea>
+                    <ServiceAreaCode>PEK</ServiceAreaCode>
+                    <Description>BEIJING-CHN</Description>
+                </ServiceArea>
+            </ShipmentEvent>
+        </ShipmentInfo>
+    </AWBInfo>
+    <AWBInfo>
+        <AWBNumber>4781585060</AWBNumber>
+        <Status>
+            <ActionStatus>success</ActionStatus>
+        </Status>
+        <ShipmentInfo>
+            <OriginServiceArea>
+                <ServiceAreaCode>HKG</ServiceAreaCode>
+                <Description>HONG KONG-HKG</Description>
+            </OriginServiceArea>
+            <DestinationServiceArea>
+                <ServiceAreaCode>HKG</ServiceAreaCode>
+                <Description>HONG KONG-HKG</Description>
+            </DestinationServiceArea>
+            <ShipperName>NET-A-PORTER</ShipperName>
+            <ShipperAccountNumber>123456789</ShipperAccountNumber>
+            <ConsigneeName>NICOLE LI</ConsigneeName>
+            <ShipmentDate>2017-12-24T13:35:00</ShipmentDate>
+            <Pieces>1</Pieces>
+            <Weight>2.0</Weight>
+            <WeightUnit>K</WeightUnit>
+            <GlobalProductCode>N</GlobalProductCode>
+            <ShipmentDesc>NOT RESTRICTED FOR TRANSPORT,</ShipmentDesc>
+            <DlvyNotificationFlag>Y</DlvyNotificationFlag>
+            <Shipper>
+                <City>HONG KONG</City>
+                <CountryCode>HK</CountryCode>
+            </Shipper>
+            <Consignee>
+                <City>HONG KONG</City>
+                <DivisionCode>CH</DivisionCode>
+                <CountryCode>HK</CountryCode>
+            </Consignee>
+            <ShipperReference>
+                <ReferenceID>1060571</ReferenceID>
+            </ShipperReference>
+            <ShipmentEvent>
+                <Date>2017-12-24</Date>
+                <Time>13:35:00</Time>
+                <ServiceEvent>
+                    <EventCode>SD</EventCode>
+                    <Description>Shipment information received</Description>
+                </ServiceEvent>
+                <Signatory/>
+                <ServiceArea>
+                    <ServiceAreaCode>HKG</ServiceAreaCode>
+                    <Description>HONG KONG-HKG</Description>
+                </ServiceArea>
+            </ShipmentEvent>
+        </ShipmentInfo>
+    </AWBInfo>
+    <AWBInfo>
+        <AWBNumber>5702254250</AWBNumber>
+        <Status>
+            <ActionStatus>success</ActionStatus>
+        </Status>
+        <ShipmentInfo>
+            <OriginServiceArea>
+                <ServiceAreaCode>BHX</ServiceAreaCode>
+                <Description>BIRMINGHAM-GBR</Description>
+            </OriginServiceArea>
+            <DestinationServiceArea>
+                <ServiceAreaCode>AOI</ServiceAreaCode>
+                <Description>ANCONA-ITA</Description>
+            </DestinationServiceArea>
+            <ShipperName>AMAZON EU SARL</ShipperName>
+            <ShipperAccountNumber>123456789</ShipperAccountNumber>
+            <ConsigneeName>MATTEO LOMBO</ConsigneeName>
+            <ShipmentDate>2017-12-24T04:12:00</ShipmentDate>
+            <Pieces>1</Pieces>
+            <Weight>0.12</Weight>
+            <WeightUnit>K</WeightUnit>
+            <GlobalProductCode>U</GlobalProductCode>
+            <ShipmentDesc>CD</ShipmentDesc>
+            <DlvyNotificationFlag>Y</DlvyNotificationFlag>
+            <Shipper>
+                <City>PETERBOROUGH</City>
+                <PostalCode>PE2 9EN</PostalCode>
+                <CountryCode>GB</CountryCode>
+            </Shipper>
+            <Consignee>
+                <City>ORTONA</City>
+                <PostalCode>66026</PostalCode>
+                <CountryCode>IT</CountryCode>
+            </Consignee>
+            <ShipperReference>
+                <ReferenceID>DGWYDy4xN_1</ReferenceID>
+            </ShipperReference>
+            <ShipmentEvent>
+                <Date>2017-12-24</Date>
+                <Time>04:12:00</Time>
+                <ServiceEvent>
+                    <EventCode>SD</EventCode>
+                    <Description>Shipment information received</Description>
+                </ServiceEvent>
+                <Signatory/>
+                <ServiceArea>
+                    <ServiceAreaCode>BHX</ServiceAreaCode>
+                    <Description>BIRMINGHAM-GBR</Description>
+                </ServiceArea>
+            </ShipmentEvent>
+        </ShipmentInfo>
+    </AWBInfo>
+    <LanguageCode>en</LanguageCode>
+</req:TrackingResponse>
+<!-- ServiceInvocationId:20180227124344_5793_23bed3d9-e792-4955-8055-9472b1b41929 -->
