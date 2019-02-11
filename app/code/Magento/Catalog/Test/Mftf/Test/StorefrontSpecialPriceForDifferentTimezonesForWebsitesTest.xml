@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSpecialPriceForDifferentTimezonesForWebsitesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
+            <description value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
+            <stories value="Verify product special price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13788"/>
+            <useCaseId value="MAGETWO-95452"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <createData entity="SimpleProduct3" stepKey="createProduct"/>
+
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!--Set timezone for default config-->
+            <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_locale-link')}}" stepKey="openLocaleSection"/>
+            <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="Central European Standard Time (Europe/Paris)" stepKey="setTimezone"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+            <!--Set timezone for Main Website-->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchStoreViewActionGroup">
+                <argument name="scopeName" value="_defaultWebsite.name"/>
+            </actionGroup>
+            <uncheckOption selector="{{LocaleOptionsSection.useDefault}}"  stepKey="uncheckUseDefault"/>
+            <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="Greenwich Mean Time (Africa/Abidjan)" stepKey="setTimezone1"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig1"/>
+        </before>
+        <after>
+            <!--Delete create data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!--Reset timezone-->
+            <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_locale-link')}}" stepKey="openLocaleSectionReset"/>
+            <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="{{_ENV.DEFAULT_TIMEZONE}}" stepKey="resetTimezone"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>
+
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup">
+                <argument name="scopeName" value="_defaultWebsite.name"/>
+            </actionGroup>
+            <checkOption selector="{{LocaleOptionsSection.useDefault}}"  stepKey="checkUseDefault"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset1"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Set special price to created product-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setSpecialPriceToCreatedProduct">
+            <argument name="price" value="15"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+        <!--Login to storefront from customer and check price-->
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="logInFromCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Go to the product page and check special price-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" userInput='$15.00' stepKey="assertSpecialPrice"/>
+     </test>
+</tests>
