@@ -96,16 +96,6 @@ abstract class AbstractSource implements
     }
 
     /**
-     * Clear cached options.
-     *
-     * @return void
-     */
-    public function clearOptions() : void
-    {
-        $this->_options = null;
-    }
-
-    /**
      * Add Value Sort To Collection Select
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
