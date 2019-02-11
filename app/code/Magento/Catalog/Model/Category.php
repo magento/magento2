@@ -1170,15 +1170,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_TAG . '_' . $this->getId();
             }
 
-            if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
-                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
-                if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
-                    foreach ($this->getPathIds() as $id) {
-                        $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $id;
-                    }
-                }
-            }
-            
+            $identities = $this->getCategoryRelationIdentities($identities);
+
             if ($this->isObjectNew()) {
                 $identities[] = self::CACHE_TAG;
             }
@@ -1468,6 +1461,26 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Return category relation identities.
+     *
+     * @param array $identities
+     * @return array
+     */
+    private function getCategoryRelationIdentities(array $identities): array
+    {
+        if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
+            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+            if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
+                foreach ($this->getPathIds() as $id) {
+                    $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $id;
+                }
+            }
+        }
+
+        return $identities;
     }
 
     //@codeCoverageIgnoreEnd
