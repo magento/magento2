@@ -696,7 +696,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param float $totalRefunded
      * @return bool
      */
-    public function canCreditmemoForZeroTotal($totalRefunded)
+    private function canCreditmemoForZeroTotal($totalRefunded)
     {
         $totalPaid = $this->getTotalPaid();
         //check if total paid is less than grandtotal
