@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
+use \Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Delegation\Data\NewOperation;
@@ -170,7 +171,8 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -240,7 +242,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerDataArr['default_shipping']
             );
         }
-
+        $this->setIgnoreValidationFlag($customerArr, $customerModel);
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -253,7 +255,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $delegatedNewOperation->getCustomer()->getAddresses()
             );
         }
-        if ($customer->getAddresses() !== null) {
+        if ($customer->getAddresses() !== null && !$customerModel->getData('ignore_validation_flag')) {
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
                 $getIdFunc = function ($address) {
@@ -365,7 +367,7 @@ class CustomerRepository implements CustomerRepositoryInterface
             ->joinAttribute('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
             ->joinAttribute('billing_region', 'customer_address/region', 'default_billing', null, 'left')
             ->joinAttribute('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left')
-            ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left');
+            ->joinAttribute('billing_company', 'customer_address/company', 'default_billing', null, 'left');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
@@ -418,6 +420,20 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
         if ($fields) {
             $collection->addFieldToFilter($fields);
+        }
+    }
+
+    /**
+     * Set ignore_validation_flag to skip model validation.
+     *
+     * @param array $customerArray
+     * @param CustomerModel $customerModel
+     * @return void
+     */
+    private function setIgnoreValidationFlag(array $customerArray, CustomerModel $customerModel)
+    {
+        if (isset($customerArray['ignore_validation_flag'])) {
+            $customerModel->setData('ignore_validation_flag', true);
         }
     }
 }

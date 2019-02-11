@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAttributeTextSwatchesCanBeFiledTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Create/configure swatches product attribute"/>
+            <title value="Check that attribute text swatches can be filed"/>
+            <description value="Check that attribute text swatches can be filed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13771"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create 10 store views -->
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}" />
+                <argument name="customStoreCode" value="{{customStore.code}}" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView1">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}1" />
+                <argument name="customStoreCode" value="{{customStore.code}}1" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView2">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}2" />
+                <argument name="customStoreCode" value="{{customStore.code}}2" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView3">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}3" />
+                <argument name="customStoreCode" value="{{customStore.code}}3" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView4">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}4" />
+                <argument name="customStoreCode" value="{{customStore.code}}4" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView5">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}5" />
+                <argument name="customStoreCode" value="{{customStore.code}}5" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView6">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}6" />
+                <argument name="customStoreCode" value="{{customStore.code}}6" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView7">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}7" />
+                <argument name="customStoreCode" value="{{customStore.code}}7" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView8">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}8" />
+                <argument name="customStoreCode" value="{{customStore.code}}8" />
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewUseStringArgumentsActionGroup" stepKey="createStoreView9">
+                <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}" />
+                <argument name="customStoreName" value="{{customStore.name}}9" />
+                <argument name="customStoreCode" value="{{customStore.code}}9" />
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete all 10 store views -->
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView">
+                <argument name="customStoreName" value="{{customStore.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView1">
+                <argument name="customStoreName" value="{{customStore.name}}1"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView2">
+                <argument name="customStoreName" value="{{customStore.name}}2"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView3">
+                <argument name="customStoreName" value="{{customStore.name}}3"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView4">
+                <argument name="customStoreName" value="{{customStore.name}}4"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView5">
+                <argument name="customStoreName" value="{{customStore.name}}5"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView6">
+                <argument name="customStoreName" value="{{customStore.name}}6"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView7">
+                <argument name="customStoreName" value="{{customStore.name}}7"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView8">
+                <argument name="customStoreName" value="{{customStore.name}}8"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewUseStringArgumentsActionGroup" stepKey="deleteStoreView9">
+                <argument name="customStoreName" value="{{customStore.name}}9"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Navigate to Product attribute page-->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
+        <fillField userInput="test_label" selector="{{AttributePropertiesSection.defaultLabel}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.inputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
+        <click selector="{{AdvancedAttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Get field outer width -->
+        <executeJS function="return jQuery(&quot;{{AttributeManageSwatchSection.descriptionField('0','0')}}&quot;).outerWidth();" stepKey="getElementWidth"/>
+        <assertGreaterThanOrEqual stepKey="assertElementsWidthIsGreaterOrEqual">
+            <expectedResult type="int">30</expectedResult>
+            <actualResult type="variable">getElementWidth</actualResult>
+        </assertGreaterThanOrEqual>
+
+        <!-- Fill Swatch and Description fields for Admin -->
+        <fillField selector="{{AttributeManageSwatchSection.swatchField('0','0')}}" userInput="test" stepKey="fillSwatchForAdmin"/>
+        <fillField selector="{{AttributeManageSwatchSection.descriptionField('0','0')}}" userInput="test" stepKey="fillDescriptionForAdmin"/>
+
+        <!-- Grab value Swatch and Description fields for Admin -->
+        <grabValueFrom selector="{{AttributeManageSwatchSection.swatchField('0','0')}}" stepKey="grabSwatchForAdmin"/>
+        <grabValueFrom selector="{{AttributeManageSwatchSection.descriptionField('0','0'')}}" stepKey="grabDescriptionForAdmin"/>
+
+        <!-- Check that Swatch and Description fields for Admin are not empty-->
+        <assertNotEmpty actual="$grabSwatchForAdmin" stepKey="checkSwatchFieldForAdmin"/>
+        <assertNotEmpty actual="$grabDescriptionForAdmin" stepKey="checkDescriptionFieldForAdmin"/>
+    </test>
+</tests>

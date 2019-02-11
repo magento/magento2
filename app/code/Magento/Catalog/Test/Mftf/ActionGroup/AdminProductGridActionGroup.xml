@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter the product grid by new from date filter-->
     <actionGroup name="filterProductGridBySetNewFromDate">
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
@@ -33,6 +33,7 @@
     <actionGroup name="deleteProductUsingProductGrid">
         <arguments>
             <argument name="product"/>
+            <argument name="productCount" type="string" defaultValue="1"/>
         </arguments>
         <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
@@ -48,8 +49,18 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of {{productCount}} record(s) have been deleted." stepKey="seeSuccessMessage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteProductByName" extends="deleteProductUsingProductGrid">
+        <arguments>
+            <argument name="product" type="string"/>
+        </arguments>
+        <remove keyForRemoval="fillProductSkuFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product}}" stepKey="fillProductSkuFilter" after="openProductFilters"/>
+        <remove keyForRemoval="seeProductSkuInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{product}}"  stepKey="seeProductNameInGrid" after="clickApplyFilters"/>
     </actionGroup>
 
     <!--Disabled a product by filtering grid and using change status action-->
