@@ -303,30 +303,39 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $post = [
             'customer' => [
+                'middlename' => 'test middlename',
                 'website_id' => 1,
+                'firstname' => 'test firstname',
+                'lastname' => 'test lastname',
                 'email' => 'customer@example.com',
                 'dob' => '12/3/1996',
             ],
         ];
-        $postFormatted = [
-            'customer' => [
-                'website_id' => 1,
-                'email' => 'customer@example.com',
-                'dob' => '1996-12-03',
-            ],
+        $postCustomerFormatted = [
+            'middlename' => 'test middlename',
+            'website_id' => 1,
+            'firstname' => 'test firstname',
+            'lastname' => 'test lastname',
+            'email' => 'customer@example.com',
+            'dob' => '1996-12-03',
         ];
-        $this->getRequest()->setPostValue($post);
+
+        $this->getRequest()->setPostValue($post)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/save');
         /*
-         * Check that error message is set
-         */
+        * Check that error message is set
+        */
         $this->assertSessionMessages(
             $this->equalTo(['A customer with the same email address already exists in an associated website.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
+
+        $customerFormData = Bootstrap::getObjectManager()
+            ->get(\Magento\Backend\Model\Session::class)
+            ->getCustomerFormData();
         $this->assertEquals(
-            $postFormatted,
-            Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerFormData(),
+            $postCustomerFormatted,
+            $customerFormData['customer'],
             'Customer form data should be formatted'
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
