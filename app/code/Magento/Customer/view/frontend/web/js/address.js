@@ -72,7 +72,7 @@ define([
                         dataPost().postData({
                             action: self.options.deleteUrlPrefix + addressId,
                             data: {
-                                form_key: $.mage.cookies.get('form_key')
+                                'form_key': $.mage.cookies.get('form_key')
                             }
                         });
                     }
