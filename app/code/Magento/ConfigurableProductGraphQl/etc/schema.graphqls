@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Mutation {
-    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\AddConfigurableProductsToCart")
+    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
 }
 
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
