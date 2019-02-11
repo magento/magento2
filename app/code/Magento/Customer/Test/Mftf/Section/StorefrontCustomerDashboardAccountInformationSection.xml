@@ -10,6 +10,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerDashboardAccountInformationSection">
         <element name="ContactInformation" type="textarea" selector=".box.box-information .box-content"/>
+        <element name="edit" type="link" selector=".action.edit" timeout="15"/>
+        <element name="changePassword" type="link" selector=".action.change-password" timeout="15"/>
     </section>
     <section name="StorefrontCustomerAddressSection">
         <element name="firstName" type="input" selector="#firstname"/>

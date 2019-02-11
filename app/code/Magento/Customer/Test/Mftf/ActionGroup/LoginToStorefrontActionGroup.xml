@@ -16,4 +16,14 @@
         <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
     </actionGroup>
+    <actionGroup name="LoginToStorefrontWithEmailAndPasswordActionGroup">
+        <arguments>
+            <argument name="email" type="string"/>
+            <argument name="password" type="string"/>
+        </arguments>
+        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+        <fillField  stepKey="fillEmail" userInput="{{email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="{{password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+    </actionGroup>
 </actionGroups>
