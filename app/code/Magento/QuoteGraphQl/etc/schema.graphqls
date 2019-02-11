@@ -98,6 +98,7 @@ type Cart {
     items: [CartItemInterface]
     applied_coupon: AppliedCoupon
     addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddresses")
+    available_payment_methods : [CheckoutPaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethodsResolver") @doc(description: "Available payment methods")
 }
 
 type CartAddress {
@@ -139,6 +140,11 @@ type CheckoutShippingMethod {
     free_shipping: Boolean!
     error_message: String
     # TODO: Add more complex structure for shipping rates
+}
+
+type CheckoutPaymentMethod @doc(description: "The type contains list of active payment methods") {
+    code : String @doc(description: "The payment method code")
+    title : String @doc(description: "The payment method title.")
 }
 
 enum AdressTypeEnum {
