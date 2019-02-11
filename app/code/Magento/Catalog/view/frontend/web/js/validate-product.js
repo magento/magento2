@@ -42,7 +42,7 @@ define([
                     return false;
                 }
             });
-            $(this.options.addToCartButtonSelector).attr('disabled',false);
+            $(this.options.addToCartButtonSelector).attr('disabled', false);
         }
     });
 
