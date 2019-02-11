@@ -21,5 +21,10 @@
         <element name="saveConfiguration" type="input" selector="//button[contains(@title, 'Save Configuration')]" />
         <element name="successNotification" type="text" selector="//div[contains(@data-ui-id, 'messages-message-success')]" />
         <element name="useDefaultByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader')]//span[contains(text(), 'Use Default Value')]" parameterized="true" />
+        <element name="logoSectionHeader" type="text" selector="[data-index='email']"/>
+        <element name="logoSection" type="text" selector="[data-index='email'] .admin__fieldset-wrapper-content"/>
+        <element name="logoUpload" type ="input" selector="[name='email_logo']" />
+        <element name="logoWrapperOpen" type ="text" selector="[data-index='email'] [data-state-collapsible ='closed']"/>
+        <element name="logoPreview" type ="text" selector="[alt ='magento-logo.png']"/>
     </section>
 </sections>
