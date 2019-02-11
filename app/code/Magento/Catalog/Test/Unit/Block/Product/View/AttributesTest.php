@@ -125,33 +125,28 @@ class AttributesTest extends TestCase
     }
 
     /**
+     * Get attribute with no value phrase
+     *
+     * @param string $phrase
      * @return void
+     * @dataProvider noValue
      */
-    public function testGetAttributeNoValue()
+    public function testGetAttributeNoValue(string $phrase)
     {
-        $this->phrase = '';
-        $this->frontendAttribute
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($this->phrase);
+        $this->frontendAttribute->method('getValue')
+            ->willReturn($phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertTrue(empty($attributes['phrase']));
+        $this->assertArrayNotHasKey('phrase', $attributes);
     }
 
     /**
-     * Test getAttribute whitespaces.
+     * No value data provider
      *
-     * @return void
+     * @return array
      */
-    public function testGetAttributeWhitespacesValue()
+    public function noValue()
     {
-        $this->phrase = ' ';
-        $this->frontendAttribute
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($this->phrase);
-        $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertTrue(empty($attributes['phrase']));
+        return [[' '], ['']];
     }
 
     /**
