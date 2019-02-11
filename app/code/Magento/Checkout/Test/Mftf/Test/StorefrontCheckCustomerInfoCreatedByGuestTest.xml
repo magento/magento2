@@ -11,14 +11,15 @@
     <test name="StorefrontCheckCustomerInfoCreatedByGuestTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="Check customer information created by guest"/>
-            <title value="Check Customer Information Created By Guest"/>
+            <stories value="Check order customer information created by guest"/>
+            <title value="Check Order Customer Information Created By Guest"/>
             <description value="Check customer information after placing the order as the guest who created an account"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-13839"/>
-            <useCaseId value="MAGETWO-95820"/>
+            <useCaseId value="MAGETWO-95182"/>
             <group value="checkout"/>
             <group value="customer"/>
+            <group value="sales"/>
         </annotations>
 
         <before>
@@ -29,10 +30,10 @@
         </before>
 
         <after>
-            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogoutFromStorefront" />
             <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
             <deleteData createDataKey="createCategory" stepKey="deleteCategory" />
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogoutFromStorefront" />
         </after>
 
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="navigateToProductPage"/>
@@ -44,6 +45,7 @@
             <argument name="customerVar" value="CustomerEntityOne"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
