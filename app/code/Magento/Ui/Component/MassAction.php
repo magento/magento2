@@ -6,6 +6,8 @@
 namespace Magento\Ui\Component;
 
 /**
+ * Mass action UI component.
+ *
  * @api
  * @since 100.0.2
  */
