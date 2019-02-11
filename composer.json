@@ -143,6 +143,7 @@
         "magento/module-developer": "*",
         "magento/module-dhl": "*",
         "magento/module-directory": "*",
+        "magento/module-directory-graph-ql": "*",
         "magento/module-downloadable": "*",
         "magento/module-downloadable-graph-ql": "*",
         "magento/module-downloadable-import-export": "*",
