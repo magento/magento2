@@ -149,6 +149,10 @@
     width: 50px;
 }
 
+.col-swatch-min-width {
+    min-width: 30px;
+}
+
 .swatches-visual-col.unavailable:after {
     position: absolute;
     width: 35px;
