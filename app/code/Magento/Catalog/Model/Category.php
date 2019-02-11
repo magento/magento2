@@ -1130,10 +1130,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
-        if (!$productIndexer->isScheduled()
-            && (!empty($this->getAffectedProductIds()) || $this->dataHasChangedFor('is_anchor'))
-        ) {
-            $productIndexer->reindexList($this->getPathIds());
+
+        if (!empty($this->getAffectedProductIds())
+            || $this->dataHasChangedFor('is_anchor')
+            || $this->dataHasChangedFor('is_active')) {
+            if (!$productIndexer->isScheduled()) {
+                $productIndexer->reindexList($this->getPathIds());
+            } else {
+                $productIndexer->invalidate();
+            }
         }
     }
 
@@ -1167,6 +1172,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
             if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
                 $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+                if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
+                    foreach ($this->getPathIds() as $id) {
+                        $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $id;
+                    }
+                }
             }
             
             if ($this->isObjectNew()) {
@@ -1174,7 +1184,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             }
         }
 
-        return $identities;
+        return array_unique($identities);
     }
 
     /**
