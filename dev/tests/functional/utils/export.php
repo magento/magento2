@@ -8,7 +8,7 @@ if (!isset($_GET['template'])) {
     throw new \InvalidArgumentException('Argument "template" must be set.');
 }
 
-$varDir = '../../../../var/';
+$varDir = '../../../../var/export/';
 $template = urldecode($_GET['template']);
 $fileList = scandir($varDir, SCANDIR_SORT_NONE);
 $files = [];
